@@ -133,12 +133,17 @@ src/
 - [x] 拆 `init` 为 `src/cli/commands/init.command.ts`
   - 验收：`init --ai codex`、`init --all` 行为与阶段 0 smoke 一致。
   - 依赖：阶段 0。
-- [ ] 拆 `upgrade` 为 `src/cli/commands/upgrade.command.ts`
+- [x] 拆 `upgrade` 为 `src/cli/commands/upgrade.command.ts`
   - 验收：`upgrade --dry-run` 和现有输出一致，备份逻辑不丢。
-- [ ] 拆插件命令为 `plugins.command.ts`
+- [x] 拆插件命令为 `plugins.command.ts`
   - 验收：`plugins:list/add/remove` 不改变命令名。
 - [x] 保留兼容导出
   - 验收：package bin 仍指向 `dist/cli.js`。
+
+阶段备注：
+
+- 已新增 `src/cli/commands/check-status.command.ts`、`plugins.command.ts`、`upgrade.command.ts`、`info.command.ts`，让 `src/cli/program.ts` 仅负责 program wiring、banner、帮助扩展和注册命令。
+- 已新增 `tests/smoke/cli-commands.test.ts` 覆盖 help、info、plugins help、`upgrade --dry-run`。
 
 ## 阶段 2：应用层 use case 化
 
