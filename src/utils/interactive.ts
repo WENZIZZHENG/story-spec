@@ -6,14 +6,7 @@
 
 import inquirer from 'inquirer';
 import chalk from 'chalk';
-
-export interface AIConfig {
-  name: string;
-  dir: string;
-  commandsDir: string;
-  displayName: string;
-  extraDirs?: string[];
-}
+import type { AIPlatformConfig, AIPlatformId } from './ai-platforms.js';
 
 /**
  * Display project banner
@@ -29,7 +22,7 @@ export function displayProjectBanner(): void {
 /**
  * Select AI assistant interactively
  */
-export async function selectAIAssistant(aiConfigs: AIConfig[]): Promise<string> {
+export async function selectAIAssistant(aiConfigs: readonly AIPlatformConfig[]): Promise<AIPlatformId> {
   const choices = aiConfigs.map(config => ({
     name: `${chalk.cyan(config.name.padEnd(12))} ${chalk.dim(`(${config.displayName})`)}`,
     value: config.name,
@@ -47,7 +40,7 @@ export async function selectAIAssistant(aiConfigs: AIConfig[]): Promise<string> 
     }
   ]);
 
-  return answer.ai;
+  return answer.ai as AIPlatformId;
 }
 
 /**

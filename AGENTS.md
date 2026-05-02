@@ -20,6 +20,7 @@ Co-Authored-By: (the agent model's name and attribution byline)
 | Codex status smoke | `node dist/cli.js codex-status --json` |
 
 ## Key Conventions
+- `src/utils/ai-platforms.ts` is the single source for AI platform IDs, dirs, dist paths, display names, and slash prefixes.
 - `templates/commands/*.md` is the source for generated slash prompts.
 - `scripts/build-commands.cjs` locates bash and calls `scripts/build/generate-commands.sh`.
 - `scripts/postbuild.cjs` keeps CLI executable bits cross-platform after TypeScript build.

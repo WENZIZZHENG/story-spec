@@ -29,6 +29,10 @@
 
 记录 Codex 状态命令、`AGENTS.md` 模板、任务边界和世界观模板增强的设计取舍。
 
+### [AI 平台 Registry 重构记录](ai-platform-registry-refactor.md)
+
+记录将 AI 平台目录、构建产物、显示名和命令前缀收敛为单一 typed registry 的架构取舍。
+
 ---
 
 ## 🖼️ 架构图

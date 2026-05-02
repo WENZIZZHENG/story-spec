@@ -1,10 +1,11 @@
 import fs from 'fs-extra';
 import path from 'path';
+import { AI_PLATFORMS, type AIPlatformId } from './ai-platforms.js';
 
 export interface ProjectInfo {
   root: string;
   version: string;
-  installedAI: string[];
+  installedAI: AIPlatformId[];
 }
 
 /**
@@ -37,25 +38,9 @@ export async function validateProject(projectPath: string): Promise<boolean> {
 /**
  * 检测项目安装了哪些 AI 配置
  */
-export async function detectInstalledAI(projectPath: string): Promise<string[]> {
-  const aiConfigs = [
-    { name: 'claude', dir: '.claude' },
-    { name: 'cursor', dir: '.cursor' },
-    { name: 'gemini', dir: '.gemini' },
-    { name: 'windsurf', dir: '.windsurf' },
-    { name: 'roocode', dir: '.roo' },
-    { name: 'copilot', dir: '.github' },
-    { name: 'qwen', dir: '.qwen' },
-    { name: 'opencode', dir: '.opencode' },
-    { name: 'codex', dir: '.codex' },
-    { name: 'kilocode', dir: '.kilocode' },
-    { name: 'auggie', dir: '.augment' },
-    { name: 'codebuddy', dir: '.codebuddy' },
-    { name: 'q', dir: '.amazonq' }
-  ];
-
-  const installedAI: string[] = [];
-  for (const ai of aiConfigs) {
+export async function detectInstalledAI(projectPath: string): Promise<AIPlatformId[]> {
+  const installedAI: AIPlatformId[] = [];
+  for (const ai of AI_PLATFORMS) {
     const aiPath = path.join(projectPath, ai.dir);
     if (await fs.pathExists(aiPath)) {
       installedAI.push(ai.name);

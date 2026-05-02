@@ -12,6 +12,16 @@ import { PluginManager } from './plugins/manager.js';
 import { ensureProjectRoot, getProjectInfo } from './utils/project.js';
 import { getCodexStatus, renderCodexStatus } from './utils/codex-status.js';
 import {
+  AI_PLATFORM_OPTIONS,
+  AI_PLATFORMS,
+  formatAICommand,
+  formatDisplayNames,
+  getAIInitDirs,
+  getAIPlatform,
+  getTargetAIPlatforms,
+  type AIPlatformConfig
+} from './utils/ai-platforms.js';
+import {
   displayProjectBanner,
   selectAIAssistant,
   selectWritingMethod,
@@ -25,31 +35,6 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const program = new Command();
-
-// AI 平台配置 - 所有支持的平台
-interface AIConfig {
-  name: string;
-  dir: string;
-  commandsDir: string;
-  displayName: string;
-  extraDirs?: string[];
-}
-
-const AI_CONFIGS: AIConfig[] = [
-  { name: 'claude', dir: '.claude', commandsDir: 'commands', displayName: 'Claude Code' },
-  { name: 'cursor', dir: '.cursor', commandsDir: 'commands', displayName: 'Cursor' },
-  { name: 'gemini', dir: '.gemini', commandsDir: 'commands', displayName: 'Gemini CLI' },
-  { name: 'windsurf', dir: '.windsurf', commandsDir: 'workflows', displayName: 'Windsurf' },
-  { name: 'roocode', dir: '.roo', commandsDir: 'commands', displayName: 'Roo Code' },
-  { name: 'copilot', dir: '.github', commandsDir: 'prompts', displayName: 'GitHub Copilot', extraDirs: ['.vscode'] },
-  { name: 'qwen', dir: '.qwen', commandsDir: 'commands', displayName: 'Qwen Code' },
-  { name: 'opencode', dir: '.opencode', commandsDir: 'command', displayName: 'OpenCode' },
-  { name: 'codex', dir: '.codex', commandsDir: 'prompts', displayName: 'Codex CLI' },
-  { name: 'kilocode', dir: '.kilocode', commandsDir: 'workflows', displayName: 'Kilo Code' },
-  { name: 'auggie', dir: '.augment', commandsDir: 'commands', displayName: 'Auggie CLI' },
-  { name: 'codebuddy', dir: '.codebuddy', commandsDir: 'commands', displayName: 'CodeBuddy' },
-  { name: 'q', dir: '.amazonq', commandsDir: 'prompts', displayName: 'Amazon Q Developer' }
-];
 
 // 辅助函数：处理命令模板生成 Markdown 格式
 function generateMarkdownCommand(template: string, scriptPath: string): string {
@@ -109,7 +94,7 @@ program
   .command('init')
   .argument('[name]', '小说项目名称')
   .option('--here', '在当前目录初始化')
-  .option('--ai <type>', '选择 AI 助手: claude | cursor | gemini | windsurf | roocode | copilot | qwen | opencode | codex | kilocode | auggie | codebuddy | q')
+  .option('--ai <type>', `选择 AI 助手: ${AI_PLATFORM_OPTIONS}`)
   .option('--all', '为所有支持的 AI 助手生成配置')
   .option('--method <type>', '选择写作方法: three-act | hero-journey | story-circle | seven-point | pixar | snowflake')
   .option('--no-git', '跳过 Git 初始化')
@@ -134,7 +119,7 @@ program
       if (needsAISelection) {
         stepCount++;
         displayStep(stepCount, totalSteps, '选择 AI 助手');
-        options.ai = await selectAIAssistant(AI_CONFIGS);
+        options.ai = await selectAIAssistant(AI_PLATFORMS);
         console.log('');
       }
 
@@ -167,6 +152,13 @@ program
     // 设置默认值（如果没有通过交互或参数指定）
     if (!options.ai) options.ai = 'claude';
     if (!options.method) options.method = 'three-act';
+
+    const selectedPlatform = getAIPlatform(options.ai);
+    if (!selectedPlatform && !options.all) {
+      console.log(chalk.red(`❌ 不支持的 AI 助手: ${options.ai}`));
+      console.log(chalk.gray(`   可选值: ${AI_PLATFORM_OPTIONS}`));
+      process.exit(1);
+    }
 
     const spinner = ora('正在初始化小说项目...').start();
 
@@ -207,70 +199,8 @@ program
         await fs.ensureDir(path.join(projectPath, dir));
       }
 
-      // 根据 AI 类型创建特定目录
-      const aiDirs: string[] = [];
-      if (options.all) {
-        // 创建所有 AI 目录
-        aiDirs.push(
-          '.claude/commands',
-          '.cursor/commands',
-          '.gemini/commands',
-          '.windsurf/workflows',
-          '.roo/commands',
-          '.github/prompts',
-          '.vscode',
-          '.qwen/commands',
-          '.opencode/command',
-          '.codex/prompts',
-          '.kilocode/workflows',
-          '.augment/commands',
-          '.codebuddy/commands',
-          '.amazonq/prompts'
-        );
-      } else {
-        // 根据选择的 AI 创建目录
-        switch(options.ai) {
-          case 'claude':
-            aiDirs.push('.claude/commands');
-            break;
-          case 'cursor':
-            aiDirs.push('.cursor/commands');
-            break;
-          case 'gemini':
-            aiDirs.push('.gemini/commands');
-            break;
-          case 'windsurf':
-            aiDirs.push('.windsurf/workflows');
-            break;
-          case 'roocode':
-            aiDirs.push('.roo/commands');
-            break;
-          case 'copilot':
-            aiDirs.push('.github/prompts', '.vscode');
-            break;
-          case 'qwen':
-            aiDirs.push('.qwen/commands');
-            break;
-          case 'opencode':
-            aiDirs.push('.opencode/command');
-            break;
-          case 'codex':
-            aiDirs.push('.codex/prompts');
-            break;
-          case 'kilocode':
-            aiDirs.push('.kilocode/workflows');
-            break;
-          case 'auggie':
-            aiDirs.push('.augment/commands');
-            break;
-          case 'codebuddy':
-            aiDirs.push('.codebuddy/commands');
-            break;
-          case 'q':
-            aiDirs.push('.amazonq/prompts');
-            break;
-        }
-      }
+      const targetPlatforms = getTargetAIPlatforms(!!options.all, options.ai as string);
+      const aiDirs = getAIInitDirs(targetPlatforms);
 
       for (const dir of aiDirs) {
         await fs.ensureDir(path.join(projectPath, dir));
@@ -291,39 +221,16 @@ program
       // 从构建产物复制 AI 配置和命令文件
       const packageRoot = path.resolve(__dirname, '..');
       const scriptsDir = path.join(packageRoot, 'scripts');
-      const sourceMap: Record<string, string> = {
-        'claude': 'dist/claude',
-        'gemini': 'dist/gemini',
-        'cursor': 'dist/cursor',
-        'windsurf': 'dist/windsurf',
-        'roocode': 'dist/roocode',
-        'copilot': 'dist/copilot',
-        'qwen': 'dist/qwen',
-        'opencode': 'dist/opencode',
-        'codex': 'dist/codex',
-        'kilocode': 'dist/kilocode',
-        'auggie': 'dist/auggie',
-        'codebuddy': 'dist/codebuddy',
-        'q': 'dist/q'
-      };
-
-      // 确定需要复制的 AI 平台
-      const targetAI: string[] = [];
-      if (options.all) {
-        targetAI.push('claude', 'gemini', 'cursor', 'windsurf', 'roocode', 'copilot', 'qwen', 'opencode', 'codex', 'kilocode', 'auggie', 'codebuddy', 'q');
-      } else {
-        targetAI.push(options.ai);
-      }
 
       // 复制 AI 配置目录（包含命令文件和 .specify 目录）
-      for (const ai of targetAI) {
-        const sourceDir = path.join(packageRoot, sourceMap[ai]);
+      for (const platform of targetPlatforms) {
+        const sourceDir = path.join(packageRoot, platform.distDir);
         if (await fs.pathExists(sourceDir)) {
           // 复制整个构建产物目录到项目
           await fs.copy(sourceDir, projectPath, { overwrite: false });
-          spinner.text = `已安装 ${ai} 配置...`;
+          spinner.text = `已安装 ${platform.name} 配置...`;
         } else {
-          console.log(chalk.yellow(`\n警告: ${ai} 构建产物未找到，请运行 npm run build:commands`));
+          console.log(chalk.yellow(`\n警告: ${platform.name} 构建产物未找到，请运行 npm run build:commands`));
         }
       }
 
@@ -354,7 +261,7 @@ program
       }
 
       // 为 Codex 项目生成轻量 AGENTS.md，便于接手时直接识别流程和边界
-      if (targetAI.includes('codex')) {
+      if (targetPlatforms.some(platform => platform.name === 'codex')) {
         const codexAgentsSource = path.join(fullTemplatesDir, 'AGENTS.codex.md');
         const codexAgentsDest = path.join(projectPath, 'AGENTS.md');
         if (await fs.pathExists(codexAgentsSource) && !await fs.pathExists(codexAgentsDest)) {
@@ -418,7 +325,7 @@ program
       }
 
       // 为 Gemini 复制额外的配置文件
-      if (aiDirs.some(dir => dir.includes('.gemini'))) {
+      if (targetPlatforms.some(platform => platform.name === 'gemini')) {
         // 复制 settings.json
         const geminiSettingsSource = path.join(packageRoot, 'templates', 'gemini-settings.json');
         const geminiSettingsDest = path.join(projectPath, '.gemini', 'settings.json');
@@ -437,7 +344,7 @@ program
       }
 
       // 为 GitHub Copilot 复制 VS Code settings
-      if (aiDirs.some(dir => dir.includes('.github') || dir.includes('.vscode'))) {
+      if (targetPlatforms.some(platform => platform.name === 'copilot')) {
         const vscodeSettingsSource = path.join(packageRoot, 'templates', 'vscode-settings.json');
         const vscodeSettingsDest = path.join(projectPath, '.vscode', 'settings.json');
         if (await fs.pathExists(vscodeSettingsSource)) {
@@ -545,41 +452,15 @@ node_modules/
         console.log(`  1. ${chalk.white(`cd ${name}`)} - 进入项目目录`);
       }
 
-      const aiName = {
-        'claude': 'Claude Code',
-        'cursor': 'Cursor',
-        'gemini': 'Gemini',
-        'windsurf': 'Windsurf',
-        'roocode': 'Roo Code',
-        'copilot': 'GitHub Copilot',
-        'qwen': 'Qwen Code',
-        'opencode': 'OpenCode',
-        'codex': 'Codex CLI',
-        'kilocode': 'Kilo Code',
-        'auggie': 'Auggie CLI',
-        'codebuddy': 'CodeBuddy',
-        'q': 'Amazon Q Developer'
-      }[options.ai] || 'AI 助手';
-
       if (options.all) {
-        console.log(`  2. ${chalk.white('在任意 AI 助手中打开项目（Claude Code、Cursor、Gemini、Windsurf、Roo Code、GitHub Copilot、Qwen Code、OpenCode、Codex CLI、Kilo Code、Auggie CLI、CodeBuddy、Amazon Q Developer）')}`);
+        console.log(`  2. ${chalk.white(`在任意 AI 助手中打开项目（${formatDisplayNames(AI_PLATFORMS)}）`)}`);
       } else {
-        console.log(`  2. ${chalk.white(`在 ${aiName} 中打开项目`)}`);
+        console.log(`  2. ${chalk.white(`在 ${selectedPlatform?.displayName ?? 'AI 助手'} 中打开项目`)}`);
       }
       console.log(`  3. 使用以下斜杠命令开始创作:`);
 
       const formatCommand = (commandName: string): string => {
-        if (options.all) return `/${commandName}`;
-        switch (options.ai) {
-          case 'claude':
-            return `/novel.${commandName}`;
-          case 'gemini':
-            return `/novel:${commandName}`;
-          case 'codex':
-            return `/novel-${commandName}`;
-          default:
-            return `/${commandName}`;
-        }
+        return formatAICommand(selectedPlatform, commandName, !!options.all);
       };
 
       console.log('\n' + chalk.yellow('     📝 七步方法论:'));
@@ -951,35 +832,15 @@ async function selectUpdateContentInteractive(): Promise<UpdateContent> {
  * 更新命令文件
  */
 async function updateCommands(
-  targetAI: string[],
+  targetAI: AIPlatformConfig[],
   projectPath: string,
   packageRoot: string,
   dryRun: boolean
 ): Promise<number> {
   let count = 0;
 
-  const sourceMap: Record<string, string> = {
-    'claude': 'dist/claude',
-    'gemini': 'dist/gemini',
-    'cursor': 'dist/cursor',
-    'windsurf': 'dist/windsurf',
-    'roocode': 'dist/roocode',
-    'copilot': 'dist/copilot',
-    'qwen': 'dist/qwen',
-    'opencode': 'dist/opencode',
-    'codex': 'dist/codex',
-    'kilocode': 'dist/kilocode',
-    'auggie': 'dist/auggie',
-    'codebuddy': 'dist/codebuddy',
-    'q': 'dist/q'
-  };
-
-  for (const ai of targetAI) {
-    const sourceDir = path.join(packageRoot, sourceMap[ai]);
-    const aiConfig = AI_CONFIGS.find(c => c.name === ai);
-
-    if (!aiConfig) continue;
-
+  for (const aiConfig of targetAI) {
+    const sourceDir = path.join(packageRoot, aiConfig.distDir);
     if (await fs.pathExists(sourceDir)) {
       const targetDir = path.join(projectPath, aiConfig.dir);
 
@@ -1017,7 +878,7 @@ async function updateCommands(
         }
       }
     } else {
-      console.log(chalk.yellow(`  ⚠ ${aiConfig?.displayName || ai}: 构建产物未找到`));
+      console.log(chalk.yellow(`  ⚠ ${aiConfig.displayName}: 构建产物未找到`));
     }
   }
 
@@ -1238,7 +1099,7 @@ async function updateExperts(
 async function createBackup(
   projectPath: string,
   updateContent: UpdateContent,
-  targetAI: string[],
+  targetAI: AIPlatformConfig[],
   projectVersion: string
 ): Promise<string> {
   const timestamp = new Date().toISOString().replace(/[:.]/g, '-').slice(0, -5);
@@ -1249,10 +1110,7 @@ async function createBackup(
 
   // 备份命令文件
   if (updateContent.commands) {
-    for (const ai of targetAI) {
-      const aiConfig = AI_CONFIGS.find(c => c.name === ai);
-      if (!aiConfig) continue;
-
+    for (const aiConfig of targetAI) {
       const source = path.join(projectPath, aiConfig.dir);
       const dest = path.join(backupPath, aiConfig.dir);
 
@@ -1295,7 +1153,7 @@ async function createBackup(
     timestamp,
     fromVersion: projectVersion,
     toVersion: getVersion(),
-    upgradedAI: targetAI,
+    upgradedAI: targetAI.map(platform => platform.name),
     updateContent,
     backupPath
   };
@@ -1359,7 +1217,7 @@ function displayUpgradeReport(
 // upgrade 命令 - 升级现有项目
 program
   .command('upgrade')
-  .option('--ai <type>', '指定要升级的 AI 配置: claude | cursor | gemini | windsurf | roocode | copilot | qwen | opencode | codex | kilocode | auggie | codebuddy | q')
+  .option('--ai <type>', `指定要升级的 AI 配置: ${AI_PLATFORM_OPTIONS}`)
   .option('--all', '升级所有 AI 配置')
   .option('-i, --interactive', '交互式选择要更新的内容')
   .option('--commands', '仅更新命令文件')
@@ -1394,10 +1252,10 @@ program
       console.log(chalk.gray(`目标版本: ${getVersion()}\n`));
 
       // 2. 检测已安装的 AI 配置
-      const installedAI: string[] = [];
-      for (const aiConfig of AI_CONFIGS) {
+      const installedAI: AIPlatformConfig[] = [];
+      for (const aiConfig of AI_PLATFORMS) {
         if (await fs.pathExists(path.join(projectPath, aiConfig.dir))) {
-          installedAI.push(aiConfig.name);
+          installedAI.push(aiConfig);
         }
       }
 
@@ -1406,30 +1264,23 @@ program
         process.exit(1);
       }
 
-      const displayNames = installedAI.map(name => {
-        const config = AI_CONFIGS.find(c => c.name === name);
-        return config?.displayName || name;
-      });
-
-      console.log(chalk.green('✓') + ' 检测到 AI 配置: ' + displayNames.join(', '));
+      console.log(chalk.green('✓') + ' 检测到 AI 配置: ' + installedAI.map(platform => platform.displayName).join(', '));
 
       // 3. 确定要升级的 AI 配置
       let targetAI = installedAI;
       if (options.ai) {
-        if (!installedAI.includes(options.ai)) {
+        const requestedPlatform = getAIPlatform(options.ai);
+        if (!requestedPlatform || !installedAI.some(platform => platform.name === requestedPlatform.name)) {
           console.log(chalk.red(`❌ AI 配置 "${options.ai}" 未安装`));
           process.exit(1);
         }
-        targetAI = [options.ai];
+        targetAI = [requestedPlatform];
       } else if (!options.all) {
         // 默认升级所有已安装的 AI 配置
         targetAI = installedAI;
       }
 
-      const targetDisplayNames = targetAI.map(name => {
-        const config = AI_CONFIGS.find(c => c.name === name);
-        return config?.displayName || name;
-      });
+      const targetDisplayNames = targetAI.map(platform => platform.displayName);
 
       console.log(chalk.cyan(`\n升级目标: ${targetDisplayNames.join(', ')}\n`));
 
