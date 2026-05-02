@@ -19,7 +19,7 @@
 
 > 📖 **详细特性说明**：查看 [CHANGELOG.md](CHANGELOG.md) 了解各版本的完整更新
 
-## 🚀 快速开始
+## 🚀 5 分钟快速开始
 
 ### 1. 安装
 
@@ -30,22 +30,37 @@ npm install -g novel-writer-cn
 ### 2. 初始化项目
 
 ```bash
-# 基本用法
-novel init my-novel
+# 推荐：为当前 AI 平台生成命令，并进入项目
+novel init my-novel --ai codex
+cd my-novel
+```
 
-# 推荐：预装真实人声插件
+其他初始化示例：
+
+```bash
+# 预装真实人声插件
 novel init my-novel --plugins authentic-voice
 
-# 指定 AI 平台
+# 指定其他 AI 平台
 novel init my-novel --ai claude    # Claude Code
 novel init my-novel --ai gemini    # Gemini CLI
 novel init my-novel --ai codex     # Codex CLI
 novel init my-novel --ai cursor    # Cursor
 ```
 
-### 3. 开始创作
+### 3. 写作前检查
 
-在 AI 助手中使用斜杠命令：
+```bash
+novel codex-status          # Codex 接手状态摘要
+novel validate              # 项目结构、任务、追踪数据和写作规则校验
+novel validate --severity error
+```
+
+`codex-status` 用来判断 Codex 是否已经可以直接接手继续写；`validate` 更通用，适合所有平台在生成计划后或写作前做硬校验。
+
+### 4. 在 AI 助手中打开项目并使用命令
+
+根据平台使用对应斜杠命令格式：
 
 ```
 /novel.constitution    # Claude Code 格式
@@ -54,28 +69,14 @@ novel init my-novel --ai cursor    # Cursor
 /constitution          # 其他平台格式
 ```
 
-**七步方法论流程**：
+### 5. 进入七步创作流程
+
 1. `/constitution` → 2. `/specify` → 3. `/clarify` →
 4. `/plan` → 5. `/tasks` → 6. `/write` → 7. `/analyze`
 
 > 📚 **详细安装说明**：[docs/installation.md](docs/installation.md)
 > 📖 **完整工作流程**：[docs/workflow.md](docs/workflow.md)
 > 🎯 **AI 平台命令对照**：[docs/ai-platform-commands.md](docs/ai-platform-commands.md) ⭐ **必读**
-
-### Codex 推荐检查
-
-Codex 项目初始化后，可先运行状态检查再决定是否进入写作：
-
-```bash
-cd my-novel
-novel codex-status
-novel codex-status --json
-novel validate
-novel validate --json
-novel validate --severity error
-```
-
-`codex-status` 会汇总当前故事、规格/计划/任务、追踪 JSON、Codex prompts、`AGENTS.md` 和 Git 改动，帮助判断是否已经可以直接执行 `/novel-write`。`validate` 会检查项目结构、tracking JSON、任务字段、模板缺失和写作规则，并支持按 `error`、`warning`、`info` 过滤输出，适合在生成计划后或写作前做硬校验。
 
 ## 📦 升级现有项目
 
