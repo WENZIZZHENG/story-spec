@@ -1,25 +1,113 @@
-# Novel Writer - AI 驱动的中文小说创作工具
+# Novel Writer
 
 [![npm version](https://badge.fury.io/js/novel-writer-cn.svg)](https://www.npmjs.com/package/novel-writer-cn)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-> 🚀 基于规格驱动开发（SDD）的 AI 智能小说创作助手
->
-> 在 Claude、Cursor、Gemini 等 AI 助手中直接使用斜杠命令，系统化创作高质量小说
+Novel Writer 是一个面向中文小说创作的 AI 工作流工具。它不是单纯的灵感提示词集合，而是把“创作宪法、故事规格、创作计划、任务清单、章节正文、追踪数据、交接上下文”组织成一个可维护的小说项目。
 
-## ✨ 核心特性
+安装后你会得到两类能力：
 
-- 📚 **斜杠命令** - 在 Claude、Gemini、Codex、Cursor、Windsurf、Roo Code 等 AI 助手中直接使用
-- 🎯 **七步方法论** - 基于规格驱动开发（SDD）的系统化创作流程
-- 🤖 **智能辅助** - AI 理解上下文，提供针对性创作建议
-- 📝 **中文优化** - 专为中文小说创作设计，支持字数统计、多线索管理
-- 🔄 **跨平台** - 支持 13 个 AI 工具，Windows/Mac/Linux 全平台
-- 🔌 **插件系统** - 可扩展功能，如真实人声、翻译、风格模仿等
-- ✅ **质量保障** - 情节追踪、时间线管理、角色一致性验证
+- `novel` CLI：初始化/升级项目，检查环境，汇总项目状态，校验故事产物，导出任务看板，生成断点续写上下文包，管理插件。
+- AI 斜杠命令：在 Claude Code、Gemini CLI、Codex CLI、Cursor、Windsurf、Roo Code、GitHub Copilot 等平台中使用结构化写作命令。
 
-> 📖 **详细特性说明**：查看 [CHANGELOG.md](CHANGELOG.md) 了解各版本的完整更新
+## 适合谁用
 
-## 🚀 5 分钟快速开始
+- 想用 AI 写长篇中文小说，但需要稳定维护角色、时间线、伏笔和任务边界。
+- 已经习惯在 AI 编程工具中用斜杠命令推进工作流，希望把类似 Spec Kit / SDD 的方法迁移到小说创作。
+- 需要多个 AI 平台共用同一套小说项目文件，而不是每个平台各写一份提示词。
+- 需要让另一个 AI 或下一次会话快速接手当前故事进度。
+
+## 核心功能
+
+### 项目脚手架
+
+`novel init` 会创建标准小说项目目录，并写入：
+
+- `.specify/config.json`：项目名称、写作方法、AI 平台和版本信息。
+- `.specify/memory/`：创作宪法、个人声音等长期记忆。
+- `.specify/templates/`：故事、提纲、检查清单、知识库等模板。
+- `stories/`：每个故事的规格、计划、任务和正文。
+- `spec/tracking/`：角色状态、关系、时间线、情节追踪、校验规则等 JSON。
+- `spec/knowledge/`：世界观、角色档案、角色声音、地点资料等知识库。
+- 对应 AI 平台的命令目录，例如 `.codex/prompts/`、`.claude/commands/`、`.gemini/commands/`。
+
+### 七步写作流
+
+Novel Writer 的主流程来自规格驱动创作法：
+
+1. `/constitution`：建立创作宪法，定义不可违背的原则、风格和边界。
+2. `/specify`：生成故事规格，明确作品定位、核心冲突、角色、世界观、需求优先级和验收标准。
+3. `/clarify`：围绕规格中的模糊点做结构化澄清，记录关键决策。
+4. `/plan`：把“要写什么”转成章节结构、叙事方案、人物弧线、节奏和伏笔计划。
+5. `/tasks`：把创作计划拆成可执行任务，标注优先级、依赖、读写边界和验收标准。
+6. `/write`：按任务清单写章节，自动加载宪法、规格、计划、任务、追踪数据、知识库和前文。
+7. `/analyze`：根据阶段自动执行框架一致性分析或内容质量分析，也支持 `--type` 和 `--focus` 指定分析模式。
+
+### 追踪与交接
+
+- `/track-init`：初始化追踪数据。
+- `/track`：汇总写作进度、情节、时间线、角色状态、伏笔和一致性问题。
+- `/timeline`：管理和验证故事时间线。
+- `/relations`：管理角色关系变化。
+- `/checklist`：生成或执行规格验证、内容扫描相关检查清单。
+- `novel status`：在终端汇总当前故事、下一任务、正文数量、tracking JSON、Git 状态和建议下一步。
+- `novel validate`：校验项目结构、故事产物、任务字段、tracking JSON、模板和写作规则。
+- `novel handoff`：生成 `handoff.md`，列出下一任务、必须读取、允许修改、风险边界和阻塞项。
+- `novel tasks:board`：把 `tasks.md` 转成 `task-board.json`，并生成 GitHub issue 草稿字段。
+
+### 多平台命令生成
+
+当前内置支持 13 个 AI 平台：
+
+| 平台 ID | 平台 | 命令目录 | 命令格式示例 |
+| --- | --- | --- | --- |
+| `claude` | Claude Code | `.claude/commands` | `/novel.write` |
+| `gemini` | Gemini CLI | `.gemini/commands` | `/novel:write` |
+| `codex` | Codex CLI | `.codex/prompts` | `/novel-write` |
+| `cursor` | Cursor | `.cursor/commands` | `/write` |
+| `windsurf` | Windsurf | `.windsurf/workflows` | `/write` |
+| `roocode` | Roo Code | `.roo/commands` | `/write` |
+| `copilot` | GitHub Copilot | `.github/prompts` | `/write` |
+| `qwen` | Qwen Code | `.qwen/commands` | `/write` |
+| `opencode` | OpenCode | `.opencode/command` | `/write` |
+| `kilocode` | Kilo Code | `.kilocode/workflows` | `/write` |
+| `auggie` | Auggie CLI | `.augment/commands` | `/write` |
+| `codebuddy` | CodeBuddy | `.codebuddy/commands` | `/write` |
+| `q` | Amazon Q Developer | `.amazonq/prompts` | `/write` |
+
+使用 `novel init --all` 或 `novel upgrade --all` 可以为所有平台生成或升级命令文件。
+
+### 写作方法预设
+
+初始化时可以通过 `--method` 选择方法：
+
+- `three-act`：三幕结构。
+- `hero-journey`：英雄之旅。
+- `story-circle`：故事圈。
+- `seven-point`：七点结构。
+- `pixar`：皮克斯公式。
+- `snowflake`：雪花十步。
+
+终端中也可以运行 `novel info` 查看方法说明。
+
+### 插件系统
+
+`novel plugins:add <name>` 会把内置插件复制到项目，并把插件命令注入已配置的 AI 平台命令目录。支持 `--dry-run` 预览写入计划，支持 `--force` 覆盖冲突文件。
+
+当前仓库内置插件包括：
+
+| 插件 | 功能 |
+| --- | --- |
+| `authentic-voice` | 真实人声写作，提升生活质感和个体声音一致性 |
+| `translate` | 中文小说英译与本地化润色 |
+| `book-analysis` | 小说拆解分析 |
+| `genre-knowledge` | 类型知识库和商业网文写作知识 |
+| `luyao-style` | 路遥风格创作辅助 |
+| `wangyu-style` | 忘语风格创作辅助 |
+| `shizhangyu-style` | 石章鱼风格创作辅助 |
+| `stardust-dreams` | 连接星尘织梦工具市场的高级 AI 创作模板 |
+
+## 快速开始
 
 ### 1. 安装
 
@@ -27,341 +115,203 @@
 npm install -g novel-writer-cn
 ```
 
-### 2. 初始化项目
+要求 Node.js `>=18.0.0`。
+
+### 2. 创建小说项目
 
 ```bash
-# 推荐：为当前 AI 平台生成命令，并进入项目
 novel init my-novel --ai codex
 cd my-novel
 ```
 
-其他初始化示例：
+常用初始化方式：
 
 ```bash
-# 预装真实人声插件
-novel init my-novel --plugins authentic-voice
+# 在当前目录初始化
+novel init --here --ai claude
 
-# 指定其他 AI 平台
-novel init my-novel --ai claude    # Claude Code
-novel init my-novel --ai gemini    # Gemini CLI
-novel init my-novel --ai codex     # Codex CLI
-novel init my-novel --ai cursor    # Cursor
+# 为所有平台生成命令
+novel init my-novel --all
+
+# 指定写作方法
+novel init my-novel --method snowflake --ai gemini
+
+# 初始化时预装插件
+novel init my-novel --plugins authentic-voice,genre-knowledge
 
 # 为 Codex 生成带写作边界画像的 AGENTS.md
 novel init my-novel --ai codex --agents-profile adult,slow-burn,adventure
+
+# 跳过 Git 初始化
+novel init my-novel --no-git
 ```
 
-### 3. 写作前检查
+### 3. 检查项目状态
 
 ```bash
-novel status                # 通用项目状态摘要
-novel codex-status          # 兼容别名：Codex 接手状态摘要
-novel validate              # 项目结构、任务、追踪数据和写作规则校验
+novel status
+novel validate
+```
+
+如果需要结构化输出：
+
+```bash
+novel status --json
+novel validate --json
 novel validate --severity error
-novel tasks:board           # 将 tasks.md 导出为本地 JSON 看板
-novel tasks:board --json    # 输出结构化看板与 GitHub issue 草稿
-novel handoff               # 生成断点续写上下文包
 ```
 
-`status` 用来判断项目是否已经可以继续规划、拆任务或写作；`codex-status` 保留为兼容别名。`validate` 更适合在生成计划后或写作前做硬校验。`tasks:board` 可在 `/tasks` 后把任务清单转成看板和 GitHub issue 草稿；`handoff` 用来让 AI 在长篇项目中断点续写。
+### 4. 在 AI 助手中开始写作
 
-### 4. 在 AI 助手中打开项目并使用命令
+按你选择的平台使用对应命令。例如 Codex CLI：
 
-根据平台使用对应斜杠命令格式：
-
+```text
+/novel-constitution
+/novel-specify
+/novel-clarify
+/novel-plan
+/novel-tasks
+/novel-write
+/novel-analyze
 ```
-/novel.constitution    # Claude Code 格式
-/novel:constitution    # Gemini CLI 格式
-/novel-constitution    # Codex CLI 格式
-/constitution          # 其他平台格式
-```
 
-### 5. 进入七步创作流程
+Claude Code 对应 `/novel.write`，Gemini CLI 对应 `/novel:write`，多数其他平台直接使用 `/write`。
 
-1. `/constitution` → 2. `/specify` → 3. `/clarify` →
-4. `/plan` → 5. `/tasks` → 6. `/write` → 7. `/analyze`
-
-> 📚 **详细安装说明**：[docs/installation.md](docs/installation.md)
-> 📖 **完整工作流程**：[docs/workflow.md](docs/workflow.md)
-> 🎯 **AI 平台命令对照**：[docs/ai-platform-commands.md](docs/ai-platform-commands.md) ⭐ **必读**
-
-## 📦 升级现有项目
+### 5. 交接或导出任务
 
 ```bash
-# 升级到最新版本
+# 生成最近故事的 handoff.md
+novel handoff
+
+# 指定故事并输出 JSON
+novel handoff stories/001-demo --json
+
+# 把 tasks.md 转成任务看板 JSON
+novel tasks:board
+
+# 只输出 JSON，不写文件
+novel tasks:board 001-demo --json
+```
+
+## CLI 命令
+
+| 命令 | 作用 |
+| --- | --- |
+| `novel init [name]` | 初始化小说项目 |
+| `novel check` | 检查 Node.js、Git 和常见 AI CLI 是否可用 |
+| `novel status` | 汇总项目、故事、追踪数据、Git 状态和下一步 |
+| `novel codex-status` | `status` 的兼容别名 |
+| `novel validate` | 校验项目结构、任务、tracking、模板和写作规则 |
+| `novel handoff [story]` | 生成断点续写上下文包 |
+| `novel tasks:board [story]` | 从 `tasks.md` 导出本地任务看板和 GitHub issue 草稿 |
+| `novel plugins` | 显示插件帮助 |
+| `novel plugins:list` | 列出已安装插件 |
+| `novel plugins:add <name>` | 安装内置插件 |
+| `novel plugins:remove <name>` | 移除插件 |
+| `novel upgrade` | 升级现有项目的命令、脚本、规范、模板或记忆文件 |
+| `novel info` | 查看可用写作方法 |
+
+## 斜杠命令
+
+| 通用命令 | 作用 | 主要产物或数据 |
+| --- | --- | --- |
+| `/constitution` | 创建或更新创作宪法 | `.specify/memory/constitution.md` |
+| `/specify` | 定义故事规格 | `stories/*/specification.md` |
+| `/clarify` | 澄清规格模糊点 | 规格补充和决策记录 |
+| `/plan` | 制定创作计划 | `stories/*/creative-plan.md` |
+| `/tasks` | 分解任务清单 | `stories/*/tasks.md` |
+| `/write` | 写章节正文 | `stories/*/content/` |
+| `/analyze` | 框架或内容分析 | `stories/*/analysis-report.md` |
+| `/checklist` | 质量检查清单 | 检查清单或扫描结果 |
+| `/track-init` | 初始化追踪系统 | `spec/tracking/*.json` |
+| `/track` | 综合追踪进度和一致性 | 终端/会话报告 |
+| `/timeline` | 管理时间线 | `spec/tracking/timeline.json` |
+| `/relations` | 管理角色关系 | `spec/tracking/relationships.json` |
+| `/expert` | 专家模式入口 | `.specify/experts/core/` 和插件专家提示词 |
+
+> 注意：斜杠命令在 AI 助手内部使用，不是在终端中执行。终端里使用的是 `novel` CLI。
+
+## 项目目录
+
+```text
+my-novel/
+├── .specify/
+│   ├── config.json
+│   ├── memory/
+│   ├── scripts/
+│   └── templates/
+├── .codex/                # 取决于 --ai，可替换为 .claude/.gemini 等
+│   └── prompts/
+├── AGENTS.md              # Codex 项目可选生成
+├── plugins/
+├── spec/
+│   ├── knowledge/
+│   └── tracking/
+└── stories/
+    └── 001-story/
+        ├── specification.md
+        ├── creative-plan.md
+        ├── tasks.md
+        ├── task-board.json
+        ├── handoff.md
+        └── content/
+```
+
+## 升级现有项目
+
+```bash
 npm install -g novel-writer-cn@latest
 cd my-novel
 novel upgrade
-
-# 或指定 AI 平台
-novel upgrade --ai claude
 ```
 
-> 📚 **完整升级指南**：[docs/upgrade-guide.md](docs/upgrade-guide.md) - 包含版本兼容性、迁移说明、回滚方法
-
-## 📚 斜杠命令
-
-### 命名空间说明
-
-| AI 平台 | 命令格式 | 示例 |
-|---------|----------|------|
-| **Claude Code** | `/novel.命令名` | `/novel.write` |
-| **Gemini CLI** | `/novel:命令名` | `/novel:write` |
-| **Codex CLI** | `/novel-命令名` | `/novel-write` |
-| **其他平台** | `/命令名` | `/write` |
-
-> 💡 下表使用通用格式，实际使用时请根据您的 AI 平台添加相应前缀
-> 📖 **详细命令对照**：[docs/ai-platform-commands.md](docs/ai-platform-commands.md)
-
-### 七步方法论
-
-| 命令 | 描述 | 何时使用 |
-|------|------|----------|
-| `/constitution` | 创作宪法 | 项目开始，定义核心创作原则 |
-| `/specify` | 故事规格 | 像 PRD 一样定义故事需求 |
-| `/clarify` | 澄清决策 | 通过 5 个问题明确模糊点 |
-| `/plan` | 创作计划 | 制定章节结构和技术方案 |
-| `/tasks` | 任务分解 | 生成可执行的任务清单 |
-| `/write` | 章节写作 | 基于任务清单进行创作 |
-| `/analyze` | 综合验证 | 智能双模式：框架分析/内容分析 |
-
-### 追踪与验证
-
-| 命令 | 描述 | 何时使用 |
-|------|------|----------|
-| `/track-init` | 初始化追踪 | 首次使用（只需一次） |
-| `/checklist` | 质量检查清单 ⭐ | 规格验证（写作前）+ 内容扫描（写作后） |
-| `/track` | 综合追踪 | 每完成一章后 |
-| `/plot-check` | 情节检查 | 每 5-10 章定期检查 |
-| `/timeline` | 时间线管理 | 重要事件后 |
-| `/relations` | 关系追踪 | 角色关系变化时 |
-| `/world-check` | 世界观检查 | 新设定出现后 |
-
-> 📖 **详细命令说明**：[docs/commands.md](docs/commands.md) - 包含每个命令的详细用法、参数和最佳实践
-
-<details>
-<summary>📁 项目结构（点击展开）</summary>
-
-```
-my-novel/
-├── .specify/          # Spec Kit 配置
-│   ├── memory/        # 创作记忆（constitution.md等）
-│   └── scripts/       # 支持脚本
-├── .claude/           # Claude 命令（或 .cursor/.gemini 等）
-│   └── commands/      # 斜杠命令文件
-├── spec/              # 小说规格数据
-│   ├── tracking/      # 追踪数据（plot-tracker.json等）
-│   └── knowledge/     # 知识库（world-setting.md等）
-├── stories/           # 故事内容
-│   └── 001-故事名/
-│       ├── specification.md    # 故事规格
-│       ├── creative-plan.md    # 创作计划
-│       ├── tasks.md            # 任务清单
-│       ├── task-board.json     # 可选：任务看板导出
-│       ├── handoff.md          # 可选：断点续写上下文包
-│       └── content/            # 章节内容
-└── scripts/           # 支持脚本
-    ├── bash/          # Unix/Linux/Mac
-    └── powershell/    # Windows
-```
-
-</details>
-
-## 🤖 支持的 AI 助手
-
-| AI 工具 | 说明 | 状态 |
-|---------|------|------|
-| **Claude Code** | Anthropic 的 AI 助手 | ✅ 推荐 |
-| **Cursor** | AI 代码编辑器 | ✅ 完整支持 |
-| **Gemini CLI** | Google 的 AI 助手 | ✅ TOML 格式 |
-| **Windsurf** | Codeium 的 AI 编辑器 | ✅ 完整支持 |
-| **Roo Code** | AI 编程助手 | ✅ 完整支持 |
-| **GitHub Copilot** | GitHub 的 AI 编程助手 | ✅ 完整支持 |
-| **Qwen Code** | 阿里通义千问代码助手 | ✅ TOML 格式 |
-| **OpenCode** | 开源 AI 编程工具 | ✅ 完整支持 |
-| **Codex CLI** | AI 编程助手 | ✅ 完整支持 |
-| **Kilo Code** | AI 编程工具 | ✅ 完整支持 |
-| **Auggie CLI** | AI 开发助手 | ✅ 完整支持 |
-| **CodeBuddy** | AI 编程伙伴 | ✅ 完整支持 |
-| **Amazon Q Developer** | AWS 的 AI 开发助手 | ✅ 完整支持 |
-
-> 💡 使用 `novel init --all` 可以同时为所有 AI 工具生成配置
-
-## 🛠️ CLI 命令
-
-<details>
-<summary>详细选项（点击展开）</summary>
-
-### `novel init [name]`
+常用选项：
 
 ```bash
-novel init my-novel [选项]
+novel upgrade --ai codex
+novel upgrade --all
+novel upgrade --commands
+novel upgrade --scripts
+novel upgrade --spec
+novel upgrade --dry-run
+novel upgrade --interactive
 ```
 
-**常用选项**：
-- `--here` - 在当前目录初始化
-- `--ai <type>` - 选择 AI 平台（claude/gemini/cursor等）
-- `--with-experts` - 包含专家模式
-- `--plugins <names>` - 预装插件（逗号分隔）
-- `--agents-profile <profiles>` - 配置 Codex `AGENTS.md` 写作边界画像（如 `adult,slow-burn,adventure,romance,multi-thread`）
-- `--all` - 生成所有 AI 平台配置
+默认升级命令、脚本和写作规范；模板、记忆文件、专家模式需要显式选择，避免覆盖用户项目内容。
 
-### `novel plugins`
+## 本仓库开发
 
 ```bash
-novel plugins list                # 列出已安装插件
-novel plugins add <name>          # 安装插件
-novel plugins remove <name>       # 移除插件
+npm install
+npm run build
+npm test
+npm run test:smoke
 ```
 
-### `novel upgrade`
+生成各平台命令产物：
 
 ```bash
-novel upgrade [--ai <type>]       # 升级项目到最新版本
+npm run build:commands
 ```
 
-### `novel check`
+完整验证：
 
 ```bash
-novel check                       # 检查项目配置和状态
+npm run verify
 ```
 
-### `novel status`
+## 文档
 
-```bash
-novel status                      # 查看项目状态摘要
-novel status --json               # 输出结构化状态
-novel codex-status --json         # 兼容旧入口
-```
+- [安装指南](docs/installation.md)
+- [快速开始](docs/quickstart.md)
+- [工作流程](docs/workflow.md)
+- [斜杠命令详解](docs/commands.md)
+- [AI 平台命令对照](docs/ai-platform-commands.md)
+- [升级指南](docs/upgrade-guide.md)
+- [写作方法](docs/writing-methods.md)
+- [本地开发](docs/local-development.md)
+- [技术架构](docs/tech/architecture.md)
 
-### `novel handoff`
+## 许可证
 
-```bash
-novel handoff                     # 生成最近故事的 handoff.md
-novel handoff 001-demo --json     # 输出结构化上下文，不写文件
-novel handoff --output stories/001-demo/handoff.md
-```
-
-### `novel tasks:board`
-
-```bash
-novel tasks:board                 # 导出最近故事的 task-board.json
-novel tasks:board 001-demo --json # 输出结构化看板，不写文件
-novel tasks:board --output stories/001-demo/task-board.json
-```
-
-### `novel validate`
-
-```bash
-novel validate                    # 校验项目结构、tracking、任务和模板
-novel validate --json             # 输出结构化校验结果
-novel validate --severity error   # 只输出 error 级问题
-```
-
-</details>
-
-## 📖 文档索引
-
-### 核心文档
-- **[命令详解](docs/commands.md)** - 所有斜杠命令的详细用法、参数和最佳实践
-- **[工作流程](docs/workflow.md)** - 完整的创作流程说明
-- **[写作方法](docs/writing-methods.md)** - 6种经典写作方法详解
-- **[最佳实践](docs/best-practices.md)** - 实战经验和高级技巧
-
-### 进阶文档
-- **[实战指南](docs/writing/practical-guide.md)** - 基于真实案例的 SDD 应用
-- **[升级指南](docs/upgrade-guide.md)** - 版本升级说明和迁移指南
-- **[安装指南](docs/installation.md)** - 详细安装步骤
-- **[字数统计](docs/word-count-guide.md)** - 中文字数统计最佳实践
-
-### 插件与扩展
-- **真实人声插件** - `novel plugins add authentic-voice`
-  - 编辑 `.specify/memory/personal-voice.md` 配置个人语料
-  - 使用 `/authentic-voice` 创作，`/authenticity-audit` 自查
-- **翻译插件** - `novel plugins add translate`
-- **风格模仿插件** - 路遥、王钰等作家风格
-
-> 💡 使用 `novel plugins list` 查看所有可用插件
-
-## 📈 版本历史
-
-查看完整的更新日志：**[CHANGELOG.md](CHANGELOG.md)**
-
-**最新版本亮点**：
-- v0.15.0 - 多平台命令格式优化
-- v0.14.2 - 中文字数统计修复
-- v0.12.2 - Claude Code 增强层
-- v0.12.0 - 多线索管理系统
-- v0.10.0 - 七步方法论体系
-
-## 🤝 贡献
-
-欢迎提交 Issue 和 Pull Request！
-
-项目地址：[https://github.com/wordflowlab/novel-writer](https://github.com/wordflowlab/novel-writer)
-
-## 📄 许可证
-
-MIT License
-
-## 🌐 项目矩阵
-
-WordFlowLab 围绕 AI 辅助小说创作展开多维度探索，采用不同方法论和技术栈的开源项目组合：
-
-### 方法论探索系列
-
-| 项目 | 方法论 | 技术特点 | 适用场景 |
-|------|--------|----------|----------|
-| **[Novel-Writer](https://github.com/wordflowlab/novel-writer)** ⭐ | Spec-Kit | 寄生斜杠命令，七步方法论 | 适合多平台用户，跨 13 个 AI 工具 |
-| **[Article-Writer](https://github.com/wordflowlab/article-writer)** 🆕 | Spec-Kit | 九步写作流程，工作区管理 | 公众号/自媒体文章创作，降低 AI 味 |
-| **[Novel-Writer-OpenSpec](https://github.com/wordflowlab/novel-writer-openspec)** | OpenSpec | 寄生斜杠命令，规格分离管理（specs/ + changes/） | 适合需要 OpenSpec 规格化管理 |
-| **[Novel-Writer-Skills](https://github.com/wordflowlab/novel-writer-skills)** | Spec-Kit + Agent Skills | 寄生斜杠命令，支持 Claude Code Agent Skills | 专为 Claude Code 优化 |
-
-### 工具实现系列
-
-| 项目 | 类型 | 技术基础 | 说明 |
-|------|------|----------|------|
-| **[WriteFlow](https://github.com/wordflowlab/writeflow)** | CLI 工具 | 模仿 Claude Code 架构 | 独立 CLI，为技术型作家设计 |
-| **[NovelWeave](https://github.com/wordflowlab/novelweave)** | VSCode 扩展 | Fork: Cline → Roo Code → Kilo Code → NovelWeave | 可视化小说编辑器，星尘织梦 |
-
-### 技术演进路径
-
-```
-Spec-Kit 方法论分支:
-  Novel-Writer (主线) ──┬─→ Novel-Writer-Skills (Claude Code 专版)
-                       └─→ WriteFlow (CLI 独立版)
-
-OpenSpec 方法论分支:
-  Novel-Writer-OpenSpec (探索版)
-
-VSCode 扩展分支:
-  Cline → Roo Code → Kilo Code → NovelWeave (小说定制版)
-```
-
-### 选择建议
-
-根据您的经验背景选择合适的工具：
-
-| 用户类型 | 推荐项目 | 理由 |
-|---------|---------|------|
-| 🌟 **新手入门** | [NovelWeave](https://github.com/wordflowlab/novelweave) | 可视化编辑器，VSCode 扩展，最易上手 |
-| 💻 **有编程基础<br>无小说经验** | [Novel-Writer](https://github.com/wordflowlab/novel-writer) <br> [Novel-Writer-Skills](https://github.com/wordflowlab/novel-writer-skills) | 七步方法论引导创作流程<br>Skills 版适合 Claude Code 用户 |
-| 📚 **有编程基础<br>有小说经验** | [Novel-Writer-OpenSpec](https://github.com/wordflowlab/novel-writer-openspec) | OpenSpec 规格化管理<br>适合系统化创作和团队协作 |
-| 🚀 **技术探索者<br>可贡献 PR** | [WriteFlow](https://github.com/wordflowlab/writeflow) | CLI 工具开发探索<br>欢迎贡献代码和想法 |
-
-**快速决策**：
-- **完全新手** → NovelWeave（可视化最友好）
-- **用 Claude Code** → Novel-Writer-Skills（深度集成 Agent Skills）
-- **跨多个 AI 工具** → Novel-Writer（支持 13 个平台）
-- **追求规格化** → Novel-Writer-OpenSpec（OpenSpec 方法论）
-- **喜欢命令行** → WriteFlow（纯 CLI 体验）
-
-> 💡 **多矩阵、多方法论组合开源**：探索 AI 写作的不同可能性，欢迎根据需求选择合适的工具！
-
-## 🙏 致谢
-
-本项目基于 [Spec Kit](https://github.com/sublayerapp/spec-kit) 架构设计，特此感谢！
-
----
-
-**Novel Writer** - 让 AI 成为你的创作伙伴！ ✨📚
+MIT
