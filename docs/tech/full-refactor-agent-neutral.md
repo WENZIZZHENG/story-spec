@@ -442,7 +442,7 @@ risk:
 - [x] A1-T001：新增 `src/agent/capabilities.ts`。
 - [x] A1-T002：新增 `src/agent/registry.ts`，迁移当前 13 个平台，并加入 `generic`。
 - [x] A1-T003：保留 `src/utils/ai-platforms.ts` 作为兼容 wrapper。
-- [ ] A1-T004：新增 `novel agent:list`，输出 id、displayName、commandSurface、capabilities、installTargets。
+- [x] A1-T004：新增 `novel agent:list`，输出 id、displayName、commandSurface、capabilities、installTargets。
 - [x] A1-T005：为 registry 增加单元测试，覆盖旧 id 与新 id 一致性。
 
 验收：

@@ -1,4 +1,5 @@
 import { Command } from '@commander-js/extra-typings';
+import { registerAgentCommand } from './commands/agent.command.js';
 import { registerInitCommand } from './commands/init.command.js';
 import { registerCheckStatusCommand } from './commands/check-status.command.js';
 import { registerHandoffCommand } from './commands/handoff.command.js';
@@ -42,6 +43,7 @@ export function runProgram(argv: string[]): void {
     .helpOption('-h, --help', '显示帮助信息');
 
   registerInitCommand(program, { packageRoot });
+  registerAgentCommand(program);
   registerCheckStatusCommand(program);
   registerHandoffCommand(program);
   registerTasksBoardCommand(program);

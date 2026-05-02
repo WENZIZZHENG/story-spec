@@ -28,6 +28,7 @@ describe('CLI command modules smoke', () => {
     ]);
 
     expect(help).toContain('init [options] [name]');
+    expect(help).toContain('agent:list [options]');
     expect(help).toContain('plugins:add [options] <name>');
     expect(help).toContain('upgrade [options]');
     expect(help).toContain('status [options]');
@@ -36,6 +37,24 @@ describe('CLI command modules smoke', () => {
     expect(help).toContain('validate [options]');
     expect(info).toContain('三幕结构');
     expect(info).toContain('雪花十步');
+  });
+
+  it('lists agent integrations as JSON', async () => {
+    const { stdout } = await execFileAsync('node', [
+      cliPath,
+      'agent:list',
+      '--json'
+    ], { cwd: repoRoot });
+
+    const result = JSON.parse(stdout);
+    expect(result.count).toBeGreaterThan(1);
+    expect(result.integrations[0]).toMatchObject({
+      id: 'generic',
+      displayName: 'Generic Markdown Agent',
+      commandSurface: 'markdown-command',
+      renderer: 'generic-markdown'
+    });
+    expect(result.integrations.some((integration: { id: string }) => integration.id === 'codex')).toBe(true);
   });
 
   it('runs plugin help without requiring a project', async () => {
