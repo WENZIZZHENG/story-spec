@@ -1,423 +1,618 @@
-# Novel Writer 全面重构待办
+# Novel Writer Agent-Neutral 重构路线图
 
 ## 状态
 
-Draft，作为后续重构开发的路线图。执行每个阶段前，需要重新确认工作区干净、运行对应基线验证，并按本文件的任务顺序推进。
+Active planning。本文是后续开发的路线图，只记录设计、任务顺序、验收口径和历史归档；当前阶段不立即进入代码实现。
 
-## 目标
+上一次“全面重构”阶段 0-10 已完成，已归档到本文末尾“历史归档”。新的重构目标是把 Novel Writer 从“支持多 AI 平台的小说 prompt/CLI 工具”进一步升级为“任意 agent 都能接手的小说创作协议 + 平台适配器”。
 
-把 Novel Writer 从“单体 CLI + 大模板 + 双脚本集合”的形态，重构为更适合 Codex 和多 AI agent 长期维护的产品级架构：
+## 一句话目标
 
-- CLI 命令薄、可测试、可组合。
-- AI 平台适配、prompt 编译、项目模板、运行脚本各自有清晰边界。
-- 小说创作领域模型可被类型系统、测试和验证脚本约束。
-- 模板和命令支持 preset、extension、project-local override。
-- 后续新增 AI 平台、写作流程、插件和追踪能力时，不再需要改多个散点。
+Novel Writer 的核心不绑定 Codex、Claude、Gemini 或任意单一工具；它应提供稳定的小说项目协议、agent contract、命令语义、校验规则和生成器，让不同 agent 只作为触发入口或渲染目标。
+
+## 关键判断
+
+- `novel` CLI 是项目管理器，不是写作 agent。
+- `.specify/`、`stories/`、`spec/tracking/`、`spec/knowledge/` 是 agent-neutral 数据协议。
+- slash command 是增强入口，不是唯一入口。
+- `AGENTS.md` 应是通用 agent contract 的一种输出，不应只为 Codex 服务。
+- `codex`、`claude`、`gemini`、`cursor` 等应该被建模为 integration/adapter，而不是产品中心概念。
+- 不同 agent 的能力差异很大，需要分层支持：只读 Markdown、读写文件、slash command、脚本/CLI、MCP/自动化。
 
 ## 非目标
 
-- 不在第一阶段更改 slash command 的用户可见命名。
-- 不删除现有 Bash/PowerShell 脚本，先建立兼容层，再逐步替换。
-- 不改变已生成项目的目录约定：`.specify/`、`stories/`、`spec/` 继续保留。
-- 不把成人向、高风险题材的正文生成策略写死在程序里；只在计划、任务和验证层保留边界字段。
+- 不在第一轮删除 `--ai`、`codex-status`、现有平台目录或现有 slash command 命名。
+- 不在第一轮实现“直接调用 LLM 自动写小说”的运行引擎。
+- 不把 Novel Writer 变成只支持某个 IDE、某个 CLI 或某个模型供应商的工具。
+- 不破坏旧项目的 `.specify/`、`stories/`、`spec/` 数据布局。
+- 不把成人向、高风险题材策略写死到程序；仍通过 contract、任务边界、tracking 和 validate 约束。
 
-## 当前痛点
+## 参考项目与借鉴点
 
-| 区域 | 现状 | 风险 |
-|------|------|------|
-| CLI | `src/cli.ts` 约 1247 行，包含 init、plugins、upgrade、help、备份、复制逻辑 | 难测试、难分工、改一处容易影响多处 |
-| Prompt 模板 | `templates/commands/analyze.md` 约 740 行，`specify.md` 约 494 行 | prompt 难审阅，平台差异只能靠生成脚本处理 |
-| 构建脚本 | `scripts/build/generate-commands.sh` 约 320 行，平台矩阵仍在 shell 内 | 与 TS registry 分离，平台新增仍有第二处事实源 |
-| 运行脚本 | Bash 与 PowerShell 逻辑并行维护 | 容易漂移，测试成本高 |
-| 领域模型 | story/spec/plan/tasks/tracking 基本是文件约定 | 缺 schema，AI 写错文件结构后难发现 |
-| 插件系统 | 有插件管理器，但命令、模板、知识库、追踪扩展边界不够统一 | 插件能力继续增长后会变脆 |
-| 测试 | 主要靠 build 和手工 smoke | 重构缺少回归保护 |
+| 项目 | 已核对事实 | 对 Novel Writer 的启发 |
+|------|------------|------------------------|
+| [github/spec-kit](https://github.com/github/spec-kit) | README 明确支持 30+ AI coding agent integrations，并用 `specify init --integration <agent>` 初始化；还提供 slash command / skills 两类安装形态。 | 把 `--ai` 演进为 `--integration`/`--agent`，把平台差异收敛到 registry 和 renderer。 |
+| [Spec Kit extensions/presets](https://github.com/github/spec-kit) | 采用 project-local overrides → presets → extensions → core 的模板优先级；extensions 增加能力，presets 改造既有工作流。 | Novel Writer 的插件、风格包、类型知识、项目本地改写应共享一套 resolution stack。 |
+| [agentsmd/agents.md](https://github.com/agentsmd/agents.md) | 将 `AGENTS.md` 定义为给 coding agents 的简单开放格式，是“agent 的 README”。 | 建立通用 `AGENTS.md`/agent contract，不再让 `AGENTS.md` 只承载 Codex 语义。 |
+| [continuedev/continue](https://github.com/continuedev/continue) | README 描述每个 AI check 是仓库中的 Markdown 文件，位于 `.continue/checks/`，并可在 CI 中运行。 | 命令/检查/分析能力应可被普通 Markdown 表达，便于无 slash command 的 agent 手动执行，也便于未来做 CI 化质量检查。 |
+| [OpenHands](https://github.com/OpenHands/OpenHands) | README 将 SDK、CLI、Local GUI、Cloud/Enterprise 分层；CLI 可由 Claude、GPT 或其他 LLM 驱动。 | Novel Writer 应拆清“核心协议/应用层”和“触发入口/界面/agent 适配”，避免入口反向污染核心模型。 |
+| [Cline](https://github.com/cline/cline) | README 强调 IDE 内 agent 可创建/编辑文件、执行命令、使用浏览器，并通过 diff/checkpoint 管理改动。 | 将 agent 能力分级纳入 integration metadata：文件读写、命令执行、浏览器、checkpoint、用户确认模式。 |
+| [Aider](https://github.com/Aider-AI/aider) | README 将 aider 定位为 terminal 中的 AI pair programming，可在现有代码库上协作。 | 对“已有小说项目接手”优化：contract、handoff、status、validate 必须比 init 更重要。 |
 
-## 参考项目与启发
+## 目标形态
 
-| 项目 | 借鉴点 | 对 Novel Writer 的落地 |
-|------|--------|------------------------|
-| [github/spec-kit](https://github.com/github/spec-kit) | SDD 命令、AI integrations、preset/extension/project-local override 分层 | 把 prompt、模板、平台集成做成可解析的 registry，不靠散落复制逻辑 |
-| [tj/commander.js](https://github.com/tj/commander.js) | Commander 支持 `.command()`、`.addCommand()` 和独立 executable subcommands | 保留 commander，但把每个命令拆到 `src/commands/*` |
-| [oclif/core](https://github.com/oclif/core) | 复杂 CLI 使用命令类、插件、hooks、测试 helper，且只加载被执行命令 | 不急于迁移 oclif，但采用“命令模块薄入口 + use case”结构 |
-| [eslint/eslint](https://github.com/eslint/eslint) | core 与 plugin/rule 分离，运行时可扩展 | 把写作规则、世界观检查、任务校验做成可注册 rule/checker |
-| [nrwl/nx](https://github.com/nrwl/nx) | project graph、affected-only、插件发现、AI-native tooling | 为故事、任务、追踪文件建立 artifact graph，支持只验证受影响章节 |
-| [changesets/changesets](https://github.com/changesets/changesets) | 每个变化记录版本类型和 changelog 信息，不是所有变化都要求 changeset | 建立轻量 change record：CLI 行为、模板契约、生成产物变化才要求记录 |
-| [vitest-dev/vitest](https://github.com/vitest-dev/vitest) | workspace/projects、coverage、type-level testing、ESM-first | 引入 Vitest，覆盖 registry、project IO、prompt compiler、CLI smoke |
+### 用户视角
 
-## 归档 skills 采用
+```bash
+novel init my-novel --agent codex
+novel init my-novel --agent claude
+novel init my-novel --agent generic
+novel init my-novel --all-agents
 
-- `software-architecture`：按 Clean Architecture/DDD 拆分 CLI、domain、infra、presentation。
-- `spec-driven-development`：本文件作为后续重构的 spec → plan → tasks 起点。
-- `source-driven-development`：涉及 Commander、测试框架、发布工具时以官方文档或知名项目源码为准。
-- `architecture-decision-records`：每个架构拐点新增 `docs/tech/*.md` 记录。
-- `typescript-pro`：先建 typed contract，再改实现。
-- `simplify-code`：每阶段优先高置信、行为保持的简化。
-- `verification-before-completion`：每次阶段完成前必须重新运行验证命令。
-- `technical-change-tracker`：后续长线重构可建立结构化 change tracker，避免会话断点丢失。
+novel agent:list
+novel agent:add gemini
+novel agent:doctor
+novel contract:print
+novel contract:sync
+```
 
-## 目标架构
+兼容旧入口：
+
+```bash
+novel init my-novel --ai codex
+novel upgrade --ai claude
+novel codex-status --json
+```
+
+### 项目协议视角
+
+```text
+my-novel/
+├── AGENTS.md                         # 通用 agent contract 输出
+├── .specify/
+│   ├── config.json
+│   ├── agent-contract.md             # contract 源文件或同步副本
+│   ├── commands/                     # generic agent 可直接读取的命令说明
+│   ├── integrations/                 # 已安装 agent/integration 状态
+│   ├── memory/
+│   ├── templates/
+│   └── scripts/
+├── .codex/prompts/                   # Codex adapter 输出
+├── .claude/commands/                 # Claude adapter 输出
+├── .gemini/commands/                 # Gemini adapter 输出
+├── stories/
+└── spec/
+```
+
+### 代码视角
 
 ```text
 src/
-  cli/
-    program.ts                 # commander program wiring
-    commands/
-      init.command.ts
-      upgrade.command.ts
-      check-status.command.ts
-      plugins.command.ts
-      info.command.ts
-  application/
-    init-project.ts            # use case
-    upgrade-project.ts
-    install-plugin.ts
-    get-project-status.ts
-  domain/
-    ai-platform.ts
-    story-artifact.ts
-    writing-task.ts
-    tracking-rule.ts
-    plugin-manifest.ts
-  infrastructure/
-    filesystem-project-store.ts
-    prompt-template-store.ts
-    shell-script-runner.ts
-    git-adapter.ts
+  agent/
+    contract.ts                       # agent-neutral contract model
+    capabilities.ts                   # 能力分层：read/write/shell/slash/mcp/browser
+    registry.ts                       # AgentIntegration registry
+    compatibility.ts                  # --ai 兼容映射与迁移提示
   prompt/
+    command-spec.ts                   # 命令语义，不含平台格式
     compiler.ts
-    frontmatter.ts
-    platform-renderers/
-  templates/
-    resolver.ts                # core/preset/extension/project override
+    renderers/
+      generic-markdown.ts
+      agents-md.ts
+      claude.ts
+      gemini.ts
+      codex.ts
+  application/
+    install-agent-integration.ts
+    sync-agent-contract.ts
+    get-project-status.ts
+    validate-project.ts
   validation/
-    artifact-graph.ts
-    schema/
-    rules/
+    agent-contract-rules.ts
 ```
 
-## 阶段 0：建立重构保护网
+## 概念模型重构
 
-目标：在大拆分前先让行为有测试锚点。
+### 从 AIPlatform 到 AgentIntegration
 
-- [x] 新增 Vitest 或同等级测试框架
-  - 验收：`npm test` 可运行，至少包含 registry 与路径工具测试。
-  - 文件：`package.json`、`vitest.config.ts`、`tests/**`。
-  - 验证：`npm run build`、`npm test`。
-- [x] 建立 CLI smoke fixture
-  - 验收：测试可在临时目录执行 `init --ai codex --no-git`、`init --all --no-git`、`status --json`，并覆盖 `codex-status --json` 兼容别名。
-  - 文件：`tests/cli-smoke.test.ts`。
-  - 验证：`npm test -- cli-smoke`。
-- [x] 记录 golden output
-  - 验收：关键生成目录、prompt 数量、AGENTS.md 生成行为有快照或断言。
-  - 文件：`tests/fixtures/`。
-- [x] 加入 `npm run verify`
-  - 验收：统一运行 build、测试、命令生成、smoke。
-  - 文件：`package.json`。
+当前事实源是 `src/utils/ai-platforms.ts`。重构后建议迁移为：
 
-阶段备注：
+```ts
+type AgentIntegrationId =
+  | 'generic'
+  | 'codex'
+  | 'claude'
+  | 'gemini'
+  | 'cursor'
+  | 'windsurf'
+  | 'roocode'
+  | 'copilot'
+  | 'qwen'
+  | 'opencode'
+  | 'kilocode'
+  | 'auggie'
+  | 'codebuddy'
+  | 'q'
+  | string;
 
-- 已新增 `tests/unit/ai-platforms.test.ts` 覆盖 AI platform registry。
-- 已新增 `tests/unit/project.test.ts` 覆盖项目根目录查找和 AI 配置检测。
-- 已新增 `tests/smoke/cli-init.test.ts` 覆盖 `init --ai codex` 与 `init --all`。
-- 已新增 `tests/fixtures/cli-init-golden.json` 固化 Codex prompt 数量、关键输出、关键文件和全平台目录。
-- 本机没有 `bun` 可执行文件，因此本轮未刷新 `bun.lock`；已用 `npm install --package-lock=false --ignore-scripts` 安装依赖且未生成 `package-lock.json`。
+interface AgentIntegration {
+  id: AgentIntegrationId;
+  displayName: string;
+  kind: 'cli' | 'ide' | 'web' | 'generic' | 'ci' | 'mcp';
+  commandSurface: 'slash-command' | 'skill' | 'markdown-command' | 'manual';
+  capabilities: AgentCapabilities;
+  installTargets: InstallTarget[];
+  renderer: RendererId;
+  slashPrefix?: string;
+  legacyAiId?: string;
+}
+```
 
-## 阶段 1：CLI 拆分为命令模块
+能力模型：
 
-目标：把 `src/cli.ts` 从 1000+ 行降到只负责 program wiring。
+```ts
+interface AgentCapabilities {
+  readFiles: boolean;
+  writeFiles: boolean;
+  runShell: boolean;
+  supportsSlashCommands: boolean;
+  supportsSkills: boolean;
+  supportsProjectInstructions: boolean;
+  supportsMcp: boolean;
+  supportsBrowser: boolean;
+  supportsCheckpoints: boolean;
+  requiresHumanApproval?: boolean;
+}
+```
 
-- [x] 新建 `src/cli/program.ts`
-  - 验收：`dist/cli.js` 只导入并运行 program。
-  - 验证：`node dist/cli.js --help`。
-- [x] 拆 `init` 为 `src/cli/commands/init.command.ts`
-  - 验收：`init --ai codex`、`init --all` 行为与阶段 0 smoke 一致。
-  - 依赖：阶段 0。
-- [x] 拆 `upgrade` 为 `src/cli/commands/upgrade.command.ts`
-  - 验收：`upgrade --dry-run` 和现有输出一致，备份逻辑不丢。
-- [x] 拆插件命令为 `plugins.command.ts`
-  - 验收：`plugins:list/add/remove` 不改变命令名。
-- [x] 保留兼容导出
-  - 验收：package bin 仍指向 `dist/cli.js`。
+验收标准：
 
-阶段备注：
+- `AI_PLATFORM_IDS` 继续作为兼容导出，但内部使用 `AGENT_INTEGRATION_IDS`。
+- `formatAICommand` 增加兼容 wrapper，核心调用改用 `formatAgentCommand`。
+- `novel init --ai codex` 输出 deprecation warning，但行为不变。
+- `novel init --agent codex` 成为文档主路径。
 
-- 已新增 `src/cli/commands/check-status.command.ts`、`plugins.command.ts`、`upgrade.command.ts`、`info.command.ts`，让 `src/cli/program.ts` 仅负责 program wiring、banner、帮助扩展和注册命令。
-- 已新增 `tests/smoke/cli-commands.test.ts` 覆盖 help、info、plugins help、`upgrade --dry-run`。
+## Agent Contract 设计
 
-## 阶段 2：应用层 use case 化
+### Contract 源文件
 
-目标：CLI 不直接做文件复制、Git 初始化、模板替换。
+建议新增源模板：
 
-- [x] 新建 `application/init-project.ts`
-  - 输入：项目名、路径、目标平台、写作方法、插件、git/expert 选项。
-  - 输出：结构化 `InitProjectResult`。
-  - 验收：CLI action 只负责解析参数和打印结果。
-- [x] 新建 `application/upgrade-project.ts`
-  - 验收：备份、dry-run、选择性更新可测试。
-- [x] 新建 `application/get-project-status.ts`
-  - 验收：`codex-status` 和后续通用 `status` 共用状态模型。
-- [x] 所有 use case 仅依赖接口，不直接依赖 `fs-extra`
-  - 验收：单元测试可用内存 fake store。
+```text
+templates/agent/agent-contract.md
+```
 
-阶段备注：
+初始化后输出：
 
-- 已新增 `src/application/init-project.ts`，把 `init` 的项目目录创建、模板复制、插件安装和 Git 初始化移入 application 层。
-- 已新增 `tests/unit/init-project.test.ts` 直接覆盖 use case 的 Codex 项目生成和已存在目录错误。
-- 已新增 `src/application/upgrade-project.ts`，把 `upgrade` 的项目检测、平台选择、备份、选择性更新、dry-run 和版本写回移入 application 层。
-- 已新增 `tests/unit/upgrade-project.test.ts` 覆盖 dry-run 不落盘、选择性更新、备份、用户 `spec/tracking` 与 `spec/knowledge` 保护，以及非项目目录错误。
-- 已新增 `src/application/get-project-status.ts`，提供通用 `ProjectStatus` 状态模型；`status` 与 `codex-status` CLI 均调用 application 层。
-- 已新增 `tests/unit/get-project-status.test.ts` 覆盖项目摘要、Codex 接手文件、故事进度、追踪 JSON 与渲染输出。
-- 已新增 `src/application/project-ports.ts`，定义 `ProjectFileSystem`、`GitAdapter`、`PluginInstaller` 端口。
-- 已新增 `src/infrastructure/node-file-system.ts`、`command-git-adapter.ts`、`plugin-manager-installer.ts`，由 CLI 注入 Node/fs-extra/Git/插件管理器实现。
-- 已新增 `tests/helpers/memory-file-system.ts`，并在 `get-project-status` 单元测试中用内存 fake store 覆盖 application 层无真实文件系统依赖的路径。
+```text
+.specify/agent-contract.md
+AGENTS.md
+```
 
-## 阶段 3：项目 artifact graph
+`AGENTS.md` 是给支持该约定的 agent 直接读取的入口；`.specify/agent-contract.md` 是 Novel Writer 自己的协议源，便于 `contract:sync` 和 validate 对比。
 
-目标：让故事规格、计划、任务、正文、追踪数据之间有可验证关系。
+### Contract 必须包含
 
-- [x] 定义 `StoryArtifact`、`StoryProject`、`WritingTask` 类型
-  - 验收：`tasks.md` 中的输出路径、依赖、状态可解析。
-- [x] 新增 artifact scanner
-  - 验收：可扫描 `stories/*`、`spec/tracking/*.json`，返回缺失、过期、非法状态。
-- [x] 新增 artifact graph
-  - 验收：能回答“哪个章节受哪个任务/线索/角色状态影响”。
-- [x] `codex-status` 改用 graph
-  - 验收：输出不回退，并新增阻塞原因列表。
+- 项目身份：这是 Novel Writer 小说项目，而不是代码开发项目。
+- 读取顺序：
+  1. `AGENTS.md`
+  2. `.specify/agent-contract.md`
+  3. `.specify/memory/constitution.md`
+  4. `stories/*/specification.md`
+  5. `stories/*/creative-plan.md`
+  6. `stories/*/tasks.md`
+  7. `spec/tracking/*.json`
+  8. `spec/knowledge/*`
+  9. `stories/*/content/*`
+- 写入边界：默认只写当前任务允许修改的文件。
+- 任务状态规则：`todo`、`in_progress`、`done` 的更新时机。
+- tracking 更新规则：写章节后必须同步角色、关系、时间线、情节数据。
+- handoff 规则：长会话结束前生成或更新 `handoff.md`。
+- validate 规则：阶段完成前运行 `novel validate` 或说明无法运行。
+- 高风险内容边界：只处理剧情功能、人物动机、同意边界、后果和任务标注，不扩写未授权内容。
+- agent 能力降级策略：不能执行 CLI 时如何手动读取 `.specify/commands/*.md`。
 
-阶段备注：
+### Contract renderer
 
-- 已新增 `src/domain/story-artifact.ts`，定义 `StoryArtifact`、`StoryProject`、`WritingTask`、任务状态/优先级等领域类型。
-- 已新增 `parseWritingTasksFromMarkdown`，可解析 `tasks.md` 中的任务状态、优先级、`WRITE-READY`/`PLAN-ONLY` 标记、依赖、输出路径、必须读取、允许修改、涉及线索和验收标准。
-- 已新增 `tests/unit/story-artifact.test.ts`，用接近真实任务模板的 Markdown 片段覆盖任务元数据解析。
-- 已新增 `src/validation/artifact-scanner.ts`，扫描 `stories/*`、任务输出文件和 `spec/tracking/*.json`，返回故事级与全局 issue。
-- 已新增 `tests/unit/artifact-scanner.test.ts`，覆盖缺失 `creative-plan.md`/`tasks.md`、任务输出缺失，以及非法 tracking JSON。
-- 已新增 `src/validation/artifact-graph.ts`，基于扫描结果建立任务、章节输出、线索和阻塞 issue 的查询索引。
-- 已新增 `tests/unit/artifact-graph.test.ts`，覆盖章节影响查询、线索关联任务查询和阻塞任务查询。
-- 已将 `src/application/get-project-status.ts` 接入 artifact scanner/graph，新增 `blockers` 字段与 CLI 渲染中的“阻塞原因”列表。
-- 已扩展 `tests/unit/get-project-status.test.ts`，覆盖 graph blocker 不影响原有 status summary，并验证内存文件系统路径仍可运行。
+| 输出 | 用途 |
+|------|------|
+| `AGENTS.md` | 通用 agent 指令入口 |
+| `.specify/agent-contract.md` | Novel Writer 协议源文件 |
+| `.codex/AGENTS.md` 或项目根 `AGENTS.md` profile 段 | Codex 特定增强 |
+| `.gemini/GEMINI.md` | Gemini 特定 project instruction |
+| `.continue/checks/novel-*.md`（后续可选） | Continue 风格 CI/PR 检查 |
 
-## 阶段 4：模板与 prompt compiler 体系
+## 命令语义与渲染拆分
 
-目标：把 shell 中的 prompt 生成逻辑迁移到 TypeScript，减少平台漂移。
+### 当前问题
 
-- [x] 新建 `prompt/frontmatter.ts`
-  - 验收：可解析 `templates/commands/*.md` 的 description、argument-hint、scripts。
-- [x] 新建 `prompt/compiler.ts`
-  - 验收：输入 command template + platform config，输出目标 prompt 文件内容。
-- [x] 为 Claude/Gemini/Codex 等平台建 renderer
-  - 验收：生成结果与现有 `build:commands` golden fixture 等价。
-- [x] `scripts/build/generate-commands.sh` 降级为兼容包装或移除
-  - 验收：Windows 无 Git Bash 时仍可生成命令。
-- [x] 支持模板 resolution stack
-  - 顺序：project-local overrides → presets → extensions → core templates。
-  - 验收：覆盖规则有测试。
+`templates/commands/*.md` 同时承担：
 
-阶段备注：
+- 命令元数据。
+- 平台 frontmatter。
+- 脚本路径。
+- agent 行为提示。
+- 小说领域逻辑。
 
-- 已新增 `src/prompt/frontmatter.ts`，解析命令模板 frontmatter、正文、`description`、`argument-hint`、`allowed-tools`、`model` 与 `scripts`。
-- 已新增 `tests/unit/frontmatter.test.ts`，覆盖纯函数解析、无 frontmatter 模板，以及仓库内所有 `templates/commands/*.md` 的 `sh/ps` 脚本元数据。
-- 解析器采用轻量行解析以兼容当前模板中未加引号的 `argument-hint`，后续 compiler 可在此基础上逐步收紧模板格式。
-- 已新增 `src/prompt/compiler.ts`，支持脚本变体选择、`{SCRIPT}` 替换、`$ARGUMENTS/{ARGS}` 替换、`__AGENT__` 替换、`.specify` 路径重写，以及 full/partial/minimal/none Markdown 与 TOML 输出。
-- 已新增 `tests/unit/prompt-compiler.test.ts`，覆盖核心替换规则、Markdown/TOML 输出分支，并用真实 `templates/commands/plan.md` 做轻量编译验证。
-- 已新增 `src/prompt/platform-renderers/index.ts`，把每个 AI 平台的输出扩展名、命名空间、参数占位符和输出格式集中到 typed renderer registry。
-- 已新增 `tests/unit/platform-renderers.test.ts`，覆盖 registry 与 `AI_PLATFORM_IDS` 一致，并验证 Claude/Gemini/Codex 的代表性输出约定。
-- 已新增 `src/prompt/build-commands.ts` 与 `scripts/build/build-commands.ts`，把命令产物生成、支持文件复制、平台输出目录映射迁移到 TypeScript/Node。
-- 已将 `scripts/build-commands.cjs` 改为 Node 入口，`scripts/build/generate-commands.sh` 降级为兼容包装；Windows 无 Git Bash 时可直接运行 `npm run build:commands`。
-- 已新增 `tests/unit/build-commands.test.ts`，覆盖 Codex/Gemini 命令生成、脚本路径重写、支持文件复制和 `spec/tracking`/`spec/knowledge` 空目录保护。
-- 已新增 `src/templates/resolver.ts`，支持 core、extension、preset、project-local 四层模板源解析，并返回最终模板清单与 override 记录。
-- 已新增 `tests/unit/template-resolver.test.ts`，覆盖 project → preset → extension → core 的覆盖优先级，以及解析结果写入目标目录。
+这会导致新增平台或无 slash command agent 时，需要在同一份模板里塞入越来越多适配逻辑。
 
-## 阶段 5：脚本运行时统一
+### 目标结构
 
-目标：解决 Bash/PowerShell 双维护。
+```text
+templates/
+  commands/
+    write.command.yaml          # command spec
+    write.prompt.md             # agent-neutral prompt body
+    write.examples.md           # 可选示例
+  agent/
+    agent-contract.md
+  renderers/
+    codex.prompt.hbs
+    claude.command.hbs
+    gemini.toml.hbs
+    generic.command.hbs
+```
 
-- [x] 盘点所有脚本功能
-  - 输出：`docs/tech/script-inventory.md`。
-- [x] 抽象 script runner
-  - 验收：JS/TS 层能调用 `analyze-story`、`check-writing-state` 等能力。
-- [x] 优先迁移纯文件扫描脚本到 TypeScript
-  - 候选：word count、state scan、tracking JSON validation。
-- [x] 保留 shell compatibility layer
-  - 验收：旧 prompt 中脚本路径仍能工作。
+`command.yaml` 示例：
 
-阶段备注：
+```yaml
+id: write
+title: 章节写作
+stage: drafting
+description: 基于任务清单执行章节写作
+arguments:
+  hint: "[章节编号或任务ID]"
+requiredReads:
+  - .specify/memory/constitution.md
+  - stories/*/specification.md
+  - stories/*/creative-plan.md
+  - stories/*/tasks.md
+  - spec/tracking/*.json
+allowedWrites:
+  - stories/*/content/**
+  - spec/tracking/**
+scripts:
+  check:
+    capability: check-writing-state
+    sh: .specify/scripts/bash/check-writing-state.sh
+    ps: .specify/scripts/powershell/check-writing-state.ps1
+risk:
+  requiresTaskBoundary: true
+  highRiskContentPolicy: use-task-boundary
+```
 
-- 已新增 `src/application/run-script.ts`，提供 `runNovelScript`、`ScriptExecution`、`ScriptExecutor` 和结构化 `ScriptRunnerError`。
-- runner 支持项目本地 `.specify/scripts/<platform>/` 优先、包内 `scripts/<platform>/` 回退，并可调用 `analyze-story`、`check-writing-state` 等脚本能力。
-- 已新增 `src/infrastructure/node-script-executor.ts`，把真实 `execFile` 调用隔离在 infrastructure 层，application 层只依赖 executor 接口。
-- 已新增 `tests/unit/script-runner.test.ts`，覆盖项目本地优先、包内回退、PowerShell 参数构造和缺脚本错误。
-- 已新增 `src/application/check-writing-state.ts`，将 `check-writing-state` 的纯文件扫描能力迁移到 TypeScript。
-- TS scanner 覆盖写作宪法/规格/计划/任务文档完整性、任务进度、正文可见字符统计、章节字数范围和 tracking JSON 有效性。
-- 已新增 `tests/unit/check-writing-state.test.ts`，覆盖状态模型、字数统计规则和 checklist 兼容输出。
-- 已新增 `src/script-runtime.ts`，提供 `check-writing-state` runtime 入口，支持 `--project-root`、`--story`、`--checklist`、`--json`。
-- 已将 `scripts/bash/check-writing-state.sh` 与 `scripts/powershell/check-writing-state.ps1` 降级为 runtime wrapper，保留旧脚本路径。
-- `buildCommandArtifacts` 会把 runtime bundle 复制到 `.specify/scripts/runtime/`，包含入口、写作状态 scanner 与任务解析领域代码；即使输出目录是默认 `dist`，也会先快照再清理，避免生成产物缺失 runtime。
-- 已新增 `tests/smoke/script-runtime.test.ts`，覆盖 runtime 直接调用和 PowerShell wrapper 兼容调用。
+验收标准：
 
-## 阶段 6：插件与扩展系统重构
+- 每个命令语义只定义一次。
+- generic Markdown、Codex prompt、Claude command、Gemini TOML 都由 renderer 生成。
+- 旧 `templates/commands/*.md` 可在第一阶段继续作为 source，后续再迁移到 YAML + prompt body。
+- `build:commands` 结果与旧 manifest 变化可解释、可审查。
 
-目标：让插件不只是文件复制，而是声明式能力包。
+## Generic Integration
 
-- [x] 定义 `PluginManifest`
-  - 字段：commands、templates、knowledge、trackingRules、experts、hooks。
-- [x] 插件安装改为 plan/apply 两阶段
-  - 验收：dry-run 可列出将写入的文件和冲突。
-- [x] 引入 hook 点
-  - 候选：init 后、prompt compile 前、tasks 生成后、write 前验证。
-- [x] 插件冲突策略
-  - 验收：同名 command/template 冲突有优先级和错误提示。
+### 为什么需要 generic
 
-阶段备注：
-- 已新增 `src/domain/plugin-manifest.ts`，定义插件类型、能力字段、hook 点与 manifest parser。
-- `PluginManifest` 支持 `commands`、`templates`、`knowledge`、`trackingRules`、`experts`、`hooks`，并兼容现有 `plugins/*/config.yaml`。
-- 已将 schema 层 `validatePluginManifest` 与 `PluginManager` 接入同一份领域 manifest，避免插件配置存在两套类型定义。
-- 已新增 `tests/unit/plugin-manifest.test.ts`，覆盖显式能力声明、现有内置插件配置兼容和非法字段诊断。
-- 已为 `PluginManager` 新增 `planInstallPlugin` 与 `applyInstallPlan`，安装前可结构化列出插件目录复制、命令注入、Gemini TOML 命令、专家注册及冲突。
-- `novel plugins:add <name> --dry-run` 会显示预览模式、将写入文件和冲突，不实际落盘。
-- 已新增 `tests/unit/plugin-install-plan.test.ts`，并扩展 CLI smoke 覆盖插件 dry-run。
-- 已将 hooks 纳入安装计划，当前支持 `append`、`prepend`、`replace-marker`，并可把 `pre-prompt-compile` 等 hook 点声明为可执行的 `apply-hook` 操作。
-- 插件安装默认阻止覆盖冲突文件；CLI 提供 `--force` 显式覆盖，`--dry-run` 会列出冲突目标。
+任意 agent 不一定支持 slash command，但多数 agent 至少能读 Markdown。`generic` integration 的目标是让用户可以说：
 
-## 阶段 7：schema 与规则验证
+```text
+请读取 .specify/commands/write.md 并按其中流程执行。
+```
 
-目标：把“AI 应该写对”变成“程序能检查”。
+### 输出内容
 
-- [x] 引入 JSON schema 或 Zod
-  - 对象：tracking JSON、plugin manifest、AI platform registry、task metadata。
-- [x] 新增 `novel validate`
-  - 验收：检查项目结构、tracking JSON、任务字段、模板缺失。
-- [x] 写作规则 checker 化
-  - 候选：角色称呼、时间线、世界观、任务依赖、章节字数。
-- [x] 支持 severity
-  - 级别：error、warning、info。
+```text
+.specify/commands/
+  constitution.md
+  specify.md
+  clarify.md
+  plan.md
+  tasks.md
+  write.md
+  analyze.md
+  track-init.md
+  track.md
+  timeline.md
+  relations.md
+  checklist.md
+  expert.md
+```
 
-阶段备注：
+每个 generic command 应包含：
 
-- 已新增 `src/validation/schema/index.ts`，提供统一 `ValidationIssue`、severity 和轻量 typed validators。
-- 已覆盖 AI platform registry、tracking JSON 顶层结构、WritingTask 元数据、plugin manifest 基础字段校验；暂未引入外部 Zod 依赖，避免增加安装和 lockfile 变更。
-- 已新增 `tests/unit/schema-validators.test.ts`，验证当前 registry 为合法，并覆盖重复平台、非法命令前缀、无效任务、无效插件 manifest 等失败路径。
-- 已新增 `src/application/validate-project.ts` 与 `src/cli/commands/validate.command.ts`，提供 `novel validate` / `novel validate --json`。
-- `validateProject` 会聚合项目结构、artifact scanner、tracking JSON 顶层结构、WritingTask 元数据和核心模板缺失检查；CLI 在 error 存在时返回非零 exit code。
-- 已新增 `tests/unit/validate-project.test.ts`，并在 `tests/smoke/cli-init.test.ts` 覆盖初始化项目后的 `novel validate --json`。
-- 已新增 `src/validation/rules/writing-rules.ts`，把写作规则抽象为可注册 `WritingRule`，默认覆盖任务依赖、章节字数、timeline 章节顺序、角色禁用称呼和常见误名。
-- `validateProject` 已接入默认写作规则包，统一输出 `UNKNOWN_TASK_DEPENDENCY`、`CHAPTER_TOO_SHORT`、`TIMELINE_CHAPTER_ORDER`、`FORBIDDEN_CHARACTER_ADDRESS`、`COMMON_CHARACTER_SUBSTITUTION` 等 issue。
-- 已新增 `tests/unit/writing-rules.test.ts`，并扩展 `tests/unit/validate-project.test.ts` 覆盖规则包接入。
-- 已新增 `src/validation/severity.ts`，统一 severity 合法值、计数、排序与最小级别过滤。
-- `novel validate` 已支持 `--severity error|warning|info`，JSON 输出包含 `minSeverity` 并按级别过滤 `issues`，但 `valid` 与 exit code 仍基于完整 error 计数判断。
-- 已新增 `tests/unit/validation-severity.test.ts`，并扩展 validate 单元测试和 CLI smoke 覆盖 severity 过滤。
+- 目的。
+- 前置条件。
+- 必须读取。
+- 允许写入。
+- 执行步骤。
+- 输出位置。
+- 完成后验证。
+- 无法执行 shell/CLI 时的降级方案。
 
-## 阶段 8：测试与 CI
+验收标准：
 
-目标：后续重构能持续安全。
+- `novel init my-novel --agent generic` 不生成任何特定平台目录，但项目可被任意 agent 手动使用。
+- `novel validate` 能检查 `.specify/commands/*.md` 是否存在。
+- README 主路径同时给出 `--agent codex` 和 `--agent generic`。
 
-- [x] GitHub Actions
-  - 验收：PR 上运行 install、build、test、build:commands。
-- [x] CLI e2e matrix
-  - 平台：Windows、Ubuntu；Node LTS。
-- [x] 生成产物一致性检查
-  - 验收：prompt compiler 输出变化必须显式提交。
-- [x] 覆盖率门槛
-  - 初始建议：核心模块 60%，后续提升。
+## CLI 命令规划
 
-阶段备注：
-- 已新增 `.github/workflows/ci.yml`，在 PR 与 `main` push 上运行 Node 20、`npm install --package-lock=false --ignore-scripts` 与 `npm run verify`。
-- CI 已扩展为 Ubuntu/Windows 与 Node 20/22 矩阵，复用 `npm run verify` 覆盖 CLI smoke。
-- 已新增 `scripts/build/command-artifact-manifest.ts` 与 `tests/fixtures/command-artifacts.manifest.json`，并将 `npm run check:command-manifest` 接入 `npm run verify`；prompt/compiler 生成产物变化时需运行 `npm run update:command-manifest` 并提交 manifest。
-- 已接入 `@vitest/coverage-v8`、`npm run test:coverage` 与 Vitest coverage thresholds；核心源码目录按全局 60% statements/branches/functions/lines 门槛纳入 `npm run verify`。
+### 新增命令
 
-## 阶段 9：文档与发布治理
+| 命令 | 作用 | 阶段 |
+|------|------|------|
+| `novel agent:list` | 列出支持的 agent integrations、能力和安装目标 | A1 |
+| `novel agent:add <id>` | 给现有项目添加 agent integration | A2 |
+| `novel agent:remove <id>` | 移除 agent integration 产物，保留项目数据 | A3 |
+| `novel agent:doctor` | 检查已安装 agent integration 是否缺文件或过期 | A2 |
+| `novel contract:print` | 输出当前 agent contract | A1 |
+| `novel contract:sync` | 从源模板同步 `AGENTS.md` 和平台说明文件 | A2 |
+| `novel commands:build` | 用户可显式重建当前项目命令产物 | A3 |
 
-目标：重构完成后外部用户仍能清楚升级。
+### 兼容命令
 
-- [x] 新增 `docs/architecture.md` 或更新现有架构图
-  - 验收：模块边界、数据流、extension flow 可视化。
-- [x] 引入 changeset 风格变更记录
-  - 验收：CLI 行为、模板契约、生成产物变化都有记录。
-- [x] 更新 README 快速路径
-  - 验收：新用户仍可 5 分钟 init + status + prompt。
-- [x] 编写迁移指南
-  - 验收：旧项目如何 `upgrade`、如何保留自定义模板。
+| 旧入口 | 新入口 | 策略 |
+|--------|--------|------|
+| `--ai <type>` | `--agent <id>` | 继续支持，输出提示 |
+| `--all` | `--all-agents` | 继续支持，内部映射 |
+| `codex-status` | `status` | 保留别名 |
+| `src/utils/ai-platforms.ts` | `src/agent/registry.ts` | 先 wrapper，后迁移 |
 
-阶段备注：
-- 已更新 `docs/tech/architecture.md`，以当前重构后的 CLI/application/domain/infrastructure/prompt/templates/plugins/validation 边界为准，并补充模块边界、初始化流、命令产物流、状态校验流和插件扩展流 Mermaid 图。
-- 已新增 `changes/` 轻量变更记录目录与 `npm run check:changes`，每条记录必须覆盖 CLI 行为、模板契约、生成产物和验证四个维度，并已接入 `npm run verify`。
-- 已更新 README 快速开始为 5 分钟路径，覆盖安装、`init --ai codex`、`status`、`validate` 和平台 slash command 对照。
-- 已新增 `docs/migration-guide.md`，说明旧项目保守升级、自定义命令/模板保留、插件迁移、回滚和升级后验收清单，并从升级指南与文档首页链接。
+## 插件/扩展/预设重构
 
-## 阶段 10：Codex 专项增强
+### 目标
 
-目标：让 Novel Writer 成为 Codex 友好的长篇创作工作台。
+沿用 Spec Kit 的思想，但使用 Novel Writer 术语：
 
-- [x] `novel status` 泛化，`codex-status` 作为别名
-  - 验收：Codex 与其他 AI 用户都能用同一状态入口。
-- [x] `AGENTS.md` 生成可配置
-  - 验收：可按成人向、慢热、冒险、恋爱、多线叙事生成不同边界模板。
-- [x] 任务到 issue / task board
-  - 借鉴 Spec Kit 的 task-to-issues 思路。
-  - 验收：`tasks.md` 可转为 GitHub issues 或本地 JSON board。
-- [x] 断点续写上下文包
-  - 验收：生成 `handoff.md`，包含当前章节、未完成任务、必须读取文件、风险边界。
+- Extension：新增能力，例如翻译、拆书、类型知识库、外部平台同步。
+- Preset：改造既有流程，例如玄幻网文、现实主义、慢热恋爱、成人向边界、出版审稿。
+- Project override：单个小说项目的本地修改。
+- Core：Novel Writer 默认命令、模板、schema、规则。
 
-阶段备注：
-- 已新增 `novel status` 通用项目状态入口，`codex-status` 保留为兼容别名；状态模型新增 `handoff` 字段并保留旧 `codex` 字段，避免破坏自动化读取。
-- 已新增 `--agents-profile` 初始化选项，并通过 `templates/AGENTS.codex.md` 的 `{{AGENTS_PROFILE_SECTION}}` 为 Codex 项目生成成人向、慢热、冒险、恋爱、多线叙事等可组合边界画像。
-- 已新增 `novel tasks:board`，可把最近或指定故事的 `tasks.md` 导出为 `task-board.json`，每个任务包含状态列、上下文边界、验收标准和 GitHub issue 草稿。
-- 已新增 `novel handoff`，可生成 `handoff.md` 或 `--json` 结构化上下文包，包含当前章节、下一任务、未完成任务、必须读取文件、允许修改文件、风险边界和 blocker。
+### Resolution stack
 
-## 执行顺序
+```text
+1. project-local overrides   .specify/templates/overrides/
+2. presets                   .specify/presets/*/
+3. extensions                .specify/extensions/*/
+4. core                      .specify/templates/
+```
 
-1. 阶段 0：测试保护网。
-2. 阶段 1：CLI 拆分。
-3. 阶段 2：应用层 use case。
-4. 阶段 4：prompt compiler。
-5. 阶段 3：artifact graph。
-6. 阶段 7：schema 与 validate。
-7. 阶段 5：脚本运行时迁移。
-8. 阶段 6：插件系统。
-9. 阶段 8：CI。
-10. 阶段 9、10：文档发布与 Codex 增强。
+### 需要调整
 
-说明：阶段 3 和阶段 4 可以互换，但建议先做 prompt compiler，因为它会减少后续平台相关变更成本。
+- 现有 `plugins/*/config.yaml` 增加 `kind: extension | preset | style-pack | market-bridge`。
+- 插件命令安装不再直接复制到平台目录，而是先进入 command spec registry，再由 renderer 输出。
+- 同名命令冲突按 stack 解决，并在 `agent:doctor` 中显示最终来源。
+- `plugins:add` 保留兼容，但文档逐步迁移到 `extension:add` 或 `preset:add` 是否另行决策。
 
-## 每阶段完成定义
+## 数据与迁移策略
 
-- [ ] 有明确设计记录或更新本文件。
-- [ ] 代码改动不混入无关重构。
-- [ ] `npm run build` 通过。
-- [ ] 与阶段相关的测试通过。
-- [ ] `npm run build:commands` 在涉及 prompt/platform 时通过。
-- [ ] 至少一个临时项目 smoke 通过。
-- [ ] 本地 commit 已创建，不主动 push。
+### `.specify/config.json` 建议新增
+
+```json
+{
+  "name": "my-novel",
+  "type": "novel",
+  "version": "0.x.x",
+  "method": "three-act",
+  "integrations": [
+    {
+      "id": "codex",
+      "installedAt": "2026-05-02T00:00:00.000Z",
+      "renderer": "codex",
+      "commandSurface": "slash-command"
+    }
+  ],
+  "legacy": {
+    "ai": "codex"
+  }
+}
+```
+
+### 迁移策略
+
+1. 读取旧 `ai` 字段。
+2. 如果存在平台目录，自动推断 integrations。
+3. 写入 `integrations`，保留 `ai`。
+4. 生成 `.specify/agent-contract.md`。
+5. 同步 `AGENTS.md` 和 generic commands。
+6. 不覆盖用户 `stories/`、`spec/tracking/`、`spec/knowledge/`。
+
+## 分阶段任务
+
+## 阶段 A0：基线与决策记录
+
+目标：只整理现状，不改行为。
+
+- [ ] A0-T001：新增架构决策记录 `docs/tech/agent-neutral-refactor.md`，说明 `AIPlatform` → `AgentIntegration` 的原因、非目标和兼容策略。
+- [ ] A0-T002：盘点现有平台输出目录、命令格式、renderer、测试覆盖，形成表格。
+- [ ] A0-T003：确定命名：`--agent`、`--integration` 二选一作为主命令参数；另一个可作为别名或暂不引入。
+- [ ] A0-T004：确定 `AGENTS.md` 与 `.specify/agent-contract.md` 的主从关系。
+- [ ] A0-T005：更新测试计划，但不改源码。
+
+验收：
+
+- 无运行时行为变化。
+- `docs/tech/full-refactor-todo.md` 与 ADR 一致。
+- 本阶段只允许文档变更。
+
+## 阶段 A1：AgentIntegration Registry
+
+目标：建立新模型，但保持旧 API 兼容。
+
+- [ ] A1-T001：新增 `src/agent/capabilities.ts`。
+- [ ] A1-T002：新增 `src/agent/registry.ts`，迁移当前 13 个平台，并加入 `generic`。
+- [ ] A1-T003：保留 `src/utils/ai-platforms.ts` 作为兼容 wrapper。
+- [ ] A1-T004：新增 `novel agent:list`，输出 id、displayName、commandSurface、capabilities、installTargets。
+- [ ] A1-T005：为 registry 增加单元测试，覆盖旧 id 与新 id 一致性。
+
+验收：
+
+- `npm run build` 通过。
+- 旧 `init --ai codex`、`init --all` smoke 不变。
+- `agent:list --json` 可被自动化读取。
+
+## 阶段 A2：Agent Contract 与 Generic Commands
+
+目标：让无 slash command 的任意 agent 也能使用 Novel Writer。
+
+- [ ] A2-T001：新增 `templates/agent/agent-contract.md`。
+- [ ] A2-T002：初始化时生成 `.specify/agent-contract.md`。
+- [ ] A2-T003：初始化时生成通用 `AGENTS.md`，Codex profile 作为可选增强段。
+- [ ] A2-T004：新增 `generic` renderer，输出 `.specify/commands/*.md`。
+- [ ] A2-T005：新增 `novel contract:print` 与 `novel contract:sync`。
+- [ ] A2-T006：`validate` 增加 contract/commands 缺失检查。
+
+验收：
+
+- `novel init smoke --agent generic --no-git` 后不存在平台特定目录，但存在 `AGENTS.md`、`.specify/agent-contract.md`、`.specify/commands/write.md`。
+- 任意 generic command 文档包含目的、必须读取、允许写入、执行步骤、验证和降级方案。
+- `novel validate --json` 能识别 generic 项目为合法。
+
+## 阶段 A3：CLI 参数兼容与项目升级
+
+目标：将用户主路径从 `--ai` 迁移到 `--agent`，但不中断旧项目。
+
+- [ ] A3-T001：`init` 支持 `--agent <id>`、`--all-agents`。
+- [ ] A3-T002：`upgrade` 支持 `--agent <id>`、`--all-agents`。
+- [ ] A3-T003：旧 `--ai`、`--all` 输出简短兼容提示。
+- [ ] A3-T004：新增 `novel agent:add <id>`。
+- [ ] A3-T005：新增 `novel agent:doctor`，检查 contract、平台命令目录、manifest、renderer 版本。
+- [ ] A3-T006：升级旧项目时推断并写入 `.specify/config.json.integrations`。
+
+验收：
+
+- 旧命令测试继续通过。
+- 新命令 smoke 覆盖 `--agent codex`、`--agent generic`、`agent:add gemini`。
+- README 和 docs 使用新主路径。
+
+## 阶段 A4：Command Spec 拆分
+
+目标：命令语义和平台格式解耦。
+
+- [ ] A4-T001：定义 `CommandSpec` 类型。
+- [ ] A4-T002：选 2 个命令试点迁移：`write`、`analyze`。
+- [ ] A4-T003：renderer 兼容旧 Markdown 模板和新 CommandSpec。
+- [ ] A4-T004：`build:commands` manifest 标记命令来源。
+- [ ] A4-T005：编写迁移指南：如何把旧 `templates/commands/*.md` 拆成 `.command.yaml` + `.prompt.md`。
+
+验收：
+
+- `write`、`analyze` 的 Codex/Claude/Gemini/generic 输出均可生成。
+- 输出变化通过 manifest 审核。
+- 未迁移命令仍走旧模板路径。
+
+## 阶段 A5：插件、预设、扩展统一
+
+目标：插件接入新 registry 和 resolution stack。
+
+- [ ] A5-T001：扩展 `PluginManifest`，增加 `kind`、`priority`、`provides`、`overrides`。
+- [ ] A5-T002：插件命令先注册到 command spec registry，再由 agent renderer 输出。
+- [ ] A5-T003：实现 project override / preset / extension / core 的最终来源诊断。
+- [ ] A5-T004：`plugins:add --dry-run` 显示对所有 agent integration 的影响。
+- [ ] A5-T005：评估是否新增 `preset:add`、`extension:add`，或继续复用 `plugins:add`。
+
+验收：
+
+- 内置插件安装行为不退化。
+- 同名命令冲突能解释来源和解决结果。
+- `agent:doctor` 可显示插件命令是否已同步到所有已安装 agent。
+
+## 阶段 A6：Agent 能力感知执行
+
+目标：让 prompt/contract 能根据 agent 能力降级。
+
+- [ ] A6-T001：renderer 根据 `capabilities.runShell` 决定是否写入 CLI/脚本步骤。
+- [ ] A6-T002：renderer 根据 `capabilities.writeFiles` 决定写入“只读建议”或“可执行修改”模式。
+- [ ] A6-T003：对 `generic`、`continue-check` 这类偏只读入口，生成 read-only analyze/checklist 版本。
+- [ ] A6-T004：`handoff` 增加 `targetAgent` 可选参数，输出适配目标 agent 的继续步骤。
+
+验收：
+
+- `generic` 不要求 slash command。
+- 只读 agent 不会被提示直接写正文。
+- 支持 shell 的 agent 才看到脚本执行作为主路径。
+
+## 阶段 A7：文档、发布与弃用节奏
+
+目标：用户知道为什么迁移、如何迁移、旧入口什么时候还可用。
+
+- [ ] A7-T001：README 改为 agent-neutral 主叙事。
+- [ ] A7-T002：新增 `docs/agent-integrations.md`。
+- [ ] A7-T003：新增 `docs/agent-contract.md`。
+- [ ] A7-T004：更新 `docs/migration-guide.md`，加入 `--ai` 到 `--agent` 的迁移说明。
+- [ ] A7-T005：CHANGELOG 记录兼容期和弃用策略。
+
+验收：
+
+- 新用户 5 分钟路径包含 `--agent generic` 和一个具体平台示例。
+- 旧用户能找到 `--ai` 的兼容说明。
+- 所有“Codex 接手”表述改为“agent 接手”，Codex 只在平台章节出现。
+
+## 验证矩阵
+
+| 场景 | 命令 |
+|------|------|
+| 类型检查 | `npm run build` |
+| 单元测试 | `npm test` |
+| CLI smoke | `npm run test:smoke` |
+| 生成产物 | `npm run build:commands` |
+| 生成产物一致性 | `npm run check:command-manifest` |
+| 完整验证 | `npm run verify` |
+| generic 初始化 | `node dist/cli.js init smoke --agent generic --no-git` |
+| Codex 兼容初始化 | `node dist/cli.js init smoke --ai codex --no-git` |
+| agent doctor | `node dist/cli.js agent:doctor --json` |
 
 ## 风险与缓解
 
 | 风险 | 缓解 |
 |------|------|
-| 重构范围过大导致长期半成品 | 每阶段可独立提交，保留兼容层 |
-| 生成 prompt 行为漂移 | 先建立 golden fixture，再替换 compiler |
-| 旧项目 upgrade 破坏用户数据 | plan/apply + backup + overwrite policy 测试 |
-| Bash/PowerShell 迁移遗漏 | 脚本 inventory 后按功能逐个迁移 |
-| 模板系统过度设计 | 先支持 core + project override，再扩 preset/extension |
-| AI agent 误写正文或越界 | AGENTS、tasks metadata、validate 三层约束 |
+| 术语迁移导致用户困惑 | `--ai` 保留兼容；README 给出“agent/integration 是新名称”的说明 |
+| `AGENTS.md` 泛化后 Codex 体验变弱 | 通用 contract + Codex profile 增强分层输出 |
+| generic command 与 slash command 漂移 | 单一 CommandSpec，多 renderer 输出 |
+| 插件系统再次分裂 | 插件先注册 command/template 能力，再由 renderer 输出 |
+| 旧项目 upgrade 覆盖用户内容 | plan/apply、backup、dry-run、validate、只覆盖生成产物 |
+| 支持任意 agent 范围过大 | 分层能力支持，不承诺所有 agent 都有同等自动化体验 |
 
-## 第一批建议任务
+## 建议第一批开发任务
 
-- [x] T001：引入 Vitest，并为 `src/utils/ai-platforms.ts` 写 registry 测试。
-- [x] T002：写 CLI smoke 测试，覆盖 `init --ai codex` 与 `init --all`。
-- [x] T003：拆出 `src/cli/program.ts`，保持 `src/cli.ts` 为最小 bin 入口。
-- [x] T004：拆出 `init.command.ts`，但暂不改 init 内部业务逻辑。
-- [x] T005：为当前 `build:commands` 生成结果建立 golden fixture。
-- [x] T006：新增 `docs/tech/script-inventory.md`，盘点 Bash/PowerShell 对应关系。
+- [ ] N001：新增 ADR `docs/tech/agent-neutral-refactor.md`。
+- [ ] N002：新增 `src/agent/capabilities.ts` 和 `src/agent/registry.ts`，但保持旧 `ai-platforms.ts` wrapper。
+- [ ] N003：新增 `generic` integration 和 registry 测试。
+- [ ] N004：新增 `novel agent:list --json`。
+- [ ] N005：新增 `templates/agent/agent-contract.md` 初版。
+- [ ] N006：新增 `novel init --agent generic` 的 smoke fixture。
+- [ ] N007：README 改主叙事：agent-neutral，Codex 为示例 integration。
+
+## 历史归档：上一轮全面重构
+
+上一轮 `full-refactor-todo.md` 的阶段 0-10 已完成，归档如下。详细实现可从 Git 历史和对应测试文件追溯。
+
+| 阶段 | 状态 | 归档摘要 |
+|------|------|----------|
+| 阶段 0：重构保护网 | Done | 引入 Vitest、CLI smoke、golden fixture、`npm run verify`。 |
+| 阶段 1：CLI 拆分 | Done | 建立 `src/cli/program.ts` 与 `src/cli/commands/*`，CLI 入口变薄。 |
+| 阶段 2：应用层 use case | Done | `init-project`、`upgrade-project`、`get-project-status` 等迁入 application 层，并引入 ports。 |
+| 阶段 3：artifact graph | Done | 定义 story/task artifact，支持扫描、阻塞项、任务/章节/线索关系查询。 |
+| 阶段 4：prompt compiler | Done | 建立 frontmatter parser、compiler、platform renderers、TypeScript build-commands。 |
+| 阶段 5：脚本运行时统一 | Done | 盘点脚本，新增 script runner 和 `check-writing-state` TS runtime wrapper。 |
+| 阶段 6：插件与扩展系统 | Done | 定义 `PluginManifest`，安装 plan/apply、dry-run、冲突策略、hook 操作。 |
+| 阶段 7：schema 与规则验证 | Done | 新增 `novel validate`、severity、tracking/task/plugin/写作规则校验。 |
+| 阶段 8：测试与 CI | Done | GitHub Actions、matrix、command artifact manifest、coverage 门槛。 |
+| 阶段 9：文档与发布治理 | Done | 更新架构文档、changes 记录、迁移指南、README 快速路径。 |
+| 阶段 10：Codex 专项增强 | Done | `status` 泛化、`codex-status` 别名、Codex `AGENTS.md` profile、`tasks:board`、`handoff`。 |
+
+归档说明：
+
+- 上一轮目标是“让 Novel Writer 从单体 CLI + 大模板变成可测试、可维护、多平台的产品级架构”。
+- 本轮目标是在上一轮基础上继续抽象“agent-neutral 协议”，不是重复拆 CLI、应用层、prompt compiler。
+- 如需恢复上一轮逐项细节，请查看本文件的 Git 历史，而不要把已完成清单重新放回活跃待办。
 
 ## 参考链接
 
 - Spec Kit：<https://github.com/github/spec-kit>
 - Spec Kit integrations：<https://github.com/github/spec-kit/blob/main/docs/reference/integrations.md>
-- Spec Kit presets：<https://github.com/github/spec-kit/blob/main/presets/README.md>
-- Commander.js：<https://github.com/tj/commander.js>
-- oclif/core：<https://github.com/oclif/core>
-- ESLint：<https://github.com/eslint/eslint>
-- Nx：<https://github.com/nrwl/nx>
-- Changesets：<https://github.com/changesets/changesets/blob/main/docs/intro-to-using-changesets.md>
-- Vitest：<https://github.com/vitest-dev/vitest>
+- AGENTS.md：<https://github.com/agentsmd/agents.md>
+- Continue：<https://github.com/continuedev/continue>
+- OpenHands：<https://github.com/OpenHands/OpenHands>
+- Cline：<https://github.com/cline/cline>
+- Aider：<https://github.com/Aider-AI/aider>
