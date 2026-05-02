@@ -4,7 +4,7 @@
 
 Active planning。本文是后续开发的路线图，只记录设计、任务顺序、验收口径和历史归档；当前阶段不立即进入代码实现。
 
-上一次“全面重构”阶段 0-10 已完成，已归档到本文末尾“历史归档”。新的重构目标是把 Novel Writer 从“支持多 AI 平台的小说 prompt/CLI 工具”进一步升级为“任意 agent 都能接手的小说创作协议 + 平台适配器”。
+上一次“全面重构”阶段 0-10 已完成，归档信息已移至 [full-refactor-archive.md](full-refactor-archive.md)。新的重构目标是把 Novel Writer 从“支持多 AI 平台的小说 prompt/CLI 工具”进一步升级为“任意 agent 都能接手的小说创作协议 + 平台适配器”。
 
 ## 一句话目标
 
@@ -583,29 +583,9 @@ risk:
 - [ ] N006：新增 `novel init --agent generic` 的 smoke fixture。
 - [ ] N007：README 改主叙事：agent-neutral，Codex 为示例 integration。
 
-## 历史归档：上一轮全面重构
+## 历史归档
 
-上一轮 `full-refactor-todo.md` 的阶段 0-10 已完成，归档如下。详细实现可从 Git 历史和对应测试文件追溯。
-
-| 阶段 | 状态 | 归档摘要 |
-|------|------|----------|
-| 阶段 0：重构保护网 | Done | 引入 Vitest、CLI smoke、golden fixture、`npm run verify`。 |
-| 阶段 1：CLI 拆分 | Done | 建立 `src/cli/program.ts` 与 `src/cli/commands/*`，CLI 入口变薄。 |
-| 阶段 2：应用层 use case | Done | `init-project`、`upgrade-project`、`get-project-status` 等迁入 application 层，并引入 ports。 |
-| 阶段 3：artifact graph | Done | 定义 story/task artifact，支持扫描、阻塞项、任务/章节/线索关系查询。 |
-| 阶段 4：prompt compiler | Done | 建立 frontmatter parser、compiler、platform renderers、TypeScript build-commands。 |
-| 阶段 5：脚本运行时统一 | Done | 盘点脚本，新增 script runner 和 `check-writing-state` TS runtime wrapper。 |
-| 阶段 6：插件与扩展系统 | Done | 定义 `PluginManifest`，安装 plan/apply、dry-run、冲突策略、hook 操作。 |
-| 阶段 7：schema 与规则验证 | Done | 新增 `novel validate`、severity、tracking/task/plugin/写作规则校验。 |
-| 阶段 8：测试与 CI | Done | GitHub Actions、matrix、command artifact manifest、coverage 门槛。 |
-| 阶段 9：文档与发布治理 | Done | 更新架构文档、changes 记录、迁移指南、README 快速路径。 |
-| 阶段 10：Codex 专项增强 | Done | `status` 泛化、`codex-status` 别名、Codex `AGENTS.md` profile、`tasks:board`、`handoff`。 |
-
-归档说明：
-
-- 上一轮目标是“让 Novel Writer 从单体 CLI + 大模板变成可测试、可维护、多平台的产品级架构”。
-- 本轮目标是在上一轮基础上继续抽象“agent-neutral 协议”，不是重复拆 CLI、应用层、prompt compiler。
-- 如需恢复上一轮逐项细节，请查看本文件的 Git 历史，而不要把已完成清单重新放回活跃待办。
+上一轮全面重构已完成，归档信息见 [full-refactor-archive.md](full-refactor-archive.md)。本文件只保留当前 agent-neutral 重构的活跃计划。
 
 ## 参考链接
 
