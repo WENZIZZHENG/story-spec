@@ -24,6 +24,9 @@
     "postbuild": "node scripts/postbuild.cjs",
     "build:commands": "node scripts/build-commands.cjs --agents=claude,gemini,cursor,windsurf,roocode,copilot,qwen,opencode,codex,kilocode,auggie,codebuddy,q --scripts=sh",
     "dev": "tsx src/cli.ts",
+    "test": "vitest run tests/unit",
+    "test:smoke": "vitest run tests/smoke",
+    "verify": "npm run build && npm test && npm run build:commands && npm run build && npm run test:smoke",
     "start": "node dist/cli.js",
     "clean": "rm -rf dist",
     "prepare": "npm run build:commands && npm run build",
@@ -47,7 +50,8 @@
     "@types/node": "^20.10.0",
     "@types/through": "^0.0.33",
     "tsx": "^4.7.0",
-    "typescript": "^5.3.3"
+    "typescript": "^5.3.3",
+    "vitest": "^3.2.4"
   },
   "engines": {
     "node": ">=18.0.0"

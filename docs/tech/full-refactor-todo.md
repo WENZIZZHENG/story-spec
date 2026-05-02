@@ -100,20 +100,27 @@ src/
 
 目标：在大拆分前先让行为有测试锚点。
 
-- [ ] 新增 Vitest 或同等级测试框架
+- [x] 新增 Vitest 或同等级测试框架
   - 验收：`npm test` 可运行，至少包含 registry 与路径工具测试。
   - 文件：`package.json`、`vitest.config.ts`、`tests/**`。
   - 验证：`npm run build`、`npm test`。
-- [ ] 建立 CLI smoke fixture
+- [x] 建立 CLI smoke fixture
   - 验收：测试可在临时目录执行 `init --ai codex --no-git`、`init --all --no-git`、`codex-status --json`。
   - 文件：`tests/cli-smoke.test.ts`。
   - 验证：`npm test -- cli-smoke`。
 - [ ] 记录 golden output
   - 验收：关键生成目录、prompt 数量、AGENTS.md 生成行为有快照或断言。
   - 文件：`tests/fixtures/`。
-- [ ] 加入 `npm run verify`
+- [x] 加入 `npm run verify`
   - 验收：统一运行 build、测试、命令生成、smoke。
   - 文件：`package.json`。
+
+阶段备注：
+
+- 已新增 `tests/unit/ai-platforms.test.ts` 覆盖 AI platform registry。
+- 已新增 `tests/unit/project.test.ts` 覆盖项目根目录查找和 AI 配置检测。
+- 已新增 `tests/smoke/cli-init.test.ts` 覆盖 `init --ai codex` 与 `init --all`。
+- 本机没有 `bun` 可执行文件，因此本轮未刷新 `bun.lock`；已用 `npm install --package-lock=false --ignore-scripts` 安装依赖且未生成 `package-lock.json`。
 
 ## 阶段 1：CLI 拆分为命令模块
 
@@ -293,8 +300,8 @@ src/
 
 ## 第一批建议任务
 
-- [ ] T001：引入 Vitest，并为 `src/utils/ai-platforms.ts` 写 registry 测试。
-- [ ] T002：写 CLI smoke 测试，覆盖 `init --ai codex` 与 `init --all`。
+- [x] T001：引入 Vitest，并为 `src/utils/ai-platforms.ts` 写 registry 测试。
+- [x] T002：写 CLI smoke 测试，覆盖 `init --ai codex` 与 `init --all`。
 - [ ] T003：拆出 `src/cli/program.ts`，保持 `src/cli.ts` 为最小 bin 入口。
 - [ ] T004：拆出 `init.command.ts`，但暂不改 init 内部业务逻辑。
 - [ ] T005：为当前 `build:commands` 生成结果建立 golden fixture。
