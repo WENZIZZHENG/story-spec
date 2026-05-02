@@ -191,7 +191,7 @@ src/
 
 - [x] 新建 `prompt/frontmatter.ts`
   - 验收：可解析 `templates/commands/*.md` 的 description、argument-hint、scripts。
-- [ ] 新建 `prompt/compiler.ts`
+- [x] 新建 `prompt/compiler.ts`
   - 验收：输入 command template + platform config，输出目标 prompt 文件内容。
 - [ ] 为 Claude/Gemini/Codex 等平台建 renderer
   - 验收：生成结果与现有 `build:commands` golden fixture 等价。
@@ -206,6 +206,8 @@ src/
 - 已新增 `src/prompt/frontmatter.ts`，解析命令模板 frontmatter、正文、`description`、`argument-hint`、`allowed-tools`、`model` 与 `scripts`。
 - 已新增 `tests/unit/frontmatter.test.ts`，覆盖纯函数解析、无 frontmatter 模板，以及仓库内所有 `templates/commands/*.md` 的 `sh/ps` 脚本元数据。
 - 解析器采用轻量行解析以兼容当前模板中未加引号的 `argument-hint`，后续 compiler 可在此基础上逐步收紧模板格式。
+- 已新增 `src/prompt/compiler.ts`，支持脚本变体选择、`{SCRIPT}` 替换、`$ARGUMENTS/{ARGS}` 替换、`__AGENT__` 替换、`.specify` 路径重写，以及 full/partial/minimal/none Markdown 与 TOML 输出。
+- 已新增 `tests/unit/prompt-compiler.test.ts`，覆盖核心替换规则、Markdown/TOML 输出分支，并用真实 `templates/commands/plan.md` 做轻量编译验证。
 
 ## 阶段 5：脚本运行时统一
 
