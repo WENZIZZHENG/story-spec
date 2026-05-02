@@ -1,5 +1,5 @@
 import { execFile } from 'node:child_process';
-import { mkdtemp, rm } from 'node:fs/promises';
+import { mkdtemp, rm, writeFile } from 'node:fs/promises';
 import os from 'node:os';
 import path from 'node:path';
 import { promisify } from 'node:util';
@@ -28,7 +28,7 @@ describe('CLI command modules smoke', () => {
     ]);
 
     expect(help).toContain('init [options] [name]');
-    expect(help).toContain('plugins:add <name>');
+    expect(help).toContain('plugins:add [options] <name>');
     expect(help).toContain('upgrade [options]');
     expect(help).toContain('validate [options]');
     expect(info).toContain('三幕结构');
@@ -40,6 +40,35 @@ describe('CLI command modules smoke', () => {
 
     expect(stdout).toContain('插件管理命令');
     expect(stdout).toContain('novel plugins add <name>');
+  });
+
+  it('previews plugin installation without writing files', async () => {
+    const cwd = await makeTempDir();
+    await execFileAsync('node', [
+      cliPath,
+      'init',
+      'smoke',
+      '--ai',
+      'codex',
+      '--method',
+      'three-act',
+      '--no-git'
+    ], { cwd });
+
+    const projectPath = path.join(cwd, 'smoke');
+    await writeFile(path.join(projectPath, '.codex', 'prompts', 'translate.md'), 'existing');
+
+    const { stdout } = await execFileAsync('node', [
+      cliPath,
+      'plugins:add',
+      'translate',
+      '--dry-run'
+    ], { cwd: projectPath });
+
+    expect(stdout).toContain('预览模式');
+    expect(stdout).toContain('plugins/translate');
+    expect(stdout).toContain('.codex/prompts/translate.md');
+    expect(stdout).toContain('冲突');
   });
 
   it('runs upgrade dry-run against an initialized project', async () => {

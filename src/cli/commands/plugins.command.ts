@@ -3,8 +3,27 @@ import chalk from 'chalk';
 import fs from 'fs-extra';
 import ora from 'ora';
 import path from 'path';
-import { PluginManager } from '../../plugins/manager.js';
+import { PluginManager, type PluginInstallPlan } from '../../plugins/manager.js';
 import { ensureProjectRoot, getProjectInfo } from '../../utils/project.js';
+
+const formatProjectRelativePath = (projectPath: string, targetPath: string): string =>
+  path.relative(projectPath, targetPath).replace(/\\/g, '/');
+
+const renderInstallPlan = (projectPath: string, plan: PluginInstallPlan): void => {
+  console.log(chalk.yellow('\n预览模式：不会写入任何文件\n'));
+  console.log(chalk.cyan('将写入:'));
+
+  for (const operation of plan.operations) {
+    const label = operation.conflict ? chalk.red('冲突') : chalk.green('写入');
+    console.log(`  [${label}] ${formatProjectRelativePath(projectPath, operation.targetPath)}`);
+  }
+
+  if (plan.conflicts.length > 0) {
+    console.log(chalk.red(`\n发现 ${plan.conflicts.length} 个冲突，请确认后再安装。`));
+  } else {
+    console.log(chalk.green('\n未发现冲突。'));
+  }
+};
 
 export function registerPluginsCommand(program: Command, context: { packageRoot: string }): void {
   const { packageRoot } = context;
@@ -80,7 +99,8 @@ export function registerPluginsCommand(program: Command, context: { packageRoot:
   program
     .command('plugins:add <name>')
     .description('安装插件')
-    .action(async (name) => {
+    .option('--dry-run', '预览将写入的文件，不实际安装')
+    .action(async (name, options) => {
       try {
         // 1. 检测项目
         const projectPath = await ensureProjectRoot();
@@ -108,11 +128,9 @@ export function registerPluginsCommand(program: Command, context: { packageRoot:
           process.exit(1);
         }
 
-        // 3. 读取插件配置
-        const pluginConfigPath = path.join(builtinPluginPath, 'config.yaml');
-        const yaml = await import('js-yaml');
-        const pluginConfigContent = await fs.readFile(pluginConfigPath, 'utf-8');
-        const pluginConfig = yaml.load(pluginConfigContent) as any;
+        const pluginManager = new PluginManager(projectPath);
+        const installPlan = await pluginManager.planInstallPlugin(name, builtinPluginPath);
+        const pluginConfig = installPlan.manifest;
 
         // 4. 显示插件信息
         console.log(chalk.cyan(`准备安装: ${pluginConfig.description || name}`));
@@ -133,11 +151,16 @@ export function registerPluginsCommand(program: Command, context: { packageRoot:
           console.log(chalk.gray('   插件将被复制，但命令不会被注入到任何 AI 平台\n'));
         }
 
+        if (options.dryRun) {
+          renderInstallPlan(projectPath, installPlan);
+          console.log('');
+          return;
+        }
+
         // 5. 安装插件
         const spinner = ora('正在安装插件...').start();
-        const pluginManager = new PluginManager(projectPath);
 
-        await pluginManager.installPlugin(name, builtinPluginPath);
+        await pluginManager.applyInstallPlan(installPlan);
         spinner.succeed(chalk.green('插件安装成功！\n'));
 
         // 6. 显示后续步骤

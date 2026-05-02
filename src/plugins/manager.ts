@@ -7,7 +7,37 @@ import {
   type PluginExpert,
   type PluginManifest
 } from '../domain/plugin-manifest.js';
+import { AI_PLATFORMS, type AIPlatformId } from '../utils/ai-platforms.js';
 import { logger } from '../utils/logger.js';
+
+export type PluginInstallOperationKind =
+  | 'copy-plugin'
+  | 'install-command'
+  | 'install-gemini-command'
+  | 'register-expert';
+
+export interface PluginInstallOperation {
+  kind: PluginInstallOperationKind;
+  sourcePath: string;
+  targetPath: string;
+  conflict: boolean;
+  platform?: AIPlatformId;
+  id?: string;
+}
+
+export interface PluginInstallConflict {
+  targetPath: string;
+  operation: PluginInstallOperationKind;
+  id?: string;
+}
+
+export interface PluginInstallPlan {
+  pluginName: string;
+  sourcePath: string;
+  manifest: PluginManifest;
+  operations: PluginInstallOperation[];
+  conflicts: PluginInstallConflict[];
+}
 
 export class PluginManager {
   private pluginsDir: string
@@ -30,6 +60,15 @@ export class PluginManager {
       roocode: path.join(projectRoot, '.roo', 'commands')
     }
     this.expertsDir = path.join(projectRoot, 'experts')
+  }
+
+  private getCommandDir(platformId: AIPlatformId): string {
+    const platform = AI_PLATFORMS.find(item => item.name === platformId)
+    if (!platform) {
+      throw new Error(`Unsupported AI platform: ${platformId}`)
+    }
+
+    return path.join(path.dirname(this.pluginsDir), platform.dir, platform.commandsDir)
   }
 
   /**
@@ -156,6 +195,18 @@ export class PluginManager {
     }
   }
 
+  private async loadManifestFromSource(sourcePath: string): Promise<PluginManifest> {
+    const configPath = path.join(sourcePath, 'config.yaml')
+    const content = await fs.readFile(configPath, 'utf-8')
+    const result = parsePluginManifest(yaml.load(content))
+
+    if (!result.manifest) {
+      throw new Error(result.issues.map(manifestIssue => `${manifestIssue.path}: ${manifestIssue.message}`).join('\n'))
+    }
+
+    return result.manifest
+  }
+
   /**
    * 检查插件依赖
    */
@@ -192,6 +243,130 @@ export class PluginManager {
       gemini: await fs.pathExists(this.commandsDirs.gemini),
       windsurf: await fs.pathExists(this.commandsDirs.windsurf),
       roocode: await fs.pathExists(this.commandsDirs.roocode)
+    }
+  }
+
+  private async detectSupportedPlatformIds(): Promise<AIPlatformId[]> {
+    const platformIds: AIPlatformId[] = []
+
+    for (const platform of AI_PLATFORMS) {
+      if (await fs.pathExists(this.getCommandDir(platform.name))) {
+        platformIds.push(platform.name)
+      }
+    }
+
+    return platformIds
+  }
+
+  private async createOperation(
+    operation: Omit<PluginInstallOperation, 'conflict'>
+  ): Promise<PluginInstallOperation> {
+    return {
+      ...operation,
+      conflict: await fs.pathExists(operation.targetPath)
+    }
+  }
+
+  private async createCommandOperations(
+    pluginName: string,
+    sourcePath: string,
+    commands: PluginCommand[]
+  ): Promise<PluginInstallOperation[]> {
+    const operations: PluginInstallOperation[] = []
+    const supportedPlatformIds = await this.detectSupportedPlatformIds()
+
+    for (const command of commands) {
+      const commandSource = path.join(sourcePath, command.file)
+
+      for (const platformId of supportedPlatformIds) {
+        if (platformId === 'gemini') {
+          const cmdId = path.basename(command.id, path.extname(command.id))
+          const tomlSourcePath = path.join(sourcePath, 'commands-gemini', `${cmdId}.toml`)
+          operations.push(await this.createOperation({
+            kind: 'install-gemini-command',
+            sourcePath: await fs.pathExists(tomlSourcePath) ? tomlSourcePath : commandSource,
+            targetPath: path.join(this.getCommandDir(platformId), `${cmdId}.toml`),
+            platform: platformId,
+            id: command.id
+          }))
+          continue
+        }
+
+        operations.push(await this.createOperation({
+          kind: 'install-command',
+          sourcePath: commandSource,
+          targetPath: path.join(this.getCommandDir(platformId), `${command.id}.md`),
+          platform: platformId,
+          id: command.id
+        }))
+      }
+    }
+
+    return operations
+  }
+
+  private async createExpertOperations(
+    pluginName: string,
+    sourcePath: string,
+    experts: PluginExpert[]
+  ): Promise<PluginInstallOperation[]> {
+    const operations: PluginInstallOperation[] = []
+
+    for (const expert of experts) {
+      operations.push(await this.createOperation({
+        kind: 'register-expert',
+        sourcePath: path.join(sourcePath, expert.file),
+        targetPath: path.join(this.expertsDir, 'plugins', pluginName, `${expert.id}.md`),
+        id: expert.id
+      }))
+    }
+
+    return operations
+  }
+
+  async planInstallPlugin(pluginName: string, sourcePath: string): Promise<PluginInstallPlan> {
+    const manifest = await this.loadManifestFromSource(sourcePath)
+    const operations: PluginInstallOperation[] = [
+      await this.createOperation({
+        kind: 'copy-plugin',
+        sourcePath,
+        targetPath: path.join(this.pluginsDir, pluginName),
+        id: pluginName
+      }),
+      ...await this.createCommandOperations(pluginName, sourcePath, manifest.commands),
+      ...await this.createExpertOperations(pluginName, sourcePath, manifest.experts)
+    ]
+
+    return {
+      pluginName,
+      sourcePath,
+      manifest,
+      operations,
+      conflicts: operations
+        .filter(operation => operation.conflict)
+        .map(operation => ({
+          targetPath: operation.targetPath,
+          operation: operation.kind,
+          id: operation.id
+        }))
+    }
+  }
+
+  async applyInstallPlan(plan: PluginInstallPlan): Promise<void> {
+    for (const operation of plan.operations) {
+      if (operation.kind === 'install-gemini-command' && operation.sourcePath.endsWith('.md')) {
+        await fs.ensureDir(path.dirname(operation.targetPath))
+        const command = plan.manifest.commands.find(item => item.id === operation.id)
+        const markdown = await fs.readFile(operation.sourcePath, 'utf-8')
+        const tomlContent = this.convertMarkdownToToml(markdown, command)
+        if (tomlContent) {
+          await fs.writeFile(operation.targetPath, tomlContent)
+        }
+        continue
+      }
+
+      await fs.ensureDir(path.dirname(operation.targetPath))
+      await fs.copy(operation.sourcePath, operation.targetPath)
     }
   }
 
@@ -328,16 +503,17 @@ export class PluginManager {
 
       // 如果提供了源路径，从源复制
       if (source) {
-        const destPath = path.join(this.pluginsDir, pluginName)
-        await fs.copy(source, destPath)
+        const plan = await this.planInstallPlugin(pluginName, source)
+        await this.applyInstallPlan(plan)
+        if (plan.manifest.installation?.message) {
+          console.log(plan.manifest.installation.message)
+        }
       } else {
         // TODO: 实现从远程仓库或注册中心安装
         logger.warn('远程安装功能尚未实现')
         return
       }
 
-      // 加载新安装的插件
-      await this.loadPlugin(pluginName)
       logger.success(`插件 ${pluginName} 安装成功`)
     } catch (error) {
       logger.error(`安装插件 ${pluginName} 失败:`, error)

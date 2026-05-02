@@ -261,7 +261,7 @@ src/
 
 - [x] 定义 `PluginManifest`
   - 字段：commands、templates、knowledge、trackingRules、experts、hooks。
-- [ ] 插件安装改为 plan/apply 两阶段
+- [x] 插件安装改为 plan/apply 两阶段
   - 验收：dry-run 可列出将写入的文件和冲突。
 - [ ] 引入 hook 点
   - 候选：init 后、prompt compile 前、tasks 生成后、write 前验证。
@@ -273,6 +273,9 @@ src/
 - `PluginManifest` 支持 `commands`、`templates`、`knowledge`、`trackingRules`、`experts`、`hooks`，并兼容现有 `plugins/*/config.yaml`。
 - 已将 schema 层 `validatePluginManifest` 与 `PluginManager` 接入同一份领域 manifest，避免插件配置存在两套类型定义。
 - 已新增 `tests/unit/plugin-manifest.test.ts`，覆盖显式能力声明、现有内置插件配置兼容和非法字段诊断。
+- 已为 `PluginManager` 新增 `planInstallPlugin` 与 `applyInstallPlan`，安装前可结构化列出插件目录复制、命令注入、Gemini TOML 命令、专家注册及冲突。
+- `novel plugins:add <name> --dry-run` 会显示预览模式、将写入文件和冲突，不实际落盘。
+- 已新增 `tests/unit/plugin-install-plan.test.ts`，并扩展 CLI smoke 覆盖插件 dry-run。
 
 ## 阶段 7：schema 与规则验证
 
