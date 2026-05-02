@@ -18,6 +18,7 @@ export interface CompileCommandTemplateInput {
   scriptVariant: ScriptVariant;
   outputFormat: CommandOutputFormat;
   runShell?: boolean;
+  writeFiles?: boolean;
 }
 
 export interface CompileCommandSpecInput {
@@ -28,6 +29,7 @@ export interface CompileCommandSpecInput {
   scriptVariant: ScriptVariant;
   outputFormat: CommandOutputFormat;
   runShell?: boolean;
+  writeFiles?: boolean;
 }
 
 export const rewriteSpecifyPaths = (content: string): string => content
@@ -87,6 +89,57 @@ const escapeTomlString = (value: string): string => value.replace(/\\/g, '\\\\')
 
 const noShellScriptInstruction = '当前 agent 不支持 shell；不要执行 CLI/脚本，改为人工读取相关文件并记录无法自动验证的部分。';
 
+const cleanNoShellPromptBody = (content: string, runShell?: boolean): string => {
+  if (runShell !== false) {
+    return content;
+  }
+
+  return content
+    .replace(/运行脚本\s+`?当前 agent 不支持 shell；不要执行 CLI\/脚本，改为人工读取相关文件并记录无法自动验证的部分。`?/g, '不要执行 CLI/脚本；人工读取相关文件并记录无法自动验证的部分')
+    .replace(/运行\s+`?当前 agent 不支持 shell；不要执行 CLI\/脚本，改为人工读取相关文件并记录无法自动验证的部分。`?/g, '不要执行 CLI/脚本；人工读取相关文件并记录无法自动验证的部分')
+    .replace(/执行脚本\s+`?当前 agent 不支持 shell；不要执行 CLI\/脚本，改为人工读取相关文件并记录无法自动验证的部分。`?/g, '不要执行 CLI/脚本；人工读取相关文件并记录无法自动验证的部分')
+    .replace(/`当前 agent 不支持 shell；不要执行 CLI\/脚本，改为人工读取相关文件并记录无法自动验证的部分。`/g, '当前 agent 不支持 shell；不要执行 CLI/脚本，改为人工读取相关文件并记录无法自动验证的部分。');
+};
+
+const writeModeInstruction = (writeFiles?: boolean): string => writeFiles === false
+  ? '当前 agent 是只读模式；不要创建、修改或删除文件。请输出检查结果、目标路径、建议内容和补丁式修改说明，等待具备写入权限的 agent 或用户执行。'
+  : '当前 agent 可在任务允许范围内写入文件；只修改“允许写入”或当前任务明确授权的路径。';
+
+const outputLocationInstruction = (writeFiles?: boolean): string[] => writeFiles === false
+  ? [
+    '- 不直接写入文件。',
+    '- 在回复中按“目标路径 + 建议内容/补丁”的形式列出需要修改的内容。'
+  ]
+  : [
+    '- 按命令正文或当前任务声明的输出路径写入。',
+    '- 如果命令正文未指定输出路径，在回复中列出建议路径，不擅自创建新位置。'
+  ];
+
+const allowedWriteInstruction = (writeFiles?: boolean): string[] => writeFiles === false
+  ? [
+    '- 只读模式：不要写入任何文件。',
+    '- 可以引用允许写入范围来判断建议是否越界，但最终只输出建议和补丁式说明。'
+  ]
+  : [
+    '- 仅写入本命令正文或当前任务明确允许的文件。',
+    '- 不确定是否允许写入时，先记录澄清项，不直接修改正文或 tracking。'
+  ];
+
+const formatAllowedWritesForMode = (
+  items: readonly string[],
+  writeFiles?: boolean
+): string[] => {
+  if (writeFiles !== false) {
+    return formatMarkdownList(items);
+  }
+
+  return [
+    '- 只读模式：不要写入任何文件。',
+    '- 以下路径只作为建议修改范围，用于判断补丁式说明是否越界：',
+    ...formatMarkdownList(items)
+  ];
+};
+
 const compileTemplateBody = (input: CompileCommandTemplateInput): {
   body: string;
   promptBody: string;
@@ -134,11 +187,11 @@ const compileSpecBody = (input: CompileCommandSpecInput): {
   argumentHint?: string;
 } => {
   const scriptCommand = getSpecScriptCommand(input);
-  const promptBody = rewriteSpecifyPaths(input.promptBody
+  const promptBody = cleanNoShellPromptBody(rewriteSpecifyPaths(input.promptBody
     .replaceAll('{SCRIPT}', scriptCommand)
     .replaceAll('{ARGS}', input.argFormat)
     .replaceAll('$ARGUMENTS', input.argFormat)
-    .replaceAll('__AGENT__', input.agent));
+    .replaceAll('__AGENT__', input.agent)), input.runShell);
   const frontmatter = [
     '---',
     `description: ${input.spec.description}`,
@@ -199,6 +252,7 @@ export const compileCommandTemplate = (input: CompileCommandTemplateInput): stri
         '- 阅读并遵守 `.specify/agent-contract.md`。',
         '- 确认当前任务边界、允许写入范围和验证要求。',
         '- 如果项目已有 `stories/*/tasks.md`，优先选择当前任务清单中的任务。',
+        `- ${writeModeInstruction(input.writeFiles)}`,
         '',
         '## 必须读取',
         '- `.specify/memory/constitution.md`',
@@ -209,15 +263,13 @@ export const compileCommandTemplate = (input: CompileCommandTemplateInput): stri
         '- `spec/knowledge/*`',
         '',
         '## 允许写入',
-        '- 仅写入本命令正文或当前任务明确允许的文件。',
-        '- 不确定是否允许写入时，先记录澄清项，不直接修改正文或 tracking。',
+        ...allowedWriteInstruction(input.writeFiles),
         '',
         '## 执行步骤',
         compiled.promptBody,
         '',
         '## 输出位置',
-        '- 按命令正文或当前任务声明的输出路径写入。',
-        '- 如果命令正文未指定输出路径，在回复中列出建议路径，不擅自创建新位置。',
+        ...outputLocationInstruction(input.writeFiles),
         '',
         '## 验证',
         '- 如果可以执行 CLI，请在阶段完成前运行 `novel validate`。',
@@ -277,19 +329,19 @@ export const compileCommandSpec = (input: CompileCommandSpecInput): string => {
         '## 前置条件',
         '- 阅读并遵守 `.specify/agent-contract.md`。',
         '- 确认当前任务边界、允许写入范围和验证要求。',
+        `- ${writeModeInstruction(input.writeFiles)}`,
         '',
         '## 必须读取',
         ...formatMarkdownList(input.spec.requiredReads),
         '',
         '## 允许写入',
-        ...formatMarkdownList(input.spec.allowedWrites),
+        ...formatAllowedWritesForMode(input.spec.allowedWrites, input.writeFiles),
         '',
         '## 执行步骤',
         compiled.promptBody,
         '',
         '## 输出位置',
-        '- 按命令正文或当前任务声明的路径写入。',
-        '- 如果无法确定输出路径，在回复中列出建议路径，不擅自创建新位置。',
+        ...outputLocationInstruction(input.writeFiles),
         '',
         '## 验证',
         '- 如果可以执行 CLI，请在阶段完成前运行 `novel validate`。',

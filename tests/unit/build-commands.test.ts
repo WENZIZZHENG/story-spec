@@ -176,6 +176,31 @@ describe('buildCommandArtifacts', () => {
     expect(genericCommand).toContain('当前 agent 不支持 shell');
   });
 
+  it('generates read-only Continue check prompts', async () => {
+    const rootDir = await createPackageRootFixture();
+    const outDir = path.join(rootDir, 'out');
+
+    const result = await buildCommandArtifacts({
+      rootDir,
+      outDir,
+      agents: ['continue-check'],
+      scripts: ['sh']
+    });
+
+    expect(result.variants).toEqual([
+      { agent: 'continue-check', script: 'sh', commandCount: 2 }
+    ]);
+
+    const prompt = await readFile(path.join(outDir, 'continue-check', '.continue', 'prompts', 'write.md'), 'utf-8');
+    expect(prompt).toContain('# Write chapter');
+    expect(prompt).toContain('当前 agent 是只读模式');
+    expect(prompt).toContain('不要创建、修改或删除文件');
+    expect(prompt).toContain('以下路径只作为建议修改范围');
+    expect(prompt).toContain('- `stories/*/content/**`');
+    expect(prompt).not.toContain('.specify/scripts/bash/check-writing-state.sh');
+    expect(prompt).toContain('当前 agent 不支持 shell');
+  });
+
   it('snapshots the runtime bundle before cleaning the default dist output', async () => {
     const rootDir = await createPackageRootFixture();
 

@@ -1,5 +1,19 @@
 # 更新日志
 
+## [Unreleased]
+
+### 新功能
+
+- 新增 `continue-check` agent integration，生成 `.continue/prompts/*.md` 只读检查提示词。
+- 命令 renderer 按 `writeFiles` 能力降级；只读 agent 不再被提示直接写正文、tracking 或任务文件。
+- `novel handoff` 新增 `--target-agent <id>`，可按目标 agent 的 `runShell` / `writeFiles` 能力生成继续步骤。
+
+### 文档
+
+- README 主路径切换为 `--agent` / `--all-agents`，`--ai` / `--all` 作为兼容入口说明。
+- 新增 `docs/agent-integrations.md` 和 `docs/agent-contract.md`。
+- `docs/migration-guide.md` 增加 `--ai` 到 `--agent` 的迁移说明。
+
 ## [0.19.0] - 2025-10-25
 
 ### ✨ 新功能

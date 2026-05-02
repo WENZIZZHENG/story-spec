@@ -5,6 +5,7 @@ import {
 
 export const AGENT_INTEGRATION_IDS = [
   'generic',
+  'continue-check',
   'claude',
   'cursor',
   'gemini',
@@ -104,6 +105,15 @@ const genericMarkdownCapabilities = () => createAgentCapabilities({
   requiresHumanApproval: true
 });
 
+const readOnlyPromptCapabilities = () => createAgentCapabilities({
+  readFiles: true,
+  writeFiles: false,
+  runShell: false,
+  supportsSlashCommands: true,
+  supportsProjectInstructions: true,
+  requiresHumanApproval: true
+});
+
 export const AGENT_INTEGRATIONS = [
   {
     id: 'generic',
@@ -117,6 +127,20 @@ export const AGENT_INTEGRATIONS = [
       distDir: 'dist/generic'
     }],
     renderer: 'generic-markdown'
+  },
+  {
+    id: 'continue-check',
+    displayName: 'Continue Check',
+    kind: 'ide',
+    commandSurface: 'markdown-command',
+    capabilities: readOnlyPromptCapabilities(),
+    installTargets: [{
+      dir: '.continue',
+      commandsDir: 'prompts',
+      distDir: 'dist/continue-check'
+    }],
+    renderer: 'continue-check',
+    slashPrefix: '/'
   },
   {
     id: 'claude',

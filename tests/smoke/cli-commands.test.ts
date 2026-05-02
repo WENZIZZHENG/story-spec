@@ -411,4 +411,50 @@ describe('CLI command modules smoke', () => {
     expect(handoff.nextTask.id).toBe('T001');
     expect(handoff.currentChapter.path).toBe('stories/001-demo/content/chapter-001.md');
   });
+
+  it('generates a target-agent aware handoff package', async () => {
+    const cwd = await makeTempDir();
+    await execFileAsync('node', [
+      cliPath,
+      'init',
+      'smoke',
+      '--agent',
+      'generic',
+      '--method',
+      'three-act',
+      '--no-git'
+    ], { cwd });
+
+    const projectPath = path.join(cwd, 'smoke');
+    const storyPath = path.join(projectPath, 'stories', '001-demo');
+    await mkdir(storyPath, { recursive: true });
+    await writeFile(path.join(storyPath, 'specification.md'), '# spec');
+    await writeFile(path.join(storyPath, 'creative-plan.md'), '# plan');
+    await writeFile(path.join(storyPath, 'tasks.md'), `- [ ] [P0] [WRITE-READY] **T001** - 起草第一章
+  - **必须读取**：
+    - \`specification.md\`
+  - **允许修改**：
+    - \`content/chapter-001.md\`
+  - **依赖**：无
+  - **输出**：\`content/chapter-001.md\`
+`);
+
+    const { stdout } = await execFileAsync('node', [
+      cliPath,
+      'handoff',
+      '--target-agent',
+      'continue-check',
+      '--json'
+    ], { cwd: projectPath });
+
+    const handoff = JSON.parse(stdout);
+    expect(handoff.targetAgent).toMatchObject({
+      id: 'continue-check',
+      capabilities: expect.objectContaining({
+        writeFiles: false,
+        runShell: false
+      })
+    });
+    expect(handoff.riskBoundaries.join('\n')).toContain('只读模式');
+  });
 });

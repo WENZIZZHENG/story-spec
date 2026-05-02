@@ -3,19 +3,19 @@
 [![npm version](https://badge.fury.io/js/novel-writer-cn.svg)](https://www.npmjs.com/package/novel-writer-cn)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-Novel Writer 是一个面向中文小说创作的 AI 工作流工具。它不是单纯的灵感提示词集合，而是把“创作宪法、故事规格、创作计划、任务清单、章节正文、追踪数据、交接上下文”组织成一个可维护的小说项目。
+Novel Writer 是一个面向中文小说创作的 agent-neutral 工作流工具。它不是单纯的灵感提示词集合，而是把“创作宪法、故事规格、创作计划、任务清单、章节正文、追踪数据、交接上下文”组织成一个可维护的小说项目。
 
 安装后你会得到两类能力：
 
 - `novel` CLI：初始化/升级项目，检查环境，汇总项目状态，校验故事产物，导出任务看板，生成断点续写上下文包，管理插件。
-- AI 斜杠命令：在 Claude Code、Gemini CLI、Codex CLI、Cursor、Windsurf、Roo Code、GitHub Copilot 等平台中使用结构化写作命令。
+- Agent integrations：为 Generic Markdown、Claude Code、Gemini CLI、Codex CLI、Cursor、Windsurf、Roo Code、GitHub Copilot、Continue Check 等入口生成结构化写作命令或只读检查提示词。
 
 ## 适合谁用
 
 - 想用 AI 写长篇中文小说，但需要稳定维护角色、时间线、伏笔和任务边界。
 - 已经习惯在 AI 编程工具中用斜杠命令推进工作流，希望把类似 Spec Kit / SDD 的方法迁移到小说创作。
-- 需要多个 AI 平台共用同一套小说项目文件，而不是每个平台各写一份提示词。
-- 需要让另一个 AI 或下一次会话快速接手当前故事进度。
+- 需要多个 agent 共用同一套小说项目文件，而不是每个平台各写一份提示词。
+- 需要让另一个 agent 或下一次会话快速接手当前故事进度。
 
 ## 核心功能
 
@@ -23,13 +23,13 @@ Novel Writer 是一个面向中文小说创作的 AI 工作流工具。它不是
 
 `novel init` 会创建标准小说项目目录，并写入：
 
-- `.specify/config.json`：项目名称、写作方法、AI 平台和版本信息。
+- `.specify/config.json`：项目名称、写作方法、agent integrations 和版本信息。
 - `.specify/memory/`：创作宪法、个人声音等长期记忆。
 - `.specify/templates/`：故事、提纲、检查清单、知识库等模板。
 - `stories/`：每个故事的规格、计划、任务和正文。
 - `spec/tracking/`：角色状态、关系、时间线、情节追踪、校验规则等 JSON。
 - `spec/knowledge/`：世界观、角色档案、角色声音、地点资料等知识库。
-- 对应 AI 平台的命令目录，例如 `.codex/prompts/`、`.claude/commands/`、`.gemini/commands/`。
+- 对应 agent integration 的命令目录，例如 `.specify/commands/`、`.continue/prompts/`、`.codex/prompts/`、`.claude/commands/`、`.gemini/commands/`。
 
 ### 七步写作流
 
@@ -55,12 +55,14 @@ Novel Writer 的主流程来自规格驱动创作法：
 - `novel handoff`：生成 `handoff.md`，列出下一任务、必须读取、允许修改、风险边界和阻塞项。
 - `novel tasks:board`：把 `tasks.md` 转成 `task-board.json`，并生成 GitHub issue 草稿字段。
 
-### 多平台命令生成
+### Agent integration 命令生成
 
-当前内置支持 13 个 AI 平台：
+当前内置支持 15 个 agent integration，其中 `generic` 是通用 Markdown 命令入口，`continue-check` 是只读检查入口，其余 13 个是 legacy AI 平台兼容入口：
 
-| 平台 ID | 平台 | 命令目录 | 命令格式示例 |
+| Agent ID | Agent integration | 命令目录 | 命令格式示例 |
 | --- | --- | --- | --- |
+| `generic` | Generic Markdown Agent | `.specify/commands` | `/write` |
+| `continue-check` | Continue Check | `.continue/prompts` | `/write` |
 | `claude` | Claude Code | `.claude/commands` | `/novel.write` |
 | `gemini` | Gemini CLI | `.gemini/commands` | `/novel:write` |
 | `codex` | Codex CLI | `.codex/prompts` | `/novel-write` |
@@ -75,7 +77,7 @@ Novel Writer 的主流程来自规格驱动创作法：
 | `codebuddy` | CodeBuddy | `.codebuddy/commands` | `/write` |
 | `q` | Amazon Q Developer | `.amazonq/prompts` | `/write` |
 
-使用 `novel init --all` 或 `novel upgrade --all` 可以为所有平台生成或升级命令文件。
+使用 `novel init --all-agents` 或 `novel upgrade --all-agents` 可以为所有 agent integration 生成或升级命令文件。旧 `--ai`、`--all` 仍处于兼容期，会映射到 legacy AI 平台并输出迁移提示。
 
 ### 写作方法预设
 
@@ -120,27 +122,33 @@ npm install -g novel-writer-cn
 ### 2. 创建小说项目
 
 ```bash
-novel init my-novel --ai codex
+novel init my-novel --agent generic
 cd my-novel
+```
+
+也可以直接选择具体平台，例如：
+
+```bash
+novel init my-novel --agent codex
 ```
 
 常用初始化方式：
 
 ```bash
 # 在当前目录初始化
-novel init --here --ai claude
+novel init --here --agent claude
 
-# 为所有平台生成命令
-novel init my-novel --all
+# 为所有 agent integration 生成命令
+novel init my-novel --all-agents
 
 # 指定写作方法
-novel init my-novel --method snowflake --ai gemini
+novel init my-novel --method snowflake --agent gemini
 
 # 初始化时预装插件
 novel init my-novel --plugins authentic-voice,genre-knowledge
 
 # 为 Codex 生成带写作边界画像的 AGENTS.md
-novel init my-novel --ai codex --agents-profile adult,slow-burn,adventure
+novel init my-novel --agent codex --agents-profile adult,slow-burn,adventure
 
 # 跳过 Git 初始化
 novel init my-novel --no-git
@@ -161,9 +169,21 @@ novel validate --json
 novel validate --severity error
 ```
 
-### 4. 在 AI 助手中开始写作
+### 4. 在 agent 中开始写作
 
-按你选择的平台使用对应命令。例如 Codex CLI：
+按你选择的 agent integration 使用对应命令。通用 Markdown 入口使用：
+
+```text
+/constitution
+/specify
+/clarify
+/plan
+/tasks
+/write
+/analyze
+```
+
+Codex CLI 对应：
 
 ```text
 /novel-constitution
@@ -186,6 +206,9 @@ novel handoff
 # 指定故事并输出 JSON
 novel handoff stories/001-demo --json
 
+# 为只读 agent 生成检查式交接步骤
+novel handoff --target-agent continue-check
+
 # 把 tasks.md 转成任务看板 JSON
 novel tasks:board
 
@@ -199,6 +222,11 @@ novel tasks:board 001-demo --json
 | --- | --- |
 | `novel init [name]` | 初始化小说项目 |
 | `novel check` | 检查 Node.js、Git 和常见 AI CLI 是否可用 |
+| `novel agent:list` | 列出支持的 agent integration 和能力 |
+| `novel agent:add <id>` | 给现有项目添加 agent integration |
+| `novel agent:doctor` | 检查已安装 agent contract、命令和 manifest |
+| `novel contract:print` | 输出当前 agent contract |
+| `novel contract:sync` | 同步 `.specify/agent-contract.md` 和 `AGENTS.md` |
 | `novel status` | 汇总项目、故事、追踪数据、Git 状态和下一步 |
 | `novel codex-status` | `status` 的兼容别名 |
 | `novel validate` | 校验项目结构、任务、tracking、模板和写作规则 |
@@ -240,9 +268,11 @@ my-novel/
 │   ├── memory/
 │   ├── scripts/
 │   └── templates/
-├── .codex/                # 取决于 --ai，可替换为 .claude/.gemini 等
+├── .specify/commands/     # generic agent 命令
+├── .continue/prompts/     # continue-check 只读检查提示词
+├── .codex/                # 取决于 --agent，可替换为 .claude/.gemini 等
 │   └── prompts/
-├── AGENTS.md              # Codex 项目可选生成
+├── AGENTS.md              # agent 项目说明
 ├── plugins/
 ├── spec/
 │   ├── knowledge/
@@ -268,8 +298,8 @@ novel upgrade
 常用选项：
 
 ```bash
-novel upgrade --ai codex
-novel upgrade --all
+novel upgrade --agent codex
+novel upgrade --all-agents
 novel upgrade --commands
 novel upgrade --scripts
 novel upgrade --spec
@@ -278,6 +308,8 @@ novel upgrade --interactive
 ```
 
 默认升级命令、脚本和写作规范；模板、记忆文件、专家模式需要显式选择，避免覆盖用户项目内容。
+
+旧 `novel upgrade --ai <id>` 和 `novel upgrade --all` 仍可用，但建议新文档和新项目使用 `--agent` / `--all-agents`。
 
 ## 本仓库开发
 
@@ -306,6 +338,8 @@ npm run verify
 - [快速开始](docs/quickstart.md)
 - [工作流程](docs/workflow.md)
 - [斜杠命令详解](docs/commands.md)
+- [Agent integrations](docs/agent-integrations.md)
+- [Agent contract](docs/agent-contract.md)
 - [AI 平台命令对照](docs/ai-platform-commands.md)
 - [升级指南](docs/upgrade-guide.md)
 - [写作方法](docs/writing-methods.md)

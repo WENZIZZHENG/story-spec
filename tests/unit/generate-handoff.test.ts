@@ -111,6 +111,44 @@ describe('generateHandoff', () => {
     expect(result.context.unfinishedTasks).toHaveLength(2);
   });
 
+  it('adapts handoff steps for read-only target agents', async () => {
+    const { projectRoot, fileSystem } = await createProject();
+
+    const result = await generateHandoff({
+      projectRoot,
+      fileSystem,
+      targetAgent: 'continue-check',
+      write: false
+    });
+
+    expect(result.context.targetAgent).toMatchObject({
+      id: 'continue-check',
+      displayName: 'Continue Check',
+      capabilities: expect.objectContaining({
+        writeFiles: false,
+        runShell: false
+      })
+    });
+    expect(result.markdown).toContain('## 目标 Agent');
+    expect(result.markdown).toContain('能力：read, read-only, no-shell, slash, instructions');
+    expect(result.markdown).toContain('不要让它创建、修改或删除文件');
+    expect(result.markdown).toContain('只围绕“下一任务”和“建议修改范围”做检查');
+    expect(result.markdown).toContain('不执行 CLI/脚本');
+    expect(result.markdown).not.toContain('完成后更新 `tasks.md`、tracking 数据和对应正文文件');
+  });
+
+  it('reports unknown target agents with a typed error', async () => {
+    const { projectRoot, fileSystem } = await createProject();
+
+    await expect(generateHandoff({
+      projectRoot,
+      fileSystem,
+      targetAgent: 'missing'
+    })).rejects.toMatchObject({
+      code: 'UNKNOWN_AGENT'
+    } satisfies Partial<HandoffGenerationError>);
+  });
+
   it('reports missing stories with a typed error', async () => {
     const projectRoot = path.join(os.tmpdir(), 'memory-novel-empty-handoff');
     const fileSystem = new MemoryFileSystem(projectRoot);

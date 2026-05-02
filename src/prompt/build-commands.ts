@@ -10,6 +10,7 @@ import {
 
 export const BUILD_COMMAND_AGENTS = [
   'generic',
+  'continue-check',
   'claude',
   'gemini',
   'cursor',
@@ -54,6 +55,7 @@ interface RuntimeBundleFile {
 
 const PLATFORM_COMMAND_DIRS: Record<BuildCommandAgent, string> = {
   generic: path.join('.specify', 'commands'),
+  'continue-check': path.join('.continue', 'prompts'),
   claude: path.join('.claude', 'commands'),
   gemini: path.join('.gemini', 'commands', 'novel'),
   cursor: path.join('.cursor', 'commands'),

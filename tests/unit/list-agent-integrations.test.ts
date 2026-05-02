@@ -27,6 +27,20 @@ describe('listAgentIntegrations', () => {
         distDir: 'dist/generic'
       }]
     });
+    expect(result.integrations.find(integration => integration.id === 'continue-check')).toMatchObject({
+      displayName: 'Continue Check',
+      commandSurface: 'markdown-command',
+      capabilities: expect.objectContaining({
+        readFiles: true,
+        writeFiles: false,
+        runShell: false
+      }),
+      installTargets: [{
+        dir: '.continue',
+        commandsDir: 'prompts',
+        distDir: 'dist/continue-check'
+      }]
+    });
   });
 
   it('renders a readable agent list for humans', () => {
@@ -34,6 +48,8 @@ describe('listAgentIntegrations', () => {
 
     expect(output).toContain('Agent integrations');
     expect(output).toContain('generic - Generic Markdown Agent');
+    expect(output).toContain('continue-check - Continue Check');
+    expect(output).toContain('能力: read, slash, instructions, approval');
     expect(output).toContain('codex - Codex CLI');
     expect(output).toContain('安装目标: .codex/prompts');
     expect(output).toContain('能力: read, write, shell, slash, instructions');

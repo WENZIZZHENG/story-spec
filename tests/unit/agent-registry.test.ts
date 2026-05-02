@@ -37,6 +37,29 @@ describe('agent integration registry', () => {
     expect(AI_PLATFORMS.map(platform => platform.name)).not.toContain('generic');
   });
 
+  it('registers continue-check as a read-only agent integration', () => {
+    expect(getAgentIntegration('continue-check')).toMatchObject({
+      id: 'continue-check',
+      displayName: 'Continue Check',
+      commandSurface: 'markdown-command',
+      renderer: 'continue-check',
+      capabilities: expect.objectContaining({
+        readFiles: true,
+        writeFiles: false,
+        runShell: false,
+        supportsSlashCommands: true,
+        requiresHumanApproval: true
+      }),
+      installTargets: [{
+        dir: '.continue',
+        commandsDir: 'prompts',
+        distDir: 'dist/continue-check'
+      }]
+    });
+
+    expect(AI_PLATFORMS.map(platform => platform.name)).not.toContain('continue-check');
+  });
+
   it('maps legacy AI integrations to the old platform registry shape', () => {
     expect(LEGACY_AI_INTEGRATIONS.map(integration => integration.id)).toEqual([...AI_PLATFORM_IDS]);
     expect(AI_PLATFORMS.map(platform => ({

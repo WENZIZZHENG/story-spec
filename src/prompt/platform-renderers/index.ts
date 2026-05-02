@@ -17,6 +17,7 @@ export interface PlatformRenderer {
   argFormat: '$ARGUMENTS' | '{{args}}';
   outputFormat: CommandOutputFormat;
   runShell: boolean;
+  writeFiles: boolean;
 }
 
 export interface RenderCommandForPlatformInput {
@@ -40,7 +41,17 @@ const PLATFORM_RENDERERS: Record<AgentIntegrationId, PlatformRenderer> = {
     namespace: '',
     argFormat: '$ARGUMENTS',
     outputFormat: 'markdown-generic',
-    runShell: false
+    runShell: false,
+    writeFiles: true
+  },
+  'continue-check': {
+    platform: 'continue-check',
+    extension: 'md',
+    namespace: '',
+    argFormat: '$ARGUMENTS',
+    outputFormat: 'markdown-generic',
+    runShell: false,
+    writeFiles: false
   },
   claude: {
     platform: 'claude',
@@ -48,7 +59,8 @@ const PLATFORM_RENDERERS: Record<AgentIntegrationId, PlatformRenderer> = {
     namespace: 'novel.',
     argFormat: '$ARGUMENTS',
     outputFormat: 'markdown-full',
-    runShell: true
+    runShell: true,
+    writeFiles: true
   },
   gemini: {
     platform: 'gemini',
@@ -56,7 +68,8 @@ const PLATFORM_RENDERERS: Record<AgentIntegrationId, PlatformRenderer> = {
     namespace: '',
     argFormat: '{{args}}',
     outputFormat: 'toml',
-    runShell: true
+    runShell: true,
+    writeFiles: true
   },
   cursor: {
     platform: 'cursor',
@@ -64,7 +77,8 @@ const PLATFORM_RENDERERS: Record<AgentIntegrationId, PlatformRenderer> = {
     namespace: '',
     argFormat: '$ARGUMENTS',
     outputFormat: 'markdown-none',
-    runShell: true
+    runShell: true,
+    writeFiles: true
   },
   windsurf: {
     platform: 'windsurf',
@@ -72,7 +86,8 @@ const PLATFORM_RENDERERS: Record<AgentIntegrationId, PlatformRenderer> = {
     namespace: '',
     argFormat: '$ARGUMENTS',
     outputFormat: 'markdown-partial',
-    runShell: true
+    runShell: true,
+    writeFiles: true
   },
   roocode: {
     platform: 'roocode',
@@ -80,7 +95,8 @@ const PLATFORM_RENDERERS: Record<AgentIntegrationId, PlatformRenderer> = {
     namespace: '',
     argFormat: '$ARGUMENTS',
     outputFormat: 'markdown-partial',
-    runShell: true
+    runShell: true,
+    writeFiles: true
   },
   copilot: {
     platform: 'copilot',
@@ -88,7 +104,8 @@ const PLATFORM_RENDERERS: Record<AgentIntegrationId, PlatformRenderer> = {
     namespace: '',
     argFormat: '$ARGUMENTS',
     outputFormat: 'markdown-none',
-    runShell: false
+    runShell: false,
+    writeFiles: true
   },
   qwen: {
     platform: 'qwen',
@@ -96,7 +113,8 @@ const PLATFORM_RENDERERS: Record<AgentIntegrationId, PlatformRenderer> = {
     namespace: '',
     argFormat: '{{args}}',
     outputFormat: 'toml',
-    runShell: true
+    runShell: true,
+    writeFiles: true
   },
   opencode: {
     platform: 'opencode',
@@ -104,7 +122,8 @@ const PLATFORM_RENDERERS: Record<AgentIntegrationId, PlatformRenderer> = {
     namespace: '',
     argFormat: '$ARGUMENTS',
     outputFormat: 'markdown-minimal',
-    runShell: true
+    runShell: true,
+    writeFiles: true
   },
   codex: {
     platform: 'codex',
@@ -112,7 +131,8 @@ const PLATFORM_RENDERERS: Record<AgentIntegrationId, PlatformRenderer> = {
     namespace: 'novel-',
     argFormat: '$ARGUMENTS',
     outputFormat: 'markdown-none',
-    runShell: true
+    runShell: true,
+    writeFiles: true
   },
   kilocode: {
     platform: 'kilocode',
@@ -120,7 +140,8 @@ const PLATFORM_RENDERERS: Record<AgentIntegrationId, PlatformRenderer> = {
     namespace: '',
     argFormat: '$ARGUMENTS',
     outputFormat: 'markdown-partial',
-    runShell: true
+    runShell: true,
+    writeFiles: true
   },
   auggie: {
     platform: 'auggie',
@@ -128,7 +149,8 @@ const PLATFORM_RENDERERS: Record<AgentIntegrationId, PlatformRenderer> = {
     namespace: '',
     argFormat: '$ARGUMENTS',
     outputFormat: 'markdown-none',
-    runShell: true
+    runShell: true,
+    writeFiles: true
   },
   codebuddy: {
     platform: 'codebuddy',
@@ -136,7 +158,8 @@ const PLATFORM_RENDERERS: Record<AgentIntegrationId, PlatformRenderer> = {
     namespace: '',
     argFormat: '$ARGUMENTS',
     outputFormat: 'markdown-none',
-    runShell: true
+    runShell: true,
+    writeFiles: true
   },
   q: {
     platform: 'q',
@@ -144,13 +167,15 @@ const PLATFORM_RENDERERS: Record<AgentIntegrationId, PlatformRenderer> = {
     namespace: '',
     argFormat: '$ARGUMENTS',
     outputFormat: 'markdown-none',
-    runShell: false
+    runShell: false,
+    writeFiles: true
   }
 };
 
 const syncRendererCapabilities = (renderer: PlatformRenderer): PlatformRenderer => ({
   ...renderer,
-  runShell: getAgentIntegration(renderer.platform)?.capabilities.runShell ?? renderer.runShell
+  runShell: getAgentIntegration(renderer.platform)?.capabilities.runShell ?? renderer.runShell,
+  writeFiles: getAgentIntegration(renderer.platform)?.capabilities.writeFiles ?? renderer.writeFiles
 });
 
 export const getPlatformRenderer = (platform: AgentIntegrationId): PlatformRenderer =>
@@ -171,7 +196,8 @@ export const renderCommandForPlatform = (input: RenderCommandForPlatformInput): 
       argFormat: renderer.argFormat,
       scriptVariant: input.scriptVariant,
       outputFormat: renderer.outputFormat,
-      runShell: renderer.runShell
+      runShell: renderer.runShell,
+      writeFiles: renderer.writeFiles
     })
     : compileCommandTemplate({
       template: input.commandSource?.kind === 'legacy-template'
@@ -181,7 +207,8 @@ export const renderCommandForPlatform = (input: RenderCommandForPlatformInput): 
       argFormat: renderer.argFormat,
       scriptVariant: input.scriptVariant,
       outputFormat: renderer.outputFormat,
-      runShell: renderer.runShell
+      runShell: renderer.runShell,
+      writeFiles: renderer.writeFiles
     });
 
   return {

@@ -13,6 +13,7 @@ export const registerHandoffCommand = (program: Command): void => {
     .command('handoff')
     .argument('[story]', '故事目录名或路径，默认使用最近更新的 stories/*')
     .option('-o, --output <path>', '输出 Markdown 路径，默认写入故事目录 handoff.md')
+    .option('--target-agent <id>', '按目标 agent integration 的能力生成继续步骤')
     .option('--json', '输出结构化上下文到 stdout，不写入文件')
     .description('生成断点续写上下文包，帮助 AI 接手当前故事')
     .action(async (story, options) => {
@@ -23,6 +24,7 @@ export const registerHandoffCommand = (program: Command): void => {
           fileSystem: nodeFileSystem,
           story,
           output: options.output,
+          targetAgent: options.targetAgent,
           write: !options.json
         });
 

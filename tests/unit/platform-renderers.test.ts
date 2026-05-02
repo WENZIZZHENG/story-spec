@@ -73,7 +73,15 @@ describe('platform renderers', () => {
       platform: 'generic',
       namespace: '',
       outputFormat: 'markdown-generic',
-      runShell: false
+      runShell: false,
+      writeFiles: true
+    });
+    expect(getPlatformRenderer('continue-check')).toMatchObject({
+      platform: 'continue-check',
+      namespace: '',
+      outputFormat: 'markdown-generic',
+      runShell: false,
+      writeFiles: false
     });
   });
 
@@ -143,6 +151,12 @@ describe('platform renderers', () => {
       platform: 'copilot',
       scriptVariant: 'sh'
     });
+    const continueCheck = renderCommandForPlatform({
+      commandName: 'write',
+      commandSource,
+      platform: 'continue-check',
+      scriptVariant: 'sh'
+    });
 
     expect(codex.outputFile).toBe('novel-write.md');
     expect(codex.content).not.toMatch(/^---/);
@@ -159,5 +173,13 @@ describe('platform renderers', () => {
 
     expect(copilot.content).not.toContain('.specify/scripts/bash/check-writing-state.sh');
     expect(copilot.content).toContain('当前 agent 不支持 shell');
+
+    expect(continueCheck.outputFile).toBe('write.md');
+    expect(continueCheck.content).toContain('当前 agent 是只读模式');
+    expect(continueCheck.content).toContain('不要创建、修改或删除文件');
+    expect(continueCheck.content).toContain('以下路径只作为建议修改范围');
+    expect(continueCheck.content).toContain('- `stories/*/content/**`');
+    expect(continueCheck.content).not.toContain('.specify/scripts/bash/check-writing-state.sh');
+    expect(continueCheck.content).toContain('当前 agent 不支持 shell');
   });
 });

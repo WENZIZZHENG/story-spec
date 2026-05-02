@@ -428,24 +428,8 @@ risk:
 - [x] Batch A0：Agent-neutral 基线与入口。覆盖原 A0-A3 与 shared N001-N006，详情见 [full-refactor-completed.md](full-refactor-completed.md)。
 - [x] Batch A1：CommandSpec 与插件统一。覆盖原 A4-A5，详情见 [full-refactor-completed.md](full-refactor-completed.md)。
 - [x] Batch A2a：脚本能力降级。覆盖原 A6-T001，详情见 [full-refactor-completed.md](full-refactor-completed.md)。
+- [x] Batch A2：Agent 能力与文档收口。覆盖原 A6-T002、A6-T003、A6-T004、A7-T001 至 A7-T005，以及 shared N007，详情见 [full-refactor-completed.md](full-refactor-completed.md)。
 
 ## 待执行批次
 
-### [ ] Batch A2：Agent 能力与文档收口
-
-合并原 A6-T002、A6-T003、A6-T004、A7-T001 至 A7-T005，以及 shared N007。
-
-目标：
-
-- renderer 根据 `capabilities.writeFiles` 输出“可执行修改”或“只读建议”模式。
-- 为 generic / continue-check 这类偏只读入口生成 read-only analyze/checklist 版本。
-- `handoff` 增加 `targetAgent` 可选参数，输出适配目标 agent 的继续步骤。
-- README、`docs/agent-integrations.md`、`docs/agent-contract.md`、`docs/migration-guide.md`、CHANGELOG 同步 agent-neutral 主叙事和 `--ai` 到 `--agent` 迁移说明。
-
-验收：
-
-- 只读 agent 不会被提示直接写正文或 tracking。
-- 支持 shell 的 agent 才看到脚本执行作为主路径。
-- 新用户 5 分钟路径包含 `--agent generic` 和一个具体平台示例。
-- 旧用户能找到 `--ai` 兼容说明。
-- “Codex 接手”类表达改为“agent 接手”，Codex 只在平台章节出现。
+Agent-neutral 路线当前批次已完成。下一步按 [full-refactor-todo.md](full-refactor-todo.md) 进入 Worldbuilding Batch B0。

@@ -1,4 +1,9 @@
 import path from 'node:path';
+import {
+  getAgentIntegration,
+  type AgentIntegrationId
+} from '../agent/registry.js';
+import type { AgentCapabilities } from '../agent/capabilities.js';
 import type { ProjectFileSystem } from './project-ports.js';
 import type { ScannedStoryProject } from '../validation/artifact-scanner.js';
 import { scanStoryArtifacts, type ArtifactIssue } from '../validation/artifact-scanner.js';
@@ -7,7 +12,8 @@ import type { StoryArtifact, WritingTask } from '../domain/story-artifact.js';
 export type HandoffGenerationErrorCode =
   | 'NO_STORIES'
   | 'STORY_NOT_FOUND'
-  | 'MISSING_TASKS';
+  | 'MISSING_TASKS'
+  | 'UNKNOWN_AGENT';
 
 export class HandoffGenerationError extends Error {
   constructor(
@@ -56,6 +62,12 @@ export interface HandoffContext {
   allowedWriteFiles: string[];
   riskBoundaries: string[];
   blockers: ArtifactIssue[];
+  targetAgent?: {
+    id: AgentIntegrationId;
+    displayName: string;
+    commandSurface: string;
+    capabilities: AgentCapabilities;
+  };
 }
 
 export interface GenerateHandoffInput {
@@ -64,6 +76,7 @@ export interface GenerateHandoffInput {
   story?: string;
   output?: string;
   write?: boolean;
+  targetAgent?: string;
   now?: () => Date;
 }
 
@@ -299,7 +312,8 @@ const requireTasksPath = (story: ScannedStoryProject): string => {
 
 const buildRiskBoundaries = (
   nextTask: WritingTask | undefined,
-  blockers: ArtifactIssue[]
+  blockers: ArtifactIssue[],
+  targetAgent?: HandoffContext['targetAgent']
 ): string[] => {
   const boundaries = [
     '写作前先读取“必须读取”列表中的文件，确认规格、计划、任务边界和 AGENTS.md 约定。',
@@ -319,6 +333,14 @@ const buildRiskBoundaries = (
     boundaries.push('存在 artifact blocker，继续写作前优先处理缺失产物或结构问题。');
   }
 
+  if (targetAgent?.capabilities.runShell === false) {
+    boundaries.push(`目标 agent ${targetAgent.displayName} 不支持 shell；不要要求它执行 CLI/脚本，应改为人工检查和记录未验证项。`);
+  }
+
+  if (targetAgent?.capabilities.writeFiles === false) {
+    boundaries.push(`目标 agent ${targetAgent.displayName} 是只读模式；不要让它创建、修改或删除文件，只输出检查结果和补丁式建议。`);
+  }
+
   return boundaries;
 };
 
@@ -326,6 +348,7 @@ const buildContext = async (
   projectRoot: string,
   fs: ProjectFileSystem,
   story: ScannedStoryProject,
+  targetAgent: HandoffContext['targetAgent'],
   now: () => Date
 ): Promise<HandoffContext> => {
   const tasksPath = requireTasksPath(story);
@@ -369,8 +392,9 @@ const buildContext = async (
     unfinishedTasks,
     mustReadFiles,
     allowedWriteFiles,
-    riskBoundaries: buildRiskBoundaries(nextTask, blockers),
-    blockers
+    riskBoundaries: buildRiskBoundaries(nextTask, blockers, targetAgent),
+    blockers,
+    targetAgent
   };
 };
 
@@ -433,6 +457,74 @@ const renderNextTask = (task: HandoffTask | null): string[] => {
   ];
 };
 
+const resolveTargetAgent = (targetAgent: string | undefined): HandoffContext['targetAgent'] => {
+  if (!targetAgent) {
+    return undefined;
+  }
+
+  const integration = getAgentIntegration(targetAgent);
+  if (!integration) {
+    throw new HandoffGenerationError('UNKNOWN_AGENT', `未知 agent integration：${targetAgent}`);
+  }
+
+  return {
+    id: integration.id,
+    displayName: integration.displayName,
+    commandSurface: integration.commandSurface,
+    capabilities: { ...integration.capabilities }
+  };
+};
+
+const renderTargetAgentSection = (targetAgent: HandoffContext['targetAgent']): string[] => {
+  if (!targetAgent) {
+    return [];
+  }
+
+  const capabilities = [
+    targetAgent.capabilities.readFiles ? 'read' : '',
+    targetAgent.capabilities.writeFiles ? 'write' : 'read-only',
+    targetAgent.capabilities.runShell ? 'shell' : 'no-shell',
+    targetAgent.capabilities.supportsSlashCommands ? 'slash' : '',
+    targetAgent.capabilities.supportsProjectInstructions ? 'instructions' : ''
+  ].filter(Boolean).join(', ');
+
+  return [
+    '',
+    '## 目标 Agent',
+    '',
+    `- ID：\`${targetAgent.id}\``,
+    `- 名称：${targetAgent.displayName}`,
+    `- 命令界面：${targetAgent.commandSurface}`,
+    `- 能力：${capabilities}`
+  ];
+};
+
+const renderContinueSteps = (context: HandoffContext): string[] => {
+  const targetAgent = context.targetAgent;
+  const canRunShell = targetAgent?.capabilities.runShell !== false;
+  const canWriteFiles = targetAgent?.capabilities.writeFiles !== false;
+
+  if (!canWriteFiles) {
+    return [
+      '1. 按“必须读取”顺序加载上下文。',
+      '2. 只围绕“下一任务”和“建议修改范围”做检查，不创建、修改或删除文件。',
+      '3. 输出检查结果、目标路径、建议内容和补丁式修改说明。',
+      canRunShell
+        ? '4. 如需验证，只给出建议命令，等待具备执行权限的 agent 或用户运行。'
+        : '4. 不执行 CLI/脚本；人工核对必须读取、建议范围和验收标准，并记录无法自动验证的部分。'
+    ];
+  }
+
+  return [
+    canRunShell
+      ? '1. 运行 `novel status` 确认项目状态。'
+      : '1. 不执行 CLI/脚本；人工确认项目状态、任务边界和已知阻塞项。',
+    '2. 按“必须读取”顺序加载上下文。',
+    '3. 只围绕“下一任务”和“允许修改”推进。',
+    '4. 完成后更新 `tasks.md`、tracking 数据和对应正文文件。'
+  ];
+};
+
 export const renderHandoffMarkdown = (context: HandoffContext): string => {
   const currentChapter = context.currentChapter.path
     ? `\`${context.currentChapter.path}\`（${context.currentChapter.exists ? '已存在' : '待创建'}，${context.currentChapter.chars} 字）`
@@ -449,6 +541,7 @@ export const renderHandoffMarkdown = (context: HandoffContext): string => {
     `故事：${context.story.name}`,
     `当前章节：${currentChapter}`,
     ...renderNextTask(context.nextTask),
+    ...renderTargetAgentSection(context.targetAgent),
     '',
     '## 必须读取',
     '',
@@ -472,10 +565,7 @@ export const renderHandoffMarkdown = (context: HandoffContext): string => {
     '',
     '## 继续步骤',
     '',
-    '1. 运行 `novel status` 确认项目状态。',
-    '2. 按“必须读取”顺序加载上下文。',
-    '3. 只围绕“下一任务”和“允许修改”推进。',
-    '4. 完成后更新 `tasks.md`、tracking 数据和对应正文文件。'
+    ...renderContinueSteps(context)
   ].join('\n');
 };
 
@@ -484,7 +574,8 @@ export const generateHandoff = async (
 ): Promise<GenerateHandoffResult> => {
   const { projectRoot, fileSystem: fs } = input;
   const story = await selectStory(projectRoot, fs, input.story);
-  const context = await buildContext(projectRoot, fs, story, input.now ?? (() => new Date()));
+  const targetAgent = resolveTargetAgent(input.targetAgent);
+  const context = await buildContext(projectRoot, fs, story, targetAgent, input.now ?? (() => new Date()));
   const markdown = renderHandoffMarkdown(context);
 
   if (input.write === false) {
