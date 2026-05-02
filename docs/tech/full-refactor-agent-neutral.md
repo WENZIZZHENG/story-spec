@@ -477,7 +477,7 @@ risk:
 - [x] A3-T001：`init` 支持 `--agent <id>`、`--all-agents`。
 - [x] A3-T002：`upgrade` 支持 `--agent <id>`、`--all-agents`。
 - [x] A3-T003：旧 `--ai`、`--all` 输出简短兼容提示。
-- [ ] A3-T004：新增 `novel agent:add <id>`。
+- [x] A3-T004：新增 `novel agent:add <id>`。
 - [ ] A3-T005：新增 `novel agent:doctor`，检查 contract、平台命令目录、manifest、renderer 版本。
 - [ ] A3-T006：升级旧项目时推断并写入 `.specify/config.json.integrations`。
 

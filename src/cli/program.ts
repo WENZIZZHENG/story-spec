@@ -44,7 +44,7 @@ export function runProgram(argv: string[]): void {
     .helpOption('-h, --help', '显示帮助信息');
 
   registerInitCommand(program, { packageRoot });
-  registerAgentCommand(program);
+  registerAgentCommand(program, { packageRoot });
   registerContractCommand(program, { packageRoot });
   registerCheckStatusCommand(program);
   registerHandoffCommand(program);
