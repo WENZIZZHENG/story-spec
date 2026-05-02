@@ -4,6 +4,10 @@ import type {
   WritingTaskPriority,
   WritingTaskStatus
 } from '../../domain/story-artifact.js';
+import {
+  parsePluginManifest,
+  type PluginManifest
+} from '../../domain/plugin-manifest.js';
 
 export type ValidationSeverity = 'error' | 'warning' | 'info';
 
@@ -22,29 +26,15 @@ export interface ValidationIssue {
     | 'MISSING_PLUGIN_NAME'
     | 'MISSING_PLUGIN_VERSION'
     | 'INVALID_PLUGIN_TYPE'
+    | 'INVALID_PLUGIN_MANIFEST'
     | 'INVALID_PLUGIN_COMMAND';
   path: string;
   message: string;
 }
 
-export interface PluginManifestCommand {
-  id?: unknown;
-  file?: unknown;
-  description?: unknown;
-}
-
-export interface PluginManifestLike {
-  name?: unknown;
-  version?: unknown;
-  description?: unknown;
-  type?: unknown;
-  commands?: unknown;
-}
-
 const VALID_COMMAND_PREFIXES = new Set(['/', '/novel.', '/novel:', '/novel-']);
 const VALID_TASK_STATUSES = new Set<WritingTaskStatus>(['todo', 'done']);
 const VALID_TASK_PRIORITIES = new Set<WritingTaskPriority>(['P0', 'P1', 'P2', 'P3', 'PX']);
-const VALID_PLUGIN_TYPES = new Set(['feature', 'expert', 'workflow']);
 
 const issue = (
   code: ValidationIssue['code'],
@@ -134,31 +124,25 @@ export const validateWritingTask = (task: unknown): ValidationIssue[] => {
   return issues;
 };
 
-export const validatePluginManifest = (manifest: PluginManifestLike): ValidationIssue[] => {
-  const issues: ValidationIssue[] = [];
+export const validatePluginManifest = (manifest: unknown): ValidationIssue[] =>
+  parsePluginManifest(manifest).issues.map(pluginIssue => {
+    if (pluginIssue.path === 'plugin.name') {
+      return issue('MISSING_PLUGIN_NAME', pluginIssue.path, pluginIssue.message);
+    }
 
-  if (!isNonEmptyString(manifest.name)) {
-    issues.push(issue('MISSING_PLUGIN_NAME', 'plugin.name', '插件 name 不能为空'));
-  }
+    if (pluginIssue.path === 'plugin.version') {
+      return issue('MISSING_PLUGIN_VERSION', pluginIssue.path, pluginIssue.message);
+    }
 
-  if (!isNonEmptyString(manifest.version)) {
-    issues.push(issue('MISSING_PLUGIN_VERSION', 'plugin.version', '插件 version 不能为空'));
-  }
+    if (pluginIssue.path === 'plugin.type') {
+      return issue('INVALID_PLUGIN_TYPE', pluginIssue.path, pluginIssue.message);
+    }
 
-  if (!VALID_PLUGIN_TYPES.has(String(manifest.type))) {
-    issues.push(issue('INVALID_PLUGIN_TYPE', 'plugin.type', '插件 type 必须是 feature/expert/workflow'));
-  }
+    if (pluginIssue.path.startsWith('plugin.commands')) {
+      return issue('INVALID_PLUGIN_COMMAND', pluginIssue.path, pluginIssue.message);
+    }
 
-  if (Array.isArray(manifest.commands)) {
-    manifest.commands.forEach((command, index) => {
-      if (!isRecord(command)
-        || !isNonEmptyString(command.id)
-        || !isNonEmptyString(command.file)
-        || !isNonEmptyString(command.description)) {
-        issues.push(issue('INVALID_PLUGIN_COMMAND', `plugin.commands[${index}]`, '插件 command 必须包含 id/file/description'));
-      }
-    });
-  }
+    return issue('INVALID_PLUGIN_MANIFEST', pluginIssue.path, pluginIssue.message);
+  });
 
-  return issues;
-};
+export type { PluginManifest };

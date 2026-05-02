@@ -83,7 +83,7 @@ describe('schema validators', () => {
       name: 'genre-knowledge',
       version: '1.0.0',
       description: '类型知识',
-      type: 'feature',
+      type: 'knowledge',
       commands: [{ id: 'genre-plan', file: 'commands/plan.md', description: '规划增强' }]
     })).toEqual([]);
 
@@ -96,7 +96,7 @@ describe('schema validators', () => {
       expect.objectContaining({ code: 'MISSING_PLUGIN_NAME' }),
       expect.objectContaining({ code: 'MISSING_PLUGIN_VERSION' }),
       expect.objectContaining({ code: 'INVALID_PLUGIN_TYPE' }),
-      expect.objectContaining({ code: 'INVALID_PLUGIN_COMMAND' })
+      expect.objectContaining({ code: 'INVALID_PLUGIN_COMMAND', path: 'plugin.commands[0].id' })
     ]));
   });
 });

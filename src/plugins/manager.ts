@@ -1,36 +1,13 @@
 import fs from 'fs-extra';
 import path from 'path';
 import yaml from 'js-yaml';
+import {
+  parsePluginManifest,
+  type PluginCommand,
+  type PluginExpert,
+  type PluginManifest
+} from '../domain/plugin-manifest.js';
 import { logger } from '../utils/logger.js';
-
-interface PluginConfig {
-  name: string
-  version: string
-  description: string
-  type: 'feature' | 'expert' | 'workflow'
-  commands?: Array<{
-    id: string
-    file: string
-    description: string
-  }>
-  experts?: Array<{
-    id: string
-    file: string
-    title: string
-    description: string
-  }>
-  dependencies?: {
-    core: string
-  }
-  installation?: {
-    files?: Array<{
-      source: string
-      target: string
-      prefix?: string
-    }>
-    message?: string
-  }
-}
 
 export class PluginManager {
   private pluginsDir: string
@@ -160,17 +137,19 @@ export class PluginManager {
   /**
    * 读取并解析插件配置
    */
-  private async loadConfig(configPath: string): Promise<PluginConfig | null> {
+  private async loadConfig(configPath: string): Promise<PluginManifest | null> {
     try {
       const content = await fs.readFile(configPath, 'utf-8')
-      const config = yaml.load(content) as PluginConfig
+      const result = parsePluginManifest(yaml.load(content))
 
-      // 验证必要字段
-      if (!config.name || !config.version) {
+      if (!result.manifest) {
+        for (const manifestIssue of result.issues) {
+          logger.warn(`${manifestIssue.path}: ${manifestIssue.message}`)
+        }
         return null
       }
 
-      return config
+      return result.manifest
     } catch (error) {
       logger.error(`读取配置文件失败: ${configPath}`, error)
       return null
@@ -180,7 +159,7 @@ export class PluginManager {
   /**
    * 检查插件依赖
    */
-  private checkDependencies(config: PluginConfig): boolean {
+  private checkDependencies(config: PluginManifest): boolean {
     if (!config.dependencies) {
       return true
     }
@@ -221,7 +200,7 @@ export class PluginManager {
    */
   private async injectCommands(
     pluginName: string,
-    commands: PluginConfig['commands']
+    commands: PluginCommand[]
   ): Promise<void> {
     if (!commands) return
 
@@ -301,7 +280,7 @@ export class PluginManager {
    */
   private async registerExperts(
     pluginName: string,
-    experts: PluginConfig['experts']
+    experts: PluginExpert[]
   ): Promise<void> {
     if (!experts) return
 
@@ -325,9 +304,9 @@ export class PluginManager {
   /**
    * 列出所有已安装的插件
    */
-  async listPlugins(): Promise<PluginConfig[]> {
+  async listPlugins(): Promise<PluginManifest[]> {
     const plugins = await this.scanPlugins()
-    const configs: PluginConfig[] = []
+    const configs: PluginManifest[] = []
 
     for (const pluginName of plugins) {
       const configPath = path.join(this.pluginsDir, pluginName, 'config.yaml')

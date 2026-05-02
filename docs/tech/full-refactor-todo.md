@@ -259,7 +259,7 @@ src/
 
 目标：让插件不只是文件复制，而是声明式能力包。
 
-- [ ] 定义 `PluginManifest`
+- [x] 定义 `PluginManifest`
   - 字段：commands、templates、knowledge、trackingRules、experts、hooks。
 - [ ] 插件安装改为 plan/apply 两阶段
   - 验收：dry-run 可列出将写入的文件和冲突。
@@ -267,6 +267,12 @@ src/
   - 候选：init 后、prompt compile 前、tasks 生成后、write 前验证。
 - [ ] 插件冲突策略
   - 验收：同名 command/template 冲突有优先级和错误提示。
+
+阶段备注：
+- 已新增 `src/domain/plugin-manifest.ts`，定义插件类型、能力字段、hook 点与 manifest parser。
+- `PluginManifest` 支持 `commands`、`templates`、`knowledge`、`trackingRules`、`experts`、`hooks`，并兼容现有 `plugins/*/config.yaml`。
+- 已将 schema 层 `validatePluginManifest` 与 `PluginManager` 接入同一份领域 manifest，避免插件配置存在两套类型定义。
+- 已新增 `tests/unit/plugin-manifest.test.ts`，覆盖显式能力声明、现有内置插件配置兼容和非法字段诊断。
 
 ## 阶段 7：schema 与规则验证
 
