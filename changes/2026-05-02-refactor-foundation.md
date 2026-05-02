@@ -10,6 +10,7 @@ scope: cli,prompt,validation,plugins,ci
 ## CLI 行为
 
 - `novel validate` 现在提供项目结构、tracking JSON、任务元数据和写作规则的统一校验入口，并支持 `--json` 与 `--severity error|warning|info`。
+- `novel init --ai codex --agents-profile <profiles>` 可生成带写作边界画像的 `AGENTS.md`，支持 `adult`、`slow-burn`、`adventure`、`romance`、`multi-thread` 组合。
 - `novel plugins add <name>` 支持 `--dry-run` 预览安装计划，默认阻止覆盖冲突；需要覆盖时必须显式使用 `--force`。
 - `novel codex-status` 继续保留 Codex 接手状态摘要，并接入 artifact graph blocker。
 - `npm run verify` 现在覆盖 build、unit tests、coverage、变更记录、命令产物 manifest、命令生成和 smoke tests。

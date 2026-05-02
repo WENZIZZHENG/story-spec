@@ -255,6 +255,7 @@ Novel Writer 在部分 AI 平台使用命名空间（namespace）前缀，主要
 - ✅ 使用 `novel-` 前缀避免与其他工具冲突
 - ✅ 完整支持所有 Novel Writer 命令功能
 - ✅ 初始化时生成 `AGENTS.md`，帮助 Codex 明确读取顺序、写作边界和文件职责
+- ✅ 初始化时可用 `--agents-profile adult,slow-burn,adventure,romance,multi-thread` 配置 `AGENTS.md` 写作边界画像
 - ✅ 可用 `novel status` 在终端查看项目是否已具备直接写作条件；`novel codex-status` 保留为兼容别名
 
 **安装方式**:

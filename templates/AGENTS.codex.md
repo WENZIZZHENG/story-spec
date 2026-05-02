@@ -2,7 +2,7 @@
 
 ## Project
 - Novel project: `{{PROJECT_NAME}}`.
-- Work from the project root and run `novel codex-status` before planning or writing.
+- Work from the project root and run `novel status` before planning or writing.
 - Use Chinese for author-facing notes unless the project files say otherwise.
 
 ## Workflow
@@ -26,6 +26,9 @@
 - If the user asks for planning, only update planning files; do not draft chapter prose.
 - Sensitive or adult story elements are kept as plot function, motivation, relationship change, consequence, and boundary notes unless the active writing task says otherwise.
 - When a boundary is unclear, add a clarification task instead of expanding the scene.
+
+## Profile
+{{AGENTS_PROFILE_SECTION}}
 
 ## Files
 - Planning: `stories/*/specification.md`, `stories/*/creative-plan.md`, `stories/*/tasks.md`.

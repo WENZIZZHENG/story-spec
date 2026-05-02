@@ -189,7 +189,7 @@
     },
     {
       "path": "auggie/.specify/templates/AGENTS.codex.md",
-      "sha256": "85a8aaf48b73f1762d478f6fff69daa0cde4615423a314d75302583a8227bfd1"
+      "sha256": "021af3ad7ba2d6a278cd6304b165fd89b1e3541f9bd7b4acf9341334644b86e2"
     },
     {
       "path": "auggie/.specify/templates/checklist-template.md",
@@ -517,7 +517,7 @@
     },
     {
       "path": "claude/.specify/templates/AGENTS.codex.md",
-      "sha256": "85a8aaf48b73f1762d478f6fff69daa0cde4615423a314d75302583a8227bfd1"
+      "sha256": "021af3ad7ba2d6a278cd6304b165fd89b1e3541f9bd7b4acf9341334644b86e2"
     },
     {
       "path": "claude/.specify/templates/checklist-template.md",
@@ -845,7 +845,7 @@
     },
     {
       "path": "codebuddy/.specify/templates/AGENTS.codex.md",
-      "sha256": "85a8aaf48b73f1762d478f6fff69daa0cde4615423a314d75302583a8227bfd1"
+      "sha256": "021af3ad7ba2d6a278cd6304b165fd89b1e3541f9bd7b4acf9341334644b86e2"
     },
     {
       "path": "codebuddy/.specify/templates/checklist-template.md",
@@ -1173,7 +1173,7 @@
     },
     {
       "path": "codex/.specify/templates/AGENTS.codex.md",
-      "sha256": "85a8aaf48b73f1762d478f6fff69daa0cde4615423a314d75302583a8227bfd1"
+      "sha256": "021af3ad7ba2d6a278cd6304b165fd89b1e3541f9bd7b4acf9341334644b86e2"
     },
     {
       "path": "codex/.specify/templates/checklist-template.md",
@@ -1501,7 +1501,7 @@
     },
     {
       "path": "copilot/.specify/templates/AGENTS.codex.md",
-      "sha256": "85a8aaf48b73f1762d478f6fff69daa0cde4615423a314d75302583a8227bfd1"
+      "sha256": "021af3ad7ba2d6a278cd6304b165fd89b1e3541f9bd7b4acf9341334644b86e2"
     },
     {
       "path": "copilot/.specify/templates/checklist-template.md",
@@ -1829,7 +1829,7 @@
     },
     {
       "path": "cursor/.specify/templates/AGENTS.codex.md",
-      "sha256": "85a8aaf48b73f1762d478f6fff69daa0cde4615423a314d75302583a8227bfd1"
+      "sha256": "021af3ad7ba2d6a278cd6304b165fd89b1e3541f9bd7b4acf9341334644b86e2"
     },
     {
       "path": "cursor/.specify/templates/checklist-template.md",
@@ -2157,7 +2157,7 @@
     },
     {
       "path": "gemini/.specify/templates/AGENTS.codex.md",
-      "sha256": "85a8aaf48b73f1762d478f6fff69daa0cde4615423a314d75302583a8227bfd1"
+      "sha256": "021af3ad7ba2d6a278cd6304b165fd89b1e3541f9bd7b4acf9341334644b86e2"
     },
     {
       "path": "gemini/.specify/templates/checklist-template.md",
@@ -2485,7 +2485,7 @@
     },
     {
       "path": "kilocode/.specify/templates/AGENTS.codex.md",
-      "sha256": "85a8aaf48b73f1762d478f6fff69daa0cde4615423a314d75302583a8227bfd1"
+      "sha256": "021af3ad7ba2d6a278cd6304b165fd89b1e3541f9bd7b4acf9341334644b86e2"
     },
     {
       "path": "kilocode/.specify/templates/checklist-template.md",
@@ -2813,7 +2813,7 @@
     },
     {
       "path": "opencode/.specify/templates/AGENTS.codex.md",
-      "sha256": "85a8aaf48b73f1762d478f6fff69daa0cde4615423a314d75302583a8227bfd1"
+      "sha256": "021af3ad7ba2d6a278cd6304b165fd89b1e3541f9bd7b4acf9341334644b86e2"
     },
     {
       "path": "opencode/.specify/templates/checklist-template.md",
@@ -3141,7 +3141,7 @@
     },
     {
       "path": "q/.specify/templates/AGENTS.codex.md",
-      "sha256": "85a8aaf48b73f1762d478f6fff69daa0cde4615423a314d75302583a8227bfd1"
+      "sha256": "021af3ad7ba2d6a278cd6304b165fd89b1e3541f9bd7b4acf9341334644b86e2"
     },
     {
       "path": "q/.specify/templates/checklist-template.md",
@@ -3469,7 +3469,7 @@
     },
     {
       "path": "qwen/.specify/templates/AGENTS.codex.md",
-      "sha256": "85a8aaf48b73f1762d478f6fff69daa0cde4615423a314d75302583a8227bfd1"
+      "sha256": "021af3ad7ba2d6a278cd6304b165fd89b1e3541f9bd7b4acf9341334644b86e2"
     },
     {
       "path": "qwen/.specify/templates/checklist-template.md",
@@ -3797,7 +3797,7 @@
     },
     {
       "path": "roocode/.specify/templates/AGENTS.codex.md",
-      "sha256": "85a8aaf48b73f1762d478f6fff69daa0cde4615423a314d75302583a8227bfd1"
+      "sha256": "021af3ad7ba2d6a278cd6304b165fd89b1e3541f9bd7b4acf9341334644b86e2"
     },
     {
       "path": "roocode/.specify/templates/checklist-template.md",
@@ -4073,7 +4073,7 @@
     },
     {
       "path": "windsurf/.specify/templates/AGENTS.codex.md",
-      "sha256": "85a8aaf48b73f1762d478f6fff69daa0cde4615423a314d75302583a8227bfd1"
+      "sha256": "021af3ad7ba2d6a278cd6304b165fd89b1e3541f9bd7b4acf9341334644b86e2"
     },
     {
       "path": "windsurf/.specify/templates/checklist-template.md",

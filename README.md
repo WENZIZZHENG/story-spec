@@ -46,6 +46,9 @@ novel init my-novel --ai claude    # Claude Code
 novel init my-novel --ai gemini    # Gemini CLI
 novel init my-novel --ai codex     # Codex CLI
 novel init my-novel --ai cursor    # Cursor
+
+# 为 Codex 生成带写作边界画像的 AGENTS.md
+novel init my-novel --ai codex --agents-profile adult,slow-burn,adventure
 ```
 
 ### 3. 写作前检查
@@ -195,6 +198,7 @@ novel init my-novel [选项]
 - `--ai <type>` - 选择 AI 平台（claude/gemini/cursor等）
 - `--with-experts` - 包含专家模式
 - `--plugins <names>` - 预装插件（逗号分隔）
+- `--agents-profile <profiles>` - 配置 Codex `AGENTS.md` 写作边界画像（如 `adult,slow-burn,adventure,romance,multi-thread`）
 - `--all` - 生成所有 AI 平台配置
 
 ### `novel plugins`

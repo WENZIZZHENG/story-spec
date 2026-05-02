@@ -40,6 +40,7 @@ export function registerInitCommand(program: Command, context: InitCommandContex
     .option('--no-git', '跳过 Git 初始化')
     .option('--with-experts', '包含专家模式')
     .option('--plugins <names>', '预装插件，逗号分隔')
+    .option('--agents-profile <profiles>', '配置 AGENTS.md 写作边界画像，逗号分隔：adult,slow-burn,adventure,romance,multi-thread')
     .description('初始化一个新的小说项目')
     .action(async (name, options) => {
       // 如果是交互式终端且没有明确指定参数，显示交互选择
@@ -114,6 +115,7 @@ export function registerInitCommand(program: Command, context: InitCommandContex
           git: options.git !== false,
           withExperts: !!options.withExperts,
           plugins: options.plugins,
+          agentsProfile: options.agentsProfile,
           fileSystem: nodeFileSystem,
           gitAdapter: commandGitAdapter,
           pluginInstaller: pluginManagerInstaller,

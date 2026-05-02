@@ -1,4 +1,4 @@
-import { access, mkdir, mkdtemp, rm, writeFile } from 'node:fs/promises';
+import { access, mkdir, mkdtemp, readFile, rm, writeFile } from 'node:fs/promises';
 import os from 'node:os';
 import path from 'node:path';
 import { afterEach, describe, expect, it } from 'vitest';
@@ -34,7 +34,10 @@ const createPackageRootFixture = async () => {
 
   await mkdir(path.join(packageRoot, 'templates', 'tracking'), { recursive: true });
   await mkdir(path.join(packageRoot, 'templates', 'knowledge'), { recursive: true });
-  await writeFile(path.join(packageRoot, 'templates', 'AGENTS.codex.md'), '# {{PROJECT_NAME}}\n');
+  await writeFile(
+    path.join(packageRoot, 'templates', 'AGENTS.codex.md'),
+    '# {{PROJECT_NAME}}\n\n{{AGENTS_PROFILE_SECTION}}\n'
+  );
   await writeFile(path.join(packageRoot, 'templates', 'tracking', 'plot-tracker.json'), '{}');
   await writeFile(path.join(packageRoot, 'templates', 'knowledge', 'world-setting.md'), 'updated [日期]');
 
@@ -78,8 +81,36 @@ describe('initProject', () => {
     await expect(exists(path.join(projectPath, '.specify', 'config.json'))).resolves.toBe(true);
     await expect(exists(path.join(projectPath, '.codex', 'prompts', 'novel-write.md'))).resolves.toBe(true);
     await expect(exists(path.join(projectPath, 'AGENTS.md'))).resolves.toBe(true);
+    await expect(readFile(path.join(projectPath, 'AGENTS.md'), 'utf-8')).resolves.toContain('Default profile');
     await expect(exists(path.join(projectPath, 'spec', 'tracking', 'plot-tracker.json'))).resolves.toBe(true);
     await expect(exists(path.join(projectPath, 'spec', 'knowledge', 'world-setting.md'))).resolves.toBe(true);
+  });
+
+  it('renders configured AGENTS.md writing profiles for Codex projects', async () => {
+    const cwd = await makeTempDir();
+    const packageRoot = await createPackageRootFixture();
+
+    await initProject({
+      name: 'profiled',
+      cwd,
+      packageRoot,
+      here: false,
+      ai: 'codex',
+      all: false,
+      method: 'three-act',
+      git: false,
+      withExperts: false,
+      agentsProfile: 'adult,slow-burn,adventure',
+      fileSystem: nodeFileSystem
+    });
+
+    const agents = await readFile(path.join(cwd, 'profiled', 'AGENTS.md'), 'utf-8');
+    expect(agents).toContain('Profile `adult`');
+    expect(agents).toContain('consent boundary');
+    expect(agents).toContain('Profile `slow-burn`');
+    expect(agents).toContain('gradual emotional escalation');
+    expect(agents).toContain('Profile `adventure`');
+    expect(agents).toContain('external stakes');
   });
 
   it('rejects an existing project directory', async () => {

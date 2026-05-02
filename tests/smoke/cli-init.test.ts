@@ -1,5 +1,5 @@
 import { execFile } from 'node:child_process';
-import { access, mkdtemp, readdir, rm } from 'node:fs/promises';
+import { access, mkdtemp, readFile, readdir, rm } from 'node:fs/promises';
 import os from 'node:os';
 import path from 'node:path';
 import { promisify } from 'node:util';
@@ -41,6 +41,8 @@ describe('CLI init smoke', () => {
       'codex',
       '--method',
       'three-act',
+      '--agents-profile',
+      'adult,slow-burn',
       '--no-git'
     ], { cwd });
 
@@ -54,6 +56,8 @@ describe('CLI init smoke', () => {
       expect(await exists(path.join(projectPath, file))).toBe(true);
     }));
     expect(prompts.filter(file => file.endsWith('.md'))).toHaveLength(golden.codex.promptCount);
+    await expect(readFile(path.join(projectPath, 'AGENTS.md'), 'utf-8')).resolves.toContain('Profile `adult`');
+    await expect(readFile(path.join(projectPath, 'AGENTS.md'), 'utf-8')).resolves.toContain('Profile `slow-burn`');
 
     const statusResult = await execFileAsync('node', [
       cliPath,

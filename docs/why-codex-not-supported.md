@@ -11,13 +11,15 @@ Novel Writer 已支持 Codex CLI。
 - 初始化方式：`novel init my-novel --ai codex`
 - 状态检查：`novel status`（`novel codex-status` 仍作为兼容别名）
 
-从 v0.20.x 开始，Codex 项目会额外生成根目录 `AGENTS.md`，用于说明读取顺序、规划/写作边界、关键文件位置和高风险剧情节点的处理方式。该文件只在不存在时创建，不覆盖作者已有约定。
+从 v0.20.x 开始，Codex 项目会额外生成根目录 `AGENTS.md`，用于说明读取顺序、规划/写作边界、关键文件位置和高风险剧情节点的处理方式。该文件只在不存在时创建，不覆盖作者已有约定；可通过 `--agents-profile adult,slow-burn,adventure,romance,multi-thread` 组合写作边界画像。
 
 ## 推荐流程
 
 ```bash
 npm install -g novel-writer-cn
 novel init my-novel --ai codex
+# 可选：生成成人向、慢热、冒险等边界画像
+novel init my-novel --ai codex --agents-profile adult,slow-burn,adventure
 cd my-novel
 novel status
 ```
