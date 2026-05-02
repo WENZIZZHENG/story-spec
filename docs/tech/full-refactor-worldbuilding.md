@@ -454,152 +454,74 @@ novel preset:doctor
 - `/specify`、`/plan`、`/tasks` 能读取当前 preset。
 - `validate` 能按 preset 检查必填世界观字段。
 
-## Phase Tasks
+## 批次化开发计划
 
-## 阶段 B0：世界观基线与 ADR
+后续执行以 Batch 为单位。旧 B0-B8 细项已合并为下列批次；细项只作为覆盖范围说明，不再作为独立开发门槛。
 
-目标：确定 World Bible、Canon Ledger、Scene Cards 的最小可交付边界，避免一次性做成大型写作软件。
+### [ ] Batch B0：World / Canon 基座
 
-- [ ] B0-T001：新增 ADR `docs/tech/worldbuilding-quality-roadmap.md`，说明为什么引入 World Bible、Canon Ledger、Entity Graph、Scene Cards。
-- [ ] B0-T002：盘点现有 `spec/knowledge/*`、`spec/tracking/*`、`stories/*` 与新模型的映射关系。
-- [ ] B0-T003：决定第一版结构化格式：YAML、JSON、Markdown frontmatter 的边界。
-- [ ] B0-T004：定义最小 schema：`WorldFact`、`CanonFact`、`StoryEntity`、`StoryEdge`、`SceneCard`、`VoiceFingerprint`。
-- [ ] B0-T005：补充迁移策略：已有项目如何从 `world-setting.md`、`character-profiles.md`、`relationships.json` 迁移。
+合并原 B0-B2 与 shared N008-N011。
 
-验收：
+目标：
 
-- 本阶段只允许文档和 schema 草案，不改生成行为。
-- ADR 明确第一版不做数据库、不做复杂可视化、不做自动全文重写。
-
-## 阶段 B1：World Bible MVP
-
-目标：让世界观从松散笔记升级为可校验的剧情约束。
-
-- [ ] B1-T001：新增 `templates/world/`，包含 `world-bible.md`、`rules.yaml`、`factions.yaml`、`locations.yaml`、`history.yaml`、`systems.yaml`、`artifacts.yaml`。
-- [ ] B1-T002：`init` 生成 `spec/world/` 模板；`upgrade` 可选择补齐缺失模板。
-- [ ] B1-T003：新增 `src/domain/world-fact.ts` 与 parser/validator。
-- [ ] B1-T004：`novel validate` 检查 WorldFact 缺 `storyFunction`、缺 `constraints`、引用不存在 entity。
-- [ ] B1-T005：新增 `novel world:list`、`novel world:check`。
-- [ ] B1-T006：`/write` 和 generic `write.md` 加入 World Bible 读取顺序。
+- 新增 `docs/tech/worldbuilding-quality-roadmap.md`，明确 World Bible、Canon Ledger、Entity Graph、Scene Cards 的第一版边界。
+- 盘点现有 `spec/knowledge/*`、`spec/tracking/*`、`stories/*` 与新模型的映射关系。
+- 定义 `WorldFact`、`CanonFact`、`StoryEntity`、`StoryEdge`、`SceneCard`、`VoiceFingerprint` 最小 schema 草案。
+- 新增 `spec/world/` 与 `spec/canon/` 初始化模板草案。
+- 落地 World Bible 与 Canon Ledger 的 domain parser/validator、基础 CLI、`validate` issue 输出和写作读取/checklist 接入。
 
 验收：
 
-- 新项目有 `spec/world/`。
-- `novel validate --json` 输出 world issue。
-- 没有 World Bible 的旧项目只给 warning，不阻断写作。
-
-## 阶段 B2：Canon Ledger 与传播债务
-
-目标：把“正文已经写成事实”的内容记录下来，并在设定变更时产生可追踪的影响清单。
-
-- [ ] B2-T001：新增 `templates/canon/facts.md`、`facts.json`、`contradictions.md`、`propagation-debt.json`。
-- [ ] B2-T002：新增 `src/domain/canon.ts`，定义 `CanonFact`、`CanonEvidence`、`PropagationDebt`。
-- [ ] B2-T003：新增 `novel canon:list`、`novel canon:check`、`novel canon:diff`、`novel canon:impact`。
-- [ ] B2-T004：`handoff` 增加 canon 摘要、open propagation debt 数量、下一任务相关 canon facts。
-- [ ] B2-T005：`/write` 完成步骤新增 canon update checklist。
-- [ ] B2-T006：新增 `/canon-update`、`/canon-check` 或 generic command 文档。
-
-验收：
-
-- `canon:check` 能发现明显互斥事实和 evidence 缺失。
-- `canon:impact` 能基于 evidencePaths/affectedEntities 输出受影响路径。
+- 新项目有 `spec/world/` 与 `spec/canon/` 基础模板。
+- `novel validate --json` 输出 world/canon issue。
+- 没有 World Bible / Canon Ledger 的旧项目只给 warning，不阻断写作。
 - 写作流程不会自动重写正文，只生成 debt 和建议动作。
 
-## 阶段 B3：Entity Graph
+### [ ] Batch B1：Entity Graph / Scene Card 创作结构
 
-目标：将角色、地点、组织、物品、事件、线索、规则连接成可查询图谱。
+合并原 B3-B4。
 
-- [ ] B3-T001：新增 `spec/graph/entities.json`、`edges.json` 模板。
-- [ ] B3-T002：新增 `src/domain/story-entity.ts` 与 graph builder。
-- [ ] B3-T003：从 `character-profiles.md`、`relationships.json`、`timeline.json`、`plot-tracker.json`、Canon Ledger 构建第一版 entity graph。
-- [ ] B3-T004：新增 `novel graph:build`、`novel entity:list`、`novel entity:show`、`novel graph:impact`。
-- [ ] B3-T005：`validate` 检查 edge 引用不存在 entity、alias 重复、entity 无 sourcePaths。
-- [ ] B3-T006：`handoff` 为下一任务输出相关 entity 子图。
+目标：
+
+- 新增 entity graph 模板、domain parser/builder、CLI 和 validate 规则。
+- 从显式文件构建第一版 entity graph，不依赖 AI 推断。
+- 新增 scene card 模板、parser/validator、`scene:*` CLI、generic/slash command。
+- `write`、`handoff`、`tasks:board` 能读取或展示相关 entity / scene 信息。
 
 验收：
 
-- graph builder 不依赖 AI 推断也能从显式文件构建基础图谱。
-- 每条 edge 都保留 evidencePaths。
+- 每条 graph edge 保留 evidencePaths。
 - `graph:impact` 可辅助 Canon/World impact。
-
-## 阶段 B4：Scene Cards 与编译工作流
-
-目标：让章节写作基于场景卡，支持场景级规划、校验、重排和编译。
-
-- [ ] B4-T001：新增 `templates/scenes/scene-template.yaml`。
-- [ ] B4-T002：新增 `src/domain/scene-card.ts` 与 parser/validator。
-- [ ] B4-T003：新增 `novel scene:init`、`novel scene:list`、`novel scene:check`、`novel scene:compile`。
-- [ ] B4-T004：新增 `/scene-plan`、`/scene-write`、`/scene-review` generic/slash command。
-- [ ] B4-T005：`/write` 检测到 scene card 时优先按 scene card 写作。
-- [ ] B4-T006：`tasks:board` 显示任务关联 scene card。
-
-验收：
-
 - scene 缺 POV、location、time、sceneGoal、conflict、outcome 时 validate 给 warning/error。
-- `scene:compile` 可按 scene order 输出章节草稿索引。
-- 不强制所有旧章节立即补 scene cards。
+- 不强制旧章节立即补 scene cards。
 
-## 阶段 B5：世界观密度、揭示节奏与伏笔检查
+### [ ] Batch B2：Worldbuilding Quality / Voice / Reviewer
 
-目标：减少设定堆砌、设定断裂、伏笔无回收等长篇常见问题。
+合并原 B5-B7。
 
-- [ ] B5-T001：新增 `src/validation/rules/world-density-rules.ts`。
-- [ ] B5-T002：新增 `src/validation/rules/reveal-pacing-rules.ts`。
-- [ ] B5-T003：`novel analyze --focus=world-density` 输出每章/每场设定密度。
-- [ ] B5-T004：`novel analyze --focus=reveal-pacing` 输出设定首次出现、再次使用、悬空设定。
-- [ ] B5-T005：`novel analyze --focus=foreshadowing` 对伏笔埋设/回收做检查。
-- [ ] B5-T006：将严重问题接入 `novel validate` 或 reviewer findings。
+目标：
+
+- 新增世界观密度、揭示节奏、伏笔检查规则，并接入 analyze / validate / reviewer findings。
+- 新增 VoiceFingerprint 模板、schema、validator、`voice:*` CLI 和相关 commands。
+- 建立 reviewer registry 与 `novel review` / review commands，输出结构化 findings 和任务草稿。
 
 验收：
 
-- 所有 finding 必须引用 chapter/scene/world/canon 路径。
-- 第一版允许启发式统计，但输出必须可解释。
-- 不因为没有 scene card 就完全失效，应能 fallback 到章节正文。
+- 所有 finding 必须引用 chapter/scene/world/canon 路径，包含 severity、evidence、suggestedAction。
+- 无 scene card 时能 fallback 到章节级检查。
+- voice rewrite 和 reviewer loop 默认输出建议或任务草稿，不直接覆盖正文。
 
-## 阶段 B6：角色声音指纹
+### [ ] Batch B3：Genre Preset 包
 
-目标：提升对白质量，减少角色声音同质化。
+合并原 B8。
 
-- [ ] B6-T001：新增 `spec/voice/character-voices.yaml` 与 `narrator-voice.md` 模板。
-- [ ] B6-T002：新增 `VoiceFingerprint` schema 和 validator。
-- [ ] B6-T003：新增 `novel voice:check`、`novel voice:sample`。
-- [ ] B6-T004：新增 `/voice-fingerprint`，从已有正文提取角色声音草案。
-- [ ] B6-T005：新增 `/voice-rewrite`，只针对对话片段生成 rewrite 建议，不直接覆盖正文。
-- [ ] B6-T006：`/write` 读取当前 POV/参与角色的 voice fingerprint。
+目标：
 
-验收：
-
-- `voice:check` 能发现称呼错误、禁用词、主要角色缺 voice fingerprint。
-- voice reviewer 可进入 reviewer loop。
-- 任何自动 rewrite 必须默认输出建议，不直接覆盖正文。
-
-## 阶段 B7：Reviewer Loop
-
-目标：把 `/analyze` 升级为多审稿人面板，输出结构化 findings 和下一步任务草稿。
-
-- [ ] B7-T001：定义 reviewer registry：reader、genre、editor、worldbuilding、character、continuity。
-- [ ] B7-T002：新增 `novel review`、`novel review --panel`、`novel review --chapter`、`novel review --json`。
-- [ ] B7-T003：新增 `/review-panel`、`/review-world`、`/review-character`、`/review-reader`。
-- [ ] B7-T004：review findings 输出 path、severity、evidence、suggestedAction。
-- [ ] B7-T005：review 可生成 `tasks.md` 草稿项，但不直接写入，除非用户确认。
-- [ ] B7-T006：`handoff` 可包含最近 reviewer findings 摘要。
-
-验收：
-
-- reviewer findings 与 validate issue 结构兼容或可转换。
-- `review --json` 可被自动化消费。
-- reviewer loop 不直接改正文。
-
-## 阶段 B8：类型 Preset 包
-
-目标：将类型小说知识沉淀为可安装 preset。
-
-- [ ] B8-T001：定义 `PresetManifest`，复用插件 resolution stack。
-- [ ] B8-T002：新增 `presets/xuanhuan-cultivation`，作为首个完整样板。
-- [ ] B8-T003：样板包含 World Bible 必填字段、角色功能位、节奏模板、常见错误、reviewer 权重、validate 规则。
-- [ ] B8-T004：新增 `novel preset:list`、`novel preset:add`、`novel preset:doctor`。
-- [ ] B8-T005：`/specify`、`/plan`、`/tasks` 读取当前 preset。
-- [ ] B8-T006：README/docs 增加 preset 使用示例。
+- 定义 `PresetManifest`，复用插件 resolution stack。
+- 新增 `presets/xuanhuan-cultivation` 作为完整样板。
+- 样板包含 World Bible 必填字段、角色功能位、节奏模板、常见错误、reviewer 权重和 validate 规则。
+- 新增 `novel preset:list`、`preset:add`、`preset:doctor`，并让 `/specify`、`/plan`、`/tasks` 读取当前 preset。
+- README/docs 增加 preset 使用示例。
 
 验收：
 

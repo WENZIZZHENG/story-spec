@@ -485,168 +485,38 @@ novel feedback:to-tasks
 - `feedback:to-tasks` 生成任务草稿，用户确认后再写入 `tasks.md`。
 - feedback 可关联 reviewer findings、canon debt、promise tracking。
 
-## Phase Tasks
+## 批次化开发计划
 
-## 阶段 C0：工作台能力 ADR
+Workbench 路线按批次执行，旧 `C*-T*` 编号仅作为范围映射，不再作为逐项开发闸门。每个批次完成后同步更新本文与 [full-refactor-shared.md](full-refactor-shared.md) 的状态。
 
-目标：明确 Context Pack、Draft/Revision、Narrative Tests、Dialogue、Branch、Promise、Research、Style、Compile、Feedback 的边界和优先级。
+## 待执行批次
 
-- [ ] C0-T001：新增 ADR `docs/tech/novel-workbench-roadmap.md`。
-- [ ] C0-T002：确定 C 系列第一批 MVP 顺序：建议 Context Pack → Draft/Revision → Narrative Tests → Promise Tracking。
-- [ ] C0-T003：定义 C 系列公共 finding/task draft 格式，避免 review、lint、feedback、narrative test 各写一套。
-- [ ] C0-T004：补充迁移原则：旧项目不强制引入 drafts、branches、research。
-- [ ] C0-T005：列出不做项：不做富文本编辑器、不做多人协作平台、不做自动发布平台。
+- [ ] Batch C0：Workbench 基线与 Context / Draft / Narrative MVP。
 
-验收：
+  范围：覆盖原 C0-C3 与 Shared N012-N015。新增工作台 ADR，定义公共 finding/task draft 格式，落地 `ContextPack`、`DraftRecord`、`NarrativeTestResult` 最小 schema，并实现 `context:pack`、draft/revision 文件布局、draft 基础命令与 `narrative:test` MVP。
 
-- 本阶段只改文档。
-- ADR 明确每项能力的最小落地范围和延期能力。
+  验收：
+  - ADR 明确 C 系列能力边界、MVP 顺序和延期能力。
+  - `context:pack --task T001 --json` 输出结构化 pack，且每个 mustRead 都有 reason。
+  - draft/revision 不默认覆盖正式正文，`draft:promote` 前有确认摘要。
+  - narrative findings 带 path、evidence、suggestedAction，无 scene card 时能 fallback 到章节级检查。
 
-## 阶段 C1：Context Pack
+- [ ] Batch C1：Dialogue / Branch / Promise 创作扩展。
 
-目标：让任意 agent 写作前拿到精简、稳定、可验证的上下文包。
+  范围：覆盖原 C4-C6。实现对白结构化检查与计划、剧情分支安全探索、Promise Tracking / Tension Curve，并把相关信息接入 `/plan`、`/tasks`、`/write` 与 reviewer loop。
 
-- [ ] C1-T001：新增 `src/domain/context-pack.ts`。
-- [ ] C1-T002：新增 `templates/context-pack/write-pack.md`。
-- [ ] C1-T003：新增 `novel context:pack`、`context:show`、`context:validate`。
-- [ ] C1-T004：`handoff` 可引用最近 context pack。
-- [ ] C1-T005：`/write`、generic `write.md` 支持“若存在 context pack，优先按 pack 执行”。
-- [ ] C1-T006：context pack 自动收集下一任务、WorldFacts、CanonFacts、SceneCards、VoiceFingerprints、近期摘要、禁止事项。
+  验收：
+  - `dialogue:extract` 输出待确认 YAML，不直接写 canon。
+  - branch 默认写入 `branches/`，compare 输出结构化影响报告，promote 必须显式确认。
+  - `promise:check` 能发现长期未兑现、payoff 缺 evidence、重复建立但不推进的问题。
+  - promise/tension findings 可生成任务草稿。
 
-验收：
+- [ ] Batch C2：Research / Style / Compile / Feedback 收口。
 
-- `context:pack --task T001 --json` 输出结构化 pack。
-- pack 中每个 mustRead 都有 reason。
-- `context:validate` 能发现路径缺失和 pack 过期。
+  范围：覆盖原 C7-C9。实现 Research Vault、Style Guide as Linter、manuscript compile/export 与 Feedback Loop，并保证这些能力默认不改正文。
 
-## 阶段 C2：Draft / Revision 分层
-
-目标：让章节经历草稿、审稿、修订、定稿，不默认覆盖正式正文。
-
-- [ ] C2-T001：新增 `src/domain/draft.ts`。
-- [ ] C2-T002：初始化 `stories/*/drafts/`、`revisions/` 目录策略。
-- [ ] C2-T003：新增 `novel draft:new`、`draft:list`、`draft:promote`。
-- [ ] C2-T004：新增 `novel revise --chapter`。
-- [ ] C2-T005：`/write` 可选择输出到 drafts，而不是直接写 `content/`。
-- [ ] C2-T006：`validate` 检查 draft record 与文件状态一致。
-
-验收：
-
-- `draft:promote` 前显示确认摘要。
-- `content/chapter.md` 不被自动覆盖。
-- `status` 能显示当前章节 draft 状态。
-
-## 阶段 C3：Narrative Tests
-
-目标：把章节好坏拆成可检查的叙事规则。
-
-- [ ] C3-T001：新增 `src/validation/rules/narrative-tests.ts`。
-- [ ] C3-T002：新增 `novel narrative:test`。
-- [ ] C3-T003：支持 `--chapter`、`--scene`、`--json`。
-- [ ] C3-T004：将 narrative test finding 接入 reviewer findings 或 validate issue。
-- [ ] C3-T005：支持 preset 注入 narrative test 权重和额外规则。
-
-验收：
-
-- 至少覆盖 goal/conflict/outcome、主角选择、章节结尾动力、对话推进功能四类规则。
-- findings 必须带 path、evidence、suggestedAction。
-- 无 scene card 时能 fallback 到章节级检查。
-
-## 阶段 C4：Dialogue System
-
-目标：结构化规划、检查和改写对白。
-
-- [ ] C4-T001：新增 `src/domain/dialogue.ts`。
-- [ ] C4-T002：新增 `stories/*/dialogue/` 模板。
-- [ ] C4-T003：新增 `novel dialogue:extract`、`dialogue:check`、`dialogue:plan`。
-- [ ] C4-T004：新增 `/dialogue-plan`、`/dialogue-review`、`/dialogue-rewrite`。
-- [ ] C4-T005：DialogueBeat 与 VoiceFingerprint、Relationship tracking、Canon reveals 打通。
-- [ ] C4-T006：`review --panel character` 读取 dialogue beats。
-
-验收：
-
-- `dialogue:extract` 输出待确认 YAML，不直接写 canon。
-- `dialogue:check` 能发现说话人不存在、缺 intent、称呼错误。
-- dialogue rewrite 默认输出建议。
-
-## 阶段 C5：Branch / What-if Exploration
-
-目标：安全探索剧情分支，比较影响，选择是否提升为主线。
-
-- [ ] C5-T001：新增 `src/domain/story-branch.ts`。
-- [ ] C5-T002：新增 `stories/*/branches/` 结构。
-- [ ] C5-T003：新增 `novel branch:create`、`branch:list`、`branch:compare`、`branch:promote`。
-- [ ] C5-T004：branch compare 读取 scene、canon、promise、relationship、world impact。
-- [ ] C5-T005：branch promote 生成确认清单和 propagation debt。
-
-验收：
-
-- branch 默认不改 main content/canon。
-- compare 输出结构化影响报告。
-- promote 必须显式确认。
-
-## 阶段 C6：Promise Tracking / Tension Curve
-
-目标：管理读者期待、悬念、爽点、感情张力和兑现节奏。
-
-- [ ] C6-T001：新增 `spec/tracking/promises.json`、`tension-curve.json` 模板。
-- [ ] C6-T002：新增 `src/domain/story-promise.ts`。
-- [ ] C6-T003：新增 `novel promise:list`、`promise:check`、`tension:chart`。
-- [ ] C6-T004：新增 `novel analyze --focus=promise`。
-- [ ] C6-T005：`/plan`、`/tasks`、`/write` 读取 open promises。
-- [ ] C6-T006：reviewer loop 增加 promise/tension 维度。
-
-验收：
-
-- `promise:check` 能发现 open 太久、payoff 缺 evidence、重复建立不推进。
-- `tension:chart` 第一版输出 Markdown/JSON 表格。
-- promise finding 能生成任务草稿。
-
-## 阶段 C7：Research Vault
-
-目标：把资料来源与世界观事实连接，支持考据、灵感、引用管理。
-
-- [ ] C7-T001：新增 `research/notes/`、`research/sources/`、`research/citations.json` 模板。
-- [ ] C7-T002：新增 `src/domain/research.ts`。
-- [ ] C7-T003：新增 `novel research:add`、`research:list`、`research:link`、`research:check`。
-- [ ] C7-T004：WorldFact 支持可选 citation links。
-- [ ] C7-T005：`context:pack` 可包含相关 research 摘要。
-
-验收：
-
-- 默认不联网，不自动抓取网页。
-- `research:check` 能发现 citation 指向不存在 source/target。
-- Research Vault 支持自由 Markdown 笔记，不强迫全部结构化。
-
-## 阶段 C8：Style Guide as Linter
-
-目标：把项目文风与中文小说质量规则变成可配置 lint。
-
-- [ ] C8-T001：新增 `spec/style/style-guide.md`、`banned-patterns.yaml`、`rhythm-rules.yaml`、`diction.yaml`。
-- [ ] C8-T002：新增 `src/validation/rules/style-linter.ts`。
-- [ ] C8-T003：新增 `novel style:lint`、`style:explain`。
-- [ ] C8-T004：支持按 preset 或项目本地 override 加载规则。
-- [ ] C8-T005：评估未来对接 Vale/textlint 的 adapter，但第一版不强依赖。
-
-验收：
-
-- lint finding 包含 ruleId、path、evidence、suggestion。
-- 规则可关闭或降级，不把所有作者压成同一种风格。
-- 至少覆盖 AI 腔、说明式对白、重复句式、现代词穿帮四类。
-
-## 阶段 C9：Compile / Export 与 Feedback Loop
-
-目标：把作品编译成可读 manuscript，并让外部反馈进入任务系统。
-
-- [ ] C9-T001：新增 `novel compile --format markdown`。
-- [ ] C9-T002：compile 支持 scene order 和章节文件名 fallback。
-- [ ] C9-T003：compile 输出字数统计、缺失章节警告、frontmatter。
-- [ ] C9-T004：新增 `feedback/` 模板与 `src/domain/feedback.ts`。
-- [ ] C9-T005：新增 `novel feedback:import`、`feedback:list`、`feedback:triage`、`feedback:to-tasks`。
-- [ ] C9-T006：feedback 可关联 reviewer findings、canon debt、promise tracking。
-
-验收：
-
-- compile 不改正文，只写 `build/`。
-- feedback 默认不改正文。
-- `feedback:to-tasks` 默认生成草稿，用户确认后才写入任务文件。
+  验收：
+  - Research Vault 默认不联网，支持自由 Markdown 笔记和 citation 结构校验。
+  - `style:lint` finding 包含 ruleId、path、evidence、suggestion，规则可关闭或降级。
+  - `compile` 只写 `build/`，输出字数统计、缺失章节警告和 frontmatter。
+  - feedback 默认不改正文，`feedback:to-tasks` 生成待确认任务草稿。

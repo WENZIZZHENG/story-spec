@@ -419,133 +419,77 @@ risk:
 5. 同步 `AGENTS.md` 和 generic commands。
 6. 不覆盖用户 `stories/`、`spec/tracking/`、`spec/knowledge/`。
 
-## 分阶段任务
+## 批次化开发计划
 
-## 阶段 A0：基线与决策记录
+后续执行以 Batch 为单位。旧 A0-A7 细项已合并为下列批次；细项只作为覆盖范围说明，不再作为独立开发门槛。
 
-目标：只整理现状，不改行为。
+## 已完成批次
 
-- [ ] A0-T001：新增架构决策记录 `docs/tech/agent-neutral-refactor.md`，说明 `AIPlatform` → `AgentIntegration` 的原因、非目标和兼容策略。
-- [ ] A0-T002：盘点现有平台输出目录、命令格式、renderer、测试覆盖，形成表格。
-- [ ] A0-T003：确定命名：`--agent`、`--integration` 二选一作为主命令参数；另一个可作为别名或暂不引入。
-- [ ] A0-T004：确定 `AGENTS.md` 与 `.specify/agent-contract.md` 的主从关系。
-- [ ] A0-T005：更新测试计划，但不改源码。
+### [x] Batch A0：Agent-neutral 基线与入口
 
-验收：
+覆盖原 A0-A3 与 shared N001-N006。
 
-- 无运行时行为变化。
-- `docs/tech/full-refactor-todo.md` 与 ADR 一致。
-- 本阶段只允许文档变更。
+已完成：
 
-## 阶段 A1：AgentIntegration Registry
+- `docs/tech/agent-neutral-refactor.md` 记录 `AIPlatform` 到 `AgentIntegration` 的重构决策、非目标和兼容策略。
+- `src/agent/capabilities.ts`、`src/agent/registry.ts` 建立能力模型和 agent registry，并保留 `src/utils/ai-platforms.ts` 兼容 wrapper。
+- `generic` integration、`agent:list`、`init/upgrade --agent`、`agent:add`、`agent:doctor` 已落地。
+- `templates/agent/agent-contract.md`、`.specify/agent-contract.md`、通用 `AGENTS.md`、generic commands、`contract:print`、`contract:sync` 已落地。
+- 旧 `--ai` / `--all` 仍处于兼容期，并输出迁移提示。
 
-目标：建立新模型，但保持旧 API 兼容。
+完成口径：
 
-- [x] A1-T001：新增 `src/agent/capabilities.ts`。
-- [x] A1-T002：新增 `src/agent/registry.ts`，迁移当前 13 个平台，并加入 `generic`。
-- [x] A1-T003：保留 `src/utils/ai-platforms.ts` 作为兼容 wrapper。
-- [x] A1-T004：新增 `novel agent:list`，输出 id、displayName、commandSurface、capabilities、installTargets。
-- [x] A1-T005：为 registry 增加单元测试，覆盖旧 id 与新 id 一致性。
+- 新旧初始化、升级、agent doctor 和 generic validate 相关测试已覆盖。
+- A0 细项虽曾保持未勾选，但对应 ADR、盘点、命名和 contract 主从关系已经由 A1-A3 实现与文档吸收，状态规范为已完成批次。
 
-验收：
+### [x] Batch A1：CommandSpec 与插件统一
 
-- `npm run build` 通过。
-- 旧 `init --ai codex`、`init --all` smoke 不变。
-- `agent:list --json` 可被自动化读取。
+覆盖原 A4-A5。
 
-## 阶段 A2：Agent Contract 与 Generic Commands
+已完成：
 
-目标：让无 slash command 的任意 agent 也能使用 Novel Writer。
+- `CommandSpec` 类型、`write` / `analyze` 试点迁移、旧 Markdown 模板兼容 renderer 已落地。
+- `build:commands` manifest 标记命令来源，迁移指南见 `docs/tech/command-spec-migration-guide.md`。
+- `PluginManifest` 已支持 `kind`、`priority`、`provides`、`overrides`。
+- 插件命令先归一为 command source，再由 agent renderer 输出。
+- template resolution stack 已诊断 project override / preset / extension / core 最终来源。
+- `plugins:add --dry-run` 已显示对所有 agent integration 的影响。
+- `docs/tech/plugin-entrypoint-decision.md` 决定当前继续复用 `plugins:add`，未来 `preset:add` / `extension:add` 作为薄 alias 再评估。
 
-- [x] A2-T001：新增 `templates/agent/agent-contract.md`。
-- [x] A2-T002：初始化时生成 `.specify/agent-contract.md`。
-- [x] A2-T003：初始化时生成通用 `AGENTS.md`，Codex profile 作为可选增强段。
-- [x] A2-T004：新增 `generic` renderer，输出 `.specify/commands/*.md`。
-- [x] A2-T005：新增 `novel contract:print` 与 `novel contract:sync`。
-- [x] A2-T006：`validate` 增加 contract/commands 缺失检查。
+完成口径：
 
-验收：
+- 插件安装计划、CommandSpec renderer、manifest 和 CLI dry-run 相关测试已覆盖。
 
-- `novel init smoke --agent generic --no-git` 后不存在平台特定目录，但存在 `AGENTS.md`、`.specify/agent-contract.md`、`.specify/commands/write.md`。
-- 任意 generic command 文档包含目的、必须读取、允许写入、执行步骤、验证和降级方案。
-- `novel validate --json` 能识别 generic 项目为合法。
+### [x] Batch A2a：脚本能力降级
 
-## 阶段 A3：CLI 参数兼容与项目升级
+覆盖原 A6-T001。
 
-目标：将用户主路径从 `--ai` 迁移到 `--agent`，但不中断旧项目。
+已完成：
 
-- [x] A3-T001：`init` 支持 `--agent <id>`、`--all-agents`。
-- [x] A3-T002：`upgrade` 支持 `--agent <id>`、`--all-agents`。
-- [x] A3-T003：旧 `--ai`、`--all` 输出简短兼容提示。
-- [x] A3-T004：新增 `novel agent:add <id>`。
-- [x] A3-T005：新增 `novel agent:doctor`，检查 contract、平台命令目录、manifest、renderer 版本。
-- [x] A3-T006：升级旧项目时推断并写入 `.specify/config.json.integrations`。
+- renderer 根据 `capabilities.runShell` 决定是否写入 CLI/脚本步骤。
+- 不支持 shell 的 agent 输出人工检查说明，不再要求执行 `.specify/scripts/**`。
 
-验收：
+完成口径：
 
-- 旧命令测试继续通过。
-- 新命令 smoke 覆盖 `--agent codex`、`--agent generic`、`agent:add gemini`。
-- README 和 docs 使用新主路径。
+- platform renderer、build command、manifest 和 build 验证已覆盖。
 
-## 阶段 A4：Command Spec 拆分
+## 待执行批次
 
-目标：命令语义和平台格式解耦。
+### [ ] Batch A2：Agent 能力与文档收口
 
-- [x] A4-T001：定义 `CommandSpec` 类型。
-- [x] A4-T002：选 2 个命令试点迁移：`write`、`analyze`。
-- [x] A4-T003：renderer 兼容旧 Markdown 模板和新 CommandSpec。
-- [x] A4-T004：`build:commands` manifest 标记命令来源。
-- [x] A4-T005：编写迁移指南：如何把旧 `templates/commands/*.md` 拆成 `.command.yaml` + `.prompt.md`。
+合并原 A6-T002、A6-T003、A6-T004、A7-T001 至 A7-T005，以及 shared N007。
+
+目标：
+
+- renderer 根据 `capabilities.writeFiles` 输出“可执行修改”或“只读建议”模式。
+- 为 generic / continue-check 这类偏只读入口生成 read-only analyze/checklist 版本。
+- `handoff` 增加 `targetAgent` 可选参数，输出适配目标 agent 的继续步骤。
+- README、`docs/agent-integrations.md`、`docs/agent-contract.md`、`docs/migration-guide.md`、CHANGELOG 同步 agent-neutral 主叙事和 `--ai` 到 `--agent` 迁移说明。
 
 验收：
 
-- `write`、`analyze` 的 Codex/Claude/Gemini/generic 输出均可生成。
-- 输出变化通过 manifest 审核。
-- 未迁移命令仍走旧模板路径。
-
-## 阶段 A5：插件、预设、扩展统一
-
-目标：插件接入新 registry 和 resolution stack。
-
-- [x] A5-T001：扩展 `PluginManifest`，增加 `kind`、`priority`、`provides`、`overrides`。
-- [x] A5-T002：插件命令先注册到 command spec registry，再由 agent renderer 输出。
-- [x] A5-T003：实现 project override / preset / extension / core 的最终来源诊断。
-- [x] A5-T004：`plugins:add --dry-run` 显示对所有 agent integration 的影响。
-- [x] A5-T005：评估是否新增 `preset:add`、`extension:add`，或继续复用 `plugins:add`。
-
-验收：
-
-- 内置插件安装行为不退化。
-- 同名命令冲突能解释来源和解决结果。
-- `agent:doctor` 可显示插件命令是否已同步到所有已安装 agent。
-
-## 阶段 A6：Agent 能力感知执行
-
-目标：让 prompt/contract 能根据 agent 能力降级。
-
-- [x] A6-T001：renderer 根据 `capabilities.runShell` 决定是否写入 CLI/脚本步骤。
-- [ ] A6-T002：renderer 根据 `capabilities.writeFiles` 决定写入“只读建议”或“可执行修改”模式。
-- [ ] A6-T003：对 `generic`、`continue-check` 这类偏只读入口，生成 read-only analyze/checklist 版本。
-- [ ] A6-T004：`handoff` 增加 `targetAgent` 可选参数，输出适配目标 agent 的继续步骤。
-
-验收：
-
-- `generic` 不要求 slash command。
-- 只读 agent 不会被提示直接写正文。
+- 只读 agent 不会被提示直接写正文或 tracking。
 - 支持 shell 的 agent 才看到脚本执行作为主路径。
-
-## 阶段 A7：文档、发布与弃用节奏
-
-目标：用户知道为什么迁移、如何迁移、旧入口什么时候还可用。
-
-- [ ] A7-T001：README 改为 agent-neutral 主叙事。
-- [ ] A7-T002：新增 `docs/agent-integrations.md`。
-- [ ] A7-T003：新增 `docs/agent-contract.md`。
-- [ ] A7-T004：更新 `docs/migration-guide.md`，加入 `--ai` 到 `--agent` 的迁移说明。
-- [ ] A7-T005：CHANGELOG 记录兼容期和弃用策略。
-
-验收：
-
 - 新用户 5 分钟路径包含 `--agent generic` 和一个具体平台示例。
-- 旧用户能找到 `--ai` 的兼容说明。
-- 所有“Codex 接手”表述改为“agent 接手”，Codex 只在平台章节出现。
+- 旧用户能找到 `--ai` 兼容说明。
+- “Codex 接手”类表达改为“agent 接手”，Codex 只在平台章节出现。
