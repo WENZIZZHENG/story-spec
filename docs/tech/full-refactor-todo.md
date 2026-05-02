@@ -189,7 +189,7 @@ src/
 
 目标：把 shell 中的 prompt 生成逻辑迁移到 TypeScript，减少平台漂移。
 
-- [ ] 新建 `prompt/frontmatter.ts`
+- [x] 新建 `prompt/frontmatter.ts`
   - 验收：可解析 `templates/commands/*.md` 的 description、argument-hint、scripts。
 - [ ] 新建 `prompt/compiler.ts`
   - 验收：输入 command template + platform config，输出目标 prompt 文件内容。
@@ -200,6 +200,12 @@ src/
 - [ ] 支持模板 resolution stack
   - 顺序：project-local overrides → presets → extensions → core templates。
   - 验收：覆盖规则有测试。
+
+阶段备注：
+
+- 已新增 `src/prompt/frontmatter.ts`，解析命令模板 frontmatter、正文、`description`、`argument-hint`、`allowed-tools`、`model` 与 `scripts`。
+- 已新增 `tests/unit/frontmatter.test.ts`，覆盖纯函数解析、无 frontmatter 模板，以及仓库内所有 `templates/commands/*.md` 的 `sh/ps` 脚本元数据。
+- 解析器采用轻量行解析以兼容当前模板中未加引号的 `argument-hint`，后续 compiler 可在此基础上逐步收紧模板格式。
 
 ## 阶段 5：脚本运行时统一
 
