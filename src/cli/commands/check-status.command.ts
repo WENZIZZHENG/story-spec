@@ -1,8 +1,8 @@
 import type { Command } from '@commander-js/extra-typings';
 import chalk from 'chalk';
 import { execSync } from 'child_process';
+import { getProjectStatus, renderProjectStatus } from '../../application/get-project-status.js';
 import { ensureProjectRoot } from '../../utils/project.js';
-import { getCodexStatus, renderCodexStatus } from '../../utils/codex-status.js';
 
 export function registerCheckStatusCommand(program: Command): void {
   // check 命令 - 检查环境
@@ -53,12 +53,12 @@ export function registerCheckStatusCommand(program: Command): void {
     .action(async (options) => {
       try {
         const projectPath = await ensureProjectRoot();
-        const status = await getCodexStatus(projectPath);
+        const status = await getProjectStatus(projectPath);
 
         if (options.json) {
           console.log(JSON.stringify(status, null, 2));
         } else {
-          console.log(renderCodexStatus(status));
+          console.log(renderProjectStatus(status));
         }
       } catch (error: any) {
         if (error.message === 'NOT_IN_PROJECT') {

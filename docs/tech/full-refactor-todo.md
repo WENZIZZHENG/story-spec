@@ -155,7 +155,7 @@ src/
   - 验收：CLI action 只负责解析参数和打印结果。
 - [x] 新建 `application/upgrade-project.ts`
   - 验收：备份、dry-run、选择性更新可测试。
-- [ ] 新建 `application/get-project-status.ts`
+- [x] 新建 `application/get-project-status.ts`
   - 验收：`codex-status` 和后续通用 `status` 共用状态模型。
 - [ ] 所有 use case 仅依赖接口，不直接依赖 `fs-extra`
   - 验收：单元测试可用内存 fake store。
@@ -166,6 +166,8 @@ src/
 - 已新增 `tests/unit/init-project.test.ts` 直接覆盖 use case 的 Codex 项目生成和已存在目录错误。
 - 已新增 `src/application/upgrade-project.ts`，把 `upgrade` 的项目检测、平台选择、备份、选择性更新、dry-run 和版本写回移入 application 层。
 - 已新增 `tests/unit/upgrade-project.test.ts` 覆盖 dry-run 不落盘、选择性更新、备份、用户 `spec/tracking` 与 `spec/knowledge` 保护，以及非项目目录错误。
+- 已新增 `src/application/get-project-status.ts`，提供通用 `ProjectStatus` 状态模型；`codex-status` CLI 改为调用 application 层，旧 `utils/codex-status.ts` 保留兼容导出。
+- 已新增 `tests/unit/get-project-status.test.ts` 覆盖项目摘要、Codex 接手文件、故事进度、追踪 JSON 与渲染输出。
 - 当前 `init-project.ts` 仍直接依赖 `fs-extra`，后续阶段再抽 filesystem store 接口。
 
 ## 阶段 3：项目 artifact graph
