@@ -193,7 +193,7 @@ src/
   - 验收：可解析 `templates/commands/*.md` 的 description、argument-hint、scripts。
 - [x] 新建 `prompt/compiler.ts`
   - 验收：输入 command template + platform config，输出目标 prompt 文件内容。
-- [ ] 为 Claude/Gemini/Codex 等平台建 renderer
+- [x] 为 Claude/Gemini/Codex 等平台建 renderer
   - 验收：生成结果与现有 `build:commands` golden fixture 等价。
 - [ ] `scripts/build/generate-commands.sh` 降级为兼容包装或移除
   - 验收：Windows 无 Git Bash 时仍可生成命令。
@@ -208,6 +208,8 @@ src/
 - 解析器采用轻量行解析以兼容当前模板中未加引号的 `argument-hint`，后续 compiler 可在此基础上逐步收紧模板格式。
 - 已新增 `src/prompt/compiler.ts`，支持脚本变体选择、`{SCRIPT}` 替换、`$ARGUMENTS/{ARGS}` 替换、`__AGENT__` 替换、`.specify` 路径重写，以及 full/partial/minimal/none Markdown 与 TOML 输出。
 - 已新增 `tests/unit/prompt-compiler.test.ts`，覆盖核心替换规则、Markdown/TOML 输出分支，并用真实 `templates/commands/plan.md` 做轻量编译验证。
+- 已新增 `src/prompt/platform-renderers/index.ts`，把每个 AI 平台的输出扩展名、命名空间、参数占位符和输出格式集中到 typed renderer registry。
+- 已新增 `tests/unit/platform-renderers.test.ts`，覆盖 registry 与 `AI_PLATFORM_IDS` 一致，并验证 Claude/Gemini/Codex 的代表性输出约定。
 
 ## 阶段 5：脚本运行时统一
 
