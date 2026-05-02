@@ -311,7 +311,7 @@ src/
 
 目标：后续重构能持续安全。
 
-- [ ] GitHub Actions
+- [x] GitHub Actions
   - 验收：PR 上运行 install、build、test、build:commands。
 - [ ] CLI e2e matrix
   - 平台：Windows、Ubuntu；Node LTS。
@@ -319,6 +319,9 @@ src/
   - 验收：prompt compiler 输出变化必须显式提交。
 - [ ] 覆盖率门槛
   - 初始建议：核心模块 60%，后续提升。
+
+阶段备注：
+- 已新增 `.github/workflows/ci.yml`，在 PR 与 `main` push 上运行 Node 20、`npm install --package-lock=false --ignore-scripts` 与 `npm run verify`。
 
 ## 阶段 9：文档与发布治理
 
