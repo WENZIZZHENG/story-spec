@@ -1618,7 +1618,7 @@
     },
     {
       "path": "copilot/.github/prompts/analyze.prompt.md",
-      "sha256": "aee67a7fd98b5b9cdf5e614c79cd8fe9d41008de01a16b969179f1a94e061f1b",
+      "sha256": "16396caf06ff74ebf33001efc4b11999365c6803b940c1620aa1984cb9588033",
       "commandSource": {
         "command": "analyze",
         "kind": "command-spec",
@@ -1637,7 +1637,7 @@
     },
     {
       "path": "copilot/.github/prompts/clarify.prompt.md",
-      "sha256": "72911b090782d26e6bcb4c67aecc7dc5a3beabdb0ef72daf2e50030788456f42",
+      "sha256": "c9c72d09bc83f757a646a774b1d0b0552c8521c78d301becccb42d54a0b35209",
       "commandSource": {
         "command": "clarify",
         "kind": "legacy-template",
@@ -1664,7 +1664,7 @@
     },
     {
       "path": "copilot/.github/prompts/plan.prompt.md",
-      "sha256": "ddc8255fd47ae2538f931ae933e0506dc83c3190cd59e6310838ab0503d1c995",
+      "sha256": "08a5403929d608b18d8a4a6d2876615ff84bfdd92062b998a962a7b58d7f8e51",
       "commandSource": {
         "command": "plan",
         "kind": "legacy-template",
@@ -1673,7 +1673,7 @@
     },
     {
       "path": "copilot/.github/prompts/relations.prompt.md",
-      "sha256": "9c520b48ccdeff7c86a8fb895416e5a2ac306815950c6f905440c09afed98fc8",
+      "sha256": "c26c021242d548c960c9b13db815a0396e6980fdf1acff24071d22f00ce824ff",
       "commandSource": {
         "command": "relations",
         "kind": "legacy-template",
@@ -1682,7 +1682,7 @@
     },
     {
       "path": "copilot/.github/prompts/specify.prompt.md",
-      "sha256": "21ed950bdf9abddff7ffa08c07cb813717b8f66fd1f19fbe0b9c5816710ef961",
+      "sha256": "49844a31ac9978128687cc51e599faac75cdc903050749fd7f800a8f8134efd8",
       "commandSource": {
         "command": "specify",
         "kind": "legacy-template",
@@ -1691,7 +1691,7 @@
     },
     {
       "path": "copilot/.github/prompts/tasks.prompt.md",
-      "sha256": "98dc0279bd26c751eb831d62a38d5483708f2e1bc0a92ea183ce63e21a93ee7a",
+      "sha256": "bcb1fe740d3f3f6c20978bffadc69f6360673cd43d7cb25c58f4645413d62450",
       "commandSource": {
         "command": "tasks",
         "kind": "legacy-template",
@@ -1700,7 +1700,7 @@
     },
     {
       "path": "copilot/.github/prompts/timeline.prompt.md",
-      "sha256": "f03fbd8c3bd871b48940b6677588c83b52a84d012bd6f28c0a29368ad655baab",
+      "sha256": "6137bb5de8cc41b630f4c2c69744fda250bb77bac7c9c1220c5b16fa550addb3",
       "commandSource": {
         "command": "timeline",
         "kind": "legacy-template",
@@ -1718,7 +1718,7 @@
     },
     {
       "path": "copilot/.github/prompts/track.prompt.md",
-      "sha256": "9ac511e3bc24d554462c00cfd8a88e9a36d78b059d90f524400a594e0a3a6e85",
+      "sha256": "d573f865cc8db620f083aa109a575eb46f8c548ee0ef0883a25209a06ebc2d55",
       "commandSource": {
         "command": "track",
         "kind": "legacy-template",
@@ -1727,7 +1727,7 @@
     },
     {
       "path": "copilot/.github/prompts/write.prompt.md",
-      "sha256": "d6e3a4665bb3086cda8b48ae6ce30c664e04e5e21f981888ec60dc0b94e277a9",
+      "sha256": "2609e200e142530d7df04bfa084bc86849dc86ee727090417ad96ccd229aad53",
       "commandSource": {
         "command": "write",
         "kind": "command-spec",
@@ -2815,7 +2815,7 @@
     },
     {
       "path": "generic/.specify/commands/analyze.md",
-      "sha256": "50e3401f34c918eece9485fd387dd34c3b42db1ea8b7083ab7a139000e951fa5",
+      "sha256": "4688fba74b3a108ca2c6f323d83256e373d6946eac6e7af6e712a7032f135c60",
       "commandSource": {
         "command": "analyze",
         "kind": "command-spec",
@@ -2834,7 +2834,7 @@
     },
     {
       "path": "generic/.specify/commands/clarify.md",
-      "sha256": "7c520a1cb330bff0b396eb3fbf6b14acf09cfd066d27ed1cc0d2f09de2305474",
+      "sha256": "ba87344662529713a4dd81a67237313b12f073f417c9fd42732e993c333fd92d",
       "commandSource": {
         "command": "clarify",
         "kind": "legacy-template",
@@ -2861,7 +2861,7 @@
     },
     {
       "path": "generic/.specify/commands/plan.md",
-      "sha256": "4321a9bb7b78d87c062fca2635db781aed6b91185fa62a173bb042179c6864ee",
+      "sha256": "1a03c8017188458a9b05f6150d0ad12b1c7fa7fbc2920bb2aba88107602d004e",
       "commandSource": {
         "command": "plan",
         "kind": "legacy-template",
@@ -2870,7 +2870,7 @@
     },
     {
       "path": "generic/.specify/commands/relations.md",
-      "sha256": "10d504fdf0e10132d0757dd6dd90814e04f02aaff5bfd297758558ae35883985",
+      "sha256": "daf795431760ac9dbee4df0942e6a84788d358db28a3b252b4a8a774fa7bdfd3",
       "commandSource": {
         "command": "relations",
         "kind": "legacy-template",
@@ -2879,7 +2879,7 @@
     },
     {
       "path": "generic/.specify/commands/specify.md",
-      "sha256": "831cafd2b063ff52e2a8c18070c5ec85a0fa4403d629e324097ce58643e0ddd5",
+      "sha256": "e98372ae14bc64c1caca717ead075c40c94d0b6afdef92415363bb52b168b7c4",
       "commandSource": {
         "command": "specify",
         "kind": "legacy-template",
@@ -2888,7 +2888,7 @@
     },
     {
       "path": "generic/.specify/commands/tasks.md",
-      "sha256": "e0f9f8ac3bd62e3c49301f67b348b01f4dc8c8190230d575f15911b37416078d",
+      "sha256": "fd0285848123d1c979d446690c6d3df55e024f7445652c5c80b148d544a5b78f",
       "commandSource": {
         "command": "tasks",
         "kind": "legacy-template",
@@ -2897,7 +2897,7 @@
     },
     {
       "path": "generic/.specify/commands/timeline.md",
-      "sha256": "00868edd03cb04bb850a52f649b4a19f45639ee56d2bdc62fead6872b50f7fdf",
+      "sha256": "830327b2ef7cf4e24896e83cea0cf8f6064236004ce1217b94fa85c7bf39c404",
       "commandSource": {
         "command": "timeline",
         "kind": "legacy-template",
@@ -2915,7 +2915,7 @@
     },
     {
       "path": "generic/.specify/commands/track.md",
-      "sha256": "c919209b255a9932c1fd8c62ef1d969115061ad73a63778ce28473dca25f03d0",
+      "sha256": "4304a0fdd47ed8a58d7add70da5dfced0c42805f554dd8445acdd1bca564461f",
       "commandSource": {
         "command": "track",
         "kind": "legacy-template",
@@ -2924,7 +2924,7 @@
     },
     {
       "path": "generic/.specify/commands/write.md",
-      "sha256": "ac1423565217b1f0b24e5dae4e353c8b8719e0b72e738ed38190fcd2bc653715",
+      "sha256": "ba3f683cf48dc7ae9d58e1c20520bd449aa291b559c814474384999a264da0fc",
       "commandSource": {
         "command": "write",
         "kind": "command-spec",
@@ -4012,7 +4012,7 @@
     },
     {
       "path": "q/.amazonq/prompts/analyze.md",
-      "sha256": "aee67a7fd98b5b9cdf5e614c79cd8fe9d41008de01a16b969179f1a94e061f1b",
+      "sha256": "16396caf06ff74ebf33001efc4b11999365c6803b940c1620aa1984cb9588033",
       "commandSource": {
         "command": "analyze",
         "kind": "command-spec",
@@ -4031,7 +4031,7 @@
     },
     {
       "path": "q/.amazonq/prompts/clarify.md",
-      "sha256": "72911b090782d26e6bcb4c67aecc7dc5a3beabdb0ef72daf2e50030788456f42",
+      "sha256": "c9c72d09bc83f757a646a774b1d0b0552c8521c78d301becccb42d54a0b35209",
       "commandSource": {
         "command": "clarify",
         "kind": "legacy-template",
@@ -4058,7 +4058,7 @@
     },
     {
       "path": "q/.amazonq/prompts/plan.md",
-      "sha256": "ddc8255fd47ae2538f931ae933e0506dc83c3190cd59e6310838ab0503d1c995",
+      "sha256": "08a5403929d608b18d8a4a6d2876615ff84bfdd92062b998a962a7b58d7f8e51",
       "commandSource": {
         "command": "plan",
         "kind": "legacy-template",
@@ -4067,7 +4067,7 @@
     },
     {
       "path": "q/.amazonq/prompts/relations.md",
-      "sha256": "9c520b48ccdeff7c86a8fb895416e5a2ac306815950c6f905440c09afed98fc8",
+      "sha256": "c26c021242d548c960c9b13db815a0396e6980fdf1acff24071d22f00ce824ff",
       "commandSource": {
         "command": "relations",
         "kind": "legacy-template",
@@ -4076,7 +4076,7 @@
     },
     {
       "path": "q/.amazonq/prompts/specify.md",
-      "sha256": "21ed950bdf9abddff7ffa08c07cb813717b8f66fd1f19fbe0b9c5816710ef961",
+      "sha256": "49844a31ac9978128687cc51e599faac75cdc903050749fd7f800a8f8134efd8",
       "commandSource": {
         "command": "specify",
         "kind": "legacy-template",
@@ -4085,7 +4085,7 @@
     },
     {
       "path": "q/.amazonq/prompts/tasks.md",
-      "sha256": "98dc0279bd26c751eb831d62a38d5483708f2e1bc0a92ea183ce63e21a93ee7a",
+      "sha256": "bcb1fe740d3f3f6c20978bffadc69f6360673cd43d7cb25c58f4645413d62450",
       "commandSource": {
         "command": "tasks",
         "kind": "legacy-template",
@@ -4094,7 +4094,7 @@
     },
     {
       "path": "q/.amazonq/prompts/timeline.md",
-      "sha256": "f03fbd8c3bd871b48940b6677588c83b52a84d012bd6f28c0a29368ad655baab",
+      "sha256": "6137bb5de8cc41b630f4c2c69744fda250bb77bac7c9c1220c5b16fa550addb3",
       "commandSource": {
         "command": "timeline",
         "kind": "legacy-template",
@@ -4112,7 +4112,7 @@
     },
     {
       "path": "q/.amazonq/prompts/track.md",
-      "sha256": "9ac511e3bc24d554462c00cfd8a88e9a36d78b059d90f524400a594e0a3a6e85",
+      "sha256": "d573f865cc8db620f083aa109a575eb46f8c548ee0ef0883a25209a06ebc2d55",
       "commandSource": {
         "command": "track",
         "kind": "legacy-template",
@@ -4121,7 +4121,7 @@
     },
     {
       "path": "q/.amazonq/prompts/write.md",
-      "sha256": "d6e3a4665bb3086cda8b48ae6ce30c664e04e5e21f981888ec60dc0b94e277a9",
+      "sha256": "2609e200e142530d7df04bfa084bc86849dc86ee727090417ad96ccd229aad53",
       "commandSource": {
         "command": "write",
         "kind": "command-spec",

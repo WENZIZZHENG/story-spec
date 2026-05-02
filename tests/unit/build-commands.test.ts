@@ -164,14 +164,16 @@ describe('buildCommandArtifacts', () => {
     expect(genericSpecCommand).toContain('[task]');
     expect(genericSpecCommand).toContain('- `stories/*/tasks.md`');
     expect(genericSpecCommand).toContain('- `stories/*/content/**`');
-    expect(genericSpecCommand).toContain('.specify/scripts/bash/check-writing-state.sh');
+    expect(genericSpecCommand).not.toContain('.specify/scripts/bash/check-writing-state.sh');
+    expect(genericSpecCommand).toContain('当前 agent 不支持 shell');
     expect(genericCommand).toContain('## 前置条件');
     expect(genericCommand).toContain('## 必须读取');
     expect(genericCommand).toContain('## 允许写入');
     expect(genericCommand).toContain('## 执行步骤');
     expect(genericCommand).toContain('## 输出位置');
     expect(genericCommand).toContain('## 降级方案');
-    expect(genericCommand).toContain('.specify/scripts/bash/plan-story.sh');
+    expect(genericCommand).not.toContain('.specify/scripts/bash/plan-story.sh');
+    expect(genericCommand).toContain('当前 agent 不支持 shell');
   });
 
   it('snapshots the runtime bundle before cleaning the default dist output', async () => {

@@ -72,7 +72,8 @@ describe('platform renderers', () => {
     expect(getPlatformRenderer('generic')).toMatchObject({
       platform: 'generic',
       namespace: '',
-      outputFormat: 'markdown-generic'
+      outputFormat: 'markdown-generic',
+      runShell: false
     });
   });
 
@@ -107,6 +108,8 @@ describe('platform renderers', () => {
     expect(gemini.content).toContain('.specify/scripts/powershell/plan-story.ps1');
 
     expect(generic.outputFile).toBe('plan.md');
+    expect(generic.content).not.toContain('.specify/scripts/bash/plan-story.sh');
+    expect(generic.content).toContain('当前 agent 不支持 shell');
     expect(generic.content).toContain('# 生成创作计划');
     expect(generic.content).toContain('## 目的');
     expect(generic.content).toContain('## 必须读取');
@@ -134,6 +137,12 @@ describe('platform renderers', () => {
       platform: 'generic',
       scriptVariant: 'ps'
     });
+    const copilot = renderCommandForPlatform({
+      commandName: 'write',
+      commandSource,
+      platform: 'copilot',
+      scriptVariant: 'sh'
+    });
 
     expect(codex.outputFile).toBe('novel-write.md');
     expect(codex.content).not.toMatch(/^---/);
@@ -145,6 +154,10 @@ describe('platform renderers', () => {
     expect(generic.content).toContain('[task]');
     expect(generic.content).toContain('- `.specify/memory/constitution.md`');
     expect(generic.content).toContain('- `stories/*/content/**`');
-    expect(generic.content).toContain('.specify/scripts/powershell/check-writing-state.ps1');
+    expect(generic.content).not.toContain('.specify/scripts/powershell/check-writing-state.ps1');
+    expect(generic.content).toContain('当前 agent 不支持 shell');
+
+    expect(copilot.content).not.toContain('.specify/scripts/bash/check-writing-state.sh');
+    expect(copilot.content).toContain('当前 agent 不支持 shell');
   });
 });

@@ -523,7 +523,7 @@ risk:
 
 目标：让 prompt/contract 能根据 agent 能力降级。
 
-- [ ] A6-T001：renderer 根据 `capabilities.runShell` 决定是否写入 CLI/脚本步骤。
+- [x] A6-T001：renderer 根据 `capabilities.runShell` 决定是否写入 CLI/脚本步骤。
 - [ ] A6-T002：renderer 根据 `capabilities.writeFiles` 决定写入“只读建议”或“可执行修改”模式。
 - [ ] A6-T003：对 `generic`、`continue-check` 这类偏只读入口，生成 read-only analyze/checklist 版本。
 - [ ] A6-T004：`handoff` 增加 `targetAgent` 可选参数，输出适配目标 agent 的继续步骤。

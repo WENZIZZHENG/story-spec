@@ -17,6 +17,7 @@ export interface CompileCommandTemplateInput {
   argFormat: string;
   scriptVariant: ScriptVariant;
   outputFormat: CommandOutputFormat;
+  runShell?: boolean;
 }
 
 export interface CompileCommandSpecInput {
@@ -26,6 +27,7 @@ export interface CompileCommandSpecInput {
   argFormat: string;
   scriptVariant: ScriptVariant;
   outputFormat: CommandOutputFormat;
+  runShell?: boolean;
 }
 
 export const rewriteSpecifyPaths = (content: string): string => content
@@ -83,6 +85,8 @@ const extractPromptBody = (compiledWithFrontmatter: string): string => {
 
 const escapeTomlString = (value: string): string => value.replace(/\\/g, '\\\\').replace(/"/g, '\\"');
 
+const noShellScriptInstruction = '当前 agent 不支持 shell；不要执行 CLI/脚本，改为人工读取相关文件并记录无法自动验证的部分。';
+
 const compileTemplateBody = (input: CompileCommandTemplateInput): {
   body: string;
   promptBody: string;
@@ -92,9 +96,10 @@ const compileTemplateBody = (input: CompileCommandTemplateInput): {
   const parsed = parseCommandTemplate(input.template);
   const scriptCommand = parsed.frontmatter.scripts[input.scriptVariant]
     ?? `echo 'Missing script command for ${input.scriptVariant}'`;
+  const scriptInstruction = input.runShell === false ? noShellScriptInstruction : scriptCommand;
 
   const replacedTemplate = input.template
-    .replaceAll('{SCRIPT}', scriptCommand);
+    .replaceAll('{SCRIPT}', scriptInstruction);
   const withoutScripts = stripScriptsFromFrontmatter(replacedTemplate);
   const body = rewriteSpecifyPaths(withoutScripts
     .replaceAll('{ARGS}', input.argFormat)
@@ -114,6 +119,10 @@ const formatMarkdownList = (items: readonly string[]): string[] => items.length 
   : ['- 无'];
 
 const getSpecScriptCommand = (input: CompileCommandSpecInput): string => {
+  if (input.runShell === false) {
+    return noShellScriptInstruction;
+  }
+
   const script = input.spec.scripts?.check ?? input.spec.scripts?.run;
   return script?.[input.scriptVariant] ?? `echo 'Missing script command for ${input.spec.id} (${input.scriptVariant})'`;
 };
