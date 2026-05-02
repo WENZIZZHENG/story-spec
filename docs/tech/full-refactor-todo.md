@@ -195,7 +195,7 @@ src/
   - 验收：输入 command template + platform config，输出目标 prompt 文件内容。
 - [x] 为 Claude/Gemini/Codex 等平台建 renderer
   - 验收：生成结果与现有 `build:commands` golden fixture 等价。
-- [ ] `scripts/build/generate-commands.sh` 降级为兼容包装或移除
+- [x] `scripts/build/generate-commands.sh` 降级为兼容包装或移除
   - 验收：Windows 无 Git Bash 时仍可生成命令。
 - [ ] 支持模板 resolution stack
   - 顺序：project-local overrides → presets → extensions → core templates。
@@ -210,6 +210,9 @@ src/
 - 已新增 `tests/unit/prompt-compiler.test.ts`，覆盖核心替换规则、Markdown/TOML 输出分支，并用真实 `templates/commands/plan.md` 做轻量编译验证。
 - 已新增 `src/prompt/platform-renderers/index.ts`，把每个 AI 平台的输出扩展名、命名空间、参数占位符和输出格式集中到 typed renderer registry。
 - 已新增 `tests/unit/platform-renderers.test.ts`，覆盖 registry 与 `AI_PLATFORM_IDS` 一致，并验证 Claude/Gemini/Codex 的代表性输出约定。
+- 已新增 `src/prompt/build-commands.ts` 与 `scripts/build/build-commands.ts`，把命令产物生成、支持文件复制、平台输出目录映射迁移到 TypeScript/Node。
+- 已将 `scripts/build-commands.cjs` 改为 Node 入口，`scripts/build/generate-commands.sh` 降级为兼容包装；Windows 无 Git Bash 时可直接运行 `npm run build:commands`。
+- 已新增 `tests/unit/build-commands.test.ts`，覆盖 Codex/Gemini 命令生成、脚本路径重写、支持文件复制和 `spec/tracking`/`spec/knowledge` 空目录保护。
 
 ## 阶段 5：脚本运行时统一
 
