@@ -30,6 +30,7 @@ describe('CLI command modules smoke', () => {
     expect(help).toContain('init [options] [name]');
     expect(help).toContain('plugins:add [options] <name>');
     expect(help).toContain('upgrade [options]');
+    expect(help).toContain('status [options]');
     expect(help).toContain('validate [options]');
     expect(info).toContain('三幕结构');
     expect(info).toContain('雪花十步');

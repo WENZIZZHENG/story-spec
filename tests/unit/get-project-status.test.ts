@@ -68,6 +68,10 @@ describe('getProjectStatus', () => {
       version: '0.8.0',
       method: 'three-act',
       configuredAI: ['codex'],
+      handoff: {
+        codexPrompts: true,
+        agentsFile: true
+      },
       codex: {
         prompts: true,
         agentsFile: true
@@ -107,7 +111,7 @@ describe('getProjectStatus', () => {
 
     const output = renderProjectStatus(status);
 
-    expect(output).toContain('Codex 项目状态');
+    expect(output).toContain('Novel Writer 项目状态');
     expect(output).toContain('项目：status-demo');
     expect(output).toContain('当前故事：001-demo');
     expect(output).toContain('追踪 JSON：存在错误');
@@ -140,6 +144,7 @@ describe('getProjectStatus', () => {
 
     expect(status.projectName).toBe('memory-demo');
     expect(status.codex.prompts).toBe(true);
+    expect(status.handoff.codexPrompts).toBe(true);
     expect(status.git).toMatchObject({
       available: true,
       dirty: true,

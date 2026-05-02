@@ -39,6 +39,10 @@ export interface ProjectStatus {
   version: string;
   method: string;
   configuredAI: string[];
+  handoff: {
+    codexPrompts: boolean;
+    agentsFile: boolean;
+  };
   codex: {
     prompts: boolean;
     agentsFile: boolean;
@@ -261,26 +265,30 @@ const detectConfiguredAI = async (
 const buildNextActions = (status: Omit<ProjectStatus, 'nextActions'>): string[] => {
   const actions: string[] = [];
 
-  if (!status.codex.prompts) {
+  if (status.configuredAI.length === 0) {
+    actions.push('运行 `novel upgrade` 或重新执行 `novel init --ai <platform>` 补齐 AI 平台命令');
+  }
+
+  if (!status.handoff.codexPrompts) {
     actions.push('运行 `novel upgrade --ai codex` 或重新执行 `novel init --ai codex` 补齐 Codex prompts');
   }
 
-  if (!status.codex.agentsFile) {
+  if (!status.handoff.agentsFile) {
     actions.push('补充 `AGENTS.md`，让 Codex 明确只读/规划/写作边界');
   }
 
   if (!status.story) {
-    actions.push('在 Codex 中使用 `/novel-specify` 创建第一个故事规格');
+    actions.push('在 AI 助手中使用 `/specify` 或平台对应命令创建第一个故事规格');
   } else if (!status.story.hasSpecification) {
     actions.push('先补齐 `stories/*/specification.md`');
   } else if (!status.story.hasCreativePlan) {
-    actions.push('继续执行 `/novel-plan` 生成创作计划');
+    actions.push('继续执行 `/plan` 或平台对应命令生成创作计划');
   } else if (!status.story.hasTasks) {
-    actions.push('继续执行 `/novel-tasks` 生成可执行任务清单');
+    actions.push('继续执行 `/tasks` 或平台对应命令生成可执行任务清单');
   } else if (status.story.nextTask !== '暂无未完成任务') {
     actions.push(`下一步任务：${status.story.nextTask}`);
   } else {
-    actions.push('任务清单暂无未完成项，可运行 `/novel-analyze` 做阶段复核');
+    actions.push('任务清单暂无未完成项，可运行 `/analyze` 或平台对应命令做阶段复核');
   }
 
   const invalidTracking = status.tracking.filter(item => !item.valid);
@@ -305,15 +313,20 @@ export const getProjectStatus = async (input: GetProjectStatusInput): Promise<Pr
   const artifactGraph = createArtifactGraph(artifactScan);
 
   const config = await readJsonSafe(fs, path.join(projectRoot, '.specify', 'config.json'));
+  const handoff = {
+    codexPrompts: await fs.pathExists(path.join(projectRoot, '.codex', 'prompts')),
+    agentsFile: await fs.pathExists(path.join(projectRoot, 'AGENTS.md'))
+  };
   const baseStatus = {
     projectRoot,
     projectName: String(config.name ?? path.basename(projectRoot)),
     version: String(config.version ?? '未知'),
     method: String(config.method ?? '未设置'),
     configuredAI: await detectConfiguredAI(fs, projectRoot),
+    handoff,
     codex: {
-      prompts: await fs.pathExists(path.join(projectRoot, '.codex', 'prompts')),
-      agentsFile: await fs.pathExists(path.join(projectRoot, 'AGENTS.md'))
+      prompts: handoff.codexPrompts,
+      agentsFile: handoff.agentsFile
     },
     story: await buildStorySummary(fs, projectRoot),
     tracking: await validateTracking(fs, projectRoot),
@@ -333,15 +346,15 @@ export const renderProjectStatus = (status: ProjectStatus): string => {
   const lines: string[] = [];
   const trackingOk = status.tracking.every(item => item.valid);
 
-  lines.push('Codex 项目状态');
+  lines.push('Novel Writer 项目状态');
   lines.push('');
   lines.push(`项目：${status.projectName}`);
   lines.push(`根目录：${status.projectRoot}`);
   lines.push(`版本：${status.version}`);
   lines.push(`写作方法：${status.method}`);
   lines.push(`AI 配置：${status.configuredAI.join(', ') || '未检测到'}`);
-  lines.push(`Codex prompts：${status.codex.prompts ? '已安装' : '缺失'}`);
-  lines.push(`AGENTS.md：${status.codex.agentsFile ? '已存在' : '缺失'}`);
+  lines.push(`Codex prompts：${status.handoff.codexPrompts ? '已安装' : '缺失'}`);
+  lines.push(`AGENTS.md：${status.handoff.agentsFile ? '已存在' : '缺失'}`);
   lines.push('');
 
   if (status.story) {

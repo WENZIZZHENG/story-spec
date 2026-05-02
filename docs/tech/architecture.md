@@ -90,12 +90,12 @@ flowchart TB
   Scanner --> Graph["artifact graph"]
   Project --> Schema["schema validators"]
   Project --> Rules["writing rules"]
-  Graph --> Status["codex-status 输出"]
+  Graph --> Status["status 输出"]
   Schema --> Validate["novel validate 输出"]
   Rules --> Validate
 ```
 
-`codex-status` 关注“能否接手继续写”，会汇总故事进度、追踪数据、Codex prompt、`AGENTS.md` 与 blocker。`novel validate` 关注“结构和产物是否合格”，会输出 error/warning/info，并支持 `--severity` 过滤。
+`status` 关注“能否接手继续写”，会汇总故事进度、追踪数据、AI 平台配置、Codex prompt、`AGENTS.md` 与 blocker；`codex-status` 保留为兼容别名。`novel validate` 关注“结构和产物是否合格”，会输出 error/warning/info，并支持 `--severity` 过滤。
 
 ### 插件扩展流
 

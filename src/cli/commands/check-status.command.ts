@@ -6,6 +6,39 @@ import { commandGitAdapter } from '../../infrastructure/command-git-adapter.js';
 import { nodeFileSystem } from '../../infrastructure/node-file-system.js';
 import { ensureProjectRoot } from '../../utils/project.js';
 
+type ProjectStatusCommandOptions = {
+  json?: boolean;
+};
+
+const runProjectStatusCommand = async (
+  options: ProjectStatusCommandOptions,
+  errorLabel: string
+): Promise<void> => {
+  try {
+    const projectPath = await ensureProjectRoot();
+    const status = await getProjectStatus({
+      projectRoot: projectPath,
+      fileSystem: nodeFileSystem,
+      git: commandGitAdapter
+    });
+
+    if (options.json) {
+      console.log(JSON.stringify(status, null, 2));
+    } else {
+      console.log(renderProjectStatus(status));
+    }
+  } catch (error: any) {
+    if (error.message === 'NOT_IN_PROJECT') {
+      console.log(chalk.red('\n❌ 当前目录不是 novel-writer 项目'));
+      console.log(chalk.gray('   请在项目根目录运行此命令，或使用 novel init 创建新项目\n'));
+      process.exit(1);
+    }
+
+    console.error(chalk.red(`❌ 读取${errorLabel}失败:`), error);
+    process.exit(1);
+  }
+};
+
 export function registerCheckStatusCommand(program: Command): void {
   // check 命令 - 检查环境
   program
@@ -47,34 +80,21 @@ export function registerCheckStatusCommand(program: Command): void {
       }
     });
 
-  // codex-status 命令 - 输出 Codex 接手项目时最需要的状态摘要
+  // status 命令 - 输出所有 AI 平台可复用的项目状态摘要
+  program
+    .command('status')
+    .option('--json', '输出 JSON，便于自动化读取')
+    .description('汇总 Novel Writer 小说项目状态')
+    .action(async (options) => {
+      await runProjectStatusCommand(options, '项目状态');
+    });
+
+  // codex-status 命令 - 兼容旧入口，输出同一份项目状态摘要
   program
     .command('codex-status')
     .option('--json', '输出 JSON，便于自动化读取')
-    .description('汇总 Codex 可接手的小说项目状态')
+    .description('汇总 Codex 可接手的小说项目状态（status 的兼容别名）')
     .action(async (options) => {
-      try {
-        const projectPath = await ensureProjectRoot();
-        const status = await getProjectStatus({
-          projectRoot: projectPath,
-          fileSystem: nodeFileSystem,
-          git: commandGitAdapter
-        });
-
-        if (options.json) {
-          console.log(JSON.stringify(status, null, 2));
-        } else {
-          console.log(renderProjectStatus(status));
-        }
-      } catch (error: any) {
-        if (error.message === 'NOT_IN_PROJECT') {
-          console.log(chalk.red('\n❌ 当前目录不是 novel-writer 项目'));
-          console.log(chalk.gray('   请在项目根目录运行此命令，或使用 novel init 创建新项目\n'));
-          process.exit(1);
-        }
-
-        console.error(chalk.red('❌ 读取 Codex 状态失败:'), error);
-        process.exit(1);
-      }
+      await runProjectStatusCommand(options, 'Codex 状态');
     });
 }

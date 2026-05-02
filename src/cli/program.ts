@@ -53,7 +53,7 @@ export function runProgram(argv: string[]): void {
     console.log('  $ novel init my-story           # 创建新项目');
     console.log('  $ novel init --here              # 在当前目录初始化');
     console.log('  $ novel check                    # 检查环境');
-    console.log('  $ novel codex-status             # 查看 Codex 接手状态');
+    console.log('  $ novel status                   # 查看项目接手状态');
     console.log('  $ novel validate                 # 校验项目结构和写作产物');
     console.log('  $ novel info                     # 查看写作方法');
     console.log('');

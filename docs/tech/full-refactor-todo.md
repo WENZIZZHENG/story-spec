@@ -65,14 +65,14 @@ src/
     commands/
       init.command.ts
       upgrade.command.ts
-      codex-status.command.ts
+      check-status.command.ts
       plugins.command.ts
       info.command.ts
   application/
     init-project.ts            # use case
     upgrade-project.ts
     install-plugin.ts
-    get-codex-status.ts
+    get-project-status.ts
   domain/
     ai-platform.ts
     story-artifact.ts
@@ -105,7 +105,7 @@ src/
   - 文件：`package.json`、`vitest.config.ts`、`tests/**`。
   - 验证：`npm run build`、`npm test`。
 - [x] 建立 CLI smoke fixture
-  - 验收：测试可在临时目录执行 `init --ai codex --no-git`、`init --all --no-git`、`codex-status --json`。
+  - 验收：测试可在临时目录执行 `init --ai codex --no-git`、`init --all --no-git`、`status --json`，并覆盖 `codex-status --json` 兼容别名。
   - 文件：`tests/cli-smoke.test.ts`。
   - 验证：`npm test -- cli-smoke`。
 - [x] 记录 golden output
@@ -166,7 +166,7 @@ src/
 - 已新增 `tests/unit/init-project.test.ts` 直接覆盖 use case 的 Codex 项目生成和已存在目录错误。
 - 已新增 `src/application/upgrade-project.ts`，把 `upgrade` 的项目检测、平台选择、备份、选择性更新、dry-run 和版本写回移入 application 层。
 - 已新增 `tests/unit/upgrade-project.test.ts` 覆盖 dry-run 不落盘、选择性更新、备份、用户 `spec/tracking` 与 `spec/knowledge` 保护，以及非项目目录错误。
-- 已新增 `src/application/get-project-status.ts`，提供通用 `ProjectStatus` 状态模型；`codex-status` CLI 改为调用 application 层，旧 `utils/codex-status.ts` 保留兼容导出。
+- 已新增 `src/application/get-project-status.ts`，提供通用 `ProjectStatus` 状态模型；`status` 与 `codex-status` CLI 均调用 application 层。
 - 已新增 `tests/unit/get-project-status.test.ts` 覆盖项目摘要、Codex 接手文件、故事进度、追踪 JSON 与渲染输出。
 - 已新增 `src/application/project-ports.ts`，定义 `ProjectFileSystem`、`GitAdapter`、`PluginInstaller` 端口。
 - 已新增 `src/infrastructure/node-file-system.ts`、`command-git-adapter.ts`、`plugin-manager-installer.ts`，由 CLI 注入 Node/fs-extra/Git/插件管理器实现。
@@ -342,14 +342,14 @@ src/
 阶段备注：
 - 已更新 `docs/tech/architecture.md`，以当前重构后的 CLI/application/domain/infrastructure/prompt/templates/plugins/validation 边界为准，并补充模块边界、初始化流、命令产物流、状态校验流和插件扩展流 Mermaid 图。
 - 已新增 `changes/` 轻量变更记录目录与 `npm run check:changes`，每条记录必须覆盖 CLI 行为、模板契约、生成产物和验证四个维度，并已接入 `npm run verify`。
-- 已更新 README 快速开始为 5 分钟路径，覆盖安装、`init --ai codex`、`codex-status`、`validate` 和平台 slash command 对照。
+- 已更新 README 快速开始为 5 分钟路径，覆盖安装、`init --ai codex`、`status`、`validate` 和平台 slash command 对照。
 - 已新增 `docs/migration-guide.md`，说明旧项目保守升级、自定义命令/模板保留、插件迁移、回滚和升级后验收清单，并从升级指南与文档首页链接。
 
 ## 阶段 10：Codex 专项增强
 
 目标：让 Novel Writer 成为 Codex 友好的长篇创作工作台。
 
-- [ ] `novel status` 泛化，`codex-status` 作为别名
+- [x] `novel status` 泛化，`codex-status` 作为别名
   - 验收：Codex 与其他 AI 用户都能用同一状态入口。
 - [ ] `AGENTS.md` 生成可配置
   - 验收：可按成人向、慢热、冒险、恋爱、多线叙事生成不同边界模板。
@@ -358,6 +358,9 @@ src/
   - 验收：`tasks.md` 可转为 GitHub issues 或本地 JSON board。
 - [ ] 断点续写上下文包
   - 验收：生成 `handoff.md`，包含当前章节、未完成任务、必须读取文件、风险边界。
+
+阶段备注：
+- 已新增 `novel status` 通用项目状态入口，`codex-status` 保留为兼容别名；状态模型新增 `handoff` 字段并保留旧 `codex` 字段，避免破坏自动化读取。
 
 ## 执行顺序
 

@@ -9,7 +9,7 @@
 在旧项目根目录执行：
 
 ```bash
-novel codex-status
+novel status
 novel validate --severity error
 git status --short
 ```
@@ -26,7 +26,7 @@ cd my-novel
 novel upgrade --dry-run
 novel upgrade --commands --scripts
 novel validate --severity error
-novel codex-status
+novel status
 ```
 
 这条路径只更新 AI 平台命令和兼容脚本：
@@ -134,7 +134,7 @@ Copy-Item -Recurse backup\2026-05-02T10-30-00\.claude .claude
 ## 升级后验收清单
 
 - [ ] `novel validate --severity error` 无 error。
-- [ ] `novel codex-status` 能看到故事、任务、追踪数据和 blocker 摘要。
+- [ ] `novel status` 能看到故事、任务、追踪数据和 blocker 摘要。
 - [ ] 已安装 AI 平台的命令目录存在，例如 `.codex/prompts/`、`.claude/commands/`、`.gemini/commands/novel/`。
 - [ ] `.specify/scripts/runtime/` 存在，旧脚本入口仍可调用。
 - [ ] 自定义模板和记忆文件未被误覆盖。

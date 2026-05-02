@@ -53,5 +53,5 @@ CLI 中 AI 平台相关数据曾分散在多个位置：
 
 - `npm run build`
 - `npm run build:commands`
-- `node dist/cli.js codex-status --json`
+- `node dist/cli.js status --json`
 - 临时目录 `node dist/cli.js init smoke --ai codex --method three-act --no-git`

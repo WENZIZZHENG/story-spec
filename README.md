@@ -51,12 +51,13 @@ novel init my-novel --ai cursor    # Cursor
 ### 3. 写作前检查
 
 ```bash
-novel codex-status          # Codex 接手状态摘要
+novel status                # 通用项目状态摘要
+novel codex-status          # 兼容别名：Codex 接手状态摘要
 novel validate              # 项目结构、任务、追踪数据和写作规则校验
 novel validate --severity error
 ```
 
-`codex-status` 用来判断 Codex 是否已经可以直接接手继续写；`validate` 更通用，适合所有平台在生成计划后或写作前做硬校验。
+`status` 用来判断项目是否已经可以继续规划、拆任务或写作；`codex-status` 保留为兼容别名。`validate` 更适合在生成计划后或写作前做硬校验。
 
 ### 4. 在 AI 助手中打开项目并使用命令
 
@@ -216,11 +217,12 @@ novel upgrade [--ai <type>]       # 升级项目到最新版本
 novel check                       # 检查项目配置和状态
 ```
 
-### `novel codex-status`
+### `novel status`
 
 ```bash
-novel codex-status                # 查看 Codex 接手项目所需状态摘要
-novel codex-status --json         # 输出结构化状态
+novel status                      # 查看项目状态摘要
+novel status --json               # 输出结构化状态
+novel codex-status --json         # 兼容旧入口
 ```
 
 ### `novel validate`

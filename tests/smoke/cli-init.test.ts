@@ -57,7 +57,7 @@ describe('CLI init smoke', () => {
 
     const statusResult = await execFileAsync('node', [
       cliPath,
-      'codex-status',
+      'status',
       '--json'
     ], { cwd: projectPath });
     const status = JSON.parse(statusResult.stdout);
@@ -65,9 +65,20 @@ describe('CLI init smoke', () => {
     expect(status.projectName).toBe(golden.codex.status.projectName);
     expect(status.method).toBe(golden.codex.status.method);
     expect(status.configuredAI).toEqual(golden.codex.status.configuredAI);
+    expect(status.handoff.codexPrompts).toBe(true);
+    expect(status.handoff.agentsFile).toBe(true);
     expect(status.codex.prompts).toBe(true);
     expect(status.codex.agentsFile).toBe(true);
     expect(status.tracking).toHaveLength(golden.codex.status.trackingFiles);
+
+    const codexStatusResult = await execFileAsync('node', [
+      cliPath,
+      'codex-status',
+      '--json'
+    ], { cwd: projectPath });
+    const codexStatus = JSON.parse(codexStatusResult.stdout);
+    expect(codexStatus.projectName).toBe(status.projectName);
+    expect(codexStatus.handoff).toEqual(status.handoff);
 
     const validateResult = await execFileAsync('node', [
       cliPath,

@@ -255,7 +255,7 @@ Novel Writer 在部分 AI 平台使用命名空间（namespace）前缀，主要
 - ✅ 使用 `novel-` 前缀避免与其他工具冲突
 - ✅ 完整支持所有 Novel Writer 命令功能
 - ✅ 初始化时生成 `AGENTS.md`，帮助 Codex 明确读取顺序、写作边界和文件职责
-- ✅ 可用 `novel codex-status` 在终端查看项目是否已具备直接写作条件
+- ✅ 可用 `novel status` 在终端查看项目是否已具备直接写作条件；`novel codex-status` 保留为兼容别名
 
 **安装方式**:
 ```bash
@@ -265,7 +265,7 @@ novel init my-novel --ai codex
 **推荐接手流程**:
 ```bash
 cd my-novel
-novel codex-status
+novel status
 ```
 
 然后在 Codex 中按状态提示继续执行：
