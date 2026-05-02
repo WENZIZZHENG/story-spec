@@ -13,6 +13,7 @@ import { registerWorldbuildingCommand } from './commands/worldbuilding.command.j
 import { registerStoryStructureCommand } from './commands/story-structure.command.js';
 import { registerVoiceCommand } from './commands/voice.command.js';
 import { registerReviewCommand } from './commands/review.command.js';
+import { registerPresetCommand } from './commands/preset.command.js';
 import chalk from 'chalk';
 import path from 'path';
 import { fileURLToPath } from 'url';
@@ -60,6 +61,7 @@ export function runProgram(argv: string[]): void {
   registerStoryStructureCommand(program, { packageRoot });
   registerVoiceCommand(program);
   registerReviewCommand(program, { packageRoot });
+  registerPresetCommand(program, { packageRoot });
   registerInfoCommand(program);
 
   program.on('--help', () => {

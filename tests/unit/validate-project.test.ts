@@ -292,6 +292,45 @@ describe('validateProject', () => {
     ]));
   });
 
+  it('reports active preset world fact gaps', async () => {
+    const { projectRoot, packageRoot, fileSystem } = await createFileSystem();
+    await fileSystem.writeFile(path.join(projectRoot, '.specify', 'presets', 'xuanhuan-cultivation', 'preset.yaml'), `id: xuanhuan-cultivation
+name: 玄幻修炼
+version: "1.0.0"
+description: preset
+genre: xuanhuan
+requiredWorldFacts:
+  - id: world.cultivation.realm-system
+    title: 境界体系
+    storyFunction: creates conflict
+    constraints:
+      - cost
+characterRoles: []
+pacingTemplates: []
+commonMistakes: []
+reviewerWeights: {}
+validateRules: []
+`);
+    await fileSystem.writeJson(path.join(projectRoot, 'spec', 'presets', 'current-preset.json'), {
+      id: 'xuanhuan-cultivation',
+      manifestPath: '.specify/presets/xuanhuan-cultivation/preset.yaml'
+    });
+
+    const result = await validateProject({
+      projectRoot,
+      packageRoot,
+      fileSystem
+    });
+
+    expect(result.summary.activePreset).toBe('xuanhuan-cultivation');
+    expect(result.issues).toEqual(expect.arrayContaining([
+      expect.objectContaining({
+        code: 'MISSING_PRESET_WORLD_FACT',
+        severity: 'warning'
+      })
+    ]));
+  });
+
   it('checks generic command files when generic integration is declared', async () => {
     const projectRoot = path.join(os.tmpdir(), 'memory-novel-generic-commands');
     const packageRoot = path.join(os.tmpdir(), 'memory-novel-generic-package');
@@ -343,6 +382,7 @@ describe('validateProject', () => {
     expect(output).toContain('graph edges：1');
     expect(output).toContain('scene cards：0');
     expect(output).toContain('voice fingerprints：1');
+    expect(output).toContain('active preset：无');
     expect(output).toContain('generic commands：0');
     expect(output).toContain('MISSING_TEMPLATE');
     expect(output).toContain('INVALID_TRACKING_JSON');

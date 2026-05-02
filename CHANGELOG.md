@@ -20,6 +20,9 @@
 - `novel validate` 接入 VoiceFingerprint 校验，并新增世界观密度、揭示节奏、伏笔闭环 Scene Card 质量规则。
 - 新增 `novel review` reviewer loop，按 worldbuilding、voice、continuity、editor、reader 输出结构化 findings 与任务草稿。
 - `/analyze` 增加 `world-density` 与 `reveal-pacing` 专项；新增 `/review` 通用命令模板。
+- 新增 Genre Preset 包能力，内置 `xuanhuan-cultivation` 样板，包含 World Bible 必填字段、角色功能位、节奏模板、常见错误、reviewer 权重和 validate 规则。
+- 新增 `novel preset:list`、`novel preset:add <id>`、`novel preset:doctor`；`novel validate` 会按当前 preset 检查必填 WorldFact。
+- `/specify`、`/plan`、`/tasks` 会读取当前 Genre Preset，用于增强规格、计划和任务生成。
 
 ### 文档
 

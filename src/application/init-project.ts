@@ -132,6 +132,7 @@ const createBaseDirs = async (
     '.specify/templates',
     'stories',
     'spec',
+    'spec/presets',
     'spec/tracking',
     'spec/knowledge',
     'spec/world',

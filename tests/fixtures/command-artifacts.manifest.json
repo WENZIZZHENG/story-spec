@@ -69,7 +69,7 @@
     },
     {
       "path": "auggie/.augment/commands/plan.md",
-      "sha256": "ddc8255fd47ae2538f931ae933e0506dc83c3190cd59e6310838ab0503d1c995",
+      "sha256": "367aa351bfa2ba4a14682d3eab1b349fabd768fbceb28b6ae740fde5d8cbe3a8",
       "commandSource": {
         "command": "plan",
         "kind": "legacy-template",
@@ -105,7 +105,7 @@
     },
     {
       "path": "auggie/.augment/commands/specify.md",
-      "sha256": "21ed950bdf9abddff7ffa08c07cb813717b8f66fd1f19fbe0b9c5816710ef961",
+      "sha256": "71a4c31fe95c1879a8137aae086725cdf07b664309eaf17152e9a10d64ec18f9",
       "commandSource": {
         "command": "specify",
         "kind": "legacy-template",
@@ -114,7 +114,7 @@
     },
     {
       "path": "auggie/.augment/commands/tasks.md",
-      "sha256": "46ce2bc7ceca60c915ac2b3c5d1dc7fef069151128fc3ca0aeca2e4200ef18c7",
+      "sha256": "aced7ceddd2b1fc2113ebb32ef3e630ec43ff8fc4b9a9c8b13bc5fa0a0061933",
       "commandSource": {
         "command": "tasks",
         "kind": "legacy-template",
@@ -542,7 +542,7 @@
     },
     {
       "path": "claude/.claude/commands/novel.plan.md",
-      "sha256": "6066edb2472272f8727380d2d2f39200c634a9b49ad09d8de850be5e95cd5e3b",
+      "sha256": "f343eb6533bf86e25d2da8f123b6b3f6c591f734c3860d27b40947dba1a962ff",
       "commandSource": {
         "command": "plan",
         "kind": "legacy-template",
@@ -578,7 +578,7 @@
     },
     {
       "path": "claude/.claude/commands/novel.specify.md",
-      "sha256": "5db28dd4b4fbf9b6614a338fdcfce9520df0d2c412b93a5ec5755b802cc99704",
+      "sha256": "983d47201436e9d747ef942e451a0972b2a09df3ffdfc1a0ec670a9064be16d8",
       "commandSource": {
         "command": "specify",
         "kind": "legacy-template",
@@ -587,7 +587,7 @@
     },
     {
       "path": "claude/.claude/commands/novel.tasks.md",
-      "sha256": "dce636e57f673e8daca3ce8c1d425be31870ed8b8cfbc6be5cceed7c712021cd",
+      "sha256": "f11ad01c2e821ad833bbe51a4434b17136ac5f5c657d7b6b2a2d32c7131d087f",
       "commandSource": {
         "command": "tasks",
         "kind": "legacy-template",
@@ -1015,7 +1015,7 @@
     },
     {
       "path": "codebuddy/.codebuddy/commands/plan.md",
-      "sha256": "ddc8255fd47ae2538f931ae933e0506dc83c3190cd59e6310838ab0503d1c995",
+      "sha256": "367aa351bfa2ba4a14682d3eab1b349fabd768fbceb28b6ae740fde5d8cbe3a8",
       "commandSource": {
         "command": "plan",
         "kind": "legacy-template",
@@ -1051,7 +1051,7 @@
     },
     {
       "path": "codebuddy/.codebuddy/commands/specify.md",
-      "sha256": "21ed950bdf9abddff7ffa08c07cb813717b8f66fd1f19fbe0b9c5816710ef961",
+      "sha256": "71a4c31fe95c1879a8137aae086725cdf07b664309eaf17152e9a10d64ec18f9",
       "commandSource": {
         "command": "specify",
         "kind": "legacy-template",
@@ -1060,7 +1060,7 @@
     },
     {
       "path": "codebuddy/.codebuddy/commands/tasks.md",
-      "sha256": "46ce2bc7ceca60c915ac2b3c5d1dc7fef069151128fc3ca0aeca2e4200ef18c7",
+      "sha256": "aced7ceddd2b1fc2113ebb32ef3e630ec43ff8fc4b9a9c8b13bc5fa0a0061933",
       "commandSource": {
         "command": "tasks",
         "kind": "legacy-template",
@@ -1488,7 +1488,7 @@
     },
     {
       "path": "codex/.codex/prompts/novel-plan.md",
-      "sha256": "ddc8255fd47ae2538f931ae933e0506dc83c3190cd59e6310838ab0503d1c995",
+      "sha256": "367aa351bfa2ba4a14682d3eab1b349fabd768fbceb28b6ae740fde5d8cbe3a8",
       "commandSource": {
         "command": "plan",
         "kind": "legacy-template",
@@ -1524,7 +1524,7 @@
     },
     {
       "path": "codex/.codex/prompts/novel-specify.md",
-      "sha256": "21ed950bdf9abddff7ffa08c07cb813717b8f66fd1f19fbe0b9c5816710ef961",
+      "sha256": "71a4c31fe95c1879a8137aae086725cdf07b664309eaf17152e9a10d64ec18f9",
       "commandSource": {
         "command": "specify",
         "kind": "legacy-template",
@@ -1533,7 +1533,7 @@
     },
     {
       "path": "codex/.codex/prompts/novel-tasks.md",
-      "sha256": "46ce2bc7ceca60c915ac2b3c5d1dc7fef069151128fc3ca0aeca2e4200ef18c7",
+      "sha256": "aced7ceddd2b1fc2113ebb32ef3e630ec43ff8fc4b9a9c8b13bc5fa0a0061933",
       "commandSource": {
         "command": "tasks",
         "kind": "legacy-template",
@@ -1961,7 +1961,7 @@
     },
     {
       "path": "continue-check/.continue/prompts/plan.md",
-      "sha256": "e703f1a5a0f278931f6dce8e0df61a0b5b63d7f465a2d484499fa2618e6a0453",
+      "sha256": "753c4f5167c9f2ca08506a38d1277a7d0753d93786087f471e67149a113da3ea",
       "commandSource": {
         "command": "plan",
         "kind": "legacy-template",
@@ -1997,7 +1997,7 @@
     },
     {
       "path": "continue-check/.continue/prompts/specify.md",
-      "sha256": "cbf098c4f37c0b5c906410d4ec3f349321bf5eec9a4f638a3f242e7b404bfd87",
+      "sha256": "93ab7eb6f2ec1c9a7a3ee6d837814b409784178f53ceb5182d423fc5d1977d64",
       "commandSource": {
         "command": "specify",
         "kind": "legacy-template",
@@ -2006,7 +2006,7 @@
     },
     {
       "path": "continue-check/.continue/prompts/tasks.md",
-      "sha256": "14d7c65b7fd26a9b332e35cc10ebdceeff15496638b682821f601d364538505e",
+      "sha256": "10a921201fe289f3325dbbb2e099746270a6735e63b0d1ca6558eb897d3b6181",
       "commandSource": {
         "command": "tasks",
         "kind": "legacy-template",
@@ -2434,7 +2434,7 @@
     },
     {
       "path": "copilot/.github/prompts/plan.prompt.md",
-      "sha256": "08a5403929d608b18d8a4a6d2876615ff84bfdd92062b998a962a7b58d7f8e51",
+      "sha256": "e6e7b3263a3bc8f60fbc592e236d2b63838392c0a6c8252bd9976767da8e3f16",
       "commandSource": {
         "command": "plan",
         "kind": "legacy-template",
@@ -2470,7 +2470,7 @@
     },
     {
       "path": "copilot/.github/prompts/specify.prompt.md",
-      "sha256": "49844a31ac9978128687cc51e599faac75cdc903050749fd7f800a8f8134efd8",
+      "sha256": "fa2584d4f83f3bcd08c34603b7e5ac3c08524cc53b3f356b82bc47596737c6c8",
       "commandSource": {
         "command": "specify",
         "kind": "legacy-template",
@@ -2479,7 +2479,7 @@
     },
     {
       "path": "copilot/.github/prompts/tasks.prompt.md",
-      "sha256": "b8265c66f7a65fd32439f64141b27e848fcb4b549b212490796f96453836efc4",
+      "sha256": "c237eca41a8a89f3e6899209670c9be3972ac5b89bc65d0593aecf89e3db3e9a",
       "commandSource": {
         "command": "tasks",
         "kind": "legacy-template",
@@ -2907,7 +2907,7 @@
     },
     {
       "path": "cursor/.cursor/commands/plan.md",
-      "sha256": "ddc8255fd47ae2538f931ae933e0506dc83c3190cd59e6310838ab0503d1c995",
+      "sha256": "367aa351bfa2ba4a14682d3eab1b349fabd768fbceb28b6ae740fde5d8cbe3a8",
       "commandSource": {
         "command": "plan",
         "kind": "legacy-template",
@@ -2943,7 +2943,7 @@
     },
     {
       "path": "cursor/.cursor/commands/specify.md",
-      "sha256": "21ed950bdf9abddff7ffa08c07cb813717b8f66fd1f19fbe0b9c5816710ef961",
+      "sha256": "71a4c31fe95c1879a8137aae086725cdf07b664309eaf17152e9a10d64ec18f9",
       "commandSource": {
         "command": "specify",
         "kind": "legacy-template",
@@ -2952,7 +2952,7 @@
     },
     {
       "path": "cursor/.cursor/commands/tasks.md",
-      "sha256": "46ce2bc7ceca60c915ac2b3c5d1dc7fef069151128fc3ca0aeca2e4200ef18c7",
+      "sha256": "aced7ceddd2b1fc2113ebb32ef3e630ec43ff8fc4b9a9c8b13bc5fa0a0061933",
       "commandSource": {
         "command": "tasks",
         "kind": "legacy-template",
@@ -3380,7 +3380,7 @@
     },
     {
       "path": "gemini/.gemini/commands/novel/plan.toml",
-      "sha256": "5763dd2a89554f8750ffb7b73cfa09eaa688f4ed538a9cc0f1c8755b52cb72d5",
+      "sha256": "5f7a28ff5e171901f5c39ffb9f1a515dafdbb77fac4bf4b2bc28a32796e2c89f",
       "commandSource": {
         "command": "plan",
         "kind": "legacy-template",
@@ -3416,7 +3416,7 @@
     },
     {
       "path": "gemini/.gemini/commands/novel/specify.toml",
-      "sha256": "68032c81f6099acd5df58b1d438f02d82ad70228f701e713b9c4669ff231fc12",
+      "sha256": "891c8ff4813a66420c6149b994e2e87bd2df8ecc462468324c165482e2c9be61",
       "commandSource": {
         "command": "specify",
         "kind": "legacy-template",
@@ -3425,7 +3425,7 @@
     },
     {
       "path": "gemini/.gemini/commands/novel/tasks.toml",
-      "sha256": "d0d185f556f93d844757c7beb8336cbd3b925b51b6e4b41a8571fd24438fcedc",
+      "sha256": "7ed28b1c18b203b6fe3e661352d13a43dd59e5b2fcd3b550b3a5d13adc64d12e",
       "commandSource": {
         "command": "tasks",
         "kind": "legacy-template",
@@ -3853,7 +3853,7 @@
     },
     {
       "path": "generic/.specify/commands/plan.md",
-      "sha256": "b242936949349f4bf36d03bc5abdd066942b8eeefb7203a068e24402bc5abcf1",
+      "sha256": "f13ef43802e80e0d02b433e84d5c0318574cadafefaeae825f6e328843b48183",
       "commandSource": {
         "command": "plan",
         "kind": "legacy-template",
@@ -3889,7 +3889,7 @@
     },
     {
       "path": "generic/.specify/commands/specify.md",
-      "sha256": "7ef5a6f072ff90e98a95a6353e03429cb30df88aa1a6ba13e9765d0fe4a59876",
+      "sha256": "3cb7c8c18913cde3d000cf91208f145a7d76963f157e5f418e5404ac8498fa8f",
       "commandSource": {
         "command": "specify",
         "kind": "legacy-template",
@@ -3898,7 +3898,7 @@
     },
     {
       "path": "generic/.specify/commands/tasks.md",
-      "sha256": "78f8ff3386349cc6c80644e85b0aabf6f453564d821cf2d4fdd60928a5aaeabf",
+      "sha256": "05b3682f9ef51ef4ce05fc8b799e6a0527d0caa1a3436f9eb1483e0cf29b15da",
       "commandSource": {
         "command": "tasks",
         "kind": "legacy-template",
@@ -4326,7 +4326,7 @@
     },
     {
       "path": "kilocode/.kilocode/workflows/plan.md",
-      "sha256": "aea4875ec273f8e9793f8372fd7ea2967538f6dd7609b733b931cba284b49de6",
+      "sha256": "2af34a705934f3c1a274a6439c7f17cb4c3f8d27ae58fb3d705e714d5e731ec4",
       "commandSource": {
         "command": "plan",
         "kind": "legacy-template",
@@ -4362,7 +4362,7 @@
     },
     {
       "path": "kilocode/.kilocode/workflows/specify.md",
-      "sha256": "61dfedb76beea9612d79afe80d8ae595ae27fa9282da54027114da4c67524fbe",
+      "sha256": "8bf80b9dbce0e3766abeae5f736bf7f0f9834af2d310798da9a4c198bae4169a",
       "commandSource": {
         "command": "specify",
         "kind": "legacy-template",
@@ -4371,7 +4371,7 @@
     },
     {
       "path": "kilocode/.kilocode/workflows/tasks.md",
-      "sha256": "712135b4189b99db5d81e8914bfdf2f285f2dd53f6617f85ab246019452e319b",
+      "sha256": "38db675ca26804b75c1ad5c0e21d7eece1ed892cbee7a92dd13447dc912f9f11",
       "commandSource": {
         "command": "tasks",
         "kind": "legacy-template",
@@ -4799,7 +4799,7 @@
     },
     {
       "path": "opencode/.opencode/command/plan.md",
-      "sha256": "4dc5abee02cb7ba8db6e16c19bd5e0fde22b0c320822f2367166f30e994221af",
+      "sha256": "94ad5bc04cd4c1042b96a66a68e62dd961d5696f1f7973edc885914361d0c68e",
       "commandSource": {
         "command": "plan",
         "kind": "legacy-template",
@@ -4835,7 +4835,7 @@
     },
     {
       "path": "opencode/.opencode/command/specify.md",
-      "sha256": "6c6a80e7aa990f23fdb9d1ed8ac0ffa9f447bb813d4186df495ebe19cf3019c3",
+      "sha256": "d6aa88771e6b4fc45466dab76364b9704442cf607a1b30391131143cd7263dcc",
       "commandSource": {
         "command": "specify",
         "kind": "legacy-template",
@@ -4844,7 +4844,7 @@
     },
     {
       "path": "opencode/.opencode/command/tasks.md",
-      "sha256": "712135b4189b99db5d81e8914bfdf2f285f2dd53f6617f85ab246019452e319b",
+      "sha256": "38db675ca26804b75c1ad5c0e21d7eece1ed892cbee7a92dd13447dc912f9f11",
       "commandSource": {
         "command": "tasks",
         "kind": "legacy-template",
@@ -5272,7 +5272,7 @@
     },
     {
       "path": "q/.amazonq/prompts/plan.md",
-      "sha256": "08a5403929d608b18d8a4a6d2876615ff84bfdd92062b998a962a7b58d7f8e51",
+      "sha256": "e6e7b3263a3bc8f60fbc592e236d2b63838392c0a6c8252bd9976767da8e3f16",
       "commandSource": {
         "command": "plan",
         "kind": "legacy-template",
@@ -5308,7 +5308,7 @@
     },
     {
       "path": "q/.amazonq/prompts/specify.md",
-      "sha256": "49844a31ac9978128687cc51e599faac75cdc903050749fd7f800a8f8134efd8",
+      "sha256": "fa2584d4f83f3bcd08c34603b7e5ac3c08524cc53b3f356b82bc47596737c6c8",
       "commandSource": {
         "command": "specify",
         "kind": "legacy-template",
@@ -5317,7 +5317,7 @@
     },
     {
       "path": "q/.amazonq/prompts/tasks.md",
-      "sha256": "b8265c66f7a65fd32439f64141b27e848fcb4b549b212490796f96453836efc4",
+      "sha256": "c237eca41a8a89f3e6899209670c9be3972ac5b89bc65d0593aecf89e3db3e9a",
       "commandSource": {
         "command": "tasks",
         "kind": "legacy-template",
@@ -5745,7 +5745,7 @@
     },
     {
       "path": "qwen/.qwen/commands/plan.toml",
-      "sha256": "5763dd2a89554f8750ffb7b73cfa09eaa688f4ed538a9cc0f1c8755b52cb72d5",
+      "sha256": "5f7a28ff5e171901f5c39ffb9f1a515dafdbb77fac4bf4b2bc28a32796e2c89f",
       "commandSource": {
         "command": "plan",
         "kind": "legacy-template",
@@ -5781,7 +5781,7 @@
     },
     {
       "path": "qwen/.qwen/commands/specify.toml",
-      "sha256": "68032c81f6099acd5df58b1d438f02d82ad70228f701e713b9c4669ff231fc12",
+      "sha256": "891c8ff4813a66420c6149b994e2e87bd2df8ecc462468324c165482e2c9be61",
       "commandSource": {
         "command": "specify",
         "kind": "legacy-template",
@@ -5790,7 +5790,7 @@
     },
     {
       "path": "qwen/.qwen/commands/tasks.toml",
-      "sha256": "d0d185f556f93d844757c7beb8336cbd3b925b51b6e4b41a8571fd24438fcedc",
+      "sha256": "7ed28b1c18b203b6fe3e661352d13a43dd59e5b2fcd3b550b3a5d13adc64d12e",
       "commandSource": {
         "command": "tasks",
         "kind": "legacy-template",
@@ -6218,7 +6218,7 @@
     },
     {
       "path": "roocode/.roo/commands/plan.md",
-      "sha256": "aea4875ec273f8e9793f8372fd7ea2967538f6dd7609b733b931cba284b49de6",
+      "sha256": "2af34a705934f3c1a274a6439c7f17cb4c3f8d27ae58fb3d705e714d5e731ec4",
       "commandSource": {
         "command": "plan",
         "kind": "legacy-template",
@@ -6254,7 +6254,7 @@
     },
     {
       "path": "roocode/.roo/commands/specify.md",
-      "sha256": "61dfedb76beea9612d79afe80d8ae595ae27fa9282da54027114da4c67524fbe",
+      "sha256": "8bf80b9dbce0e3766abeae5f736bf7f0f9834af2d310798da9a4c198bae4169a",
       "commandSource": {
         "command": "specify",
         "kind": "legacy-template",
@@ -6263,7 +6263,7 @@
     },
     {
       "path": "roocode/.roo/commands/tasks.md",
-      "sha256": "712135b4189b99db5d81e8914bfdf2f285f2dd53f6617f85ab246019452e319b",
+      "sha256": "38db675ca26804b75c1ad5c0e21d7eece1ed892cbee7a92dd13447dc912f9f11",
       "commandSource": {
         "command": "tasks",
         "kind": "legacy-template",
@@ -6939,7 +6939,7 @@
     },
     {
       "path": "windsurf/.windsurf/workflows/plan.md",
-      "sha256": "aea4875ec273f8e9793f8372fd7ea2967538f6dd7609b733b931cba284b49de6",
+      "sha256": "2af34a705934f3c1a274a6439c7f17cb4c3f8d27ae58fb3d705e714d5e731ec4",
       "commandSource": {
         "command": "plan",
         "kind": "legacy-template",
@@ -6975,7 +6975,7 @@
     },
     {
       "path": "windsurf/.windsurf/workflows/specify.md",
-      "sha256": "61dfedb76beea9612d79afe80d8ae595ae27fa9282da54027114da4c67524fbe",
+      "sha256": "8bf80b9dbce0e3766abeae5f736bf7f0f9834af2d310798da9a4c198bae4169a",
       "commandSource": {
         "command": "specify",
         "kind": "legacy-template",
@@ -6984,7 +6984,7 @@
     },
     {
       "path": "windsurf/.windsurf/workflows/tasks.md",
-      "sha256": "712135b4189b99db5d81e8914bfdf2f285f2dd53f6617f85ab246019452e319b",
+      "sha256": "38db675ca26804b75c1ad5c0e21d7eece1ed892cbee7a92dd13447dc912f9f11",
       "commandSource": {
         "command": "tasks",
         "kind": "legacy-template",

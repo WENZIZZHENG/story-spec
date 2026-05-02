@@ -40,6 +40,9 @@ describe('CLI command modules smoke', () => {
     expect(help).toContain('tasks:board [options] [story]');
     expect(help).toContain('validate [options]');
     expect(help).toContain('review [options]');
+    expect(help).toContain('preset:list [options]');
+    expect(help).toContain('preset:add [options] <id>');
+    expect(help).toContain('preset:doctor [options]');
     expect(info).toContain('三幕结构');
     expect(info).toContain('雪花十步');
   });
@@ -644,5 +647,63 @@ describe('CLI command modules smoke', () => {
       && typeof finding.suggestedAction === 'string'
     ))).toBe(true);
     expect(review.taskDrafts).toEqual(expect.any(Array));
+  });
+
+  it('installs and validates a genre preset as JSON', async () => {
+    const cwd = await makeTempDir();
+    await execFileAsync('node', [
+      cliPath,
+      'init',
+      'smoke',
+      '--agent',
+      'generic',
+      '--method',
+      'three-act',
+      '--no-git'
+    ], { cwd });
+
+    const projectPath = path.join(cwd, 'smoke');
+    const listResult = await execFileAsync('node', [
+      cliPath,
+      'preset:list',
+      '--json'
+    ], { cwd: repoRoot });
+    const list = JSON.parse(listResult.stdout);
+
+    expect(list.presets.map((preset: { id: string }) => preset.id)).toContain('xuanhuan-cultivation');
+
+    const addResult = await execFileAsync('node', [
+      cliPath,
+      'preset:add',
+      'xuanhuan-cultivation',
+      '--json'
+    ], { cwd: projectPath });
+    const installed = JSON.parse(addResult.stdout);
+
+    expect(installed.preset.id).toBe('xuanhuan-cultivation');
+    expect(installed.targetDir).toContain(path.join('.specify', 'presets', 'xuanhuan-cultivation'));
+    await expect(readFile(path.join(projectPath, 'spec', 'presets', 'current-preset.json'), 'utf-8'))
+      .resolves.toContain('xuanhuan-cultivation');
+
+    const doctorResult = await execFileAsync('node', [
+      cliPath,
+      'preset:doctor',
+      '--json'
+    ], { cwd: projectPath });
+    const doctor = JSON.parse(doctorResult.stdout);
+
+    expect(doctor.activePreset.id).toBe('xuanhuan-cultivation');
+    expect(doctor.issues).toEqual([]);
+
+    const validateResult = await execFileAsync('node', [
+      cliPath,
+      'validate',
+      '--json'
+    ], { cwd: projectPath });
+    const validation = JSON.parse(validateResult.stdout);
+
+    expect(validation.valid).toBe(true);
+    expect(validation.summary.activePreset).toBe('xuanhuan-cultivation');
+    expect(validation.issues).toEqual([]);
   });
 });

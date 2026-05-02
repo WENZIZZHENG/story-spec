@@ -1,0 +1,65 @@
+id: xuanhuan-cultivation
+name: 玄幻修炼
+version: "1.0.0"
+description: 面向玄幻、修仙、升级流的世界观字段、节奏模板和审稿权重。
+genre: xuanhuan
+priority: 220
+requiredWorldFacts:
+  - id: world.cultivation.realm-system
+    title: 境界体系
+    type: system
+    storyFunction: 限制主角成长速度，制造阶段性目标和越级冲突。
+    constraints:
+      - 每个境界必须有清晰代价、门槛和失败风险。
+      - 突破不能只靠口号，必须有资源、悟性或事件触发。
+  - id: world.cultivation.energy-rule
+    title: 灵力规则
+    type: rule
+    storyFunction: 解释战斗、修炼、资源争夺和世界秩序。
+    constraints:
+      - 灵力使用必须有消耗。
+      - 高阶规则不能在无铺垫时解决低阶冲突。
+  - id: world.cultivation.faction-order
+    title: 宗门与势力秩序
+    type: faction
+    storyFunction: 为任务、资源、敌友关系和权力压迫提供结构。
+    constraints:
+      - 势力资源、规矩和惩罚必须可追踪。
+      - 主角获得庇护或敌意时必须有明确原因。
+characterRoles:
+  - id: role.protagonist
+    name: 逆势主角
+    function: 承担成长线、资源争夺和价值选择。
+    required: true
+  - id: role.mentor
+    name: 引路人
+    function: 解释部分规则，但不能替主角解决核心冲突。
+    required: true
+  - id: role.rival
+    name: 同阶竞争者
+    function: 提供阶段性压迫、镜像成长和爽点对照。
+    required: true
+pacingTemplates:
+  - id: pacing.opening-hook
+    name: 三章钩子
+    description: 第一章入冲突，第二章展示能力或代价，第三章给出阶段性目标。
+  - id: pacing.realm-ladder
+    name: 境界阶梯
+    description: 每个小阶段至少包含目标、资源、阻碍、突破后果四步。
+commonMistakes:
+  - id: mistake.power-without-cost
+    description: 主角力量增长没有代价，导致冲突变轻。
+    suggestedAction: 为新能力补上消耗、限制或债务，并写入 WorldFact。
+  - id: mistake.lore-dump
+    description: 连续解释境界和世界史，场景缺少行动承载。
+    suggestedAction: 拆成 Scene Card reveals，把设定放进冲突或选择里揭示。
+reviewerWeights:
+  worldbuilding: 1.4
+  continuity: 1.2
+  editor: 1
+  voice: 0.9
+  reader: 1.2
+validateRules:
+  - id: required-world-facts
+    type: world-required
+    description: validate 必须检查境界体系、灵力规则、势力秩序是否存在。

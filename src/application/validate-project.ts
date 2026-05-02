@@ -25,6 +25,8 @@ import {
 import type { StoryStructureIssue } from '../domain/story-structure.js';
 import { inspectVoice } from './inspect-voice.js';
 import type { VoiceIssue } from '../domain/voice.js';
+import { inspectPreset } from './manage-presets.js';
+import type { PresetDoctorIssue } from './manage-presets.js';
 import {
   countIssuesBySeverity,
   filterIssuesBySeverity,
@@ -39,6 +41,7 @@ export type ProjectValidationIssueCode =
   | WorldbuildingIssue['code']
   | StoryStructureIssue['code']
   | VoiceIssue['code']
+  | PresetDoctorIssue['code']
   | 'MISSING_PROJECT_CONFIG'
   | 'MISSING_PROJECT_DIR'
   | 'MISSING_WORLD_DIR'
@@ -69,6 +72,7 @@ export interface ProjectValidationSummary {
   graphEdges: number;
   scenes: number;
   voiceFingerprints: number;
+  activePreset?: string;
 }
 
 export interface ProjectValidationResult {
@@ -133,6 +137,13 @@ const toStoryStructureProjectIssue = (issue: StoryStructureIssue): ProjectValida
 });
 
 const toVoiceProjectIssue = (issue: VoiceIssue): ProjectValidationIssue => ({
+  severity: issue.severity,
+  code: issue.code,
+  path: issue.path,
+  message: issue.message
+});
+
+const toPresetProjectIssue = (issue: PresetDoctorIssue): ProjectValidationIssue => ({
   severity: issue.severity,
   code: issue.code,
   path: issue.path,
@@ -456,6 +467,7 @@ export const validateProject = async (input: ValidateProjectInput): Promise<Proj
   const canonResult = await validateCanonFiles(fs, projectRoot);
   const storyStructureResult = await validateStoryStructureFiles(fs, projectRoot);
   const voiceResult = await validateVoiceFiles(fs, projectRoot);
+  const presetResult = await inspectPreset({ projectRoot, fileSystem: fs });
   const templateResult = await validateTemplates(fs, projectRoot, input.packageRoot);
   const agentContractResult = await validateAgentContract(fs, projectRoot, input.packageRoot);
   const writingRuleResult = await runWritingRules({
@@ -483,6 +495,9 @@ export const validateProject = async (input: ValidateProjectInput): Promise<Proj
     ...canonResult.issues,
     ...storyStructureResult.issues,
     ...voiceResult.issues,
+    ...presetResult.issues
+      .filter(issue => issue.code !== 'NO_ACTIVE_PRESET')
+      .map(toPresetProjectIssue),
     ...taskIssues,
     ...writingRuleResult.issues.map(toProjectIssue),
     ...agentContractResult.issues,
@@ -504,7 +519,8 @@ export const validateProject = async (input: ValidateProjectInput): Promise<Proj
       graphEntities: storyStructureResult.graphEntities,
       graphEdges: storyStructureResult.graphEdges,
       scenes: storyStructureResult.scenes,
-      voiceFingerprints: voiceResult.voiceFingerprints
+      voiceFingerprints: voiceResult.voiceFingerprints,
+      activePreset: presetResult.activePreset?.id
     },
     issueCounts,
     issues
@@ -530,6 +546,7 @@ export const renderProjectValidation = (
     `graph edges：${result.summary.graphEdges}`,
     `scene cards：${result.summary.scenes}`,
     `voice fingerprints：${result.summary.voiceFingerprints}`,
+    `active preset：${result.summary.activePreset ?? '无'}`,
     `模板检查：${result.summary.templatesChecked}`,
     `generic commands：${result.summary.agentCommandsChecked}`,
     `问题：${result.issueCounts.error} error / ${result.issueCounts.warning} warning / ${result.issueCounts.info} info`

@@ -1,0 +1,34 @@
+worldFacts:
+  - id: world.cultivation.realm-system
+    title: 境界体系
+    type: system
+    summary: 记录本书修炼境界、突破门槛和失败风险。
+    storyFunction: 限制主角成长速度，制造阶段性目标和越级冲突。
+    constraints:
+      - 每个境界必须有清晰代价、门槛和失败风险。
+      - 突破不能只靠口号，必须有资源、悟性或事件触发。
+    sourcePaths:
+      - spec/presets/current-preset.json
+    status: draft
+  - id: world.cultivation.energy-rule
+    title: 灵力规则
+    type: rule
+    summary: 记录灵力来源、消耗、禁忌和战斗限制。
+    storyFunction: 解释战斗、修炼、资源争夺和世界秩序。
+    constraints:
+      - 灵力使用必须有消耗。
+      - 高阶规则不能在无铺垫时解决低阶冲突。
+    sourcePaths:
+      - spec/presets/current-preset.json
+    status: draft
+  - id: world.cultivation.faction-order
+    title: 宗门与势力秩序
+    type: faction
+    summary: 记录势力资源、规矩、庇护和惩罚。
+    storyFunction: 为任务、资源、敌友关系和权力压迫提供结构。
+    constraints:
+      - 势力资源、规矩和惩罚必须可追踪。
+      - 主角获得庇护或敌意时必须有明确原因。
+    sourcePaths:
+      - spec/presets/current-preset.json
+    status: draft

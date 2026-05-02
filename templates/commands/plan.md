@@ -22,6 +22,7 @@ scripts:
 - 宪法文件：`.specify/memory/constitution.md`
 - 规格文件：`stories/*/specification.md`
 - 澄清记录（如果已运行 `/clarify`）
+- 当前 Genre Preset（如果存在 `spec/presets/current-preset.json`，读取 `.specify/presets/<id>/preset.yaml` 和 `.specify/presets/<id>/commands/plan.md`）
 
 <!-- PLUGIN_HOOK: genre-knowledge-plan -->
 <!-- 插件增强区：知识搜索

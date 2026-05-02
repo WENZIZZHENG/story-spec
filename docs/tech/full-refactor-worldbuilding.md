@@ -2,7 +2,7 @@
 
 ## 状态
 
-Active planning。本文承接 B 系列任务，专注 World Bible、Canon Ledger、Entity Graph、Scene Cards、揭示节奏、角色声音、Reviewer Loop 和类型 Preset。Batch B0-B2 已完成，当前待执行 B3。
+Completed。本文承接 B 系列任务，专注 World Bible、Canon Ledger、Entity Graph、Scene Cards、揭示节奏、角色声音、Reviewer Loop 和类型 Preset。Batch B0-B3 已完成，后续进入 Workbench 路线。
 
 ## 写作与世界观参考项目
 
@@ -463,10 +463,13 @@ novel preset:doctor
 - [x] Batch B0：World / Canon 基座。合并原 B0-B2 与 shared N008-N011，完成状态见 [full-refactor-completed.md](full-refactor-completed.md)。
 - [x] Batch B1：Entity Graph / Scene Card 创作结构。合并原 B3-B4，完成状态见 [full-refactor-completed.md](full-refactor-completed.md)。
 - [x] Batch B2：Worldbuilding Quality / Voice / Reviewer。合并原 B5-B7，完成状态见 [full-refactor-completed.md](full-refactor-completed.md)。
+- [x] Batch B3：Genre Preset 包。合并原 B8，完成状态见 [full-refactor-completed.md](full-refactor-completed.md)。
 
-## 待执行批次
+## 后续批次
 
-### [ ] Batch B3：Genre Preset 包
+Worldbuilding 路线当前已完成。后续类型包扩展（如 court-intrigue、urban-fantasy、mystery、romance-slow-burn）应作为新增 preset 批次或 Workbench 后续增强，不再回滚 B3 状态。
+
+### [x] Batch B3：Genre Preset 包
 
 合并原 B8。
 

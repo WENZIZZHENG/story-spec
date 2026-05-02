@@ -2,7 +2,7 @@
 
 ## 状态
 
-Active。本文记录 World Bible、Canon Ledger、Entity Graph、Scene Cards、VoiceFingerprint 与 Reviewer Loop 的第一版边界。当前实现范围已经推进到 Batch B2：Worldbuilding Quality / Voice / Reviewer。
+Active。本文记录 World Bible、Canon Ledger、Entity Graph、Scene Cards、VoiceFingerprint、Reviewer Loop 与 Genre Preset 的第一版边界。当前实现范围已经推进到 Batch B3：Genre Preset 包。
 
 ## 背景
 
@@ -77,8 +77,10 @@ CanonFact 记录正文已经写成事实的内容。
 - `novel scene:init`、`novel scene:list`、`novel scene:check`、`novel scene:compile` 读取 Scene Card。
 - `novel voice:list`、`novel voice:check`、`novel voice:sample` 读取 VoiceFingerprint。
 - `novel review` 输出 reviewer findings 和任务草稿。
+- `novel preset:list`、`novel preset:add`、`novel preset:doctor` 读取和安装 Genre Preset；当前内置 `xuanhuan-cultivation`。
 - `/write` 读取 World Bible、Canon Ledger、Entity Graph、Scene Cards 和 VoiceFingerprint；写完后只生成待确认 canon fact 或 propagation debt，不自动重写正文。
 - `/analyze` 支持 world-density、reveal-pacing 和 reviewer loop 结构化 findings。
+- `/specify`、`/plan`、`/tasks` 会读取当前 Genre Preset，用于增强规格字段、章节计划和任务拆分。
 
 ## 非目标
 
@@ -88,7 +90,8 @@ CanonFact 记录正文已经写成事实的内容。
 - 不把无 evidence 的推断写入 Canon Ledger。
 - 不让 reviewer loop 直接覆盖正文；只生成建议和任务草稿。
 - 不强制旧项目立即补齐 World Bible / Canon Ledger；缺目录只给 warning。
+- 不让 Genre Preset 覆盖用户正文或已有世界观文件；安装时只新增缺失模板和当前 preset 记录。
 
 ## 后续批次
 
-- B3：Genre Preset 包。
+- Worldbuilding 第一阶段已完成。后续新增类型 preset 或 reviewer 权重接入，可作为独立增强批次推进。

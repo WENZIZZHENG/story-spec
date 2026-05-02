@@ -21,6 +21,7 @@ scripts:
 - 创作计划：`stories/*/creative-plan.md`
 - 章节架构信息
 - 时间线和依赖关系
+- 当前 Genre Preset（如果存在 `spec/presets/current-preset.json`，读取 `.specify/presets/<id>/preset.yaml` 和 `.specify/presets/<id>/commands/tasks.md`）
 
 ### 2. 生成任务列表
 

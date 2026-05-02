@@ -1,0 +1,16 @@
+{
+  "presetId": "xuanhuan-cultivation",
+  "reviewerWeights": {
+    "worldbuilding": 1.4,
+    "continuity": 1.2,
+    "editor": 1,
+    "voice": 0.9,
+    "reader": 1.2
+  },
+  "focus": [
+    "境界体系是否自洽",
+    "力量增长是否有代价",
+    "设定揭示是否由场景承载",
+    "爽点与压迫是否有节奏"
+  ]
+}

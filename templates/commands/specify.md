@@ -85,6 +85,14 @@ else:
 - 确保规格符合宪法价值观
 - 在规格中引用相关原则
 
+### 2.5 读取当前 Genre Preset（如有）
+
+如果存在 `spec/presets/current-preset.json`：
+- 读取当前 preset id 和 manifest 路径。
+- 读取 `.specify/presets/<id>/preset.yaml`。
+- 如存在 `.specify/presets/<id>/commands/specify.md`，按其中字段补强规格。
+- preset 只增强规格字段，不覆盖用户已经写明的故事方向。
+
 ### 3. 创建故事规格文档
 
 **根据判断的层级生成相应规格**：
