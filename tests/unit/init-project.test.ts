@@ -102,6 +102,8 @@ describe('initProject', () => {
     await expect(exists(path.join(projectPath, 'spec', 'graph', 'entities.json'))).resolves.toBe(true);
     await expect(exists(path.join(projectPath, 'spec', 'voice', 'character-voices.yaml'))).resolves.toBe(true);
     await expect(exists(path.join(projectPath, 'spec', 'presets'))).resolves.toBe(true);
+    await expect(exists(path.join(projectPath, '.specify', 'context-packs'))).resolves.toBe(true);
+    await expect(exists(path.join(projectPath, 'build'))).resolves.toBe(true);
   });
 
   it('renders configured AGENTS.md writing profiles for Codex projects', async () => {

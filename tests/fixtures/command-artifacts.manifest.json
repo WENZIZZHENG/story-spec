@@ -59,6 +59,15 @@
       }
     },
     {
+      "path": "auggie/.augment/commands/context-pack.md",
+      "sha256": "10c2d89f3bf9eeceae23091049071fa5c0860f16c75775179e48d50afb89b1c2",
+      "commandSource": {
+        "command": "context-pack",
+        "kind": "legacy-template",
+        "sourcePath": "templates/commands/context-pack.md"
+      }
+    },
+    {
       "path": "auggie/.augment/commands/expert.md",
       "sha256": "423fd3fed88d46e8519c874c471c8be52c01644fe0851bebe0f87f2069adaa5a",
       "commandSource": {
@@ -529,6 +538,15 @@
         "command": "constitution",
         "kind": "legacy-template",
         "sourcePath": "templates/commands/constitution.md"
+      }
+    },
+    {
+      "path": "claude/.claude/commands/novel.context-pack.md",
+      "sha256": "e19326ee7c403fe3d689704c3fcfc5cdc6208078c986a019d76feb09bbeabaae",
+      "commandSource": {
+        "command": "context-pack",
+        "kind": "legacy-template",
+        "sourcePath": "templates/commands/context-pack.md"
       }
     },
     {
@@ -1005,6 +1023,15 @@
       }
     },
     {
+      "path": "codebuddy/.codebuddy/commands/context-pack.md",
+      "sha256": "10c2d89f3bf9eeceae23091049071fa5c0860f16c75775179e48d50afb89b1c2",
+      "commandSource": {
+        "command": "context-pack",
+        "kind": "legacy-template",
+        "sourcePath": "templates/commands/context-pack.md"
+      }
+    },
+    {
       "path": "codebuddy/.codebuddy/commands/expert.md",
       "sha256": "423fd3fed88d46e8519c874c471c8be52c01644fe0851bebe0f87f2069adaa5a",
       "commandSource": {
@@ -1475,6 +1502,15 @@
         "command": "constitution",
         "kind": "legacy-template",
         "sourcePath": "templates/commands/constitution.md"
+      }
+    },
+    {
+      "path": "codex/.codex/prompts/novel-context-pack.md",
+      "sha256": "10c2d89f3bf9eeceae23091049071fa5c0860f16c75775179e48d50afb89b1c2",
+      "commandSource": {
+        "command": "context-pack",
+        "kind": "legacy-template",
+        "sourcePath": "templates/commands/context-pack.md"
       }
     },
     {
@@ -1951,6 +1987,15 @@
       }
     },
     {
+      "path": "continue-check/.continue/prompts/context-pack.md",
+      "sha256": "8bb52ab3fb681fe277d949f2aee30dda5e30be69d82838d22379ea31fde06735",
+      "commandSource": {
+        "command": "context-pack",
+        "kind": "legacy-template",
+        "sourcePath": "templates/commands/context-pack.md"
+      }
+    },
+    {
       "path": "continue-check/.continue/prompts/expert.md",
       "sha256": "b195c658e066c60c046cc05e2fb0364f68af3817f3b3706b4c8a31e5ddd54f21",
       "commandSource": {
@@ -2421,6 +2466,15 @@
         "command": "constitution",
         "kind": "legacy-template",
         "sourcePath": "templates/commands/constitution.md"
+      }
+    },
+    {
+      "path": "copilot/.github/prompts/context-pack.prompt.md",
+      "sha256": "3820abb57a6b6471deeae790c71d0cbc82747b3ded0d2b70ca315b04be7b6a01",
+      "commandSource": {
+        "command": "context-pack",
+        "kind": "legacy-template",
+        "sourcePath": "templates/commands/context-pack.md"
       }
     },
     {
@@ -2897,6 +2951,15 @@
       }
     },
     {
+      "path": "cursor/.cursor/commands/context-pack.md",
+      "sha256": "10c2d89f3bf9eeceae23091049071fa5c0860f16c75775179e48d50afb89b1c2",
+      "commandSource": {
+        "command": "context-pack",
+        "kind": "legacy-template",
+        "sourcePath": "templates/commands/context-pack.md"
+      }
+    },
+    {
       "path": "cursor/.cursor/commands/expert.md",
       "sha256": "423fd3fed88d46e8519c874c471c8be52c01644fe0851bebe0f87f2069adaa5a",
       "commandSource": {
@@ -3367,6 +3430,15 @@
         "command": "constitution",
         "kind": "legacy-template",
         "sourcePath": "templates/commands/constitution.md"
+      }
+    },
+    {
+      "path": "gemini/.gemini/commands/novel/context-pack.toml",
+      "sha256": "a3e7978d63d5900aea7ddeb71f91f9e9974fbf44d627dd861cd58a2f0f0ce748",
+      "commandSource": {
+        "command": "context-pack",
+        "kind": "legacy-template",
+        "sourcePath": "templates/commands/context-pack.md"
       }
     },
     {
@@ -3843,6 +3915,15 @@
       }
     },
     {
+      "path": "generic/.specify/commands/context-pack.md",
+      "sha256": "a077cb47520470f0f180a5a837bc18b48ceedf3746d1f5d489ec763b6fcefb7c",
+      "commandSource": {
+        "command": "context-pack",
+        "kind": "legacy-template",
+        "sourcePath": "templates/commands/context-pack.md"
+      }
+    },
+    {
       "path": "generic/.specify/commands/expert.md",
       "sha256": "45640928137daf0900b7314e6253e77c4779de5732f54929600220e31a699f71",
       "commandSource": {
@@ -4313,6 +4394,15 @@
         "command": "constitution",
         "kind": "legacy-template",
         "sourcePath": "templates/commands/constitution.md"
+      }
+    },
+    {
+      "path": "kilocode/.kilocode/workflows/context-pack.md",
+      "sha256": "4e4ebb9a369614df6abd3867a60277a3af3ad0a2b0ed60bb4c7bcd082284b586",
+      "commandSource": {
+        "command": "context-pack",
+        "kind": "legacy-template",
+        "sourcePath": "templates/commands/context-pack.md"
       }
     },
     {
@@ -4789,6 +4879,15 @@
       }
     },
     {
+      "path": "opencode/.opencode/command/context-pack.md",
+      "sha256": "12c773e7d3083d98de480d5e51d168744726c4f724d56053e472e9b5d8150faf",
+      "commandSource": {
+        "command": "context-pack",
+        "kind": "legacy-template",
+        "sourcePath": "templates/commands/context-pack.md"
+      }
+    },
+    {
       "path": "opencode/.opencode/command/expert.md",
       "sha256": "209d506e1e6cb37a1bbf2b843403caa03f10a72602bbcc3a277bdf9f35b34d6b",
       "commandSource": {
@@ -5259,6 +5358,15 @@
         "command": "constitution",
         "kind": "legacy-template",
         "sourcePath": "templates/commands/constitution.md"
+      }
+    },
+    {
+      "path": "q/.amazonq/prompts/context-pack.md",
+      "sha256": "3820abb57a6b6471deeae790c71d0cbc82747b3ded0d2b70ca315b04be7b6a01",
+      "commandSource": {
+        "command": "context-pack",
+        "kind": "legacy-template",
+        "sourcePath": "templates/commands/context-pack.md"
       }
     },
     {
@@ -5735,6 +5843,15 @@
       }
     },
     {
+      "path": "qwen/.qwen/commands/context-pack.toml",
+      "sha256": "a3e7978d63d5900aea7ddeb71f91f9e9974fbf44d627dd861cd58a2f0f0ce748",
+      "commandSource": {
+        "command": "context-pack",
+        "kind": "legacy-template",
+        "sourcePath": "templates/commands/context-pack.md"
+      }
+    },
+    {
       "path": "qwen/.qwen/commands/expert.toml",
       "sha256": "4abb1c472d3eaaae7d091e64d91c558d80529c07be06433ebcd501441686a5a5",
       "commandSource": {
@@ -6205,6 +6322,15 @@
         "command": "constitution",
         "kind": "legacy-template",
         "sourcePath": "templates/commands/constitution.md"
+      }
+    },
+    {
+      "path": "roocode/.roo/commands/context-pack.md",
+      "sha256": "4e4ebb9a369614df6abd3867a60277a3af3ad0a2b0ed60bb4c7bcd082284b586",
+      "commandSource": {
+        "command": "context-pack",
+        "kind": "legacy-template",
+        "sourcePath": "templates/commands/context-pack.md"
       }
     },
     {
@@ -6926,6 +7052,15 @@
         "command": "constitution",
         "kind": "legacy-template",
         "sourcePath": "templates/commands/constitution.md"
+      }
+    },
+    {
+      "path": "windsurf/.windsurf/workflows/context-pack.md",
+      "sha256": "4e4ebb9a369614df6abd3867a60277a3af3ad0a2b0ed60bb4c7bcd082284b586",
+      "commandSource": {
+        "command": "context-pack",
+        "kind": "legacy-template",
+        "sourcePath": "templates/commands/context-pack.md"
       }
     },
     {

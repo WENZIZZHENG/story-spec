@@ -63,6 +63,9 @@ Novel Writer 的主流程来自规格驱动创作法：
 - `novel voice:check` / `novel voice:sample <characterId>`：检查 VoiceFingerprint 必填字段和样本路径。
 - `novel review`：运行 reviewer loop，按世界观、角色声音、连续性、编辑和读者维度输出结构化 findings 与任务草稿。
 - `novel preset:list` / `novel preset:add <id>` / `novel preset:doctor`：查看、安装和检查 Genre Preset，例如玄幻修炼的世界观必填项、节奏模板和 reviewer 权重。
+- `novel context:pack`：生成 `.specify/context-packs/` 写作上下文包，每个 mustRead 都带 reason。
+- `novel draft:new` / `novel draft:list` / `novel draft:promote`：管理章节草稿、修订和发布；默认不覆盖正式正文。
+- `novel narrative:test`：运行第一版叙事测试，检查 Scene Card 闭环或 fallback 到章节任务验收。
 - `novel handoff`：生成 `handoff.md`，列出下一任务、必须读取、允许修改、风险边界和阻塞项。
 - `novel tasks:board`：把 `tasks.md` 转成 `task-board.json`，并生成 GitHub issue 草稿字段。
 
@@ -183,6 +186,9 @@ novel review --panel worldbuilding,voice,editor
 novel preset:list
 novel preset:add xuanhuan-cultivation
 novel preset:doctor
+novel context:pack --task T001
+novel draft:new --chapter 001
+novel narrative:test --chapter 001
 ```
 
 ### 4. 在 agent 中开始写作
@@ -265,6 +271,12 @@ novel tasks:board 001-demo --json
 | `novel preset:list` | 列出内置 Genre Preset |
 | `novel preset:add <id>` | 安装 Genre Preset 到当前项目 |
 | `novel preset:doctor` | 检查当前项目启用的 Genre Preset |
+| `novel context:pack [story]` | 生成写作上下文包 |
+| `novel context:validate <pack>` | 校验上下文包路径、reason 和过期状态 |
+| `novel draft:new [story]` | 创建章节草稿，不覆盖正式正文 |
+| `novel draft:list [story]` | 列出章节草稿 |
+| `novel draft:promote <draftId>` | 预览或发布草稿到正式正文 |
+| `novel narrative:test [story]` | 运行叙事测试 |
 | `novel handoff [story]` | 生成断点续写上下文包 |
 | `novel tasks:board [story]` | 从 `tasks.md` 导出本地任务看板和 GitHub issue 草稿 |
 | `novel plugins` | 显示插件帮助 |
@@ -287,6 +299,7 @@ novel tasks:board 001-demo --json
 | `/write` | 写章节正文 | `stories/*/content/` |
 | `/analyze` | 框架或内容分析 | `stories/*/analysis-report.md` |
 | `/review` | 多审稿人 findings 与任务草稿 | `spec/reports/**` |
+| `/context-pack` | 生成写作上下文包 | `.specify/context-packs/**` |
 | `/checklist` | 质量检查清单 | 检查清单或扫描结果 |
 | `/track-init` | 初始化追踪系统 | `spec/tracking/*.json` |
 | `/track` | 综合追踪进度和一致性 | 终端/会话报告 |
@@ -302,6 +315,7 @@ novel tasks:board 001-demo --json
 my-novel/
 ├── .specify/
 │   ├── config.json
+│   ├── context-packs/
 │   ├── memory/
 │   ├── scripts/
 │   └── templates/
@@ -319,6 +333,7 @@ my-novel/
 │   ├── voice/
 │   ├── presets/
 │   └── tracking/
+├── build/
 └── stories/
     └── 001-story/
         ├── specification.md
@@ -326,6 +341,8 @@ my-novel/
         ├── tasks.md
         ├── task-board.json
         ├── handoff.md
+        ├── drafts/
+        ├── revisions/
         ├── scenes/
         └── content/
 ```

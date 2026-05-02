@@ -23,6 +23,9 @@
 - 新增 Genre Preset 包能力，内置 `xuanhuan-cultivation` 样板，包含 World Bible 必填字段、角色功能位、节奏模板、常见错误、reviewer 权重和 validate 规则。
 - 新增 `novel preset:list`、`novel preset:add <id>`、`novel preset:doctor`；`novel validate` 会按当前 preset 检查必填 WorldFact。
 - `/specify`、`/plan`、`/tasks` 会读取当前 Genre Preset，用于增强规格、计划和任务生成。
+- 新增 `novel context:pack` 与 `context:validate`，生成 `.specify/context-packs/` 写作上下文包，并校验 mustRead reason、路径和过期状态。
+- 新增 `novel draft:new`、`draft:list`、`draft:promote`，引入章节草稿与发布索引，默认不覆盖正式正文。
+- 新增 `novel narrative:test` 和 `/context-pack` 命令模板，第一版叙事测试支持 Scene Card 闭环检查，并在没有 Scene Card 时 fallback 到章节任务验收。
 
 ### 文档
 

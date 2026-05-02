@@ -125,6 +125,7 @@ const createBaseDirs = async (
 ): Promise<void> => {
   const baseDirs = [
     '.specify',
+    '.specify/context-packs',
     '.specify/memory',
     '.specify/scripts',
     '.specify/scripts/bash',
@@ -139,7 +140,8 @@ const createBaseDirs = async (
     'spec/canon',
     'spec/graph',
     'spec/voice',
-    'spec/voice/samples'
+    'spec/voice/samples',
+    'build'
   ];
 
   for (const dir of [...baseDirs, ...aiDirs]) {

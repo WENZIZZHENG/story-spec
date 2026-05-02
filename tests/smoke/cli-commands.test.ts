@@ -43,6 +43,9 @@ describe('CLI command modules smoke', () => {
     expect(help).toContain('preset:list [options]');
     expect(help).toContain('preset:add [options] <id>');
     expect(help).toContain('preset:doctor [options]');
+    expect(help).toContain('context:pack [options] [story]');
+    expect(help).toContain('draft:new [options] [story]');
+    expect(help).toContain('narrative:test [options] [story]');
     expect(info).toContain('三幕结构');
     expect(info).toContain('雪花十步');
   });
@@ -705,5 +708,89 @@ describe('CLI command modules smoke', () => {
     expect(validation.valid).toBe(true);
     expect(validation.summary.activePreset).toBe('xuanhuan-cultivation');
     expect(validation.issues).toEqual([]);
+  });
+
+  it('runs workbench context, draft, and narrative commands as JSON', async () => {
+    const cwd = await makeTempDir();
+    await execFileAsync('node', [
+      cliPath,
+      'init',
+      'smoke',
+      '--agent',
+      'generic',
+      '--method',
+      'three-act',
+      '--no-git'
+    ], { cwd });
+
+    const projectPath = path.join(cwd, 'smoke');
+    const storyPath = path.join(projectPath, 'stories', '001-demo');
+    await mkdir(storyPath, { recursive: true });
+    await writeFile(path.join(storyPath, 'specification.md'), '# spec');
+    await writeFile(path.join(storyPath, 'creative-plan.md'), '# plan');
+    await writeFile(path.join(storyPath, 'tasks.md'), `# tasks
+
+- [ ] [P0] [WRITE-READY] **T001** - 起草第一章
+  - **必须读取**：
+    - \`specification.md\`
+  - **允许修改**：
+    - \`content/chapter-001.md\`
+    - \`tasks.md\`
+  - **输出**：\`content/chapter-001.md\`
+  - **验收标准**：
+    - [ ] 主角主动做选择
+`);
+
+    const packResult = await execFileAsync('node', [
+      cliPath,
+      'context:pack',
+      '001-demo',
+      '--task',
+      'T001',
+      '--json'
+    ], { cwd: projectPath });
+    const pack = JSON.parse(packResult.stdout);
+
+    expect(pack.targetTask).toBe('T001');
+    expect(pack.mustRead.every((item: { reason: string }) => item.reason.length > 0)).toBe(true);
+    expect(pack.allowedWrites).toContain('stories/001-demo/content/chapter-001.md');
+
+    const draftResult = await execFileAsync('node', [
+      cliPath,
+      'draft:new',
+      '001-demo',
+      '--chapter',
+      '001',
+      '--json'
+    ], { cwd: projectPath });
+    const draft = JSON.parse(draftResult.stdout);
+
+    expect(draft.record.id).toBe('chapter-001.v1');
+    expect(draft.record.status).toBe('draft');
+
+    const promotePreviewResult = await execFileAsync('node', [
+      cliPath,
+      'draft:promote',
+      'chapter-001.v1',
+      '--story',
+      '001-demo',
+      '--json'
+    ], { cwd: projectPath });
+    const promotePreview = JSON.parse(promotePreviewResult.stdout);
+
+    expect(promotePreview.dryRun).toBe(true);
+
+    const narrativeResult = await execFileAsync('node', [
+      cliPath,
+      'narrative:test',
+      '001-demo',
+      '--chapter',
+      '001',
+      '--json'
+    ], { cwd: projectPath });
+    const narrative = JSON.parse(narrativeResult.stdout);
+
+    expect(narrative.summary.pass).toBeGreaterThan(0);
+    expect(narrative.results[0].suggestedAction).toEqual(expect.any(String));
   });
 });
