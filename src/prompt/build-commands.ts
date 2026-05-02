@@ -77,7 +77,7 @@ const listCommandTemplates = async (rootDir: string): Promise<string[]> => {
 
   const entries = await fs.readdir(commandsDir);
   return entries
-    .filter(entry => entry.endsWith('.md'))
+    .filter(entry => entry.endsWith('.md') && !entry.endsWith('.prompt.md'))
     .sort()
     .map(entry => path.join(commandsDir, entry));
 };

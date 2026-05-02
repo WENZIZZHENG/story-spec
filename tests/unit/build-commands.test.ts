@@ -37,6 +37,14 @@ Input: $ARGUMENTS
 Agent: __AGENT__
 Run {SCRIPT}
 `);
+  await writeFile(path.join(rootDir, 'templates', 'commands', 'plan.command.yaml'), `id: plan
+title: Plan story
+stage: planning
+description: Plan story
+requiredReads: []
+allowedWrites: []
+`);
+  await writeFile(path.join(rootDir, 'templates', 'commands', 'plan.prompt.md'), 'Prompt body without legacy frontmatter');
 
   await mkdir(path.join(rootDir, 'templates', 'knowledge'), { recursive: true });
   await writeFile(path.join(rootDir, 'templates', 'knowledge', 'world.md'), '# world');

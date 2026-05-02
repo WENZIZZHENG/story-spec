@@ -63,7 +63,8 @@ describe('prompt frontmatter parser', () => {
 
   it('parses all command template scripts from the repository templates', async () => {
     const commandsDir = path.join(repoRoot, 'templates', 'commands');
-    const files = (await readdir(commandsDir)).filter(file => file.endsWith('.md'));
+    const files = (await readdir(commandsDir))
+      .filter(file => file.endsWith('.md') && !file.endsWith('.prompt.md'));
 
     expect(files.length).toBeGreaterThan(0);
 

@@ -1,0 +1,26 @@
+id: write
+title: 章节写作
+stage: drafting
+description: 基于任务清单执行章节写作
+arguments:
+  hint: "[章节编号或任务ID]"
+requiredReads:
+  - .specify/agent-contract.md
+  - .specify/memory/constitution.md
+  - stories/*/specification.md
+  - stories/*/creative-plan.md
+  - stories/*/tasks.md
+  - spec/tracking/*.json
+  - spec/knowledge/*
+allowedWrites:
+  - stories/*/tasks.md
+  - stories/*/content/**
+  - spec/tracking/**
+scripts:
+  check:
+    capability: check-writing-state
+    sh: .specify/scripts/bash/check-writing-state.sh
+    ps: .specify/scripts/powershell/check-writing-state.ps1
+risk:
+  requiresTaskBoundary: true
+  highRiskContentPolicy: use-task-boundary

@@ -492,7 +492,7 @@ risk:
 目标：命令语义和平台格式解耦。
 
 - [x] A4-T001：定义 `CommandSpec` 类型。
-- [ ] A4-T002：选 2 个命令试点迁移：`write`、`analyze`。
+- [x] A4-T002：选 2 个命令试点迁移：`write`、`analyze`。
 - [ ] A4-T003：renderer 兼容旧 Markdown 模板和新 CommandSpec。
 - [ ] A4-T004：`build:commands` manifest 标记命令来源。
 - [ ] A4-T005：编写迁移指南：如何把旧 `templates/commands/*.md` 拆成 `.command.yaml` + `.prompt.md`。

@@ -1,0 +1,25 @@
+id: analyze
+title: 作品分析
+stage: analysis
+description: 根据当前创作阶段执行框架一致性或内容质量分析
+arguments:
+  hint: "[--type=framework|content] [--focus=opening|pacing|character|foreshadow|logic|style]"
+requiredReads:
+  - .specify/agent-contract.md
+  - .specify/memory/constitution.md
+  - stories/*/specification.md
+  - stories/*/creative-plan.md
+  - stories/*/tasks.md
+  - stories/*/content/**
+  - spec/tracking/*.json
+  - spec/knowledge/*
+allowedWrites:
+  - stories/*/analysis-report.md
+  - spec/reports/**
+scripts:
+  check:
+    capability: analyze-story
+    sh: .specify/scripts/bash/check-analyze-stage.sh --json
+    ps: .specify/scripts/powershell/check-analyze-stage.ps1 -Json
+risk:
+  requiresTaskBoundary: false
