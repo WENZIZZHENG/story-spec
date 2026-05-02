@@ -50,6 +50,10 @@ describe('CLI command modules smoke', () => {
     expect(help).toContain('branch:create [options] <title>');
     expect(help).toContain('promise:check [options]');
     expect(help).toContain('tension:chart [options]');
+    expect(help).toContain('research:add [options] <title>');
+    expect(help).toContain('style:lint [options] [story]');
+    expect(help).toContain('compile [options]');
+    expect(help).toContain('feedback:to-tasks [options]');
     expect(info).toContain('三幕结构');
     expect(info).toContain('雪花十步');
   });
@@ -936,5 +940,136 @@ describe('CLI command modules smoke', () => {
     const tension = JSON.parse(tensionResult.stdout);
 
     expect(tension.markdown).toContain('| Chapter | Scene | Tension | Emotion | Info | Payoff |');
+  });
+
+  it('runs research, style, compile, and feedback commands as JSON', async () => {
+    const cwd = await makeTempDir();
+    await execFileAsync('node', [
+      cliPath,
+      'init',
+      'smoke',
+      '--agent',
+      'generic',
+      '--method',
+      'three-act',
+      '--no-git'
+    ], { cwd });
+
+    const projectPath = path.join(cwd, 'smoke');
+    const storyPath = path.join(projectPath, 'stories', '001-demo');
+    await mkdir(path.join(storyPath, 'content'), { recursive: true });
+    await mkdir(path.join(storyPath, 'scenes'), { recursive: true });
+    await writeFile(path.join(storyPath, 'specification.md'), '# spec');
+    await writeFile(path.join(storyPath, 'creative-plan.md'), '# plan');
+    await writeFile(path.join(storyPath, 'tasks.md'), '# tasks');
+    await writeFile(path.join(storyPath, 'content', 'chapter-001.md'), '# 第一章\n\n他心中涌起一种无法言说的感觉。');
+    await writeFile(path.join(storyPath, 'scenes', 'scene-001.yaml'), [
+      'id: scene-001',
+      'chapter: chapter-001',
+      'order: 1',
+      'pov: 主角',
+      'location: 门外',
+      'time: 夜',
+      'sceneGoal: 进入',
+      'conflict: 有人阻拦',
+      'outcome: 推开门',
+      'draftPath: content/chapter-001.md'
+    ].join('\n'));
+    await writeFile(path.join(projectPath, 'feedback', 'beta-reader-001.md'), '开头目标不够清楚。');
+
+    const researchAddResult = await execFileAsync('node', [
+      cliPath,
+      'research:add',
+      '朝代制度笔记',
+      '--type',
+      'personal-note',
+      '--note',
+      '官制资料',
+      '--json'
+    ], { cwd: projectPath });
+    const researchAdd = JSON.parse(researchAddResult.stdout);
+    expect(researchAdd.source.id).toBe('source.朝代制度笔记');
+    expect(researchAdd.notePath).toContain(path.join('research', 'notes'));
+
+    const researchLinkResult = await execFileAsync('node', [
+      cliPath,
+      'research:link',
+      researchAdd.source.id,
+      'spec/world/rules.yaml',
+      '--target-id',
+      'world.government',
+      '--reason',
+      '支撑设定',
+      '--json'
+    ], { cwd: projectPath });
+    const researchLink = JSON.parse(researchLinkResult.stdout);
+    expect(researchLink.link.targetPath).toBe('spec/world/rules.yaml');
+
+    const researchCheckResult = await execFileAsync('node', [
+      cliPath,
+      'research:check',
+      '--json'
+    ], { cwd: projectPath });
+    const researchCheck = JSON.parse(researchCheckResult.stdout);
+    expect(researchCheck.valid).toBe(true);
+    expect(researchCheck.issues).toEqual([]);
+
+    const styleResult = await execFileAsync('node', [
+      cliPath,
+      'style:lint',
+      '001-demo',
+      '--chapter',
+      '001',
+      '--json'
+    ], { cwd: projectPath });
+    const style = JSON.parse(styleResult.stdout);
+    expect(style.findings).toEqual(expect.arrayContaining([
+      expect.objectContaining({
+        ruleId: 'style.ai-empty-abstract',
+        evidence: expect.stringContaining('一种无法言说的感觉')
+      })
+    ]));
+
+    const compileResult = await execFileAsync('node', [
+      cliPath,
+      'compile',
+      '--story',
+      '001-demo',
+      '--format',
+      'markdown',
+      '--with-frontmatter',
+      '--include',
+      'appendix',
+      '--json'
+    ], { cwd: projectPath });
+    const compiled = JSON.parse(compileResult.stdout);
+    expect(compiled.outputPath).toContain(path.join('build', 'manuscript.md'));
+    expect(compiled.frontmatterPath).toContain(path.join('build', 'manuscript.frontmatter.json'));
+    await expect(readFile(path.join(projectPath, 'build', 'manuscript.md'), 'utf-8')).resolves.toContain('# 第一章');
+
+    const feedbackImportResult = await execFileAsync('node', [
+      cliPath,
+      'feedback:import',
+      'feedback/beta-reader-001.md',
+      '--source',
+      'beta-reader-001',
+      '--target',
+      'stories/001-demo/content/chapter-001.md',
+      '--json'
+    ], { cwd: projectPath });
+    const feedbackImport = JSON.parse(feedbackImportResult.stdout);
+    expect(feedbackImport.imported).toHaveLength(1);
+
+    const feedbackTasksResult = await execFileAsync('node', [
+      cliPath,
+      'feedback:to-tasks',
+      '--json'
+    ], { cwd: projectPath });
+    const feedbackTasks = JSON.parse(feedbackTasksResult.stdout);
+    expect(feedbackTasks.taskDrafts).toEqual(expect.arrayContaining([
+      expect.objectContaining({
+        sourceFinding: `feedback:${feedbackImport.imported[0].id}`
+      })
+    ]));
   });
 });

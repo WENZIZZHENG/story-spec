@@ -1,0 +1,11 @@
+rules:
+  - id: style.ai-empty-abstract
+    description: 避免空泛抽象总结替代具体动作和感官细节。
+    pattern: 一种无法言说的感觉
+    severity: warning
+    suggestion: 改成角色可感知的动作、环境细节或具体心理反应。
+  - id: style.explain-known-motive
+    description: 避免对白直接解释双方已经知道的动机。
+    pattern: 你应该明白
+    severity: info
+    suggestion: 让角色通过回避、误导、动作或冲突透露动机。

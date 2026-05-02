@@ -1,6 +1,20 @@
 import type { Command } from '@commander-js/extra-typings';
 import chalk from 'chalk';
 import {
+  compileManuscript,
+  renderCompileResult
+} from '../../application/compile-manuscript.js';
+import {
+  feedbackToTasks,
+  importFeedback,
+  listFeedback,
+  renderFeedbackImport,
+  renderFeedbackList,
+  renderFeedbackTasks,
+  renderFeedbackTriage,
+  triageFeedback
+} from '../../application/manage-feedback.js';
+import {
   generateContextPack,
   renderContextPackSummary,
   renderContextPackValidation,
@@ -42,10 +56,31 @@ import {
   renderPromiseList,
   renderTensionChart
 } from '../../application/manage-promises.js';
+import {
+  addResearchSource,
+  checkResearch,
+  linkResearchCitation,
+  listResearchSources,
+  renderResearchAdd,
+  renderResearchCheck,
+  renderResearchLink,
+  renderResearchList
+} from '../../application/manage-research.js';
+import {
+  explainStyleRule,
+  lintStyle,
+  renderStyleExplain,
+  renderStyleLint
+} from '../../application/manage-style.js';
 import { nodeFileSystem } from '../../infrastructure/node-file-system.js';
 import { ensureProjectRoot } from '../../utils/project.js';
 import { StorySelectionError } from '../../application/workbench-utils.js';
-import type { ContextPackPurpose } from '../../domain/workbench.js';
+import type {
+  ContextPackPurpose,
+  ReaderFeedbackStatus,
+  ReaderFeedbackType,
+  ResearchSourceType
+} from '../../domain/workbench.js';
 
 const handleWorkbenchError = (error: any, fallbackMessage: string): never => {
   if (error.message === 'NOT_IN_PROJECT') {
@@ -78,7 +113,70 @@ const parseCsv = (value?: string): string[] =>
     .map(item => item.trim())
     .filter(Boolean) ?? [];
 
+const parseResearchSourceType = (value?: string): ResearchSourceType => {
+  const type = value ?? 'personal-note';
+  if (['book', 'article', 'web', 'video', 'interview', 'personal-note'].includes(type)) {
+    return type as ResearchSourceType;
+  }
+
+  throw new Error(`不支持的 research source type：${type}`);
+};
+
+const parseFeedbackType = (value?: string): ReaderFeedbackType => {
+  const type = value ?? 'confusion';
+  if (['confusion', 'boredom', 'excitement', 'continuity', 'style', 'character', 'world'].includes(type)) {
+    return type as ReaderFeedbackType;
+  }
+
+  throw new Error(`不支持的 feedback type：${type}`);
+};
+
+const parseFeedbackStatus = (value?: string): ReaderFeedbackStatus => {
+  const status = value ?? 'triaged';
+  if (['new', 'triaged', 'accepted', 'rejected', 'done'].includes(status)) {
+    return status as ReaderFeedbackStatus;
+  }
+
+  throw new Error(`不支持的 feedback status：${status}`);
+};
+
+const parseCompileFormat = (value?: string): 'markdown' => {
+  if (!value || value === 'markdown') {
+    return 'markdown';
+  }
+
+  throw new Error(`当前仅支持 markdown compile format：${value}`);
+};
+
 export const registerWorkbenchCommand = (program: Command): void => {
+  program
+    .command('compile')
+    .option('--story <story>', '故事目录名；默认使用最近更新的 stories/*')
+    .option('--format <format>', '输出格式，当前支持 markdown', 'markdown')
+    .option('--with-frontmatter', '同时输出 build/manuscript.frontmatter.json')
+    .option('--include <parts>', '可选附录；传入 appendix 时在 manuscript 末尾写入统计附录')
+    .option('--json', '输出 JSON，便于自动化读取')
+    .description('编译 Markdown manuscript；只写 build/，不修改正文')
+    .action(async (commandOptions) => {
+      try {
+        const projectRoot = await ensureProjectRoot();
+        const result = await compileManuscript({
+          projectRoot,
+          fileSystem: nodeFileSystem,
+          story: commandOptions.story,
+          format: parseCompileFormat(commandOptions.format),
+          withFrontmatter: commandOptions.withFrontmatter,
+          includeAppendix: commandOptions.include === 'appendix'
+        });
+
+        console.log(commandOptions.json
+          ? JSON.stringify(result, null, 2)
+          : renderCompileResult(result));
+      } catch (error: any) {
+        handleWorkbenchError(error, 'Compile 执行失败');
+      }
+    });
+
   program
     .command('context:pack')
     .argument('[story]', '故事目录名或路径，默认使用最近更新的 stories/*')
@@ -503,6 +601,256 @@ export const registerWorkbenchCommand = (program: Command): void => {
         }
       } catch (error: any) {
         handleWorkbenchError(error, 'Tension Chart 生成失败');
+      }
+    });
+
+  program
+    .command('research:add')
+    .argument('<title>', '资料标题')
+    .option('--type <type>', 'book、article、web、video、interview、personal-note', 'personal-note')
+    .option('--path <path>', '本地资料路径；personal-note 未提供时会写入 research/notes/')
+    .option('--url <url>', '外部来源 URL，仅记录，不联网抓取')
+    .option('--note <text>', '资料摘要或灵感笔记')
+    .option('--accessed-at <date>', '访问日期，格式建议 YYYY-MM-DD')
+    .option('--json', '输出 JSON，便于自动化读取')
+    .description('添加本地 Research Source；默认离线管理，不抓取网络内容')
+    .action(async (title, commandOptions) => {
+      try {
+        const projectRoot = await ensureProjectRoot();
+        const result = await addResearchSource({
+          projectRoot,
+          fileSystem: nodeFileSystem,
+          title,
+          type: parseResearchSourceType(commandOptions.type),
+          path: commandOptions.path,
+          url: commandOptions.url,
+          note: commandOptions.note,
+          accessedAt: commandOptions.accessedAt
+        });
+
+        console.log(commandOptions.json
+          ? JSON.stringify(result, null, 2)
+          : renderResearchAdd(result));
+      } catch (error: any) {
+        handleWorkbenchError(error, 'Research Source 添加失败');
+      }
+    });
+
+  program
+    .command('research:list')
+    .option('--json', '输出 JSON，便于自动化读取')
+    .description('列出 Research Vault 中的资料来源')
+    .action(async (commandOptions) => {
+      try {
+        const projectRoot = await ensureProjectRoot();
+        const result = await listResearchSources({
+          projectRoot,
+          fileSystem: nodeFileSystem
+        });
+
+        console.log(commandOptions.json
+          ? JSON.stringify(result, null, 2)
+          : renderResearchList(result));
+      } catch (error: any) {
+        handleWorkbenchError(error, 'Research Source 列表读取失败');
+      }
+    });
+
+  program
+    .command('research:link')
+    .argument('<sourceId>', 'Research Source ID')
+    .argument('<targetPath>', '目标文件路径，例如 spec/world/rules.yaml')
+    .option('--target-id <id>', '目标对象 ID，例如 world.government')
+    .option('--reason <text>', '引用原因', '支撑设定或写作决策')
+    .option('--json', '输出 JSON，便于自动化读取')
+    .description('把资料来源关联到 world/canon/spec/story 目标')
+    .action(async (sourceId, targetPath, commandOptions) => {
+      try {
+        const projectRoot = await ensureProjectRoot();
+        const result = await linkResearchCitation({
+          projectRoot,
+          fileSystem: nodeFileSystem,
+          sourceId,
+          targetPath,
+          targetId: commandOptions.targetId,
+          reason: commandOptions.reason
+        });
+
+        console.log(commandOptions.json
+          ? JSON.stringify(result, null, 2)
+          : renderResearchLink(result));
+      } catch (error: any) {
+        handleWorkbenchError(error, 'Research Citation 关联失败');
+      }
+    });
+
+  program
+    .command('research:check')
+    .option('--json', '输出 JSON，便于自动化读取')
+    .description('检查 Research Source 与 citation 的本地引用关系')
+    .action(async (commandOptions) => {
+      try {
+        const projectRoot = await ensureProjectRoot();
+        const result = await checkResearch({
+          projectRoot,
+          fileSystem: nodeFileSystem
+        });
+
+        console.log(commandOptions.json
+          ? JSON.stringify(result, null, 2)
+          : renderResearchCheck(result));
+
+        if (!result.valid) {
+          process.exitCode = 1;
+        }
+      } catch (error: any) {
+        handleWorkbenchError(error, 'Research Check 执行失败');
+      }
+    });
+
+  program
+    .command('style:lint')
+    .argument('[story]', '故事目录名；不提供时扫描所有 stories/*/content/*.md')
+    .option('--chapter <id>', '限定章节，例如 003 或 chapter-003')
+    .option('--json', '输出 JSON，便于自动化读取')
+    .description('按 spec/style 规则检查正文文风，不自动修改正文')
+    .action(async (story, commandOptions) => {
+      try {
+        const projectRoot = await ensureProjectRoot();
+        const result = await lintStyle({
+          projectRoot,
+          fileSystem: nodeFileSystem,
+          story,
+          chapter: commandOptions.chapter
+        });
+
+        console.log(commandOptions.json
+          ? JSON.stringify(result, null, 2)
+          : renderStyleLint(result));
+
+        if (result.summary.error > 0) {
+          process.exitCode = 1;
+        }
+      } catch (error: any) {
+        handleWorkbenchError(error, 'Style Lint 执行失败');
+      }
+    });
+
+  program
+    .command('style:explain')
+    .argument('<ruleId>', 'Style rule ID')
+    .option('--json', '输出 JSON，便于自动化读取')
+    .description('解释 style:lint 规则的 pattern、severity 与 suggestion')
+    .action(async (ruleId, commandOptions) => {
+      try {
+        const projectRoot = await ensureProjectRoot();
+        const result = await explainStyleRule({
+          projectRoot,
+          fileSystem: nodeFileSystem,
+          ruleId
+        });
+
+        console.log(commandOptions.json
+          ? JSON.stringify(result, null, 2)
+          : renderStyleExplain(result));
+      } catch (error: any) {
+        handleWorkbenchError(error, 'Style Rule 读取失败');
+      }
+    });
+
+  program
+    .command('feedback:import')
+    .argument('<path>', '反馈 Markdown 文件路径')
+    .option('--source <source>', '反馈来源，例如 beta-reader-001')
+    .option('--target <path>', '反馈指向的正文或设定路径')
+    .option('--type <type>', 'confusion、boredom、excitement、continuity、style、character、world', 'confusion')
+    .option('--suggested-action <text>', '默认处理建议')
+    .option('--json', '输出 JSON，便于自动化读取')
+    .description('导入读者反馈到 feedback/feedback.json，不修改正文')
+    .action(async (filePath, commandOptions) => {
+      try {
+        const projectRoot = await ensureProjectRoot();
+        const result = await importFeedback({
+          projectRoot,
+          fileSystem: nodeFileSystem,
+          filePath,
+          source: commandOptions.source,
+          targetPath: commandOptions.target,
+          type: parseFeedbackType(commandOptions.type),
+          suggestedAction: commandOptions.suggestedAction
+        });
+
+        console.log(commandOptions.json
+          ? JSON.stringify(result, null, 2)
+          : renderFeedbackImport(result));
+      } catch (error: any) {
+        handleWorkbenchError(error, 'Feedback 导入失败');
+      }
+    });
+
+  program
+    .command('feedback:list')
+    .option('--status <status>', 'new、triaged、accepted、rejected、done')
+    .option('--json', '输出 JSON，便于自动化读取')
+    .description('列出读者反馈')
+    .action(async (commandOptions) => {
+      try {
+        const projectRoot = await ensureProjectRoot();
+        const result = await listFeedback({
+          projectRoot,
+          fileSystem: nodeFileSystem,
+          status: commandOptions.status ? parseFeedbackStatus(commandOptions.status) : undefined
+        });
+
+        console.log(commandOptions.json
+          ? JSON.stringify(result, null, 2)
+          : renderFeedbackList(result));
+      } catch (error: any) {
+        handleWorkbenchError(error, 'Feedback 列表读取失败');
+      }
+    });
+
+  program
+    .command('feedback:triage')
+    .argument('<id>', 'Feedback ID')
+    .requiredOption('--status <status>', 'triaged、accepted、rejected、done')
+    .option('--json', '输出 JSON，便于自动化读取')
+    .description('更新反馈状态，不修改正文')
+    .action(async (id, commandOptions) => {
+      try {
+        const projectRoot = await ensureProjectRoot();
+        const result = await triageFeedback({
+          projectRoot,
+          fileSystem: nodeFileSystem,
+          id,
+          status: parseFeedbackStatus(commandOptions.status)
+        });
+
+        console.log(commandOptions.json
+          ? JSON.stringify(result, null, 2)
+          : renderFeedbackTriage(result));
+      } catch (error: any) {
+        handleWorkbenchError(error, 'Feedback triage 失败');
+      }
+    });
+
+  program
+    .command('feedback:to-tasks')
+    .option('--json', '输出 JSON，便于自动化读取')
+    .description('把 feedback 转为待确认任务草稿；不写入 tasks.md')
+    .action(async (commandOptions) => {
+      try {
+        const projectRoot = await ensureProjectRoot();
+        const result = await feedbackToTasks({
+          projectRoot,
+          fileSystem: nodeFileSystem
+        });
+
+        console.log(commandOptions.json
+          ? JSON.stringify(result, null, 2)
+          : renderFeedbackTasks(result));
+      } catch (error: any) {
+        handleWorkbenchError(error, 'Feedback 任务草稿生成失败');
       }
     });
 };

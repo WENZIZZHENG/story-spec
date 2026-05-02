@@ -308,6 +308,10 @@
       "sha256": "cb3f31ae0eba66bc155c1151d0e0704a34deaa9ea1f783f9af93609aed3bcb32"
     },
     {
+      "path": "auggie/.specify/templates/feedback/feedback.json",
+      "sha256": "4c6e8e443a53c2172f54ac75e79463c2480878b5c59f0b2b066c330b44664186"
+    },
+    {
       "path": "auggie/.specify/templates/gemini-settings.json",
       "sha256": "4e699dab1d8e8f0d685c06b15525f253a9ad6797122db4a096973875a9115c74"
     },
@@ -352,12 +356,36 @@
       "sha256": "6087930e2f516bc721ec47d11b37eecaf30674eaad946abd3406cf25e654a299"
     },
     {
+      "path": "auggie/.specify/templates/research/citations.json",
+      "sha256": "5711427b460e01ffad23a81ae1261162866eaedec8edf9d3f1ec0656dbfa2f78"
+    },
+    {
+      "path": "auggie/.specify/templates/research/sources/sources.json",
+      "sha256": "faa00ade02ae1764b4b0a2bc380fa44094255aca3c6424736a4a10e5d8386507"
+    },
+    {
       "path": "auggie/.specify/templates/scenes/scene-001.yaml",
       "sha256": "b48effcec4e1f9eb35d7771cf7b80e1b0ffcd740d4f606c7ab9eb2b423fce863"
     },
     {
       "path": "auggie/.specify/templates/story-template.md",
       "sha256": "78326b42ea7a65c9f2b22161a849cea86359bba3620d728f7abdbb5ef64d7003"
+    },
+    {
+      "path": "auggie/.specify/templates/style/banned-patterns.yaml",
+      "sha256": "c38634e502639bef1dd40e97df0f3334bb867dd7cae3b621d8ea9572ebaccb72"
+    },
+    {
+      "path": "auggie/.specify/templates/style/diction.yaml",
+      "sha256": "e0dfa70eb69d47fe9cb2be8a4fcd53e74cf7fe26fcbb1f06912b57a9c028e4e0"
+    },
+    {
+      "path": "auggie/.specify/templates/style/rhythm-rules.yaml",
+      "sha256": "e0dfa70eb69d47fe9cb2be8a4fcd53e74cf7fe26fcbb1f06912b57a9c028e4e0"
+    },
+    {
+      "path": "auggie/.specify/templates/style/style-guide.md",
+      "sha256": "ae9a0b791cb63e8a96f68b7ff9168abbfe6d57993bb8a7b7f4a7218d0b7c28a9"
     },
     {
       "path": "auggie/.specify/templates/tracking/character-state.json",
@@ -798,6 +826,10 @@
       "sha256": "cb3f31ae0eba66bc155c1151d0e0704a34deaa9ea1f783f9af93609aed3bcb32"
     },
     {
+      "path": "claude/.specify/templates/feedback/feedback.json",
+      "sha256": "4c6e8e443a53c2172f54ac75e79463c2480878b5c59f0b2b066c330b44664186"
+    },
+    {
       "path": "claude/.specify/templates/gemini-settings.json",
       "sha256": "4e699dab1d8e8f0d685c06b15525f253a9ad6797122db4a096973875a9115c74"
     },
@@ -842,12 +874,36 @@
       "sha256": "6087930e2f516bc721ec47d11b37eecaf30674eaad946abd3406cf25e654a299"
     },
     {
+      "path": "claude/.specify/templates/research/citations.json",
+      "sha256": "5711427b460e01ffad23a81ae1261162866eaedec8edf9d3f1ec0656dbfa2f78"
+    },
+    {
+      "path": "claude/.specify/templates/research/sources/sources.json",
+      "sha256": "faa00ade02ae1764b4b0a2bc380fa44094255aca3c6424736a4a10e5d8386507"
+    },
+    {
       "path": "claude/.specify/templates/scenes/scene-001.yaml",
       "sha256": "b48effcec4e1f9eb35d7771cf7b80e1b0ffcd740d4f606c7ab9eb2b423fce863"
     },
     {
       "path": "claude/.specify/templates/story-template.md",
       "sha256": "78326b42ea7a65c9f2b22161a849cea86359bba3620d728f7abdbb5ef64d7003"
+    },
+    {
+      "path": "claude/.specify/templates/style/banned-patterns.yaml",
+      "sha256": "c38634e502639bef1dd40e97df0f3334bb867dd7cae3b621d8ea9572ebaccb72"
+    },
+    {
+      "path": "claude/.specify/templates/style/diction.yaml",
+      "sha256": "e0dfa70eb69d47fe9cb2be8a4fcd53e74cf7fe26fcbb1f06912b57a9c028e4e0"
+    },
+    {
+      "path": "claude/.specify/templates/style/rhythm-rules.yaml",
+      "sha256": "e0dfa70eb69d47fe9cb2be8a4fcd53e74cf7fe26fcbb1f06912b57a9c028e4e0"
+    },
+    {
+      "path": "claude/.specify/templates/style/style-guide.md",
+      "sha256": "ae9a0b791cb63e8a96f68b7ff9168abbfe6d57993bb8a7b7f4a7218d0b7c28a9"
     },
     {
       "path": "claude/.specify/templates/tracking/character-state.json",
@@ -1288,6 +1344,10 @@
       "sha256": "cb3f31ae0eba66bc155c1151d0e0704a34deaa9ea1f783f9af93609aed3bcb32"
     },
     {
+      "path": "codebuddy/.specify/templates/feedback/feedback.json",
+      "sha256": "4c6e8e443a53c2172f54ac75e79463c2480878b5c59f0b2b066c330b44664186"
+    },
+    {
       "path": "codebuddy/.specify/templates/gemini-settings.json",
       "sha256": "4e699dab1d8e8f0d685c06b15525f253a9ad6797122db4a096973875a9115c74"
     },
@@ -1332,12 +1392,36 @@
       "sha256": "6087930e2f516bc721ec47d11b37eecaf30674eaad946abd3406cf25e654a299"
     },
     {
+      "path": "codebuddy/.specify/templates/research/citations.json",
+      "sha256": "5711427b460e01ffad23a81ae1261162866eaedec8edf9d3f1ec0656dbfa2f78"
+    },
+    {
+      "path": "codebuddy/.specify/templates/research/sources/sources.json",
+      "sha256": "faa00ade02ae1764b4b0a2bc380fa44094255aca3c6424736a4a10e5d8386507"
+    },
+    {
       "path": "codebuddy/.specify/templates/scenes/scene-001.yaml",
       "sha256": "b48effcec4e1f9eb35d7771cf7b80e1b0ffcd740d4f606c7ab9eb2b423fce863"
     },
     {
       "path": "codebuddy/.specify/templates/story-template.md",
       "sha256": "78326b42ea7a65c9f2b22161a849cea86359bba3620d728f7abdbb5ef64d7003"
+    },
+    {
+      "path": "codebuddy/.specify/templates/style/banned-patterns.yaml",
+      "sha256": "c38634e502639bef1dd40e97df0f3334bb867dd7cae3b621d8ea9572ebaccb72"
+    },
+    {
+      "path": "codebuddy/.specify/templates/style/diction.yaml",
+      "sha256": "e0dfa70eb69d47fe9cb2be8a4fcd53e74cf7fe26fcbb1f06912b57a9c028e4e0"
+    },
+    {
+      "path": "codebuddy/.specify/templates/style/rhythm-rules.yaml",
+      "sha256": "e0dfa70eb69d47fe9cb2be8a4fcd53e74cf7fe26fcbb1f06912b57a9c028e4e0"
+    },
+    {
+      "path": "codebuddy/.specify/templates/style/style-guide.md",
+      "sha256": "ae9a0b791cb63e8a96f68b7ff9168abbfe6d57993bb8a7b7f4a7218d0b7c28a9"
     },
     {
       "path": "codebuddy/.specify/templates/tracking/character-state.json",
@@ -1778,6 +1862,10 @@
       "sha256": "cb3f31ae0eba66bc155c1151d0e0704a34deaa9ea1f783f9af93609aed3bcb32"
     },
     {
+      "path": "codex/.specify/templates/feedback/feedback.json",
+      "sha256": "4c6e8e443a53c2172f54ac75e79463c2480878b5c59f0b2b066c330b44664186"
+    },
+    {
       "path": "codex/.specify/templates/gemini-settings.json",
       "sha256": "4e699dab1d8e8f0d685c06b15525f253a9ad6797122db4a096973875a9115c74"
     },
@@ -1822,12 +1910,36 @@
       "sha256": "6087930e2f516bc721ec47d11b37eecaf30674eaad946abd3406cf25e654a299"
     },
     {
+      "path": "codex/.specify/templates/research/citations.json",
+      "sha256": "5711427b460e01ffad23a81ae1261162866eaedec8edf9d3f1ec0656dbfa2f78"
+    },
+    {
+      "path": "codex/.specify/templates/research/sources/sources.json",
+      "sha256": "faa00ade02ae1764b4b0a2bc380fa44094255aca3c6424736a4a10e5d8386507"
+    },
+    {
       "path": "codex/.specify/templates/scenes/scene-001.yaml",
       "sha256": "b48effcec4e1f9eb35d7771cf7b80e1b0ffcd740d4f606c7ab9eb2b423fce863"
     },
     {
       "path": "codex/.specify/templates/story-template.md",
       "sha256": "78326b42ea7a65c9f2b22161a849cea86359bba3620d728f7abdbb5ef64d7003"
+    },
+    {
+      "path": "codex/.specify/templates/style/banned-patterns.yaml",
+      "sha256": "c38634e502639bef1dd40e97df0f3334bb867dd7cae3b621d8ea9572ebaccb72"
+    },
+    {
+      "path": "codex/.specify/templates/style/diction.yaml",
+      "sha256": "e0dfa70eb69d47fe9cb2be8a4fcd53e74cf7fe26fcbb1f06912b57a9c028e4e0"
+    },
+    {
+      "path": "codex/.specify/templates/style/rhythm-rules.yaml",
+      "sha256": "e0dfa70eb69d47fe9cb2be8a4fcd53e74cf7fe26fcbb1f06912b57a9c028e4e0"
+    },
+    {
+      "path": "codex/.specify/templates/style/style-guide.md",
+      "sha256": "ae9a0b791cb63e8a96f68b7ff9168abbfe6d57993bb8a7b7f4a7218d0b7c28a9"
     },
     {
       "path": "codex/.specify/templates/tracking/character-state.json",
@@ -2268,6 +2380,10 @@
       "sha256": "cb3f31ae0eba66bc155c1151d0e0704a34deaa9ea1f783f9af93609aed3bcb32"
     },
     {
+      "path": "continue-check/.specify/templates/feedback/feedback.json",
+      "sha256": "4c6e8e443a53c2172f54ac75e79463c2480878b5c59f0b2b066c330b44664186"
+    },
+    {
       "path": "continue-check/.specify/templates/gemini-settings.json",
       "sha256": "4e699dab1d8e8f0d685c06b15525f253a9ad6797122db4a096973875a9115c74"
     },
@@ -2312,12 +2428,36 @@
       "sha256": "6087930e2f516bc721ec47d11b37eecaf30674eaad946abd3406cf25e654a299"
     },
     {
+      "path": "continue-check/.specify/templates/research/citations.json",
+      "sha256": "5711427b460e01ffad23a81ae1261162866eaedec8edf9d3f1ec0656dbfa2f78"
+    },
+    {
+      "path": "continue-check/.specify/templates/research/sources/sources.json",
+      "sha256": "faa00ade02ae1764b4b0a2bc380fa44094255aca3c6424736a4a10e5d8386507"
+    },
+    {
       "path": "continue-check/.specify/templates/scenes/scene-001.yaml",
       "sha256": "b48effcec4e1f9eb35d7771cf7b80e1b0ffcd740d4f606c7ab9eb2b423fce863"
     },
     {
       "path": "continue-check/.specify/templates/story-template.md",
       "sha256": "78326b42ea7a65c9f2b22161a849cea86359bba3620d728f7abdbb5ef64d7003"
+    },
+    {
+      "path": "continue-check/.specify/templates/style/banned-patterns.yaml",
+      "sha256": "c38634e502639bef1dd40e97df0f3334bb867dd7cae3b621d8ea9572ebaccb72"
+    },
+    {
+      "path": "continue-check/.specify/templates/style/diction.yaml",
+      "sha256": "e0dfa70eb69d47fe9cb2be8a4fcd53e74cf7fe26fcbb1f06912b57a9c028e4e0"
+    },
+    {
+      "path": "continue-check/.specify/templates/style/rhythm-rules.yaml",
+      "sha256": "e0dfa70eb69d47fe9cb2be8a4fcd53e74cf7fe26fcbb1f06912b57a9c028e4e0"
+    },
+    {
+      "path": "continue-check/.specify/templates/style/style-guide.md",
+      "sha256": "ae9a0b791cb63e8a96f68b7ff9168abbfe6d57993bb8a7b7f4a7218d0b7c28a9"
     },
     {
       "path": "continue-check/.specify/templates/tracking/character-state.json",
@@ -2758,6 +2898,10 @@
       "sha256": "cb3f31ae0eba66bc155c1151d0e0704a34deaa9ea1f783f9af93609aed3bcb32"
     },
     {
+      "path": "copilot/.specify/templates/feedback/feedback.json",
+      "sha256": "4c6e8e443a53c2172f54ac75e79463c2480878b5c59f0b2b066c330b44664186"
+    },
+    {
       "path": "copilot/.specify/templates/gemini-settings.json",
       "sha256": "4e699dab1d8e8f0d685c06b15525f253a9ad6797122db4a096973875a9115c74"
     },
@@ -2802,12 +2946,36 @@
       "sha256": "6087930e2f516bc721ec47d11b37eecaf30674eaad946abd3406cf25e654a299"
     },
     {
+      "path": "copilot/.specify/templates/research/citations.json",
+      "sha256": "5711427b460e01ffad23a81ae1261162866eaedec8edf9d3f1ec0656dbfa2f78"
+    },
+    {
+      "path": "copilot/.specify/templates/research/sources/sources.json",
+      "sha256": "faa00ade02ae1764b4b0a2bc380fa44094255aca3c6424736a4a10e5d8386507"
+    },
+    {
       "path": "copilot/.specify/templates/scenes/scene-001.yaml",
       "sha256": "b48effcec4e1f9eb35d7771cf7b80e1b0ffcd740d4f606c7ab9eb2b423fce863"
     },
     {
       "path": "copilot/.specify/templates/story-template.md",
       "sha256": "78326b42ea7a65c9f2b22161a849cea86359bba3620d728f7abdbb5ef64d7003"
+    },
+    {
+      "path": "copilot/.specify/templates/style/banned-patterns.yaml",
+      "sha256": "c38634e502639bef1dd40e97df0f3334bb867dd7cae3b621d8ea9572ebaccb72"
+    },
+    {
+      "path": "copilot/.specify/templates/style/diction.yaml",
+      "sha256": "e0dfa70eb69d47fe9cb2be8a4fcd53e74cf7fe26fcbb1f06912b57a9c028e4e0"
+    },
+    {
+      "path": "copilot/.specify/templates/style/rhythm-rules.yaml",
+      "sha256": "e0dfa70eb69d47fe9cb2be8a4fcd53e74cf7fe26fcbb1f06912b57a9c028e4e0"
+    },
+    {
+      "path": "copilot/.specify/templates/style/style-guide.md",
+      "sha256": "ae9a0b791cb63e8a96f68b7ff9168abbfe6d57993bb8a7b7f4a7218d0b7c28a9"
     },
     {
       "path": "copilot/.specify/templates/tracking/character-state.json",
@@ -3248,6 +3416,10 @@
       "sha256": "cb3f31ae0eba66bc155c1151d0e0704a34deaa9ea1f783f9af93609aed3bcb32"
     },
     {
+      "path": "cursor/.specify/templates/feedback/feedback.json",
+      "sha256": "4c6e8e443a53c2172f54ac75e79463c2480878b5c59f0b2b066c330b44664186"
+    },
+    {
       "path": "cursor/.specify/templates/gemini-settings.json",
       "sha256": "4e699dab1d8e8f0d685c06b15525f253a9ad6797122db4a096973875a9115c74"
     },
@@ -3292,12 +3464,36 @@
       "sha256": "6087930e2f516bc721ec47d11b37eecaf30674eaad946abd3406cf25e654a299"
     },
     {
+      "path": "cursor/.specify/templates/research/citations.json",
+      "sha256": "5711427b460e01ffad23a81ae1261162866eaedec8edf9d3f1ec0656dbfa2f78"
+    },
+    {
+      "path": "cursor/.specify/templates/research/sources/sources.json",
+      "sha256": "faa00ade02ae1764b4b0a2bc380fa44094255aca3c6424736a4a10e5d8386507"
+    },
+    {
       "path": "cursor/.specify/templates/scenes/scene-001.yaml",
       "sha256": "b48effcec4e1f9eb35d7771cf7b80e1b0ffcd740d4f606c7ab9eb2b423fce863"
     },
     {
       "path": "cursor/.specify/templates/story-template.md",
       "sha256": "78326b42ea7a65c9f2b22161a849cea86359bba3620d728f7abdbb5ef64d7003"
+    },
+    {
+      "path": "cursor/.specify/templates/style/banned-patterns.yaml",
+      "sha256": "c38634e502639bef1dd40e97df0f3334bb867dd7cae3b621d8ea9572ebaccb72"
+    },
+    {
+      "path": "cursor/.specify/templates/style/diction.yaml",
+      "sha256": "e0dfa70eb69d47fe9cb2be8a4fcd53e74cf7fe26fcbb1f06912b57a9c028e4e0"
+    },
+    {
+      "path": "cursor/.specify/templates/style/rhythm-rules.yaml",
+      "sha256": "e0dfa70eb69d47fe9cb2be8a4fcd53e74cf7fe26fcbb1f06912b57a9c028e4e0"
+    },
+    {
+      "path": "cursor/.specify/templates/style/style-guide.md",
+      "sha256": "ae9a0b791cb63e8a96f68b7ff9168abbfe6d57993bb8a7b7f4a7218d0b7c28a9"
     },
     {
       "path": "cursor/.specify/templates/tracking/character-state.json",
@@ -3738,6 +3934,10 @@
       "sha256": "cb3f31ae0eba66bc155c1151d0e0704a34deaa9ea1f783f9af93609aed3bcb32"
     },
     {
+      "path": "gemini/.specify/templates/feedback/feedback.json",
+      "sha256": "4c6e8e443a53c2172f54ac75e79463c2480878b5c59f0b2b066c330b44664186"
+    },
+    {
       "path": "gemini/.specify/templates/gemini-settings.json",
       "sha256": "4e699dab1d8e8f0d685c06b15525f253a9ad6797122db4a096973875a9115c74"
     },
@@ -3782,12 +3982,36 @@
       "sha256": "6087930e2f516bc721ec47d11b37eecaf30674eaad946abd3406cf25e654a299"
     },
     {
+      "path": "gemini/.specify/templates/research/citations.json",
+      "sha256": "5711427b460e01ffad23a81ae1261162866eaedec8edf9d3f1ec0656dbfa2f78"
+    },
+    {
+      "path": "gemini/.specify/templates/research/sources/sources.json",
+      "sha256": "faa00ade02ae1764b4b0a2bc380fa44094255aca3c6424736a4a10e5d8386507"
+    },
+    {
       "path": "gemini/.specify/templates/scenes/scene-001.yaml",
       "sha256": "b48effcec4e1f9eb35d7771cf7b80e1b0ffcd740d4f606c7ab9eb2b423fce863"
     },
     {
       "path": "gemini/.specify/templates/story-template.md",
       "sha256": "78326b42ea7a65c9f2b22161a849cea86359bba3620d728f7abdbb5ef64d7003"
+    },
+    {
+      "path": "gemini/.specify/templates/style/banned-patterns.yaml",
+      "sha256": "c38634e502639bef1dd40e97df0f3334bb867dd7cae3b621d8ea9572ebaccb72"
+    },
+    {
+      "path": "gemini/.specify/templates/style/diction.yaml",
+      "sha256": "e0dfa70eb69d47fe9cb2be8a4fcd53e74cf7fe26fcbb1f06912b57a9c028e4e0"
+    },
+    {
+      "path": "gemini/.specify/templates/style/rhythm-rules.yaml",
+      "sha256": "e0dfa70eb69d47fe9cb2be8a4fcd53e74cf7fe26fcbb1f06912b57a9c028e4e0"
+    },
+    {
+      "path": "gemini/.specify/templates/style/style-guide.md",
+      "sha256": "ae9a0b791cb63e8a96f68b7ff9168abbfe6d57993bb8a7b7f4a7218d0b7c28a9"
     },
     {
       "path": "gemini/.specify/templates/tracking/character-state.json",
@@ -4228,6 +4452,10 @@
       "sha256": "cb3f31ae0eba66bc155c1151d0e0704a34deaa9ea1f783f9af93609aed3bcb32"
     },
     {
+      "path": "generic/.specify/templates/feedback/feedback.json",
+      "sha256": "4c6e8e443a53c2172f54ac75e79463c2480878b5c59f0b2b066c330b44664186"
+    },
+    {
       "path": "generic/.specify/templates/gemini-settings.json",
       "sha256": "4e699dab1d8e8f0d685c06b15525f253a9ad6797122db4a096973875a9115c74"
     },
@@ -4272,12 +4500,36 @@
       "sha256": "6087930e2f516bc721ec47d11b37eecaf30674eaad946abd3406cf25e654a299"
     },
     {
+      "path": "generic/.specify/templates/research/citations.json",
+      "sha256": "5711427b460e01ffad23a81ae1261162866eaedec8edf9d3f1ec0656dbfa2f78"
+    },
+    {
+      "path": "generic/.specify/templates/research/sources/sources.json",
+      "sha256": "faa00ade02ae1764b4b0a2bc380fa44094255aca3c6424736a4a10e5d8386507"
+    },
+    {
       "path": "generic/.specify/templates/scenes/scene-001.yaml",
       "sha256": "b48effcec4e1f9eb35d7771cf7b80e1b0ffcd740d4f606c7ab9eb2b423fce863"
     },
     {
       "path": "generic/.specify/templates/story-template.md",
       "sha256": "78326b42ea7a65c9f2b22161a849cea86359bba3620d728f7abdbb5ef64d7003"
+    },
+    {
+      "path": "generic/.specify/templates/style/banned-patterns.yaml",
+      "sha256": "c38634e502639bef1dd40e97df0f3334bb867dd7cae3b621d8ea9572ebaccb72"
+    },
+    {
+      "path": "generic/.specify/templates/style/diction.yaml",
+      "sha256": "e0dfa70eb69d47fe9cb2be8a4fcd53e74cf7fe26fcbb1f06912b57a9c028e4e0"
+    },
+    {
+      "path": "generic/.specify/templates/style/rhythm-rules.yaml",
+      "sha256": "e0dfa70eb69d47fe9cb2be8a4fcd53e74cf7fe26fcbb1f06912b57a9c028e4e0"
+    },
+    {
+      "path": "generic/.specify/templates/style/style-guide.md",
+      "sha256": "ae9a0b791cb63e8a96f68b7ff9168abbfe6d57993bb8a7b7f4a7218d0b7c28a9"
     },
     {
       "path": "generic/.specify/templates/tracking/character-state.json",
@@ -4718,6 +4970,10 @@
       "sha256": "cb3f31ae0eba66bc155c1151d0e0704a34deaa9ea1f783f9af93609aed3bcb32"
     },
     {
+      "path": "kilocode/.specify/templates/feedback/feedback.json",
+      "sha256": "4c6e8e443a53c2172f54ac75e79463c2480878b5c59f0b2b066c330b44664186"
+    },
+    {
       "path": "kilocode/.specify/templates/gemini-settings.json",
       "sha256": "4e699dab1d8e8f0d685c06b15525f253a9ad6797122db4a096973875a9115c74"
     },
@@ -4762,12 +5018,36 @@
       "sha256": "6087930e2f516bc721ec47d11b37eecaf30674eaad946abd3406cf25e654a299"
     },
     {
+      "path": "kilocode/.specify/templates/research/citations.json",
+      "sha256": "5711427b460e01ffad23a81ae1261162866eaedec8edf9d3f1ec0656dbfa2f78"
+    },
+    {
+      "path": "kilocode/.specify/templates/research/sources/sources.json",
+      "sha256": "faa00ade02ae1764b4b0a2bc380fa44094255aca3c6424736a4a10e5d8386507"
+    },
+    {
       "path": "kilocode/.specify/templates/scenes/scene-001.yaml",
       "sha256": "b48effcec4e1f9eb35d7771cf7b80e1b0ffcd740d4f606c7ab9eb2b423fce863"
     },
     {
       "path": "kilocode/.specify/templates/story-template.md",
       "sha256": "78326b42ea7a65c9f2b22161a849cea86359bba3620d728f7abdbb5ef64d7003"
+    },
+    {
+      "path": "kilocode/.specify/templates/style/banned-patterns.yaml",
+      "sha256": "c38634e502639bef1dd40e97df0f3334bb867dd7cae3b621d8ea9572ebaccb72"
+    },
+    {
+      "path": "kilocode/.specify/templates/style/diction.yaml",
+      "sha256": "e0dfa70eb69d47fe9cb2be8a4fcd53e74cf7fe26fcbb1f06912b57a9c028e4e0"
+    },
+    {
+      "path": "kilocode/.specify/templates/style/rhythm-rules.yaml",
+      "sha256": "e0dfa70eb69d47fe9cb2be8a4fcd53e74cf7fe26fcbb1f06912b57a9c028e4e0"
+    },
+    {
+      "path": "kilocode/.specify/templates/style/style-guide.md",
+      "sha256": "ae9a0b791cb63e8a96f68b7ff9168abbfe6d57993bb8a7b7f4a7218d0b7c28a9"
     },
     {
       "path": "kilocode/.specify/templates/tracking/character-state.json",
@@ -5208,6 +5488,10 @@
       "sha256": "cb3f31ae0eba66bc155c1151d0e0704a34deaa9ea1f783f9af93609aed3bcb32"
     },
     {
+      "path": "opencode/.specify/templates/feedback/feedback.json",
+      "sha256": "4c6e8e443a53c2172f54ac75e79463c2480878b5c59f0b2b066c330b44664186"
+    },
+    {
       "path": "opencode/.specify/templates/gemini-settings.json",
       "sha256": "4e699dab1d8e8f0d685c06b15525f253a9ad6797122db4a096973875a9115c74"
     },
@@ -5252,12 +5536,36 @@
       "sha256": "6087930e2f516bc721ec47d11b37eecaf30674eaad946abd3406cf25e654a299"
     },
     {
+      "path": "opencode/.specify/templates/research/citations.json",
+      "sha256": "5711427b460e01ffad23a81ae1261162866eaedec8edf9d3f1ec0656dbfa2f78"
+    },
+    {
+      "path": "opencode/.specify/templates/research/sources/sources.json",
+      "sha256": "faa00ade02ae1764b4b0a2bc380fa44094255aca3c6424736a4a10e5d8386507"
+    },
+    {
       "path": "opencode/.specify/templates/scenes/scene-001.yaml",
       "sha256": "b48effcec4e1f9eb35d7771cf7b80e1b0ffcd740d4f606c7ab9eb2b423fce863"
     },
     {
       "path": "opencode/.specify/templates/story-template.md",
       "sha256": "78326b42ea7a65c9f2b22161a849cea86359bba3620d728f7abdbb5ef64d7003"
+    },
+    {
+      "path": "opencode/.specify/templates/style/banned-patterns.yaml",
+      "sha256": "c38634e502639bef1dd40e97df0f3334bb867dd7cae3b621d8ea9572ebaccb72"
+    },
+    {
+      "path": "opencode/.specify/templates/style/diction.yaml",
+      "sha256": "e0dfa70eb69d47fe9cb2be8a4fcd53e74cf7fe26fcbb1f06912b57a9c028e4e0"
+    },
+    {
+      "path": "opencode/.specify/templates/style/rhythm-rules.yaml",
+      "sha256": "e0dfa70eb69d47fe9cb2be8a4fcd53e74cf7fe26fcbb1f06912b57a9c028e4e0"
+    },
+    {
+      "path": "opencode/.specify/templates/style/style-guide.md",
+      "sha256": "ae9a0b791cb63e8a96f68b7ff9168abbfe6d57993bb8a7b7f4a7218d0b7c28a9"
     },
     {
       "path": "opencode/.specify/templates/tracking/character-state.json",
@@ -5698,6 +6006,10 @@
       "sha256": "cb3f31ae0eba66bc155c1151d0e0704a34deaa9ea1f783f9af93609aed3bcb32"
     },
     {
+      "path": "q/.specify/templates/feedback/feedback.json",
+      "sha256": "4c6e8e443a53c2172f54ac75e79463c2480878b5c59f0b2b066c330b44664186"
+    },
+    {
       "path": "q/.specify/templates/gemini-settings.json",
       "sha256": "4e699dab1d8e8f0d685c06b15525f253a9ad6797122db4a096973875a9115c74"
     },
@@ -5742,12 +6054,36 @@
       "sha256": "6087930e2f516bc721ec47d11b37eecaf30674eaad946abd3406cf25e654a299"
     },
     {
+      "path": "q/.specify/templates/research/citations.json",
+      "sha256": "5711427b460e01ffad23a81ae1261162866eaedec8edf9d3f1ec0656dbfa2f78"
+    },
+    {
+      "path": "q/.specify/templates/research/sources/sources.json",
+      "sha256": "faa00ade02ae1764b4b0a2bc380fa44094255aca3c6424736a4a10e5d8386507"
+    },
+    {
       "path": "q/.specify/templates/scenes/scene-001.yaml",
       "sha256": "b48effcec4e1f9eb35d7771cf7b80e1b0ffcd740d4f606c7ab9eb2b423fce863"
     },
     {
       "path": "q/.specify/templates/story-template.md",
       "sha256": "78326b42ea7a65c9f2b22161a849cea86359bba3620d728f7abdbb5ef64d7003"
+    },
+    {
+      "path": "q/.specify/templates/style/banned-patterns.yaml",
+      "sha256": "c38634e502639bef1dd40e97df0f3334bb867dd7cae3b621d8ea9572ebaccb72"
+    },
+    {
+      "path": "q/.specify/templates/style/diction.yaml",
+      "sha256": "e0dfa70eb69d47fe9cb2be8a4fcd53e74cf7fe26fcbb1f06912b57a9c028e4e0"
+    },
+    {
+      "path": "q/.specify/templates/style/rhythm-rules.yaml",
+      "sha256": "e0dfa70eb69d47fe9cb2be8a4fcd53e74cf7fe26fcbb1f06912b57a9c028e4e0"
+    },
+    {
+      "path": "q/.specify/templates/style/style-guide.md",
+      "sha256": "ae9a0b791cb63e8a96f68b7ff9168abbfe6d57993bb8a7b7f4a7218d0b7c28a9"
     },
     {
       "path": "q/.specify/templates/tracking/character-state.json",
@@ -6188,6 +6524,10 @@
       "sha256": "cb3f31ae0eba66bc155c1151d0e0704a34deaa9ea1f783f9af93609aed3bcb32"
     },
     {
+      "path": "qwen/.specify/templates/feedback/feedback.json",
+      "sha256": "4c6e8e443a53c2172f54ac75e79463c2480878b5c59f0b2b066c330b44664186"
+    },
+    {
       "path": "qwen/.specify/templates/gemini-settings.json",
       "sha256": "4e699dab1d8e8f0d685c06b15525f253a9ad6797122db4a096973875a9115c74"
     },
@@ -6232,12 +6572,36 @@
       "sha256": "6087930e2f516bc721ec47d11b37eecaf30674eaad946abd3406cf25e654a299"
     },
     {
+      "path": "qwen/.specify/templates/research/citations.json",
+      "sha256": "5711427b460e01ffad23a81ae1261162866eaedec8edf9d3f1ec0656dbfa2f78"
+    },
+    {
+      "path": "qwen/.specify/templates/research/sources/sources.json",
+      "sha256": "faa00ade02ae1764b4b0a2bc380fa44094255aca3c6424736a4a10e5d8386507"
+    },
+    {
       "path": "qwen/.specify/templates/scenes/scene-001.yaml",
       "sha256": "b48effcec4e1f9eb35d7771cf7b80e1b0ffcd740d4f606c7ab9eb2b423fce863"
     },
     {
       "path": "qwen/.specify/templates/story-template.md",
       "sha256": "78326b42ea7a65c9f2b22161a849cea86359bba3620d728f7abdbb5ef64d7003"
+    },
+    {
+      "path": "qwen/.specify/templates/style/banned-patterns.yaml",
+      "sha256": "c38634e502639bef1dd40e97df0f3334bb867dd7cae3b621d8ea9572ebaccb72"
+    },
+    {
+      "path": "qwen/.specify/templates/style/diction.yaml",
+      "sha256": "e0dfa70eb69d47fe9cb2be8a4fcd53e74cf7fe26fcbb1f06912b57a9c028e4e0"
+    },
+    {
+      "path": "qwen/.specify/templates/style/rhythm-rules.yaml",
+      "sha256": "e0dfa70eb69d47fe9cb2be8a4fcd53e74cf7fe26fcbb1f06912b57a9c028e4e0"
+    },
+    {
+      "path": "qwen/.specify/templates/style/style-guide.md",
+      "sha256": "ae9a0b791cb63e8a96f68b7ff9168abbfe6d57993bb8a7b7f4a7218d0b7c28a9"
     },
     {
       "path": "qwen/.specify/templates/tracking/character-state.json",
@@ -6678,6 +7042,10 @@
       "sha256": "cb3f31ae0eba66bc155c1151d0e0704a34deaa9ea1f783f9af93609aed3bcb32"
     },
     {
+      "path": "roocode/.specify/templates/feedback/feedback.json",
+      "sha256": "4c6e8e443a53c2172f54ac75e79463c2480878b5c59f0b2b066c330b44664186"
+    },
+    {
       "path": "roocode/.specify/templates/gemini-settings.json",
       "sha256": "4e699dab1d8e8f0d685c06b15525f253a9ad6797122db4a096973875a9115c74"
     },
@@ -6722,12 +7090,36 @@
       "sha256": "6087930e2f516bc721ec47d11b37eecaf30674eaad946abd3406cf25e654a299"
     },
     {
+      "path": "roocode/.specify/templates/research/citations.json",
+      "sha256": "5711427b460e01ffad23a81ae1261162866eaedec8edf9d3f1ec0656dbfa2f78"
+    },
+    {
+      "path": "roocode/.specify/templates/research/sources/sources.json",
+      "sha256": "faa00ade02ae1764b4b0a2bc380fa44094255aca3c6424736a4a10e5d8386507"
+    },
+    {
       "path": "roocode/.specify/templates/scenes/scene-001.yaml",
       "sha256": "b48effcec4e1f9eb35d7771cf7b80e1b0ffcd740d4f606c7ab9eb2b423fce863"
     },
     {
       "path": "roocode/.specify/templates/story-template.md",
       "sha256": "78326b42ea7a65c9f2b22161a849cea86359bba3620d728f7abdbb5ef64d7003"
+    },
+    {
+      "path": "roocode/.specify/templates/style/banned-patterns.yaml",
+      "sha256": "c38634e502639bef1dd40e97df0f3334bb867dd7cae3b621d8ea9572ebaccb72"
+    },
+    {
+      "path": "roocode/.specify/templates/style/diction.yaml",
+      "sha256": "e0dfa70eb69d47fe9cb2be8a4fcd53e74cf7fe26fcbb1f06912b57a9c028e4e0"
+    },
+    {
+      "path": "roocode/.specify/templates/style/rhythm-rules.yaml",
+      "sha256": "e0dfa70eb69d47fe9cb2be8a4fcd53e74cf7fe26fcbb1f06912b57a9c028e4e0"
+    },
+    {
+      "path": "roocode/.specify/templates/style/style-guide.md",
+      "sha256": "ae9a0b791cb63e8a96f68b7ff9168abbfe6d57993bb8a7b7f4a7218d0b7c28a9"
     },
     {
       "path": "roocode/.specify/templates/tracking/character-state.json",
@@ -7022,6 +7414,10 @@
       "sha256": "cb3f31ae0eba66bc155c1151d0e0704a34deaa9ea1f783f9af93609aed3bcb32"
     },
     {
+      "path": "windsurf/.specify/templates/feedback/feedback.json",
+      "sha256": "4c6e8e443a53c2172f54ac75e79463c2480878b5c59f0b2b066c330b44664186"
+    },
+    {
       "path": "windsurf/.specify/templates/gemini-settings.json",
       "sha256": "4e699dab1d8e8f0d685c06b15525f253a9ad6797122db4a096973875a9115c74"
     },
@@ -7066,12 +7462,36 @@
       "sha256": "6087930e2f516bc721ec47d11b37eecaf30674eaad946abd3406cf25e654a299"
     },
     {
+      "path": "windsurf/.specify/templates/research/citations.json",
+      "sha256": "5711427b460e01ffad23a81ae1261162866eaedec8edf9d3f1ec0656dbfa2f78"
+    },
+    {
+      "path": "windsurf/.specify/templates/research/sources/sources.json",
+      "sha256": "faa00ade02ae1764b4b0a2bc380fa44094255aca3c6424736a4a10e5d8386507"
+    },
+    {
       "path": "windsurf/.specify/templates/scenes/scene-001.yaml",
       "sha256": "b48effcec4e1f9eb35d7771cf7b80e1b0ffcd740d4f606c7ab9eb2b423fce863"
     },
     {
       "path": "windsurf/.specify/templates/story-template.md",
       "sha256": "78326b42ea7a65c9f2b22161a849cea86359bba3620d728f7abdbb5ef64d7003"
+    },
+    {
+      "path": "windsurf/.specify/templates/style/banned-patterns.yaml",
+      "sha256": "c38634e502639bef1dd40e97df0f3334bb867dd7cae3b621d8ea9572ebaccb72"
+    },
+    {
+      "path": "windsurf/.specify/templates/style/diction.yaml",
+      "sha256": "e0dfa70eb69d47fe9cb2be8a4fcd53e74cf7fe26fcbb1f06912b57a9c028e4e0"
+    },
+    {
+      "path": "windsurf/.specify/templates/style/rhythm-rules.yaml",
+      "sha256": "e0dfa70eb69d47fe9cb2be8a4fcd53e74cf7fe26fcbb1f06912b57a9c028e4e0"
+    },
+    {
+      "path": "windsurf/.specify/templates/style/style-guide.md",
+      "sha256": "ae9a0b791cb63e8a96f68b7ff9168abbfe6d57993bb8a7b7f4a7218d0b7c28a9"
     },
     {
       "path": "windsurf/.specify/templates/tracking/character-state.json",

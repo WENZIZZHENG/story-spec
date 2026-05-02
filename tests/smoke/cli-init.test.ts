@@ -68,6 +68,10 @@ describe('CLI init smoke', () => {
     expect(await exists(path.join(projectPath, 'spec', 'presets'))).toBe(true);
     expect(await exists(path.join(projectPath, 'spec', 'tracking', 'promises.json'))).toBe(true);
     expect(await exists(path.join(projectPath, 'spec', 'tracking', 'tension-curve.json'))).toBe(true);
+    expect(await exists(path.join(projectPath, 'spec', 'style', 'banned-patterns.yaml'))).toBe(true);
+    expect(await exists(path.join(projectPath, 'research', 'citations.json'))).toBe(true);
+    expect(await exists(path.join(projectPath, 'research', 'sources', 'sources.json'))).toBe(true);
+    expect(await exists(path.join(projectPath, 'feedback', 'feedback.json'))).toBe(true);
     expect(await exists(path.join(projectPath, '.specify', 'context-packs'))).toBe(true);
     expect(await exists(path.join(projectPath, 'build'))).toBe(true);
 
@@ -162,6 +166,9 @@ describe('CLI init smoke', () => {
     expect(await exists(path.join(projectPath, 'spec', 'graph', 'entities.json'))).toBe(true);
     expect(await exists(path.join(projectPath, 'spec', 'voice', 'character-voices.yaml'))).toBe(true);
     expect(await exists(path.join(projectPath, 'spec', 'presets'))).toBe(true);
+    expect(await exists(path.join(projectPath, 'spec', 'style', 'banned-patterns.yaml'))).toBe(true);
+    expect(await exists(path.join(projectPath, 'research', 'citations.json'))).toBe(true);
+    expect(await exists(path.join(projectPath, 'feedback', 'feedback.json'))).toBe(true);
     expect(await exists(path.join(projectPath, '.specify', 'context-packs'))).toBe(true);
     expect(await exists(path.join(projectPath, 'build'))).toBe(true);
     expect(await exists(path.join(projectPath, 'AGENTS.md'))).toBe(true);

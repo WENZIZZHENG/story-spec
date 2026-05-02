@@ -31,6 +31,11 @@
 - 新增 `promise:list`、`promise:check`、`tension:chart`，检查长期未兑现、payoff 缺 evidence、重复建立不推进的 promise，并输出任务草稿。
 - 新项目初始化新增 `spec/tracking/promises.json` 与 `spec/tracking/tension-curve.json`。
 - `/plan`、`/tasks`、`/write` 和 reviewer loop 已接入 promise/tension、dialogue 与 branch 上下文。
+- 新增 `research:add`、`research:list`、`research:link`、`research:check`，离线管理 Research Vault、自由 Markdown 笔记和 citation 校验。
+- 新增 `style:lint`、`style:explain`，按 `spec/style` 可配置规则检查正文文风，finding 包含 ruleId、path、evidence 和 suggestion。
+- 新增 `compile --format markdown`，只写 `build/`，输出 manuscript、frontmatter、字数统计和缺失章节 warning。
+- 新增 `feedback:import`、`feedback:list`、`feedback:triage`、`feedback:to-tasks`，导入读者反馈并生成待确认任务草稿，不自动修改正文。
+- 新项目初始化新增 `spec/style/`、`research/` 和 `feedback/` 基础模板。
 
 ### 文档
 

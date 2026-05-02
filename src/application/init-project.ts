@@ -141,6 +141,11 @@ const createBaseDirs = async (
     'spec/graph',
     'spec/voice',
     'spec/voice/samples',
+    'spec/style',
+    'research',
+    'research/notes',
+    'research/sources',
+    'feedback',
     'build'
   ];
 
@@ -276,6 +281,21 @@ const copyTemplatesAndKnowledge = async (
   const voiceTemplatesDir = path.join(input.packageRoot, 'templates', 'voice');
   if (await fs.pathExists(voiceTemplatesDir)) {
     await fs.copy(voiceTemplatesDir, path.join(projectPath, 'spec', 'voice'));
+  }
+
+  const styleTemplatesDir = path.join(input.packageRoot, 'templates', 'style');
+  if (await fs.pathExists(styleTemplatesDir)) {
+    await fs.copy(styleTemplatesDir, path.join(projectPath, 'spec', 'style'));
+  }
+
+  const researchTemplatesDir = path.join(input.packageRoot, 'templates', 'research');
+  if (await fs.pathExists(researchTemplatesDir)) {
+    await fs.copy(researchTemplatesDir, path.join(projectPath, 'research'));
+  }
+
+  const feedbackTemplatesDir = path.join(input.packageRoot, 'templates', 'feedback');
+  if (await fs.pathExists(feedbackTemplatesDir)) {
+    await fs.copy(feedbackTemplatesDir, path.join(projectPath, 'feedback'));
   }
 };
 

@@ -24,6 +24,27 @@ export type PromiseIssueCode =
   | 'INVALID_TENSION_POINT'
   | 'TENSION_PAYOFF_GAP'
   | 'TENSION_LONG_FLATLINE';
+export type ResearchSourceType = 'book' | 'article' | 'web' | 'video' | 'interview' | 'personal-note';
+export type ResearchIssueCode =
+  | 'INVALID_RESEARCH_DOCUMENT'
+  | 'INVALID_RESEARCH_SOURCE'
+  | 'MISSING_RESEARCH_SOURCE_FIELD'
+  | 'INVALID_CITATION_DOCUMENT'
+  | 'INVALID_CITATION_LINK'
+  | 'MISSING_CITATION_SOURCE'
+  | 'MISSING_CITATION_TARGET';
+export type StyleRuleSeverity = 'error' | 'warning' | 'info' | 'off';
+export type StyleLintSeverity = Exclude<StyleRuleSeverity, 'off'>;
+export type StyleIssueCode =
+  | 'INVALID_STYLE_RULE_DOCUMENT'
+  | 'INVALID_STYLE_RULE'
+  | 'STYLE_RULE_MATCH';
+export type CompileWarningCode =
+  | 'UNSUPPORTED_COMPILE_FORMAT'
+  | 'MISSING_CHAPTER_FILE'
+  | 'NO_CHAPTERS_FOUND';
+export type ReaderFeedbackType = 'confusion' | 'boredom' | 'excitement' | 'continuity' | 'style' | 'character' | 'world';
+export type ReaderFeedbackStatus = 'new' | 'triaged' | 'accepted' | 'rejected' | 'done';
 
 export interface ContextPackItem {
   path: string;
@@ -144,4 +165,74 @@ export interface PromiseIssue {
   evidence?: string;
   message: string;
   suggestedAction: string;
+}
+
+export interface ResearchSource {
+  id: string;
+  title: string;
+  type: ResearchSourceType;
+  path?: string;
+  url?: string;
+  accessedAt?: string;
+  notes: string[];
+}
+
+export interface CitationLink {
+  sourceId: string;
+  targetPath: string;
+  targetId?: string;
+  reason: string;
+}
+
+export interface ResearchIssue {
+  severity: 'error' | 'warning' | 'info';
+  code: ResearchIssueCode;
+  path: string;
+  message: string;
+  suggestedAction: string;
+}
+
+export interface StyleRule {
+  id: string;
+  description: string;
+  pattern: string;
+  severity: StyleRuleSeverity;
+  suggestion: string;
+  regex?: boolean;
+  enabled?: boolean;
+}
+
+export interface StyleLintFinding {
+  severity: StyleLintSeverity;
+  code: StyleIssueCode;
+  ruleId: string;
+  path: string;
+  evidence: string;
+  message: string;
+  suggestion: string;
+}
+
+export interface CompileChapter {
+  path: string;
+  title: string;
+  order: number;
+  wordCount: number;
+}
+
+export interface CompileWarning {
+  severity: 'warning' | 'info';
+  code: CompileWarningCode;
+  path: string;
+  message: string;
+}
+
+export interface ReaderFeedback {
+  id: string;
+  source: string;
+  targetPath: string;
+  type: ReaderFeedbackType;
+  comment: string;
+  suggestedAction?: string;
+  status: ReaderFeedbackStatus;
+  createdAt: string;
 }
