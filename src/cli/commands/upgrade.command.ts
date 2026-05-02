@@ -230,6 +230,12 @@ export function registerUpgradeCommand(program: Command, context: { packageRoot:
           process.exit(1);
         }
 
+        if (options.ai) {
+          console.log(chalk.gray(`提示: --ai 已进入兼容期，后续请使用 --agent ${options.ai}`));
+        } else if (options.all) {
+          console.log(chalk.gray('提示: --all 已进入兼容期，后续请使用 --all-agents'));
+        }
+
         const updateContent = await getUpdateContentFromOptions(options);
         const plan = await createUpgradeProjectPlan({
           projectPath,

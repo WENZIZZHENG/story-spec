@@ -133,6 +133,12 @@ export function registerInitCommand(program: Command, context: InitCommandContex
         process.exit(1);
       }
 
+      const compatibilityHint = options.all
+        ? '提示: --all 已进入兼容期，后续请使用 --all-agents'
+        : options.ai
+          ? `提示: --ai 已进入兼容期，后续请使用 --agent ${options.ai}`
+          : undefined;
+
       const spinner = ora('正在初始化小说项目...').start();
 
       try {
@@ -235,6 +241,9 @@ export function registerInitCommand(program: Command, context: InitCommandContex
         console.log(chalk.dim(usesMarkdownCommands
           ? '提示: 让 agent 读取对应 .specify/commands/*.md 文件并按步骤执行'
           : '提示: 斜杠命令在 AI 助手内部使用，不是在终端中'));
+        if (compatibilityHint) {
+          console.log(chalk.gray(compatibilityHint));
+        }
 
       } catch (error) {
         spinner.fail(chalk.red('项目初始化失败'));

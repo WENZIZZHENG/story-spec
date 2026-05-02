@@ -205,6 +205,34 @@ describe('CLI command modules smoke', () => {
     expect(stdout).toContain('更新命令文件');
   });
 
+  it('shows a compatibility hint for legacy upgrade --ai', async () => {
+    const cwd = await makeTempDir();
+    await execFileAsync('node', [
+      cliPath,
+      'init',
+      'smoke',
+      '--ai',
+      'codex',
+      '--method',
+      'three-act',
+      '--no-git'
+    ], { cwd });
+
+    const projectPath = path.join(cwd, 'smoke');
+    const { stdout } = await execFileAsync('node', [
+      cliPath,
+      'upgrade',
+      '--ai',
+      'codex',
+      '--commands',
+      '--dry-run',
+      '--yes'
+    ], { cwd: projectPath });
+
+    expect(stdout).toContain('--ai 已进入兼容期');
+    expect(stdout).toContain('--agent codex');
+  });
+
   it('adds generic commands to an existing project through upgrade --agent', async () => {
     const cwd = await makeTempDir();
     await execFileAsync('node', [

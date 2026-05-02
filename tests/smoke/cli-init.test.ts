@@ -52,6 +52,7 @@ describe('CLI init smoke', () => {
     golden.codex.requiredStdout.forEach(text => {
       expect(stdout).toContain(text);
     });
+    expect(stdout).toContain('--ai 已进入兼容期');
     await Promise.all(golden.codex.requiredFiles.map(async file => {
       expect(await exists(path.join(projectPath, file))).toBe(true);
     }));
@@ -113,7 +114,7 @@ describe('CLI init smoke', () => {
 
   it('initializes every configured AI platform with command directories', async () => {
     const cwd = await makeTempDir();
-    await execFileAsync('node', [
+    const { stdout } = await execFileAsync('node', [
       cliPath,
       'init',
       'smoke',
@@ -123,6 +124,7 @@ describe('CLI init smoke', () => {
       '--no-git'
     ], { cwd });
 
+    expect(stdout).toContain('--all 已进入兼容期');
     const projectPath = path.join(cwd, 'smoke');
     await Promise.all(golden.allPlatforms.expectedDirs.map(async dir => {
       expect(await exists(path.join(projectPath, dir))).toBe(true);
