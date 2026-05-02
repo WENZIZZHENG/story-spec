@@ -30,6 +30,7 @@ describe('CLI command modules smoke', () => {
     expect(help).toContain('init [options] [name]');
     expect(help).toContain('agent:list [options]');
     expect(help).toContain('agent:add [options] <id>');
+    expect(help).toContain('agent:doctor [options]');
     expect(help).toContain('contract:print [options]');
     expect(help).toContain('contract:sync [options]');
     expect(help).toContain('plugins:add [options] <name>');
@@ -296,6 +297,37 @@ describe('CLI command modules smoke', () => {
     expect(stdout).toContain('Generic Markdown Agent');
     await expect(readFile(path.join(projectPath, '.specify', 'commands', 'write.md'), 'utf-8'))
       .resolves.toContain('## 执行步骤');
+  });
+
+  it('checks installed agent integrations through agent:doctor', async () => {
+    const cwd = await makeTempDir();
+    await execFileAsync('node', [
+      cliPath,
+      'init',
+      'smoke',
+      '--agent',
+      'generic',
+      '--method',
+      'three-act',
+      '--no-git'
+    ], { cwd });
+
+    const projectPath = path.join(cwd, 'smoke');
+    const { stdout } = await execFileAsync('node', [
+      cliPath,
+      'agent:doctor',
+      '--json'
+    ], { cwd: projectPath });
+
+    const result = JSON.parse(stdout);
+    expect(result.valid).toBe(true);
+    expect(result.integrations).toEqual(expect.arrayContaining([
+      expect.objectContaining({
+        id: 'generic',
+        installed: true,
+        commandCount: expect.any(Number)
+      })
+    ]));
   });
 
   it('exports tasks.md as a JSON task board', async () => {

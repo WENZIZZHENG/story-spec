@@ -5,6 +5,10 @@ import {
   renderAgentIntegrationList
 } from '../../application/list-agent-integrations.js';
 import {
+  doctorAgentIntegrations,
+  renderAgentDoctorResult
+} from '../../application/doctor-agent-integrations.js';
+import {
   upgradeProject,
   UpgradeProjectError
 } from '../../application/upgrade-project.js';
@@ -84,6 +88,40 @@ export const registerAgentCommand = (
         }
 
         console.error(chalk.red('\n添加 agent integration 失败'), error);
+        process.exit(1);
+      }
+    });
+
+  program
+    .command('agent:doctor')
+    .description('检查当前项目的 agent integrations')
+    .option('--json', '输出 JSON，便于自动化读取')
+    .action(async (commandOptions) => {
+      try {
+        const projectRoot = await ensureProjectRoot();
+        const result = await doctorAgentIntegrations({
+          projectRoot,
+          packageRoot: options.packageRoot,
+          fileSystem: nodeFileSystem
+        });
+
+        if (commandOptions.json) {
+          console.log(JSON.stringify(result, null, 2));
+        } else {
+          console.log(renderAgentDoctorResult(result));
+        }
+
+        if (!result.valid) {
+          process.exitCode = 1;
+        }
+      } catch (error) {
+        if (error instanceof Error && error.message === 'NOT_IN_PROJECT') {
+          console.log(chalk.red('\n当前目录不是 novel-writer 项目'));
+          console.log(chalk.gray('请在项目根目录运行此命令，或使用 novel init 创建新项目\n'));
+          process.exit(1);
+        }
+
+        console.error(chalk.red('\n检查 agent integrations 失败'), error);
         process.exit(1);
       }
     });
