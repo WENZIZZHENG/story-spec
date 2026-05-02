@@ -353,7 +353,7 @@ src/
   - 验收：Codex 与其他 AI 用户都能用同一状态入口。
 - [x] `AGENTS.md` 生成可配置
   - 验收：可按成人向、慢热、冒险、恋爱、多线叙事生成不同边界模板。
-- [ ] 任务到 issue / task board
+- [x] 任务到 issue / task board
   - 借鉴 Spec Kit 的 task-to-issues 思路。
   - 验收：`tasks.md` 可转为 GitHub issues 或本地 JSON board。
 - [ ] 断点续写上下文包
@@ -362,6 +362,7 @@ src/
 阶段备注：
 - 已新增 `novel status` 通用项目状态入口，`codex-status` 保留为兼容别名；状态模型新增 `handoff` 字段并保留旧 `codex` 字段，避免破坏自动化读取。
 - 已新增 `--agents-profile` 初始化选项，并通过 `templates/AGENTS.codex.md` 的 `{{AGENTS_PROFILE_SECTION}}` 为 Codex 项目生成成人向、慢热、冒险、恋爱、多线叙事等可组合边界画像。
+- 已新增 `novel tasks:board`，可把最近或指定故事的 `tasks.md` 导出为 `task-board.json`，每个任务包含状态列、上下文边界、验收标准和 GitHub issue 草稿。
 
 ## 执行顺序
 

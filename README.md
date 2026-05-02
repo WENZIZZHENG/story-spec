@@ -58,9 +58,11 @@ novel status                # 通用项目状态摘要
 novel codex-status          # 兼容别名：Codex 接手状态摘要
 novel validate              # 项目结构、任务、追踪数据和写作规则校验
 novel validate --severity error
+novel tasks:board           # 将 tasks.md 导出为本地 JSON 看板
+novel tasks:board --json    # 输出结构化看板与 GitHub issue 草稿
 ```
 
-`status` 用来判断项目是否已经可以继续规划、拆任务或写作；`codex-status` 保留为兼容别名。`validate` 更适合在生成计划后或写作前做硬校验。
+`status` 用来判断项目是否已经可以继续规划、拆任务或写作；`codex-status` 保留为兼容别名。`validate` 更适合在生成计划后或写作前做硬校验。`tasks:board` 可在 `/tasks` 后把任务清单转成看板和 GitHub issue 草稿。
 
 ### 4. 在 AI 助手中打开项目并使用命令
 
@@ -154,6 +156,7 @@ my-novel/
 │       ├── specification.md    # 故事规格
 │       ├── creative-plan.md    # 创作计划
 │       ├── tasks.md            # 任务清单
+│       ├── task-board.json     # 可选：任务看板导出
 │       └── content/            # 章节内容
 └── scripts/           # 支持脚本
     ├── bash/          # Unix/Linux/Mac
@@ -227,6 +230,14 @@ novel check                       # 检查项目配置和状态
 novel status                      # 查看项目状态摘要
 novel status --json               # 输出结构化状态
 novel codex-status --json         # 兼容旧入口
+```
+
+### `novel tasks:board`
+
+```bash
+novel tasks:board                 # 导出最近故事的 task-board.json
+novel tasks:board 001-demo --json # 输出结构化看板，不写文件
+novel tasks:board --output stories/001-demo/task-board.json
 ```
 
 ### `novel validate`

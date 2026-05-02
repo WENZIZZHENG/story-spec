@@ -3,6 +3,7 @@ import { registerInitCommand } from './commands/init.command.js';
 import { registerCheckStatusCommand } from './commands/check-status.command.js';
 import { registerInfoCommand } from './commands/info.command.js';
 import { registerPluginsCommand } from './commands/plugins.command.js';
+import { registerTasksBoardCommand } from './commands/tasks-board.command.js';
 import { registerUpgradeCommand } from './commands/upgrade.command.js';
 import { registerValidateCommand } from './commands/validate.command.js';
 import chalk from 'chalk';
@@ -41,6 +42,7 @@ export function runProgram(argv: string[]): void {
 
   registerInitCommand(program, { packageRoot });
   registerCheckStatusCommand(program);
+  registerTasksBoardCommand(program);
   registerPluginsCommand(program, { packageRoot });
   registerUpgradeCommand(program, { packageRoot });
   registerValidateCommand(program, { packageRoot });
