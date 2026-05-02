@@ -332,7 +332,7 @@ src/
 
 - [x] 新增 `docs/architecture.md` 或更新现有架构图
   - 验收：模块边界、数据流、extension flow 可视化。
-- [ ] 引入 changeset 风格变更记录
+- [x] 引入 changeset 风格变更记录
   - 验收：CLI 行为、模板契约、生成产物变化都有记录。
 - [ ] 更新 README 快速路径
   - 验收：新用户仍可 5 分钟 init + status + prompt。
@@ -341,6 +341,7 @@ src/
 
 阶段备注：
 - 已更新 `docs/tech/architecture.md`，以当前重构后的 CLI/application/domain/infrastructure/prompt/templates/plugins/validation 边界为准，并补充模块边界、初始化流、命令产物流、状态校验流和插件扩展流 Mermaid 图。
+- 已新增 `changes/` 轻量变更记录目录与 `npm run check:changes`，每条记录必须覆盖 CLI 行为、模板契约、生成产物和验证四个维度，并已接入 `npm run verify`。
 
 ## 阶段 10：Codex 专项增强
 
