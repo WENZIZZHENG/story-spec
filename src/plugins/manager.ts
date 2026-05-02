@@ -5,6 +5,7 @@ import {
   parsePluginManifest,
   type PluginCommand,
   type PluginExpert,
+  type PluginHook,
   type PluginManifest
 } from '../domain/plugin-manifest.js';
 import { AI_PLATFORMS, type AIPlatformId } from '../utils/ai-platforms.js';
@@ -14,7 +15,8 @@ export type PluginInstallOperationKind =
   | 'copy-plugin'
   | 'install-command'
   | 'install-gemini-command'
-  | 'register-expert';
+  | 'register-expert'
+  | 'apply-hook';
 
 export interface PluginInstallOperation {
   kind: PluginInstallOperationKind;
@@ -23,6 +25,7 @@ export interface PluginInstallOperation {
   conflict: boolean;
   platform?: AIPlatformId;
   id?: string;
+  hook?: PluginHook;
 }
 
 export interface PluginInstallConflict {
@@ -37,6 +40,17 @@ export interface PluginInstallPlan {
   manifest: PluginManifest;
   operations: PluginInstallOperation[];
   conflicts: PluginInstallConflict[];
+}
+
+export interface ApplyInstallPlanOptions {
+  force?: boolean;
+}
+
+export class PluginInstallConflictError extends Error {
+  constructor(readonly conflicts: PluginInstallConflict[]) {
+    super(`插件安装存在 ${conflicts.length} 个冲突，请使用 --dry-run 查看详情，或使用 --force 覆盖。`);
+    this.name = 'PluginInstallConflictError';
+  }
 }
 
 export class PluginManager {
@@ -261,6 +275,13 @@ export class PluginManager {
   private async createOperation(
     operation: Omit<PluginInstallOperation, 'conflict'>
   ): Promise<PluginInstallOperation> {
+    if (operation.kind === 'apply-hook') {
+      return {
+        ...operation,
+        conflict: false
+      }
+    }
+
     return {
       ...operation,
       conflict: await fs.pathExists(operation.targetPath)
@@ -324,6 +345,29 @@ export class PluginManager {
     return operations
   }
 
+  private async createHookOperations(
+    sourcePath: string,
+    hooks: PluginHook[]
+  ): Promise<PluginInstallOperation[]> {
+    const operations: PluginInstallOperation[] = []
+
+    for (const hook of hooks) {
+      if (!hook.source || !hook.target) {
+        continue
+      }
+
+      operations.push(await this.createOperation({
+        kind: 'apply-hook',
+        sourcePath: path.join(sourcePath, hook.source),
+        targetPath: path.join(path.dirname(this.pluginsDir), hook.target),
+        id: hook.id,
+        hook
+      }))
+    }
+
+    return operations
+  }
+
   async planInstallPlugin(pluginName: string, sourcePath: string): Promise<PluginInstallPlan> {
     const manifest = await this.loadManifestFromSource(sourcePath)
     const operations: PluginInstallOperation[] = [
@@ -334,7 +378,8 @@ export class PluginManager {
         id: pluginName
       }),
       ...await this.createCommandOperations(pluginName, sourcePath, manifest.commands),
-      ...await this.createExpertOperations(pluginName, sourcePath, manifest.experts)
+      ...await this.createExpertOperations(pluginName, sourcePath, manifest.experts),
+      ...await this.createHookOperations(sourcePath, manifest.hooks)
     ]
 
     return {
@@ -352,8 +397,40 @@ export class PluginManager {
     }
   }
 
-  async applyInstallPlan(plan: PluginInstallPlan): Promise<void> {
+  private async applyHookOperation(operation: PluginInstallOperation): Promise<void> {
+    if (!operation.hook) {
+      return
+    }
+
+    const sourceContent = await fs.readFile(operation.sourcePath, 'utf-8')
+    const targetExists = await fs.pathExists(operation.targetPath)
+    const targetContent = targetExists ? await fs.readFile(operation.targetPath, 'utf-8') : ''
+    let nextContent = targetContent
+
+    if (operation.hook.strategy === 'prepend') {
+      nextContent = `${sourceContent}\n${targetContent}`
+    } else if (operation.hook.strategy === 'replace-marker' && operation.hook.marker) {
+      const markerPattern = new RegExp(`^.*PLUGIN_HOOK:\\s*${operation.hook.marker.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}.*(?:\\r?\\n)?`, 'm')
+      nextContent = targetContent.replace(markerPattern, sourceContent.endsWith('\n') ? sourceContent : `${sourceContent}\n`)
+    } else {
+      nextContent = targetContent ? `${targetContent}\n${sourceContent}` : sourceContent
+    }
+
+    await fs.ensureDir(path.dirname(operation.targetPath))
+    await fs.writeFile(operation.targetPath, nextContent)
+  }
+
+  async applyInstallPlan(plan: PluginInstallPlan, options: ApplyInstallPlanOptions = {}): Promise<void> {
+    if (plan.conflicts.length > 0 && !options.force) {
+      throw new PluginInstallConflictError(plan.conflicts)
+    }
+
     for (const operation of plan.operations) {
+      if (operation.kind === 'apply-hook') {
+        await this.applyHookOperation(operation)
+        continue
+      }
+
       if (operation.kind === 'install-gemini-command' && operation.sourcePath.endsWith('.md')) {
         await fs.ensureDir(path.dirname(operation.targetPath))
         const command = plan.manifest.commands.find(item => item.id === operation.id)
@@ -497,14 +574,14 @@ export class PluginManager {
   /**
    * 安装插件（从模板或远程）
    */
-  async installPlugin(pluginName: string, source?: string): Promise<void> {
+  async installPlugin(pluginName: string, source?: string, options: ApplyInstallPlanOptions = {}): Promise<void> {
     try {
       logger.info(`安装插件: ${pluginName}`)
 
       // 如果提供了源路径，从源复制
       if (source) {
         const plan = await this.planInstallPlugin(pluginName, source)
-        await this.applyInstallPlan(plan)
+        await this.applyInstallPlan(plan, options)
         if (plan.manifest.installation?.message) {
           console.log(plan.manifest.installation.message)
         }

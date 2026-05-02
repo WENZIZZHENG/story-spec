@@ -263,9 +263,9 @@ src/
   - 字段：commands、templates、knowledge、trackingRules、experts、hooks。
 - [x] 插件安装改为 plan/apply 两阶段
   - 验收：dry-run 可列出将写入的文件和冲突。
-- [ ] 引入 hook 点
+- [x] 引入 hook 点
   - 候选：init 后、prompt compile 前、tasks 生成后、write 前验证。
-- [ ] 插件冲突策略
+- [x] 插件冲突策略
   - 验收：同名 command/template 冲突有优先级和错误提示。
 
 阶段备注：
@@ -276,6 +276,8 @@ src/
 - 已为 `PluginManager` 新增 `planInstallPlugin` 与 `applyInstallPlan`，安装前可结构化列出插件目录复制、命令注入、Gemini TOML 命令、专家注册及冲突。
 - `novel plugins:add <name> --dry-run` 会显示预览模式、将写入文件和冲突，不实际落盘。
 - 已新增 `tests/unit/plugin-install-plan.test.ts`，并扩展 CLI smoke 覆盖插件 dry-run。
+- 已将 hooks 纳入安装计划，当前支持 `append`、`prepend`、`replace-marker`，并可把 `pre-prompt-compile` 等 hook 点声明为可执行的 `apply-hook` 操作。
+- 插件安装默认阻止覆盖冲突文件；CLI 提供 `--force` 显式覆盖，`--dry-run` 会列出冲突目标。
 
 ## 阶段 7：schema 与规则验证
 

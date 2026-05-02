@@ -56,6 +56,26 @@ Run demo
   return sourcePath;
 };
 
+const createHookPluginSource = async () => {
+  const sourcePath = await makeTempDir();
+
+  await writeFixtureFile(sourcePath, 'config.yaml', `name: hook-plugin
+version: 1.0.0
+description: Hook plugin
+type: feature
+hooks:
+  - id: enrich-plan
+    point: pre-prompt-compile
+    source: commands/plan-enhance.md
+    target: .specify/templates/commands/plan.md
+    marker: demo-plan
+    strategy: replace-marker
+`);
+  await writeFixtureFile(sourcePath, 'commands/plan-enhance.md', 'Injected hook content');
+
+  return sourcePath;
+};
+
 const createProjectRoot = async () => {
   const projectRoot = await makeTempDir();
   await mkdir(path.join(projectRoot, '.claude', 'commands'), { recursive: true });
@@ -111,5 +131,51 @@ describe('PluginManager install plan', () => {
     await expect(exists(path.join(projectRoot, '.gemini', 'commands', 'demo-command.toml'))).resolves.toBe(true);
     await expect(exists(path.join(projectRoot, 'experts', 'plugins', 'demo-plugin', 'demo-expert.md'))).resolves.toBe(true);
     await expect(readFile(path.join(projectRoot, '.gemini', 'commands', 'demo-command.toml'), 'utf-8')).resolves.toContain('Demo command');
+  });
+
+  it('plans and applies replace-marker hook operations', async () => {
+    const projectRoot = await createProjectRoot();
+    const sourcePath = await createHookPluginSource();
+    const manager = new PluginManager(projectRoot);
+
+    await writeFixtureFile(
+      projectRoot,
+      '.specify/templates/commands/plan.md',
+      'Before\n<!-- PLUGIN_HOOK: demo-plan -->\nAfter'
+    );
+
+    const plan = await manager.planInstallPlugin('hook-plugin', sourcePath);
+
+    expect(plan.operations.map(operation => ({
+      kind: operation.kind,
+      target: path.relative(projectRoot, operation.targetPath).replace(/\\/g, '/'),
+      conflict: operation.conflict
+    }))).toEqual(expect.arrayContaining([
+      { kind: 'apply-hook', target: '.specify/templates/commands/plan.md', conflict: false }
+    ]));
+
+    await manager.applyInstallPlan(plan);
+
+    await expect(readFile(path.join(projectRoot, '.specify/templates/commands/plan.md'), 'utf-8')).resolves.toBe(
+      'Before\nInjected hook content\nAfter'
+    );
+  });
+
+  it('blocks conflicting writes unless force is enabled', async () => {
+    const projectRoot = await createProjectRoot();
+    const sourcePath = await createPluginSource();
+    const manager = new PluginManager(projectRoot);
+
+    await writeFixtureFile(projectRoot, '.claude/commands/demo-command.md', 'existing');
+    const plan = await manager.planInstallPlugin('demo-plugin', sourcePath);
+
+    await expect(manager.applyInstallPlan(plan)).rejects.toMatchObject({
+      name: 'PluginInstallConflictError'
+    });
+    await expect(readFile(path.join(projectRoot, '.claude/commands/demo-command.md'), 'utf-8')).resolves.toBe('existing');
+
+    await manager.applyInstallPlan(plan, { force: true });
+
+    await expect(readFile(path.join(projectRoot, '.claude/commands/demo-command.md'), 'utf-8')).resolves.toContain('Run demo');
   });
 });

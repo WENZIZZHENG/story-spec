@@ -1,5 +1,5 @@
 import { execFile } from 'node:child_process';
-import { mkdtemp, rm, writeFile } from 'node:fs/promises';
+import { mkdtemp, readFile, rm, writeFile } from 'node:fs/promises';
 import os from 'node:os';
 import path from 'node:path';
 import { promisify } from 'node:util';
@@ -69,6 +69,42 @@ describe('CLI command modules smoke', () => {
     expect(stdout).toContain('plugins/translate');
     expect(stdout).toContain('.codex/prompts/translate.md');
     expect(stdout).toContain('冲突');
+  });
+
+  it('blocks plugin overwrite unless --force is used', async () => {
+    const cwd = await makeTempDir();
+    await execFileAsync('node', [
+      cliPath,
+      'init',
+      'smoke',
+      '--ai',
+      'codex',
+      '--method',
+      'three-act',
+      '--no-git'
+    ], { cwd });
+
+    const projectPath = path.join(cwd, 'smoke');
+    const commandPath = path.join(projectPath, '.codex', 'prompts', 'translate.md');
+    await writeFile(commandPath, 'existing');
+
+    await expect(execFileAsync('node', [
+      cliPath,
+      'plugins:add',
+      'translate'
+    ], { cwd: projectPath })).rejects.toMatchObject({
+      stderr: expect.stringContaining('冲突')
+    });
+    await expect(readFile(commandPath, 'utf-8')).resolves.toBe('existing');
+
+    await execFileAsync('node', [
+      cliPath,
+      'plugins:add',
+      'translate',
+      '--force'
+    ], { cwd: projectPath });
+
+    await expect(readFile(commandPath, 'utf-8')).resolves.not.toBe('existing');
   });
 
   it('runs upgrade dry-run against an initialized project', async () => {

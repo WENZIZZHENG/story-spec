@@ -19,7 +19,7 @@ const renderInstallPlan = (projectPath: string, plan: PluginInstallPlan): void =
   }
 
   if (plan.conflicts.length > 0) {
-    console.log(chalk.red(`\n发现 ${plan.conflicts.length} 个冲突，请确认后再安装。`));
+    console.log(chalk.red(`\n发现 ${plan.conflicts.length} 个冲突；安装时默认会阻止覆盖，可使用 --force 覆盖。`));
   } else {
     console.log(chalk.green('\n未发现冲突。'));
   }
@@ -100,6 +100,7 @@ export function registerPluginsCommand(program: Command, context: { packageRoot:
     .command('plugins:add <name>')
     .description('安装插件')
     .option('--dry-run', '预览将写入的文件，不实际安装')
+    .option('--force', '允许覆盖冲突文件')
     .action(async (name, options) => {
       try {
         // 1. 检测项目
@@ -160,7 +161,7 @@ export function registerPluginsCommand(program: Command, context: { packageRoot:
         // 5. 安装插件
         const spinner = ora('正在安装插件...').start();
 
-        await pluginManager.applyInstallPlan(installPlan);
+        await pluginManager.applyInstallPlan(installPlan, { force: options.force });
         spinner.succeed(chalk.green('插件安装成功！\n'));
 
         // 6. 显示后续步骤
