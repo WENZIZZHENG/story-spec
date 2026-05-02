@@ -180,6 +180,10 @@ $ARGUMENTS
 - `spec/knowledge/locations.md`
 - `spec/knowledge/culture.md`
 - `spec/knowledge/rules.md`
+- `spec/world/*.yaml`
+- `spec/canon/*.json`
+- `spec/graph/*.json`
+- `stories/*/scenes/*.yaml`
 
 **生成检查项维度**：
 
@@ -198,10 +202,13 @@ $ARGUMENTS
 - 不同文档中的世界观设定是否一致？
 - 世界观规则是否存在内部矛盾？
 - 与大纲描述是否一致？
+- Entity Graph 的 edge 是否保留 evidencePaths？
+- Scene Card 引用的 entities、worldElements、canonFacts 是否存在或需要补充？
 
 **覆盖范围**：
 - 是否覆盖了故事涉及的所有地点？
 - 是否定义了所有出现的特殊规则或能力？
+- 章节是否已有可选 Scene Card；没有时是否仍能按任务直接写作？
 
 ##### 2.4 创作计划检查
 

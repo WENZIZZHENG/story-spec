@@ -10,6 +10,7 @@ import { registerTasksBoardCommand } from './commands/tasks-board.command.js';
 import { registerUpgradeCommand } from './commands/upgrade.command.js';
 import { registerValidateCommand } from './commands/validate.command.js';
 import { registerWorldbuildingCommand } from './commands/worldbuilding.command.js';
+import { registerStoryStructureCommand } from './commands/story-structure.command.js';
 import chalk from 'chalk';
 import path from 'path';
 import { fileURLToPath } from 'url';
@@ -54,6 +55,7 @@ export function runProgram(argv: string[]): void {
   registerUpgradeCommand(program, { packageRoot });
   registerValidateCommand(program, { packageRoot });
   registerWorldbuildingCommand(program);
+  registerStoryStructureCommand(program, { packageRoot });
   registerInfoCommand(program);
 
   program.on('--help', () => {

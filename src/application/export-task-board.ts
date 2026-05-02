@@ -3,6 +3,8 @@ import type { ProjectFileSystem } from './project-ports.js';
 import type { ScannedStoryProject } from '../validation/artifact-scanner.js';
 import { scanStoryArtifacts } from '../validation/artifact-scanner.js';
 import type { WritingTask, WritingTaskStatus } from '../domain/story-artifact.js';
+import { inspectScenes, inspectStoryGraph } from './inspect-story-structure.js';
+import type { SceneCard } from '../domain/story-structure.js';
 
 export type TaskBoardExportErrorCode =
   | 'NO_STORIES'
@@ -46,6 +48,8 @@ export interface TaskBoardTask {
   allowedWrites: string[];
   clues: string[];
   acceptanceCriteria: string[];
+  relatedSceneIds: string[];
+  relatedEntityIds: string[];
   labels: string[];
   githubIssue: TaskBoardIssueDraft;
 }
@@ -65,6 +69,9 @@ export interface TaskBoard {
     done: number;
     writeReady: number;
     planOnly: number;
+    graphEntities: number;
+    graphEdges: number;
+    sceneCards: number;
   };
   columns: TaskBoardColumn[];
   tasks: TaskBoardTask[];
@@ -104,6 +111,53 @@ const listOrNone = (items: string[]): string => {
   return items.map(item => `- \`${item}\``).join('\n');
 };
 
+const globToRegExp = (value: string): RegExp => {
+  const escaped = value
+    .replace(/[.+^${}()|[\]\\]/g, '\\$&')
+    .replace(/\*\*/g, '__DOUBLE_STAR__')
+    .replace(/\*/g, '[^/]*')
+    .replace(/__DOUBLE_STAR__/g, '.*');
+
+  return new RegExp(`^${escaped}$`);
+};
+
+const matchesPathPattern = (pattern: string, candidate: string): boolean => {
+  const normalizedPattern = toPosixPath(pattern);
+  const normalizedCandidate = toPosixPath(candidate);
+
+  if (normalizedPattern === normalizedCandidate) {
+    return true;
+  }
+
+  if (normalizedPattern.includes('*')) {
+    return globToRegExp(normalizedPattern).test(normalizedCandidate);
+  }
+
+  return normalizedCandidate.endsWith(normalizedPattern);
+};
+
+const relatedScenesForTask = (
+  task: WritingTask,
+  scenes: SceneCard[]
+): SceneCard[] => {
+  const taskPaths = [
+    ...task.outputs,
+    ...task.requiredReads,
+    ...task.allowedWrites
+  ];
+
+  return scenes.filter(scene => [
+    scene.draftPath ?? '',
+    ...scene.requiredReads,
+    ...scene.allowedWrites
+  ].filter(Boolean).some(scenePath =>
+    taskPaths.some(taskPath =>
+      matchesPathPattern(taskPath, scenePath)
+      || matchesPathPattern(scenePath, taskPath)
+    )
+  ));
+};
+
 const createLabels = (task: WritingTask): string[] => [
   `priority:${task.priority}`,
   `status:${task.status}`,
@@ -115,7 +169,8 @@ const createLabels = (task: WritingTask): string[] => [
 const createIssueDraft = (
   task: WritingTask,
   projectRoot: string,
-  labels: string[]
+  labels: string[],
+  relatedScenes: SceneCard[]
 ): TaskBoardIssueDraft => {
   const body = [
     `来源任务：\`${toRelativePath(projectRoot, task.tasksPath)}#${task.id}\``,
@@ -137,6 +192,9 @@ const createIssueDraft = (
     '输出：',
     listOrNone(task.outputs),
     '',
+    '相关 Scene：',
+    listOrNone(relatedScenes.map(scene => scene.id)),
+    '',
     '验收标准：',
     task.acceptanceCriteria.length > 0
       ? task.acceptanceCriteria.map(item => `- [ ] ${item}`).join('\n')
@@ -150,8 +208,14 @@ const createIssueDraft = (
   };
 };
 
-const toBoardTask = (task: WritingTask, projectRoot: string): TaskBoardTask => {
+const toBoardTask = (
+  task: WritingTask,
+  projectRoot: string,
+  scenes: SceneCard[]
+): TaskBoardTask => {
   const labels = createLabels(task);
+  const relatedScenes = relatedScenesForTask(task, scenes);
+  const relatedEntityIds = [...new Set(relatedScenes.flatMap(scene => scene.entities))].sort();
 
   return {
     id: task.id,
@@ -168,8 +232,10 @@ const toBoardTask = (task: WritingTask, projectRoot: string): TaskBoardTask => {
     allowedWrites: task.allowedWrites,
     clues: task.clues,
     acceptanceCriteria: task.acceptanceCriteria,
+    relatedSceneIds: relatedScenes.map(scene => scene.id),
+    relatedEntityIds,
     labels,
-    githubIssue: createIssueDraft(task, projectRoot, labels)
+    githubIssue: createIssueDraft(task, projectRoot, labels, relatedScenes)
   };
 };
 
@@ -257,9 +323,11 @@ const createTaskBoard = (
   projectRoot: string,
   story: ScannedStoryProject,
   tasksPath: string,
-  now: () => Date
+  now: () => Date,
+  scenes: SceneCard[],
+  graphCounts: { entities: number; edges: number }
 ): TaskBoard => {
-  const tasks = story.tasks.map(task => toBoardTask(task, projectRoot));
+  const tasks = story.tasks.map(task => toBoardTask(task, projectRoot, scenes));
 
   return {
     schemaVersion: '1.0',
@@ -275,7 +343,10 @@ const createTaskBoard = (
       todo: tasks.filter(task => task.status === 'todo').length,
       done: tasks.filter(task => task.status === 'done').length,
       writeReady: tasks.filter(task => task.writeReady).length,
-      planOnly: tasks.filter(task => task.planOnly).length
+      planOnly: tasks.filter(task => task.planOnly).length,
+      graphEntities: graphCounts.entities,
+      graphEdges: graphCounts.edges,
+      sceneCards: scenes.length
     },
     columns: createColumns(tasks),
     tasks
@@ -288,7 +359,18 @@ export const exportTaskBoard = async (
   const { projectRoot, fileSystem: fs } = input;
   const story = await selectStory(projectRoot, fs, input.story);
   const tasksPath = assertTasksFile(story);
-  const board = createTaskBoard(projectRoot, story, tasksPath, input.now ?? (() => new Date()));
+  const [graph, sceneResult] = await Promise.all([
+    inspectStoryGraph({ projectRoot, fileSystem: fs }),
+    inspectScenes({ projectRoot, fileSystem: fs, story: story.name })
+  ]);
+  const board = createTaskBoard(
+    projectRoot,
+    story,
+    tasksPath,
+    input.now ?? (() => new Date()),
+    sceneResult.scenes,
+    { entities: graph.entities.length, edges: graph.edges.length }
+  );
 
   if (input.write === false) {
     return { board };
@@ -312,6 +394,7 @@ export const renderTaskBoardExportSummary = (result: ExportTaskBoardResult): str
     `故事：${board.story.name}`,
     `任务：${board.summary.total}（待办 ${board.summary.todo} / 已完成 ${board.summary.done}）`,
     `写作就绪：${board.summary.writeReady}`,
+    `结构：${board.summary.graphEntities} entities / ${board.summary.graphEdges} edges / ${board.summary.sceneCards} scenes`,
     `GitHub issue 草稿：${board.tasks.length}`
   ];
 

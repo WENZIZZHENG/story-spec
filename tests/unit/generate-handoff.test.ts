@@ -18,6 +18,29 @@ const createProject = async () => {
   await fileSystem.writeFile(path.join(storyPath, 'specification.md'), '# spec');
   await fileSystem.writeFile(path.join(storyPath, 'creative-plan.md'), '# plan');
   await fileSystem.writeFile(path.join(storyPath, 'content', 'chapter-000.md'), '# 前情\n\n已经写过的内容');
+  await fileSystem.writeJson(path.join(projectRoot, 'spec', 'graph', 'entities.json'), {
+    entities: [{
+      id: 'entity.hero',
+      type: 'character',
+      name: 'Hero'
+    }]
+  });
+  await fileSystem.writeJson(path.join(projectRoot, 'spec', 'graph', 'edges.json'), {
+    edges: []
+  });
+  await fileSystem.writeFile(path.join(storyPath, 'scenes', 'scene-001.yaml'), `id: scene-001
+chapter: chapter-001
+order: 1
+pov: Hero
+location: Home
+time: Morning
+sceneGoal: Open story
+conflict: Trouble arrives
+outcome: Hero accepts the task
+entities:
+  - entity.hero
+draftPath: stories/*/content/chapter-001.md
+`);
   await fileSystem.writeFile(path.join(storyPath, 'tasks.md'), `# tasks
 
 - [ ] [P0] [WRITE-READY] **T001** - 起草第一章
@@ -89,10 +112,20 @@ describe('generateHandoff', () => {
       '.specify/memory/constitution.md',
       'stories/001-demo/specification.md',
       'stories/001-demo/creative-plan.md',
-      'stories/001-demo/tasks.md'
+      'stories/001-demo/tasks.md',
+      'spec/graph/entities.json',
+      'spec/graph/edges.json',
+      'stories/001-demo/scenes/scene-001.yaml'
     ]);
+    expect(result.context.storyStructure).toMatchObject({
+      graphEntities: 1,
+      graphEdges: 0,
+      sceneCards: 1,
+      relevantSceneIds: ['scene-001']
+    });
     expect(result.context.allowedWriteFiles).toContain('spec/knowledge/relationships.md');
     expect(result.markdown).toContain('# Handoff');
+    expect(result.markdown).toContain('## 结构上下文');
     expect(result.markdown).toContain('`T001` 起草第一章');
     expect(result.markdown).toContain('## 风险边界');
     expect(renderHandoffSummary(result)).toContain('下一任务：T001 起草第一章');

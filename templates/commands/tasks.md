@@ -50,8 +50,10 @@ scripts:
     - `stories/*/specification.md`
     - `stories/*/creative-plan.md`
     - `spec/knowledge/world-setting.md`
+    - `spec/graph/entities.json`
   - **允许修改**：
     - `stories/*/content/volume1/chapter-001.md`
+    - `stories/*/scenes/scene-001.yaml`
     - `stories/*/tasks.md`（仅更新任务状态）
   - **禁止事项**：
     - 不改动已定世界规则
@@ -67,6 +69,7 @@ scripts:
   - **章末钩子**：[悬念设置]
   - **依赖**：无
   - **输出**：`content/volume1/chapter-001.md`
+  - **Scene Card**：`scenes/scene-001.yaml`（如本阶段启用 scene cards）
   - **验收标准**：
     - [ ] 覆盖本章全部关键情节
     - [ ] 线索推进与计划一致
@@ -109,6 +112,7 @@ scripts:
 - **交汇点**：从specification.md 5.3节读取，标明本章是否为交汇点
 - **伏笔埋设/揭晓**：从specification.md 5.4节读取，标明本章涉及的伏笔操作
 - **必须读取/允许修改/禁止事项**：让 Codex 接手时知道上下文边界和文件写入边界
+- **Scene Card**：如章节已拆成场景，必须标注对应 `scenes/*.yaml`；没有 scene card 的旧章节可留空。
 - **验收标准**：用于写完后自检，也用于 `/analyze` 或人工复核
 
 #### 任务标记说明

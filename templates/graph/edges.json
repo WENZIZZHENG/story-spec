@@ -1,0 +1,15 @@
+{
+  "schemaVersion": "1.0",
+  "edges": [
+    {
+      "id": "edge.protagonist.home",
+      "from": "entity.protagonist",
+      "to": "entity.start-location",
+      "relation": "origin",
+      "evidencePaths": [
+        "spec/knowledge/character-profiles.md"
+      ],
+      "confidence": "draft"
+    }
+  ]
+}

@@ -2,7 +2,7 @@
 
 ## 状态
 
-Active planning。本文承接 B 系列任务，专注 World Bible、Canon Ledger、Entity Graph、Scene Cards、揭示节奏、角色声音、Reviewer Loop 和类型 Preset。Batch B0 已完成，当前待执行 B1-B3。
+Active planning。本文承接 B 系列任务，专注 World Bible、Canon Ledger、Entity Graph、Scene Cards、揭示节奏、角色声音、Reviewer Loop 和类型 Preset。Batch B0-B1 已完成，当前待执行 B2-B3。
 
 ## 写作与世界观参考项目
 
@@ -461,26 +461,9 @@ novel preset:doctor
 ## 已完成批次
 
 - [x] Batch B0：World / Canon 基座。合并原 B0-B2 与 shared N008-N011，完成状态见 [full-refactor-completed.md](full-refactor-completed.md)。
+- [x] Batch B1：Entity Graph / Scene Card 创作结构。合并原 B3-B4，完成状态见 [full-refactor-completed.md](full-refactor-completed.md)。
 
 ## 待执行批次
-
-### [ ] Batch B1：Entity Graph / Scene Card 创作结构
-
-合并原 B3-B4。
-
-目标：
-
-- 新增 entity graph 模板、domain parser/builder、CLI 和 validate 规则。
-- 从显式文件构建第一版 entity graph，不依赖 AI 推断。
-- 新增 scene card 模板、parser/validator、`scene:*` CLI、generic/slash command。
-- `write`、`handoff`、`tasks:board` 能读取或展示相关 entity / scene 信息。
-
-验收：
-
-- 每条 graph edge 保留 evidencePaths。
-- `graph:impact` 可辅助 Canon/World impact。
-- scene 缺 POV、location、time、sceneGoal、conflict、outcome 时 validate 给 warning/error。
-- 不强制旧章节立即补 scene cards。
 
 ### [ ] Batch B2：Worldbuilding Quality / Voice / Reviewer
 

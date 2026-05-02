@@ -8,6 +8,8 @@ import type { ProjectFileSystem } from './project-ports.js';
 import type { ScannedStoryProject } from '../validation/artifact-scanner.js';
 import { scanStoryArtifacts, type ArtifactIssue } from '../validation/artifact-scanner.js';
 import type { StoryArtifact, WritingTask } from '../domain/story-artifact.js';
+import { inspectScenes, inspectStoryGraph } from './inspect-story-structure.js';
+import type { SceneCard } from '../domain/story-structure.js';
 
 export type HandoffGenerationErrorCode =
   | 'NO_STORIES'
@@ -58,6 +60,14 @@ export interface HandoffContext {
   };
   nextTask: HandoffTask | null;
   unfinishedTasks: HandoffTask[];
+  storyStructure: {
+    graphEntities: number;
+    graphEdges: number;
+    sceneCards: number;
+    relevantSceneIds: string[];
+    sceneFiles: string[];
+    graphFiles: string[];
+  };
   mustReadFiles: string[];
   allowedWriteFiles: string[];
   riskBoundaries: string[];
@@ -171,6 +181,53 @@ const normalizeTaskPaths = (
   allowedWrites: task.allowedWrites.map(item => normalizeProjectRelativePath(projectRoot, storyPath, item)),
   acceptanceCriteria: task.acceptanceCriteria
 });
+
+const globToRegExp = (value: string): RegExp => {
+  const escaped = value
+    .replace(/[.+^${}()|[\]\\]/g, '\\$&')
+    .replace(/\*\*/g, '__DOUBLE_STAR__')
+    .replace(/\*/g, '[^/]*')
+    .replace(/__DOUBLE_STAR__/g, '.*');
+
+  return new RegExp(`^${escaped}$`);
+};
+
+const matchesPathPattern = (pattern: string, candidate: string): boolean => {
+  const normalizedPattern = toPosixPath(pattern);
+  const normalizedCandidate = toPosixPath(candidate);
+
+  if (normalizedPattern === normalizedCandidate) {
+    return true;
+  }
+
+  if (normalizedPattern.includes('*')) {
+    return globToRegExp(normalizedPattern).test(normalizedCandidate);
+  }
+
+  return normalizedCandidate.endsWith(normalizedPattern);
+};
+
+const sceneMatchesTask = (scene: SceneCard, task: HandoffTask | null): boolean => {
+  if (!task) {
+    return false;
+  }
+
+  const taskPaths = [
+    ...task.outputs,
+    ...task.requiredReads,
+    ...task.allowedWrites
+  ];
+  const scenePaths = [
+    scene.draftPath ?? '',
+    ...scene.requiredReads,
+    ...scene.allowedWrites
+  ].filter(Boolean);
+
+  return scenePaths.some(scenePath => taskPaths.some(taskPath =>
+    matchesPathPattern(taskPath, scenePath)
+    || matchesPathPattern(scenePath, taskPath)
+  ));
+};
 
 const isChapterLikePath = (filePath: string): boolean => {
   const normalized = toPosixPath(filePath).toLowerCase();
@@ -358,6 +415,9 @@ const buildContext = async (
   const unfinishedTasks = unfinished.map(task => normalizeTaskPaths(task, projectRoot, story.path));
   const specificationPath = artifactPath(story, 'specification');
   const creativePlanPath = artifactPath(story, 'creative-plan');
+  const graph = await inspectStoryGraph({ projectRoot, fileSystem: fs });
+  const scenes = await inspectScenes({ projectRoot, fileSystem: fs, story: story.name });
+  const relevantScenes = scenes.scenes.filter(scene => sceneMatchesTask(scene, nextHandoffTask));
   const baseMustRead = await Promise.all([
     path.join(projectRoot, 'AGENTS.md'),
     path.join(projectRoot, '.specify', 'memory', 'constitution.md')
@@ -367,6 +427,8 @@ const buildContext = async (
     specificationPath ? toPosixPath(path.relative(projectRoot, specificationPath)) : '',
     creativePlanPath ? toPosixPath(path.relative(projectRoot, creativePlanPath)) : '',
     toPosixPath(path.relative(projectRoot, tasksPath)),
+    ...graph.files.map(file => toPosixPath(path.relative(projectRoot, file))),
+    ...scenes.files.map(file => toPosixPath(path.relative(projectRoot, file))),
     ...unfinishedTasks.flatMap(task => task.requiredReads)
   ]);
   const allowedWriteFiles = unique(unfinishedTasks.flatMap(task => [
@@ -390,6 +452,14 @@ const buildContext = async (
     currentChapter,
     nextTask: nextHandoffTask,
     unfinishedTasks,
+    storyStructure: {
+      graphEntities: graph.entities.length,
+      graphEdges: graph.edges.length,
+      sceneCards: scenes.scenes.length,
+      relevantSceneIds: relevantScenes.map(scene => scene.id),
+      sceneFiles: scenes.files.map(file => toPosixPath(path.relative(projectRoot, file))),
+      graphFiles: graph.files.map(file => toPosixPath(path.relative(projectRoot, file)))
+    },
     mustReadFiles,
     allowedWriteFiles,
     riskBoundaries: buildRiskBoundaries(nextTask, blockers, targetAgent),
@@ -456,6 +526,19 @@ const renderNextTask = (task: HandoffTask | null): string[] => {
     ].filter(Boolean).join(', ') || '-'}`
   ];
 };
+
+const renderStoryStructureSection = (context: HandoffContext): string[] => [
+  '',
+  '## 结构上下文',
+  '',
+  `- Entity Graph：${context.storyStructure.graphEntities} entities / ${context.storyStructure.graphEdges} edges`,
+  `- Scene Cards：${context.storyStructure.sceneCards}`,
+  `- 下一任务相关 Scene：${context.storyStructure.relevantSceneIds.length > 0 ? context.storyStructure.relevantSceneIds.map(id => `\`${id}\``).join(', ') : '无'}`,
+  '- Graph 文件：',
+  checkList(context.storyStructure.graphFiles),
+  '- Scene 文件：',
+  checkList(context.storyStructure.sceneFiles)
+];
 
 const resolveTargetAgent = (targetAgent: string | undefined): HandoffContext['targetAgent'] => {
   if (!targetAgent) {
@@ -542,6 +625,7 @@ export const renderHandoffMarkdown = (context: HandoffContext): string => {
     `当前章节：${currentChapter}`,
     ...renderNextTask(context.nextTask),
     ...renderTargetAgentSection(context.targetAgent),
+    ...renderStoryStructureSection(context),
     '',
     '## 必须读取',
     '',

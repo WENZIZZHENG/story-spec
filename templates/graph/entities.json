@@ -1,0 +1,31 @@
+{
+  "schemaVersion": "1.0",
+  "entities": [
+    {
+      "id": "entity.protagonist",
+      "type": "character",
+      "name": "主角",
+      "aliases": [],
+      "status": "active",
+      "sourcePaths": [
+        "spec/knowledge/character-profiles.md"
+      ],
+      "tags": [
+        "主线"
+      ]
+    },
+    {
+      "id": "entity.start-location",
+      "type": "location",
+      "name": "起始地点",
+      "aliases": [],
+      "status": "active",
+      "sourcePaths": [
+        "spec/knowledge/locations.md"
+      ],
+      "tags": [
+        "开场"
+      ]
+    }
+  ]
+}

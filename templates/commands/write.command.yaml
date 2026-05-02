@@ -13,12 +13,15 @@ requiredReads:
   - spec/tracking/*.json
   - spec/world/*.yaml
   - spec/canon/*.json
+  - spec/graph/*.json
+  - stories/*/scenes/*.yaml
   - spec/knowledge/*
 allowedWrites:
   - stories/*/tasks.md
   - stories/*/content/**
   - spec/tracking/**
   - spec/canon/propagation-debt.json
+  - spec/graph/indexes.json
 scripts:
   check:
     capability: check-writing-state

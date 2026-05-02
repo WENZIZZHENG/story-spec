@@ -1,0 +1,27 @@
+id: scene-001
+chapter: chapter-001
+order: 1
+pov: 主角
+location: 起始地点
+time: 故事开始
+sceneGoal: 建立主角当下目标
+conflict: 主角目标遭遇阻力
+outcome: 主角做出会推动下一幕的选择
+emotionalTurn: 从安稳转向不安
+entities:
+  - entity.protagonist
+worldElements:
+  - world.rule.example
+canonFacts:
+  - canon.fact.example
+reveals: []
+foreshadowing:
+  planted: []
+  paidOff: []
+requiredReads:
+  - .specify/memory/constitution.md
+  - stories/*/specification.md
+  - stories/*/creative-plan.md
+allowedWrites:
+  - stories/*/content/chapter-001.md
+draftPath: stories/*/content/chapter-001.md

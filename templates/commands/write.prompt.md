@@ -18,12 +18,14 @@
 ## 写作流程
 
 1. 将选中任务标记为 `in_progress`。
-2. 读取宪法、故事规格、创作计划、任务清单、tracking、World Bible、Canon Ledger 与知识库。
-3. 明确本次章节的目标、冲突、人物变化、场景限制和字数要求。
-4. 写入 `stories/*/content/**` 中的目标章节文件。
-5. 更新相关 `spec/tracking/**`，至少覆盖角色状态、关系变化、剧情进度和时间线。
-6. 写完后只生成待确认 canon fact 或 propagation debt；不要自动重写既有正文。
-7. 将任务状态更新为 `completed`，记录完成时间、章节路径和字数。
+2. 读取宪法、故事规格、创作计划、任务清单、tracking、World Bible、Canon Ledger、Entity Graph、Scene Cards 与知识库。
+3. 若目标章节存在 Scene Card，优先按 sceneGoal、conflict、outcome、entities、worldElements 和 canonFacts 写作；否则按任务清单写作。
+4. 明确本次章节的目标、冲突、人物变化、场景限制和字数要求。
+5. 写入 `stories/*/content/**` 中的目标章节文件。
+6. 更新相关 `spec/tracking/**`，至少覆盖角色状态、关系变化、剧情进度和时间线。
+7. 写完后只生成待确认 canon fact 或 propagation debt；不要自动重写既有正文。
+8. 如 scene draftPath 或 graph evidencePaths 发生变化，只更新显式引用和 `spec/graph/indexes.json`，不要用 AI 推断补 graph facts。
+9. 将任务状态更新为 `completed`，记录完成时间、章节路径和字数。
 
 ## 写作要求
 
@@ -40,5 +42,7 @@
 - 已写入章节路径。
 - 实际字数与目标字数。
 - 已更新的 tracking 文件。
+- 使用的 Scene Card 和 Entity Graph 引用。
+- 待人工确认的 CanonFact 或 propagation debt。
 - 任务状态更新结果。
 - 无法完成或无法验证的部分。

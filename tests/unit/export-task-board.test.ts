@@ -13,6 +13,29 @@ const createProject = async () => {
   const fileSystem = new MemoryFileSystem(projectRoot);
   const storyPath = path.join(projectRoot, 'stories', '001-demo');
 
+  await fileSystem.writeJson(path.join(projectRoot, 'spec', 'graph', 'entities.json'), {
+    entities: [{
+      id: 'entity.hero',
+      type: 'character',
+      name: 'Hero'
+    }]
+  });
+  await fileSystem.writeJson(path.join(projectRoot, 'spec', 'graph', 'edges.json'), {
+    edges: []
+  });
+  await fileSystem.writeFile(path.join(storyPath, 'scenes', 'scene-001.yaml'), `id: scene-001
+chapter: chapter-001
+order: 1
+pov: Hero
+location: Home
+time: Morning
+sceneGoal: Open story
+conflict: Trouble arrives
+outcome: Hero accepts the task
+entities:
+  - entity.hero
+draftPath: stories/*/content/chapter-001.md
+`);
   await fileSystem.writeFile(path.join(storyPath, 'specification.md'), '# spec');
   await fileSystem.writeFile(path.join(storyPath, 'creative-plan.md'), '# plan');
   await fileSystem.writeFile(path.join(storyPath, 'tasks.md'), `# tasks
@@ -66,7 +89,10 @@ describe('exportTaskBoard', () => {
         todo: 1,
         done: 1,
         writeReady: 1,
-        planOnly: 1
+        planOnly: 1,
+        graphEntities: 1,
+        graphEdges: 0,
+        sceneCards: 1
       },
       columns: [
         { id: 'todo', title: '待办', taskIds: ['T001'] },
@@ -85,6 +111,8 @@ describe('exportTaskBoard', () => {
       allowedWrites: ['content/chapter-001.md', 'tasks.md'],
       clues: ['PL-01'],
       acceptanceCriteria: ['覆盖本章关键情节', '更新任务状态'],
+      relatedSceneIds: ['scene-001'],
+      relatedEntityIds: ['entity.hero'],
       labels: ['priority:P0', 'status:todo', 'write-ready', 'clue:PL-01']
     });
     expect(result.board.tasks[0].githubIssue.title).toBe('[P0] T001 起草第一章');

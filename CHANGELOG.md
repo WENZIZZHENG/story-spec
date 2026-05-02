@@ -11,6 +11,10 @@
 - 新增 `world:list`、`world:check`、`canon:list`、`canon:check` CLI，用于查看和校验世界观与 Canon Ledger。
 - `novel validate --json` 增加 world/canon summary 与 issue 输出；旧项目缺少对应目录时只给 warning。
 - `/write` 命令会读取 world/canon 上下文，并提示生成待确认 canon fact 或 propagation debt。
+- 新项目初始化新增 `spec/graph/` Entity Graph 模板，记录 entities、edges、indexes 和 evidencePaths。
+- 新增 `entity:list`、`graph:build`、`graph:check`、`graph:impact`、`scene:init`、`scene:list`、`scene:check`、`scene:compile` CLI。
+- 新增 `/scene` 通用命令模板；`/tasks` 和 `/write` 可携带 Scene Card 与 Entity Graph 上下文。
+- `handoff` 与 `tasks:board` 输出结构上下文和相关 scene/entity 信息。
 
 ### 文档
 

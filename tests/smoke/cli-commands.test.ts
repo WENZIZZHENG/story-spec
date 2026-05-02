@@ -493,4 +493,75 @@ describe('CLI command modules smoke', () => {
     expect(canon.facts.length).toBeGreaterThan(0);
     expect(canon.issues).toEqual([]);
   });
+
+  it('checks graph and scene documents as JSON', async () => {
+    const cwd = await makeTempDir();
+    await execFileAsync('node', [
+      cliPath,
+      'init',
+      'smoke',
+      '--agent',
+      'generic',
+      '--method',
+      'three-act',
+      '--no-git'
+    ], { cwd });
+
+    const projectPath = path.join(cwd, 'smoke');
+    const storyPath = path.join(projectPath, 'stories', '001-demo');
+    await mkdir(storyPath, { recursive: true });
+
+    const initSceneResult = await execFileAsync('node', [
+      cliPath,
+      'scene:init',
+      '001-demo',
+      '--json'
+    ], { cwd: projectPath });
+    const graphResult = await execFileAsync('node', [
+      cliPath,
+      'graph:build',
+      '--json'
+    ], { cwd: projectPath });
+    const entityResult = await execFileAsync('node', [
+      cliPath,
+      'entity:list',
+      '--json'
+    ], { cwd: projectPath });
+    const sceneResult = await execFileAsync('node', [
+      cliPath,
+      'scene:check',
+      '001-demo',
+      '--json'
+    ], { cwd: projectPath });
+    const compileResult = await execFileAsync('node', [
+      cliPath,
+      'scene:compile',
+      '001-demo',
+      '--json'
+    ], { cwd: projectPath });
+    const impactResult = await execFileAsync('node', [
+      cliPath,
+      'graph:impact',
+      'entity.protagonist',
+      '--json'
+    ], { cwd: projectPath });
+
+    const initialized = JSON.parse(initSceneResult.stdout);
+    const graph = JSON.parse(graphResult.stdout);
+    const entity = JSON.parse(entityResult.stdout);
+    const scenes = JSON.parse(sceneResult.stdout);
+    const compiled = JSON.parse(compileResult.stdout);
+    const impact = JSON.parse(impactResult.stdout);
+
+    expect(initialized.outputPath).toContain('scene-001.yaml');
+    expect(graph.entities.length).toBeGreaterThan(0);
+    expect(graph.edges.length).toBeGreaterThan(0);
+    expect(graph.indexes.adjacency['entity.protagonist']).toContain('entity.start-location');
+    expect(entity.entities.length).toBe(graph.entities.length);
+    expect(scenes.scenes).toHaveLength(1);
+    expect(scenes.issues).toEqual([]);
+    expect(compiled.draftPaths).toContain('stories/*/content/chapter-001.md');
+    expect(impact.edges.length).toBeGreaterThan(0);
+    expect(impact.evidencePaths.length).toBeGreaterThan(0);
+  });
 });

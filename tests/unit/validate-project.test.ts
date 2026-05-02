@@ -29,6 +29,7 @@ const createFileSystem = async () => {
   await fileSystem.ensureDir(path.join(projectRoot, 'spec', 'tracking'));
   await fileSystem.ensureDir(path.join(projectRoot, 'spec', 'world'));
   await fileSystem.ensureDir(path.join(projectRoot, 'spec', 'canon'));
+  await fileSystem.ensureDir(path.join(projectRoot, 'spec', 'graph'));
   await fileSystem.writeFile(path.join(projectRoot, 'spec', 'tracking', 'plot-tracker.json'), '{"currentState":{}}');
   await fileSystem.writeFile(path.join(projectRoot, 'spec', 'tracking', 'array.json'), '[]');
   await fileSystem.writeFile(path.join(projectRoot, 'spec', 'tracking', 'broken.json'), '{bad');
@@ -48,6 +49,22 @@ const createFileSystem = async () => {
       evidence: [{ path: 'stories/demo/content/chapter-001.md' }]
     }]
   }));
+  await fileSystem.writeJson(path.join(projectRoot, 'spec', 'graph', 'entities.json'), {
+    entities: [{
+      id: 'entity.hero',
+      type: 'character',
+      name: 'Hero'
+    }]
+  });
+  await fileSystem.writeJson(path.join(projectRoot, 'spec', 'graph', 'edges.json'), {
+    edges: [{
+      id: 'edge.hero.self',
+      from: 'entity.hero',
+      to: 'entity.hero',
+      relation: 'self',
+      evidencePaths: ['stories/demo/content/chapter-001.md']
+    }]
+  });
 
   const storyPath = path.join(projectRoot, 'stories', 'demo');
   await fileSystem.writeFile(path.join(storyPath, 'specification.md'), '# spec');
@@ -76,6 +93,9 @@ describe('validateProject', () => {
       trackingFiles: 3,
       worldFiles: 1,
       canonFiles: 1,
+      graphEntities: 1,
+      graphEdges: 1,
+      scenes: 0,
       templatesChecked: 2,
       agentCommandsChecked: 0
     });
@@ -122,7 +142,7 @@ describe('validateProject', () => {
     ]));
   });
 
-  it('reports missing world and canon directories as warnings for old projects', async () => {
+  it('reports missing world, canon, and graph directories as warnings for old projects', async () => {
     const projectRoot = path.join(os.tmpdir(), 'memory-novel-missing-world-canon');
     const packageRoot = path.join(os.tmpdir(), 'memory-novel-missing-world-canon-package');
     const fileSystem = new MemoryFileSystem(projectRoot);
@@ -145,7 +165,8 @@ describe('validateProject', () => {
     expect(result.valid).toBe(true);
     expect(result.issues).toEqual(expect.arrayContaining([
       expect.objectContaining({ code: 'MISSING_WORLD_DIR', severity: 'warning' }),
-      expect.objectContaining({ code: 'MISSING_CANON_DIR', severity: 'warning' })
+      expect.objectContaining({ code: 'MISSING_CANON_DIR', severity: 'warning' }),
+      expect.objectContaining({ code: 'MISSING_GRAPH_DIR', severity: 'warning' })
     ]));
   });
 
@@ -177,6 +198,48 @@ describe('validateProject', () => {
     expect(result.issues).toEqual(expect.arrayContaining([
       expect.objectContaining({ code: 'MISSING_WORLD_FACT_FIELD', severity: 'warning' }),
       expect.objectContaining({ code: 'MISSING_CANON_FACT_FIELD', severity: 'warning' })
+    ]));
+  });
+
+  it('reports invalid graph and scene documents', async () => {
+    const projectRoot = path.join(os.tmpdir(), 'memory-novel-invalid-graph-scene');
+    const packageRoot = path.join(os.tmpdir(), 'memory-novel-invalid-graph-scene-package');
+    const fileSystem = new MemoryFileSystem(projectRoot);
+
+    await fileSystem.ensureDir(path.join(packageRoot, 'templates'));
+    await fileSystem.writeJson(path.join(projectRoot, '.specify', 'config.json'), {
+      name: 'invalid-graph-scene',
+      type: 'novel',
+      version: '1.0.0'
+    });
+    await fileSystem.writeFile(path.join(projectRoot, '.specify', 'agent-contract.md'), '# contract');
+    await fileSystem.writeFile(path.join(projectRoot, 'AGENTS.md'), '# agents');
+    await fileSystem.writeFile(path.join(projectRoot, 'spec', 'world', 'rules.yaml'), 'worldFacts: []');
+    await fileSystem.writeFile(path.join(projectRoot, 'spec', 'canon', 'facts.json'), '{"canonFacts":[]}');
+    await fileSystem.writeJson(path.join(projectRoot, 'spec', 'graph', 'entities.json'), {
+      entities: [{ id: 'entity.hero', type: 'character', name: 'Hero' }]
+    });
+    await fileSystem.writeJson(path.join(projectRoot, 'spec', 'graph', 'edges.json'), {
+      edges: [{
+        id: 'edge.hero.unknown',
+        from: 'entity.hero',
+        to: 'entity.unknown',
+        relation: 'knows',
+        evidencePaths: ['stories/demo/content/chapter-001.md']
+      }]
+    });
+    await fileSystem.writeFile(path.join(projectRoot, 'stories', 'demo', 'scenes', 'scene-001.yaml'), 'id: scene-001\nchapter: chapter-001\n');
+
+    const result = await validateProject({
+      projectRoot,
+      packageRoot,
+      fileSystem
+    });
+
+    expect(result.valid).toBe(false);
+    expect(result.issues).toEqual(expect.arrayContaining([
+      expect.objectContaining({ code: 'UNKNOWN_STORY_EDGE_ENTITY', severity: 'error' }),
+      expect.objectContaining({ code: 'MISSING_SCENE_FIELD', severity: 'warning' })
     ]));
   });
 
@@ -227,6 +290,9 @@ describe('validateProject', () => {
     expect(output).toContain('结果：失败');
     expect(output).toContain('world 文件：1');
     expect(output).toContain('canon 文件：1');
+    expect(output).toContain('graph entities：1');
+    expect(output).toContain('graph edges：1');
+    expect(output).toContain('scene cards：0');
     expect(output).toContain('generic commands：0');
     expect(output).toContain('MISSING_TEMPLATE');
     expect(output).toContain('INVALID_TRACKING_JSON');

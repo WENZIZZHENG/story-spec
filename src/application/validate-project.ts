@@ -19,6 +19,11 @@ import {
   type WorldbuildingIssue
 } from '../domain/worldbuilding.js';
 import {
+  inspectScenes,
+  inspectStoryGraph
+} from './inspect-story-structure.js';
+import type { StoryStructureIssue } from '../domain/story-structure.js';
+import {
   countIssuesBySeverity,
   filterIssuesBySeverity,
   sortIssuesBySeverity
@@ -30,10 +35,12 @@ export type ProjectValidationIssueCode =
   | ArtifactIssue['code']
   | WritingRuleIssue['code']
   | WorldbuildingIssue['code']
+  | StoryStructureIssue['code']
   | 'MISSING_PROJECT_CONFIG'
   | 'MISSING_PROJECT_DIR'
   | 'MISSING_WORLD_DIR'
   | 'MISSING_CANON_DIR'
+  | 'MISSING_GRAPH_DIR'
   | 'MISSING_TEMPLATE'
   | 'MISSING_AGENT_CONTRACT'
   | 'MISSING_AGENTS_FILE'
@@ -54,6 +61,9 @@ export interface ProjectValidationSummary {
   agentCommandsChecked: number;
   worldFiles: number;
   canonFiles: number;
+  graphEntities: number;
+  graphEdges: number;
+  scenes: number;
 }
 
 export interface ProjectValidationResult {
@@ -104,6 +114,13 @@ const toProjectIssue = (issue: ValidationIssue | ArtifactIssue | WritingRuleIssu
 });
 
 const toWorldbuildingProjectIssue = (issue: WorldbuildingIssue): ProjectValidationIssue => ({
+  severity: issue.severity,
+  code: issue.code,
+  path: issue.path,
+  message: issue.message
+});
+
+const toStoryStructureProjectIssue = (issue: StoryStructureIssue): ProjectValidationIssue => ({
   severity: issue.severity,
   code: issue.code,
   path: issue.path,
@@ -231,6 +248,37 @@ const validateCanonFiles = async (
   }
 
   return { count: files.length, issues };
+};
+
+const validateStoryStructureFiles = async (
+  fs: ProjectFileSystem,
+  projectRoot: string
+): Promise<{
+  graphEntities: number;
+  graphEdges: number;
+  scenes: number;
+  issues: ProjectValidationIssue[];
+}> => {
+  const graphDir = path.join(projectRoot, 'spec', 'graph');
+  const issues: ProjectValidationIssue[] = [];
+
+  if (!await fs.pathExists(graphDir)) {
+    issues.push(createIssue('MISSING_GRAPH_DIR', graphDir, '缺少 spec/graph；旧项目可运行 upgrade 补齐 Entity Graph 模板', 'warning'));
+  }
+
+  const graph = await inspectStoryGraph({ projectRoot, fileSystem: fs });
+  const sceneResult = await inspectScenes({ projectRoot, fileSystem: fs });
+
+  return {
+    graphEntities: graph.entities.length,
+    graphEdges: graph.edges.length,
+    scenes: sceneResult.scenes.length,
+    issues: [
+      ...issues,
+      ...graph.issues.map(toStoryStructureProjectIssue),
+      ...sceneResult.issues.map(toStoryStructureProjectIssue)
+    ]
+  };
 };
 
 const validateTemplates = async (
@@ -372,6 +420,7 @@ export const validateProject = async (input: ValidateProjectInput): Promise<Proj
   const trackingResult = await validateTrackingFiles(fs, projectRoot);
   const worldResult = await validateWorldFiles(fs, projectRoot);
   const canonResult = await validateCanonFiles(fs, projectRoot);
+  const storyStructureResult = await validateStoryStructureFiles(fs, projectRoot);
   const templateResult = await validateTemplates(fs, projectRoot, input.packageRoot);
   const agentContractResult = await validateAgentContract(fs, projectRoot, input.packageRoot);
   const writingRuleResult = await runWritingRules({
@@ -397,6 +446,7 @@ export const validateProject = async (input: ValidateProjectInput): Promise<Proj
     ...trackingResult.issues,
     ...worldResult.issues,
     ...canonResult.issues,
+    ...storyStructureResult.issues,
     ...taskIssues,
     ...writingRuleResult.issues.map(toProjectIssue),
     ...agentContractResult.issues,
@@ -414,7 +464,10 @@ export const validateProject = async (input: ValidateProjectInput): Promise<Proj
       templatesChecked: templateResult.templatesChecked,
       agentCommandsChecked: agentContractResult.agentCommandsChecked,
       worldFiles: worldResult.count,
-      canonFiles: canonResult.count
+      canonFiles: canonResult.count,
+      graphEntities: storyStructureResult.graphEntities,
+      graphEdges: storyStructureResult.graphEdges,
+      scenes: storyStructureResult.scenes
     },
     issueCounts,
     issues
@@ -436,6 +489,9 @@ export const renderProjectValidation = (
     `tracking JSON：${result.summary.trackingFiles}`,
     `world 文件：${result.summary.worldFiles}`,
     `canon 文件：${result.summary.canonFiles}`,
+    `graph entities：${result.summary.graphEntities}`,
+    `graph edges：${result.summary.graphEdges}`,
+    `scene cards：${result.summary.scenes}`,
     `模板检查：${result.summary.templatesChecked}`,
     `generic commands：${result.summary.agentCommandsChecked}`,
     `问题：${result.issueCounts.error} error / ${result.issueCounts.warning} warning / ${result.issueCounts.info} info`

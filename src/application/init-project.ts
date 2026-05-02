@@ -135,7 +135,8 @@ const createBaseDirs = async (
     'spec/tracking',
     'spec/knowledge',
     'spec/world',
-    'spec/canon'
+    'spec/canon',
+    'spec/graph'
   ];
 
   for (const dir of [...baseDirs, ...aiDirs]) {
@@ -260,6 +261,11 @@ const copyTemplatesAndKnowledge = async (
   const canonTemplatesDir = path.join(input.packageRoot, 'templates', 'canon');
   if (await fs.pathExists(canonTemplatesDir)) {
     await fs.copy(canonTemplatesDir, path.join(projectPath, 'spec', 'canon'));
+  }
+
+  const graphTemplatesDir = path.join(input.packageRoot, 'templates', 'graph');
+  if (await fs.pathExists(graphTemplatesDir)) {
+    await fs.copy(graphTemplatesDir, path.join(projectPath, 'spec', 'graph'));
   }
 };
 
