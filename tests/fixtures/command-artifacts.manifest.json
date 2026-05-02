@@ -1,0 +1,4287 @@
+{
+  "generatedBy": "scripts/build/command-artifact-manifest.ts",
+  "agents": [
+    "claude",
+    "gemini",
+    "cursor",
+    "windsurf",
+    "roocode",
+    "copilot",
+    "qwen",
+    "opencode",
+    "codex",
+    "kilocode",
+    "auggie",
+    "codebuddy",
+    "q"
+  ],
+  "scripts": [
+    "sh"
+  ],
+  "files": [
+    {
+      "path": "auggie/.augment/commands/analyze.md",
+      "sha256": "2a20432766ab4fd9353a15cd47658843225c1406a63b7c6db609f842aa71d48f"
+    },
+    {
+      "path": "auggie/.augment/commands/checklist.md",
+      "sha256": "002cfadb70a239fb80575bd079904489b09124705fa83312f04adc352760f1f1"
+    },
+    {
+      "path": "auggie/.augment/commands/clarify.md",
+      "sha256": "72911b090782d26e6bcb4c67aecc7dc5a3beabdb0ef72daf2e50030788456f42"
+    },
+    {
+      "path": "auggie/.augment/commands/constitution.md",
+      "sha256": "557f7ec23126b104549b938157bd97bf8f8fba8544d459704841534b1705903c"
+    },
+    {
+      "path": "auggie/.augment/commands/expert.md",
+      "sha256": "423fd3fed88d46e8519c874c471c8be52c01644fe0851bebe0f87f2069adaa5a"
+    },
+    {
+      "path": "auggie/.augment/commands/plan.md",
+      "sha256": "ddc8255fd47ae2538f931ae933e0506dc83c3190cd59e6310838ab0503d1c995"
+    },
+    {
+      "path": "auggie/.augment/commands/relations.md",
+      "sha256": "9c520b48ccdeff7c86a8fb895416e5a2ac306815950c6f905440c09afed98fc8"
+    },
+    {
+      "path": "auggie/.augment/commands/specify.md",
+      "sha256": "21ed950bdf9abddff7ffa08c07cb813717b8f66fd1f19fbe0b9c5816710ef961"
+    },
+    {
+      "path": "auggie/.augment/commands/tasks.md",
+      "sha256": "98dc0279bd26c751eb831d62a38d5483708f2e1bc0a92ea183ce63e21a93ee7a"
+    },
+    {
+      "path": "auggie/.augment/commands/timeline.md",
+      "sha256": "f03fbd8c3bd871b48940b6677588c83b52a84d012bd6f28c0a29368ad655baab"
+    },
+    {
+      "path": "auggie/.augment/commands/track-init.md",
+      "sha256": "c7845f0e78240912bf4e36cd8ab4a90ae2ec13f72d92e8f0f68e6949d501cb76"
+    },
+    {
+      "path": "auggie/.augment/commands/track.md",
+      "sha256": "9ac511e3bc24d554462c00cfd8a88e9a36d78b059d90f524400a594e0a3a6e85"
+    },
+    {
+      "path": "auggie/.augment/commands/write.md",
+      "sha256": "12c6ed13c148a2097d73693c47ecaeeb0182eca452a2189d2553735a9cb7fc7a"
+    },
+    {
+      "path": "auggie/.specify/experts/core/character.md",
+      "sha256": "6a2a74bd4b42c52e15bd877fe7fe1c5ad6a32358475e797397b060a4b230cd89"
+    },
+    {
+      "path": "auggie/.specify/experts/core/plot.md",
+      "sha256": "1bf60cf836de917490c1424d2781f7d82518621815c3f66e5994f1225b1d7edb"
+    },
+    {
+      "path": "auggie/.specify/experts/core/style.md",
+      "sha256": "5a1ef640343dfdf2dcb41109c500416d8319aa9591ed7b26e0184becde04f147"
+    },
+    {
+      "path": "auggie/.specify/experts/core/world.md",
+      "sha256": "aeaef9f816d34d5e5ca27f9efc3001fd2987b15ac9b781d3fc0a1b13f1d070cc"
+    },
+    {
+      "path": "auggie/.specify/memory/constitution.md",
+      "sha256": "4e388c23598d178167ac7f73f70359079ccb3c2f68e8884606640ecbacba2dbc"
+    },
+    {
+      "path": "auggie/.specify/memory/personal-voice.md",
+      "sha256": "97a781384ec013203cc6a64aad7b9431c75b5a45bc19f82d3482800e7a22b0c4"
+    },
+    {
+      "path": "auggie/.specify/scripts/bash/analyze-story.sh",
+      "sha256": "55bed848066c013b4a01736793c20bbab5e79f6e859491fc4a3aa8ad3816b736"
+    },
+    {
+      "path": "auggie/.specify/scripts/bash/check-consistency.sh",
+      "sha256": "cac69cdf14298924dd7d23b8bd700ac74d2f672285f423932247d99ad4696702"
+    },
+    {
+      "path": "auggie/.specify/scripts/bash/check-plot.sh",
+      "sha256": "f814931fe8928fc55af9a2386969355e2a02b570bd8da651cde92c98066c147d"
+    },
+    {
+      "path": "auggie/.specify/scripts/bash/check-timeline.sh",
+      "sha256": "d8ef7a477cd31ab486a38e7c3509b375b31cbc6e3a406d4e47c4cb3d6cd101ab"
+    },
+    {
+      "path": "auggie/.specify/scripts/bash/check-world.sh",
+      "sha256": "d5aa04491960003807def1d5b33c7d1e236fda5ad3c942a8ac22215ca0d85140"
+    },
+    {
+      "path": "auggie/.specify/scripts/bash/check-writing-state.sh",
+      "sha256": "5fddce4ddf5d246937ea6888a2d623ede7148cda071a83587df833e50303ad3f"
+    },
+    {
+      "path": "auggie/.specify/scripts/bash/clarify-story.sh",
+      "sha256": "9787229ca3e2ea30505fc99373a44e7d698bb6a182a08002cfa7f029d921d84d"
+    },
+    {
+      "path": "auggie/.specify/scripts/bash/common.sh",
+      "sha256": "070581f0531b9ce1442bfbd14c7caab0cac8c99c8537dc122bf0b0495cb7f646"
+    },
+    {
+      "path": "auggie/.specify/scripts/bash/constitution.sh",
+      "sha256": "b352cd5e0679aa50d1f370a4807a88af473406159b5d1e4a907a724b23983667"
+    },
+    {
+      "path": "auggie/.specify/scripts/bash/generate-tasks.sh",
+      "sha256": "0b1c3a8b8a20d82bd6132017072f53f4796f51ca08467ee405e809978ac9e5c8"
+    },
+    {
+      "path": "auggie/.specify/scripts/bash/init-tracking.sh",
+      "sha256": "dfdf2ac7eb46c3014c2c20429219a4544b94fba7af21e509697b5597ed1d173e"
+    },
+    {
+      "path": "auggie/.specify/scripts/bash/manage-relations.sh",
+      "sha256": "78ffc8b1ccdb044ac5879979ae228bacb397ab3acda2feccc25080e00ea4c474"
+    },
+    {
+      "path": "auggie/.specify/scripts/bash/plan-story.sh",
+      "sha256": "f0d13b40d811fee076e7e7fe915f13b0d143fd971e4f8ca02444cd0f9fef689f"
+    },
+    {
+      "path": "auggie/.specify/scripts/bash/specify-story.sh",
+      "sha256": "5f796579bea1ca541d3766a9c2ea58802b835f27cacb59e1f09bf27527a8f6fb"
+    },
+    {
+      "path": "auggie/.specify/scripts/bash/tasks-story.sh",
+      "sha256": "cbe549cbdb206983c4a4a111b164602ed98e9fb578b7f89aed6ecb93bdab380e"
+    },
+    {
+      "path": "auggie/.specify/scripts/bash/test-word-count.sh",
+      "sha256": "6c550a6b7fc6996d0c440bec0bb1cc320c4027df83ec0749a2106d792e15ce88"
+    },
+    {
+      "path": "auggie/.specify/scripts/bash/text-audit.sh",
+      "sha256": "433c811d291e9ef73c5a939953c545845535228fa36805e1c0e8ac2f1e5afac5"
+    },
+    {
+      "path": "auggie/.specify/scripts/bash/track-progress.sh",
+      "sha256": "0092e8ba609d10dc3d4c4ebcac0a802771947dad88bafeed9012424c0b84aed8"
+    },
+    {
+      "path": "auggie/.specify/scripts/build-commands.cjs",
+      "sha256": "148e9aea0b947582b1475eaa53d7778dd9aafbbdf4476d6ea9b9eca684602eee"
+    },
+    {
+      "path": "auggie/.specify/scripts/postbuild.cjs",
+      "sha256": "06255c106d3ee5a1a5c84afcc056a370589bc3bc8577d7e42a7934bfc7b9bede"
+    },
+    {
+      "path": "auggie/.specify/scripts/runtime/application/check-writing-state.js",
+      "sha256": "3d966a5256cefed94cc1cb9bde8a55c4ddac6d4efb146d4a0dbc6192b02dedb8"
+    },
+    {
+      "path": "auggie/.specify/scripts/runtime/domain/story-artifact.js",
+      "sha256": "010032f357a3154a9e939db41baa9b47bf72d20a7b4d3c1dba65c25c2af2d603"
+    },
+    {
+      "path": "auggie/.specify/scripts/runtime/script-runtime.js",
+      "sha256": "6ddcafa9fca67371f159c0feb8df4d0eda5cda0e80d45bcb11713f43db99ba6c"
+    },
+    {
+      "path": "auggie/.specify/templates/AGENTS.codex.md",
+      "sha256": "85a8aaf48b73f1762d478f6fff69daa0cde4615423a314d75302583a8227bfd1"
+    },
+    {
+      "path": "auggie/.specify/templates/checklist-template.md",
+      "sha256": "cb3f31ae0eba66bc155c1151d0e0704a34deaa9ea1f783f9af93609aed3bcb32"
+    },
+    {
+      "path": "auggie/.specify/templates/gemini-settings.json",
+      "sha256": "4e699dab1d8e8f0d685c06b15525f253a9ad6797122db4a096973875a9115c74"
+    },
+    {
+      "path": "auggie/.specify/templates/GEMINI.md",
+      "sha256": "3b6521784cfc9dfccb8d3f1c6f8008371fe14e30f7bb378ecf12c6686e83f0da"
+    },
+    {
+      "path": "auggie/.specify/templates/knowledge/audit-config.json",
+      "sha256": "f1f3931cc70bd5b515e22d6f600609d6a093066d29620f3aac6456e79f4e53c7"
+    },
+    {
+      "path": "auggie/.specify/templates/knowledge/character-profiles.md",
+      "sha256": "5c0622856e9aeb19b0f6184a4d1e4fdee1feb9fe09e4b419dc20eae36071d03f"
+    },
+    {
+      "path": "auggie/.specify/templates/knowledge/character-voices.md",
+      "sha256": "3b0eee617fb919d1c068d850fddf27c3a578ac440fdbdb17513a6265c99dff3d"
+    },
+    {
+      "path": "auggie/.specify/templates/knowledge/locations.md",
+      "sha256": "9ba169c1e1b3ad65260a4ec815d92dbb68ebd9be03b8736a57b140cea33dbdcc"
+    },
+    {
+      "path": "auggie/.specify/templates/knowledge/world-setting.md",
+      "sha256": "7cfe68b12bab865d4646b03dacfff0a9bfbc36db60fb2b44c3ffff66bc545429"
+    },
+    {
+      "path": "auggie/.specify/templates/outline-template.md",
+      "sha256": "6087930e2f516bc721ec47d11b37eecaf30674eaad946abd3406cf25e654a299"
+    },
+    {
+      "path": "auggie/.specify/templates/story-template.md",
+      "sha256": "78326b42ea7a65c9f2b22161a849cea86359bba3620d728f7abdbb5ef64d7003"
+    },
+    {
+      "path": "auggie/.specify/templates/tracking/character-state.json",
+      "sha256": "81d3dc912c5e3504360d76bfdf9bdf365013857d4cae088f192bce8915c89d70"
+    },
+    {
+      "path": "auggie/.specify/templates/tracking/plot-tracker.json",
+      "sha256": "841703f221259f4746c2266a8dd943e004aa94ecf06db172fbdf0bd770d7703f"
+    },
+    {
+      "path": "auggie/.specify/templates/tracking/relationships.json",
+      "sha256": "de9567882a8cdf31dba6f0afa8b92bbf68346bb7063164724e47ae4434bddbcf"
+    },
+    {
+      "path": "auggie/.specify/templates/tracking/timeline.json",
+      "sha256": "f49c0aae351ab780591ab25bfbe82f53e24744adfc967d8ce1884bb8428dece1"
+    },
+    {
+      "path": "auggie/.specify/templates/tracking/validation-rules.json",
+      "sha256": "43d783508b85efe6dcfa70bb73493f9bddea45c5a26a408f379bf0b91aac47fe"
+    },
+    {
+      "path": "auggie/.specify/templates/vscode-settings.json",
+      "sha256": "875183e65cb2b8fd43111ef9f6b8e7b94fb8e3cdcfa9ae340cd9cf3eadaf06eb"
+    },
+    {
+      "path": "auggie/.specify/templates/writing-constitution-template.md",
+      "sha256": "26784c8e78e8636b6d09105ef9f6dcd3951c111517049cfbf23503a3e1b53b64"
+    },
+    {
+      "path": "auggie/spec/checklists/README.md",
+      "sha256": "dfc8a1470e23a98534dc9b8c3e33ea23990423ea9866d4a428484e5be074cc57"
+    },
+    {
+      "path": "auggie/spec/config.json",
+      "sha256": "719976aa49cedb025f13b9d047cc497cf01a9f3579fda888d94e592e19e8b469"
+    },
+    {
+      "path": "auggie/spec/presets/anti-ai-detection.md",
+      "sha256": "00bf97e5949d33a6d5bce083e8d210620206c6d6827efc0b67dbaccc0149fcfa"
+    },
+    {
+      "path": "auggie/spec/presets/golden-opening.md",
+      "sha256": "77843e024e293a6580f19aed0b3e41b36b2a7d3502b16c9402c1546b5d314371"
+    },
+    {
+      "path": "auggie/spec/presets/hero-journey/config.yaml",
+      "sha256": "46f87f2e09bf728231f9acdf6ce1aa6859c9bde5ca899e848d761ff0c263789e"
+    },
+    {
+      "path": "auggie/spec/presets/hero-journey/outline.md",
+      "sha256": "0f1a8b5fbf3b65ba128ed1a895b7ed58a3d76e85d2aff5618dcb94e6b8095959"
+    },
+    {
+      "path": "auggie/spec/presets/hero-journey/story.md",
+      "sha256": "6b4156a14dc9ed4c38b5826077e4c6ee5fe85f638b9c51ead0ac48287808554d"
+    },
+    {
+      "path": "auggie/spec/presets/pixar-formula/config.yaml",
+      "sha256": "86132b84e484eed8689614424859e8240c51ed638c4401a7184301b584ec35a3"
+    },
+    {
+      "path": "auggie/spec/presets/pixar-formula/outline.md",
+      "sha256": "31a8bdb81bf5e8c02413204a7448ead30d2cac78a82e84357ea302e1af0eed02"
+    },
+    {
+      "path": "auggie/spec/presets/pixar-formula/story.md",
+      "sha256": "bd883a9ba8221f41a8fb96a4fd3eec0a331cd20798154d14c3eb6f6149e5e1d4"
+    },
+    {
+      "path": "auggie/spec/presets/seven-point/config.yaml",
+      "sha256": "9127133dd1c4c2e4f29b2f883d9e3c33296be616c86f46bbfcc6e2dac5f2cc62"
+    },
+    {
+      "path": "auggie/spec/presets/seven-point/outline.md",
+      "sha256": "bad21f10defe45f1287ae8622550047a87e590994ffa8f71b9b6eca2975fdf91"
+    },
+    {
+      "path": "auggie/spec/presets/seven-point/story.md",
+      "sha256": "f1f045b9961002158d2b210412919643feac0e3b323af652fde29b4ce86f0252"
+    },
+    {
+      "path": "auggie/spec/presets/snowflake/outline.md",
+      "sha256": "8d31dab1b6fd6ebfb5de445ce2e8cfeaf61943e22582623c7215d4b2a39f9b8c"
+    },
+    {
+      "path": "auggie/spec/presets/snowflake/story.md",
+      "sha256": "f48b2dae3650cd396dad7fa47709fdfc9737cf06da71e21ec1c2b8cdd9d415ba"
+    },
+    {
+      "path": "auggie/spec/presets/story-circle/config.yaml",
+      "sha256": "8bfe9a4af156878aa8330efd41b0fc4ceabebbeafce49efcd3a6c6d16b38d8c3"
+    },
+    {
+      "path": "auggie/spec/presets/story-circle/outline.md",
+      "sha256": "34b56f852b4cb87b2cc1e82494839daa10ed47cff1c782db7d71f03c4936e467"
+    },
+    {
+      "path": "auggie/spec/presets/story-circle/story.md",
+      "sha256": "fa4f7ba6e3a6124f33bd9af8ef4168b95844f36b723bb4c8bf664048c28d3739"
+    },
+    {
+      "path": "auggie/spec/presets/three-act/config.yaml",
+      "sha256": "35534c4499c75c6670d7a38bf07d7d1268f72ebfce214af609901948802e939d"
+    },
+    {
+      "path": "auggie/spec/presets/three-act/outline.md",
+      "sha256": "6087930e2f516bc721ec47d11b37eecaf30674eaad946abd3406cf25e654a299"
+    },
+    {
+      "path": "auggie/spec/presets/three-act/story.md",
+      "sha256": "78326b42ea7a65c9f2b22161a849cea86359bba3620d728f7abdbb5ef64d7003"
+    },
+    {
+      "path": "auggie/spec/README.md",
+      "sha256": "780485b5b85cd4060b8deb8e8cb95acd9ec88660ebceae8e1a05631941aa5719"
+    },
+    {
+      "path": "claude/.claude/commands/novel.analyze.md",
+      "sha256": "a97601eef0292d1004094915f4c0d69c70f8a2a2148d1a13103cb3b5620b02be"
+    },
+    {
+      "path": "claude/.claude/commands/novel.checklist.md",
+      "sha256": "8bc6e608c07dfdafaab349de7b931c44e220467ffc81d5af8a218df5627da85b"
+    },
+    {
+      "path": "claude/.claude/commands/novel.clarify.md",
+      "sha256": "9df6b6069d9a9b14ec0236693bbee5752bea901771776a3846dcc09485b2793f"
+    },
+    {
+      "path": "claude/.claude/commands/novel.constitution.md",
+      "sha256": "925314d92ffdc8198d86f1b6c859c19ff5b523bb0e186f6a2ea8a77ddc4380de"
+    },
+    {
+      "path": "claude/.claude/commands/novel.expert.md",
+      "sha256": "84f2b05006abd81188919b8560967b8ac837914695fb2a7b8ee553543dbf3dde"
+    },
+    {
+      "path": "claude/.claude/commands/novel.plan.md",
+      "sha256": "6066edb2472272f8727380d2d2f39200c634a9b49ad09d8de850be5e95cd5e3b"
+    },
+    {
+      "path": "claude/.claude/commands/novel.relations.md",
+      "sha256": "b2ba0d38be2fe091cb7e62b4c32fb0a8366a5917fa68831eb97e646fb7a4f2e2"
+    },
+    {
+      "path": "claude/.claude/commands/novel.specify.md",
+      "sha256": "5db28dd4b4fbf9b6614a338fdcfce9520df0d2c412b93a5ec5755b802cc99704"
+    },
+    {
+      "path": "claude/.claude/commands/novel.tasks.md",
+      "sha256": "e1e2d987880efc3213e323f183c801c587493050487c416b9fa14998a0960148"
+    },
+    {
+      "path": "claude/.claude/commands/novel.timeline.md",
+      "sha256": "c6490b074d2bfb513c9a3979ed6004709cb990f4c8a4ca29b827e64010f782a5"
+    },
+    {
+      "path": "claude/.claude/commands/novel.track-init.md",
+      "sha256": "dd33637757b990dbd2386055dcb3c508a6f359ed063221c8725354aaeff01dd1"
+    },
+    {
+      "path": "claude/.claude/commands/novel.track.md",
+      "sha256": "565e90b4b3050a23e312c0112e8d13ddb07eafa2222539cc7528b456ee173bd0"
+    },
+    {
+      "path": "claude/.claude/commands/novel.write.md",
+      "sha256": "bc6fe5738ec160de8aac07cc9557f334bc246f82f8e39783376506eba0e3f2a4"
+    },
+    {
+      "path": "claude/.specify/experts/core/character.md",
+      "sha256": "6a2a74bd4b42c52e15bd877fe7fe1c5ad6a32358475e797397b060a4b230cd89"
+    },
+    {
+      "path": "claude/.specify/experts/core/plot.md",
+      "sha256": "1bf60cf836de917490c1424d2781f7d82518621815c3f66e5994f1225b1d7edb"
+    },
+    {
+      "path": "claude/.specify/experts/core/style.md",
+      "sha256": "5a1ef640343dfdf2dcb41109c500416d8319aa9591ed7b26e0184becde04f147"
+    },
+    {
+      "path": "claude/.specify/experts/core/world.md",
+      "sha256": "aeaef9f816d34d5e5ca27f9efc3001fd2987b15ac9b781d3fc0a1b13f1d070cc"
+    },
+    {
+      "path": "claude/.specify/memory/constitution.md",
+      "sha256": "4e388c23598d178167ac7f73f70359079ccb3c2f68e8884606640ecbacba2dbc"
+    },
+    {
+      "path": "claude/.specify/memory/personal-voice.md",
+      "sha256": "97a781384ec013203cc6a64aad7b9431c75b5a45bc19f82d3482800e7a22b0c4"
+    },
+    {
+      "path": "claude/.specify/scripts/bash/analyze-story.sh",
+      "sha256": "55bed848066c013b4a01736793c20bbab5e79f6e859491fc4a3aa8ad3816b736"
+    },
+    {
+      "path": "claude/.specify/scripts/bash/check-consistency.sh",
+      "sha256": "cac69cdf14298924dd7d23b8bd700ac74d2f672285f423932247d99ad4696702"
+    },
+    {
+      "path": "claude/.specify/scripts/bash/check-plot.sh",
+      "sha256": "f814931fe8928fc55af9a2386969355e2a02b570bd8da651cde92c98066c147d"
+    },
+    {
+      "path": "claude/.specify/scripts/bash/check-timeline.sh",
+      "sha256": "d8ef7a477cd31ab486a38e7c3509b375b31cbc6e3a406d4e47c4cb3d6cd101ab"
+    },
+    {
+      "path": "claude/.specify/scripts/bash/check-world.sh",
+      "sha256": "d5aa04491960003807def1d5b33c7d1e236fda5ad3c942a8ac22215ca0d85140"
+    },
+    {
+      "path": "claude/.specify/scripts/bash/check-writing-state.sh",
+      "sha256": "5fddce4ddf5d246937ea6888a2d623ede7148cda071a83587df833e50303ad3f"
+    },
+    {
+      "path": "claude/.specify/scripts/bash/clarify-story.sh",
+      "sha256": "9787229ca3e2ea30505fc99373a44e7d698bb6a182a08002cfa7f029d921d84d"
+    },
+    {
+      "path": "claude/.specify/scripts/bash/common.sh",
+      "sha256": "070581f0531b9ce1442bfbd14c7caab0cac8c99c8537dc122bf0b0495cb7f646"
+    },
+    {
+      "path": "claude/.specify/scripts/bash/constitution.sh",
+      "sha256": "b352cd5e0679aa50d1f370a4807a88af473406159b5d1e4a907a724b23983667"
+    },
+    {
+      "path": "claude/.specify/scripts/bash/generate-tasks.sh",
+      "sha256": "0b1c3a8b8a20d82bd6132017072f53f4796f51ca08467ee405e809978ac9e5c8"
+    },
+    {
+      "path": "claude/.specify/scripts/bash/init-tracking.sh",
+      "sha256": "dfdf2ac7eb46c3014c2c20429219a4544b94fba7af21e509697b5597ed1d173e"
+    },
+    {
+      "path": "claude/.specify/scripts/bash/manage-relations.sh",
+      "sha256": "78ffc8b1ccdb044ac5879979ae228bacb397ab3acda2feccc25080e00ea4c474"
+    },
+    {
+      "path": "claude/.specify/scripts/bash/plan-story.sh",
+      "sha256": "f0d13b40d811fee076e7e7fe915f13b0d143fd971e4f8ca02444cd0f9fef689f"
+    },
+    {
+      "path": "claude/.specify/scripts/bash/specify-story.sh",
+      "sha256": "5f796579bea1ca541d3766a9c2ea58802b835f27cacb59e1f09bf27527a8f6fb"
+    },
+    {
+      "path": "claude/.specify/scripts/bash/tasks-story.sh",
+      "sha256": "cbe549cbdb206983c4a4a111b164602ed98e9fb578b7f89aed6ecb93bdab380e"
+    },
+    {
+      "path": "claude/.specify/scripts/bash/test-word-count.sh",
+      "sha256": "6c550a6b7fc6996d0c440bec0bb1cc320c4027df83ec0749a2106d792e15ce88"
+    },
+    {
+      "path": "claude/.specify/scripts/bash/text-audit.sh",
+      "sha256": "433c811d291e9ef73c5a939953c545845535228fa36805e1c0e8ac2f1e5afac5"
+    },
+    {
+      "path": "claude/.specify/scripts/bash/track-progress.sh",
+      "sha256": "0092e8ba609d10dc3d4c4ebcac0a802771947dad88bafeed9012424c0b84aed8"
+    },
+    {
+      "path": "claude/.specify/scripts/build-commands.cjs",
+      "sha256": "148e9aea0b947582b1475eaa53d7778dd9aafbbdf4476d6ea9b9eca684602eee"
+    },
+    {
+      "path": "claude/.specify/scripts/postbuild.cjs",
+      "sha256": "06255c106d3ee5a1a5c84afcc056a370589bc3bc8577d7e42a7934bfc7b9bede"
+    },
+    {
+      "path": "claude/.specify/scripts/runtime/application/check-writing-state.js",
+      "sha256": "3d966a5256cefed94cc1cb9bde8a55c4ddac6d4efb146d4a0dbc6192b02dedb8"
+    },
+    {
+      "path": "claude/.specify/scripts/runtime/domain/story-artifact.js",
+      "sha256": "010032f357a3154a9e939db41baa9b47bf72d20a7b4d3c1dba65c25c2af2d603"
+    },
+    {
+      "path": "claude/.specify/scripts/runtime/script-runtime.js",
+      "sha256": "6ddcafa9fca67371f159c0feb8df4d0eda5cda0e80d45bcb11713f43db99ba6c"
+    },
+    {
+      "path": "claude/.specify/templates/AGENTS.codex.md",
+      "sha256": "85a8aaf48b73f1762d478f6fff69daa0cde4615423a314d75302583a8227bfd1"
+    },
+    {
+      "path": "claude/.specify/templates/checklist-template.md",
+      "sha256": "cb3f31ae0eba66bc155c1151d0e0704a34deaa9ea1f783f9af93609aed3bcb32"
+    },
+    {
+      "path": "claude/.specify/templates/gemini-settings.json",
+      "sha256": "4e699dab1d8e8f0d685c06b15525f253a9ad6797122db4a096973875a9115c74"
+    },
+    {
+      "path": "claude/.specify/templates/GEMINI.md",
+      "sha256": "3b6521784cfc9dfccb8d3f1c6f8008371fe14e30f7bb378ecf12c6686e83f0da"
+    },
+    {
+      "path": "claude/.specify/templates/knowledge/audit-config.json",
+      "sha256": "f1f3931cc70bd5b515e22d6f600609d6a093066d29620f3aac6456e79f4e53c7"
+    },
+    {
+      "path": "claude/.specify/templates/knowledge/character-profiles.md",
+      "sha256": "5c0622856e9aeb19b0f6184a4d1e4fdee1feb9fe09e4b419dc20eae36071d03f"
+    },
+    {
+      "path": "claude/.specify/templates/knowledge/character-voices.md",
+      "sha256": "3b0eee617fb919d1c068d850fddf27c3a578ac440fdbdb17513a6265c99dff3d"
+    },
+    {
+      "path": "claude/.specify/templates/knowledge/locations.md",
+      "sha256": "9ba169c1e1b3ad65260a4ec815d92dbb68ebd9be03b8736a57b140cea33dbdcc"
+    },
+    {
+      "path": "claude/.specify/templates/knowledge/world-setting.md",
+      "sha256": "7cfe68b12bab865d4646b03dacfff0a9bfbc36db60fb2b44c3ffff66bc545429"
+    },
+    {
+      "path": "claude/.specify/templates/outline-template.md",
+      "sha256": "6087930e2f516bc721ec47d11b37eecaf30674eaad946abd3406cf25e654a299"
+    },
+    {
+      "path": "claude/.specify/templates/story-template.md",
+      "sha256": "78326b42ea7a65c9f2b22161a849cea86359bba3620d728f7abdbb5ef64d7003"
+    },
+    {
+      "path": "claude/.specify/templates/tracking/character-state.json",
+      "sha256": "81d3dc912c5e3504360d76bfdf9bdf365013857d4cae088f192bce8915c89d70"
+    },
+    {
+      "path": "claude/.specify/templates/tracking/plot-tracker.json",
+      "sha256": "841703f221259f4746c2266a8dd943e004aa94ecf06db172fbdf0bd770d7703f"
+    },
+    {
+      "path": "claude/.specify/templates/tracking/relationships.json",
+      "sha256": "de9567882a8cdf31dba6f0afa8b92bbf68346bb7063164724e47ae4434bddbcf"
+    },
+    {
+      "path": "claude/.specify/templates/tracking/timeline.json",
+      "sha256": "f49c0aae351ab780591ab25bfbe82f53e24744adfc967d8ce1884bb8428dece1"
+    },
+    {
+      "path": "claude/.specify/templates/tracking/validation-rules.json",
+      "sha256": "43d783508b85efe6dcfa70bb73493f9bddea45c5a26a408f379bf0b91aac47fe"
+    },
+    {
+      "path": "claude/.specify/templates/vscode-settings.json",
+      "sha256": "875183e65cb2b8fd43111ef9f6b8e7b94fb8e3cdcfa9ae340cd9cf3eadaf06eb"
+    },
+    {
+      "path": "claude/.specify/templates/writing-constitution-template.md",
+      "sha256": "26784c8e78e8636b6d09105ef9f6dcd3951c111517049cfbf23503a3e1b53b64"
+    },
+    {
+      "path": "claude/spec/checklists/README.md",
+      "sha256": "dfc8a1470e23a98534dc9b8c3e33ea23990423ea9866d4a428484e5be074cc57"
+    },
+    {
+      "path": "claude/spec/config.json",
+      "sha256": "719976aa49cedb025f13b9d047cc497cf01a9f3579fda888d94e592e19e8b469"
+    },
+    {
+      "path": "claude/spec/presets/anti-ai-detection.md",
+      "sha256": "00bf97e5949d33a6d5bce083e8d210620206c6d6827efc0b67dbaccc0149fcfa"
+    },
+    {
+      "path": "claude/spec/presets/golden-opening.md",
+      "sha256": "77843e024e293a6580f19aed0b3e41b36b2a7d3502b16c9402c1546b5d314371"
+    },
+    {
+      "path": "claude/spec/presets/hero-journey/config.yaml",
+      "sha256": "46f87f2e09bf728231f9acdf6ce1aa6859c9bde5ca899e848d761ff0c263789e"
+    },
+    {
+      "path": "claude/spec/presets/hero-journey/outline.md",
+      "sha256": "0f1a8b5fbf3b65ba128ed1a895b7ed58a3d76e85d2aff5618dcb94e6b8095959"
+    },
+    {
+      "path": "claude/spec/presets/hero-journey/story.md",
+      "sha256": "6b4156a14dc9ed4c38b5826077e4c6ee5fe85f638b9c51ead0ac48287808554d"
+    },
+    {
+      "path": "claude/spec/presets/pixar-formula/config.yaml",
+      "sha256": "86132b84e484eed8689614424859e8240c51ed638c4401a7184301b584ec35a3"
+    },
+    {
+      "path": "claude/spec/presets/pixar-formula/outline.md",
+      "sha256": "31a8bdb81bf5e8c02413204a7448ead30d2cac78a82e84357ea302e1af0eed02"
+    },
+    {
+      "path": "claude/spec/presets/pixar-formula/story.md",
+      "sha256": "bd883a9ba8221f41a8fb96a4fd3eec0a331cd20798154d14c3eb6f6149e5e1d4"
+    },
+    {
+      "path": "claude/spec/presets/seven-point/config.yaml",
+      "sha256": "9127133dd1c4c2e4f29b2f883d9e3c33296be616c86f46bbfcc6e2dac5f2cc62"
+    },
+    {
+      "path": "claude/spec/presets/seven-point/outline.md",
+      "sha256": "bad21f10defe45f1287ae8622550047a87e590994ffa8f71b9b6eca2975fdf91"
+    },
+    {
+      "path": "claude/spec/presets/seven-point/story.md",
+      "sha256": "f1f045b9961002158d2b210412919643feac0e3b323af652fde29b4ce86f0252"
+    },
+    {
+      "path": "claude/spec/presets/snowflake/outline.md",
+      "sha256": "8d31dab1b6fd6ebfb5de445ce2e8cfeaf61943e22582623c7215d4b2a39f9b8c"
+    },
+    {
+      "path": "claude/spec/presets/snowflake/story.md",
+      "sha256": "f48b2dae3650cd396dad7fa47709fdfc9737cf06da71e21ec1c2b8cdd9d415ba"
+    },
+    {
+      "path": "claude/spec/presets/story-circle/config.yaml",
+      "sha256": "8bfe9a4af156878aa8330efd41b0fc4ceabebbeafce49efcd3a6c6d16b38d8c3"
+    },
+    {
+      "path": "claude/spec/presets/story-circle/outline.md",
+      "sha256": "34b56f852b4cb87b2cc1e82494839daa10ed47cff1c782db7d71f03c4936e467"
+    },
+    {
+      "path": "claude/spec/presets/story-circle/story.md",
+      "sha256": "fa4f7ba6e3a6124f33bd9af8ef4168b95844f36b723bb4c8bf664048c28d3739"
+    },
+    {
+      "path": "claude/spec/presets/three-act/config.yaml",
+      "sha256": "35534c4499c75c6670d7a38bf07d7d1268f72ebfce214af609901948802e939d"
+    },
+    {
+      "path": "claude/spec/presets/three-act/outline.md",
+      "sha256": "6087930e2f516bc721ec47d11b37eecaf30674eaad946abd3406cf25e654a299"
+    },
+    {
+      "path": "claude/spec/presets/three-act/story.md",
+      "sha256": "78326b42ea7a65c9f2b22161a849cea86359bba3620d728f7abdbb5ef64d7003"
+    },
+    {
+      "path": "claude/spec/README.md",
+      "sha256": "780485b5b85cd4060b8deb8e8cb95acd9ec88660ebceae8e1a05631941aa5719"
+    },
+    {
+      "path": "codebuddy/.codebuddy/commands/analyze.md",
+      "sha256": "2a20432766ab4fd9353a15cd47658843225c1406a63b7c6db609f842aa71d48f"
+    },
+    {
+      "path": "codebuddy/.codebuddy/commands/checklist.md",
+      "sha256": "002cfadb70a239fb80575bd079904489b09124705fa83312f04adc352760f1f1"
+    },
+    {
+      "path": "codebuddy/.codebuddy/commands/clarify.md",
+      "sha256": "72911b090782d26e6bcb4c67aecc7dc5a3beabdb0ef72daf2e50030788456f42"
+    },
+    {
+      "path": "codebuddy/.codebuddy/commands/constitution.md",
+      "sha256": "557f7ec23126b104549b938157bd97bf8f8fba8544d459704841534b1705903c"
+    },
+    {
+      "path": "codebuddy/.codebuddy/commands/expert.md",
+      "sha256": "423fd3fed88d46e8519c874c471c8be52c01644fe0851bebe0f87f2069adaa5a"
+    },
+    {
+      "path": "codebuddy/.codebuddy/commands/plan.md",
+      "sha256": "ddc8255fd47ae2538f931ae933e0506dc83c3190cd59e6310838ab0503d1c995"
+    },
+    {
+      "path": "codebuddy/.codebuddy/commands/relations.md",
+      "sha256": "9c520b48ccdeff7c86a8fb895416e5a2ac306815950c6f905440c09afed98fc8"
+    },
+    {
+      "path": "codebuddy/.codebuddy/commands/specify.md",
+      "sha256": "21ed950bdf9abddff7ffa08c07cb813717b8f66fd1f19fbe0b9c5816710ef961"
+    },
+    {
+      "path": "codebuddy/.codebuddy/commands/tasks.md",
+      "sha256": "98dc0279bd26c751eb831d62a38d5483708f2e1bc0a92ea183ce63e21a93ee7a"
+    },
+    {
+      "path": "codebuddy/.codebuddy/commands/timeline.md",
+      "sha256": "f03fbd8c3bd871b48940b6677588c83b52a84d012bd6f28c0a29368ad655baab"
+    },
+    {
+      "path": "codebuddy/.codebuddy/commands/track-init.md",
+      "sha256": "c7845f0e78240912bf4e36cd8ab4a90ae2ec13f72d92e8f0f68e6949d501cb76"
+    },
+    {
+      "path": "codebuddy/.codebuddy/commands/track.md",
+      "sha256": "9ac511e3bc24d554462c00cfd8a88e9a36d78b059d90f524400a594e0a3a6e85"
+    },
+    {
+      "path": "codebuddy/.codebuddy/commands/write.md",
+      "sha256": "12c6ed13c148a2097d73693c47ecaeeb0182eca452a2189d2553735a9cb7fc7a"
+    },
+    {
+      "path": "codebuddy/.specify/experts/core/character.md",
+      "sha256": "6a2a74bd4b42c52e15bd877fe7fe1c5ad6a32358475e797397b060a4b230cd89"
+    },
+    {
+      "path": "codebuddy/.specify/experts/core/plot.md",
+      "sha256": "1bf60cf836de917490c1424d2781f7d82518621815c3f66e5994f1225b1d7edb"
+    },
+    {
+      "path": "codebuddy/.specify/experts/core/style.md",
+      "sha256": "5a1ef640343dfdf2dcb41109c500416d8319aa9591ed7b26e0184becde04f147"
+    },
+    {
+      "path": "codebuddy/.specify/experts/core/world.md",
+      "sha256": "aeaef9f816d34d5e5ca27f9efc3001fd2987b15ac9b781d3fc0a1b13f1d070cc"
+    },
+    {
+      "path": "codebuddy/.specify/memory/constitution.md",
+      "sha256": "4e388c23598d178167ac7f73f70359079ccb3c2f68e8884606640ecbacba2dbc"
+    },
+    {
+      "path": "codebuddy/.specify/memory/personal-voice.md",
+      "sha256": "97a781384ec013203cc6a64aad7b9431c75b5a45bc19f82d3482800e7a22b0c4"
+    },
+    {
+      "path": "codebuddy/.specify/scripts/bash/analyze-story.sh",
+      "sha256": "55bed848066c013b4a01736793c20bbab5e79f6e859491fc4a3aa8ad3816b736"
+    },
+    {
+      "path": "codebuddy/.specify/scripts/bash/check-consistency.sh",
+      "sha256": "cac69cdf14298924dd7d23b8bd700ac74d2f672285f423932247d99ad4696702"
+    },
+    {
+      "path": "codebuddy/.specify/scripts/bash/check-plot.sh",
+      "sha256": "f814931fe8928fc55af9a2386969355e2a02b570bd8da651cde92c98066c147d"
+    },
+    {
+      "path": "codebuddy/.specify/scripts/bash/check-timeline.sh",
+      "sha256": "d8ef7a477cd31ab486a38e7c3509b375b31cbc6e3a406d4e47c4cb3d6cd101ab"
+    },
+    {
+      "path": "codebuddy/.specify/scripts/bash/check-world.sh",
+      "sha256": "d5aa04491960003807def1d5b33c7d1e236fda5ad3c942a8ac22215ca0d85140"
+    },
+    {
+      "path": "codebuddy/.specify/scripts/bash/check-writing-state.sh",
+      "sha256": "5fddce4ddf5d246937ea6888a2d623ede7148cda071a83587df833e50303ad3f"
+    },
+    {
+      "path": "codebuddy/.specify/scripts/bash/clarify-story.sh",
+      "sha256": "9787229ca3e2ea30505fc99373a44e7d698bb6a182a08002cfa7f029d921d84d"
+    },
+    {
+      "path": "codebuddy/.specify/scripts/bash/common.sh",
+      "sha256": "070581f0531b9ce1442bfbd14c7caab0cac8c99c8537dc122bf0b0495cb7f646"
+    },
+    {
+      "path": "codebuddy/.specify/scripts/bash/constitution.sh",
+      "sha256": "b352cd5e0679aa50d1f370a4807a88af473406159b5d1e4a907a724b23983667"
+    },
+    {
+      "path": "codebuddy/.specify/scripts/bash/generate-tasks.sh",
+      "sha256": "0b1c3a8b8a20d82bd6132017072f53f4796f51ca08467ee405e809978ac9e5c8"
+    },
+    {
+      "path": "codebuddy/.specify/scripts/bash/init-tracking.sh",
+      "sha256": "dfdf2ac7eb46c3014c2c20429219a4544b94fba7af21e509697b5597ed1d173e"
+    },
+    {
+      "path": "codebuddy/.specify/scripts/bash/manage-relations.sh",
+      "sha256": "78ffc8b1ccdb044ac5879979ae228bacb397ab3acda2feccc25080e00ea4c474"
+    },
+    {
+      "path": "codebuddy/.specify/scripts/bash/plan-story.sh",
+      "sha256": "f0d13b40d811fee076e7e7fe915f13b0d143fd971e4f8ca02444cd0f9fef689f"
+    },
+    {
+      "path": "codebuddy/.specify/scripts/bash/specify-story.sh",
+      "sha256": "5f796579bea1ca541d3766a9c2ea58802b835f27cacb59e1f09bf27527a8f6fb"
+    },
+    {
+      "path": "codebuddy/.specify/scripts/bash/tasks-story.sh",
+      "sha256": "cbe549cbdb206983c4a4a111b164602ed98e9fb578b7f89aed6ecb93bdab380e"
+    },
+    {
+      "path": "codebuddy/.specify/scripts/bash/test-word-count.sh",
+      "sha256": "6c550a6b7fc6996d0c440bec0bb1cc320c4027df83ec0749a2106d792e15ce88"
+    },
+    {
+      "path": "codebuddy/.specify/scripts/bash/text-audit.sh",
+      "sha256": "433c811d291e9ef73c5a939953c545845535228fa36805e1c0e8ac2f1e5afac5"
+    },
+    {
+      "path": "codebuddy/.specify/scripts/bash/track-progress.sh",
+      "sha256": "0092e8ba609d10dc3d4c4ebcac0a802771947dad88bafeed9012424c0b84aed8"
+    },
+    {
+      "path": "codebuddy/.specify/scripts/build-commands.cjs",
+      "sha256": "148e9aea0b947582b1475eaa53d7778dd9aafbbdf4476d6ea9b9eca684602eee"
+    },
+    {
+      "path": "codebuddy/.specify/scripts/postbuild.cjs",
+      "sha256": "06255c106d3ee5a1a5c84afcc056a370589bc3bc8577d7e42a7934bfc7b9bede"
+    },
+    {
+      "path": "codebuddy/.specify/scripts/runtime/application/check-writing-state.js",
+      "sha256": "3d966a5256cefed94cc1cb9bde8a55c4ddac6d4efb146d4a0dbc6192b02dedb8"
+    },
+    {
+      "path": "codebuddy/.specify/scripts/runtime/domain/story-artifact.js",
+      "sha256": "010032f357a3154a9e939db41baa9b47bf72d20a7b4d3c1dba65c25c2af2d603"
+    },
+    {
+      "path": "codebuddy/.specify/scripts/runtime/script-runtime.js",
+      "sha256": "6ddcafa9fca67371f159c0feb8df4d0eda5cda0e80d45bcb11713f43db99ba6c"
+    },
+    {
+      "path": "codebuddy/.specify/templates/AGENTS.codex.md",
+      "sha256": "85a8aaf48b73f1762d478f6fff69daa0cde4615423a314d75302583a8227bfd1"
+    },
+    {
+      "path": "codebuddy/.specify/templates/checklist-template.md",
+      "sha256": "cb3f31ae0eba66bc155c1151d0e0704a34deaa9ea1f783f9af93609aed3bcb32"
+    },
+    {
+      "path": "codebuddy/.specify/templates/gemini-settings.json",
+      "sha256": "4e699dab1d8e8f0d685c06b15525f253a9ad6797122db4a096973875a9115c74"
+    },
+    {
+      "path": "codebuddy/.specify/templates/GEMINI.md",
+      "sha256": "3b6521784cfc9dfccb8d3f1c6f8008371fe14e30f7bb378ecf12c6686e83f0da"
+    },
+    {
+      "path": "codebuddy/.specify/templates/knowledge/audit-config.json",
+      "sha256": "f1f3931cc70bd5b515e22d6f600609d6a093066d29620f3aac6456e79f4e53c7"
+    },
+    {
+      "path": "codebuddy/.specify/templates/knowledge/character-profiles.md",
+      "sha256": "5c0622856e9aeb19b0f6184a4d1e4fdee1feb9fe09e4b419dc20eae36071d03f"
+    },
+    {
+      "path": "codebuddy/.specify/templates/knowledge/character-voices.md",
+      "sha256": "3b0eee617fb919d1c068d850fddf27c3a578ac440fdbdb17513a6265c99dff3d"
+    },
+    {
+      "path": "codebuddy/.specify/templates/knowledge/locations.md",
+      "sha256": "9ba169c1e1b3ad65260a4ec815d92dbb68ebd9be03b8736a57b140cea33dbdcc"
+    },
+    {
+      "path": "codebuddy/.specify/templates/knowledge/world-setting.md",
+      "sha256": "7cfe68b12bab865d4646b03dacfff0a9bfbc36db60fb2b44c3ffff66bc545429"
+    },
+    {
+      "path": "codebuddy/.specify/templates/outline-template.md",
+      "sha256": "6087930e2f516bc721ec47d11b37eecaf30674eaad946abd3406cf25e654a299"
+    },
+    {
+      "path": "codebuddy/.specify/templates/story-template.md",
+      "sha256": "78326b42ea7a65c9f2b22161a849cea86359bba3620d728f7abdbb5ef64d7003"
+    },
+    {
+      "path": "codebuddy/.specify/templates/tracking/character-state.json",
+      "sha256": "81d3dc912c5e3504360d76bfdf9bdf365013857d4cae088f192bce8915c89d70"
+    },
+    {
+      "path": "codebuddy/.specify/templates/tracking/plot-tracker.json",
+      "sha256": "841703f221259f4746c2266a8dd943e004aa94ecf06db172fbdf0bd770d7703f"
+    },
+    {
+      "path": "codebuddy/.specify/templates/tracking/relationships.json",
+      "sha256": "de9567882a8cdf31dba6f0afa8b92bbf68346bb7063164724e47ae4434bddbcf"
+    },
+    {
+      "path": "codebuddy/.specify/templates/tracking/timeline.json",
+      "sha256": "f49c0aae351ab780591ab25bfbe82f53e24744adfc967d8ce1884bb8428dece1"
+    },
+    {
+      "path": "codebuddy/.specify/templates/tracking/validation-rules.json",
+      "sha256": "43d783508b85efe6dcfa70bb73493f9bddea45c5a26a408f379bf0b91aac47fe"
+    },
+    {
+      "path": "codebuddy/.specify/templates/vscode-settings.json",
+      "sha256": "875183e65cb2b8fd43111ef9f6b8e7b94fb8e3cdcfa9ae340cd9cf3eadaf06eb"
+    },
+    {
+      "path": "codebuddy/.specify/templates/writing-constitution-template.md",
+      "sha256": "26784c8e78e8636b6d09105ef9f6dcd3951c111517049cfbf23503a3e1b53b64"
+    },
+    {
+      "path": "codebuddy/spec/checklists/README.md",
+      "sha256": "dfc8a1470e23a98534dc9b8c3e33ea23990423ea9866d4a428484e5be074cc57"
+    },
+    {
+      "path": "codebuddy/spec/config.json",
+      "sha256": "719976aa49cedb025f13b9d047cc497cf01a9f3579fda888d94e592e19e8b469"
+    },
+    {
+      "path": "codebuddy/spec/presets/anti-ai-detection.md",
+      "sha256": "00bf97e5949d33a6d5bce083e8d210620206c6d6827efc0b67dbaccc0149fcfa"
+    },
+    {
+      "path": "codebuddy/spec/presets/golden-opening.md",
+      "sha256": "77843e024e293a6580f19aed0b3e41b36b2a7d3502b16c9402c1546b5d314371"
+    },
+    {
+      "path": "codebuddy/spec/presets/hero-journey/config.yaml",
+      "sha256": "46f87f2e09bf728231f9acdf6ce1aa6859c9bde5ca899e848d761ff0c263789e"
+    },
+    {
+      "path": "codebuddy/spec/presets/hero-journey/outline.md",
+      "sha256": "0f1a8b5fbf3b65ba128ed1a895b7ed58a3d76e85d2aff5618dcb94e6b8095959"
+    },
+    {
+      "path": "codebuddy/spec/presets/hero-journey/story.md",
+      "sha256": "6b4156a14dc9ed4c38b5826077e4c6ee5fe85f638b9c51ead0ac48287808554d"
+    },
+    {
+      "path": "codebuddy/spec/presets/pixar-formula/config.yaml",
+      "sha256": "86132b84e484eed8689614424859e8240c51ed638c4401a7184301b584ec35a3"
+    },
+    {
+      "path": "codebuddy/spec/presets/pixar-formula/outline.md",
+      "sha256": "31a8bdb81bf5e8c02413204a7448ead30d2cac78a82e84357ea302e1af0eed02"
+    },
+    {
+      "path": "codebuddy/spec/presets/pixar-formula/story.md",
+      "sha256": "bd883a9ba8221f41a8fb96a4fd3eec0a331cd20798154d14c3eb6f6149e5e1d4"
+    },
+    {
+      "path": "codebuddy/spec/presets/seven-point/config.yaml",
+      "sha256": "9127133dd1c4c2e4f29b2f883d9e3c33296be616c86f46bbfcc6e2dac5f2cc62"
+    },
+    {
+      "path": "codebuddy/spec/presets/seven-point/outline.md",
+      "sha256": "bad21f10defe45f1287ae8622550047a87e590994ffa8f71b9b6eca2975fdf91"
+    },
+    {
+      "path": "codebuddy/spec/presets/seven-point/story.md",
+      "sha256": "f1f045b9961002158d2b210412919643feac0e3b323af652fde29b4ce86f0252"
+    },
+    {
+      "path": "codebuddy/spec/presets/snowflake/outline.md",
+      "sha256": "8d31dab1b6fd6ebfb5de445ce2e8cfeaf61943e22582623c7215d4b2a39f9b8c"
+    },
+    {
+      "path": "codebuddy/spec/presets/snowflake/story.md",
+      "sha256": "f48b2dae3650cd396dad7fa47709fdfc9737cf06da71e21ec1c2b8cdd9d415ba"
+    },
+    {
+      "path": "codebuddy/spec/presets/story-circle/config.yaml",
+      "sha256": "8bfe9a4af156878aa8330efd41b0fc4ceabebbeafce49efcd3a6c6d16b38d8c3"
+    },
+    {
+      "path": "codebuddy/spec/presets/story-circle/outline.md",
+      "sha256": "34b56f852b4cb87b2cc1e82494839daa10ed47cff1c782db7d71f03c4936e467"
+    },
+    {
+      "path": "codebuddy/spec/presets/story-circle/story.md",
+      "sha256": "fa4f7ba6e3a6124f33bd9af8ef4168b95844f36b723bb4c8bf664048c28d3739"
+    },
+    {
+      "path": "codebuddy/spec/presets/three-act/config.yaml",
+      "sha256": "35534c4499c75c6670d7a38bf07d7d1268f72ebfce214af609901948802e939d"
+    },
+    {
+      "path": "codebuddy/spec/presets/three-act/outline.md",
+      "sha256": "6087930e2f516bc721ec47d11b37eecaf30674eaad946abd3406cf25e654a299"
+    },
+    {
+      "path": "codebuddy/spec/presets/three-act/story.md",
+      "sha256": "78326b42ea7a65c9f2b22161a849cea86359bba3620d728f7abdbb5ef64d7003"
+    },
+    {
+      "path": "codebuddy/spec/README.md",
+      "sha256": "780485b5b85cd4060b8deb8e8cb95acd9ec88660ebceae8e1a05631941aa5719"
+    },
+    {
+      "path": "codex/.codex/prompts/novel-analyze.md",
+      "sha256": "2a20432766ab4fd9353a15cd47658843225c1406a63b7c6db609f842aa71d48f"
+    },
+    {
+      "path": "codex/.codex/prompts/novel-checklist.md",
+      "sha256": "002cfadb70a239fb80575bd079904489b09124705fa83312f04adc352760f1f1"
+    },
+    {
+      "path": "codex/.codex/prompts/novel-clarify.md",
+      "sha256": "72911b090782d26e6bcb4c67aecc7dc5a3beabdb0ef72daf2e50030788456f42"
+    },
+    {
+      "path": "codex/.codex/prompts/novel-constitution.md",
+      "sha256": "557f7ec23126b104549b938157bd97bf8f8fba8544d459704841534b1705903c"
+    },
+    {
+      "path": "codex/.codex/prompts/novel-expert.md",
+      "sha256": "423fd3fed88d46e8519c874c471c8be52c01644fe0851bebe0f87f2069adaa5a"
+    },
+    {
+      "path": "codex/.codex/prompts/novel-plan.md",
+      "sha256": "ddc8255fd47ae2538f931ae933e0506dc83c3190cd59e6310838ab0503d1c995"
+    },
+    {
+      "path": "codex/.codex/prompts/novel-relations.md",
+      "sha256": "9c520b48ccdeff7c86a8fb895416e5a2ac306815950c6f905440c09afed98fc8"
+    },
+    {
+      "path": "codex/.codex/prompts/novel-specify.md",
+      "sha256": "21ed950bdf9abddff7ffa08c07cb813717b8f66fd1f19fbe0b9c5816710ef961"
+    },
+    {
+      "path": "codex/.codex/prompts/novel-tasks.md",
+      "sha256": "98dc0279bd26c751eb831d62a38d5483708f2e1bc0a92ea183ce63e21a93ee7a"
+    },
+    {
+      "path": "codex/.codex/prompts/novel-timeline.md",
+      "sha256": "f03fbd8c3bd871b48940b6677588c83b52a84d012bd6f28c0a29368ad655baab"
+    },
+    {
+      "path": "codex/.codex/prompts/novel-track-init.md",
+      "sha256": "c7845f0e78240912bf4e36cd8ab4a90ae2ec13f72d92e8f0f68e6949d501cb76"
+    },
+    {
+      "path": "codex/.codex/prompts/novel-track.md",
+      "sha256": "9ac511e3bc24d554462c00cfd8a88e9a36d78b059d90f524400a594e0a3a6e85"
+    },
+    {
+      "path": "codex/.codex/prompts/novel-write.md",
+      "sha256": "12c6ed13c148a2097d73693c47ecaeeb0182eca452a2189d2553735a9cb7fc7a"
+    },
+    {
+      "path": "codex/.specify/experts/core/character.md",
+      "sha256": "6a2a74bd4b42c52e15bd877fe7fe1c5ad6a32358475e797397b060a4b230cd89"
+    },
+    {
+      "path": "codex/.specify/experts/core/plot.md",
+      "sha256": "1bf60cf836de917490c1424d2781f7d82518621815c3f66e5994f1225b1d7edb"
+    },
+    {
+      "path": "codex/.specify/experts/core/style.md",
+      "sha256": "5a1ef640343dfdf2dcb41109c500416d8319aa9591ed7b26e0184becde04f147"
+    },
+    {
+      "path": "codex/.specify/experts/core/world.md",
+      "sha256": "aeaef9f816d34d5e5ca27f9efc3001fd2987b15ac9b781d3fc0a1b13f1d070cc"
+    },
+    {
+      "path": "codex/.specify/memory/constitution.md",
+      "sha256": "4e388c23598d178167ac7f73f70359079ccb3c2f68e8884606640ecbacba2dbc"
+    },
+    {
+      "path": "codex/.specify/memory/personal-voice.md",
+      "sha256": "97a781384ec013203cc6a64aad7b9431c75b5a45bc19f82d3482800e7a22b0c4"
+    },
+    {
+      "path": "codex/.specify/scripts/bash/analyze-story.sh",
+      "sha256": "55bed848066c013b4a01736793c20bbab5e79f6e859491fc4a3aa8ad3816b736"
+    },
+    {
+      "path": "codex/.specify/scripts/bash/check-consistency.sh",
+      "sha256": "cac69cdf14298924dd7d23b8bd700ac74d2f672285f423932247d99ad4696702"
+    },
+    {
+      "path": "codex/.specify/scripts/bash/check-plot.sh",
+      "sha256": "f814931fe8928fc55af9a2386969355e2a02b570bd8da651cde92c98066c147d"
+    },
+    {
+      "path": "codex/.specify/scripts/bash/check-timeline.sh",
+      "sha256": "d8ef7a477cd31ab486a38e7c3509b375b31cbc6e3a406d4e47c4cb3d6cd101ab"
+    },
+    {
+      "path": "codex/.specify/scripts/bash/check-world.sh",
+      "sha256": "d5aa04491960003807def1d5b33c7d1e236fda5ad3c942a8ac22215ca0d85140"
+    },
+    {
+      "path": "codex/.specify/scripts/bash/check-writing-state.sh",
+      "sha256": "5fddce4ddf5d246937ea6888a2d623ede7148cda071a83587df833e50303ad3f"
+    },
+    {
+      "path": "codex/.specify/scripts/bash/clarify-story.sh",
+      "sha256": "9787229ca3e2ea30505fc99373a44e7d698bb6a182a08002cfa7f029d921d84d"
+    },
+    {
+      "path": "codex/.specify/scripts/bash/common.sh",
+      "sha256": "070581f0531b9ce1442bfbd14c7caab0cac8c99c8537dc122bf0b0495cb7f646"
+    },
+    {
+      "path": "codex/.specify/scripts/bash/constitution.sh",
+      "sha256": "b352cd5e0679aa50d1f370a4807a88af473406159b5d1e4a907a724b23983667"
+    },
+    {
+      "path": "codex/.specify/scripts/bash/generate-tasks.sh",
+      "sha256": "0b1c3a8b8a20d82bd6132017072f53f4796f51ca08467ee405e809978ac9e5c8"
+    },
+    {
+      "path": "codex/.specify/scripts/bash/init-tracking.sh",
+      "sha256": "dfdf2ac7eb46c3014c2c20429219a4544b94fba7af21e509697b5597ed1d173e"
+    },
+    {
+      "path": "codex/.specify/scripts/bash/manage-relations.sh",
+      "sha256": "78ffc8b1ccdb044ac5879979ae228bacb397ab3acda2feccc25080e00ea4c474"
+    },
+    {
+      "path": "codex/.specify/scripts/bash/plan-story.sh",
+      "sha256": "f0d13b40d811fee076e7e7fe915f13b0d143fd971e4f8ca02444cd0f9fef689f"
+    },
+    {
+      "path": "codex/.specify/scripts/bash/specify-story.sh",
+      "sha256": "5f796579bea1ca541d3766a9c2ea58802b835f27cacb59e1f09bf27527a8f6fb"
+    },
+    {
+      "path": "codex/.specify/scripts/bash/tasks-story.sh",
+      "sha256": "cbe549cbdb206983c4a4a111b164602ed98e9fb578b7f89aed6ecb93bdab380e"
+    },
+    {
+      "path": "codex/.specify/scripts/bash/test-word-count.sh",
+      "sha256": "6c550a6b7fc6996d0c440bec0bb1cc320c4027df83ec0749a2106d792e15ce88"
+    },
+    {
+      "path": "codex/.specify/scripts/bash/text-audit.sh",
+      "sha256": "433c811d291e9ef73c5a939953c545845535228fa36805e1c0e8ac2f1e5afac5"
+    },
+    {
+      "path": "codex/.specify/scripts/bash/track-progress.sh",
+      "sha256": "0092e8ba609d10dc3d4c4ebcac0a802771947dad88bafeed9012424c0b84aed8"
+    },
+    {
+      "path": "codex/.specify/scripts/build-commands.cjs",
+      "sha256": "148e9aea0b947582b1475eaa53d7778dd9aafbbdf4476d6ea9b9eca684602eee"
+    },
+    {
+      "path": "codex/.specify/scripts/postbuild.cjs",
+      "sha256": "06255c106d3ee5a1a5c84afcc056a370589bc3bc8577d7e42a7934bfc7b9bede"
+    },
+    {
+      "path": "codex/.specify/scripts/runtime/application/check-writing-state.js",
+      "sha256": "3d966a5256cefed94cc1cb9bde8a55c4ddac6d4efb146d4a0dbc6192b02dedb8"
+    },
+    {
+      "path": "codex/.specify/scripts/runtime/domain/story-artifact.js",
+      "sha256": "010032f357a3154a9e939db41baa9b47bf72d20a7b4d3c1dba65c25c2af2d603"
+    },
+    {
+      "path": "codex/.specify/scripts/runtime/script-runtime.js",
+      "sha256": "6ddcafa9fca67371f159c0feb8df4d0eda5cda0e80d45bcb11713f43db99ba6c"
+    },
+    {
+      "path": "codex/.specify/templates/AGENTS.codex.md",
+      "sha256": "85a8aaf48b73f1762d478f6fff69daa0cde4615423a314d75302583a8227bfd1"
+    },
+    {
+      "path": "codex/.specify/templates/checklist-template.md",
+      "sha256": "cb3f31ae0eba66bc155c1151d0e0704a34deaa9ea1f783f9af93609aed3bcb32"
+    },
+    {
+      "path": "codex/.specify/templates/gemini-settings.json",
+      "sha256": "4e699dab1d8e8f0d685c06b15525f253a9ad6797122db4a096973875a9115c74"
+    },
+    {
+      "path": "codex/.specify/templates/GEMINI.md",
+      "sha256": "3b6521784cfc9dfccb8d3f1c6f8008371fe14e30f7bb378ecf12c6686e83f0da"
+    },
+    {
+      "path": "codex/.specify/templates/knowledge/audit-config.json",
+      "sha256": "f1f3931cc70bd5b515e22d6f600609d6a093066d29620f3aac6456e79f4e53c7"
+    },
+    {
+      "path": "codex/.specify/templates/knowledge/character-profiles.md",
+      "sha256": "5c0622856e9aeb19b0f6184a4d1e4fdee1feb9fe09e4b419dc20eae36071d03f"
+    },
+    {
+      "path": "codex/.specify/templates/knowledge/character-voices.md",
+      "sha256": "3b0eee617fb919d1c068d850fddf27c3a578ac440fdbdb17513a6265c99dff3d"
+    },
+    {
+      "path": "codex/.specify/templates/knowledge/locations.md",
+      "sha256": "9ba169c1e1b3ad65260a4ec815d92dbb68ebd9be03b8736a57b140cea33dbdcc"
+    },
+    {
+      "path": "codex/.specify/templates/knowledge/world-setting.md",
+      "sha256": "7cfe68b12bab865d4646b03dacfff0a9bfbc36db60fb2b44c3ffff66bc545429"
+    },
+    {
+      "path": "codex/.specify/templates/outline-template.md",
+      "sha256": "6087930e2f516bc721ec47d11b37eecaf30674eaad946abd3406cf25e654a299"
+    },
+    {
+      "path": "codex/.specify/templates/story-template.md",
+      "sha256": "78326b42ea7a65c9f2b22161a849cea86359bba3620d728f7abdbb5ef64d7003"
+    },
+    {
+      "path": "codex/.specify/templates/tracking/character-state.json",
+      "sha256": "81d3dc912c5e3504360d76bfdf9bdf365013857d4cae088f192bce8915c89d70"
+    },
+    {
+      "path": "codex/.specify/templates/tracking/plot-tracker.json",
+      "sha256": "841703f221259f4746c2266a8dd943e004aa94ecf06db172fbdf0bd770d7703f"
+    },
+    {
+      "path": "codex/.specify/templates/tracking/relationships.json",
+      "sha256": "de9567882a8cdf31dba6f0afa8b92bbf68346bb7063164724e47ae4434bddbcf"
+    },
+    {
+      "path": "codex/.specify/templates/tracking/timeline.json",
+      "sha256": "f49c0aae351ab780591ab25bfbe82f53e24744adfc967d8ce1884bb8428dece1"
+    },
+    {
+      "path": "codex/.specify/templates/tracking/validation-rules.json",
+      "sha256": "43d783508b85efe6dcfa70bb73493f9bddea45c5a26a408f379bf0b91aac47fe"
+    },
+    {
+      "path": "codex/.specify/templates/vscode-settings.json",
+      "sha256": "875183e65cb2b8fd43111ef9f6b8e7b94fb8e3cdcfa9ae340cd9cf3eadaf06eb"
+    },
+    {
+      "path": "codex/.specify/templates/writing-constitution-template.md",
+      "sha256": "26784c8e78e8636b6d09105ef9f6dcd3951c111517049cfbf23503a3e1b53b64"
+    },
+    {
+      "path": "codex/spec/checklists/README.md",
+      "sha256": "dfc8a1470e23a98534dc9b8c3e33ea23990423ea9866d4a428484e5be074cc57"
+    },
+    {
+      "path": "codex/spec/config.json",
+      "sha256": "719976aa49cedb025f13b9d047cc497cf01a9f3579fda888d94e592e19e8b469"
+    },
+    {
+      "path": "codex/spec/presets/anti-ai-detection.md",
+      "sha256": "00bf97e5949d33a6d5bce083e8d210620206c6d6827efc0b67dbaccc0149fcfa"
+    },
+    {
+      "path": "codex/spec/presets/golden-opening.md",
+      "sha256": "77843e024e293a6580f19aed0b3e41b36b2a7d3502b16c9402c1546b5d314371"
+    },
+    {
+      "path": "codex/spec/presets/hero-journey/config.yaml",
+      "sha256": "46f87f2e09bf728231f9acdf6ce1aa6859c9bde5ca899e848d761ff0c263789e"
+    },
+    {
+      "path": "codex/spec/presets/hero-journey/outline.md",
+      "sha256": "0f1a8b5fbf3b65ba128ed1a895b7ed58a3d76e85d2aff5618dcb94e6b8095959"
+    },
+    {
+      "path": "codex/spec/presets/hero-journey/story.md",
+      "sha256": "6b4156a14dc9ed4c38b5826077e4c6ee5fe85f638b9c51ead0ac48287808554d"
+    },
+    {
+      "path": "codex/spec/presets/pixar-formula/config.yaml",
+      "sha256": "86132b84e484eed8689614424859e8240c51ed638c4401a7184301b584ec35a3"
+    },
+    {
+      "path": "codex/spec/presets/pixar-formula/outline.md",
+      "sha256": "31a8bdb81bf5e8c02413204a7448ead30d2cac78a82e84357ea302e1af0eed02"
+    },
+    {
+      "path": "codex/spec/presets/pixar-formula/story.md",
+      "sha256": "bd883a9ba8221f41a8fb96a4fd3eec0a331cd20798154d14c3eb6f6149e5e1d4"
+    },
+    {
+      "path": "codex/spec/presets/seven-point/config.yaml",
+      "sha256": "9127133dd1c4c2e4f29b2f883d9e3c33296be616c86f46bbfcc6e2dac5f2cc62"
+    },
+    {
+      "path": "codex/spec/presets/seven-point/outline.md",
+      "sha256": "bad21f10defe45f1287ae8622550047a87e590994ffa8f71b9b6eca2975fdf91"
+    },
+    {
+      "path": "codex/spec/presets/seven-point/story.md",
+      "sha256": "f1f045b9961002158d2b210412919643feac0e3b323af652fde29b4ce86f0252"
+    },
+    {
+      "path": "codex/spec/presets/snowflake/outline.md",
+      "sha256": "8d31dab1b6fd6ebfb5de445ce2e8cfeaf61943e22582623c7215d4b2a39f9b8c"
+    },
+    {
+      "path": "codex/spec/presets/snowflake/story.md",
+      "sha256": "f48b2dae3650cd396dad7fa47709fdfc9737cf06da71e21ec1c2b8cdd9d415ba"
+    },
+    {
+      "path": "codex/spec/presets/story-circle/config.yaml",
+      "sha256": "8bfe9a4af156878aa8330efd41b0fc4ceabebbeafce49efcd3a6c6d16b38d8c3"
+    },
+    {
+      "path": "codex/spec/presets/story-circle/outline.md",
+      "sha256": "34b56f852b4cb87b2cc1e82494839daa10ed47cff1c782db7d71f03c4936e467"
+    },
+    {
+      "path": "codex/spec/presets/story-circle/story.md",
+      "sha256": "fa4f7ba6e3a6124f33bd9af8ef4168b95844f36b723bb4c8bf664048c28d3739"
+    },
+    {
+      "path": "codex/spec/presets/three-act/config.yaml",
+      "sha256": "35534c4499c75c6670d7a38bf07d7d1268f72ebfce214af609901948802e939d"
+    },
+    {
+      "path": "codex/spec/presets/three-act/outline.md",
+      "sha256": "6087930e2f516bc721ec47d11b37eecaf30674eaad946abd3406cf25e654a299"
+    },
+    {
+      "path": "codex/spec/presets/three-act/story.md",
+      "sha256": "78326b42ea7a65c9f2b22161a849cea86359bba3620d728f7abdbb5ef64d7003"
+    },
+    {
+      "path": "codex/spec/README.md",
+      "sha256": "780485b5b85cd4060b8deb8e8cb95acd9ec88660ebceae8e1a05631941aa5719"
+    },
+    {
+      "path": "copilot/.github/prompts/analyze.prompt.md",
+      "sha256": "2a20432766ab4fd9353a15cd47658843225c1406a63b7c6db609f842aa71d48f"
+    },
+    {
+      "path": "copilot/.github/prompts/checklist.prompt.md",
+      "sha256": "002cfadb70a239fb80575bd079904489b09124705fa83312f04adc352760f1f1"
+    },
+    {
+      "path": "copilot/.github/prompts/clarify.prompt.md",
+      "sha256": "72911b090782d26e6bcb4c67aecc7dc5a3beabdb0ef72daf2e50030788456f42"
+    },
+    {
+      "path": "copilot/.github/prompts/constitution.prompt.md",
+      "sha256": "557f7ec23126b104549b938157bd97bf8f8fba8544d459704841534b1705903c"
+    },
+    {
+      "path": "copilot/.github/prompts/expert.prompt.md",
+      "sha256": "423fd3fed88d46e8519c874c471c8be52c01644fe0851bebe0f87f2069adaa5a"
+    },
+    {
+      "path": "copilot/.github/prompts/plan.prompt.md",
+      "sha256": "ddc8255fd47ae2538f931ae933e0506dc83c3190cd59e6310838ab0503d1c995"
+    },
+    {
+      "path": "copilot/.github/prompts/relations.prompt.md",
+      "sha256": "9c520b48ccdeff7c86a8fb895416e5a2ac306815950c6f905440c09afed98fc8"
+    },
+    {
+      "path": "copilot/.github/prompts/specify.prompt.md",
+      "sha256": "21ed950bdf9abddff7ffa08c07cb813717b8f66fd1f19fbe0b9c5816710ef961"
+    },
+    {
+      "path": "copilot/.github/prompts/tasks.prompt.md",
+      "sha256": "98dc0279bd26c751eb831d62a38d5483708f2e1bc0a92ea183ce63e21a93ee7a"
+    },
+    {
+      "path": "copilot/.github/prompts/timeline.prompt.md",
+      "sha256": "f03fbd8c3bd871b48940b6677588c83b52a84d012bd6f28c0a29368ad655baab"
+    },
+    {
+      "path": "copilot/.github/prompts/track-init.prompt.md",
+      "sha256": "c7845f0e78240912bf4e36cd8ab4a90ae2ec13f72d92e8f0f68e6949d501cb76"
+    },
+    {
+      "path": "copilot/.github/prompts/track.prompt.md",
+      "sha256": "9ac511e3bc24d554462c00cfd8a88e9a36d78b059d90f524400a594e0a3a6e85"
+    },
+    {
+      "path": "copilot/.github/prompts/write.prompt.md",
+      "sha256": "12c6ed13c148a2097d73693c47ecaeeb0182eca452a2189d2553735a9cb7fc7a"
+    },
+    {
+      "path": "copilot/.specify/experts/core/character.md",
+      "sha256": "6a2a74bd4b42c52e15bd877fe7fe1c5ad6a32358475e797397b060a4b230cd89"
+    },
+    {
+      "path": "copilot/.specify/experts/core/plot.md",
+      "sha256": "1bf60cf836de917490c1424d2781f7d82518621815c3f66e5994f1225b1d7edb"
+    },
+    {
+      "path": "copilot/.specify/experts/core/style.md",
+      "sha256": "5a1ef640343dfdf2dcb41109c500416d8319aa9591ed7b26e0184becde04f147"
+    },
+    {
+      "path": "copilot/.specify/experts/core/world.md",
+      "sha256": "aeaef9f816d34d5e5ca27f9efc3001fd2987b15ac9b781d3fc0a1b13f1d070cc"
+    },
+    {
+      "path": "copilot/.specify/memory/constitution.md",
+      "sha256": "4e388c23598d178167ac7f73f70359079ccb3c2f68e8884606640ecbacba2dbc"
+    },
+    {
+      "path": "copilot/.specify/memory/personal-voice.md",
+      "sha256": "97a781384ec013203cc6a64aad7b9431c75b5a45bc19f82d3482800e7a22b0c4"
+    },
+    {
+      "path": "copilot/.specify/scripts/bash/analyze-story.sh",
+      "sha256": "55bed848066c013b4a01736793c20bbab5e79f6e859491fc4a3aa8ad3816b736"
+    },
+    {
+      "path": "copilot/.specify/scripts/bash/check-consistency.sh",
+      "sha256": "cac69cdf14298924dd7d23b8bd700ac74d2f672285f423932247d99ad4696702"
+    },
+    {
+      "path": "copilot/.specify/scripts/bash/check-plot.sh",
+      "sha256": "f814931fe8928fc55af9a2386969355e2a02b570bd8da651cde92c98066c147d"
+    },
+    {
+      "path": "copilot/.specify/scripts/bash/check-timeline.sh",
+      "sha256": "d8ef7a477cd31ab486a38e7c3509b375b31cbc6e3a406d4e47c4cb3d6cd101ab"
+    },
+    {
+      "path": "copilot/.specify/scripts/bash/check-world.sh",
+      "sha256": "d5aa04491960003807def1d5b33c7d1e236fda5ad3c942a8ac22215ca0d85140"
+    },
+    {
+      "path": "copilot/.specify/scripts/bash/check-writing-state.sh",
+      "sha256": "5fddce4ddf5d246937ea6888a2d623ede7148cda071a83587df833e50303ad3f"
+    },
+    {
+      "path": "copilot/.specify/scripts/bash/clarify-story.sh",
+      "sha256": "9787229ca3e2ea30505fc99373a44e7d698bb6a182a08002cfa7f029d921d84d"
+    },
+    {
+      "path": "copilot/.specify/scripts/bash/common.sh",
+      "sha256": "070581f0531b9ce1442bfbd14c7caab0cac8c99c8537dc122bf0b0495cb7f646"
+    },
+    {
+      "path": "copilot/.specify/scripts/bash/constitution.sh",
+      "sha256": "b352cd5e0679aa50d1f370a4807a88af473406159b5d1e4a907a724b23983667"
+    },
+    {
+      "path": "copilot/.specify/scripts/bash/generate-tasks.sh",
+      "sha256": "0b1c3a8b8a20d82bd6132017072f53f4796f51ca08467ee405e809978ac9e5c8"
+    },
+    {
+      "path": "copilot/.specify/scripts/bash/init-tracking.sh",
+      "sha256": "dfdf2ac7eb46c3014c2c20429219a4544b94fba7af21e509697b5597ed1d173e"
+    },
+    {
+      "path": "copilot/.specify/scripts/bash/manage-relations.sh",
+      "sha256": "78ffc8b1ccdb044ac5879979ae228bacb397ab3acda2feccc25080e00ea4c474"
+    },
+    {
+      "path": "copilot/.specify/scripts/bash/plan-story.sh",
+      "sha256": "f0d13b40d811fee076e7e7fe915f13b0d143fd971e4f8ca02444cd0f9fef689f"
+    },
+    {
+      "path": "copilot/.specify/scripts/bash/specify-story.sh",
+      "sha256": "5f796579bea1ca541d3766a9c2ea58802b835f27cacb59e1f09bf27527a8f6fb"
+    },
+    {
+      "path": "copilot/.specify/scripts/bash/tasks-story.sh",
+      "sha256": "cbe549cbdb206983c4a4a111b164602ed98e9fb578b7f89aed6ecb93bdab380e"
+    },
+    {
+      "path": "copilot/.specify/scripts/bash/test-word-count.sh",
+      "sha256": "6c550a6b7fc6996d0c440bec0bb1cc320c4027df83ec0749a2106d792e15ce88"
+    },
+    {
+      "path": "copilot/.specify/scripts/bash/text-audit.sh",
+      "sha256": "433c811d291e9ef73c5a939953c545845535228fa36805e1c0e8ac2f1e5afac5"
+    },
+    {
+      "path": "copilot/.specify/scripts/bash/track-progress.sh",
+      "sha256": "0092e8ba609d10dc3d4c4ebcac0a802771947dad88bafeed9012424c0b84aed8"
+    },
+    {
+      "path": "copilot/.specify/scripts/build-commands.cjs",
+      "sha256": "148e9aea0b947582b1475eaa53d7778dd9aafbbdf4476d6ea9b9eca684602eee"
+    },
+    {
+      "path": "copilot/.specify/scripts/postbuild.cjs",
+      "sha256": "06255c106d3ee5a1a5c84afcc056a370589bc3bc8577d7e42a7934bfc7b9bede"
+    },
+    {
+      "path": "copilot/.specify/scripts/runtime/application/check-writing-state.js",
+      "sha256": "3d966a5256cefed94cc1cb9bde8a55c4ddac6d4efb146d4a0dbc6192b02dedb8"
+    },
+    {
+      "path": "copilot/.specify/scripts/runtime/domain/story-artifact.js",
+      "sha256": "010032f357a3154a9e939db41baa9b47bf72d20a7b4d3c1dba65c25c2af2d603"
+    },
+    {
+      "path": "copilot/.specify/scripts/runtime/script-runtime.js",
+      "sha256": "6ddcafa9fca67371f159c0feb8df4d0eda5cda0e80d45bcb11713f43db99ba6c"
+    },
+    {
+      "path": "copilot/.specify/templates/AGENTS.codex.md",
+      "sha256": "85a8aaf48b73f1762d478f6fff69daa0cde4615423a314d75302583a8227bfd1"
+    },
+    {
+      "path": "copilot/.specify/templates/checklist-template.md",
+      "sha256": "cb3f31ae0eba66bc155c1151d0e0704a34deaa9ea1f783f9af93609aed3bcb32"
+    },
+    {
+      "path": "copilot/.specify/templates/gemini-settings.json",
+      "sha256": "4e699dab1d8e8f0d685c06b15525f253a9ad6797122db4a096973875a9115c74"
+    },
+    {
+      "path": "copilot/.specify/templates/GEMINI.md",
+      "sha256": "3b6521784cfc9dfccb8d3f1c6f8008371fe14e30f7bb378ecf12c6686e83f0da"
+    },
+    {
+      "path": "copilot/.specify/templates/knowledge/audit-config.json",
+      "sha256": "f1f3931cc70bd5b515e22d6f600609d6a093066d29620f3aac6456e79f4e53c7"
+    },
+    {
+      "path": "copilot/.specify/templates/knowledge/character-profiles.md",
+      "sha256": "5c0622856e9aeb19b0f6184a4d1e4fdee1feb9fe09e4b419dc20eae36071d03f"
+    },
+    {
+      "path": "copilot/.specify/templates/knowledge/character-voices.md",
+      "sha256": "3b0eee617fb919d1c068d850fddf27c3a578ac440fdbdb17513a6265c99dff3d"
+    },
+    {
+      "path": "copilot/.specify/templates/knowledge/locations.md",
+      "sha256": "9ba169c1e1b3ad65260a4ec815d92dbb68ebd9be03b8736a57b140cea33dbdcc"
+    },
+    {
+      "path": "copilot/.specify/templates/knowledge/world-setting.md",
+      "sha256": "7cfe68b12bab865d4646b03dacfff0a9bfbc36db60fb2b44c3ffff66bc545429"
+    },
+    {
+      "path": "copilot/.specify/templates/outline-template.md",
+      "sha256": "6087930e2f516bc721ec47d11b37eecaf30674eaad946abd3406cf25e654a299"
+    },
+    {
+      "path": "copilot/.specify/templates/story-template.md",
+      "sha256": "78326b42ea7a65c9f2b22161a849cea86359bba3620d728f7abdbb5ef64d7003"
+    },
+    {
+      "path": "copilot/.specify/templates/tracking/character-state.json",
+      "sha256": "81d3dc912c5e3504360d76bfdf9bdf365013857d4cae088f192bce8915c89d70"
+    },
+    {
+      "path": "copilot/.specify/templates/tracking/plot-tracker.json",
+      "sha256": "841703f221259f4746c2266a8dd943e004aa94ecf06db172fbdf0bd770d7703f"
+    },
+    {
+      "path": "copilot/.specify/templates/tracking/relationships.json",
+      "sha256": "de9567882a8cdf31dba6f0afa8b92bbf68346bb7063164724e47ae4434bddbcf"
+    },
+    {
+      "path": "copilot/.specify/templates/tracking/timeline.json",
+      "sha256": "f49c0aae351ab780591ab25bfbe82f53e24744adfc967d8ce1884bb8428dece1"
+    },
+    {
+      "path": "copilot/.specify/templates/tracking/validation-rules.json",
+      "sha256": "43d783508b85efe6dcfa70bb73493f9bddea45c5a26a408f379bf0b91aac47fe"
+    },
+    {
+      "path": "copilot/.specify/templates/vscode-settings.json",
+      "sha256": "875183e65cb2b8fd43111ef9f6b8e7b94fb8e3cdcfa9ae340cd9cf3eadaf06eb"
+    },
+    {
+      "path": "copilot/.specify/templates/writing-constitution-template.md",
+      "sha256": "26784c8e78e8636b6d09105ef9f6dcd3951c111517049cfbf23503a3e1b53b64"
+    },
+    {
+      "path": "copilot/spec/checklists/README.md",
+      "sha256": "dfc8a1470e23a98534dc9b8c3e33ea23990423ea9866d4a428484e5be074cc57"
+    },
+    {
+      "path": "copilot/spec/config.json",
+      "sha256": "719976aa49cedb025f13b9d047cc497cf01a9f3579fda888d94e592e19e8b469"
+    },
+    {
+      "path": "copilot/spec/presets/anti-ai-detection.md",
+      "sha256": "00bf97e5949d33a6d5bce083e8d210620206c6d6827efc0b67dbaccc0149fcfa"
+    },
+    {
+      "path": "copilot/spec/presets/golden-opening.md",
+      "sha256": "77843e024e293a6580f19aed0b3e41b36b2a7d3502b16c9402c1546b5d314371"
+    },
+    {
+      "path": "copilot/spec/presets/hero-journey/config.yaml",
+      "sha256": "46f87f2e09bf728231f9acdf6ce1aa6859c9bde5ca899e848d761ff0c263789e"
+    },
+    {
+      "path": "copilot/spec/presets/hero-journey/outline.md",
+      "sha256": "0f1a8b5fbf3b65ba128ed1a895b7ed58a3d76e85d2aff5618dcb94e6b8095959"
+    },
+    {
+      "path": "copilot/spec/presets/hero-journey/story.md",
+      "sha256": "6b4156a14dc9ed4c38b5826077e4c6ee5fe85f638b9c51ead0ac48287808554d"
+    },
+    {
+      "path": "copilot/spec/presets/pixar-formula/config.yaml",
+      "sha256": "86132b84e484eed8689614424859e8240c51ed638c4401a7184301b584ec35a3"
+    },
+    {
+      "path": "copilot/spec/presets/pixar-formula/outline.md",
+      "sha256": "31a8bdb81bf5e8c02413204a7448ead30d2cac78a82e84357ea302e1af0eed02"
+    },
+    {
+      "path": "copilot/spec/presets/pixar-formula/story.md",
+      "sha256": "bd883a9ba8221f41a8fb96a4fd3eec0a331cd20798154d14c3eb6f6149e5e1d4"
+    },
+    {
+      "path": "copilot/spec/presets/seven-point/config.yaml",
+      "sha256": "9127133dd1c4c2e4f29b2f883d9e3c33296be616c86f46bbfcc6e2dac5f2cc62"
+    },
+    {
+      "path": "copilot/spec/presets/seven-point/outline.md",
+      "sha256": "bad21f10defe45f1287ae8622550047a87e590994ffa8f71b9b6eca2975fdf91"
+    },
+    {
+      "path": "copilot/spec/presets/seven-point/story.md",
+      "sha256": "f1f045b9961002158d2b210412919643feac0e3b323af652fde29b4ce86f0252"
+    },
+    {
+      "path": "copilot/spec/presets/snowflake/outline.md",
+      "sha256": "8d31dab1b6fd6ebfb5de445ce2e8cfeaf61943e22582623c7215d4b2a39f9b8c"
+    },
+    {
+      "path": "copilot/spec/presets/snowflake/story.md",
+      "sha256": "f48b2dae3650cd396dad7fa47709fdfc9737cf06da71e21ec1c2b8cdd9d415ba"
+    },
+    {
+      "path": "copilot/spec/presets/story-circle/config.yaml",
+      "sha256": "8bfe9a4af156878aa8330efd41b0fc4ceabebbeafce49efcd3a6c6d16b38d8c3"
+    },
+    {
+      "path": "copilot/spec/presets/story-circle/outline.md",
+      "sha256": "34b56f852b4cb87b2cc1e82494839daa10ed47cff1c782db7d71f03c4936e467"
+    },
+    {
+      "path": "copilot/spec/presets/story-circle/story.md",
+      "sha256": "fa4f7ba6e3a6124f33bd9af8ef4168b95844f36b723bb4c8bf664048c28d3739"
+    },
+    {
+      "path": "copilot/spec/presets/three-act/config.yaml",
+      "sha256": "35534c4499c75c6670d7a38bf07d7d1268f72ebfce214af609901948802e939d"
+    },
+    {
+      "path": "copilot/spec/presets/three-act/outline.md",
+      "sha256": "6087930e2f516bc721ec47d11b37eecaf30674eaad946abd3406cf25e654a299"
+    },
+    {
+      "path": "copilot/spec/presets/three-act/story.md",
+      "sha256": "78326b42ea7a65c9f2b22161a849cea86359bba3620d728f7abdbb5ef64d7003"
+    },
+    {
+      "path": "copilot/spec/README.md",
+      "sha256": "780485b5b85cd4060b8deb8e8cb95acd9ec88660ebceae8e1a05631941aa5719"
+    },
+    {
+      "path": "cursor/.cursor/commands/analyze.md",
+      "sha256": "2a20432766ab4fd9353a15cd47658843225c1406a63b7c6db609f842aa71d48f"
+    },
+    {
+      "path": "cursor/.cursor/commands/checklist.md",
+      "sha256": "002cfadb70a239fb80575bd079904489b09124705fa83312f04adc352760f1f1"
+    },
+    {
+      "path": "cursor/.cursor/commands/clarify.md",
+      "sha256": "72911b090782d26e6bcb4c67aecc7dc5a3beabdb0ef72daf2e50030788456f42"
+    },
+    {
+      "path": "cursor/.cursor/commands/constitution.md",
+      "sha256": "557f7ec23126b104549b938157bd97bf8f8fba8544d459704841534b1705903c"
+    },
+    {
+      "path": "cursor/.cursor/commands/expert.md",
+      "sha256": "423fd3fed88d46e8519c874c471c8be52c01644fe0851bebe0f87f2069adaa5a"
+    },
+    {
+      "path": "cursor/.cursor/commands/plan.md",
+      "sha256": "ddc8255fd47ae2538f931ae933e0506dc83c3190cd59e6310838ab0503d1c995"
+    },
+    {
+      "path": "cursor/.cursor/commands/relations.md",
+      "sha256": "9c520b48ccdeff7c86a8fb895416e5a2ac306815950c6f905440c09afed98fc8"
+    },
+    {
+      "path": "cursor/.cursor/commands/specify.md",
+      "sha256": "21ed950bdf9abddff7ffa08c07cb813717b8f66fd1f19fbe0b9c5816710ef961"
+    },
+    {
+      "path": "cursor/.cursor/commands/tasks.md",
+      "sha256": "98dc0279bd26c751eb831d62a38d5483708f2e1bc0a92ea183ce63e21a93ee7a"
+    },
+    {
+      "path": "cursor/.cursor/commands/timeline.md",
+      "sha256": "f03fbd8c3bd871b48940b6677588c83b52a84d012bd6f28c0a29368ad655baab"
+    },
+    {
+      "path": "cursor/.cursor/commands/track-init.md",
+      "sha256": "c7845f0e78240912bf4e36cd8ab4a90ae2ec13f72d92e8f0f68e6949d501cb76"
+    },
+    {
+      "path": "cursor/.cursor/commands/track.md",
+      "sha256": "9ac511e3bc24d554462c00cfd8a88e9a36d78b059d90f524400a594e0a3a6e85"
+    },
+    {
+      "path": "cursor/.cursor/commands/write.md",
+      "sha256": "12c6ed13c148a2097d73693c47ecaeeb0182eca452a2189d2553735a9cb7fc7a"
+    },
+    {
+      "path": "cursor/.specify/experts/core/character.md",
+      "sha256": "6a2a74bd4b42c52e15bd877fe7fe1c5ad6a32358475e797397b060a4b230cd89"
+    },
+    {
+      "path": "cursor/.specify/experts/core/plot.md",
+      "sha256": "1bf60cf836de917490c1424d2781f7d82518621815c3f66e5994f1225b1d7edb"
+    },
+    {
+      "path": "cursor/.specify/experts/core/style.md",
+      "sha256": "5a1ef640343dfdf2dcb41109c500416d8319aa9591ed7b26e0184becde04f147"
+    },
+    {
+      "path": "cursor/.specify/experts/core/world.md",
+      "sha256": "aeaef9f816d34d5e5ca27f9efc3001fd2987b15ac9b781d3fc0a1b13f1d070cc"
+    },
+    {
+      "path": "cursor/.specify/memory/constitution.md",
+      "sha256": "4e388c23598d178167ac7f73f70359079ccb3c2f68e8884606640ecbacba2dbc"
+    },
+    {
+      "path": "cursor/.specify/memory/personal-voice.md",
+      "sha256": "97a781384ec013203cc6a64aad7b9431c75b5a45bc19f82d3482800e7a22b0c4"
+    },
+    {
+      "path": "cursor/.specify/scripts/bash/analyze-story.sh",
+      "sha256": "55bed848066c013b4a01736793c20bbab5e79f6e859491fc4a3aa8ad3816b736"
+    },
+    {
+      "path": "cursor/.specify/scripts/bash/check-consistency.sh",
+      "sha256": "cac69cdf14298924dd7d23b8bd700ac74d2f672285f423932247d99ad4696702"
+    },
+    {
+      "path": "cursor/.specify/scripts/bash/check-plot.sh",
+      "sha256": "f814931fe8928fc55af9a2386969355e2a02b570bd8da651cde92c98066c147d"
+    },
+    {
+      "path": "cursor/.specify/scripts/bash/check-timeline.sh",
+      "sha256": "d8ef7a477cd31ab486a38e7c3509b375b31cbc6e3a406d4e47c4cb3d6cd101ab"
+    },
+    {
+      "path": "cursor/.specify/scripts/bash/check-world.sh",
+      "sha256": "d5aa04491960003807def1d5b33c7d1e236fda5ad3c942a8ac22215ca0d85140"
+    },
+    {
+      "path": "cursor/.specify/scripts/bash/check-writing-state.sh",
+      "sha256": "5fddce4ddf5d246937ea6888a2d623ede7148cda071a83587df833e50303ad3f"
+    },
+    {
+      "path": "cursor/.specify/scripts/bash/clarify-story.sh",
+      "sha256": "9787229ca3e2ea30505fc99373a44e7d698bb6a182a08002cfa7f029d921d84d"
+    },
+    {
+      "path": "cursor/.specify/scripts/bash/common.sh",
+      "sha256": "070581f0531b9ce1442bfbd14c7caab0cac8c99c8537dc122bf0b0495cb7f646"
+    },
+    {
+      "path": "cursor/.specify/scripts/bash/constitution.sh",
+      "sha256": "b352cd5e0679aa50d1f370a4807a88af473406159b5d1e4a907a724b23983667"
+    },
+    {
+      "path": "cursor/.specify/scripts/bash/generate-tasks.sh",
+      "sha256": "0b1c3a8b8a20d82bd6132017072f53f4796f51ca08467ee405e809978ac9e5c8"
+    },
+    {
+      "path": "cursor/.specify/scripts/bash/init-tracking.sh",
+      "sha256": "dfdf2ac7eb46c3014c2c20429219a4544b94fba7af21e509697b5597ed1d173e"
+    },
+    {
+      "path": "cursor/.specify/scripts/bash/manage-relations.sh",
+      "sha256": "78ffc8b1ccdb044ac5879979ae228bacb397ab3acda2feccc25080e00ea4c474"
+    },
+    {
+      "path": "cursor/.specify/scripts/bash/plan-story.sh",
+      "sha256": "f0d13b40d811fee076e7e7fe915f13b0d143fd971e4f8ca02444cd0f9fef689f"
+    },
+    {
+      "path": "cursor/.specify/scripts/bash/specify-story.sh",
+      "sha256": "5f796579bea1ca541d3766a9c2ea58802b835f27cacb59e1f09bf27527a8f6fb"
+    },
+    {
+      "path": "cursor/.specify/scripts/bash/tasks-story.sh",
+      "sha256": "cbe549cbdb206983c4a4a111b164602ed98e9fb578b7f89aed6ecb93bdab380e"
+    },
+    {
+      "path": "cursor/.specify/scripts/bash/test-word-count.sh",
+      "sha256": "6c550a6b7fc6996d0c440bec0bb1cc320c4027df83ec0749a2106d792e15ce88"
+    },
+    {
+      "path": "cursor/.specify/scripts/bash/text-audit.sh",
+      "sha256": "433c811d291e9ef73c5a939953c545845535228fa36805e1c0e8ac2f1e5afac5"
+    },
+    {
+      "path": "cursor/.specify/scripts/bash/track-progress.sh",
+      "sha256": "0092e8ba609d10dc3d4c4ebcac0a802771947dad88bafeed9012424c0b84aed8"
+    },
+    {
+      "path": "cursor/.specify/scripts/build-commands.cjs",
+      "sha256": "148e9aea0b947582b1475eaa53d7778dd9aafbbdf4476d6ea9b9eca684602eee"
+    },
+    {
+      "path": "cursor/.specify/scripts/postbuild.cjs",
+      "sha256": "06255c106d3ee5a1a5c84afcc056a370589bc3bc8577d7e42a7934bfc7b9bede"
+    },
+    {
+      "path": "cursor/.specify/scripts/runtime/application/check-writing-state.js",
+      "sha256": "3d966a5256cefed94cc1cb9bde8a55c4ddac6d4efb146d4a0dbc6192b02dedb8"
+    },
+    {
+      "path": "cursor/.specify/scripts/runtime/domain/story-artifact.js",
+      "sha256": "010032f357a3154a9e939db41baa9b47bf72d20a7b4d3c1dba65c25c2af2d603"
+    },
+    {
+      "path": "cursor/.specify/scripts/runtime/script-runtime.js",
+      "sha256": "6ddcafa9fca67371f159c0feb8df4d0eda5cda0e80d45bcb11713f43db99ba6c"
+    },
+    {
+      "path": "cursor/.specify/templates/AGENTS.codex.md",
+      "sha256": "85a8aaf48b73f1762d478f6fff69daa0cde4615423a314d75302583a8227bfd1"
+    },
+    {
+      "path": "cursor/.specify/templates/checklist-template.md",
+      "sha256": "cb3f31ae0eba66bc155c1151d0e0704a34deaa9ea1f783f9af93609aed3bcb32"
+    },
+    {
+      "path": "cursor/.specify/templates/gemini-settings.json",
+      "sha256": "4e699dab1d8e8f0d685c06b15525f253a9ad6797122db4a096973875a9115c74"
+    },
+    {
+      "path": "cursor/.specify/templates/GEMINI.md",
+      "sha256": "3b6521784cfc9dfccb8d3f1c6f8008371fe14e30f7bb378ecf12c6686e83f0da"
+    },
+    {
+      "path": "cursor/.specify/templates/knowledge/audit-config.json",
+      "sha256": "f1f3931cc70bd5b515e22d6f600609d6a093066d29620f3aac6456e79f4e53c7"
+    },
+    {
+      "path": "cursor/.specify/templates/knowledge/character-profiles.md",
+      "sha256": "5c0622856e9aeb19b0f6184a4d1e4fdee1feb9fe09e4b419dc20eae36071d03f"
+    },
+    {
+      "path": "cursor/.specify/templates/knowledge/character-voices.md",
+      "sha256": "3b0eee617fb919d1c068d850fddf27c3a578ac440fdbdb17513a6265c99dff3d"
+    },
+    {
+      "path": "cursor/.specify/templates/knowledge/locations.md",
+      "sha256": "9ba169c1e1b3ad65260a4ec815d92dbb68ebd9be03b8736a57b140cea33dbdcc"
+    },
+    {
+      "path": "cursor/.specify/templates/knowledge/world-setting.md",
+      "sha256": "7cfe68b12bab865d4646b03dacfff0a9bfbc36db60fb2b44c3ffff66bc545429"
+    },
+    {
+      "path": "cursor/.specify/templates/outline-template.md",
+      "sha256": "6087930e2f516bc721ec47d11b37eecaf30674eaad946abd3406cf25e654a299"
+    },
+    {
+      "path": "cursor/.specify/templates/story-template.md",
+      "sha256": "78326b42ea7a65c9f2b22161a849cea86359bba3620d728f7abdbb5ef64d7003"
+    },
+    {
+      "path": "cursor/.specify/templates/tracking/character-state.json",
+      "sha256": "81d3dc912c5e3504360d76bfdf9bdf365013857d4cae088f192bce8915c89d70"
+    },
+    {
+      "path": "cursor/.specify/templates/tracking/plot-tracker.json",
+      "sha256": "841703f221259f4746c2266a8dd943e004aa94ecf06db172fbdf0bd770d7703f"
+    },
+    {
+      "path": "cursor/.specify/templates/tracking/relationships.json",
+      "sha256": "de9567882a8cdf31dba6f0afa8b92bbf68346bb7063164724e47ae4434bddbcf"
+    },
+    {
+      "path": "cursor/.specify/templates/tracking/timeline.json",
+      "sha256": "f49c0aae351ab780591ab25bfbe82f53e24744adfc967d8ce1884bb8428dece1"
+    },
+    {
+      "path": "cursor/.specify/templates/tracking/validation-rules.json",
+      "sha256": "43d783508b85efe6dcfa70bb73493f9bddea45c5a26a408f379bf0b91aac47fe"
+    },
+    {
+      "path": "cursor/.specify/templates/vscode-settings.json",
+      "sha256": "875183e65cb2b8fd43111ef9f6b8e7b94fb8e3cdcfa9ae340cd9cf3eadaf06eb"
+    },
+    {
+      "path": "cursor/.specify/templates/writing-constitution-template.md",
+      "sha256": "26784c8e78e8636b6d09105ef9f6dcd3951c111517049cfbf23503a3e1b53b64"
+    },
+    {
+      "path": "cursor/spec/checklists/README.md",
+      "sha256": "dfc8a1470e23a98534dc9b8c3e33ea23990423ea9866d4a428484e5be074cc57"
+    },
+    {
+      "path": "cursor/spec/config.json",
+      "sha256": "719976aa49cedb025f13b9d047cc497cf01a9f3579fda888d94e592e19e8b469"
+    },
+    {
+      "path": "cursor/spec/presets/anti-ai-detection.md",
+      "sha256": "00bf97e5949d33a6d5bce083e8d210620206c6d6827efc0b67dbaccc0149fcfa"
+    },
+    {
+      "path": "cursor/spec/presets/golden-opening.md",
+      "sha256": "77843e024e293a6580f19aed0b3e41b36b2a7d3502b16c9402c1546b5d314371"
+    },
+    {
+      "path": "cursor/spec/presets/hero-journey/config.yaml",
+      "sha256": "46f87f2e09bf728231f9acdf6ce1aa6859c9bde5ca899e848d761ff0c263789e"
+    },
+    {
+      "path": "cursor/spec/presets/hero-journey/outline.md",
+      "sha256": "0f1a8b5fbf3b65ba128ed1a895b7ed58a3d76e85d2aff5618dcb94e6b8095959"
+    },
+    {
+      "path": "cursor/spec/presets/hero-journey/story.md",
+      "sha256": "6b4156a14dc9ed4c38b5826077e4c6ee5fe85f638b9c51ead0ac48287808554d"
+    },
+    {
+      "path": "cursor/spec/presets/pixar-formula/config.yaml",
+      "sha256": "86132b84e484eed8689614424859e8240c51ed638c4401a7184301b584ec35a3"
+    },
+    {
+      "path": "cursor/spec/presets/pixar-formula/outline.md",
+      "sha256": "31a8bdb81bf5e8c02413204a7448ead30d2cac78a82e84357ea302e1af0eed02"
+    },
+    {
+      "path": "cursor/spec/presets/pixar-formula/story.md",
+      "sha256": "bd883a9ba8221f41a8fb96a4fd3eec0a331cd20798154d14c3eb6f6149e5e1d4"
+    },
+    {
+      "path": "cursor/spec/presets/seven-point/config.yaml",
+      "sha256": "9127133dd1c4c2e4f29b2f883d9e3c33296be616c86f46bbfcc6e2dac5f2cc62"
+    },
+    {
+      "path": "cursor/spec/presets/seven-point/outline.md",
+      "sha256": "bad21f10defe45f1287ae8622550047a87e590994ffa8f71b9b6eca2975fdf91"
+    },
+    {
+      "path": "cursor/spec/presets/seven-point/story.md",
+      "sha256": "f1f045b9961002158d2b210412919643feac0e3b323af652fde29b4ce86f0252"
+    },
+    {
+      "path": "cursor/spec/presets/snowflake/outline.md",
+      "sha256": "8d31dab1b6fd6ebfb5de445ce2e8cfeaf61943e22582623c7215d4b2a39f9b8c"
+    },
+    {
+      "path": "cursor/spec/presets/snowflake/story.md",
+      "sha256": "f48b2dae3650cd396dad7fa47709fdfc9737cf06da71e21ec1c2b8cdd9d415ba"
+    },
+    {
+      "path": "cursor/spec/presets/story-circle/config.yaml",
+      "sha256": "8bfe9a4af156878aa8330efd41b0fc4ceabebbeafce49efcd3a6c6d16b38d8c3"
+    },
+    {
+      "path": "cursor/spec/presets/story-circle/outline.md",
+      "sha256": "34b56f852b4cb87b2cc1e82494839daa10ed47cff1c782db7d71f03c4936e467"
+    },
+    {
+      "path": "cursor/spec/presets/story-circle/story.md",
+      "sha256": "fa4f7ba6e3a6124f33bd9af8ef4168b95844f36b723bb4c8bf664048c28d3739"
+    },
+    {
+      "path": "cursor/spec/presets/three-act/config.yaml",
+      "sha256": "35534c4499c75c6670d7a38bf07d7d1268f72ebfce214af609901948802e939d"
+    },
+    {
+      "path": "cursor/spec/presets/three-act/outline.md",
+      "sha256": "6087930e2f516bc721ec47d11b37eecaf30674eaad946abd3406cf25e654a299"
+    },
+    {
+      "path": "cursor/spec/presets/three-act/story.md",
+      "sha256": "78326b42ea7a65c9f2b22161a849cea86359bba3620d728f7abdbb5ef64d7003"
+    },
+    {
+      "path": "cursor/spec/README.md",
+      "sha256": "780485b5b85cd4060b8deb8e8cb95acd9ec88660ebceae8e1a05631941aa5719"
+    },
+    {
+      "path": "gemini/.gemini/commands/novel/analyze.toml",
+      "sha256": "282937088c149711628d47e1d919f29bc02941bb76d9eabf1571971e350afaa4"
+    },
+    {
+      "path": "gemini/.gemini/commands/novel/checklist.toml",
+      "sha256": "a4d55f91b6e7d7841a1dffe463d647919a3ee51d72eba87e03407b14d424c016"
+    },
+    {
+      "path": "gemini/.gemini/commands/novel/clarify.toml",
+      "sha256": "acb3df2a84342563921e77e5d40555ee850e4762ea43be42cc7c4a79bb923182"
+    },
+    {
+      "path": "gemini/.gemini/commands/novel/constitution.toml",
+      "sha256": "f7964e0da4e9cad8208ee6ceccd00f1d84c6a5021e7a256459206c1fa4ec4337"
+    },
+    {
+      "path": "gemini/.gemini/commands/novel/expert.toml",
+      "sha256": "4abb1c472d3eaaae7d091e64d91c558d80529c07be06433ebcd501441686a5a5"
+    },
+    {
+      "path": "gemini/.gemini/commands/novel/plan.toml",
+      "sha256": "5763dd2a89554f8750ffb7b73cfa09eaa688f4ed538a9cc0f1c8755b52cb72d5"
+    },
+    {
+      "path": "gemini/.gemini/commands/novel/relations.toml",
+      "sha256": "8e1c3fcb72f7a39a6d171b85f6d017d2b932f2af10c8bfedf6f6210b442fdcb6"
+    },
+    {
+      "path": "gemini/.gemini/commands/novel/specify.toml",
+      "sha256": "68032c81f6099acd5df58b1d438f02d82ad70228f701e713b9c4669ff231fc12"
+    },
+    {
+      "path": "gemini/.gemini/commands/novel/tasks.toml",
+      "sha256": "d18be8b448b13a92e2a37ddc3ac16bba253b86f3afec3b0a137273787fe62f1f"
+    },
+    {
+      "path": "gemini/.gemini/commands/novel/timeline.toml",
+      "sha256": "9598271d188885cf550a623c3fb25a2e447b6b99046a180490aee6c11123e8a9"
+    },
+    {
+      "path": "gemini/.gemini/commands/novel/track-init.toml",
+      "sha256": "f8470332113b64544bb10ba6da246c1044a9ddccfde9222b4261b1151cd3a340"
+    },
+    {
+      "path": "gemini/.gemini/commands/novel/track.toml",
+      "sha256": "8b531b75860eaed4289d7ff33b00ea5c2cfe071a33cac3f31fdc85e9e6300519"
+    },
+    {
+      "path": "gemini/.gemini/commands/novel/write.toml",
+      "sha256": "38a30c5cee4f60d8df72c8fd6336f9fede5e2d13080035420a14d525d150a7fb"
+    },
+    {
+      "path": "gemini/.specify/experts/core/character.md",
+      "sha256": "6a2a74bd4b42c52e15bd877fe7fe1c5ad6a32358475e797397b060a4b230cd89"
+    },
+    {
+      "path": "gemini/.specify/experts/core/plot.md",
+      "sha256": "1bf60cf836de917490c1424d2781f7d82518621815c3f66e5994f1225b1d7edb"
+    },
+    {
+      "path": "gemini/.specify/experts/core/style.md",
+      "sha256": "5a1ef640343dfdf2dcb41109c500416d8319aa9591ed7b26e0184becde04f147"
+    },
+    {
+      "path": "gemini/.specify/experts/core/world.md",
+      "sha256": "aeaef9f816d34d5e5ca27f9efc3001fd2987b15ac9b781d3fc0a1b13f1d070cc"
+    },
+    {
+      "path": "gemini/.specify/memory/constitution.md",
+      "sha256": "4e388c23598d178167ac7f73f70359079ccb3c2f68e8884606640ecbacba2dbc"
+    },
+    {
+      "path": "gemini/.specify/memory/personal-voice.md",
+      "sha256": "97a781384ec013203cc6a64aad7b9431c75b5a45bc19f82d3482800e7a22b0c4"
+    },
+    {
+      "path": "gemini/.specify/scripts/bash/analyze-story.sh",
+      "sha256": "55bed848066c013b4a01736793c20bbab5e79f6e859491fc4a3aa8ad3816b736"
+    },
+    {
+      "path": "gemini/.specify/scripts/bash/check-consistency.sh",
+      "sha256": "cac69cdf14298924dd7d23b8bd700ac74d2f672285f423932247d99ad4696702"
+    },
+    {
+      "path": "gemini/.specify/scripts/bash/check-plot.sh",
+      "sha256": "f814931fe8928fc55af9a2386969355e2a02b570bd8da651cde92c98066c147d"
+    },
+    {
+      "path": "gemini/.specify/scripts/bash/check-timeline.sh",
+      "sha256": "d8ef7a477cd31ab486a38e7c3509b375b31cbc6e3a406d4e47c4cb3d6cd101ab"
+    },
+    {
+      "path": "gemini/.specify/scripts/bash/check-world.sh",
+      "sha256": "d5aa04491960003807def1d5b33c7d1e236fda5ad3c942a8ac22215ca0d85140"
+    },
+    {
+      "path": "gemini/.specify/scripts/bash/check-writing-state.sh",
+      "sha256": "5fddce4ddf5d246937ea6888a2d623ede7148cda071a83587df833e50303ad3f"
+    },
+    {
+      "path": "gemini/.specify/scripts/bash/clarify-story.sh",
+      "sha256": "9787229ca3e2ea30505fc99373a44e7d698bb6a182a08002cfa7f029d921d84d"
+    },
+    {
+      "path": "gemini/.specify/scripts/bash/common.sh",
+      "sha256": "070581f0531b9ce1442bfbd14c7caab0cac8c99c8537dc122bf0b0495cb7f646"
+    },
+    {
+      "path": "gemini/.specify/scripts/bash/constitution.sh",
+      "sha256": "b352cd5e0679aa50d1f370a4807a88af473406159b5d1e4a907a724b23983667"
+    },
+    {
+      "path": "gemini/.specify/scripts/bash/generate-tasks.sh",
+      "sha256": "0b1c3a8b8a20d82bd6132017072f53f4796f51ca08467ee405e809978ac9e5c8"
+    },
+    {
+      "path": "gemini/.specify/scripts/bash/init-tracking.sh",
+      "sha256": "dfdf2ac7eb46c3014c2c20429219a4544b94fba7af21e509697b5597ed1d173e"
+    },
+    {
+      "path": "gemini/.specify/scripts/bash/manage-relations.sh",
+      "sha256": "78ffc8b1ccdb044ac5879979ae228bacb397ab3acda2feccc25080e00ea4c474"
+    },
+    {
+      "path": "gemini/.specify/scripts/bash/plan-story.sh",
+      "sha256": "f0d13b40d811fee076e7e7fe915f13b0d143fd971e4f8ca02444cd0f9fef689f"
+    },
+    {
+      "path": "gemini/.specify/scripts/bash/specify-story.sh",
+      "sha256": "5f796579bea1ca541d3766a9c2ea58802b835f27cacb59e1f09bf27527a8f6fb"
+    },
+    {
+      "path": "gemini/.specify/scripts/bash/tasks-story.sh",
+      "sha256": "cbe549cbdb206983c4a4a111b164602ed98e9fb578b7f89aed6ecb93bdab380e"
+    },
+    {
+      "path": "gemini/.specify/scripts/bash/test-word-count.sh",
+      "sha256": "6c550a6b7fc6996d0c440bec0bb1cc320c4027df83ec0749a2106d792e15ce88"
+    },
+    {
+      "path": "gemini/.specify/scripts/bash/text-audit.sh",
+      "sha256": "433c811d291e9ef73c5a939953c545845535228fa36805e1c0e8ac2f1e5afac5"
+    },
+    {
+      "path": "gemini/.specify/scripts/bash/track-progress.sh",
+      "sha256": "0092e8ba609d10dc3d4c4ebcac0a802771947dad88bafeed9012424c0b84aed8"
+    },
+    {
+      "path": "gemini/.specify/scripts/build-commands.cjs",
+      "sha256": "148e9aea0b947582b1475eaa53d7778dd9aafbbdf4476d6ea9b9eca684602eee"
+    },
+    {
+      "path": "gemini/.specify/scripts/postbuild.cjs",
+      "sha256": "06255c106d3ee5a1a5c84afcc056a370589bc3bc8577d7e42a7934bfc7b9bede"
+    },
+    {
+      "path": "gemini/.specify/scripts/runtime/application/check-writing-state.js",
+      "sha256": "3d966a5256cefed94cc1cb9bde8a55c4ddac6d4efb146d4a0dbc6192b02dedb8"
+    },
+    {
+      "path": "gemini/.specify/scripts/runtime/domain/story-artifact.js",
+      "sha256": "010032f357a3154a9e939db41baa9b47bf72d20a7b4d3c1dba65c25c2af2d603"
+    },
+    {
+      "path": "gemini/.specify/scripts/runtime/script-runtime.js",
+      "sha256": "6ddcafa9fca67371f159c0feb8df4d0eda5cda0e80d45bcb11713f43db99ba6c"
+    },
+    {
+      "path": "gemini/.specify/templates/AGENTS.codex.md",
+      "sha256": "85a8aaf48b73f1762d478f6fff69daa0cde4615423a314d75302583a8227bfd1"
+    },
+    {
+      "path": "gemini/.specify/templates/checklist-template.md",
+      "sha256": "cb3f31ae0eba66bc155c1151d0e0704a34deaa9ea1f783f9af93609aed3bcb32"
+    },
+    {
+      "path": "gemini/.specify/templates/gemini-settings.json",
+      "sha256": "4e699dab1d8e8f0d685c06b15525f253a9ad6797122db4a096973875a9115c74"
+    },
+    {
+      "path": "gemini/.specify/templates/GEMINI.md",
+      "sha256": "3b6521784cfc9dfccb8d3f1c6f8008371fe14e30f7bb378ecf12c6686e83f0da"
+    },
+    {
+      "path": "gemini/.specify/templates/knowledge/audit-config.json",
+      "sha256": "f1f3931cc70bd5b515e22d6f600609d6a093066d29620f3aac6456e79f4e53c7"
+    },
+    {
+      "path": "gemini/.specify/templates/knowledge/character-profiles.md",
+      "sha256": "5c0622856e9aeb19b0f6184a4d1e4fdee1feb9fe09e4b419dc20eae36071d03f"
+    },
+    {
+      "path": "gemini/.specify/templates/knowledge/character-voices.md",
+      "sha256": "3b0eee617fb919d1c068d850fddf27c3a578ac440fdbdb17513a6265c99dff3d"
+    },
+    {
+      "path": "gemini/.specify/templates/knowledge/locations.md",
+      "sha256": "9ba169c1e1b3ad65260a4ec815d92dbb68ebd9be03b8736a57b140cea33dbdcc"
+    },
+    {
+      "path": "gemini/.specify/templates/knowledge/world-setting.md",
+      "sha256": "7cfe68b12bab865d4646b03dacfff0a9bfbc36db60fb2b44c3ffff66bc545429"
+    },
+    {
+      "path": "gemini/.specify/templates/outline-template.md",
+      "sha256": "6087930e2f516bc721ec47d11b37eecaf30674eaad946abd3406cf25e654a299"
+    },
+    {
+      "path": "gemini/.specify/templates/story-template.md",
+      "sha256": "78326b42ea7a65c9f2b22161a849cea86359bba3620d728f7abdbb5ef64d7003"
+    },
+    {
+      "path": "gemini/.specify/templates/tracking/character-state.json",
+      "sha256": "81d3dc912c5e3504360d76bfdf9bdf365013857d4cae088f192bce8915c89d70"
+    },
+    {
+      "path": "gemini/.specify/templates/tracking/plot-tracker.json",
+      "sha256": "841703f221259f4746c2266a8dd943e004aa94ecf06db172fbdf0bd770d7703f"
+    },
+    {
+      "path": "gemini/.specify/templates/tracking/relationships.json",
+      "sha256": "de9567882a8cdf31dba6f0afa8b92bbf68346bb7063164724e47ae4434bddbcf"
+    },
+    {
+      "path": "gemini/.specify/templates/tracking/timeline.json",
+      "sha256": "f49c0aae351ab780591ab25bfbe82f53e24744adfc967d8ce1884bb8428dece1"
+    },
+    {
+      "path": "gemini/.specify/templates/tracking/validation-rules.json",
+      "sha256": "43d783508b85efe6dcfa70bb73493f9bddea45c5a26a408f379bf0b91aac47fe"
+    },
+    {
+      "path": "gemini/.specify/templates/vscode-settings.json",
+      "sha256": "875183e65cb2b8fd43111ef9f6b8e7b94fb8e3cdcfa9ae340cd9cf3eadaf06eb"
+    },
+    {
+      "path": "gemini/.specify/templates/writing-constitution-template.md",
+      "sha256": "26784c8e78e8636b6d09105ef9f6dcd3951c111517049cfbf23503a3e1b53b64"
+    },
+    {
+      "path": "gemini/spec/checklists/README.md",
+      "sha256": "dfc8a1470e23a98534dc9b8c3e33ea23990423ea9866d4a428484e5be074cc57"
+    },
+    {
+      "path": "gemini/spec/config.json",
+      "sha256": "719976aa49cedb025f13b9d047cc497cf01a9f3579fda888d94e592e19e8b469"
+    },
+    {
+      "path": "gemini/spec/presets/anti-ai-detection.md",
+      "sha256": "00bf97e5949d33a6d5bce083e8d210620206c6d6827efc0b67dbaccc0149fcfa"
+    },
+    {
+      "path": "gemini/spec/presets/golden-opening.md",
+      "sha256": "77843e024e293a6580f19aed0b3e41b36b2a7d3502b16c9402c1546b5d314371"
+    },
+    {
+      "path": "gemini/spec/presets/hero-journey/config.yaml",
+      "sha256": "46f87f2e09bf728231f9acdf6ce1aa6859c9bde5ca899e848d761ff0c263789e"
+    },
+    {
+      "path": "gemini/spec/presets/hero-journey/outline.md",
+      "sha256": "0f1a8b5fbf3b65ba128ed1a895b7ed58a3d76e85d2aff5618dcb94e6b8095959"
+    },
+    {
+      "path": "gemini/spec/presets/hero-journey/story.md",
+      "sha256": "6b4156a14dc9ed4c38b5826077e4c6ee5fe85f638b9c51ead0ac48287808554d"
+    },
+    {
+      "path": "gemini/spec/presets/pixar-formula/config.yaml",
+      "sha256": "86132b84e484eed8689614424859e8240c51ed638c4401a7184301b584ec35a3"
+    },
+    {
+      "path": "gemini/spec/presets/pixar-formula/outline.md",
+      "sha256": "31a8bdb81bf5e8c02413204a7448ead30d2cac78a82e84357ea302e1af0eed02"
+    },
+    {
+      "path": "gemini/spec/presets/pixar-formula/story.md",
+      "sha256": "bd883a9ba8221f41a8fb96a4fd3eec0a331cd20798154d14c3eb6f6149e5e1d4"
+    },
+    {
+      "path": "gemini/spec/presets/seven-point/config.yaml",
+      "sha256": "9127133dd1c4c2e4f29b2f883d9e3c33296be616c86f46bbfcc6e2dac5f2cc62"
+    },
+    {
+      "path": "gemini/spec/presets/seven-point/outline.md",
+      "sha256": "bad21f10defe45f1287ae8622550047a87e590994ffa8f71b9b6eca2975fdf91"
+    },
+    {
+      "path": "gemini/spec/presets/seven-point/story.md",
+      "sha256": "f1f045b9961002158d2b210412919643feac0e3b323af652fde29b4ce86f0252"
+    },
+    {
+      "path": "gemini/spec/presets/snowflake/outline.md",
+      "sha256": "8d31dab1b6fd6ebfb5de445ce2e8cfeaf61943e22582623c7215d4b2a39f9b8c"
+    },
+    {
+      "path": "gemini/spec/presets/snowflake/story.md",
+      "sha256": "f48b2dae3650cd396dad7fa47709fdfc9737cf06da71e21ec1c2b8cdd9d415ba"
+    },
+    {
+      "path": "gemini/spec/presets/story-circle/config.yaml",
+      "sha256": "8bfe9a4af156878aa8330efd41b0fc4ceabebbeafce49efcd3a6c6d16b38d8c3"
+    },
+    {
+      "path": "gemini/spec/presets/story-circle/outline.md",
+      "sha256": "34b56f852b4cb87b2cc1e82494839daa10ed47cff1c782db7d71f03c4936e467"
+    },
+    {
+      "path": "gemini/spec/presets/story-circle/story.md",
+      "sha256": "fa4f7ba6e3a6124f33bd9af8ef4168b95844f36b723bb4c8bf664048c28d3739"
+    },
+    {
+      "path": "gemini/spec/presets/three-act/config.yaml",
+      "sha256": "35534c4499c75c6670d7a38bf07d7d1268f72ebfce214af609901948802e939d"
+    },
+    {
+      "path": "gemini/spec/presets/three-act/outline.md",
+      "sha256": "6087930e2f516bc721ec47d11b37eecaf30674eaad946abd3406cf25e654a299"
+    },
+    {
+      "path": "gemini/spec/presets/three-act/story.md",
+      "sha256": "78326b42ea7a65c9f2b22161a849cea86359bba3620d728f7abdbb5ef64d7003"
+    },
+    {
+      "path": "gemini/spec/README.md",
+      "sha256": "780485b5b85cd4060b8deb8e8cb95acd9ec88660ebceae8e1a05631941aa5719"
+    },
+    {
+      "path": "kilocode/.kilocode/workflows/analyze.md",
+      "sha256": "ef87c1d7a42933298fb9447fef8854b6a91f6a54da394938da6b8b39269f90e8"
+    },
+    {
+      "path": "kilocode/.kilocode/workflows/checklist.md",
+      "sha256": "e425bb9c1f25b7b82a763e3f8f52451228da0e41e18e6a3f1eb56dd1edd74eae"
+    },
+    {
+      "path": "kilocode/.kilocode/workflows/clarify.md",
+      "sha256": "6aef8185f8a6880f5831502207c60d27e072cd040eed306449cd6465453dc487"
+    },
+    {
+      "path": "kilocode/.kilocode/workflows/constitution.md",
+      "sha256": "e4147cedcbef8bb72644eb8bf2d3e6ba4e1d900d30bb08c5f6527d369e1cbfc0"
+    },
+    {
+      "path": "kilocode/.kilocode/workflows/expert.md",
+      "sha256": "eb8fe161666c34158806ff1ffdbc06aa4339d7ad5180e9d2a6329e91b3dde52c"
+    },
+    {
+      "path": "kilocode/.kilocode/workflows/plan.md",
+      "sha256": "aea4875ec273f8e9793f8372fd7ea2967538f6dd7609b733b931cba284b49de6"
+    },
+    {
+      "path": "kilocode/.kilocode/workflows/relations.md",
+      "sha256": "335cb989f2b352aad9f1c6dc9a70a52ea860272a11135bbe30337eabe2be1e66"
+    },
+    {
+      "path": "kilocode/.kilocode/workflows/specify.md",
+      "sha256": "61dfedb76beea9612d79afe80d8ae595ae27fa9282da54027114da4c67524fbe"
+    },
+    {
+      "path": "kilocode/.kilocode/workflows/tasks.md",
+      "sha256": "c1d7b5bb3757e6498682cc75b3276492fc94972010de8d45cbbd0177c18764e5"
+    },
+    {
+      "path": "kilocode/.kilocode/workflows/timeline.md",
+      "sha256": "984f650fdc05864e0581e6b28a290d14c39be5eb693aa69100c55e3ae69f4f64"
+    },
+    {
+      "path": "kilocode/.kilocode/workflows/track-init.md",
+      "sha256": "e102b69dee0ffef90e9b530ef045016986ed3d55f78c5f5519f6fa761c74ccec"
+    },
+    {
+      "path": "kilocode/.kilocode/workflows/track.md",
+      "sha256": "11874ff69e07396fc8ffcb6a5544b5797ecc8a90ac408c1730b8fde836413a76"
+    },
+    {
+      "path": "kilocode/.kilocode/workflows/write.md",
+      "sha256": "d19fe7bbd30608b32a016cee2adb1c9bff72b93010df54601e96e6c87d3a632d"
+    },
+    {
+      "path": "kilocode/.specify/experts/core/character.md",
+      "sha256": "6a2a74bd4b42c52e15bd877fe7fe1c5ad6a32358475e797397b060a4b230cd89"
+    },
+    {
+      "path": "kilocode/.specify/experts/core/plot.md",
+      "sha256": "1bf60cf836de917490c1424d2781f7d82518621815c3f66e5994f1225b1d7edb"
+    },
+    {
+      "path": "kilocode/.specify/experts/core/style.md",
+      "sha256": "5a1ef640343dfdf2dcb41109c500416d8319aa9591ed7b26e0184becde04f147"
+    },
+    {
+      "path": "kilocode/.specify/experts/core/world.md",
+      "sha256": "aeaef9f816d34d5e5ca27f9efc3001fd2987b15ac9b781d3fc0a1b13f1d070cc"
+    },
+    {
+      "path": "kilocode/.specify/memory/constitution.md",
+      "sha256": "4e388c23598d178167ac7f73f70359079ccb3c2f68e8884606640ecbacba2dbc"
+    },
+    {
+      "path": "kilocode/.specify/memory/personal-voice.md",
+      "sha256": "97a781384ec013203cc6a64aad7b9431c75b5a45bc19f82d3482800e7a22b0c4"
+    },
+    {
+      "path": "kilocode/.specify/scripts/bash/analyze-story.sh",
+      "sha256": "55bed848066c013b4a01736793c20bbab5e79f6e859491fc4a3aa8ad3816b736"
+    },
+    {
+      "path": "kilocode/.specify/scripts/bash/check-consistency.sh",
+      "sha256": "cac69cdf14298924dd7d23b8bd700ac74d2f672285f423932247d99ad4696702"
+    },
+    {
+      "path": "kilocode/.specify/scripts/bash/check-plot.sh",
+      "sha256": "f814931fe8928fc55af9a2386969355e2a02b570bd8da651cde92c98066c147d"
+    },
+    {
+      "path": "kilocode/.specify/scripts/bash/check-timeline.sh",
+      "sha256": "d8ef7a477cd31ab486a38e7c3509b375b31cbc6e3a406d4e47c4cb3d6cd101ab"
+    },
+    {
+      "path": "kilocode/.specify/scripts/bash/check-world.sh",
+      "sha256": "d5aa04491960003807def1d5b33c7d1e236fda5ad3c942a8ac22215ca0d85140"
+    },
+    {
+      "path": "kilocode/.specify/scripts/bash/check-writing-state.sh",
+      "sha256": "5fddce4ddf5d246937ea6888a2d623ede7148cda071a83587df833e50303ad3f"
+    },
+    {
+      "path": "kilocode/.specify/scripts/bash/clarify-story.sh",
+      "sha256": "9787229ca3e2ea30505fc99373a44e7d698bb6a182a08002cfa7f029d921d84d"
+    },
+    {
+      "path": "kilocode/.specify/scripts/bash/common.sh",
+      "sha256": "070581f0531b9ce1442bfbd14c7caab0cac8c99c8537dc122bf0b0495cb7f646"
+    },
+    {
+      "path": "kilocode/.specify/scripts/bash/constitution.sh",
+      "sha256": "b352cd5e0679aa50d1f370a4807a88af473406159b5d1e4a907a724b23983667"
+    },
+    {
+      "path": "kilocode/.specify/scripts/bash/generate-tasks.sh",
+      "sha256": "0b1c3a8b8a20d82bd6132017072f53f4796f51ca08467ee405e809978ac9e5c8"
+    },
+    {
+      "path": "kilocode/.specify/scripts/bash/init-tracking.sh",
+      "sha256": "dfdf2ac7eb46c3014c2c20429219a4544b94fba7af21e509697b5597ed1d173e"
+    },
+    {
+      "path": "kilocode/.specify/scripts/bash/manage-relations.sh",
+      "sha256": "78ffc8b1ccdb044ac5879979ae228bacb397ab3acda2feccc25080e00ea4c474"
+    },
+    {
+      "path": "kilocode/.specify/scripts/bash/plan-story.sh",
+      "sha256": "f0d13b40d811fee076e7e7fe915f13b0d143fd971e4f8ca02444cd0f9fef689f"
+    },
+    {
+      "path": "kilocode/.specify/scripts/bash/specify-story.sh",
+      "sha256": "5f796579bea1ca541d3766a9c2ea58802b835f27cacb59e1f09bf27527a8f6fb"
+    },
+    {
+      "path": "kilocode/.specify/scripts/bash/tasks-story.sh",
+      "sha256": "cbe549cbdb206983c4a4a111b164602ed98e9fb578b7f89aed6ecb93bdab380e"
+    },
+    {
+      "path": "kilocode/.specify/scripts/bash/test-word-count.sh",
+      "sha256": "6c550a6b7fc6996d0c440bec0bb1cc320c4027df83ec0749a2106d792e15ce88"
+    },
+    {
+      "path": "kilocode/.specify/scripts/bash/text-audit.sh",
+      "sha256": "433c811d291e9ef73c5a939953c545845535228fa36805e1c0e8ac2f1e5afac5"
+    },
+    {
+      "path": "kilocode/.specify/scripts/bash/track-progress.sh",
+      "sha256": "0092e8ba609d10dc3d4c4ebcac0a802771947dad88bafeed9012424c0b84aed8"
+    },
+    {
+      "path": "kilocode/.specify/scripts/build-commands.cjs",
+      "sha256": "148e9aea0b947582b1475eaa53d7778dd9aafbbdf4476d6ea9b9eca684602eee"
+    },
+    {
+      "path": "kilocode/.specify/scripts/postbuild.cjs",
+      "sha256": "06255c106d3ee5a1a5c84afcc056a370589bc3bc8577d7e42a7934bfc7b9bede"
+    },
+    {
+      "path": "kilocode/.specify/scripts/runtime/application/check-writing-state.js",
+      "sha256": "3d966a5256cefed94cc1cb9bde8a55c4ddac6d4efb146d4a0dbc6192b02dedb8"
+    },
+    {
+      "path": "kilocode/.specify/scripts/runtime/domain/story-artifact.js",
+      "sha256": "010032f357a3154a9e939db41baa9b47bf72d20a7b4d3c1dba65c25c2af2d603"
+    },
+    {
+      "path": "kilocode/.specify/scripts/runtime/script-runtime.js",
+      "sha256": "6ddcafa9fca67371f159c0feb8df4d0eda5cda0e80d45bcb11713f43db99ba6c"
+    },
+    {
+      "path": "kilocode/.specify/templates/AGENTS.codex.md",
+      "sha256": "85a8aaf48b73f1762d478f6fff69daa0cde4615423a314d75302583a8227bfd1"
+    },
+    {
+      "path": "kilocode/.specify/templates/checklist-template.md",
+      "sha256": "cb3f31ae0eba66bc155c1151d0e0704a34deaa9ea1f783f9af93609aed3bcb32"
+    },
+    {
+      "path": "kilocode/.specify/templates/gemini-settings.json",
+      "sha256": "4e699dab1d8e8f0d685c06b15525f253a9ad6797122db4a096973875a9115c74"
+    },
+    {
+      "path": "kilocode/.specify/templates/GEMINI.md",
+      "sha256": "3b6521784cfc9dfccb8d3f1c6f8008371fe14e30f7bb378ecf12c6686e83f0da"
+    },
+    {
+      "path": "kilocode/.specify/templates/knowledge/audit-config.json",
+      "sha256": "f1f3931cc70bd5b515e22d6f600609d6a093066d29620f3aac6456e79f4e53c7"
+    },
+    {
+      "path": "kilocode/.specify/templates/knowledge/character-profiles.md",
+      "sha256": "5c0622856e9aeb19b0f6184a4d1e4fdee1feb9fe09e4b419dc20eae36071d03f"
+    },
+    {
+      "path": "kilocode/.specify/templates/knowledge/character-voices.md",
+      "sha256": "3b0eee617fb919d1c068d850fddf27c3a578ac440fdbdb17513a6265c99dff3d"
+    },
+    {
+      "path": "kilocode/.specify/templates/knowledge/locations.md",
+      "sha256": "9ba169c1e1b3ad65260a4ec815d92dbb68ebd9be03b8736a57b140cea33dbdcc"
+    },
+    {
+      "path": "kilocode/.specify/templates/knowledge/world-setting.md",
+      "sha256": "7cfe68b12bab865d4646b03dacfff0a9bfbc36db60fb2b44c3ffff66bc545429"
+    },
+    {
+      "path": "kilocode/.specify/templates/outline-template.md",
+      "sha256": "6087930e2f516bc721ec47d11b37eecaf30674eaad946abd3406cf25e654a299"
+    },
+    {
+      "path": "kilocode/.specify/templates/story-template.md",
+      "sha256": "78326b42ea7a65c9f2b22161a849cea86359bba3620d728f7abdbb5ef64d7003"
+    },
+    {
+      "path": "kilocode/.specify/templates/tracking/character-state.json",
+      "sha256": "81d3dc912c5e3504360d76bfdf9bdf365013857d4cae088f192bce8915c89d70"
+    },
+    {
+      "path": "kilocode/.specify/templates/tracking/plot-tracker.json",
+      "sha256": "841703f221259f4746c2266a8dd943e004aa94ecf06db172fbdf0bd770d7703f"
+    },
+    {
+      "path": "kilocode/.specify/templates/tracking/relationships.json",
+      "sha256": "de9567882a8cdf31dba6f0afa8b92bbf68346bb7063164724e47ae4434bddbcf"
+    },
+    {
+      "path": "kilocode/.specify/templates/tracking/timeline.json",
+      "sha256": "f49c0aae351ab780591ab25bfbe82f53e24744adfc967d8ce1884bb8428dece1"
+    },
+    {
+      "path": "kilocode/.specify/templates/tracking/validation-rules.json",
+      "sha256": "43d783508b85efe6dcfa70bb73493f9bddea45c5a26a408f379bf0b91aac47fe"
+    },
+    {
+      "path": "kilocode/.specify/templates/vscode-settings.json",
+      "sha256": "875183e65cb2b8fd43111ef9f6b8e7b94fb8e3cdcfa9ae340cd9cf3eadaf06eb"
+    },
+    {
+      "path": "kilocode/.specify/templates/writing-constitution-template.md",
+      "sha256": "26784c8e78e8636b6d09105ef9f6dcd3951c111517049cfbf23503a3e1b53b64"
+    },
+    {
+      "path": "kilocode/spec/checklists/README.md",
+      "sha256": "dfc8a1470e23a98534dc9b8c3e33ea23990423ea9866d4a428484e5be074cc57"
+    },
+    {
+      "path": "kilocode/spec/config.json",
+      "sha256": "719976aa49cedb025f13b9d047cc497cf01a9f3579fda888d94e592e19e8b469"
+    },
+    {
+      "path": "kilocode/spec/presets/anti-ai-detection.md",
+      "sha256": "00bf97e5949d33a6d5bce083e8d210620206c6d6827efc0b67dbaccc0149fcfa"
+    },
+    {
+      "path": "kilocode/spec/presets/golden-opening.md",
+      "sha256": "77843e024e293a6580f19aed0b3e41b36b2a7d3502b16c9402c1546b5d314371"
+    },
+    {
+      "path": "kilocode/spec/presets/hero-journey/config.yaml",
+      "sha256": "46f87f2e09bf728231f9acdf6ce1aa6859c9bde5ca899e848d761ff0c263789e"
+    },
+    {
+      "path": "kilocode/spec/presets/hero-journey/outline.md",
+      "sha256": "0f1a8b5fbf3b65ba128ed1a895b7ed58a3d76e85d2aff5618dcb94e6b8095959"
+    },
+    {
+      "path": "kilocode/spec/presets/hero-journey/story.md",
+      "sha256": "6b4156a14dc9ed4c38b5826077e4c6ee5fe85f638b9c51ead0ac48287808554d"
+    },
+    {
+      "path": "kilocode/spec/presets/pixar-formula/config.yaml",
+      "sha256": "86132b84e484eed8689614424859e8240c51ed638c4401a7184301b584ec35a3"
+    },
+    {
+      "path": "kilocode/spec/presets/pixar-formula/outline.md",
+      "sha256": "31a8bdb81bf5e8c02413204a7448ead30d2cac78a82e84357ea302e1af0eed02"
+    },
+    {
+      "path": "kilocode/spec/presets/pixar-formula/story.md",
+      "sha256": "bd883a9ba8221f41a8fb96a4fd3eec0a331cd20798154d14c3eb6f6149e5e1d4"
+    },
+    {
+      "path": "kilocode/spec/presets/seven-point/config.yaml",
+      "sha256": "9127133dd1c4c2e4f29b2f883d9e3c33296be616c86f46bbfcc6e2dac5f2cc62"
+    },
+    {
+      "path": "kilocode/spec/presets/seven-point/outline.md",
+      "sha256": "bad21f10defe45f1287ae8622550047a87e590994ffa8f71b9b6eca2975fdf91"
+    },
+    {
+      "path": "kilocode/spec/presets/seven-point/story.md",
+      "sha256": "f1f045b9961002158d2b210412919643feac0e3b323af652fde29b4ce86f0252"
+    },
+    {
+      "path": "kilocode/spec/presets/snowflake/outline.md",
+      "sha256": "8d31dab1b6fd6ebfb5de445ce2e8cfeaf61943e22582623c7215d4b2a39f9b8c"
+    },
+    {
+      "path": "kilocode/spec/presets/snowflake/story.md",
+      "sha256": "f48b2dae3650cd396dad7fa47709fdfc9737cf06da71e21ec1c2b8cdd9d415ba"
+    },
+    {
+      "path": "kilocode/spec/presets/story-circle/config.yaml",
+      "sha256": "8bfe9a4af156878aa8330efd41b0fc4ceabebbeafce49efcd3a6c6d16b38d8c3"
+    },
+    {
+      "path": "kilocode/spec/presets/story-circle/outline.md",
+      "sha256": "34b56f852b4cb87b2cc1e82494839daa10ed47cff1c782db7d71f03c4936e467"
+    },
+    {
+      "path": "kilocode/spec/presets/story-circle/story.md",
+      "sha256": "fa4f7ba6e3a6124f33bd9af8ef4168b95844f36b723bb4c8bf664048c28d3739"
+    },
+    {
+      "path": "kilocode/spec/presets/three-act/config.yaml",
+      "sha256": "35534c4499c75c6670d7a38bf07d7d1268f72ebfce214af609901948802e939d"
+    },
+    {
+      "path": "kilocode/spec/presets/three-act/outline.md",
+      "sha256": "6087930e2f516bc721ec47d11b37eecaf30674eaad946abd3406cf25e654a299"
+    },
+    {
+      "path": "kilocode/spec/presets/three-act/story.md",
+      "sha256": "78326b42ea7a65c9f2b22161a849cea86359bba3620d728f7abdbb5ef64d7003"
+    },
+    {
+      "path": "kilocode/spec/README.md",
+      "sha256": "780485b5b85cd4060b8deb8e8cb95acd9ec88660ebceae8e1a05631941aa5719"
+    },
+    {
+      "path": "opencode/.opencode/command/analyze.md",
+      "sha256": "c66aed026d534b4007d443c87824195d68505b328796523d352a3c788498b2ce"
+    },
+    {
+      "path": "opencode/.opencode/command/checklist.md",
+      "sha256": "e425bb9c1f25b7b82a763e3f8f52451228da0e41e18e6a3f1eb56dd1edd74eae"
+    },
+    {
+      "path": "opencode/.opencode/command/clarify.md",
+      "sha256": "0397e3ed9229c222cdced270a1f76d9fedc28c0f854a53f4bfef4baf9bffd0d8"
+    },
+    {
+      "path": "opencode/.opencode/command/constitution.md",
+      "sha256": "d3cd6a8f73f9299f7e0a300632b18c791dcc2a57464923cd9709b191a07dcdbf"
+    },
+    {
+      "path": "opencode/.opencode/command/expert.md",
+      "sha256": "209d506e1e6cb37a1bbf2b843403caa03f10a72602bbcc3a277bdf9f35b34d6b"
+    },
+    {
+      "path": "opencode/.opencode/command/plan.md",
+      "sha256": "4dc5abee02cb7ba8db6e16c19bd5e0fde22b0c320822f2367166f30e994221af"
+    },
+    {
+      "path": "opencode/.opencode/command/relations.md",
+      "sha256": "cd90bd0d88c52614e60e6d171c75bbaf234cf7a6a311f4a7e1e52e6226fd9d70"
+    },
+    {
+      "path": "opencode/.opencode/command/specify.md",
+      "sha256": "6c6a80e7aa990f23fdb9d1ed8ac0ffa9f447bb813d4186df495ebe19cf3019c3"
+    },
+    {
+      "path": "opencode/.opencode/command/tasks.md",
+      "sha256": "c1d7b5bb3757e6498682cc75b3276492fc94972010de8d45cbbd0177c18764e5"
+    },
+    {
+      "path": "opencode/.opencode/command/timeline.md",
+      "sha256": "3dd2383dd1eb057dd13a404f8da265c435059a1d4891c1faf4d04b097e9cfda6"
+    },
+    {
+      "path": "opencode/.opencode/command/track-init.md",
+      "sha256": "e102b69dee0ffef90e9b530ef045016986ed3d55f78c5f5519f6fa761c74ccec"
+    },
+    {
+      "path": "opencode/.opencode/command/track.md",
+      "sha256": "cc483ebabe2f79b9bfbfa92a4980f3f096b2d00d19f9ee61f307359df1789fea"
+    },
+    {
+      "path": "opencode/.opencode/command/write.md",
+      "sha256": "b3722ec9e367ff4f9f71014365496abe68e62b4040aa77225bc75a6582e2d6da"
+    },
+    {
+      "path": "opencode/.specify/experts/core/character.md",
+      "sha256": "6a2a74bd4b42c52e15bd877fe7fe1c5ad6a32358475e797397b060a4b230cd89"
+    },
+    {
+      "path": "opencode/.specify/experts/core/plot.md",
+      "sha256": "1bf60cf836de917490c1424d2781f7d82518621815c3f66e5994f1225b1d7edb"
+    },
+    {
+      "path": "opencode/.specify/experts/core/style.md",
+      "sha256": "5a1ef640343dfdf2dcb41109c500416d8319aa9591ed7b26e0184becde04f147"
+    },
+    {
+      "path": "opencode/.specify/experts/core/world.md",
+      "sha256": "aeaef9f816d34d5e5ca27f9efc3001fd2987b15ac9b781d3fc0a1b13f1d070cc"
+    },
+    {
+      "path": "opencode/.specify/memory/constitution.md",
+      "sha256": "4e388c23598d178167ac7f73f70359079ccb3c2f68e8884606640ecbacba2dbc"
+    },
+    {
+      "path": "opencode/.specify/memory/personal-voice.md",
+      "sha256": "97a781384ec013203cc6a64aad7b9431c75b5a45bc19f82d3482800e7a22b0c4"
+    },
+    {
+      "path": "opencode/.specify/scripts/bash/analyze-story.sh",
+      "sha256": "55bed848066c013b4a01736793c20bbab5e79f6e859491fc4a3aa8ad3816b736"
+    },
+    {
+      "path": "opencode/.specify/scripts/bash/check-consistency.sh",
+      "sha256": "cac69cdf14298924dd7d23b8bd700ac74d2f672285f423932247d99ad4696702"
+    },
+    {
+      "path": "opencode/.specify/scripts/bash/check-plot.sh",
+      "sha256": "f814931fe8928fc55af9a2386969355e2a02b570bd8da651cde92c98066c147d"
+    },
+    {
+      "path": "opencode/.specify/scripts/bash/check-timeline.sh",
+      "sha256": "d8ef7a477cd31ab486a38e7c3509b375b31cbc6e3a406d4e47c4cb3d6cd101ab"
+    },
+    {
+      "path": "opencode/.specify/scripts/bash/check-world.sh",
+      "sha256": "d5aa04491960003807def1d5b33c7d1e236fda5ad3c942a8ac22215ca0d85140"
+    },
+    {
+      "path": "opencode/.specify/scripts/bash/check-writing-state.sh",
+      "sha256": "5fddce4ddf5d246937ea6888a2d623ede7148cda071a83587df833e50303ad3f"
+    },
+    {
+      "path": "opencode/.specify/scripts/bash/clarify-story.sh",
+      "sha256": "9787229ca3e2ea30505fc99373a44e7d698bb6a182a08002cfa7f029d921d84d"
+    },
+    {
+      "path": "opencode/.specify/scripts/bash/common.sh",
+      "sha256": "070581f0531b9ce1442bfbd14c7caab0cac8c99c8537dc122bf0b0495cb7f646"
+    },
+    {
+      "path": "opencode/.specify/scripts/bash/constitution.sh",
+      "sha256": "b352cd5e0679aa50d1f370a4807a88af473406159b5d1e4a907a724b23983667"
+    },
+    {
+      "path": "opencode/.specify/scripts/bash/generate-tasks.sh",
+      "sha256": "0b1c3a8b8a20d82bd6132017072f53f4796f51ca08467ee405e809978ac9e5c8"
+    },
+    {
+      "path": "opencode/.specify/scripts/bash/init-tracking.sh",
+      "sha256": "dfdf2ac7eb46c3014c2c20429219a4544b94fba7af21e509697b5597ed1d173e"
+    },
+    {
+      "path": "opencode/.specify/scripts/bash/manage-relations.sh",
+      "sha256": "78ffc8b1ccdb044ac5879979ae228bacb397ab3acda2feccc25080e00ea4c474"
+    },
+    {
+      "path": "opencode/.specify/scripts/bash/plan-story.sh",
+      "sha256": "f0d13b40d811fee076e7e7fe915f13b0d143fd971e4f8ca02444cd0f9fef689f"
+    },
+    {
+      "path": "opencode/.specify/scripts/bash/specify-story.sh",
+      "sha256": "5f796579bea1ca541d3766a9c2ea58802b835f27cacb59e1f09bf27527a8f6fb"
+    },
+    {
+      "path": "opencode/.specify/scripts/bash/tasks-story.sh",
+      "sha256": "cbe549cbdb206983c4a4a111b164602ed98e9fb578b7f89aed6ecb93bdab380e"
+    },
+    {
+      "path": "opencode/.specify/scripts/bash/test-word-count.sh",
+      "sha256": "6c550a6b7fc6996d0c440bec0bb1cc320c4027df83ec0749a2106d792e15ce88"
+    },
+    {
+      "path": "opencode/.specify/scripts/bash/text-audit.sh",
+      "sha256": "433c811d291e9ef73c5a939953c545845535228fa36805e1c0e8ac2f1e5afac5"
+    },
+    {
+      "path": "opencode/.specify/scripts/bash/track-progress.sh",
+      "sha256": "0092e8ba609d10dc3d4c4ebcac0a802771947dad88bafeed9012424c0b84aed8"
+    },
+    {
+      "path": "opencode/.specify/scripts/build-commands.cjs",
+      "sha256": "148e9aea0b947582b1475eaa53d7778dd9aafbbdf4476d6ea9b9eca684602eee"
+    },
+    {
+      "path": "opencode/.specify/scripts/postbuild.cjs",
+      "sha256": "06255c106d3ee5a1a5c84afcc056a370589bc3bc8577d7e42a7934bfc7b9bede"
+    },
+    {
+      "path": "opencode/.specify/scripts/runtime/application/check-writing-state.js",
+      "sha256": "3d966a5256cefed94cc1cb9bde8a55c4ddac6d4efb146d4a0dbc6192b02dedb8"
+    },
+    {
+      "path": "opencode/.specify/scripts/runtime/domain/story-artifact.js",
+      "sha256": "010032f357a3154a9e939db41baa9b47bf72d20a7b4d3c1dba65c25c2af2d603"
+    },
+    {
+      "path": "opencode/.specify/scripts/runtime/script-runtime.js",
+      "sha256": "6ddcafa9fca67371f159c0feb8df4d0eda5cda0e80d45bcb11713f43db99ba6c"
+    },
+    {
+      "path": "opencode/.specify/templates/AGENTS.codex.md",
+      "sha256": "85a8aaf48b73f1762d478f6fff69daa0cde4615423a314d75302583a8227bfd1"
+    },
+    {
+      "path": "opencode/.specify/templates/checklist-template.md",
+      "sha256": "cb3f31ae0eba66bc155c1151d0e0704a34deaa9ea1f783f9af93609aed3bcb32"
+    },
+    {
+      "path": "opencode/.specify/templates/gemini-settings.json",
+      "sha256": "4e699dab1d8e8f0d685c06b15525f253a9ad6797122db4a096973875a9115c74"
+    },
+    {
+      "path": "opencode/.specify/templates/GEMINI.md",
+      "sha256": "3b6521784cfc9dfccb8d3f1c6f8008371fe14e30f7bb378ecf12c6686e83f0da"
+    },
+    {
+      "path": "opencode/.specify/templates/knowledge/audit-config.json",
+      "sha256": "f1f3931cc70bd5b515e22d6f600609d6a093066d29620f3aac6456e79f4e53c7"
+    },
+    {
+      "path": "opencode/.specify/templates/knowledge/character-profiles.md",
+      "sha256": "5c0622856e9aeb19b0f6184a4d1e4fdee1feb9fe09e4b419dc20eae36071d03f"
+    },
+    {
+      "path": "opencode/.specify/templates/knowledge/character-voices.md",
+      "sha256": "3b0eee617fb919d1c068d850fddf27c3a578ac440fdbdb17513a6265c99dff3d"
+    },
+    {
+      "path": "opencode/.specify/templates/knowledge/locations.md",
+      "sha256": "9ba169c1e1b3ad65260a4ec815d92dbb68ebd9be03b8736a57b140cea33dbdcc"
+    },
+    {
+      "path": "opencode/.specify/templates/knowledge/world-setting.md",
+      "sha256": "7cfe68b12bab865d4646b03dacfff0a9bfbc36db60fb2b44c3ffff66bc545429"
+    },
+    {
+      "path": "opencode/.specify/templates/outline-template.md",
+      "sha256": "6087930e2f516bc721ec47d11b37eecaf30674eaad946abd3406cf25e654a299"
+    },
+    {
+      "path": "opencode/.specify/templates/story-template.md",
+      "sha256": "78326b42ea7a65c9f2b22161a849cea86359bba3620d728f7abdbb5ef64d7003"
+    },
+    {
+      "path": "opencode/.specify/templates/tracking/character-state.json",
+      "sha256": "81d3dc912c5e3504360d76bfdf9bdf365013857d4cae088f192bce8915c89d70"
+    },
+    {
+      "path": "opencode/.specify/templates/tracking/plot-tracker.json",
+      "sha256": "841703f221259f4746c2266a8dd943e004aa94ecf06db172fbdf0bd770d7703f"
+    },
+    {
+      "path": "opencode/.specify/templates/tracking/relationships.json",
+      "sha256": "de9567882a8cdf31dba6f0afa8b92bbf68346bb7063164724e47ae4434bddbcf"
+    },
+    {
+      "path": "opencode/.specify/templates/tracking/timeline.json",
+      "sha256": "f49c0aae351ab780591ab25bfbe82f53e24744adfc967d8ce1884bb8428dece1"
+    },
+    {
+      "path": "opencode/.specify/templates/tracking/validation-rules.json",
+      "sha256": "43d783508b85efe6dcfa70bb73493f9bddea45c5a26a408f379bf0b91aac47fe"
+    },
+    {
+      "path": "opencode/.specify/templates/vscode-settings.json",
+      "sha256": "875183e65cb2b8fd43111ef9f6b8e7b94fb8e3cdcfa9ae340cd9cf3eadaf06eb"
+    },
+    {
+      "path": "opencode/.specify/templates/writing-constitution-template.md",
+      "sha256": "26784c8e78e8636b6d09105ef9f6dcd3951c111517049cfbf23503a3e1b53b64"
+    },
+    {
+      "path": "opencode/spec/checklists/README.md",
+      "sha256": "dfc8a1470e23a98534dc9b8c3e33ea23990423ea9866d4a428484e5be074cc57"
+    },
+    {
+      "path": "opencode/spec/config.json",
+      "sha256": "719976aa49cedb025f13b9d047cc497cf01a9f3579fda888d94e592e19e8b469"
+    },
+    {
+      "path": "opencode/spec/presets/anti-ai-detection.md",
+      "sha256": "00bf97e5949d33a6d5bce083e8d210620206c6d6827efc0b67dbaccc0149fcfa"
+    },
+    {
+      "path": "opencode/spec/presets/golden-opening.md",
+      "sha256": "77843e024e293a6580f19aed0b3e41b36b2a7d3502b16c9402c1546b5d314371"
+    },
+    {
+      "path": "opencode/spec/presets/hero-journey/config.yaml",
+      "sha256": "46f87f2e09bf728231f9acdf6ce1aa6859c9bde5ca899e848d761ff0c263789e"
+    },
+    {
+      "path": "opencode/spec/presets/hero-journey/outline.md",
+      "sha256": "0f1a8b5fbf3b65ba128ed1a895b7ed58a3d76e85d2aff5618dcb94e6b8095959"
+    },
+    {
+      "path": "opencode/spec/presets/hero-journey/story.md",
+      "sha256": "6b4156a14dc9ed4c38b5826077e4c6ee5fe85f638b9c51ead0ac48287808554d"
+    },
+    {
+      "path": "opencode/spec/presets/pixar-formula/config.yaml",
+      "sha256": "86132b84e484eed8689614424859e8240c51ed638c4401a7184301b584ec35a3"
+    },
+    {
+      "path": "opencode/spec/presets/pixar-formula/outline.md",
+      "sha256": "31a8bdb81bf5e8c02413204a7448ead30d2cac78a82e84357ea302e1af0eed02"
+    },
+    {
+      "path": "opencode/spec/presets/pixar-formula/story.md",
+      "sha256": "bd883a9ba8221f41a8fb96a4fd3eec0a331cd20798154d14c3eb6f6149e5e1d4"
+    },
+    {
+      "path": "opencode/spec/presets/seven-point/config.yaml",
+      "sha256": "9127133dd1c4c2e4f29b2f883d9e3c33296be616c86f46bbfcc6e2dac5f2cc62"
+    },
+    {
+      "path": "opencode/spec/presets/seven-point/outline.md",
+      "sha256": "bad21f10defe45f1287ae8622550047a87e590994ffa8f71b9b6eca2975fdf91"
+    },
+    {
+      "path": "opencode/spec/presets/seven-point/story.md",
+      "sha256": "f1f045b9961002158d2b210412919643feac0e3b323af652fde29b4ce86f0252"
+    },
+    {
+      "path": "opencode/spec/presets/snowflake/outline.md",
+      "sha256": "8d31dab1b6fd6ebfb5de445ce2e8cfeaf61943e22582623c7215d4b2a39f9b8c"
+    },
+    {
+      "path": "opencode/spec/presets/snowflake/story.md",
+      "sha256": "f48b2dae3650cd396dad7fa47709fdfc9737cf06da71e21ec1c2b8cdd9d415ba"
+    },
+    {
+      "path": "opencode/spec/presets/story-circle/config.yaml",
+      "sha256": "8bfe9a4af156878aa8330efd41b0fc4ceabebbeafce49efcd3a6c6d16b38d8c3"
+    },
+    {
+      "path": "opencode/spec/presets/story-circle/outline.md",
+      "sha256": "34b56f852b4cb87b2cc1e82494839daa10ed47cff1c782db7d71f03c4936e467"
+    },
+    {
+      "path": "opencode/spec/presets/story-circle/story.md",
+      "sha256": "fa4f7ba6e3a6124f33bd9af8ef4168b95844f36b723bb4c8bf664048c28d3739"
+    },
+    {
+      "path": "opencode/spec/presets/three-act/config.yaml",
+      "sha256": "35534c4499c75c6670d7a38bf07d7d1268f72ebfce214af609901948802e939d"
+    },
+    {
+      "path": "opencode/spec/presets/three-act/outline.md",
+      "sha256": "6087930e2f516bc721ec47d11b37eecaf30674eaad946abd3406cf25e654a299"
+    },
+    {
+      "path": "opencode/spec/presets/three-act/story.md",
+      "sha256": "78326b42ea7a65c9f2b22161a849cea86359bba3620d728f7abdbb5ef64d7003"
+    },
+    {
+      "path": "opencode/spec/README.md",
+      "sha256": "780485b5b85cd4060b8deb8e8cb95acd9ec88660ebceae8e1a05631941aa5719"
+    },
+    {
+      "path": "q/.amazonq/prompts/analyze.md",
+      "sha256": "2a20432766ab4fd9353a15cd47658843225c1406a63b7c6db609f842aa71d48f"
+    },
+    {
+      "path": "q/.amazonq/prompts/checklist.md",
+      "sha256": "002cfadb70a239fb80575bd079904489b09124705fa83312f04adc352760f1f1"
+    },
+    {
+      "path": "q/.amazonq/prompts/clarify.md",
+      "sha256": "72911b090782d26e6bcb4c67aecc7dc5a3beabdb0ef72daf2e50030788456f42"
+    },
+    {
+      "path": "q/.amazonq/prompts/constitution.md",
+      "sha256": "557f7ec23126b104549b938157bd97bf8f8fba8544d459704841534b1705903c"
+    },
+    {
+      "path": "q/.amazonq/prompts/expert.md",
+      "sha256": "423fd3fed88d46e8519c874c471c8be52c01644fe0851bebe0f87f2069adaa5a"
+    },
+    {
+      "path": "q/.amazonq/prompts/plan.md",
+      "sha256": "ddc8255fd47ae2538f931ae933e0506dc83c3190cd59e6310838ab0503d1c995"
+    },
+    {
+      "path": "q/.amazonq/prompts/relations.md",
+      "sha256": "9c520b48ccdeff7c86a8fb895416e5a2ac306815950c6f905440c09afed98fc8"
+    },
+    {
+      "path": "q/.amazonq/prompts/specify.md",
+      "sha256": "21ed950bdf9abddff7ffa08c07cb813717b8f66fd1f19fbe0b9c5816710ef961"
+    },
+    {
+      "path": "q/.amazonq/prompts/tasks.md",
+      "sha256": "98dc0279bd26c751eb831d62a38d5483708f2e1bc0a92ea183ce63e21a93ee7a"
+    },
+    {
+      "path": "q/.amazonq/prompts/timeline.md",
+      "sha256": "f03fbd8c3bd871b48940b6677588c83b52a84d012bd6f28c0a29368ad655baab"
+    },
+    {
+      "path": "q/.amazonq/prompts/track-init.md",
+      "sha256": "c7845f0e78240912bf4e36cd8ab4a90ae2ec13f72d92e8f0f68e6949d501cb76"
+    },
+    {
+      "path": "q/.amazonq/prompts/track.md",
+      "sha256": "9ac511e3bc24d554462c00cfd8a88e9a36d78b059d90f524400a594e0a3a6e85"
+    },
+    {
+      "path": "q/.amazonq/prompts/write.md",
+      "sha256": "12c6ed13c148a2097d73693c47ecaeeb0182eca452a2189d2553735a9cb7fc7a"
+    },
+    {
+      "path": "q/.specify/experts/core/character.md",
+      "sha256": "6a2a74bd4b42c52e15bd877fe7fe1c5ad6a32358475e797397b060a4b230cd89"
+    },
+    {
+      "path": "q/.specify/experts/core/plot.md",
+      "sha256": "1bf60cf836de917490c1424d2781f7d82518621815c3f66e5994f1225b1d7edb"
+    },
+    {
+      "path": "q/.specify/experts/core/style.md",
+      "sha256": "5a1ef640343dfdf2dcb41109c500416d8319aa9591ed7b26e0184becde04f147"
+    },
+    {
+      "path": "q/.specify/experts/core/world.md",
+      "sha256": "aeaef9f816d34d5e5ca27f9efc3001fd2987b15ac9b781d3fc0a1b13f1d070cc"
+    },
+    {
+      "path": "q/.specify/memory/constitution.md",
+      "sha256": "4e388c23598d178167ac7f73f70359079ccb3c2f68e8884606640ecbacba2dbc"
+    },
+    {
+      "path": "q/.specify/memory/personal-voice.md",
+      "sha256": "97a781384ec013203cc6a64aad7b9431c75b5a45bc19f82d3482800e7a22b0c4"
+    },
+    {
+      "path": "q/.specify/scripts/bash/analyze-story.sh",
+      "sha256": "55bed848066c013b4a01736793c20bbab5e79f6e859491fc4a3aa8ad3816b736"
+    },
+    {
+      "path": "q/.specify/scripts/bash/check-consistency.sh",
+      "sha256": "cac69cdf14298924dd7d23b8bd700ac74d2f672285f423932247d99ad4696702"
+    },
+    {
+      "path": "q/.specify/scripts/bash/check-plot.sh",
+      "sha256": "f814931fe8928fc55af9a2386969355e2a02b570bd8da651cde92c98066c147d"
+    },
+    {
+      "path": "q/.specify/scripts/bash/check-timeline.sh",
+      "sha256": "d8ef7a477cd31ab486a38e7c3509b375b31cbc6e3a406d4e47c4cb3d6cd101ab"
+    },
+    {
+      "path": "q/.specify/scripts/bash/check-world.sh",
+      "sha256": "d5aa04491960003807def1d5b33c7d1e236fda5ad3c942a8ac22215ca0d85140"
+    },
+    {
+      "path": "q/.specify/scripts/bash/check-writing-state.sh",
+      "sha256": "5fddce4ddf5d246937ea6888a2d623ede7148cda071a83587df833e50303ad3f"
+    },
+    {
+      "path": "q/.specify/scripts/bash/clarify-story.sh",
+      "sha256": "9787229ca3e2ea30505fc99373a44e7d698bb6a182a08002cfa7f029d921d84d"
+    },
+    {
+      "path": "q/.specify/scripts/bash/common.sh",
+      "sha256": "070581f0531b9ce1442bfbd14c7caab0cac8c99c8537dc122bf0b0495cb7f646"
+    },
+    {
+      "path": "q/.specify/scripts/bash/constitution.sh",
+      "sha256": "b352cd5e0679aa50d1f370a4807a88af473406159b5d1e4a907a724b23983667"
+    },
+    {
+      "path": "q/.specify/scripts/bash/generate-tasks.sh",
+      "sha256": "0b1c3a8b8a20d82bd6132017072f53f4796f51ca08467ee405e809978ac9e5c8"
+    },
+    {
+      "path": "q/.specify/scripts/bash/init-tracking.sh",
+      "sha256": "dfdf2ac7eb46c3014c2c20429219a4544b94fba7af21e509697b5597ed1d173e"
+    },
+    {
+      "path": "q/.specify/scripts/bash/manage-relations.sh",
+      "sha256": "78ffc8b1ccdb044ac5879979ae228bacb397ab3acda2feccc25080e00ea4c474"
+    },
+    {
+      "path": "q/.specify/scripts/bash/plan-story.sh",
+      "sha256": "f0d13b40d811fee076e7e7fe915f13b0d143fd971e4f8ca02444cd0f9fef689f"
+    },
+    {
+      "path": "q/.specify/scripts/bash/specify-story.sh",
+      "sha256": "5f796579bea1ca541d3766a9c2ea58802b835f27cacb59e1f09bf27527a8f6fb"
+    },
+    {
+      "path": "q/.specify/scripts/bash/tasks-story.sh",
+      "sha256": "cbe549cbdb206983c4a4a111b164602ed98e9fb578b7f89aed6ecb93bdab380e"
+    },
+    {
+      "path": "q/.specify/scripts/bash/test-word-count.sh",
+      "sha256": "6c550a6b7fc6996d0c440bec0bb1cc320c4027df83ec0749a2106d792e15ce88"
+    },
+    {
+      "path": "q/.specify/scripts/bash/text-audit.sh",
+      "sha256": "433c811d291e9ef73c5a939953c545845535228fa36805e1c0e8ac2f1e5afac5"
+    },
+    {
+      "path": "q/.specify/scripts/bash/track-progress.sh",
+      "sha256": "0092e8ba609d10dc3d4c4ebcac0a802771947dad88bafeed9012424c0b84aed8"
+    },
+    {
+      "path": "q/.specify/scripts/build-commands.cjs",
+      "sha256": "148e9aea0b947582b1475eaa53d7778dd9aafbbdf4476d6ea9b9eca684602eee"
+    },
+    {
+      "path": "q/.specify/scripts/postbuild.cjs",
+      "sha256": "06255c106d3ee5a1a5c84afcc056a370589bc3bc8577d7e42a7934bfc7b9bede"
+    },
+    {
+      "path": "q/.specify/scripts/runtime/application/check-writing-state.js",
+      "sha256": "3d966a5256cefed94cc1cb9bde8a55c4ddac6d4efb146d4a0dbc6192b02dedb8"
+    },
+    {
+      "path": "q/.specify/scripts/runtime/domain/story-artifact.js",
+      "sha256": "010032f357a3154a9e939db41baa9b47bf72d20a7b4d3c1dba65c25c2af2d603"
+    },
+    {
+      "path": "q/.specify/scripts/runtime/script-runtime.js",
+      "sha256": "6ddcafa9fca67371f159c0feb8df4d0eda5cda0e80d45bcb11713f43db99ba6c"
+    },
+    {
+      "path": "q/.specify/templates/AGENTS.codex.md",
+      "sha256": "85a8aaf48b73f1762d478f6fff69daa0cde4615423a314d75302583a8227bfd1"
+    },
+    {
+      "path": "q/.specify/templates/checklist-template.md",
+      "sha256": "cb3f31ae0eba66bc155c1151d0e0704a34deaa9ea1f783f9af93609aed3bcb32"
+    },
+    {
+      "path": "q/.specify/templates/gemini-settings.json",
+      "sha256": "4e699dab1d8e8f0d685c06b15525f253a9ad6797122db4a096973875a9115c74"
+    },
+    {
+      "path": "q/.specify/templates/GEMINI.md",
+      "sha256": "3b6521784cfc9dfccb8d3f1c6f8008371fe14e30f7bb378ecf12c6686e83f0da"
+    },
+    {
+      "path": "q/.specify/templates/knowledge/audit-config.json",
+      "sha256": "f1f3931cc70bd5b515e22d6f600609d6a093066d29620f3aac6456e79f4e53c7"
+    },
+    {
+      "path": "q/.specify/templates/knowledge/character-profiles.md",
+      "sha256": "5c0622856e9aeb19b0f6184a4d1e4fdee1feb9fe09e4b419dc20eae36071d03f"
+    },
+    {
+      "path": "q/.specify/templates/knowledge/character-voices.md",
+      "sha256": "3b0eee617fb919d1c068d850fddf27c3a578ac440fdbdb17513a6265c99dff3d"
+    },
+    {
+      "path": "q/.specify/templates/knowledge/locations.md",
+      "sha256": "9ba169c1e1b3ad65260a4ec815d92dbb68ebd9be03b8736a57b140cea33dbdcc"
+    },
+    {
+      "path": "q/.specify/templates/knowledge/world-setting.md",
+      "sha256": "7cfe68b12bab865d4646b03dacfff0a9bfbc36db60fb2b44c3ffff66bc545429"
+    },
+    {
+      "path": "q/.specify/templates/outline-template.md",
+      "sha256": "6087930e2f516bc721ec47d11b37eecaf30674eaad946abd3406cf25e654a299"
+    },
+    {
+      "path": "q/.specify/templates/story-template.md",
+      "sha256": "78326b42ea7a65c9f2b22161a849cea86359bba3620d728f7abdbb5ef64d7003"
+    },
+    {
+      "path": "q/.specify/templates/tracking/character-state.json",
+      "sha256": "81d3dc912c5e3504360d76bfdf9bdf365013857d4cae088f192bce8915c89d70"
+    },
+    {
+      "path": "q/.specify/templates/tracking/plot-tracker.json",
+      "sha256": "841703f221259f4746c2266a8dd943e004aa94ecf06db172fbdf0bd770d7703f"
+    },
+    {
+      "path": "q/.specify/templates/tracking/relationships.json",
+      "sha256": "de9567882a8cdf31dba6f0afa8b92bbf68346bb7063164724e47ae4434bddbcf"
+    },
+    {
+      "path": "q/.specify/templates/tracking/timeline.json",
+      "sha256": "f49c0aae351ab780591ab25bfbe82f53e24744adfc967d8ce1884bb8428dece1"
+    },
+    {
+      "path": "q/.specify/templates/tracking/validation-rules.json",
+      "sha256": "43d783508b85efe6dcfa70bb73493f9bddea45c5a26a408f379bf0b91aac47fe"
+    },
+    {
+      "path": "q/.specify/templates/vscode-settings.json",
+      "sha256": "875183e65cb2b8fd43111ef9f6b8e7b94fb8e3cdcfa9ae340cd9cf3eadaf06eb"
+    },
+    {
+      "path": "q/.specify/templates/writing-constitution-template.md",
+      "sha256": "26784c8e78e8636b6d09105ef9f6dcd3951c111517049cfbf23503a3e1b53b64"
+    },
+    {
+      "path": "q/spec/checklists/README.md",
+      "sha256": "dfc8a1470e23a98534dc9b8c3e33ea23990423ea9866d4a428484e5be074cc57"
+    },
+    {
+      "path": "q/spec/config.json",
+      "sha256": "719976aa49cedb025f13b9d047cc497cf01a9f3579fda888d94e592e19e8b469"
+    },
+    {
+      "path": "q/spec/presets/anti-ai-detection.md",
+      "sha256": "00bf97e5949d33a6d5bce083e8d210620206c6d6827efc0b67dbaccc0149fcfa"
+    },
+    {
+      "path": "q/spec/presets/golden-opening.md",
+      "sha256": "77843e024e293a6580f19aed0b3e41b36b2a7d3502b16c9402c1546b5d314371"
+    },
+    {
+      "path": "q/spec/presets/hero-journey/config.yaml",
+      "sha256": "46f87f2e09bf728231f9acdf6ce1aa6859c9bde5ca899e848d761ff0c263789e"
+    },
+    {
+      "path": "q/spec/presets/hero-journey/outline.md",
+      "sha256": "0f1a8b5fbf3b65ba128ed1a895b7ed58a3d76e85d2aff5618dcb94e6b8095959"
+    },
+    {
+      "path": "q/spec/presets/hero-journey/story.md",
+      "sha256": "6b4156a14dc9ed4c38b5826077e4c6ee5fe85f638b9c51ead0ac48287808554d"
+    },
+    {
+      "path": "q/spec/presets/pixar-formula/config.yaml",
+      "sha256": "86132b84e484eed8689614424859e8240c51ed638c4401a7184301b584ec35a3"
+    },
+    {
+      "path": "q/spec/presets/pixar-formula/outline.md",
+      "sha256": "31a8bdb81bf5e8c02413204a7448ead30d2cac78a82e84357ea302e1af0eed02"
+    },
+    {
+      "path": "q/spec/presets/pixar-formula/story.md",
+      "sha256": "bd883a9ba8221f41a8fb96a4fd3eec0a331cd20798154d14c3eb6f6149e5e1d4"
+    },
+    {
+      "path": "q/spec/presets/seven-point/config.yaml",
+      "sha256": "9127133dd1c4c2e4f29b2f883d9e3c33296be616c86f46bbfcc6e2dac5f2cc62"
+    },
+    {
+      "path": "q/spec/presets/seven-point/outline.md",
+      "sha256": "bad21f10defe45f1287ae8622550047a87e590994ffa8f71b9b6eca2975fdf91"
+    },
+    {
+      "path": "q/spec/presets/seven-point/story.md",
+      "sha256": "f1f045b9961002158d2b210412919643feac0e3b323af652fde29b4ce86f0252"
+    },
+    {
+      "path": "q/spec/presets/snowflake/outline.md",
+      "sha256": "8d31dab1b6fd6ebfb5de445ce2e8cfeaf61943e22582623c7215d4b2a39f9b8c"
+    },
+    {
+      "path": "q/spec/presets/snowflake/story.md",
+      "sha256": "f48b2dae3650cd396dad7fa47709fdfc9737cf06da71e21ec1c2b8cdd9d415ba"
+    },
+    {
+      "path": "q/spec/presets/story-circle/config.yaml",
+      "sha256": "8bfe9a4af156878aa8330efd41b0fc4ceabebbeafce49efcd3a6c6d16b38d8c3"
+    },
+    {
+      "path": "q/spec/presets/story-circle/outline.md",
+      "sha256": "34b56f852b4cb87b2cc1e82494839daa10ed47cff1c782db7d71f03c4936e467"
+    },
+    {
+      "path": "q/spec/presets/story-circle/story.md",
+      "sha256": "fa4f7ba6e3a6124f33bd9af8ef4168b95844f36b723bb4c8bf664048c28d3739"
+    },
+    {
+      "path": "q/spec/presets/three-act/config.yaml",
+      "sha256": "35534c4499c75c6670d7a38bf07d7d1268f72ebfce214af609901948802e939d"
+    },
+    {
+      "path": "q/spec/presets/three-act/outline.md",
+      "sha256": "6087930e2f516bc721ec47d11b37eecaf30674eaad946abd3406cf25e654a299"
+    },
+    {
+      "path": "q/spec/presets/three-act/story.md",
+      "sha256": "78326b42ea7a65c9f2b22161a849cea86359bba3620d728f7abdbb5ef64d7003"
+    },
+    {
+      "path": "q/spec/README.md",
+      "sha256": "780485b5b85cd4060b8deb8e8cb95acd9ec88660ebceae8e1a05631941aa5719"
+    },
+    {
+      "path": "qwen/.qwen/commands/analyze.toml",
+      "sha256": "282937088c149711628d47e1d919f29bc02941bb76d9eabf1571971e350afaa4"
+    },
+    {
+      "path": "qwen/.qwen/commands/checklist.toml",
+      "sha256": "a4d55f91b6e7d7841a1dffe463d647919a3ee51d72eba87e03407b14d424c016"
+    },
+    {
+      "path": "qwen/.qwen/commands/clarify.toml",
+      "sha256": "acb3df2a84342563921e77e5d40555ee850e4762ea43be42cc7c4a79bb923182"
+    },
+    {
+      "path": "qwen/.qwen/commands/constitution.toml",
+      "sha256": "f7964e0da4e9cad8208ee6ceccd00f1d84c6a5021e7a256459206c1fa4ec4337"
+    },
+    {
+      "path": "qwen/.qwen/commands/expert.toml",
+      "sha256": "4abb1c472d3eaaae7d091e64d91c558d80529c07be06433ebcd501441686a5a5"
+    },
+    {
+      "path": "qwen/.qwen/commands/plan.toml",
+      "sha256": "5763dd2a89554f8750ffb7b73cfa09eaa688f4ed538a9cc0f1c8755b52cb72d5"
+    },
+    {
+      "path": "qwen/.qwen/commands/relations.toml",
+      "sha256": "8e1c3fcb72f7a39a6d171b85f6d017d2b932f2af10c8bfedf6f6210b442fdcb6"
+    },
+    {
+      "path": "qwen/.qwen/commands/specify.toml",
+      "sha256": "68032c81f6099acd5df58b1d438f02d82ad70228f701e713b9c4669ff231fc12"
+    },
+    {
+      "path": "qwen/.qwen/commands/tasks.toml",
+      "sha256": "d18be8b448b13a92e2a37ddc3ac16bba253b86f3afec3b0a137273787fe62f1f"
+    },
+    {
+      "path": "qwen/.qwen/commands/timeline.toml",
+      "sha256": "9598271d188885cf550a623c3fb25a2e447b6b99046a180490aee6c11123e8a9"
+    },
+    {
+      "path": "qwen/.qwen/commands/track-init.toml",
+      "sha256": "f8470332113b64544bb10ba6da246c1044a9ddccfde9222b4261b1151cd3a340"
+    },
+    {
+      "path": "qwen/.qwen/commands/track.toml",
+      "sha256": "8b531b75860eaed4289d7ff33b00ea5c2cfe071a33cac3f31fdc85e9e6300519"
+    },
+    {
+      "path": "qwen/.qwen/commands/write.toml",
+      "sha256": "38a30c5cee4f60d8df72c8fd6336f9fede5e2d13080035420a14d525d150a7fb"
+    },
+    {
+      "path": "qwen/.specify/experts/core/character.md",
+      "sha256": "6a2a74bd4b42c52e15bd877fe7fe1c5ad6a32358475e797397b060a4b230cd89"
+    },
+    {
+      "path": "qwen/.specify/experts/core/plot.md",
+      "sha256": "1bf60cf836de917490c1424d2781f7d82518621815c3f66e5994f1225b1d7edb"
+    },
+    {
+      "path": "qwen/.specify/experts/core/style.md",
+      "sha256": "5a1ef640343dfdf2dcb41109c500416d8319aa9591ed7b26e0184becde04f147"
+    },
+    {
+      "path": "qwen/.specify/experts/core/world.md",
+      "sha256": "aeaef9f816d34d5e5ca27f9efc3001fd2987b15ac9b781d3fc0a1b13f1d070cc"
+    },
+    {
+      "path": "qwen/.specify/memory/constitution.md",
+      "sha256": "4e388c23598d178167ac7f73f70359079ccb3c2f68e8884606640ecbacba2dbc"
+    },
+    {
+      "path": "qwen/.specify/memory/personal-voice.md",
+      "sha256": "97a781384ec013203cc6a64aad7b9431c75b5a45bc19f82d3482800e7a22b0c4"
+    },
+    {
+      "path": "qwen/.specify/scripts/bash/analyze-story.sh",
+      "sha256": "55bed848066c013b4a01736793c20bbab5e79f6e859491fc4a3aa8ad3816b736"
+    },
+    {
+      "path": "qwen/.specify/scripts/bash/check-consistency.sh",
+      "sha256": "cac69cdf14298924dd7d23b8bd700ac74d2f672285f423932247d99ad4696702"
+    },
+    {
+      "path": "qwen/.specify/scripts/bash/check-plot.sh",
+      "sha256": "f814931fe8928fc55af9a2386969355e2a02b570bd8da651cde92c98066c147d"
+    },
+    {
+      "path": "qwen/.specify/scripts/bash/check-timeline.sh",
+      "sha256": "d8ef7a477cd31ab486a38e7c3509b375b31cbc6e3a406d4e47c4cb3d6cd101ab"
+    },
+    {
+      "path": "qwen/.specify/scripts/bash/check-world.sh",
+      "sha256": "d5aa04491960003807def1d5b33c7d1e236fda5ad3c942a8ac22215ca0d85140"
+    },
+    {
+      "path": "qwen/.specify/scripts/bash/check-writing-state.sh",
+      "sha256": "5fddce4ddf5d246937ea6888a2d623ede7148cda071a83587df833e50303ad3f"
+    },
+    {
+      "path": "qwen/.specify/scripts/bash/clarify-story.sh",
+      "sha256": "9787229ca3e2ea30505fc99373a44e7d698bb6a182a08002cfa7f029d921d84d"
+    },
+    {
+      "path": "qwen/.specify/scripts/bash/common.sh",
+      "sha256": "070581f0531b9ce1442bfbd14c7caab0cac8c99c8537dc122bf0b0495cb7f646"
+    },
+    {
+      "path": "qwen/.specify/scripts/bash/constitution.sh",
+      "sha256": "b352cd5e0679aa50d1f370a4807a88af473406159b5d1e4a907a724b23983667"
+    },
+    {
+      "path": "qwen/.specify/scripts/bash/generate-tasks.sh",
+      "sha256": "0b1c3a8b8a20d82bd6132017072f53f4796f51ca08467ee405e809978ac9e5c8"
+    },
+    {
+      "path": "qwen/.specify/scripts/bash/init-tracking.sh",
+      "sha256": "dfdf2ac7eb46c3014c2c20429219a4544b94fba7af21e509697b5597ed1d173e"
+    },
+    {
+      "path": "qwen/.specify/scripts/bash/manage-relations.sh",
+      "sha256": "78ffc8b1ccdb044ac5879979ae228bacb397ab3acda2feccc25080e00ea4c474"
+    },
+    {
+      "path": "qwen/.specify/scripts/bash/plan-story.sh",
+      "sha256": "f0d13b40d811fee076e7e7fe915f13b0d143fd971e4f8ca02444cd0f9fef689f"
+    },
+    {
+      "path": "qwen/.specify/scripts/bash/specify-story.sh",
+      "sha256": "5f796579bea1ca541d3766a9c2ea58802b835f27cacb59e1f09bf27527a8f6fb"
+    },
+    {
+      "path": "qwen/.specify/scripts/bash/tasks-story.sh",
+      "sha256": "cbe549cbdb206983c4a4a111b164602ed98e9fb578b7f89aed6ecb93bdab380e"
+    },
+    {
+      "path": "qwen/.specify/scripts/bash/test-word-count.sh",
+      "sha256": "6c550a6b7fc6996d0c440bec0bb1cc320c4027df83ec0749a2106d792e15ce88"
+    },
+    {
+      "path": "qwen/.specify/scripts/bash/text-audit.sh",
+      "sha256": "433c811d291e9ef73c5a939953c545845535228fa36805e1c0e8ac2f1e5afac5"
+    },
+    {
+      "path": "qwen/.specify/scripts/bash/track-progress.sh",
+      "sha256": "0092e8ba609d10dc3d4c4ebcac0a802771947dad88bafeed9012424c0b84aed8"
+    },
+    {
+      "path": "qwen/.specify/scripts/build-commands.cjs",
+      "sha256": "148e9aea0b947582b1475eaa53d7778dd9aafbbdf4476d6ea9b9eca684602eee"
+    },
+    {
+      "path": "qwen/.specify/scripts/postbuild.cjs",
+      "sha256": "06255c106d3ee5a1a5c84afcc056a370589bc3bc8577d7e42a7934bfc7b9bede"
+    },
+    {
+      "path": "qwen/.specify/scripts/runtime/application/check-writing-state.js",
+      "sha256": "3d966a5256cefed94cc1cb9bde8a55c4ddac6d4efb146d4a0dbc6192b02dedb8"
+    },
+    {
+      "path": "qwen/.specify/scripts/runtime/domain/story-artifact.js",
+      "sha256": "010032f357a3154a9e939db41baa9b47bf72d20a7b4d3c1dba65c25c2af2d603"
+    },
+    {
+      "path": "qwen/.specify/scripts/runtime/script-runtime.js",
+      "sha256": "6ddcafa9fca67371f159c0feb8df4d0eda5cda0e80d45bcb11713f43db99ba6c"
+    },
+    {
+      "path": "qwen/.specify/templates/AGENTS.codex.md",
+      "sha256": "85a8aaf48b73f1762d478f6fff69daa0cde4615423a314d75302583a8227bfd1"
+    },
+    {
+      "path": "qwen/.specify/templates/checklist-template.md",
+      "sha256": "cb3f31ae0eba66bc155c1151d0e0704a34deaa9ea1f783f9af93609aed3bcb32"
+    },
+    {
+      "path": "qwen/.specify/templates/gemini-settings.json",
+      "sha256": "4e699dab1d8e8f0d685c06b15525f253a9ad6797122db4a096973875a9115c74"
+    },
+    {
+      "path": "qwen/.specify/templates/GEMINI.md",
+      "sha256": "3b6521784cfc9dfccb8d3f1c6f8008371fe14e30f7bb378ecf12c6686e83f0da"
+    },
+    {
+      "path": "qwen/.specify/templates/knowledge/audit-config.json",
+      "sha256": "f1f3931cc70bd5b515e22d6f600609d6a093066d29620f3aac6456e79f4e53c7"
+    },
+    {
+      "path": "qwen/.specify/templates/knowledge/character-profiles.md",
+      "sha256": "5c0622856e9aeb19b0f6184a4d1e4fdee1feb9fe09e4b419dc20eae36071d03f"
+    },
+    {
+      "path": "qwen/.specify/templates/knowledge/character-voices.md",
+      "sha256": "3b0eee617fb919d1c068d850fddf27c3a578ac440fdbdb17513a6265c99dff3d"
+    },
+    {
+      "path": "qwen/.specify/templates/knowledge/locations.md",
+      "sha256": "9ba169c1e1b3ad65260a4ec815d92dbb68ebd9be03b8736a57b140cea33dbdcc"
+    },
+    {
+      "path": "qwen/.specify/templates/knowledge/world-setting.md",
+      "sha256": "7cfe68b12bab865d4646b03dacfff0a9bfbc36db60fb2b44c3ffff66bc545429"
+    },
+    {
+      "path": "qwen/.specify/templates/outline-template.md",
+      "sha256": "6087930e2f516bc721ec47d11b37eecaf30674eaad946abd3406cf25e654a299"
+    },
+    {
+      "path": "qwen/.specify/templates/story-template.md",
+      "sha256": "78326b42ea7a65c9f2b22161a849cea86359bba3620d728f7abdbb5ef64d7003"
+    },
+    {
+      "path": "qwen/.specify/templates/tracking/character-state.json",
+      "sha256": "81d3dc912c5e3504360d76bfdf9bdf365013857d4cae088f192bce8915c89d70"
+    },
+    {
+      "path": "qwen/.specify/templates/tracking/plot-tracker.json",
+      "sha256": "841703f221259f4746c2266a8dd943e004aa94ecf06db172fbdf0bd770d7703f"
+    },
+    {
+      "path": "qwen/.specify/templates/tracking/relationships.json",
+      "sha256": "de9567882a8cdf31dba6f0afa8b92bbf68346bb7063164724e47ae4434bddbcf"
+    },
+    {
+      "path": "qwen/.specify/templates/tracking/timeline.json",
+      "sha256": "f49c0aae351ab780591ab25bfbe82f53e24744adfc967d8ce1884bb8428dece1"
+    },
+    {
+      "path": "qwen/.specify/templates/tracking/validation-rules.json",
+      "sha256": "43d783508b85efe6dcfa70bb73493f9bddea45c5a26a408f379bf0b91aac47fe"
+    },
+    {
+      "path": "qwen/.specify/templates/vscode-settings.json",
+      "sha256": "875183e65cb2b8fd43111ef9f6b8e7b94fb8e3cdcfa9ae340cd9cf3eadaf06eb"
+    },
+    {
+      "path": "qwen/.specify/templates/writing-constitution-template.md",
+      "sha256": "26784c8e78e8636b6d09105ef9f6dcd3951c111517049cfbf23503a3e1b53b64"
+    },
+    {
+      "path": "qwen/spec/checklists/README.md",
+      "sha256": "dfc8a1470e23a98534dc9b8c3e33ea23990423ea9866d4a428484e5be074cc57"
+    },
+    {
+      "path": "qwen/spec/config.json",
+      "sha256": "719976aa49cedb025f13b9d047cc497cf01a9f3579fda888d94e592e19e8b469"
+    },
+    {
+      "path": "qwen/spec/presets/anti-ai-detection.md",
+      "sha256": "00bf97e5949d33a6d5bce083e8d210620206c6d6827efc0b67dbaccc0149fcfa"
+    },
+    {
+      "path": "qwen/spec/presets/golden-opening.md",
+      "sha256": "77843e024e293a6580f19aed0b3e41b36b2a7d3502b16c9402c1546b5d314371"
+    },
+    {
+      "path": "qwen/spec/presets/hero-journey/config.yaml",
+      "sha256": "46f87f2e09bf728231f9acdf6ce1aa6859c9bde5ca899e848d761ff0c263789e"
+    },
+    {
+      "path": "qwen/spec/presets/hero-journey/outline.md",
+      "sha256": "0f1a8b5fbf3b65ba128ed1a895b7ed58a3d76e85d2aff5618dcb94e6b8095959"
+    },
+    {
+      "path": "qwen/spec/presets/hero-journey/story.md",
+      "sha256": "6b4156a14dc9ed4c38b5826077e4c6ee5fe85f638b9c51ead0ac48287808554d"
+    },
+    {
+      "path": "qwen/spec/presets/pixar-formula/config.yaml",
+      "sha256": "86132b84e484eed8689614424859e8240c51ed638c4401a7184301b584ec35a3"
+    },
+    {
+      "path": "qwen/spec/presets/pixar-formula/outline.md",
+      "sha256": "31a8bdb81bf5e8c02413204a7448ead30d2cac78a82e84357ea302e1af0eed02"
+    },
+    {
+      "path": "qwen/spec/presets/pixar-formula/story.md",
+      "sha256": "bd883a9ba8221f41a8fb96a4fd3eec0a331cd20798154d14c3eb6f6149e5e1d4"
+    },
+    {
+      "path": "qwen/spec/presets/seven-point/config.yaml",
+      "sha256": "9127133dd1c4c2e4f29b2f883d9e3c33296be616c86f46bbfcc6e2dac5f2cc62"
+    },
+    {
+      "path": "qwen/spec/presets/seven-point/outline.md",
+      "sha256": "bad21f10defe45f1287ae8622550047a87e590994ffa8f71b9b6eca2975fdf91"
+    },
+    {
+      "path": "qwen/spec/presets/seven-point/story.md",
+      "sha256": "f1f045b9961002158d2b210412919643feac0e3b323af652fde29b4ce86f0252"
+    },
+    {
+      "path": "qwen/spec/presets/snowflake/outline.md",
+      "sha256": "8d31dab1b6fd6ebfb5de445ce2e8cfeaf61943e22582623c7215d4b2a39f9b8c"
+    },
+    {
+      "path": "qwen/spec/presets/snowflake/story.md",
+      "sha256": "f48b2dae3650cd396dad7fa47709fdfc9737cf06da71e21ec1c2b8cdd9d415ba"
+    },
+    {
+      "path": "qwen/spec/presets/story-circle/config.yaml",
+      "sha256": "8bfe9a4af156878aa8330efd41b0fc4ceabebbeafce49efcd3a6c6d16b38d8c3"
+    },
+    {
+      "path": "qwen/spec/presets/story-circle/outline.md",
+      "sha256": "34b56f852b4cb87b2cc1e82494839daa10ed47cff1c782db7d71f03c4936e467"
+    },
+    {
+      "path": "qwen/spec/presets/story-circle/story.md",
+      "sha256": "fa4f7ba6e3a6124f33bd9af8ef4168b95844f36b723bb4c8bf664048c28d3739"
+    },
+    {
+      "path": "qwen/spec/presets/three-act/config.yaml",
+      "sha256": "35534c4499c75c6670d7a38bf07d7d1268f72ebfce214af609901948802e939d"
+    },
+    {
+      "path": "qwen/spec/presets/three-act/outline.md",
+      "sha256": "6087930e2f516bc721ec47d11b37eecaf30674eaad946abd3406cf25e654a299"
+    },
+    {
+      "path": "qwen/spec/presets/three-act/story.md",
+      "sha256": "78326b42ea7a65c9f2b22161a849cea86359bba3620d728f7abdbb5ef64d7003"
+    },
+    {
+      "path": "qwen/spec/README.md",
+      "sha256": "780485b5b85cd4060b8deb8e8cb95acd9ec88660ebceae8e1a05631941aa5719"
+    },
+    {
+      "path": "roocode/.roo/commands/analyze.md",
+      "sha256": "ef87c1d7a42933298fb9447fef8854b6a91f6a54da394938da6b8b39269f90e8"
+    },
+    {
+      "path": "roocode/.roo/commands/checklist.md",
+      "sha256": "e425bb9c1f25b7b82a763e3f8f52451228da0e41e18e6a3f1eb56dd1edd74eae"
+    },
+    {
+      "path": "roocode/.roo/commands/clarify.md",
+      "sha256": "6aef8185f8a6880f5831502207c60d27e072cd040eed306449cd6465453dc487"
+    },
+    {
+      "path": "roocode/.roo/commands/constitution.md",
+      "sha256": "e4147cedcbef8bb72644eb8bf2d3e6ba4e1d900d30bb08c5f6527d369e1cbfc0"
+    },
+    {
+      "path": "roocode/.roo/commands/expert.md",
+      "sha256": "eb8fe161666c34158806ff1ffdbc06aa4339d7ad5180e9d2a6329e91b3dde52c"
+    },
+    {
+      "path": "roocode/.roo/commands/plan.md",
+      "sha256": "aea4875ec273f8e9793f8372fd7ea2967538f6dd7609b733b931cba284b49de6"
+    },
+    {
+      "path": "roocode/.roo/commands/relations.md",
+      "sha256": "335cb989f2b352aad9f1c6dc9a70a52ea860272a11135bbe30337eabe2be1e66"
+    },
+    {
+      "path": "roocode/.roo/commands/specify.md",
+      "sha256": "61dfedb76beea9612d79afe80d8ae595ae27fa9282da54027114da4c67524fbe"
+    },
+    {
+      "path": "roocode/.roo/commands/tasks.md",
+      "sha256": "c1d7b5bb3757e6498682cc75b3276492fc94972010de8d45cbbd0177c18764e5"
+    },
+    {
+      "path": "roocode/.roo/commands/timeline.md",
+      "sha256": "984f650fdc05864e0581e6b28a290d14c39be5eb693aa69100c55e3ae69f4f64"
+    },
+    {
+      "path": "roocode/.roo/commands/track-init.md",
+      "sha256": "e102b69dee0ffef90e9b530ef045016986ed3d55f78c5f5519f6fa761c74ccec"
+    },
+    {
+      "path": "roocode/.roo/commands/track.md",
+      "sha256": "11874ff69e07396fc8ffcb6a5544b5797ecc8a90ac408c1730b8fde836413a76"
+    },
+    {
+      "path": "roocode/.roo/commands/write.md",
+      "sha256": "d19fe7bbd30608b32a016cee2adb1c9bff72b93010df54601e96e6c87d3a632d"
+    },
+    {
+      "path": "roocode/.specify/experts/core/character.md",
+      "sha256": "6a2a74bd4b42c52e15bd877fe7fe1c5ad6a32358475e797397b060a4b230cd89"
+    },
+    {
+      "path": "roocode/.specify/experts/core/plot.md",
+      "sha256": "1bf60cf836de917490c1424d2781f7d82518621815c3f66e5994f1225b1d7edb"
+    },
+    {
+      "path": "roocode/.specify/experts/core/style.md",
+      "sha256": "5a1ef640343dfdf2dcb41109c500416d8319aa9591ed7b26e0184becde04f147"
+    },
+    {
+      "path": "roocode/.specify/experts/core/world.md",
+      "sha256": "aeaef9f816d34d5e5ca27f9efc3001fd2987b15ac9b781d3fc0a1b13f1d070cc"
+    },
+    {
+      "path": "roocode/.specify/memory/constitution.md",
+      "sha256": "4e388c23598d178167ac7f73f70359079ccb3c2f68e8884606640ecbacba2dbc"
+    },
+    {
+      "path": "roocode/.specify/memory/personal-voice.md",
+      "sha256": "97a781384ec013203cc6a64aad7b9431c75b5a45bc19f82d3482800e7a22b0c4"
+    },
+    {
+      "path": "roocode/.specify/scripts/bash/analyze-story.sh",
+      "sha256": "55bed848066c013b4a01736793c20bbab5e79f6e859491fc4a3aa8ad3816b736"
+    },
+    {
+      "path": "roocode/.specify/scripts/bash/check-consistency.sh",
+      "sha256": "cac69cdf14298924dd7d23b8bd700ac74d2f672285f423932247d99ad4696702"
+    },
+    {
+      "path": "roocode/.specify/scripts/bash/check-plot.sh",
+      "sha256": "f814931fe8928fc55af9a2386969355e2a02b570bd8da651cde92c98066c147d"
+    },
+    {
+      "path": "roocode/.specify/scripts/bash/check-timeline.sh",
+      "sha256": "d8ef7a477cd31ab486a38e7c3509b375b31cbc6e3a406d4e47c4cb3d6cd101ab"
+    },
+    {
+      "path": "roocode/.specify/scripts/bash/check-world.sh",
+      "sha256": "d5aa04491960003807def1d5b33c7d1e236fda5ad3c942a8ac22215ca0d85140"
+    },
+    {
+      "path": "roocode/.specify/scripts/bash/check-writing-state.sh",
+      "sha256": "5fddce4ddf5d246937ea6888a2d623ede7148cda071a83587df833e50303ad3f"
+    },
+    {
+      "path": "roocode/.specify/scripts/bash/clarify-story.sh",
+      "sha256": "9787229ca3e2ea30505fc99373a44e7d698bb6a182a08002cfa7f029d921d84d"
+    },
+    {
+      "path": "roocode/.specify/scripts/bash/common.sh",
+      "sha256": "070581f0531b9ce1442bfbd14c7caab0cac8c99c8537dc122bf0b0495cb7f646"
+    },
+    {
+      "path": "roocode/.specify/scripts/bash/constitution.sh",
+      "sha256": "b352cd5e0679aa50d1f370a4807a88af473406159b5d1e4a907a724b23983667"
+    },
+    {
+      "path": "roocode/.specify/scripts/bash/generate-tasks.sh",
+      "sha256": "0b1c3a8b8a20d82bd6132017072f53f4796f51ca08467ee405e809978ac9e5c8"
+    },
+    {
+      "path": "roocode/.specify/scripts/bash/init-tracking.sh",
+      "sha256": "dfdf2ac7eb46c3014c2c20429219a4544b94fba7af21e509697b5597ed1d173e"
+    },
+    {
+      "path": "roocode/.specify/scripts/bash/manage-relations.sh",
+      "sha256": "78ffc8b1ccdb044ac5879979ae228bacb397ab3acda2feccc25080e00ea4c474"
+    },
+    {
+      "path": "roocode/.specify/scripts/bash/plan-story.sh",
+      "sha256": "f0d13b40d811fee076e7e7fe915f13b0d143fd971e4f8ca02444cd0f9fef689f"
+    },
+    {
+      "path": "roocode/.specify/scripts/bash/specify-story.sh",
+      "sha256": "5f796579bea1ca541d3766a9c2ea58802b835f27cacb59e1f09bf27527a8f6fb"
+    },
+    {
+      "path": "roocode/.specify/scripts/bash/tasks-story.sh",
+      "sha256": "cbe549cbdb206983c4a4a111b164602ed98e9fb578b7f89aed6ecb93bdab380e"
+    },
+    {
+      "path": "roocode/.specify/scripts/bash/test-word-count.sh",
+      "sha256": "6c550a6b7fc6996d0c440bec0bb1cc320c4027df83ec0749a2106d792e15ce88"
+    },
+    {
+      "path": "roocode/.specify/scripts/bash/text-audit.sh",
+      "sha256": "433c811d291e9ef73c5a939953c545845535228fa36805e1c0e8ac2f1e5afac5"
+    },
+    {
+      "path": "roocode/.specify/scripts/bash/track-progress.sh",
+      "sha256": "0092e8ba609d10dc3d4c4ebcac0a802771947dad88bafeed9012424c0b84aed8"
+    },
+    {
+      "path": "roocode/.specify/scripts/build-commands.cjs",
+      "sha256": "148e9aea0b947582b1475eaa53d7778dd9aafbbdf4476d6ea9b9eca684602eee"
+    },
+    {
+      "path": "roocode/.specify/scripts/postbuild.cjs",
+      "sha256": "06255c106d3ee5a1a5c84afcc056a370589bc3bc8577d7e42a7934bfc7b9bede"
+    },
+    {
+      "path": "roocode/.specify/scripts/runtime/application/check-writing-state.js",
+      "sha256": "3d966a5256cefed94cc1cb9bde8a55c4ddac6d4efb146d4a0dbc6192b02dedb8"
+    },
+    {
+      "path": "roocode/.specify/scripts/runtime/domain/story-artifact.js",
+      "sha256": "010032f357a3154a9e939db41baa9b47bf72d20a7b4d3c1dba65c25c2af2d603"
+    },
+    {
+      "path": "roocode/.specify/scripts/runtime/script-runtime.js",
+      "sha256": "6ddcafa9fca67371f159c0feb8df4d0eda5cda0e80d45bcb11713f43db99ba6c"
+    },
+    {
+      "path": "roocode/.specify/templates/AGENTS.codex.md",
+      "sha256": "85a8aaf48b73f1762d478f6fff69daa0cde4615423a314d75302583a8227bfd1"
+    },
+    {
+      "path": "roocode/.specify/templates/checklist-template.md",
+      "sha256": "cb3f31ae0eba66bc155c1151d0e0704a34deaa9ea1f783f9af93609aed3bcb32"
+    },
+    {
+      "path": "roocode/.specify/templates/gemini-settings.json",
+      "sha256": "4e699dab1d8e8f0d685c06b15525f253a9ad6797122db4a096973875a9115c74"
+    },
+    {
+      "path": "roocode/.specify/templates/GEMINI.md",
+      "sha256": "3b6521784cfc9dfccb8d3f1c6f8008371fe14e30f7bb378ecf12c6686e83f0da"
+    },
+    {
+      "path": "roocode/.specify/templates/knowledge/audit-config.json",
+      "sha256": "f1f3931cc70bd5b515e22d6f600609d6a093066d29620f3aac6456e79f4e53c7"
+    },
+    {
+      "path": "roocode/.specify/templates/knowledge/character-profiles.md",
+      "sha256": "5c0622856e9aeb19b0f6184a4d1e4fdee1feb9fe09e4b419dc20eae36071d03f"
+    },
+    {
+      "path": "roocode/.specify/templates/knowledge/character-voices.md",
+      "sha256": "3b0eee617fb919d1c068d850fddf27c3a578ac440fdbdb17513a6265c99dff3d"
+    },
+    {
+      "path": "roocode/.specify/templates/knowledge/locations.md",
+      "sha256": "9ba169c1e1b3ad65260a4ec815d92dbb68ebd9be03b8736a57b140cea33dbdcc"
+    },
+    {
+      "path": "roocode/.specify/templates/knowledge/world-setting.md",
+      "sha256": "7cfe68b12bab865d4646b03dacfff0a9bfbc36db60fb2b44c3ffff66bc545429"
+    },
+    {
+      "path": "roocode/.specify/templates/outline-template.md",
+      "sha256": "6087930e2f516bc721ec47d11b37eecaf30674eaad946abd3406cf25e654a299"
+    },
+    {
+      "path": "roocode/.specify/templates/story-template.md",
+      "sha256": "78326b42ea7a65c9f2b22161a849cea86359bba3620d728f7abdbb5ef64d7003"
+    },
+    {
+      "path": "roocode/.specify/templates/tracking/character-state.json",
+      "sha256": "81d3dc912c5e3504360d76bfdf9bdf365013857d4cae088f192bce8915c89d70"
+    },
+    {
+      "path": "roocode/.specify/templates/tracking/plot-tracker.json",
+      "sha256": "841703f221259f4746c2266a8dd943e004aa94ecf06db172fbdf0bd770d7703f"
+    },
+    {
+      "path": "roocode/.specify/templates/tracking/relationships.json",
+      "sha256": "de9567882a8cdf31dba6f0afa8b92bbf68346bb7063164724e47ae4434bddbcf"
+    },
+    {
+      "path": "roocode/.specify/templates/tracking/timeline.json",
+      "sha256": "f49c0aae351ab780591ab25bfbe82f53e24744adfc967d8ce1884bb8428dece1"
+    },
+    {
+      "path": "roocode/.specify/templates/tracking/validation-rules.json",
+      "sha256": "43d783508b85efe6dcfa70bb73493f9bddea45c5a26a408f379bf0b91aac47fe"
+    },
+    {
+      "path": "roocode/.specify/templates/vscode-settings.json",
+      "sha256": "875183e65cb2b8fd43111ef9f6b8e7b94fb8e3cdcfa9ae340cd9cf3eadaf06eb"
+    },
+    {
+      "path": "roocode/.specify/templates/writing-constitution-template.md",
+      "sha256": "26784c8e78e8636b6d09105ef9f6dcd3951c111517049cfbf23503a3e1b53b64"
+    },
+    {
+      "path": "roocode/spec/checklists/README.md",
+      "sha256": "dfc8a1470e23a98534dc9b8c3e33ea23990423ea9866d4a428484e5be074cc57"
+    },
+    {
+      "path": "roocode/spec/config.json",
+      "sha256": "719976aa49cedb025f13b9d047cc497cf01a9f3579fda888d94e592e19e8b469"
+    },
+    {
+      "path": "roocode/spec/presets/anti-ai-detection.md",
+      "sha256": "00bf97e5949d33a6d5bce083e8d210620206c6d6827efc0b67dbaccc0149fcfa"
+    },
+    {
+      "path": "roocode/spec/presets/golden-opening.md",
+      "sha256": "77843e024e293a6580f19aed0b3e41b36b2a7d3502b16c9402c1546b5d314371"
+    },
+    {
+      "path": "roocode/spec/presets/hero-journey/config.yaml",
+      "sha256": "46f87f2e09bf728231f9acdf6ce1aa6859c9bde5ca899e848d761ff0c263789e"
+    },
+    {
+      "path": "roocode/spec/presets/hero-journey/outline.md",
+      "sha256": "0f1a8b5fbf3b65ba128ed1a895b7ed58a3d76e85d2aff5618dcb94e6b8095959"
+    },
+    {
+      "path": "roocode/spec/presets/hero-journey/story.md",
+      "sha256": "6b4156a14dc9ed4c38b5826077e4c6ee5fe85f638b9c51ead0ac48287808554d"
+    },
+    {
+      "path": "roocode/spec/presets/pixar-formula/config.yaml",
+      "sha256": "86132b84e484eed8689614424859e8240c51ed638c4401a7184301b584ec35a3"
+    },
+    {
+      "path": "roocode/spec/presets/pixar-formula/outline.md",
+      "sha256": "31a8bdb81bf5e8c02413204a7448ead30d2cac78a82e84357ea302e1af0eed02"
+    },
+    {
+      "path": "roocode/spec/presets/pixar-formula/story.md",
+      "sha256": "bd883a9ba8221f41a8fb96a4fd3eec0a331cd20798154d14c3eb6f6149e5e1d4"
+    },
+    {
+      "path": "roocode/spec/presets/seven-point/config.yaml",
+      "sha256": "9127133dd1c4c2e4f29b2f883d9e3c33296be616c86f46bbfcc6e2dac5f2cc62"
+    },
+    {
+      "path": "roocode/spec/presets/seven-point/outline.md",
+      "sha256": "bad21f10defe45f1287ae8622550047a87e590994ffa8f71b9b6eca2975fdf91"
+    },
+    {
+      "path": "roocode/spec/presets/seven-point/story.md",
+      "sha256": "f1f045b9961002158d2b210412919643feac0e3b323af652fde29b4ce86f0252"
+    },
+    {
+      "path": "roocode/spec/presets/snowflake/outline.md",
+      "sha256": "8d31dab1b6fd6ebfb5de445ce2e8cfeaf61943e22582623c7215d4b2a39f9b8c"
+    },
+    {
+      "path": "roocode/spec/presets/snowflake/story.md",
+      "sha256": "f48b2dae3650cd396dad7fa47709fdfc9737cf06da71e21ec1c2b8cdd9d415ba"
+    },
+    {
+      "path": "roocode/spec/presets/story-circle/config.yaml",
+      "sha256": "8bfe9a4af156878aa8330efd41b0fc4ceabebbeafce49efcd3a6c6d16b38d8c3"
+    },
+    {
+      "path": "roocode/spec/presets/story-circle/outline.md",
+      "sha256": "34b56f852b4cb87b2cc1e82494839daa10ed47cff1c782db7d71f03c4936e467"
+    },
+    {
+      "path": "roocode/spec/presets/story-circle/story.md",
+      "sha256": "fa4f7ba6e3a6124f33bd9af8ef4168b95844f36b723bb4c8bf664048c28d3739"
+    },
+    {
+      "path": "roocode/spec/presets/three-act/config.yaml",
+      "sha256": "35534c4499c75c6670d7a38bf07d7d1268f72ebfce214af609901948802e939d"
+    },
+    {
+      "path": "roocode/spec/presets/three-act/outline.md",
+      "sha256": "6087930e2f516bc721ec47d11b37eecaf30674eaad946abd3406cf25e654a299"
+    },
+    {
+      "path": "roocode/spec/presets/three-act/story.md",
+      "sha256": "78326b42ea7a65c9f2b22161a849cea86359bba3620d728f7abdbb5ef64d7003"
+    },
+    {
+      "path": "roocode/spec/README.md",
+      "sha256": "780485b5b85cd4060b8deb8e8cb95acd9ec88660ebceae8e1a05631941aa5719"
+    },
+    {
+      "path": "windsurf/.specify/experts/core/character.md",
+      "sha256": "6a2a74bd4b42c52e15bd877fe7fe1c5ad6a32358475e797397b060a4b230cd89"
+    },
+    {
+      "path": "windsurf/.specify/experts/core/plot.md",
+      "sha256": "1bf60cf836de917490c1424d2781f7d82518621815c3f66e5994f1225b1d7edb"
+    },
+    {
+      "path": "windsurf/.specify/experts/core/style.md",
+      "sha256": "5a1ef640343dfdf2dcb41109c500416d8319aa9591ed7b26e0184becde04f147"
+    },
+    {
+      "path": "windsurf/.specify/experts/core/world.md",
+      "sha256": "aeaef9f816d34d5e5ca27f9efc3001fd2987b15ac9b781d3fc0a1b13f1d070cc"
+    },
+    {
+      "path": "windsurf/.specify/memory/constitution.md",
+      "sha256": "4e388c23598d178167ac7f73f70359079ccb3c2f68e8884606640ecbacba2dbc"
+    },
+    {
+      "path": "windsurf/.specify/memory/personal-voice.md",
+      "sha256": "97a781384ec013203cc6a64aad7b9431c75b5a45bc19f82d3482800e7a22b0c4"
+    },
+    {
+      "path": "windsurf/.specify/scripts/bash/analyze-story.sh",
+      "sha256": "55bed848066c013b4a01736793c20bbab5e79f6e859491fc4a3aa8ad3816b736"
+    },
+    {
+      "path": "windsurf/.specify/scripts/bash/check-consistency.sh",
+      "sha256": "cac69cdf14298924dd7d23b8bd700ac74d2f672285f423932247d99ad4696702"
+    },
+    {
+      "path": "windsurf/.specify/scripts/bash/check-plot.sh",
+      "sha256": "f814931fe8928fc55af9a2386969355e2a02b570bd8da651cde92c98066c147d"
+    },
+    {
+      "path": "windsurf/.specify/scripts/bash/check-timeline.sh",
+      "sha256": "d8ef7a477cd31ab486a38e7c3509b375b31cbc6e3a406d4e47c4cb3d6cd101ab"
+    },
+    {
+      "path": "windsurf/.specify/scripts/bash/check-world.sh",
+      "sha256": "d5aa04491960003807def1d5b33c7d1e236fda5ad3c942a8ac22215ca0d85140"
+    },
+    {
+      "path": "windsurf/.specify/scripts/bash/check-writing-state.sh",
+      "sha256": "5fddce4ddf5d246937ea6888a2d623ede7148cda071a83587df833e50303ad3f"
+    },
+    {
+      "path": "windsurf/.specify/scripts/bash/clarify-story.sh",
+      "sha256": "9787229ca3e2ea30505fc99373a44e7d698bb6a182a08002cfa7f029d921d84d"
+    },
+    {
+      "path": "windsurf/.specify/scripts/bash/common.sh",
+      "sha256": "070581f0531b9ce1442bfbd14c7caab0cac8c99c8537dc122bf0b0495cb7f646"
+    },
+    {
+      "path": "windsurf/.specify/scripts/bash/constitution.sh",
+      "sha256": "b352cd5e0679aa50d1f370a4807a88af473406159b5d1e4a907a724b23983667"
+    },
+    {
+      "path": "windsurf/.specify/scripts/bash/generate-tasks.sh",
+      "sha256": "0b1c3a8b8a20d82bd6132017072f53f4796f51ca08467ee405e809978ac9e5c8"
+    },
+    {
+      "path": "windsurf/.specify/scripts/bash/init-tracking.sh",
+      "sha256": "dfdf2ac7eb46c3014c2c20429219a4544b94fba7af21e509697b5597ed1d173e"
+    },
+    {
+      "path": "windsurf/.specify/scripts/bash/manage-relations.sh",
+      "sha256": "78ffc8b1ccdb044ac5879979ae228bacb397ab3acda2feccc25080e00ea4c474"
+    },
+    {
+      "path": "windsurf/.specify/scripts/bash/plan-story.sh",
+      "sha256": "f0d13b40d811fee076e7e7fe915f13b0d143fd971e4f8ca02444cd0f9fef689f"
+    },
+    {
+      "path": "windsurf/.specify/scripts/bash/specify-story.sh",
+      "sha256": "5f796579bea1ca541d3766a9c2ea58802b835f27cacb59e1f09bf27527a8f6fb"
+    },
+    {
+      "path": "windsurf/.specify/scripts/bash/tasks-story.sh",
+      "sha256": "cbe549cbdb206983c4a4a111b164602ed98e9fb578b7f89aed6ecb93bdab380e"
+    },
+    {
+      "path": "windsurf/.specify/scripts/bash/test-word-count.sh",
+      "sha256": "6c550a6b7fc6996d0c440bec0bb1cc320c4027df83ec0749a2106d792e15ce88"
+    },
+    {
+      "path": "windsurf/.specify/scripts/bash/text-audit.sh",
+      "sha256": "433c811d291e9ef73c5a939953c545845535228fa36805e1c0e8ac2f1e5afac5"
+    },
+    {
+      "path": "windsurf/.specify/scripts/bash/track-progress.sh",
+      "sha256": "0092e8ba609d10dc3d4c4ebcac0a802771947dad88bafeed9012424c0b84aed8"
+    },
+    {
+      "path": "windsurf/.specify/scripts/build-commands.cjs",
+      "sha256": "148e9aea0b947582b1475eaa53d7778dd9aafbbdf4476d6ea9b9eca684602eee"
+    },
+    {
+      "path": "windsurf/.specify/scripts/postbuild.cjs",
+      "sha256": "06255c106d3ee5a1a5c84afcc056a370589bc3bc8577d7e42a7934bfc7b9bede"
+    },
+    {
+      "path": "windsurf/.specify/scripts/runtime/application/check-writing-state.js",
+      "sha256": "3d966a5256cefed94cc1cb9bde8a55c4ddac6d4efb146d4a0dbc6192b02dedb8"
+    },
+    {
+      "path": "windsurf/.specify/scripts/runtime/domain/story-artifact.js",
+      "sha256": "010032f357a3154a9e939db41baa9b47bf72d20a7b4d3c1dba65c25c2af2d603"
+    },
+    {
+      "path": "windsurf/.specify/scripts/runtime/script-runtime.js",
+      "sha256": "6ddcafa9fca67371f159c0feb8df4d0eda5cda0e80d45bcb11713f43db99ba6c"
+    },
+    {
+      "path": "windsurf/.specify/templates/AGENTS.codex.md",
+      "sha256": "85a8aaf48b73f1762d478f6fff69daa0cde4615423a314d75302583a8227bfd1"
+    },
+    {
+      "path": "windsurf/.specify/templates/checklist-template.md",
+      "sha256": "cb3f31ae0eba66bc155c1151d0e0704a34deaa9ea1f783f9af93609aed3bcb32"
+    },
+    {
+      "path": "windsurf/.specify/templates/gemini-settings.json",
+      "sha256": "4e699dab1d8e8f0d685c06b15525f253a9ad6797122db4a096973875a9115c74"
+    },
+    {
+      "path": "windsurf/.specify/templates/GEMINI.md",
+      "sha256": "3b6521784cfc9dfccb8d3f1c6f8008371fe14e30f7bb378ecf12c6686e83f0da"
+    },
+    {
+      "path": "windsurf/.specify/templates/knowledge/audit-config.json",
+      "sha256": "f1f3931cc70bd5b515e22d6f600609d6a093066d29620f3aac6456e79f4e53c7"
+    },
+    {
+      "path": "windsurf/.specify/templates/knowledge/character-profiles.md",
+      "sha256": "5c0622856e9aeb19b0f6184a4d1e4fdee1feb9fe09e4b419dc20eae36071d03f"
+    },
+    {
+      "path": "windsurf/.specify/templates/knowledge/character-voices.md",
+      "sha256": "3b0eee617fb919d1c068d850fddf27c3a578ac440fdbdb17513a6265c99dff3d"
+    },
+    {
+      "path": "windsurf/.specify/templates/knowledge/locations.md",
+      "sha256": "9ba169c1e1b3ad65260a4ec815d92dbb68ebd9be03b8736a57b140cea33dbdcc"
+    },
+    {
+      "path": "windsurf/.specify/templates/knowledge/world-setting.md",
+      "sha256": "7cfe68b12bab865d4646b03dacfff0a9bfbc36db60fb2b44c3ffff66bc545429"
+    },
+    {
+      "path": "windsurf/.specify/templates/outline-template.md",
+      "sha256": "6087930e2f516bc721ec47d11b37eecaf30674eaad946abd3406cf25e654a299"
+    },
+    {
+      "path": "windsurf/.specify/templates/story-template.md",
+      "sha256": "78326b42ea7a65c9f2b22161a849cea86359bba3620d728f7abdbb5ef64d7003"
+    },
+    {
+      "path": "windsurf/.specify/templates/tracking/character-state.json",
+      "sha256": "81d3dc912c5e3504360d76bfdf9bdf365013857d4cae088f192bce8915c89d70"
+    },
+    {
+      "path": "windsurf/.specify/templates/tracking/plot-tracker.json",
+      "sha256": "841703f221259f4746c2266a8dd943e004aa94ecf06db172fbdf0bd770d7703f"
+    },
+    {
+      "path": "windsurf/.specify/templates/tracking/relationships.json",
+      "sha256": "de9567882a8cdf31dba6f0afa8b92bbf68346bb7063164724e47ae4434bddbcf"
+    },
+    {
+      "path": "windsurf/.specify/templates/tracking/timeline.json",
+      "sha256": "f49c0aae351ab780591ab25bfbe82f53e24744adfc967d8ce1884bb8428dece1"
+    },
+    {
+      "path": "windsurf/.specify/templates/tracking/validation-rules.json",
+      "sha256": "43d783508b85efe6dcfa70bb73493f9bddea45c5a26a408f379bf0b91aac47fe"
+    },
+    {
+      "path": "windsurf/.specify/templates/vscode-settings.json",
+      "sha256": "875183e65cb2b8fd43111ef9f6b8e7b94fb8e3cdcfa9ae340cd9cf3eadaf06eb"
+    },
+    {
+      "path": "windsurf/.specify/templates/writing-constitution-template.md",
+      "sha256": "26784c8e78e8636b6d09105ef9f6dcd3951c111517049cfbf23503a3e1b53b64"
+    },
+    {
+      "path": "windsurf/.windsurf/workflows/analyze.md",
+      "sha256": "ef87c1d7a42933298fb9447fef8854b6a91f6a54da394938da6b8b39269f90e8"
+    },
+    {
+      "path": "windsurf/.windsurf/workflows/checklist.md",
+      "sha256": "e425bb9c1f25b7b82a763e3f8f52451228da0e41e18e6a3f1eb56dd1edd74eae"
+    },
+    {
+      "path": "windsurf/.windsurf/workflows/clarify.md",
+      "sha256": "6aef8185f8a6880f5831502207c60d27e072cd040eed306449cd6465453dc487"
+    },
+    {
+      "path": "windsurf/.windsurf/workflows/constitution.md",
+      "sha256": "e4147cedcbef8bb72644eb8bf2d3e6ba4e1d900d30bb08c5f6527d369e1cbfc0"
+    },
+    {
+      "path": "windsurf/.windsurf/workflows/expert.md",
+      "sha256": "eb8fe161666c34158806ff1ffdbc06aa4339d7ad5180e9d2a6329e91b3dde52c"
+    },
+    {
+      "path": "windsurf/.windsurf/workflows/plan.md",
+      "sha256": "aea4875ec273f8e9793f8372fd7ea2967538f6dd7609b733b931cba284b49de6"
+    },
+    {
+      "path": "windsurf/.windsurf/workflows/relations.md",
+      "sha256": "335cb989f2b352aad9f1c6dc9a70a52ea860272a11135bbe30337eabe2be1e66"
+    },
+    {
+      "path": "windsurf/.windsurf/workflows/specify.md",
+      "sha256": "61dfedb76beea9612d79afe80d8ae595ae27fa9282da54027114da4c67524fbe"
+    },
+    {
+      "path": "windsurf/.windsurf/workflows/tasks.md",
+      "sha256": "c1d7b5bb3757e6498682cc75b3276492fc94972010de8d45cbbd0177c18764e5"
+    },
+    {
+      "path": "windsurf/.windsurf/workflows/timeline.md",
+      "sha256": "984f650fdc05864e0581e6b28a290d14c39be5eb693aa69100c55e3ae69f4f64"
+    },
+    {
+      "path": "windsurf/.windsurf/workflows/track-init.md",
+      "sha256": "e102b69dee0ffef90e9b530ef045016986ed3d55f78c5f5519f6fa761c74ccec"
+    },
+    {
+      "path": "windsurf/.windsurf/workflows/track.md",
+      "sha256": "11874ff69e07396fc8ffcb6a5544b5797ecc8a90ac408c1730b8fde836413a76"
+    },
+    {
+      "path": "windsurf/.windsurf/workflows/write.md",
+      "sha256": "d19fe7bbd30608b32a016cee2adb1c9bff72b93010df54601e96e6c87d3a632d"
+    },
+    {
+      "path": "windsurf/spec/checklists/README.md",
+      "sha256": "dfc8a1470e23a98534dc9b8c3e33ea23990423ea9866d4a428484e5be074cc57"
+    },
+    {
+      "path": "windsurf/spec/config.json",
+      "sha256": "719976aa49cedb025f13b9d047cc497cf01a9f3579fda888d94e592e19e8b469"
+    },
+    {
+      "path": "windsurf/spec/presets/anti-ai-detection.md",
+      "sha256": "00bf97e5949d33a6d5bce083e8d210620206c6d6827efc0b67dbaccc0149fcfa"
+    },
+    {
+      "path": "windsurf/spec/presets/golden-opening.md",
+      "sha256": "77843e024e293a6580f19aed0b3e41b36b2a7d3502b16c9402c1546b5d314371"
+    },
+    {
+      "path": "windsurf/spec/presets/hero-journey/config.yaml",
+      "sha256": "46f87f2e09bf728231f9acdf6ce1aa6859c9bde5ca899e848d761ff0c263789e"
+    },
+    {
+      "path": "windsurf/spec/presets/hero-journey/outline.md",
+      "sha256": "0f1a8b5fbf3b65ba128ed1a895b7ed58a3d76e85d2aff5618dcb94e6b8095959"
+    },
+    {
+      "path": "windsurf/spec/presets/hero-journey/story.md",
+      "sha256": "6b4156a14dc9ed4c38b5826077e4c6ee5fe85f638b9c51ead0ac48287808554d"
+    },
+    {
+      "path": "windsurf/spec/presets/pixar-formula/config.yaml",
+      "sha256": "86132b84e484eed8689614424859e8240c51ed638c4401a7184301b584ec35a3"
+    },
+    {
+      "path": "windsurf/spec/presets/pixar-formula/outline.md",
+      "sha256": "31a8bdb81bf5e8c02413204a7448ead30d2cac78a82e84357ea302e1af0eed02"
+    },
+    {
+      "path": "windsurf/spec/presets/pixar-formula/story.md",
+      "sha256": "bd883a9ba8221f41a8fb96a4fd3eec0a331cd20798154d14c3eb6f6149e5e1d4"
+    },
+    {
+      "path": "windsurf/spec/presets/seven-point/config.yaml",
+      "sha256": "9127133dd1c4c2e4f29b2f883d9e3c33296be616c86f46bbfcc6e2dac5f2cc62"
+    },
+    {
+      "path": "windsurf/spec/presets/seven-point/outline.md",
+      "sha256": "bad21f10defe45f1287ae8622550047a87e590994ffa8f71b9b6eca2975fdf91"
+    },
+    {
+      "path": "windsurf/spec/presets/seven-point/story.md",
+      "sha256": "f1f045b9961002158d2b210412919643feac0e3b323af652fde29b4ce86f0252"
+    },
+    {
+      "path": "windsurf/spec/presets/snowflake/outline.md",
+      "sha256": "8d31dab1b6fd6ebfb5de445ce2e8cfeaf61943e22582623c7215d4b2a39f9b8c"
+    },
+    {
+      "path": "windsurf/spec/presets/snowflake/story.md",
+      "sha256": "f48b2dae3650cd396dad7fa47709fdfc9737cf06da71e21ec1c2b8cdd9d415ba"
+    },
+    {
+      "path": "windsurf/spec/presets/story-circle/config.yaml",
+      "sha256": "8bfe9a4af156878aa8330efd41b0fc4ceabebbeafce49efcd3a6c6d16b38d8c3"
+    },
+    {
+      "path": "windsurf/spec/presets/story-circle/outline.md",
+      "sha256": "34b56f852b4cb87b2cc1e82494839daa10ed47cff1c782db7d71f03c4936e467"
+    },
+    {
+      "path": "windsurf/spec/presets/story-circle/story.md",
+      "sha256": "fa4f7ba6e3a6124f33bd9af8ef4168b95844f36b723bb4c8bf664048c28d3739"
+    },
+    {
+      "path": "windsurf/spec/presets/three-act/config.yaml",
+      "sha256": "35534c4499c75c6670d7a38bf07d7d1268f72ebfce214af609901948802e939d"
+    },
+    {
+      "path": "windsurf/spec/presets/three-act/outline.md",
+      "sha256": "6087930e2f516bc721ec47d11b37eecaf30674eaad946abd3406cf25e654a299"
+    },
+    {
+      "path": "windsurf/spec/presets/three-act/story.md",
+      "sha256": "78326b42ea7a65c9f2b22161a849cea86359bba3620d728f7abdbb5ef64d7003"
+    },
+    {
+      "path": "windsurf/spec/README.md",
+      "sha256": "780485b5b85cd4060b8deb8e8cb95acd9ec88660ebceae8e1a05631941aa5719"
+    }
+  ]
+}
