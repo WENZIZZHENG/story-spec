@@ -1,10 +1,11 @@
 import path from 'node:path';
 import fs from 'fs-extra';
-import type { AIPlatformId } from '../utils/ai-platforms.js';
+import type { AgentIntegrationId } from '../agent/registry.js';
 import type { ScriptVariant } from './compiler.js';
 import { renderCommandForPlatform } from './platform-renderers/index.js';
 
 export const BUILD_COMMAND_AGENTS = [
+  'generic',
   'claude',
   'gemini',
   'cursor',
@@ -18,7 +19,7 @@ export const BUILD_COMMAND_AGENTS = [
   'auggie',
   'codebuddy',
   'q'
-] as const satisfies readonly AIPlatformId[];
+] as const satisfies readonly AgentIntegrationId[];
 
 export type BuildCommandAgent = typeof BUILD_COMMAND_AGENTS[number];
 
@@ -48,6 +49,7 @@ interface RuntimeBundleFile {
 }
 
 const PLATFORM_COMMAND_DIRS: Record<BuildCommandAgent, string> = {
+  generic: path.join('.specify', 'commands'),
   claude: path.join('.claude', 'commands'),
   gemini: path.join('.gemini', 'commands', 'novel'),
   cursor: path.join('.cursor', 'commands'),

@@ -114,6 +114,32 @@ describe('buildCommandArtifacts', () => {
     await expect(readdir(path.join(outDir, 'codex', 'spec', 'knowledge'))).resolves.toEqual([]);
   });
 
+  it('generates generic Markdown commands under .specify/commands', async () => {
+    const rootDir = await createPackageRootFixture();
+    const outDir = path.join(rootDir, 'out');
+
+    const result = await buildCommandArtifacts({
+      rootDir,
+      outDir,
+      agents: ['generic'],
+      scripts: ['sh']
+    });
+
+    expect(result.variants).toEqual([
+      { agent: 'generic', script: 'sh', commandCount: 1 }
+    ]);
+
+    const genericCommand = await readFile(path.join(outDir, 'generic', '.specify', 'commands', 'plan.md'), 'utf-8');
+    expect(genericCommand).toContain('# Plan story');
+    expect(genericCommand).toContain('## 前置条件');
+    expect(genericCommand).toContain('## 必须读取');
+    expect(genericCommand).toContain('## 允许写入');
+    expect(genericCommand).toContain('## 执行步骤');
+    expect(genericCommand).toContain('## 输出位置');
+    expect(genericCommand).toContain('## 降级方案');
+    expect(genericCommand).toContain('.specify/scripts/bash/plan-story.sh');
+  });
+
   it('snapshots the runtime bundle before cleaning the default dist output', async () => {
     const rootDir = await createPackageRootFixture();
 

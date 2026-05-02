@@ -6,6 +6,7 @@ export type CommandOutputFormat =
   | 'markdown-full'
   | 'markdown-partial'
   | 'markdown-minimal'
+  | 'markdown-generic'
   | 'markdown-none'
   | 'toml';
 
@@ -128,6 +129,48 @@ export const compileCommandTemplate = (input: CompileCommandTemplateInput): stri
         '---',
         '',
         compiled.promptBody
+      ].filter(line => line !== undefined).join('\n');
+    case 'markdown-generic':
+      return [
+        `# ${compiled.description ?? 'Novel Writer command'}`,
+        '',
+        compiled.argumentHint ? `参数提示：\`${compiled.argumentHint}\`` : undefined,
+        '',
+        '## 目的',
+        compiled.description ?? '执行 Novel Writer 命令。',
+        '',
+        '## 前置条件',
+        '- 阅读并遵守 `.specify/agent-contract.md`。',
+        '- 确认当前任务边界、允许写入范围和验证要求。',
+        '- 如果项目已有 `stories/*/tasks.md`，优先选择当前任务清单中的任务。',
+        '',
+        '## 必须读取',
+        '- `.specify/memory/constitution.md`',
+        '- `stories/*/specification.md`',
+        '- `stories/*/creative-plan.md`',
+        '- `stories/*/tasks.md`',
+        '- `spec/tracking/*.json`',
+        '- `spec/knowledge/*`',
+        '',
+        '## 允许写入',
+        '- 仅写入本命令正文或当前任务明确允许的文件。',
+        '- 不确定是否允许写入时，先记录澄清项，不直接修改正文或 tracking。',
+        '',
+        '## 执行步骤',
+        compiled.promptBody,
+        '',
+        '## 输出位置',
+        '- 按命令正文或当前任务声明的输出路径写入。',
+        '- 如果命令正文未指定输出路径，在回复中列出建议路径，不擅自创建新位置。',
+        '',
+        '## 验证',
+        '- 如果可以执行 CLI，请在阶段完成前运行 `novel validate`。',
+        '- 如果无法执行 shell，请人工检查必须读取、允许写入和输出文件是否满足命令要求。',
+        '',
+        '## 降级方案',
+        '- 不支持 slash command 时，直接按本文档步骤执行。',
+        '- 不支持 shell 时，跳过脚本命令，改为手动读取相关文件并记录无法验证的部分。',
+        '- 不支持写文件时，返回包含目标路径和内容的补丁式说明。'
       ].filter(line => line !== undefined).join('\n');
     case 'markdown-full':
     default:

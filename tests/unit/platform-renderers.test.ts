@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { AI_PLATFORM_IDS } from '../../src/utils/ai-platforms.js';
+import { AGENT_INTEGRATION_IDS } from '../../src/agent/registry.js';
 import {
   getAllPlatformRenderers,
   getPlatformRenderer,
@@ -22,7 +22,7 @@ Agent: __AGENT__
 describe('platform renderers', () => {
   it('covers every registered AI platform', () => {
     expect(getAllPlatformRenderers().map(renderer => renderer.platform).sort())
-      .toEqual([...AI_PLATFORM_IDS].sort());
+      .toEqual([...AGENT_INTEGRATION_IDS].sort());
   });
 
   it('describes command output conventions for supported platforms', () => {
@@ -45,6 +45,11 @@ describe('platform renderers', () => {
       namespace: 'novel-',
       outputFormat: 'markdown-none'
     });
+    expect(getPlatformRenderer('generic')).toMatchObject({
+      platform: 'generic',
+      namespace: '',
+      outputFormat: 'markdown-generic'
+    });
   });
 
   it('renders platform-specific output filenames and content', () => {
@@ -60,6 +65,12 @@ describe('platform renderers', () => {
       platform: 'gemini',
       scriptVariant: 'ps'
     });
+    const generic = renderCommandForPlatform({
+      commandName: 'plan',
+      template,
+      platform: 'generic',
+      scriptVariant: 'sh'
+    });
 
     expect(codex.outputFile).toBe('novel-plan.md');
     expect(codex.content).not.toMatch(/^---/);
@@ -70,5 +81,12 @@ describe('platform renderers', () => {
     expect(gemini.content).toContain('prompt = """');
     expect(gemini.content).toContain('用户输入：{{args}}');
     expect(gemini.content).toContain('.specify/scripts/powershell/plan-story.ps1');
+
+    expect(generic.outputFile).toBe('plan.md');
+    expect(generic.content).toContain('# 生成创作计划');
+    expect(generic.content).toContain('## 目的');
+    expect(generic.content).toContain('## 必须读取');
+    expect(generic.content).toContain('## 允许写入');
+    expect(generic.content).toContain('## 降级方案');
   });
 });

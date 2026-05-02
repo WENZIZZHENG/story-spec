@@ -1,4 +1,4 @@
-import type { AIPlatformId } from '../../utils/ai-platforms.js';
+import type { AgentIntegrationId } from '../../agent/registry.js';
 import {
   compileCommandTemplate,
   type CommandOutputFormat,
@@ -6,7 +6,7 @@ import {
 } from '../compiler.js';
 
 export interface PlatformRenderer {
-  platform: AIPlatformId;
+  platform: AgentIntegrationId;
   extension: 'md' | 'toml' | 'prompt.md';
   namespace: string;
   argFormat: '$ARGUMENTS' | '{{args}}';
@@ -16,7 +16,7 @@ export interface PlatformRenderer {
 export interface RenderCommandForPlatformInput {
   commandName: string;
   template: string;
-  platform: AIPlatformId;
+  platform: AgentIntegrationId;
   scriptVariant: ScriptVariant;
 }
 
@@ -26,7 +26,14 @@ export interface RenderedCommand {
   renderer: PlatformRenderer;
 }
 
-const PLATFORM_RENDERERS: Record<AIPlatformId, PlatformRenderer> = {
+const PLATFORM_RENDERERS: Record<AgentIntegrationId, PlatformRenderer> = {
+  generic: {
+    platform: 'generic',
+    extension: 'md',
+    namespace: '',
+    argFormat: '$ARGUMENTS',
+    outputFormat: 'markdown-generic'
+  },
   claude: {
     platform: 'claude',
     extension: 'md',
@@ -120,7 +127,7 @@ const PLATFORM_RENDERERS: Record<AIPlatformId, PlatformRenderer> = {
   }
 };
 
-export const getPlatformRenderer = (platform: AIPlatformId): PlatformRenderer => PLATFORM_RENDERERS[platform];
+export const getPlatformRenderer = (platform: AgentIntegrationId): PlatformRenderer => PLATFORM_RENDERERS[platform];
 
 export const getAllPlatformRenderers = (): PlatformRenderer[] => Object.values(PLATFORM_RENDERERS);
 

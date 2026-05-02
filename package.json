@@ -22,7 +22,7 @@
   "scripts": {
     "build": "tsc",
     "postbuild": "node scripts/postbuild.cjs",
-    "build:commands": "node scripts/build-commands.cjs --agents=claude,gemini,cursor,windsurf,roocode,copilot,qwen,opencode,codex,kilocode,auggie,codebuddy,q --scripts=sh",
+    "build:commands": "node scripts/build-commands.cjs --agents=generic,claude,gemini,cursor,windsurf,roocode,copilot,qwen,opencode,codex,kilocode,auggie,codebuddy,q --scripts=sh",
     "check:command-manifest": "tsx scripts/build/command-artifact-manifest.ts",
     "check:changes": "tsx scripts/build/check-change-records.ts",
     "update:command-manifest": "tsx scripts/build/command-artifact-manifest.ts --update",
