@@ -66,6 +66,8 @@ describe('CLI init smoke', () => {
     expect(await exists(path.join(projectPath, 'spec', 'graph', 'entities.json'))).toBe(true);
     expect(await exists(path.join(projectPath, 'spec', 'voice', 'character-voices.yaml'))).toBe(true);
     expect(await exists(path.join(projectPath, 'spec', 'presets'))).toBe(true);
+    expect(await exists(path.join(projectPath, 'spec', 'tracking', 'promises.json'))).toBe(true);
+    expect(await exists(path.join(projectPath, 'spec', 'tracking', 'tension-curve.json'))).toBe(true);
     expect(await exists(path.join(projectPath, '.specify', 'context-packs'))).toBe(true);
     expect(await exists(path.join(projectPath, 'build'))).toBe(true);
 

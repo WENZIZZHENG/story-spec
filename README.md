@@ -66,6 +66,9 @@ Novel Writer 的主流程来自规格驱动创作法：
 - `novel context:pack`：生成 `.specify/context-packs/` 写作上下文包，每个 mustRead 都带 reason。
 - `novel draft:new` / `novel draft:list` / `novel draft:promote`：管理章节草稿、修订和发布；默认不覆盖正式正文。
 - `novel narrative:test`：运行第一版叙事测试，检查 Scene Card 闭环或 fallback 到章节任务验收。
+- `novel dialogue:extract` / `novel dialogue:plan` / `novel dialogue:check`：生成待确认 DialogueBeat YAML，并校验 speaker、intent、relationshipChange 与 VoiceFingerprint。
+- `novel branch:create` / `novel branch:compare` / `novel branch:promote`：在 `stories/*/branches/` 中安全探索 what-if，promote 需要显式确认且不静默覆盖主线。
+- `novel promise:list` / `novel promise:check` / `novel tension:chart`：管理读者承诺和张力曲线，输出 findings 与任务草稿。
 - `novel handoff`：生成 `handoff.md`，列出下一任务、必须读取、允许修改、风险边界和阻塞项。
 - `novel tasks:board`：把 `tasks.md` 转成 `task-board.json`，并生成 GitHub issue 草稿字段。
 
@@ -189,6 +192,10 @@ novel preset:doctor
 novel context:pack --task T001
 novel draft:new --chapter 001
 novel narrative:test --chapter 001
+novel dialogue:extract --scene scene-001 --chapter 001
+novel branch:create "女主提前识破身份" --changed-scenes scene-001
+novel promise:check
+novel tension:chart
 ```
 
 ### 4. 在 agent 中开始写作
@@ -277,6 +284,16 @@ novel tasks:board 001-demo --json
 | `novel draft:list [story]` | 列出章节草稿 |
 | `novel draft:promote <draftId>` | 预览或发布草稿到正式正文 |
 | `novel narrative:test [story]` | 运行叙事测试 |
+| `novel dialogue:extract [story]` | 从场景生成待确认 DialogueBeat YAML，不写入 canon |
+| `novel dialogue:plan [story]` | 为场景创建对白计划 YAML |
+| `novel dialogue:check [story]` | 检查对白说话人、意图、关系变化和声音指纹 |
+| `novel branch:create <title>` | 创建剧情 what-if 分支，只写入 `branches/` |
+| `novel branch:list [story]` | 列出剧情分支 |
+| `novel branch:compare <branchId>` | 输出分支影响报告 |
+| `novel branch:promote <branchId>` | 预览或确认分支 promote 清单，不静默覆盖 main |
+| `novel promise:list` | 列出读者承诺 |
+| `novel promise:check` | 检查长期未兑现、payoff 缺 evidence、重复建立不推进的 promise |
+| `novel tension:chart` | 输出张力曲线 Markdown/JSON |
 | `novel handoff [story]` | 生成断点续写上下文包 |
 | `novel tasks:board [story]` | 从 `tasks.md` 导出本地任务看板和 GitHub issue 草稿 |
 | `novel plugins` | 显示插件帮助 |
@@ -341,6 +358,8 @@ my-novel/
         ├── tasks.md
         ├── task-board.json
         ├── handoff.md
+        ├── branches/
+        ├── dialogue/
         ├── drafts/
         ├── revisions/
         ├── scenes/

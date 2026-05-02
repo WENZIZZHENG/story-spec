@@ -1,0 +1,14 @@
+{
+  "schemaVersion": "1.0",
+  "promises": [
+    {
+      "id": "promise.opening-hook",
+      "type": "mystery",
+      "promise": "开篇抛出的核心疑问或读者期待",
+      "establishedAt": "chapter-001",
+      "reinforcedAt": [],
+      "status": "open",
+      "readerExpectation": "读者期待后续章节推进或阶段兑现"
+    }
+  ]
+}

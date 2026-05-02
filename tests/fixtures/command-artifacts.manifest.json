@@ -78,7 +78,7 @@
     },
     {
       "path": "auggie/.augment/commands/plan.md",
-      "sha256": "367aa351bfa2ba4a14682d3eab1b349fabd768fbceb28b6ae740fde5d8cbe3a8",
+      "sha256": "287044aa80b1e2d750ebec5ffdd355c58adfb50fbca117912d0c6cbd8665f70e",
       "commandSource": {
         "command": "plan",
         "kind": "legacy-template",
@@ -123,7 +123,7 @@
     },
     {
       "path": "auggie/.augment/commands/tasks.md",
-      "sha256": "aced7ceddd2b1fc2113ebb32ef3e630ec43ff8fc4b9a9c8b13bc5fa0a0061933",
+      "sha256": "5151257e282abc6748cfa1c8ced215e1863b9b023e91879ca4ba87d1a45cb225",
       "commandSource": {
         "command": "tasks",
         "kind": "legacy-template",
@@ -368,8 +368,16 @@
       "sha256": "841703f221259f4746c2266a8dd943e004aa94ecf06db172fbdf0bd770d7703f"
     },
     {
+      "path": "auggie/.specify/templates/tracking/promises.json",
+      "sha256": "d672df8181c0e5d44c66c515a835338b2ea34430ceba09df5ec73b11a53186c6"
+    },
+    {
       "path": "auggie/.specify/templates/tracking/relationships.json",
       "sha256": "de9567882a8cdf31dba6f0afa8b92bbf68346bb7063164724e47ae4434bddbcf"
+    },
+    {
+      "path": "auggie/.specify/templates/tracking/tension-curve.json",
+      "sha256": "70d7943c6200b60edacce24462c66f8627b29bb51c748215f79ea4acf169fcac"
     },
     {
       "path": "auggie/.specify/templates/tracking/timeline.json",
@@ -560,7 +568,7 @@
     },
     {
       "path": "claude/.claude/commands/novel.plan.md",
-      "sha256": "f343eb6533bf86e25d2da8f123b6b3f6c591f734c3860d27b40947dba1a962ff",
+      "sha256": "d3751b548b82df59f0ec451fd1ec7bcf7c2da2f78cb582a4232f6d06a1f2bcc0",
       "commandSource": {
         "command": "plan",
         "kind": "legacy-template",
@@ -605,7 +613,7 @@
     },
     {
       "path": "claude/.claude/commands/novel.tasks.md",
-      "sha256": "f11ad01c2e821ad833bbe51a4434b17136ac5f5c657d7b6b2a2d32c7131d087f",
+      "sha256": "b17c107d60d51a00dc428d7b6dbcae22a167fcad39e3ef0f20183c4c8de4116c",
       "commandSource": {
         "command": "tasks",
         "kind": "legacy-template",
@@ -850,8 +858,16 @@
       "sha256": "841703f221259f4746c2266a8dd943e004aa94ecf06db172fbdf0bd770d7703f"
     },
     {
+      "path": "claude/.specify/templates/tracking/promises.json",
+      "sha256": "d672df8181c0e5d44c66c515a835338b2ea34430ceba09df5ec73b11a53186c6"
+    },
+    {
       "path": "claude/.specify/templates/tracking/relationships.json",
       "sha256": "de9567882a8cdf31dba6f0afa8b92bbf68346bb7063164724e47ae4434bddbcf"
+    },
+    {
+      "path": "claude/.specify/templates/tracking/tension-curve.json",
+      "sha256": "70d7943c6200b60edacce24462c66f8627b29bb51c748215f79ea4acf169fcac"
     },
     {
       "path": "claude/.specify/templates/tracking/timeline.json",
@@ -1042,7 +1058,7 @@
     },
     {
       "path": "codebuddy/.codebuddy/commands/plan.md",
-      "sha256": "367aa351bfa2ba4a14682d3eab1b349fabd768fbceb28b6ae740fde5d8cbe3a8",
+      "sha256": "287044aa80b1e2d750ebec5ffdd355c58adfb50fbca117912d0c6cbd8665f70e",
       "commandSource": {
         "command": "plan",
         "kind": "legacy-template",
@@ -1087,7 +1103,7 @@
     },
     {
       "path": "codebuddy/.codebuddy/commands/tasks.md",
-      "sha256": "aced7ceddd2b1fc2113ebb32ef3e630ec43ff8fc4b9a9c8b13bc5fa0a0061933",
+      "sha256": "5151257e282abc6748cfa1c8ced215e1863b9b023e91879ca4ba87d1a45cb225",
       "commandSource": {
         "command": "tasks",
         "kind": "legacy-template",
@@ -1332,8 +1348,16 @@
       "sha256": "841703f221259f4746c2266a8dd943e004aa94ecf06db172fbdf0bd770d7703f"
     },
     {
+      "path": "codebuddy/.specify/templates/tracking/promises.json",
+      "sha256": "d672df8181c0e5d44c66c515a835338b2ea34430ceba09df5ec73b11a53186c6"
+    },
+    {
       "path": "codebuddy/.specify/templates/tracking/relationships.json",
       "sha256": "de9567882a8cdf31dba6f0afa8b92bbf68346bb7063164724e47ae4434bddbcf"
+    },
+    {
+      "path": "codebuddy/.specify/templates/tracking/tension-curve.json",
+      "sha256": "70d7943c6200b60edacce24462c66f8627b29bb51c748215f79ea4acf169fcac"
     },
     {
       "path": "codebuddy/.specify/templates/tracking/timeline.json",
@@ -1524,7 +1548,7 @@
     },
     {
       "path": "codex/.codex/prompts/novel-plan.md",
-      "sha256": "367aa351bfa2ba4a14682d3eab1b349fabd768fbceb28b6ae740fde5d8cbe3a8",
+      "sha256": "287044aa80b1e2d750ebec5ffdd355c58adfb50fbca117912d0c6cbd8665f70e",
       "commandSource": {
         "command": "plan",
         "kind": "legacy-template",
@@ -1569,7 +1593,7 @@
     },
     {
       "path": "codex/.codex/prompts/novel-tasks.md",
-      "sha256": "aced7ceddd2b1fc2113ebb32ef3e630ec43ff8fc4b9a9c8b13bc5fa0a0061933",
+      "sha256": "5151257e282abc6748cfa1c8ced215e1863b9b023e91879ca4ba87d1a45cb225",
       "commandSource": {
         "command": "tasks",
         "kind": "legacy-template",
@@ -1814,8 +1838,16 @@
       "sha256": "841703f221259f4746c2266a8dd943e004aa94ecf06db172fbdf0bd770d7703f"
     },
     {
+      "path": "codex/.specify/templates/tracking/promises.json",
+      "sha256": "d672df8181c0e5d44c66c515a835338b2ea34430ceba09df5ec73b11a53186c6"
+    },
+    {
       "path": "codex/.specify/templates/tracking/relationships.json",
       "sha256": "de9567882a8cdf31dba6f0afa8b92bbf68346bb7063164724e47ae4434bddbcf"
+    },
+    {
+      "path": "codex/.specify/templates/tracking/tension-curve.json",
+      "sha256": "70d7943c6200b60edacce24462c66f8627b29bb51c748215f79ea4acf169fcac"
     },
     {
       "path": "codex/.specify/templates/tracking/timeline.json",
@@ -2006,7 +2038,7 @@
     },
     {
       "path": "continue-check/.continue/prompts/plan.md",
-      "sha256": "753c4f5167c9f2ca08506a38d1277a7d0753d93786087f471e67149a113da3ea",
+      "sha256": "ac33c4c2ab170513305a85ff6173fae89363ae4425d7bce6cc0912438a263e0d",
       "commandSource": {
         "command": "plan",
         "kind": "legacy-template",
@@ -2051,7 +2083,7 @@
     },
     {
       "path": "continue-check/.continue/prompts/tasks.md",
-      "sha256": "10a921201fe289f3325dbbb2e099746270a6735e63b0d1ca6558eb897d3b6181",
+      "sha256": "5c08a5b771b303ddef7d819fe2dde41df17a6b39544aa04dc800b296b4d416de",
       "commandSource": {
         "command": "tasks",
         "kind": "legacy-template",
@@ -2296,8 +2328,16 @@
       "sha256": "841703f221259f4746c2266a8dd943e004aa94ecf06db172fbdf0bd770d7703f"
     },
     {
+      "path": "continue-check/.specify/templates/tracking/promises.json",
+      "sha256": "d672df8181c0e5d44c66c515a835338b2ea34430ceba09df5ec73b11a53186c6"
+    },
+    {
       "path": "continue-check/.specify/templates/tracking/relationships.json",
       "sha256": "de9567882a8cdf31dba6f0afa8b92bbf68346bb7063164724e47ae4434bddbcf"
+    },
+    {
+      "path": "continue-check/.specify/templates/tracking/tension-curve.json",
+      "sha256": "70d7943c6200b60edacce24462c66f8627b29bb51c748215f79ea4acf169fcac"
     },
     {
       "path": "continue-check/.specify/templates/tracking/timeline.json",
@@ -2488,7 +2528,7 @@
     },
     {
       "path": "copilot/.github/prompts/plan.prompt.md",
-      "sha256": "e6e7b3263a3bc8f60fbc592e236d2b63838392c0a6c8252bd9976767da8e3f16",
+      "sha256": "d0fcdd837d78fb33dcc86df262f4b02c632b4ac0b64d2444ef3d8cbc52cc21c8",
       "commandSource": {
         "command": "plan",
         "kind": "legacy-template",
@@ -2533,7 +2573,7 @@
     },
     {
       "path": "copilot/.github/prompts/tasks.prompt.md",
-      "sha256": "c237eca41a8a89f3e6899209670c9be3972ac5b89bc65d0593aecf89e3db3e9a",
+      "sha256": "3b2b65550017bb6b826b121b9488d636d84723ac67733f0c343d66f67722df84",
       "commandSource": {
         "command": "tasks",
         "kind": "legacy-template",
@@ -2778,8 +2818,16 @@
       "sha256": "841703f221259f4746c2266a8dd943e004aa94ecf06db172fbdf0bd770d7703f"
     },
     {
+      "path": "copilot/.specify/templates/tracking/promises.json",
+      "sha256": "d672df8181c0e5d44c66c515a835338b2ea34430ceba09df5ec73b11a53186c6"
+    },
+    {
       "path": "copilot/.specify/templates/tracking/relationships.json",
       "sha256": "de9567882a8cdf31dba6f0afa8b92bbf68346bb7063164724e47ae4434bddbcf"
+    },
+    {
+      "path": "copilot/.specify/templates/tracking/tension-curve.json",
+      "sha256": "70d7943c6200b60edacce24462c66f8627b29bb51c748215f79ea4acf169fcac"
     },
     {
       "path": "copilot/.specify/templates/tracking/timeline.json",
@@ -2970,7 +3018,7 @@
     },
     {
       "path": "cursor/.cursor/commands/plan.md",
-      "sha256": "367aa351bfa2ba4a14682d3eab1b349fabd768fbceb28b6ae740fde5d8cbe3a8",
+      "sha256": "287044aa80b1e2d750ebec5ffdd355c58adfb50fbca117912d0c6cbd8665f70e",
       "commandSource": {
         "command": "plan",
         "kind": "legacy-template",
@@ -3015,7 +3063,7 @@
     },
     {
       "path": "cursor/.cursor/commands/tasks.md",
-      "sha256": "aced7ceddd2b1fc2113ebb32ef3e630ec43ff8fc4b9a9c8b13bc5fa0a0061933",
+      "sha256": "5151257e282abc6748cfa1c8ced215e1863b9b023e91879ca4ba87d1a45cb225",
       "commandSource": {
         "command": "tasks",
         "kind": "legacy-template",
@@ -3260,8 +3308,16 @@
       "sha256": "841703f221259f4746c2266a8dd943e004aa94ecf06db172fbdf0bd770d7703f"
     },
     {
+      "path": "cursor/.specify/templates/tracking/promises.json",
+      "sha256": "d672df8181c0e5d44c66c515a835338b2ea34430ceba09df5ec73b11a53186c6"
+    },
+    {
       "path": "cursor/.specify/templates/tracking/relationships.json",
       "sha256": "de9567882a8cdf31dba6f0afa8b92bbf68346bb7063164724e47ae4434bddbcf"
+    },
+    {
+      "path": "cursor/.specify/templates/tracking/tension-curve.json",
+      "sha256": "70d7943c6200b60edacce24462c66f8627b29bb51c748215f79ea4acf169fcac"
     },
     {
       "path": "cursor/.specify/templates/tracking/timeline.json",
@@ -3452,7 +3508,7 @@
     },
     {
       "path": "gemini/.gemini/commands/novel/plan.toml",
-      "sha256": "5f7a28ff5e171901f5c39ffb9f1a515dafdbb77fac4bf4b2bc28a32796e2c89f",
+      "sha256": "2500d6f44088cbf4a9bf8984683df3a59c74228a79e0ace8f2b4443ba6f57888",
       "commandSource": {
         "command": "plan",
         "kind": "legacy-template",
@@ -3497,7 +3553,7 @@
     },
     {
       "path": "gemini/.gemini/commands/novel/tasks.toml",
-      "sha256": "7ed28b1c18b203b6fe3e661352d13a43dd59e5b2fcd3b550b3a5d13adc64d12e",
+      "sha256": "e4978f601f0c2a87b94689a3db3595677bc4d6c67427f4233619f5f0c0c9f5d0",
       "commandSource": {
         "command": "tasks",
         "kind": "legacy-template",
@@ -3742,8 +3798,16 @@
       "sha256": "841703f221259f4746c2266a8dd943e004aa94ecf06db172fbdf0bd770d7703f"
     },
     {
+      "path": "gemini/.specify/templates/tracking/promises.json",
+      "sha256": "d672df8181c0e5d44c66c515a835338b2ea34430ceba09df5ec73b11a53186c6"
+    },
+    {
       "path": "gemini/.specify/templates/tracking/relationships.json",
       "sha256": "de9567882a8cdf31dba6f0afa8b92bbf68346bb7063164724e47ae4434bddbcf"
+    },
+    {
+      "path": "gemini/.specify/templates/tracking/tension-curve.json",
+      "sha256": "70d7943c6200b60edacce24462c66f8627b29bb51c748215f79ea4acf169fcac"
     },
     {
       "path": "gemini/.specify/templates/tracking/timeline.json",
@@ -3934,7 +3998,7 @@
     },
     {
       "path": "generic/.specify/commands/plan.md",
-      "sha256": "f13ef43802e80e0d02b433e84d5c0318574cadafefaeae825f6e328843b48183",
+      "sha256": "7f1776d1c154a3860c102cb07eafd14d59cf9795b5f7202f46195dfd29427424",
       "commandSource": {
         "command": "plan",
         "kind": "legacy-template",
@@ -3979,7 +4043,7 @@
     },
     {
       "path": "generic/.specify/commands/tasks.md",
-      "sha256": "05b3682f9ef51ef4ce05fc8b799e6a0527d0caa1a3436f9eb1483e0cf29b15da",
+      "sha256": "6158b4c0f42d260317f9dc5986eba3772989df539e25056991cf2e3a0142e869",
       "commandSource": {
         "command": "tasks",
         "kind": "legacy-template",
@@ -4224,8 +4288,16 @@
       "sha256": "841703f221259f4746c2266a8dd943e004aa94ecf06db172fbdf0bd770d7703f"
     },
     {
+      "path": "generic/.specify/templates/tracking/promises.json",
+      "sha256": "d672df8181c0e5d44c66c515a835338b2ea34430ceba09df5ec73b11a53186c6"
+    },
+    {
       "path": "generic/.specify/templates/tracking/relationships.json",
       "sha256": "de9567882a8cdf31dba6f0afa8b92bbf68346bb7063164724e47ae4434bddbcf"
+    },
+    {
+      "path": "generic/.specify/templates/tracking/tension-curve.json",
+      "sha256": "70d7943c6200b60edacce24462c66f8627b29bb51c748215f79ea4acf169fcac"
     },
     {
       "path": "generic/.specify/templates/tracking/timeline.json",
@@ -4416,7 +4488,7 @@
     },
     {
       "path": "kilocode/.kilocode/workflows/plan.md",
-      "sha256": "2af34a705934f3c1a274a6439c7f17cb4c3f8d27ae58fb3d705e714d5e731ec4",
+      "sha256": "8648c505c8d15186c1146bd8264215f723d1a421e1f51caf347b23d55a455f4d",
       "commandSource": {
         "command": "plan",
         "kind": "legacy-template",
@@ -4461,7 +4533,7 @@
     },
     {
       "path": "kilocode/.kilocode/workflows/tasks.md",
-      "sha256": "38db675ca26804b75c1ad5c0e21d7eece1ed892cbee7a92dd13447dc912f9f11",
+      "sha256": "4e58d3a9d0aa820fc846802010e6fa36c0271e98a8d5c8357711a0a8a00eeef9",
       "commandSource": {
         "command": "tasks",
         "kind": "legacy-template",
@@ -4706,8 +4778,16 @@
       "sha256": "841703f221259f4746c2266a8dd943e004aa94ecf06db172fbdf0bd770d7703f"
     },
     {
+      "path": "kilocode/.specify/templates/tracking/promises.json",
+      "sha256": "d672df8181c0e5d44c66c515a835338b2ea34430ceba09df5ec73b11a53186c6"
+    },
+    {
       "path": "kilocode/.specify/templates/tracking/relationships.json",
       "sha256": "de9567882a8cdf31dba6f0afa8b92bbf68346bb7063164724e47ae4434bddbcf"
+    },
+    {
+      "path": "kilocode/.specify/templates/tracking/tension-curve.json",
+      "sha256": "70d7943c6200b60edacce24462c66f8627b29bb51c748215f79ea4acf169fcac"
     },
     {
       "path": "kilocode/.specify/templates/tracking/timeline.json",
@@ -4898,7 +4978,7 @@
     },
     {
       "path": "opencode/.opencode/command/plan.md",
-      "sha256": "94ad5bc04cd4c1042b96a66a68e62dd961d5696f1f7973edc885914361d0c68e",
+      "sha256": "c405fe38b4a0707e69bd1f57f2f3024c01d4c99fd9f8171705fa3ae30182b5ad",
       "commandSource": {
         "command": "plan",
         "kind": "legacy-template",
@@ -4943,7 +5023,7 @@
     },
     {
       "path": "opencode/.opencode/command/tasks.md",
-      "sha256": "38db675ca26804b75c1ad5c0e21d7eece1ed892cbee7a92dd13447dc912f9f11",
+      "sha256": "4e58d3a9d0aa820fc846802010e6fa36c0271e98a8d5c8357711a0a8a00eeef9",
       "commandSource": {
         "command": "tasks",
         "kind": "legacy-template",
@@ -5188,8 +5268,16 @@
       "sha256": "841703f221259f4746c2266a8dd943e004aa94ecf06db172fbdf0bd770d7703f"
     },
     {
+      "path": "opencode/.specify/templates/tracking/promises.json",
+      "sha256": "d672df8181c0e5d44c66c515a835338b2ea34430ceba09df5ec73b11a53186c6"
+    },
+    {
       "path": "opencode/.specify/templates/tracking/relationships.json",
       "sha256": "de9567882a8cdf31dba6f0afa8b92bbf68346bb7063164724e47ae4434bddbcf"
+    },
+    {
+      "path": "opencode/.specify/templates/tracking/tension-curve.json",
+      "sha256": "70d7943c6200b60edacce24462c66f8627b29bb51c748215f79ea4acf169fcac"
     },
     {
       "path": "opencode/.specify/templates/tracking/timeline.json",
@@ -5380,7 +5468,7 @@
     },
     {
       "path": "q/.amazonq/prompts/plan.md",
-      "sha256": "e6e7b3263a3bc8f60fbc592e236d2b63838392c0a6c8252bd9976767da8e3f16",
+      "sha256": "d0fcdd837d78fb33dcc86df262f4b02c632b4ac0b64d2444ef3d8cbc52cc21c8",
       "commandSource": {
         "command": "plan",
         "kind": "legacy-template",
@@ -5425,7 +5513,7 @@
     },
     {
       "path": "q/.amazonq/prompts/tasks.md",
-      "sha256": "c237eca41a8a89f3e6899209670c9be3972ac5b89bc65d0593aecf89e3db3e9a",
+      "sha256": "3b2b65550017bb6b826b121b9488d636d84723ac67733f0c343d66f67722df84",
       "commandSource": {
         "command": "tasks",
         "kind": "legacy-template",
@@ -5670,8 +5758,16 @@
       "sha256": "841703f221259f4746c2266a8dd943e004aa94ecf06db172fbdf0bd770d7703f"
     },
     {
+      "path": "q/.specify/templates/tracking/promises.json",
+      "sha256": "d672df8181c0e5d44c66c515a835338b2ea34430ceba09df5ec73b11a53186c6"
+    },
+    {
       "path": "q/.specify/templates/tracking/relationships.json",
       "sha256": "de9567882a8cdf31dba6f0afa8b92bbf68346bb7063164724e47ae4434bddbcf"
+    },
+    {
+      "path": "q/.specify/templates/tracking/tension-curve.json",
+      "sha256": "70d7943c6200b60edacce24462c66f8627b29bb51c748215f79ea4acf169fcac"
     },
     {
       "path": "q/.specify/templates/tracking/timeline.json",
@@ -5862,7 +5958,7 @@
     },
     {
       "path": "qwen/.qwen/commands/plan.toml",
-      "sha256": "5f7a28ff5e171901f5c39ffb9f1a515dafdbb77fac4bf4b2bc28a32796e2c89f",
+      "sha256": "2500d6f44088cbf4a9bf8984683df3a59c74228a79e0ace8f2b4443ba6f57888",
       "commandSource": {
         "command": "plan",
         "kind": "legacy-template",
@@ -5907,7 +6003,7 @@
     },
     {
       "path": "qwen/.qwen/commands/tasks.toml",
-      "sha256": "7ed28b1c18b203b6fe3e661352d13a43dd59e5b2fcd3b550b3a5d13adc64d12e",
+      "sha256": "e4978f601f0c2a87b94689a3db3595677bc4d6c67427f4233619f5f0c0c9f5d0",
       "commandSource": {
         "command": "tasks",
         "kind": "legacy-template",
@@ -6152,8 +6248,16 @@
       "sha256": "841703f221259f4746c2266a8dd943e004aa94ecf06db172fbdf0bd770d7703f"
     },
     {
+      "path": "qwen/.specify/templates/tracking/promises.json",
+      "sha256": "d672df8181c0e5d44c66c515a835338b2ea34430ceba09df5ec73b11a53186c6"
+    },
+    {
       "path": "qwen/.specify/templates/tracking/relationships.json",
       "sha256": "de9567882a8cdf31dba6f0afa8b92bbf68346bb7063164724e47ae4434bddbcf"
+    },
+    {
+      "path": "qwen/.specify/templates/tracking/tension-curve.json",
+      "sha256": "70d7943c6200b60edacce24462c66f8627b29bb51c748215f79ea4acf169fcac"
     },
     {
       "path": "qwen/.specify/templates/tracking/timeline.json",
@@ -6344,7 +6448,7 @@
     },
     {
       "path": "roocode/.roo/commands/plan.md",
-      "sha256": "2af34a705934f3c1a274a6439c7f17cb4c3f8d27ae58fb3d705e714d5e731ec4",
+      "sha256": "8648c505c8d15186c1146bd8264215f723d1a421e1f51caf347b23d55a455f4d",
       "commandSource": {
         "command": "plan",
         "kind": "legacy-template",
@@ -6389,7 +6493,7 @@
     },
     {
       "path": "roocode/.roo/commands/tasks.md",
-      "sha256": "38db675ca26804b75c1ad5c0e21d7eece1ed892cbee7a92dd13447dc912f9f11",
+      "sha256": "4e58d3a9d0aa820fc846802010e6fa36c0271e98a8d5c8357711a0a8a00eeef9",
       "commandSource": {
         "command": "tasks",
         "kind": "legacy-template",
@@ -6634,8 +6738,16 @@
       "sha256": "841703f221259f4746c2266a8dd943e004aa94ecf06db172fbdf0bd770d7703f"
     },
     {
+      "path": "roocode/.specify/templates/tracking/promises.json",
+      "sha256": "d672df8181c0e5d44c66c515a835338b2ea34430ceba09df5ec73b11a53186c6"
+    },
+    {
       "path": "roocode/.specify/templates/tracking/relationships.json",
       "sha256": "de9567882a8cdf31dba6f0afa8b92bbf68346bb7063164724e47ae4434bddbcf"
+    },
+    {
+      "path": "roocode/.specify/templates/tracking/tension-curve.json",
+      "sha256": "70d7943c6200b60edacce24462c66f8627b29bb51c748215f79ea4acf169fcac"
     },
     {
       "path": "roocode/.specify/templates/tracking/timeline.json",
@@ -6970,8 +7082,16 @@
       "sha256": "841703f221259f4746c2266a8dd943e004aa94ecf06db172fbdf0bd770d7703f"
     },
     {
+      "path": "windsurf/.specify/templates/tracking/promises.json",
+      "sha256": "d672df8181c0e5d44c66c515a835338b2ea34430ceba09df5ec73b11a53186c6"
+    },
+    {
       "path": "windsurf/.specify/templates/tracking/relationships.json",
       "sha256": "de9567882a8cdf31dba6f0afa8b92bbf68346bb7063164724e47ae4434bddbcf"
+    },
+    {
+      "path": "windsurf/.specify/templates/tracking/tension-curve.json",
+      "sha256": "70d7943c6200b60edacce24462c66f8627b29bb51c748215f79ea4acf169fcac"
     },
     {
       "path": "windsurf/.specify/templates/tracking/timeline.json",
@@ -7074,7 +7194,7 @@
     },
     {
       "path": "windsurf/.windsurf/workflows/plan.md",
-      "sha256": "2af34a705934f3c1a274a6439c7f17cb4c3f8d27ae58fb3d705e714d5e731ec4",
+      "sha256": "8648c505c8d15186c1146bd8264215f723d1a421e1f51caf347b23d55a455f4d",
       "commandSource": {
         "command": "plan",
         "kind": "legacy-template",
@@ -7119,7 +7239,7 @@
     },
     {
       "path": "windsurf/.windsurf/workflows/tasks.md",
-      "sha256": "38db675ca26804b75c1ad5c0e21d7eece1ed892cbee7a92dd13447dc912f9f11",
+      "sha256": "4e58d3a9d0aa820fc846802010e6fa36c0271e98a8d5c8357711a0a8a00eeef9",
       "commandSource": {
         "command": "tasks",
         "kind": "legacy-template",

@@ -1,0 +1,13 @@
+{
+  "schemaVersion": "1.0",
+  "tensionPoints": [
+    {
+      "chapter": "chapter-001",
+      "scene": "scene-001",
+      "tension": 5,
+      "emotionalCharge": 5,
+      "informationGain": 4,
+      "payoff": 3
+    }
+  ]
+}

@@ -22,6 +22,8 @@ scripts:
 - 章节架构信息
 - 时间线和依赖关系
 - 当前 Genre Preset（如果存在 `spec/presets/current-preset.json`，读取 `.specify/presets/<id>/preset.yaml` 和 `.specify/presets/<id>/commands/tasks.md`）
+- Promise / Tension 追踪：`spec/tracking/promises.json`、`spec/tracking/tension-curve.json`（如存在）
+- Branch / Dialogue 工作区：`stories/*/branches/*/impact.md`、`stories/*/dialogue/*.yaml`（如存在）
 
 ### 2. 生成任务列表
 
@@ -34,6 +36,7 @@ scripts:
 **面向 Codex/代码代理的任务粒度要求**：
 - 每个任务必须能在一次对话中独立执行、验证和交付。
 - 写作任务要写清“必须读取”“允许修改”“禁止事项”“验收标准”。
+- 涉及 promise、tension、branch 或 dialogue 的任务，要写清对应 ID、证据路径和是否允许修改正文。
 - 如果用户只要求规划，任务只能产出计划和设定，不得要求生成正文。
 - 成人、暴力、权力关系等 18+ 节点可以保留为剧情节点，但任务中必须写成“剧情功能、关系变化、后果、边界备注”，不要在任务清单里展开正文。
 
@@ -52,6 +55,8 @@ scripts:
     - `stories/*/creative-plan.md`
     - `spec/knowledge/world-setting.md`
     - `spec/graph/entities.json`
+    - `spec/tracking/promises.json`
+    - `spec/tracking/tension-curve.json`
   - **允许修改**：
     - `stories/*/content/volume1/chapter-001.md`
     - `stories/*/scenes/scene-001.yaml`
@@ -68,6 +73,8 @@ scripts:
   - **18+ / 高风险节点**：[如适用：剧情功能、关系变化、后果、边界备注；不展开正文]
   - **必须包含**：[关键元素列表]
   - **章末钩子**：[悬念设置]
+  - **Promise / Tension**：`promise.opening-hook` 推进/兑现；张力点 payoff 不低于计划要求
+  - **Dialogue / Branch**：如涉及对白，先产出 `dialogue/*.yaml` 待确认；如来自 what-if，引用 `branches/*/impact.md`
   - **依赖**：无
   - **输出**：`content/volume1/chapter-001.md`
   - **Scene Card**：`scenes/scene-001.yaml`（如本阶段启用 scene cards）
@@ -75,6 +82,7 @@ scripts:
     - [ ] 覆盖本章全部关键情节
     - [ ] 线索推进与计划一致
     - [ ] 角色称呼和关系状态符合追踪文件
+    - [ ] promise 推进、兑现证据和 tension payoff 已记录或生成任务草稿
     - [ ] 字数符合 validation-rules.json
     - [ ] 完成后更新任务状态
 
@@ -114,6 +122,8 @@ scripts:
 - **伏笔埋设/揭晓**：从specification.md 5.4节读取，标明本章涉及的伏笔操作
 - **必须读取/允许修改/禁止事项**：让 Codex 接手时知道上下文边界和文件写入边界
 - **Scene Card**：如章节已拆成场景，必须标注对应 `scenes/*.yaml`；没有 scene card 的旧章节可留空。
+- **Promise / Tension**：从 `promises.json` 和 `tension-curve.json` 读取，标明本任务建立、推进、兑现或修复哪些读者承诺。
+- **Dialogue / Branch**：对白任务默认先写 `dialogue/*.yaml`；分支任务默认只写 `branches/`，promote 需显式确认。
 - **验收标准**：用于写完后自检，也用于 `/analyze` 或人工复核
 
 #### 任务标记说明

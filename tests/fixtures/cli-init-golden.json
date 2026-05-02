@@ -5,7 +5,7 @@
       "projectName": "smoke",
       "method": "three-act",
       "configuredAI": ["codex"],
-      "trackingFiles": 5
+      "trackingFiles": 7
     },
     "requiredStdout": [
       "/novel-constitution",
@@ -21,6 +21,8 @@
       ".codex/prompts/novel-write.md",
       ".specify/config.json",
       "spec/tracking/plot-tracker.json",
+      "spec/tracking/promises.json",
+      "spec/tracking/tension-curve.json",
       "spec/knowledge/world-setting.md"
     ]
   },

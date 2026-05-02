@@ -23,6 +23,8 @@ scripts:
 - 规格文件：`stories/*/specification.md`
 - 澄清记录（如果已运行 `/clarify`）
 - 当前 Genre Preset（如果存在 `spec/presets/current-preset.json`，读取 `.specify/presets/<id>/preset.yaml` 和 `.specify/presets/<id>/commands/plan.md`）
+- Promise / Tension 追踪（如果存在 `spec/tracking/promises.json`、`spec/tracking/tension-curve.json`，用于安排读者承诺、兑现节点和张力曲线）
+- Branch 影响报告（如果存在 `stories/*/branches/*/impact.md`，只作为 what-if 参考，不直接改 main）
 
 <!-- PLUGIN_HOOK: genre-knowledge-plan -->
 <!-- 插件增强区：知识搜索
@@ -190,6 +192,8 @@ test -f spec/presets/rhythm-config.json && echo "found" || echo "not-found"
 - [ ] 每个卷/阶段是否有明确的情绪高潮？
 - [ ] 全书最高情绪点是否在后1/3部分？
 - [ ] 章节结尾是否留有悬念驱动下一章？
+- [ ] 是否把 `spec/tracking/promises.json` 中的 open/reinforced promise 安排到推进、反转或兑现节点？
+- [ ] 是否把 `spec/tracking/tension-curve.json` 中的低张力区段改造成冲突、信息收益或阶段回报？
 
 **与节奏配置的关系**：
 - 如果存在 `rhythm-config.json`，参考其中的"爽点间隔"参数
@@ -280,6 +284,12 @@ test -f spec/presets/rhythm-config.json && echo "found" || echo "not-found"
 
 ### 伏笔布局
 [伏笔清单和回收计划]
+
+### Promise / Tension 对齐
+- 读者承诺：列出本阶段需要建立、推进、误导或兑现的 `promise.*`
+- 兑现证据：为计划兑现的 promise 标注章节/场景 evidence
+- 张力曲线：明确 tension、emotionalCharge、informationGain、payoff 的阶段变化
+- 风险提示：长期未兑现、重复建立但无推进、高张力低回报的章节必须生成修正任务
 ```
 
 #### 2.6 叙事技术选择

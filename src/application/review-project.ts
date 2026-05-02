@@ -9,6 +9,8 @@ import {
 } from '../validation/rules/writing-rules.js';
 import { inspectScenes } from './inspect-story-structure.js';
 import type { ValidationSeverity } from '../validation/schema/index.js';
+import { checkPromises } from './manage-promises.js';
+import type { PromiseIssue } from '../domain/workbench.js';
 
 export type ReviewerId = 'worldbuilding' | 'voice' | 'continuity' | 'editor' | 'reader' | (string & {});
 
@@ -67,7 +69,11 @@ const relativePath = (projectRoot: string, filePath: string): string =>
     ? path.relative(projectRoot, filePath).split(path.sep).join('/')
     : filePath.split(path.sep).join('/');
 
-const classifyReviewer = (issue: ProjectValidationIssue | WritingRuleIssue): ReviewerId => {
+const classifyReviewer = (issue: ProjectValidationIssue | WritingRuleIssue | PromiseIssue): ReviewerId => {
+  if (issue.code.includes('PROMISE') || issue.code.includes('TENSION')) {
+    return 'reader';
+  }
+
   if (
     issue.code.includes('WORLD')
     || issue.code.includes('CANON')
@@ -107,7 +113,11 @@ const classifyReviewer = (issue: ProjectValidationIssue | WritingRuleIssue): Rev
   return 'reader';
 };
 
-const suggestAction = (issue: ProjectValidationIssue | WritingRuleIssue): string => {
+const suggestAction = (issue: ProjectValidationIssue | WritingRuleIssue | PromiseIssue): string => {
+  if ('suggestedAction' in issue) {
+    return issue.suggestedAction;
+  }
+
   const actions: Record<string, string> = {
     WORLD_DENSITY_HIGH: '拆分 Scene Card 的设定承载，或把部分 world/canon 引用移到后续场景',
     REVEAL_PACING_GAP: '补充 reveals 字段，声明本场景对读者揭示了什么信息',
@@ -129,13 +139,13 @@ const suggestAction = (issue: ProjectValidationIssue | WritingRuleIssue): string
 
 const toFinding = (
   projectRoot: string,
-  issue: ProjectValidationIssue | WritingRuleIssue
+  issue: ProjectValidationIssue | WritingRuleIssue | PromiseIssue
 ): ReviewFinding => ({
   reviewerId: classifyReviewer(issue),
   severity: issue.severity,
   code: issue.code,
   path: relativePath(projectRoot, issue.path),
-  evidence: issue.message,
+  evidence: 'evidence' in issue && issue.evidence ? issue.evidence : issue.message,
   message: issue.message,
   suggestedAction: suggestAction(issue)
 });
@@ -216,11 +226,16 @@ export const reviewProject = async (input: ReviewProjectInput): Promise<ReviewPr
     artifactScan,
     rules: createDefaultWritingRules()
   });
+  const promiseResult = await checkPromises({
+    projectRoot: input.projectRoot,
+    fileSystem: input.fileSystem
+  });
   const rawFindings = [
     ...validation.issues.map(issue => toFinding(input.projectRoot, issue)),
     ...quality.issues
       .filter(issue => !validation.issues.some(existing => existing.code === issue.code && existing.path === issue.path))
-      .map(issue => toFinding(input.projectRoot, issue))
+      .map(issue => toFinding(input.projectRoot, issue)),
+    ...promiseResult.issues.map(issue => toFinding(input.projectRoot, issue))
   ].filter(finding => panel.has(finding.reviewerId));
   const allFindings = rawFindings.filter(finding => belongsToChapter(finding, chapterPaths));
 

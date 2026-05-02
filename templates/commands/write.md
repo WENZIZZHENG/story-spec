@@ -38,6 +38,10 @@ scripts:
    - `spec/tracking/relationships.json`（关系网络）
    - `spec/tracking/plot-tracker.json`（情节追踪 - 如有）
    - `spec/tracking/validation-rules.json`（验证规则 - 如有）
+   - `spec/tracking/promises.json`（读者承诺、悬念、爽点和感情线期待 - 如有）
+   - `spec/tracking/tension-curve.json`（张力、情绪、电量和兑现曲线 - 如有）
+   - `stories/*/dialogue/*.yaml`（当前章节对白计划 - 如有）
+   - `stories/*/branches/*/impact.md`（当前任务引用的 what-if 分支影响报告 - 如有）
 
 4. **再查（知识库）**：
    - `spec/knowledge/` 相关文件（世界观、角色档案等）
@@ -70,6 +74,8 @@ scripts:
 - 如果任务标记为 `[PLAN-ONLY]`，停止正文写作，改为提示用户先完成规划或澄清。
 - 如果任务未标记 `[WRITE-READY]` 且缺少“必须读取/允许修改/验收标准”，先补齐任务说明，不直接写正文。
 - 如果任务包含 18+ / 高风险节点，先按任务清单读取“剧情功能、关系变化、后果、边界备注”，正文处理必须服从该边界。
+- 如果任务来自 branch what-if，确认 `branch:promote --yes` 已显式确认；未确认时只写 `stories/*/branches/` 或任务草稿，不覆盖 main 正文。
+- 如果任务涉及对白计划，优先读取或生成待确认 `dialogue/*.yaml`，不得把未确认对白当 canon。
 
 ### 2. 验证前置条件
 - 检查相关依赖任务是否完成
@@ -233,6 +239,8 @@ scripts:
 - 是否按照章节架构
 - 是否符合节奏设计
 - 是否达到字数要求
+- 是否推进、反转或兑现了本章相关 promise，并能在 `promises.json` 中记录 evidence
+- 是否让高张力段落获得足够 payoff，避免只吊胃口不回报
 
 **格式规范检查**：
 - ⚠️ 确认未使用"一"、"二"、"三"等数字标记分段
@@ -339,6 +347,8 @@ scripts:
 - 将章节内容保存到 `stories/*/content/`
 - 更新任务状态为 `completed`
 - 记录完成时间和字数
+- 如本章建立、推进或兑现 promise，更新 `spec/tracking/promises.json` 或生成待确认任务草稿。
+- 如本章改变张力/情绪/信息收益/兑现强度，更新 `spec/tracking/tension-curve.json` 或记录待补项。
 
 ## 写作要点
 

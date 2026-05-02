@@ -46,6 +46,10 @@ describe('CLI command modules smoke', () => {
     expect(help).toContain('context:pack [options] [story]');
     expect(help).toContain('draft:new [options] [story]');
     expect(help).toContain('narrative:test [options] [story]');
+    expect(help).toContain('dialogue:extract [options] [story]');
+    expect(help).toContain('branch:create [options] <title>');
+    expect(help).toContain('promise:check [options]');
+    expect(help).toContain('tension:chart [options]');
     expect(info).toContain('三幕结构');
     expect(info).toContain('雪花十步');
   });
@@ -792,5 +796,145 @@ describe('CLI command modules smoke', () => {
 
     expect(narrative.summary.pass).toBeGreaterThan(0);
     expect(narrative.results[0].suggestedAction).toEqual(expect.any(String));
+  });
+
+  it('runs dialogue, branch, promise, and tension commands as JSON', async () => {
+    const cwd = await makeTempDir();
+    await execFileAsync('node', [
+      cliPath,
+      'init',
+      'smoke',
+      '--agent',
+      'generic',
+      '--method',
+      'three-act',
+      '--no-git'
+    ], { cwd });
+
+    const projectPath = path.join(cwd, 'smoke');
+    const storyPath = path.join(projectPath, 'stories', '001-demo');
+    await mkdir(storyPath, { recursive: true });
+    await writeFile(path.join(storyPath, 'specification.md'), '# spec');
+    await writeFile(path.join(storyPath, 'creative-plan.md'), '# plan');
+    await writeFile(path.join(storyPath, 'tasks.md'), `# tasks
+
+- [ ] [P0] [WRITE-READY] **T001** - 调整第一场转折
+  - **必须读取**：
+    - \`scenes/scene-001.yaml\`
+  - **允许修改**：
+    - \`content/chapter-001.md\`
+  - **输出**：\`content/chapter-001.md\`
+`);
+    await writeFile(path.join(projectPath, 'spec', 'tracking', 'promises.json'), JSON.stringify({
+      promises: [{
+        id: 'promise.identity',
+        type: 'mystery',
+        promise: '身份谜题',
+        establishedAt: 'chapter-001',
+        reinforcedAt: [],
+        status: 'open',
+        readerExpectation: '期待身份揭示'
+      }]
+    }));
+    await writeFile(path.join(projectPath, 'spec', 'tracking', 'tension-curve.json'), JSON.stringify({
+      tensionPoints: [{
+        chapter: 'chapter-012',
+        scene: 'scene-001',
+        tension: 8,
+        emotionalCharge: 7,
+        informationGain: 4,
+        payoff: 1
+      }]
+    }));
+
+    const dialogueResult = await execFileAsync('node', [
+      cliPath,
+      'dialogue:extract',
+      '001-demo',
+      '--scene',
+      'scene-001',
+      '--chapter',
+      '001',
+      '--json'
+    ], { cwd: projectPath });
+    const dialogue = JSON.parse(dialogueResult.stdout);
+
+    expect(dialogue.written).toBe(true);
+    expect(dialogue.outputPath).toContain(path.join('stories', '001-demo', 'dialogue'));
+
+    const dialogueCheckResult = await execFileAsync('node', [
+      cliPath,
+      'dialogue:check',
+      '001-demo',
+      '--json'
+    ], { cwd: projectPath });
+    const dialogueCheck = JSON.parse(dialogueCheckResult.stdout);
+
+    expect(dialogueCheck.beats).toHaveLength(1);
+    expect(dialogueCheck.issues).toEqual([]);
+
+    const branchResult = await execFileAsync('node', [
+      cliPath,
+      'branch:create',
+      '提前揭示身份',
+      '--story',
+      '001-demo',
+      '--changed-scenes',
+      'scene-001',
+      '--json'
+    ], { cwd: projectPath });
+    const branch = JSON.parse(branchResult.stdout);
+
+    expect(branch.branch.status).toBe('exploring');
+    expect(branch.branchDir).toContain(path.join('stories', '001-demo', 'branches'));
+
+    const compareResult = await execFileAsync('node', [
+      cliPath,
+      'branch:compare',
+      branch.branch.id,
+      '--story',
+      '001-demo',
+      '--json'
+    ], { cwd: projectPath });
+    const compare = JSON.parse(compareResult.stdout);
+
+    expect(compare.changedScenes).toContain('scene-001');
+    expect(compare.impactedTasks).toEqual(expect.arrayContaining([
+      expect.objectContaining({ id: 'T001' })
+    ]));
+
+    const promotePreviewResult = await execFileAsync('node', [
+      cliPath,
+      'branch:promote',
+      branch.branch.id,
+      '--story',
+      '001-demo',
+      '--json'
+    ], { cwd: projectPath });
+    const promotePreview = JSON.parse(promotePreviewResult.stdout);
+
+    expect(promotePreview.dryRun).toBe(true);
+
+    const promiseResult = await execFileAsync('node', [
+      cliPath,
+      'promise:check',
+      '--json'
+    ], { cwd: projectPath });
+    const promise = JSON.parse(promiseResult.stdout);
+
+    expect(promise.issues).toEqual(expect.arrayContaining([
+      expect.objectContaining({ code: 'PROMISE_OPEN_TOO_LONG' }),
+      expect.objectContaining({ code: 'TENSION_PAYOFF_GAP' })
+    ]));
+    expect(promise.taskDrafts.length).toBeGreaterThan(0);
+
+    const tensionResult = await execFileAsync('node', [
+      cliPath,
+      'tension:chart',
+      '--json'
+    ], { cwd: projectPath });
+    const tension = JSON.parse(tensionResult.stdout);
+
+    expect(tension.markdown).toContain('| Chapter | Scene | Tension | Emotion | Info | Payoff |');
   });
 });

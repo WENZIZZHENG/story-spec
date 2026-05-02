@@ -26,6 +26,11 @@
 - 新增 `novel context:pack` 与 `context:validate`，生成 `.specify/context-packs/` 写作上下文包，并校验 mustRead reason、路径和过期状态。
 - 新增 `novel draft:new`、`draft:list`、`draft:promote`，引入章节草稿与发布索引，默认不覆盖正式正文。
 - 新增 `novel narrative:test` 和 `/context-pack` 命令模板，第一版叙事测试支持 Scene Card 闭环检查，并在没有 Scene Card 时 fallback 到章节任务验收。
+- 新增 `dialogue:extract`、`dialogue:plan`、`dialogue:check`，生成待确认 DialogueBeat YAML，并校验 speaker、intent、relationshipChange 与 VoiceFingerprint。
+- 新增 `branch:create`、`branch:list`、`branch:compare`、`branch:promote`，支持剧情 what-if 安全探索，默认只写 `stories/*/branches/`，promote 需要显式确认。
+- 新增 `promise:list`、`promise:check`、`tension:chart`，检查长期未兑现、payoff 缺 evidence、重复建立不推进的 promise，并输出任务草稿。
+- 新项目初始化新增 `spec/tracking/promises.json` 与 `spec/tracking/tension-curve.json`。
+- `/plan`、`/tasks`、`/write` 和 reviewer loop 已接入 promise/tension、dialogue 与 branch 上下文。
 
 ### 文档
 
