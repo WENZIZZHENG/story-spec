@@ -10,10 +10,13 @@ import {
 } from '../../application/upgrade-project.js';
 import { nodeFileSystem } from '../../infrastructure/node-file-system.js';
 import { AI_PLATFORM_OPTIONS } from '../../utils/ai-platforms.js';
+import { AGENT_INTEGRATION_OPTIONS } from '../../agent/registry.js';
 
 type UpgradeCommandOptions = {
   ai?: string;
   all?: boolean;
+  agent?: string;
+  allAgents?: boolean;
   interactive?: boolean;
   commands?: boolean;
   scripts?: boolean;
@@ -142,7 +145,7 @@ const displayUpgradeReport = (
 
   console.log(chalk.yellow('升级统计:'));
   console.log(`  • 版本: ${projectVersion} → ${targetVersion}`);
-  console.log(`  • AI 平台: ${stats.platforms.join(', ')}`);
+  console.log(`  • Agent integrations: ${stats.platforms.join(', ')}`);
 
   if (updateContent.commands && stats.commands > 0) {
     console.log(`  • 命令文件: ${stats.commands} 个`);
@@ -172,7 +175,7 @@ const displayUpgradeReport = (
   console.log('  • 反AI检测规范: 基于朱雀实测的0% AI浓度写作指南');
   console.log('  • 专家模式增强: 核心专家系统（角色、剧情、风格、世界观）');
   console.log('  • AI 温度控制: write 命令新增创作强化指令');
-  console.log('  • 多平台支持: 所有 13 个 AI 平台的命令已更新');
+  console.log('  • 多 agent 支持: 已更新目标 integration 的命令文件');
 
   console.log(chalk.gray('\n📚 查看详细升级指南: docs/upgrade-guide.md'));
   console.log(chalk.gray('   或访问: https://github.com/wordflowlab/novel-writer/blob/main/docs/upgrade-guide.md'));
@@ -200,6 +203,8 @@ export function registerUpgradeCommand(program: Command, context: { packageRoot:
     .command('upgrade')
     .option('--ai <type>', `指定要升级的 AI 配置: ${AI_PLATFORM_OPTIONS}`)
     .option('--all', '升级所有 AI 配置')
+    .option('--agent <id>', `指定要升级或补装的 agent integration: ${AGENT_INTEGRATION_OPTIONS}`)
+    .option('--all-agents', '升级所有已安装的 agent integrations')
     .option('-i, --interactive', '交互式选择要更新的内容')
     .option('--commands', '仅更新命令文件')
     .option('--scripts', '仅更新脚本文件')
@@ -215,11 +220,23 @@ export function registerUpgradeCommand(program: Command, context: { packageRoot:
       const projectPath = process.cwd();
 
       try {
+        if (options.agent && options.ai) {
+          console.log(chalk.red('✗ --agent 与 --ai 不能同时使用'));
+          process.exit(1);
+        }
+
+        if (options.allAgents && options.all) {
+          console.log(chalk.red('✗ --all-agents 与 --all 不能同时使用'));
+          process.exit(1);
+        }
+
         const updateContent = await getUpdateContentFromOptions(options);
         const plan = await createUpgradeProjectPlan({
           projectPath,
           ai: options.ai,
           all: options.all,
+          agent: options.agent,
+          allAgents: options.allAgents,
           updateContent,
           fileSystem: nodeFileSystem
         });
@@ -245,6 +262,8 @@ export function registerUpgradeCommand(program: Command, context: { packageRoot:
           packageRoot,
           ai: options.ai,
           all: options.all,
+          agent: options.agent,
+          allAgents: options.allAgents,
           updateContent,
           fileSystem: nodeFileSystem,
           backup: options.backup,

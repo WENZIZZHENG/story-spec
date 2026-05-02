@@ -205,6 +205,43 @@ describe('CLI command modules smoke', () => {
     expect(stdout).toContain('更新命令文件');
   });
 
+  it('adds generic commands to an existing project through upgrade --agent', async () => {
+    const cwd = await makeTempDir();
+    await execFileAsync('node', [
+      cliPath,
+      'init',
+      'smoke',
+      '--ai',
+      'codex',
+      '--method',
+      'three-act',
+      '--no-git'
+    ], { cwd });
+
+    const projectPath = path.join(cwd, 'smoke');
+    await execFileAsync('node', [
+      cliPath,
+      'upgrade',
+      '--agent',
+      'generic',
+      '--commands',
+      '--yes',
+      '--no-backup'
+    ], { cwd: projectPath });
+
+    await expect(readFile(path.join(projectPath, '.specify', 'commands', 'write.md'), 'utf-8'))
+      .resolves.toContain('## 执行步骤');
+
+    const validateResult = await execFileAsync('node', [
+      cliPath,
+      'validate',
+      '--json'
+    ], { cwd: projectPath });
+    const validation = JSON.parse(validateResult.stdout);
+    expect(validation.valid).toBe(true);
+    expect(validation.summary.agentCommandsChecked).toBeGreaterThan(0);
+  });
+
   it('exports tasks.md as a JSON task board', async () => {
     const cwd = await makeTempDir();
     await execFileAsync('node', [

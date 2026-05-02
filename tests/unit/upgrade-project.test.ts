@@ -31,6 +31,8 @@ const createPackageRootFixture = async () => {
 
   await mkdir(path.join(packageRoot, 'dist', 'codex', '.codex', 'prompts'), { recursive: true });
   await writeFile(path.join(packageRoot, 'dist', 'codex', '.codex', 'prompts', 'novel-write.md'), 'new command');
+  await mkdir(path.join(packageRoot, 'dist', 'generic', '.specify', 'commands'), { recursive: true });
+  await writeFile(path.join(packageRoot, 'dist', 'generic', '.specify', 'commands', 'write.md'), 'generic write');
 
   await mkdir(path.join(packageRoot, 'scripts', 'bash'), { recursive: true });
   await mkdir(path.join(packageRoot, 'scripts', 'powershell'), { recursive: true });
@@ -141,6 +143,40 @@ describe('upgradeProject', () => {
 
     const config = JSON.parse(await readFile(path.join(projectPath, '.specify', 'config.json'), 'utf8')) as { version: string };
     expect(config.version).not.toBe('0.1.0');
+  });
+
+  it('can add generic agent commands to an existing project', async () => {
+    const packageRoot = await createPackageRootFixture();
+    const projectPath = await createProjectFixture();
+
+    const result = await upgradeProject({
+      projectPath,
+      packageRoot,
+      agent: 'generic',
+      updateContent: {
+        commands: true,
+        scripts: false,
+        templates: false,
+        memory: false,
+        spec: false,
+        experts: false
+      },
+      fileSystem: nodeFileSystem,
+      dryRun: false,
+      backup: false
+    });
+
+    expect(result.targetAgents.map(agent => agent.id)).toEqual(['generic']);
+    expect(result.targetAI).toEqual([]);
+    expect(result.stats.commands).toBe(1);
+    await expect(readFile(path.join(projectPath, '.specify', 'commands', 'write.md'), 'utf8')).resolves.toBe('generic write');
+
+    const config = JSON.parse(await readFile(path.join(projectPath, '.specify', 'config.json'), 'utf8')) as {
+      integrations: Array<{ id: string }>;
+    };
+    expect(config.integrations).toEqual(expect.arrayContaining([
+      expect.objectContaining({ id: 'generic' })
+    ]));
   });
 
   it('rejects non novel-writer projects', async () => {

@@ -1,4 +1,9 @@
 import path from 'node:path';
+import {
+  AGENT_INTEGRATIONS,
+  getAgentIntegration,
+  type AgentIntegration
+} from '../agent/registry.js';
 import { getVersion } from '../version.js';
 import {
   AI_PLATFORMS,
@@ -34,7 +39,8 @@ export type UpgradeProjectEvent =
 export type UpgradeProjectErrorCode =
   | 'NOT_PROJECT'
   | 'NO_AI_INSTALLED'
-  | 'AI_NOT_INSTALLED';
+  | 'AI_NOT_INSTALLED'
+  | 'AGENT_NOT_FOUND';
 
 export class UpgradeProjectError extends Error {
   constructor(
@@ -50,6 +56,8 @@ export interface UpgradeProjectPlanInput {
   projectPath: string;
   ai?: string;
   all?: boolean;
+  agent?: string;
+  allAgents?: boolean;
   updateContent: UpdateContent;
   fileSystem: ProjectFileSystem;
 }
@@ -61,7 +69,9 @@ export interface UpgradeProjectPlan {
   projectVersion: string;
   targetVersion: string;
   installedAI: AIPlatformConfig[];
+  installedAgents: AgentIntegration[];
   targetAI: AIPlatformConfig[];
+  targetAgents: AgentIntegration[];
   targetDisplayNames: string[];
   updateContent: UpdateContent;
 }
@@ -142,6 +152,60 @@ const detectInstalledAI = async (
   return installedAI;
 };
 
+const configDeclaresAgent = (
+  config: Record<string, unknown>,
+  agentId: string
+): boolean => {
+  if (config.agent === agentId || config.ai === agentId) {
+    return true;
+  }
+
+  if (!Array.isArray(config.integrations)) {
+    return false;
+  }
+
+  return config.integrations.some(integration => {
+    if (integration === agentId) {
+      return true;
+    }
+
+    return typeof integration === 'object'
+      && integration !== null
+      && 'id' in integration
+      && integration.id === agentId;
+  });
+};
+
+const detectInstalledAgents = async (
+  fs: ProjectFileSystem,
+  projectPath: string,
+  config: Record<string, unknown>
+): Promise<AgentIntegration[]> => {
+  const installedAgents: AgentIntegration[] = [];
+
+  for (const integration of AGENT_INTEGRATIONS) {
+    if (integration.id === 'generic') {
+      if (configDeclaresAgent(config, 'generic') || await fs.pathExists(path.join(projectPath, '.specify', 'commands'))) {
+        installedAgents.push(integration);
+      }
+      continue;
+    }
+
+    for (const target of integration.installTargets) {
+      if (await fs.pathExists(path.join(projectPath, target.dir))) {
+        installedAgents.push(integration);
+        break;
+      }
+    }
+
+    if (configDeclaresAgent(config, integration.id) && !installedAgents.some(agent => agent.id === integration.id)) {
+      installedAgents.push(integration);
+    }
+  }
+
+  return installedAgents;
+};
+
 const resolveTargetAI = (
   installedAI: AIPlatformConfig[],
   ai: string | undefined
@@ -158,6 +222,36 @@ const resolveTargetAI = (
   return [requestedPlatform];
 };
 
+const resolveTargetAgents = (
+  input: UpgradeProjectPlanInput,
+  installedAI: AIPlatformConfig[],
+  installedAgents: AgentIntegration[]
+): AgentIntegration[] => {
+  if (input.agent) {
+    const requestedAgent = getAgentIntegration(input.agent);
+    if (!requestedAgent) {
+      throw new UpgradeProjectError('AGENT_NOT_FOUND', `Agent integration "${input.agent}" 未注册`);
+    }
+
+    return [requestedAgent];
+  }
+
+  if (input.allAgents) {
+    return installedAgents;
+  }
+
+  const targetAI = input.all ? installedAI : resolveTargetAI(installedAI, input.ai);
+  return targetAI
+    .map(platform => getAgentIntegration(platform.name))
+    .filter((integration): integration is AgentIntegration => integration !== undefined);
+};
+
+const toLegacyAIPlatforms = (
+  targetAgents: readonly AgentIntegration[]
+): AIPlatformConfig[] => targetAgents
+  .map(integration => integration.legacyAiId ? getAIPlatform(integration.legacyAiId) : undefined)
+  .filter((platform): platform is AIPlatformConfig => platform !== undefined);
+
 export const createUpgradeProjectPlan = async (
   input: UpgradeProjectPlanInput
 ): Promise<UpgradeProjectPlan> => {
@@ -169,11 +263,13 @@ export const createUpgradeProjectPlan = async (
 
   const config = await fs.readJson(configPath) as Record<string, unknown>;
   const installedAI = await detectInstalledAI(fs, input.projectPath);
-  if (installedAI.length === 0) {
+  const installedAgents = await detectInstalledAgents(fs, input.projectPath, config);
+  if (!input.agent && !input.allAgents && installedAI.length === 0) {
     throw new UpgradeProjectError('NO_AI_INSTALLED', '未检测到任何 AI 配置目录');
   }
 
-  const targetAI = input.all ? installedAI : resolveTargetAI(installedAI, input.ai);
+  const targetAgents = resolveTargetAgents(input, installedAI, installedAgents);
+  const targetAI = toLegacyAIPlatforms(targetAgents);
 
   return {
     projectPath: input.projectPath,
@@ -182,15 +278,17 @@ export const createUpgradeProjectPlan = async (
     projectVersion: typeof config.version === 'string' ? config.version : '未知',
     targetVersion: getVersion(),
     installedAI,
+    installedAgents,
     targetAI,
-    targetDisplayNames: targetAI.map(platform => platform.displayName),
+    targetAgents,
+    targetDisplayNames: targetAgents.map(agent => agent.displayName),
     updateContent: input.updateContent
   };
 };
 
 const updateCommands = async (
   fs: ProjectFileSystem,
-  targetAI: AIPlatformConfig[],
+  targetAgents: AgentIntegration[],
   projectPath: string,
   packageRoot: string,
   dryRun: boolean,
@@ -198,16 +296,16 @@ const updateCommands = async (
 ): Promise<number> => {
   let count = 0;
 
-  for (const aiConfig of targetAI) {
-    const sourceDir = path.join(packageRoot, aiConfig.distDir);
+  for (const integration of targetAgents) {
+    const target = integration.installTargets[0];
+    const sourceDir = path.join(packageRoot, target.distDir);
     if (!await fs.pathExists(sourceDir)) {
-      emit(onEvent, { type: 'warning', message: `${aiConfig.displayName}: 构建产物未找到` });
+      emit(onEvent, { type: 'warning', message: `${integration.displayName}: 构建产物未找到` });
       continue;
     }
 
-    const targetDir = path.join(projectPath, aiConfig.dir);
-    const sourceCommandsDir = path.join(sourceDir, aiConfig.dir, aiConfig.commandsDir);
-    const targetCommandsDir = path.join(targetDir, aiConfig.commandsDir);
+    const sourceCommandsDir = path.join(sourceDir, target.dir, target.commandsDir);
+    const targetCommandsDir = path.join(projectPath, target.dir, target.commandsDir);
 
     if (await fs.pathExists(sourceCommandsDir)) {
       if (!dryRun) {
@@ -218,14 +316,14 @@ const updateCommands = async (
         file.endsWith('.md') || file.endsWith('.toml')
       );
       count += commandCount;
-      emit(onEvent, { type: 'info', message: `${aiConfig.displayName}: ${commandCount} 个文件` });
+      emit(onEvent, { type: 'info', message: `${integration.displayName}: ${commandCount} 个文件` });
     }
 
-    if (!aiConfig.extraDirs) {
+    if (!target.extraDirs) {
       continue;
     }
 
-    for (const extraDir of aiConfig.extraDirs) {
+    for (const extraDir of target.extraDirs) {
       const sourceExtraDir = path.join(sourceDir, extraDir);
       const targetExtraDir = path.join(projectPath, extraDir);
       if (!await fs.pathExists(sourceExtraDir)) {
@@ -235,7 +333,7 @@ const updateCommands = async (
       if (!dryRun) {
         await fs.copy(sourceExtraDir, targetExtraDir, { overwrite: true });
       }
-      emit(onEvent, { type: 'info', message: `${aiConfig.displayName}: 已更新 ${extraDir}` });
+      emit(onEvent, { type: 'info', message: `${integration.displayName}: 已更新 ${extraDir}` });
     }
   }
 
@@ -414,11 +512,20 @@ const createBackup = async (
   emit(onEvent, { type: 'progress', message: '创建备份...' });
 
   if (plan.updateContent.commands) {
-    for (const aiConfig of plan.targetAI) {
-      const source = path.join(plan.projectPath, aiConfig.dir);
-      const dest = path.join(backupPath, aiConfig.dir);
-      if (await copyIfExists(fs, source, dest)) {
-        emit(onEvent, { type: 'info', message: `备份 ${aiConfig.dir}/` });
+    for (const integration of plan.targetAgents) {
+      for (const target of integration.installTargets) {
+        const source = path.join(plan.projectPath, target.dir, target.commandsDir);
+        const dest = path.join(backupPath, target.dir, target.commandsDir);
+        if (await copyIfExists(fs, source, dest)) {
+          emit(onEvent, { type: 'info', message: `备份 ${path.join(target.dir, target.commandsDir)}/` });
+        }
+
+        for (const extraDir of target.extraDirs ?? []) {
+          const extraSource = path.join(plan.projectPath, extraDir);
+          if (await copyIfExists(fs, extraSource, path.join(backupPath, extraDir))) {
+            emit(onEvent, { type: 'info', message: `备份 ${extraDir}/` });
+          }
+        }
       }
     }
   }
@@ -448,7 +555,7 @@ const createBackup = async (
     timestamp,
     fromVersion: plan.projectVersion,
     toVersion: plan.targetVersion,
-    upgradedAI: plan.targetAI.map(platform => platform.name),
+    upgradedAgents: plan.targetAgents.map(agent => agent.id),
     updateContent: plan.updateContent,
     backupPath
   };
@@ -457,6 +564,55 @@ const createBackup = async (
   emit(onEvent, { type: 'info', message: `备份完成: ${backupPath}` });
 
   return backupPath;
+};
+
+const mergeConfigIntegrations = (
+  config: Record<string, unknown>,
+  targetAgents: readonly AgentIntegration[]
+): Array<Record<string, string>> => {
+  const integrations = new Map<string, Record<string, string>>();
+
+  if (Array.isArray(config.integrations)) {
+    for (const integration of config.integrations) {
+      if (typeof integration === 'string') {
+        const registered = getAgentIntegration(integration);
+        if (registered) {
+          integrations.set(registered.id, {
+            id: registered.id,
+            renderer: registered.renderer,
+            commandSurface: registered.commandSurface
+          });
+        }
+        continue;
+      }
+
+      if (
+        typeof integration === 'object'
+        && integration !== null
+        && 'id' in integration
+        && typeof integration.id === 'string'
+      ) {
+        const registered = getAgentIntegration(integration.id);
+        if (registered) {
+          integrations.set(registered.id, {
+            id: registered.id,
+            renderer: registered.renderer,
+            commandSurface: registered.commandSurface
+          });
+        }
+      }
+    }
+  }
+
+  for (const agent of targetAgents) {
+    integrations.set(agent.id, {
+      id: agent.id,
+      renderer: agent.renderer,
+      commandSurface: agent.commandSurface
+    });
+  }
+
+  return [...integrations.values()];
 };
 
 export const upgradeProject = async (
@@ -483,7 +639,7 @@ export const upgradeProject = async (
 
   if (plan.updateContent.commands) {
     emit(input.onEvent, { type: 'progress', message: '更新命令文件...' });
-    stats.commands = await updateCommands(fs, plan.targetAI, plan.projectPath, input.packageRoot, dryRun, input.onEvent);
+    stats.commands = await updateCommands(fs, plan.targetAgents, plan.projectPath, input.packageRoot, dryRun, input.onEvent);
   }
 
   if (plan.updateContent.scripts) {
@@ -514,6 +670,7 @@ export const upgradeProject = async (
   if (!dryRun) {
     await fs.writeJson(plan.configPath, {
       ...plan.config,
+      integrations: mergeConfigIntegrations(plan.config, plan.targetAgents),
       version: plan.targetVersion
     }, { spaces: 2 });
   }
