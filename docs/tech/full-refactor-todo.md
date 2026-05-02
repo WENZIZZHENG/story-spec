@@ -317,13 +317,14 @@ src/
   - 平台：Windows、Ubuntu；Node LTS。
 - [x] 生成产物一致性检查
   - 验收：prompt compiler 输出变化必须显式提交。
-- [ ] 覆盖率门槛
+- [x] 覆盖率门槛
   - 初始建议：核心模块 60%，后续提升。
 
 阶段备注：
 - 已新增 `.github/workflows/ci.yml`，在 PR 与 `main` push 上运行 Node 20、`npm install --package-lock=false --ignore-scripts` 与 `npm run verify`。
 - CI 已扩展为 Ubuntu/Windows 与 Node 20/22 矩阵，复用 `npm run verify` 覆盖 CLI smoke。
 - 已新增 `scripts/build/command-artifact-manifest.ts` 与 `tests/fixtures/command-artifacts.manifest.json`，并将 `npm run check:command-manifest` 接入 `npm run verify`；prompt/compiler 生成产物变化时需运行 `npm run update:command-manifest` 并提交 manifest。
+- 已接入 `@vitest/coverage-v8`、`npm run test:coverage` 与 Vitest coverage thresholds；核心源码目录按全局 60% statements/branches/functions/lines 门槛纳入 `npm run verify`。
 
 ## 阶段 9：文档与发布治理
 
