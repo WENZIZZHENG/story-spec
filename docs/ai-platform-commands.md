@@ -254,16 +254,31 @@ Novel Writer 在部分 AI 平台使用命名空间（namespace）前缀，主要
 - ✅ 命令文件位于 `.codex/prompts/` 目录
 - ✅ 使用 `novel-` 前缀避免与其他工具冲突
 - ✅ 完整支持所有 Novel Writer 命令功能
+- ✅ 初始化时生成 `AGENTS.md`，帮助 Codex 明确读取顺序、写作边界和文件职责
+- ✅ 可用 `novel codex-status` 在终端查看项目是否已具备直接写作条件
 
 **安装方式**:
 ```bash
 novel init my-novel --ai codex
 ```
 
+**推荐接手流程**:
+```bash
+cd my-novel
+novel codex-status
+```
+
+然后在 Codex 中按状态提示继续执行：
+- 缺规格：`/novel-specify`
+- 缺计划：`/novel-plan`
+- 缺任务：`/novel-tasks`
+- 任务显示 `[WRITE-READY]` 后：`/novel-write`
+
 **注意事项**:
 - Codex CLI 的 custom prompts 功能要求命令文件必须是纯 Markdown 格式
 - 使用连字符 `-` 而非点 `.` 或冒号 `:` 作为命名空间分隔符
 - 所有脚本执行由 AI 自动处理,无需手动配置
+- `AGENTS.md` 只在项目根目录不存在时生成，避免覆盖作者自己的项目约定
 
 ---
 
@@ -276,7 +291,7 @@ novel init my-novel --ai codex
 
 ### 核心命令列表
 
-Cursor、Windsurf、Roo Code、GitHub Copilot、Qwen Code、OpenCode、Codex CLI、Kilo Code、Auggie CLI、CodeBuddy、Amazon Q 等平台使用相同的命令格式，无需前缀：
+Cursor、Windsurf、Roo Code、GitHub Copilot、Qwen Code、OpenCode、Kilo Code、Auggie CLI、CodeBuddy、Amazon Q 等平台使用相同的命令格式，无需前缀：
 
 ```bash
 # 七步方法论

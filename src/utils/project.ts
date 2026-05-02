@@ -43,7 +43,15 @@ export async function detectInstalledAI(projectPath: string): Promise<string[]> 
     { name: 'cursor', dir: '.cursor' },
     { name: 'gemini', dir: '.gemini' },
     { name: 'windsurf', dir: '.windsurf' },
-    { name: 'roocode', dir: '.roo' }
+    { name: 'roocode', dir: '.roo' },
+    { name: 'copilot', dir: '.github' },
+    { name: 'qwen', dir: '.qwen' },
+    { name: 'opencode', dir: '.opencode' },
+    { name: 'codex', dir: '.codex' },
+    { name: 'kilocode', dir: '.kilocode' },
+    { name: 'auggie', dir: '.augment' },
+    { name: 'codebuddy', dir: '.codebuddy' },
+    { name: 'q', dir: '.amazonq' }
   ];
 
   const installedAI: string[] = [];

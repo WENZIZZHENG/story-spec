@@ -10,6 +10,7 @@ import { fileURLToPath } from 'url';
 import { getVersion, getVersionInfo } from './version.js';
 import { PluginManager } from './plugins/manager.js';
 import { ensureProjectRoot, getProjectInfo } from './utils/project.js';
+import { getCodexStatus, renderCodexStatus } from './utils/codex-status.js';
 import {
   displayProjectBanner,
   selectAIAssistant,
@@ -93,7 +94,9 @@ function displayBanner(): void {
   console.log(chalk.gray(`  ${getVersionInfo()}\n`));
 }
 
-displayBanner();
+if (!process.argv.includes('--json')) {
+  displayBanner();
+}
 
 program
   .name('novel')
@@ -350,6 +353,17 @@ program
         await fs.copy(fullTemplatesDir, userTemplatesDir);
       }
 
+      // 为 Codex 项目生成轻量 AGENTS.md，便于接手时直接识别流程和边界
+      if (targetAI.includes('codex')) {
+        const codexAgentsSource = path.join(fullTemplatesDir, 'AGENTS.codex.md');
+        const codexAgentsDest = path.join(projectPath, 'AGENTS.md');
+        if (await fs.pathExists(codexAgentsSource) && !await fs.pathExists(codexAgentsDest)) {
+          let content = await fs.readFile(codexAgentsSource, 'utf-8');
+          content = content.replace(/\{\{PROJECT_NAME\}\}/g, String(name || path.basename(projectPath)));
+          await fs.writeFile(codexAgentsDest, content);
+        }
+      }
+
       // 复制 memory 文件到 .specify/memory 目录
       const memoryDir = path.join(packageRoot, 'memory');
       if (await fs.pathExists(memoryDir)) {
@@ -554,28 +568,42 @@ node_modules/
       }
       console.log(`  3. 使用以下斜杠命令开始创作:`);
 
+      const formatCommand = (commandName: string): string => {
+        if (options.all) return `/${commandName}`;
+        switch (options.ai) {
+          case 'claude':
+            return `/novel.${commandName}`;
+          case 'gemini':
+            return `/novel:${commandName}`;
+          case 'codex':
+            return `/novel-${commandName}`;
+          default:
+            return `/${commandName}`;
+        }
+      };
+
       console.log('\n' + chalk.yellow('     📝 七步方法论:'));
-      console.log(`     ${chalk.cyan('/constitution')} - 创建创作宪法，定义核心原则`);
-      console.log(`     ${chalk.cyan('/specify')}      - 定义故事规格，明确要创造什么`);
-      console.log(`     ${chalk.cyan('/clarify')}      - 澄清关键决策点，明确模糊之处`);
-      console.log(`     ${chalk.cyan('/plan')}         - 制定技术方案，决定如何创作`);
-      console.log(`     ${chalk.cyan('/tasks')}        - 分解执行任务，生成可执行清单`);
-      console.log(`     ${chalk.cyan('/write')}        - AI 辅助写作章节内容`);
-      console.log(`     ${chalk.cyan('/analyze')}      - 综合验证分析，确保质量一致`);
+      console.log(`     ${chalk.cyan(formatCommand('constitution'))} - 创建创作宪法，定义核心原则`);
+      console.log(`     ${chalk.cyan(formatCommand('specify'))}      - 定义故事规格，明确要创造什么`);
+      console.log(`     ${chalk.cyan(formatCommand('clarify'))}      - 澄清关键决策点，明确模糊之处`);
+      console.log(`     ${chalk.cyan(formatCommand('plan'))}         - 制定技术方案，决定如何创作`);
+      console.log(`     ${chalk.cyan(formatCommand('tasks'))}        - 分解执行任务，生成可执行清单`);
+      console.log(`     ${chalk.cyan(formatCommand('write'))}        - AI 辅助写作章节内容`);
+      console.log(`     ${chalk.cyan(formatCommand('analyze'))}      - 综合验证分析，确保质量一致`);
 
       console.log('\n' + chalk.yellow('     📊 追踪管理命令:'));
-      console.log(`     ${chalk.cyan('/plot-check')}  - 检查情节一致性`);
-      console.log(`     ${chalk.cyan('/timeline')}    - 管理故事时间线`);
-      console.log(`     ${chalk.cyan('/relations')}   - 追踪角色关系`);
-      console.log(`     ${chalk.cyan('/world-check')} - 验证世界观设定`);
-      console.log(`     ${chalk.cyan('/track')}       - 综合追踪与智能分析`);
+      console.log(`     ${chalk.cyan(formatCommand('plot-check'))}  - 检查情节一致性`);
+      console.log(`     ${chalk.cyan(formatCommand('timeline'))}    - 管理故事时间线`);
+      console.log(`     ${chalk.cyan(formatCommand('relations'))}   - 追踪角色关系`);
+      console.log(`     ${chalk.cyan(formatCommand('world-check'))} - 验证世界观设定`);
+      console.log(`     ${chalk.cyan(formatCommand('track'))}       - 综合追踪与智能分析`);
 
       // 如果安装了专家模式，显示提示
       if (options.withExperts) {
         console.log('\n' + chalk.yellow('     🎓 专家模式:'));
-        console.log(`     ${chalk.cyan('/expert')}       - 列出可用专家`);
-        console.log(`     ${chalk.cyan('/expert plot')} - 剧情结构专家`);
-        console.log(`     ${chalk.cyan('/expert character')} - 人物塑造专家`);
+        console.log(`     ${chalk.cyan(formatCommand('expert'))}       - 列出可用专家`);
+        console.log(`     ${chalk.cyan(`${formatCommand('expert')} plot`)} - 剧情结构专家`);
+        console.log(`     ${chalk.cyan(`${formatCommand('expert')} character`)} - 人物塑造专家`);
       }
 
       // 如果安装了插件，显示插件命令
@@ -610,7 +638,8 @@ program
       { name: 'Git', command: 'git --version', installed: false },
       { name: 'Claude CLI', command: 'claude --version', installed: false },
       { name: 'Cursor', command: 'cursor --version', installed: false },
-      { name: 'Gemini CLI', command: 'gemini --version', installed: false }
+      { name: 'Gemini CLI', command: 'gemini --version', installed: false },
+      { name: 'Codex CLI', command: 'codex --version', installed: false }
     ];
 
     checks.forEach(check => {
@@ -630,9 +659,37 @@ program
       console.log('  • Claude: https://claude.ai');
       console.log('  • Cursor: https://cursor.sh');
       console.log('  • Gemini: https://gemini.google.com');
+      console.log('  • Codex CLI: https://developers.openai.com/codex');
       console.log('  • Roo Code: https://roocode.com');
     } else {
       console.log('\n' + chalk.green('环境检查通过！'));
+    }
+  });
+
+// codex-status 命令 - 输出 Codex 接手项目时最需要的状态摘要
+program
+  .command('codex-status')
+  .option('--json', '输出 JSON，便于自动化读取')
+  .description('汇总 Codex 可接手的小说项目状态')
+  .action(async (options) => {
+    try {
+      const projectPath = await ensureProjectRoot();
+      const status = await getCodexStatus(projectPath);
+
+      if (options.json) {
+        console.log(JSON.stringify(status, null, 2));
+      } else {
+        console.log(renderCodexStatus(status));
+      }
+    } catch (error: any) {
+      if (error.message === 'NOT_IN_PROJECT') {
+        console.log(chalk.red('\n❌ 当前目录不是 novel-writer 项目'));
+        console.log(chalk.gray('   请在项目根目录运行此命令，或使用 novel init 创建新项目\n'));
+        process.exit(1);
+      }
+
+      console.error(chalk.red('❌ 读取 Codex 状态失败:'), error);
+      process.exit(1);
     }
   });
 
@@ -1518,6 +1575,7 @@ program.on('--help', () => {
   console.log('  $ novel init my-story           # 创建新项目');
   console.log('  $ novel init --here              # 在当前目录初始化');
   console.log('  $ novel check                    # 检查环境');
+  console.log('  $ novel codex-status             # 查看 Codex 接手状态');
   console.log('  $ novel info                     # 查看写作方法');
   console.log('');
   console.log(chalk.cyan('核心创作命令:'));

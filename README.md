@@ -62,6 +62,18 @@ novel init my-novel --ai cursor    # Cursor
 > 📖 **完整工作流程**：[docs/workflow.md](docs/workflow.md)
 > 🎯 **AI 平台命令对照**：[docs/ai-platform-commands.md](docs/ai-platform-commands.md) ⭐ **必读**
 
+### Codex 推荐检查
+
+Codex 项目初始化后，可先运行状态检查再决定是否进入写作：
+
+```bash
+cd my-novel
+novel codex-status
+novel codex-status --json
+```
+
+该命令会汇总当前故事、规格/计划/任务、追踪 JSON、Codex prompts、`AGENTS.md` 和 Git 改动，帮助判断是否已经可以直接执行 `/novel-write`。
+
 ## 📦 升级现有项目
 
 ```bash
@@ -198,6 +210,13 @@ novel upgrade [--ai <type>]       # 升级项目到最新版本
 
 ```bash
 novel check                       # 检查项目配置和状态
+```
+
+### `novel codex-status`
+
+```bash
+novel codex-status                # 查看 Codex 接手项目所需状态摘要
+novel codex-status --json         # 输出结构化状态
 ```
 
 </details>
