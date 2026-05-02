@@ -22,6 +22,10 @@ describe('doctorAgentIntegrations', () => {
     await fs.writeFile(path.join(projectRoot, '.specify', 'commands', 'write.md'), '# write');
     await fs.writeFile(path.join(packageRoot, 'dist', 'generic', '.specify', 'commands', 'write.md'), '# write');
     await fs.writeFile(path.join(packageRoot, 'dist', 'generic', '.specify', 'commands', 'plan.md'), '# plan');
+    await fs.writeFile(path.join(projectRoot, '.specify', 'templates', 'commands', 'plan.md'), 'core plan');
+    await fs.writeFile(path.join(projectRoot, '.specify', 'templates', 'overrides', 'commands', 'plan.md'), 'project plan');
+    await fs.writeFile(path.join(projectRoot, '.specify', 'presets', 'three-act', 'commands', 'plan.md'), 'preset plan');
+    await fs.writeFile(path.join(projectRoot, '.specify', 'extensions', 'genre', 'commands', 'plan.md'), 'extension plan');
 
     const result = await doctorAgentIntegrations({
       projectRoot,
@@ -41,7 +45,21 @@ describe('doctorAgentIntegrations', () => {
         path: path.join(projectRoot, '.specify', 'commands', 'plan.md')
       })
     ]));
-    expect(renderAgentDoctorResult(result)).toContain('Generic Markdown Agent');
+    expect(result.templateDiagnostics).toEqual(expect.arrayContaining([
+      expect.objectContaining({
+        relativePath: 'commands/plan.md',
+        finalSource: expect.objectContaining({ kind: 'project' }),
+        shadowedSources: expect.arrayContaining([
+          expect.objectContaining({ kind: 'preset', name: 'three-act' }),
+          expect.objectContaining({ kind: 'extension', name: 'genre' }),
+          expect.objectContaining({ kind: 'core' })
+        ])
+      })
+    ]));
+    const rendered = renderAgentDoctorResult(result);
+    expect(rendered).toContain('Generic Markdown Agent');
+    expect(rendered).toContain('Template source diagnostics');
+    expect(rendered).toContain('commands/plan.md: 最终 project，覆盖 preset/three-act, extension/genre, core');
   });
 
   it('reports missing root contract files', async () => {

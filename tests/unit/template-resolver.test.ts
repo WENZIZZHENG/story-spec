@@ -4,6 +4,8 @@ import path from 'node:path';
 import { afterEach, describe, expect, it } from 'vitest';
 import {
   resolveTemplateStack,
+  resolveProjectTemplateStack,
+  renderTemplateSourceDiagnostics,
   writeResolvedTemplates
 } from '../../src/templates/resolver.js';
 
@@ -69,6 +71,45 @@ describe('resolveTemplateStack', () => {
       winner: 'project',
       shadowed: ['preset', 'extension', 'core']
     });
+    expect(result.diagnostics.map(diagnostic => ({
+      relativePath: diagnostic.relativePath,
+      finalSource: diagnostic.finalSource.kind,
+      shadowedSources: diagnostic.shadowedSources.map(source => source.kind)
+    }))).toContainEqual({
+      relativePath: 'commands/plan.md',
+      finalSource: 'project',
+      shadowedSources: ['preset', 'extension', 'core']
+    });
+    expect(renderTemplateSourceDiagnostics(result.diagnostics)).toContain(
+      'commands/plan.md: 最终 project，覆盖 preset/three-act, extension/genre, core'
+    );
+  });
+
+  it('resolves the project template stack from conventional directories', async () => {
+    const projectRoot = await makeTempDir();
+
+    await writeFixtureFile(projectRoot, '.specify/templates/commands/plan.md', 'core plan');
+    await writeFixtureFile(projectRoot, '.specify/templates/overrides/commands/plan.md', 'project plan');
+    await writeFixtureFile(projectRoot, '.specify/extensions/genre/commands/plan.md', 'extension plan');
+    await writeFixtureFile(projectRoot, '.specify/presets/three-act/commands/plan.md', 'preset plan');
+
+    const result = await resolveProjectTemplateStack({ projectRoot });
+
+    expect(result.templates.map(template => [template.relativePath, template.source.kind, template.content])).toEqual([
+      ['commands/plan.md', 'project', 'project plan']
+    ]);
+    expect(result.diagnostics[0]).toMatchObject({
+      relativePath: 'commands/plan.md',
+      finalSource: {
+        kind: 'project',
+        name: 'project'
+      }
+    });
+    expect(result.diagnostics[0].shadowedSources.map(source => `${source.kind}/${source.name}`)).toEqual([
+      'preset/three-act',
+      'extension/genre',
+      'core/core'
+    ]);
   });
 
   it('writes resolved templates to a target directory', async () => {

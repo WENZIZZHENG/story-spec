@@ -4,6 +4,11 @@ import {
   type AgentIntegration
 } from '../agent/registry.js';
 import type { ProjectFileSystem } from './project-ports.js';
+import {
+  renderTemplateSourceDiagnostics,
+  resolveProjectTemplateStack,
+  type TemplateSourceDiagnostic
+} from '../templates/resolver.js';
 
 export type AgentDoctorIssueCode =
   | 'MISSING_AGENT_CONTRACT'
@@ -41,6 +46,7 @@ export interface DoctorAgentIntegrationsResult {
   valid: boolean;
   integrations: AgentDoctorIntegrationStatus[];
   issues: AgentDoctorIssue[];
+  templateDiagnostics: TemplateSourceDiagnostic[];
 }
 
 const createIssue = (
@@ -235,12 +241,17 @@ export const doctorAgentIntegrations = async (
   ));
   const integrationIssues = integrations.flatMap(integration => integration.issues);
   const allIssues = [...issues, ...integrationIssues];
+  const templateStack = await resolveProjectTemplateStack({
+    projectRoot: input.projectRoot,
+    fileSystem: fs
+  });
 
   return {
     projectRoot: input.projectRoot,
     valid: !allIssues.some(issue => issue.severity === 'error'),
     integrations,
-    issues: allIssues
+    issues: allIssues,
+    templateDiagnostics: templateStack.diagnostics
   };
 };
 
@@ -267,6 +278,10 @@ export const renderAgentDoctorResult = (result: DoctorAgentIntegrationsResult): 
       lines.push(`- [${issue.severity}] ${issue.code}: ${issue.path} - ${issue.message}`);
     }
   }
+
+  lines.push('', renderTemplateSourceDiagnostics(result.templateDiagnostics, {
+    heading: 'Template source diagnostics'
+  }));
 
   return lines.join('\n');
 };

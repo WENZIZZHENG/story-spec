@@ -195,7 +195,7 @@ npm run verify
 | 新写作规则 | `src/validation/rules/writing-rules.ts` | 返回统一 `ValidationIssue`，明确 severity |
 | 新插件能力 | `templates/plugins/<name>/config.yaml`、`src/domain/plugin-manifest.ts` | 优先声明式 manifest，不把写入逻辑藏在命令正文 |
 | 新脚本能力 | `src/application/run-script.ts` 或新的 application 用例 | 优先 TypeScript runtime，shell/PowerShell 只做兼容入口 |
-| 新模板层 | `src/templates/resolver.ts` | 保持 project-local > preset > extension > core 的覆盖顺序 |
+| 新模板层 | `src/templates/resolver.ts` | 保持 project-local > preset > extension > core 的覆盖顺序，并输出最终来源诊断 |
 
 ## 设计取舍
 
