@@ -474,7 +474,7 @@ risk:
 
 目标：将用户主路径从 `--ai` 迁移到 `--agent`，但不中断旧项目。
 
-- [ ] A3-T001：`init` 支持 `--agent <id>`、`--all-agents`。
+- [x] A3-T001：`init` 支持 `--agent <id>`、`--all-agents`。
 - [ ] A3-T002：`upgrade` 支持 `--agent <id>`、`--all-agents`。
 - [ ] A3-T003：旧 `--ai`、`--all` 输出简短兼容提示。
 - [ ] A3-T004：新增 `novel agent:add <id>`。

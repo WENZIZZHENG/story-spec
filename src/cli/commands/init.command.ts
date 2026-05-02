@@ -2,6 +2,13 @@ import type { Command } from '@commander-js/extra-typings';
 import chalk from 'chalk';
 import ora from 'ora';
 import { initProject } from '../../application/init-project.js';
+import {
+  AGENT_INTEGRATION_OPTIONS,
+  AGENT_INTEGRATIONS,
+  formatAgentCommand,
+  formatAgentDisplayNames,
+  getAgentIntegration
+} from '../../agent/registry.js';
 import { commandGitAdapter } from '../../infrastructure/command-git-adapter.js';
 import { nodeFileSystem } from '../../infrastructure/node-file-system.js';
 import { pluginManagerInstaller } from '../../infrastructure/plugin-manager-installer.js';
@@ -36,6 +43,8 @@ export function registerInitCommand(program: Command, context: InitCommandContex
     .option('--here', '在当前目录初始化')
     .option('--ai <type>', `选择 AI 助手: ${AI_PLATFORM_OPTIONS}`)
     .option('--all', '为所有支持的 AI 助手生成配置')
+    .option('--agent <id>', `选择 agent integration: ${AGENT_INTEGRATION_OPTIONS}`)
+    .option('--all-agents', '为所有支持的 agent integrations 生成配置')
     .option('--method <type>', '选择写作方法: three-act | hero-journey | story-circle | seven-point | pixar | snowflake')
     .option('--no-git', '跳过 Git 初始化')
     .option('--with-experts', '包含专家模式')
@@ -44,8 +53,8 @@ export function registerInitCommand(program: Command, context: InitCommandContex
     .description('初始化一个新的小说项目')
     .action(async (name, options) => {
       // 如果是交互式终端且没有明确指定参数，显示交互选择
-      const shouldShowInteractive = isInteractive() && !options.all;
-      const needsAISelection = shouldShowInteractive && !options.ai;
+      const shouldShowInteractive = isInteractive() && !options.all && !options.allAgents;
+      const needsAISelection = shouldShowInteractive && !options.ai && !options.agent;
       const needsMethodSelection = shouldShowInteractive && !options.method;
       const needsExpertConfirm = shouldShowInteractive && !options.withExperts;
 
@@ -91,11 +100,34 @@ export function registerInitCommand(program: Command, context: InitCommandContex
       }
 
       // 设置默认值（如果没有通过交互或参数指定）
-      if (!options.ai) options.ai = 'claude';
+      if (!options.ai && !options.agent) {
+        if (options.all) {
+          options.ai = 'claude';
+        } else if (!options.allAgents) {
+          options.agent = 'claude';
+        }
+      }
       if (!options.method) options.method = 'three-act';
 
       const selectedPlatform = getAIPlatform(options.ai);
-      if (!selectedPlatform && !options.all) {
+      const selectedAgent = getAgentIntegration(options.agent ?? options.ai);
+      if (options.agent && options.ai) {
+        console.log(chalk.red('❌ --agent 与 --ai 不能同时使用'));
+        process.exit(1);
+      }
+
+      if (options.allAgents && options.all) {
+        console.log(chalk.red('❌ --all-agents 与 --all 不能同时使用'));
+        process.exit(1);
+      }
+
+      if (options.agent && !selectedAgent && !options.allAgents) {
+        console.log(chalk.red(`❌ 不支持的 agent integration: ${options.agent}`));
+        console.log(chalk.gray(`   可选值: ${AGENT_INTEGRATION_OPTIONS}`));
+        process.exit(1);
+      }
+
+      if (options.ai && !selectedPlatform && !options.all) {
         console.log(chalk.red(`❌ 不支持的 AI 助手: ${options.ai}`));
         console.log(chalk.gray(`   可选值: ${AI_PLATFORM_OPTIONS}`));
         process.exit(1);
@@ -109,8 +141,10 @@ export function registerInitCommand(program: Command, context: InitCommandContex
           cwd: process.cwd(),
           packageRoot,
           here: !!options.here,
-          ai: options.ai as string,
+          ai: options.ai as string | undefined,
           all: !!options.all,
+          agent: options.agent as string | undefined,
+          allAgents: !!options.allAgents,
           method: options.method as string,
           git: options.git !== false,
           withExperts: !!options.withExperts,
@@ -129,7 +163,7 @@ export function registerInitCommand(program: Command, context: InitCommandContex
             }
           }
         });
-        const { projectName, targetPlatforms } = result;
+        const { projectName, targetAgents } = result;
 
         spinner.succeed(chalk.green(`小说项目 "${projectName}" 创建成功！`));
 
@@ -141,14 +175,25 @@ export function registerInitCommand(program: Command, context: InitCommandContex
           console.log(`  1. ${chalk.white(`cd ${projectName}`)} - 进入项目目录`);
         }
 
-        if (options.all) {
+        if (options.allAgents) {
+          console.log(`  2. ${chalk.white(`在任意 agent 中打开项目（${formatAgentDisplayNames(AGENT_INTEGRATIONS)}）`)}`);
+        } else if (options.all) {
           console.log(`  2. ${chalk.white(`在任意 AI 助手中打开项目（${formatDisplayNames(AI_PLATFORMS)}）`)}`);
         } else {
-          console.log(`  2. ${chalk.white(`在 ${selectedPlatform?.displayName ?? 'AI 助手'} 中打开项目`)}`);
+          console.log(`  2. ${chalk.white(`在 ${selectedAgent?.displayName ?? selectedPlatform?.displayName ?? 'agent'} 中打开项目`)}`);
         }
-        console.log(`  3. 使用以下斜杠命令开始创作:`);
+        const usesMarkdownCommands = targetAgents.some(agent => agent.commandSurface === 'markdown-command' && !agent.slashPrefix);
+        console.log(`  3. 使用以下${usesMarkdownCommands ? '命令文档' : '斜杠命令'}开始创作:`);
 
         const formatCommand = (commandName: string): string => {
+          if (usesMarkdownCommands) {
+            return `.specify/commands/${commandName}.md`;
+          }
+
+          if (selectedAgent) {
+            return formatAgentCommand(selectedAgent, commandName, !!options.allAgents || !!options.all);
+          }
+
           return formatAICommand(selectedPlatform, commandName, !!options.all);
         };
 
@@ -187,7 +232,9 @@ export function registerInitCommand(program: Command, context: InitCommandContex
         }
 
         console.log('\n' + chalk.gray('推荐流程: constitution → specify → clarify → plan → tasks → write → analyze'));
-        console.log(chalk.dim('提示: 斜杠命令在 AI 助手内部使用，不是在终端中'));
+        console.log(chalk.dim(usesMarkdownCommands
+          ? '提示: 让 agent 读取对应 .specify/commands/*.md 文件并按步骤执行'
+          : '提示: 斜杠命令在 AI 助手内部使用，不是在终端中'));
 
       } catch (error) {
         spinner.fail(chalk.red('项目初始化失败'));

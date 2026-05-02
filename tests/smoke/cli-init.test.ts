@@ -128,4 +128,38 @@ describe('CLI init smoke', () => {
       expect(await exists(path.join(projectPath, dir))).toBe(true);
     }));
   });
+
+  it('initializes a generic agent project with Markdown commands', async () => {
+    const cwd = await makeTempDir();
+    const { stdout } = await execFileAsync('node', [
+      cliPath,
+      'init',
+      'smoke',
+      '--agent',
+      'generic',
+      '--method',
+      'three-act',
+      '--no-git'
+    ], { cwd });
+
+    const projectPath = path.join(cwd, 'smoke');
+    expect(stdout).toContain('.specify/commands/constitution.md');
+    expect(stdout).toContain('.specify/commands/write.md');
+    expect(await exists(path.join(projectPath, '.specify', 'commands', 'write.md'))).toBe(true);
+    expect(await exists(path.join(projectPath, 'AGENTS.md'))).toBe(true);
+    expect(await exists(path.join(projectPath, '.specify', 'agent-contract.md'))).toBe(true);
+    expect(await exists(path.join(projectPath, '.codex'))).toBe(false);
+    expect(await exists(path.join(projectPath, '.claude'))).toBe(false);
+
+    const validateResult = await execFileAsync('node', [
+      cliPath,
+      'validate',
+      '--json'
+    ], { cwd: projectPath });
+    const validation = JSON.parse(validateResult.stdout);
+
+    expect(validation.valid).toBe(true);
+    expect(validation.summary.agentCommandsChecked).toBeGreaterThan(0);
+    expect(validation.issues).toEqual([]);
+  });
 });

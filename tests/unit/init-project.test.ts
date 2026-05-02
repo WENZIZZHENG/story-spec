@@ -31,6 +31,8 @@ const createPackageRootFixture = async () => {
 
   await mkdir(path.join(packageRoot, 'dist', 'codex', '.codex', 'prompts'), { recursive: true });
   await writeFile(path.join(packageRoot, 'dist', 'codex', '.codex', 'prompts', 'novel-write.md'), '# write');
+  await mkdir(path.join(packageRoot, 'dist', 'generic', '.specify', 'commands'), { recursive: true });
+  await writeFile(path.join(packageRoot, 'dist', 'generic', '.specify', 'commands', 'write.md'), '# generic write');
 
   await mkdir(path.join(packageRoot, 'templates', 'agent'), { recursive: true });
   await mkdir(path.join(packageRoot, 'templates', 'tracking'), { recursive: true });
@@ -115,6 +117,58 @@ describe('initProject', () => {
     expect(agents).toContain('Profile `adventure`');
     expect(agents).toContain('external stakes');
     await expect(readFile(path.join(cwd, 'profiled', '.specify', 'agent-contract.md'), 'utf-8')).resolves.toContain('Profile `adult`');
+  });
+
+  it('creates a generic agent project with Markdown commands', async () => {
+    const cwd = await makeTempDir();
+    const packageRoot = await createPackageRootFixture();
+
+    const result = await initProject({
+      name: 'generic-smoke',
+      cwd,
+      packageRoot,
+      here: false,
+      agent: 'generic',
+      method: 'three-act',
+      git: false,
+      withExperts: false,
+      fileSystem: nodeFileSystem
+    });
+
+    expect(result.targetAgents.map(agent => agent.id)).toEqual(['generic']);
+    expect(result.targetPlatforms).toEqual([]);
+    expect(result.aiDirs).toContain('.specify/commands');
+
+    const projectPath = path.join(cwd, 'generic-smoke');
+    await expect(exists(path.join(projectPath, '.specify', 'commands', 'write.md'))).resolves.toBe(true);
+    await expect(exists(path.join(projectPath, '.codex'))).resolves.toBe(false);
+
+    const config = JSON.parse(await readFile(path.join(projectPath, '.specify', 'config.json'), 'utf-8')) as {
+      agent: string;
+      integrations: Array<{ id: string }>;
+    };
+    expect(config.agent).toBe('generic');
+    expect(config.integrations).toEqual([expect.objectContaining({ id: 'generic' })]);
+  });
+
+  it('keeps legacy --all limited to legacy AI platforms', async () => {
+    const cwd = await makeTempDir();
+    const packageRoot = await createPackageRootFixture();
+
+    const result = await initProject({
+      name: 'all-legacy',
+      cwd,
+      packageRoot,
+      here: false,
+      ai: 'codex',
+      all: true,
+      method: 'three-act',
+      git: false,
+      withExperts: false,
+      fileSystem: nodeFileSystem
+    });
+
+    expect(result.targetAgents.map(agent => agent.id)).not.toContain('generic');
   });
 
   it('rejects an existing project directory', async () => {

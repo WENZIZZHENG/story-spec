@@ -1,8 +1,15 @@
 import path from 'path';
 import { writeAgentContract } from '../agent/contract.js';
+import {
+  getAgentInitDirs,
+  getAgentIntegration,
+  getTargetAgentIntegrations,
+  type AgentIntegration
+} from '../agent/registry.js';
 import { getVersion } from '../version.js';
 import {
   getAIInitDirs,
+  getAIPlatform,
   getTargetAIPlatforms,
   type AIPlatformConfig
 } from '../utils/ai-platforms.js';
@@ -18,8 +25,10 @@ export interface InitProjectInput {
   cwd: string;
   packageRoot: string;
   here: boolean;
-  ai: string;
-  all: boolean;
+  ai?: string;
+  all?: boolean;
+  agent?: string;
+  allAgents?: boolean;
   method: string;
   git: boolean;
   withExperts: boolean;
@@ -36,6 +45,7 @@ export interface InitProjectResult {
   projectPath: string;
   aiDirs: string[];
   targetPlatforms: AIPlatformConfig[];
+  targetAgents: AgentIntegration[];
 }
 
 export class InitProjectError extends Error {
@@ -135,12 +145,21 @@ const writeProjectConfig = async (
   fs: ProjectFileSystem,
   projectPath: string,
   projectName: string,
-  input: InitProjectInput
+  input: InitProjectInput,
+  targetAgents: readonly AgentIntegration[]
 ): Promise<void> => {
+  const integrations = targetAgents.map(integration => ({
+    id: integration.id,
+    renderer: integration.renderer,
+    commandSurface: integration.commandSurface
+  }));
   const config = {
     name: projectName,
     type: 'novel',
     ai: input.ai,
+    agent: !input.all && !input.allAgents && targetAgents.length === 1 ? targetAgents[0].id : undefined,
+    integrations,
+    legacy: input.ai ? { ai: input.ai } : undefined,
     method: input.method,
     created: new Date().toISOString(),
     version: getVersion()
@@ -152,18 +171,18 @@ const writeProjectConfig = async (
 const copyPlatformArtifacts = async (
   fs: ProjectFileSystem,
   projectPath: string,
-  targetPlatforms: AIPlatformConfig[],
+  targetAgents: readonly AgentIntegration[],
   input: InitProjectInput
 ): Promise<void> => {
-  for (const platform of targetPlatforms) {
-    const sourceDir = path.join(input.packageRoot, platform.distDir);
+  for (const integration of targetAgents) {
+    const sourceDir = path.join(input.packageRoot, integration.installTargets[0].distDir);
     if (await fs.pathExists(sourceDir)) {
       await fs.copy(sourceDir, projectPath, { overwrite: false });
-      emit(input, { type: 'progress', message: `已安装 ${platform.name} 配置...` });
+      emit(input, { type: 'progress', message: `已安装 ${integration.id} 配置...` });
     } else {
       emit(input, {
         type: 'warning',
-        message: `\n警告: ${platform.name} 构建产物未找到，请运行 npm run build:commands`
+        message: `\n警告: ${integration.id} 构建产物未找到，请运行 npm run build:commands`
       });
     }
   }
@@ -384,15 +403,38 @@ node_modules/
   }
 };
 
+const resolveTargetAgents = (input: InitProjectInput): AgentIntegration[] => {
+  if (input.allAgents) {
+    return getTargetAgentIntegrations(true, '');
+  }
+
+  if (input.agent) {
+    return getTargetAgentIntegrations(false, input.agent);
+  }
+
+  return getTargetAIPlatforms(!!input.all, input.ai ?? 'claude')
+    .map(platform => getAgentIntegration(platform.name))
+    .filter((integration): integration is AgentIntegration => integration !== undefined);
+};
+
+const resolveTargetPlatforms = (
+  targetAgents: readonly AgentIntegration[]
+): AIPlatformConfig[] => targetAgents
+  .map(integration => integration.legacyAiId ? getAIPlatform(integration.legacyAiId) : undefined)
+  .filter((platform): platform is AIPlatformConfig => platform !== undefined);
+
 export async function initProject(input: InitProjectInput): Promise<InitProjectResult> {
   const fs = input.fileSystem;
   const { projectName, projectPath } = await resolveProjectTarget(input);
-  const targetPlatforms = getTargetAIPlatforms(input.all, input.ai);
-  const aiDirs = getAIInitDirs(targetPlatforms);
+  const targetAgents = resolveTargetAgents(input);
+  const targetPlatforms = resolveTargetPlatforms(targetAgents);
+  const aiDirs = input.agent || input.allAgents
+    ? getAgentInitDirs(targetAgents)
+    : getAIInitDirs(targetPlatforms);
 
   await createBaseDirs(fs, projectPath, aiDirs);
-  await writeProjectConfig(fs, projectPath, projectName, input);
-  await copyPlatformArtifacts(fs, projectPath, targetPlatforms, input);
+  await writeProjectConfig(fs, projectPath, projectName, input, targetAgents);
+  await copyPlatformArtifacts(fs, projectPath, targetAgents, input);
   await copyFallbackScripts(fs, projectPath, input.packageRoot);
   await copyTemplatesAndKnowledge(fs, projectPath, projectName, input);
   await copySpec(fs, projectPath, input.packageRoot);
@@ -405,6 +447,7 @@ export async function initProject(input: InitProjectInput): Promise<InitProjectR
     projectName,
     projectPath,
     aiDirs,
-    targetPlatforms
+    targetPlatforms,
+    targetAgents
   };
 }
