@@ -42,6 +42,11 @@ export interface BuildCommandArtifactsResult {
   variants: BuildCommandVariantResult[];
 }
 
+interface RuntimeBundleFile {
+  relativePath: string;
+  content: Buffer;
+}
+
 const PLATFORM_COMMAND_DIRS: Record<BuildCommandAgent, string> = {
   claude: path.join('.claude', 'commands'),
   gemini: path.join('.gemini', 'commands', 'novel'),
@@ -84,10 +89,47 @@ const copyIfExists = async (sourcePath: string, targetPath: string): Promise<boo
   return true;
 };
 
+const readRuntimeBundle = async (rootDir: string): Promise<RuntimeBundleFile[]> => {
+  const distDir = path.join(rootDir, 'dist');
+  const runtimeFiles = [
+    'script-runtime.js',
+    path.join('application', 'check-writing-state.js'),
+    path.join('domain', 'story-artifact.js')
+  ];
+  const runtimeBundle: RuntimeBundleFile[] = [];
+
+  for (const relativePath of runtimeFiles) {
+    const sourcePath = path.join(distDir, relativePath);
+    if (await fs.pathExists(sourcePath)) {
+      runtimeBundle.push({
+        relativePath,
+        content: await fs.readFile(sourcePath)
+      });
+    }
+  }
+
+  return runtimeBundle;
+};
+
+const writeRuntimeBundle = async (
+  scriptsDest: string,
+  runtimeBundle: readonly RuntimeBundleFile[]
+): Promise<void> => {
+  if (runtimeBundle.length === 0) {
+    return;
+  }
+
+  const runtimeDest = path.join(scriptsDest, 'runtime');
+  for (const file of runtimeBundle) {
+    await fs.outputFile(path.join(runtimeDest, file.relativePath), file.content);
+  }
+};
+
 const copyScriptSupportFiles = async (
   rootDir: string,
   specDir: string,
-  script: ScriptVariant
+  script: ScriptVariant,
+  runtimeBundle: readonly RuntimeBundleFile[]
 ): Promise<void> => {
   const scriptsSource = path.join(rootDir, 'scripts');
   if (!await fs.pathExists(scriptsSource)) {
@@ -112,10 +154,7 @@ const copyScriptSupportFiles = async (
     }
   }
 
-  await copyIfExists(
-    path.join(rootDir, 'dist', 'script-runtime.js'),
-    path.join(scriptsDest, 'runtime', 'script-runtime.js')
-  );
+  await writeRuntimeBundle(scriptsDest, runtimeBundle);
 };
 
 const copyTemplateSupportFiles = async (rootDir: string, specDir: string): Promise<void> => {
@@ -162,13 +201,14 @@ const copySpecSupportFiles = async (rootDir: string, baseDir: string): Promise<v
 const copySupportFiles = async (
   rootDir: string,
   baseDir: string,
-  script: ScriptVariant
+  script: ScriptVariant,
+  runtimeBundle: readonly RuntimeBundleFile[]
 ): Promise<void> => {
   const specDir = path.join(baseDir, '.specify');
   await fs.ensureDir(specDir);
 
   await copyIfExists(path.join(rootDir, 'memory'), path.join(specDir, 'memory'));
-  await copyScriptSupportFiles(rootDir, specDir, script);
+  await copyScriptSupportFiles(rootDir, specDir, script, runtimeBundle);
   await copyTemplateSupportFiles(rootDir, specDir);
   await copyIfExists(path.join(rootDir, 'experts'), path.join(specDir, 'experts'));
   await copySpecSupportFiles(rootDir, baseDir);
@@ -207,6 +247,7 @@ export const buildCommandArtifacts = async (
   const agents = input.agents?.length ? [...input.agents] : [...BUILD_COMMAND_AGENTS];
   const scripts = input.scripts?.length ? [...input.scripts] : [...BUILD_COMMAND_SCRIPTS];
   const variants: BuildCommandVariantResult[] = [];
+  const runtimeBundle = await readRuntimeBundle(input.rootDir);
 
   await fs.remove(outDir);
   await fs.ensureDir(outDir);
@@ -215,7 +256,7 @@ export const buildCommandArtifacts = async (
     for (const script of scripts) {
       const baseDir = path.join(outDir, agent);
       await fs.ensureDir(baseDir);
-      await copySupportFiles(input.rootDir, baseDir, script);
+      await copySupportFiles(input.rootDir, baseDir, script, runtimeBundle);
       variants.push({
         agent,
         script,

@@ -1,11 +1,21 @@
 #!/usr/bin/env node
 
 import {
+  access,
+  chmod,
+  cp,
+  mkdir,
+  readFile,
+  readdir,
+  stat,
+  writeFile
+} from 'node:fs/promises';
+import path from 'node:path';
+import {
   checkWritingState,
   renderWritingStateChecklist
 } from './application/check-writing-state.js';
-import { nodeFileSystem } from './infrastructure/node-file-system.js';
-import { findProjectRoot } from './utils/project.js';
+import type { ProjectFileSystem } from './application/project-ports.js';
 
 interface RuntimeOptions {
   projectRoot?: string;
@@ -73,6 +83,53 @@ const parseOptions = (args: string[]): RuntimeOptions => {
   return options;
 };
 
+const runtimeFileSystem: ProjectFileSystem = {
+  pathExists: async (filePath) => {
+    try {
+      await access(filePath);
+      return true;
+    } catch {
+      return false;
+    }
+  },
+  ensureDir: async dirPath => {
+    await mkdir(dirPath, { recursive: true });
+  },
+  copy: async (sourcePath, targetPath, options) => {
+    await cp(sourcePath, targetPath, {
+      recursive: true,
+      force: options?.overwrite ?? true
+    });
+  },
+  readDir: dirPath => readdir(dirPath),
+  readFile: filePath => readFile(filePath, 'utf-8'),
+  writeFile: async (filePath, content) => {
+    await mkdir(path.dirname(filePath), { recursive: true });
+    await writeFile(filePath, content);
+  },
+  readJson: async filePath => JSON.parse(await readFile(filePath, 'utf-8')),
+  writeJson: async (filePath, data, options) => {
+    await mkdir(path.dirname(filePath), { recursive: true });
+    await writeFile(filePath, JSON.stringify(data, null, options?.spaces ?? 2));
+  },
+  stat: filePath => stat(filePath),
+  chmod: (filePath, mode) => chmod(filePath, mode)
+};
+
+const findProjectRoot = async (startDir: string = process.cwd()): Promise<string | null> => {
+  let currentDir = path.resolve(startDir);
+  const root = path.parse(currentDir).root;
+
+  while (currentDir !== root) {
+    if (await runtimeFileSystem.pathExists(path.join(currentDir, '.specify', 'config.json'))) {
+      return currentDir;
+    }
+    currentDir = path.dirname(currentDir);
+  }
+
+  return null;
+};
+
 const resolveProjectRoot = async (options: RuntimeOptions): Promise<string> => {
   if (options.projectRoot) {
     return options.projectRoot;
@@ -91,7 +148,7 @@ const runCheckWritingState = async (args: string[]): Promise<void> => {
   const projectRoot = await resolveProjectRoot(options);
   const state = await checkWritingState({
     projectRoot,
-    fileSystem: nodeFileSystem,
+    fileSystem: runtimeFileSystem,
     storyName: options.storyName
   });
 

@@ -252,7 +252,7 @@ src/
 - 已新增 `tests/unit/check-writing-state.test.ts`，覆盖状态模型、字数统计规则和 checklist 兼容输出。
 - 已新增 `src/script-runtime.ts`，提供 `check-writing-state` runtime 入口，支持 `--project-root`、`--story`、`--checklist`、`--json`。
 - 已将 `scripts/bash/check-writing-state.sh` 与 `scripts/powershell/check-writing-state.ps1` 降级为 runtime wrapper，保留旧脚本路径。
-- `buildCommandArtifacts` 会把 `dist/script-runtime.js` 复制到 `.specify/scripts/runtime/`，让已生成项目中的旧 prompt 脚本路径可继续工作。
+- `buildCommandArtifacts` 会把 runtime bundle 复制到 `.specify/scripts/runtime/`，包含入口、写作状态 scanner 与任务解析领域代码；即使输出目录是默认 `dist`，也会先快照再清理，避免生成产物缺失 runtime。
 - 已新增 `tests/smoke/script-runtime.test.ts`，覆盖 runtime 直接调用和 PowerShell wrapper 兼容调用。
 
 ## 阶段 6：插件与扩展系统重构

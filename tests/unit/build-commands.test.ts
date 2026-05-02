@@ -51,6 +51,10 @@ Run {SCRIPT}
   await writeFile(path.join(rootDir, 'scripts', 'helper.cjs'), 'module.exports = {};');
   await mkdir(path.join(rootDir, 'dist'), { recursive: true });
   await writeFile(path.join(rootDir, 'dist', 'script-runtime.js'), 'console.log("runtime")');
+  await mkdir(path.join(rootDir, 'dist', 'application'), { recursive: true });
+  await writeFile(path.join(rootDir, 'dist', 'application', 'check-writing-state.js'), 'export const checkWritingState = async () => ({});');
+  await mkdir(path.join(rootDir, 'dist', 'domain'), { recursive: true });
+  await writeFile(path.join(rootDir, 'dist', 'domain', 'story-artifact.js'), 'export const parseWritingTasksFromMarkdown = () => [];');
 
   await mkdir(path.join(rootDir, 'experts', 'core'), { recursive: true });
   await writeFile(path.join(rootDir, 'experts', 'core', 'plot.md'), '# plot');
@@ -100,11 +104,27 @@ describe('buildCommandArtifacts', () => {
     await expect(exists(path.join(outDir, 'codex', '.specify', 'scripts', 'bash', 'plan-story.sh'))).resolves.toBe(true);
     await expect(exists(path.join(outDir, 'codex', '.specify', 'scripts', 'helper.cjs'))).resolves.toBe(true);
     await expect(exists(path.join(outDir, 'codex', '.specify', 'scripts', 'runtime', 'script-runtime.js'))).resolves.toBe(true);
+    await expect(exists(path.join(outDir, 'codex', '.specify', 'scripts', 'runtime', 'application', 'check-writing-state.js'))).resolves.toBe(true);
+    await expect(exists(path.join(outDir, 'codex', '.specify', 'scripts', 'runtime', 'domain', 'story-artifact.js'))).resolves.toBe(true);
     await expect(exists(path.join(outDir, 'codex', '.specify', 'templates', 'knowledge', 'world.md'))).resolves.toBe(true);
     await expect(exists(path.join(outDir, 'codex', '.specify', 'templates', 'commands', 'plan.md'))).resolves.toBe(false);
     await expect(exists(path.join(outDir, 'codex', 'spec', 'presets', 'three-act.md'))).resolves.toBe(true);
 
     await expect(readdir(path.join(outDir, 'codex', 'spec', 'tracking'))).resolves.toEqual([]);
     await expect(readdir(path.join(outDir, 'codex', 'spec', 'knowledge'))).resolves.toEqual([]);
+  });
+
+  it('snapshots the runtime bundle before cleaning the default dist output', async () => {
+    const rootDir = await createPackageRootFixture();
+
+    await buildCommandArtifacts({
+      rootDir,
+      agents: ['codex'],
+      scripts: ['sh']
+    });
+
+    await expect(exists(path.join(rootDir, 'dist', 'codex', '.specify', 'scripts', 'runtime', 'script-runtime.js'))).resolves.toBe(true);
+    await expect(exists(path.join(rootDir, 'dist', 'codex', '.specify', 'scripts', 'runtime', 'application', 'check-writing-state.js'))).resolves.toBe(true);
+    await expect(exists(path.join(rootDir, 'dist', 'codex', '.specify', 'scripts', 'runtime', 'domain', 'story-artifact.js'))).resolves.toBe(true);
   });
 });

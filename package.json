@@ -29,8 +29,8 @@
     "verify": "npm run build && npm test && npm run build:commands && npm run build && npm run test:smoke",
     "start": "node dist/cli.js",
     "clean": "rm -rf dist",
-    "prepare": "npm run build:commands && npm run build",
-    "prepublishOnly": "npm run clean && npm run build:commands && npm run build"
+    "prepare": "npm run build && npm run build:commands && npm run build",
+    "prepublishOnly": "npm run clean && npm run build && npm run build:commands && npm run build"
   },
   "dependencies": {
     "@commander-js/extra-typings": "^12.0.0",
