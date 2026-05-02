@@ -11,11 +11,14 @@ requiredReads:
   - stories/*/creative-plan.md
   - stories/*/tasks.md
   - spec/tracking/*.json
+  - spec/world/*.yaml
+  - spec/canon/*.json
   - spec/knowledge/*
 allowedWrites:
   - stories/*/tasks.md
   - stories/*/content/**
   - spec/tracking/**
+  - spec/canon/propagation-debt.json
 scripts:
   check:
     capability: check-writing-state

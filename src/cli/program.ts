@@ -9,6 +9,7 @@ import { registerPluginsCommand } from './commands/plugins.command.js';
 import { registerTasksBoardCommand } from './commands/tasks-board.command.js';
 import { registerUpgradeCommand } from './commands/upgrade.command.js';
 import { registerValidateCommand } from './commands/validate.command.js';
+import { registerWorldbuildingCommand } from './commands/worldbuilding.command.js';
 import chalk from 'chalk';
 import path from 'path';
 import { fileURLToPath } from 'url';
@@ -52,6 +53,7 @@ export function runProgram(argv: string[]): void {
   registerPluginsCommand(program, { packageRoot });
   registerUpgradeCommand(program, { packageRoot });
   registerValidateCommand(program, { packageRoot });
+  registerWorldbuildingCommand(program);
   registerInfoCommand(program);
 
   program.on('--help', () => {

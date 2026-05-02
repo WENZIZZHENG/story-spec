@@ -37,12 +37,16 @@ const createPackageRootFixture = async () => {
   await mkdir(path.join(packageRoot, 'templates', 'agent'), { recursive: true });
   await mkdir(path.join(packageRoot, 'templates', 'tracking'), { recursive: true });
   await mkdir(path.join(packageRoot, 'templates', 'knowledge'), { recursive: true });
+  await mkdir(path.join(packageRoot, 'templates', 'world'), { recursive: true });
+  await mkdir(path.join(packageRoot, 'templates', 'canon'), { recursive: true });
   await writeFile(
     path.join(packageRoot, 'templates', 'agent', 'agent-contract.md'),
     '# Contract {{PROJECT_NAME}}\n\n{{AGENTS_PROFILE_SECTION}}\n'
   );
   await writeFile(path.join(packageRoot, 'templates', 'tracking', 'plot-tracker.json'), '{}');
   await writeFile(path.join(packageRoot, 'templates', 'knowledge', 'world-setting.md'), 'updated [日期]');
+  await writeFile(path.join(packageRoot, 'templates', 'world', 'rules.yaml'), 'worldFacts: []');
+  await writeFile(path.join(packageRoot, 'templates', 'canon', 'facts.json'), '{"canonFacts": []}');
 
   await mkdir(path.join(packageRoot, 'spec', 'presets', 'three-act'), { recursive: true });
   await writeFile(path.join(packageRoot, 'spec', 'config.json'), '{}');
@@ -89,6 +93,8 @@ describe('initProject', () => {
     await expect(readFile(path.join(projectPath, 'AGENTS.md'), 'utf-8')).resolves.toContain('Default profile');
     await expect(exists(path.join(projectPath, 'spec', 'tracking', 'plot-tracker.json'))).resolves.toBe(true);
     await expect(exists(path.join(projectPath, 'spec', 'knowledge', 'world-setting.md'))).resolves.toBe(true);
+    await expect(exists(path.join(projectPath, 'spec', 'world', 'rules.yaml'))).resolves.toBe(true);
+    await expect(exists(path.join(projectPath, 'spec', 'canon', 'facts.json'))).resolves.toBe(true);
   });
 
   it('renders configured AGENTS.md writing profiles for Codex projects', async () => {

@@ -7,6 +7,10 @@
 - 新增 `continue-check` agent integration，生成 `.continue/prompts/*.md` 只读检查提示词。
 - 命令 renderer 按 `writeFiles` 能力降级；只读 agent 不再被提示直接写正文、tracking 或任务文件。
 - `novel handoff` 新增 `--target-agent <id>`，可按目标 agent 的 `runShell` / `writeFiles` 能力生成继续步骤。
+- 新项目初始化新增 `spec/world/` 与 `spec/canon/`，内置 World Bible、WorldFact、Canon facts 和 propagation debt 基础模板。
+- 新增 `world:list`、`world:check`、`canon:list`、`canon:check` CLI，用于查看和校验世界观与 Canon Ledger。
+- `novel validate --json` 增加 world/canon summary 与 issue 输出；旧项目缺少对应目录时只给 warning。
+- `/write` 命令会读取 world/canon 上下文，并提示生成待确认 canon fact 或 propagation debt。
 
 ### 文档
 

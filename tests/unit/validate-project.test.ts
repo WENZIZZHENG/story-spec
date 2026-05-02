@@ -27,9 +27,27 @@ const createFileSystem = async () => {
   await fileSystem.writeFile(path.join(projectRoot, '.specify', 'templates', 'commands', 'plan.md'), '# plan');
 
   await fileSystem.ensureDir(path.join(projectRoot, 'spec', 'tracking'));
+  await fileSystem.ensureDir(path.join(projectRoot, 'spec', 'world'));
+  await fileSystem.ensureDir(path.join(projectRoot, 'spec', 'canon'));
   await fileSystem.writeFile(path.join(projectRoot, 'spec', 'tracking', 'plot-tracker.json'), '{"currentState":{}}');
   await fileSystem.writeFile(path.join(projectRoot, 'spec', 'tracking', 'array.json'), '[]');
   await fileSystem.writeFile(path.join(projectRoot, 'spec', 'tracking', 'broken.json'), '{bad');
+  await fileSystem.writeFile(path.join(projectRoot, 'spec', 'world', 'rules.yaml'), `worldFacts:
+  - id: world.rule
+    title: Rule
+    type: rule
+    summary: Summary
+    storyFunction: Creates conflict
+    constraints:
+      - Must hold
+`);
+  await fileSystem.writeFile(path.join(projectRoot, 'spec', 'canon', 'facts.json'), JSON.stringify({
+    canonFacts: [{
+      id: 'canon.fact',
+      summary: 'Fact',
+      evidence: [{ path: 'stories/demo/content/chapter-001.md' }]
+    }]
+  }));
 
   const storyPath = path.join(projectRoot, 'stories', 'demo');
   await fileSystem.writeFile(path.join(storyPath, 'specification.md'), '# spec');
@@ -56,6 +74,8 @@ describe('validateProject', () => {
       stories: 1,
       tasks: 1,
       trackingFiles: 3,
+      worldFiles: 1,
+      canonFiles: 1,
       templatesChecked: 2,
       agentCommandsChecked: 0
     });
@@ -99,6 +119,64 @@ describe('validateProject', () => {
         code: 'MISSING_AGENTS_FILE',
         path: path.join(projectRoot, 'AGENTS.md')
       })
+    ]));
+  });
+
+  it('reports missing world and canon directories as warnings for old projects', async () => {
+    const projectRoot = path.join(os.tmpdir(), 'memory-novel-missing-world-canon');
+    const packageRoot = path.join(os.tmpdir(), 'memory-novel-missing-world-canon-package');
+    const fileSystem = new MemoryFileSystem(projectRoot);
+
+    await fileSystem.ensureDir(path.join(packageRoot, 'templates'));
+    await fileSystem.writeJson(path.join(projectRoot, '.specify', 'config.json'), {
+      name: 'old-project',
+      type: 'novel',
+      version: '1.0.0'
+    });
+    await fileSystem.writeFile(path.join(projectRoot, '.specify', 'agent-contract.md'), '# contract');
+    await fileSystem.writeFile(path.join(projectRoot, 'AGENTS.md'), '# agents');
+
+    const result = await validateProject({
+      projectRoot,
+      packageRoot,
+      fileSystem
+    });
+
+    expect(result.valid).toBe(true);
+    expect(result.issues).toEqual(expect.arrayContaining([
+      expect.objectContaining({ code: 'MISSING_WORLD_DIR', severity: 'warning' }),
+      expect.objectContaining({ code: 'MISSING_CANON_DIR', severity: 'warning' })
+    ]));
+  });
+
+  it('reports invalid world and canon documents', async () => {
+    const projectRoot = path.join(os.tmpdir(), 'memory-novel-invalid-world-canon');
+    const packageRoot = path.join(os.tmpdir(), 'memory-novel-invalid-world-canon-package');
+    const fileSystem = new MemoryFileSystem(projectRoot);
+
+    await fileSystem.ensureDir(path.join(packageRoot, 'templates'));
+    await fileSystem.writeJson(path.join(projectRoot, '.specify', 'config.json'), {
+      name: 'invalid-world-canon',
+      type: 'novel',
+      version: '1.0.0'
+    });
+    await fileSystem.writeFile(path.join(projectRoot, '.specify', 'agent-contract.md'), '# contract');
+    await fileSystem.writeFile(path.join(projectRoot, 'AGENTS.md'), '# agents');
+    await fileSystem.writeFile(path.join(projectRoot, 'spec', 'world', 'rules.yaml'), `worldFacts:
+  - id: world.rule
+`);
+    await fileSystem.writeFile(path.join(projectRoot, 'spec', 'canon', 'facts.json'), '{"canonFacts":[{"id":"canon.fact"}]}');
+
+    const result = await validateProject({
+      projectRoot,
+      packageRoot,
+      fileSystem
+    });
+
+    expect(result.valid).toBe(true);
+    expect(result.issues).toEqual(expect.arrayContaining([
+      expect.objectContaining({ code: 'MISSING_WORLD_FACT_FIELD', severity: 'warning' }),
+      expect.objectContaining({ code: 'MISSING_CANON_FACT_FIELD', severity: 'warning' })
     ]));
   });
 
@@ -147,6 +225,8 @@ describe('validateProject', () => {
     expect(output).toContain('Novel Writer 项目校验');
     expect(output).toContain(`根目录：${projectRoot}`);
     expect(output).toContain('结果：失败');
+    expect(output).toContain('world 文件：1');
+    expect(output).toContain('canon 文件：1');
     expect(output).toContain('generic commands：0');
     expect(output).toContain('MISSING_TEMPLATE');
     expect(output).toContain('INVALID_TRACKING_JSON');

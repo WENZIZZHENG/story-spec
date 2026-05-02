@@ -1,0 +1,11 @@
+worldFacts:
+  - id: world.example.rule
+    title: 示例世界规则
+    type: rule
+    summary: 用一句话说明会影响剧情的世界规则。
+    storyFunction: 说明它如何限制角色选择、制造冲突或推动剧情。
+    constraints:
+      - 写作时必须遵守的限制。
+    sourcePaths:
+      - spec/knowledge/world-setting.md
+    status: draft

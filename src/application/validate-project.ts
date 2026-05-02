@@ -14,6 +14,11 @@ import {
   type WritingRuleIssue
 } from '../validation/rules/writing-rules.js';
 import {
+  parseCanonDocument,
+  parseWorldDocument,
+  type WorldbuildingIssue
+} from '../domain/worldbuilding.js';
+import {
   countIssuesBySeverity,
   filterIssuesBySeverity,
   sortIssuesBySeverity
@@ -24,8 +29,11 @@ export type ProjectValidationIssueCode =
   | ValidationIssue['code']
   | ArtifactIssue['code']
   | WritingRuleIssue['code']
+  | WorldbuildingIssue['code']
   | 'MISSING_PROJECT_CONFIG'
   | 'MISSING_PROJECT_DIR'
+  | 'MISSING_WORLD_DIR'
+  | 'MISSING_CANON_DIR'
   | 'MISSING_TEMPLATE'
   | 'MISSING_AGENT_CONTRACT'
   | 'MISSING_AGENTS_FILE'
@@ -44,6 +52,8 @@ export interface ProjectValidationSummary {
   trackingFiles: number;
   templatesChecked: number;
   agentCommandsChecked: number;
+  worldFiles: number;
+  canonFiles: number;
 }
 
 export interface ProjectValidationResult {
@@ -87,6 +97,13 @@ const createIssue = (
 });
 
 const toProjectIssue = (issue: ValidationIssue | ArtifactIssue | WritingRuleIssue): ProjectValidationIssue => ({
+  severity: issue.severity,
+  code: issue.code,
+  path: issue.path,
+  message: issue.message
+});
+
+const toWorldbuildingProjectIssue = (issue: WorldbuildingIssue): ProjectValidationIssue => ({
   severity: issue.severity,
   code: issue.code,
   path: issue.path,
@@ -159,6 +176,58 @@ const validateTrackingFiles = async (
       const detail = error instanceof Error ? error.message : String(error);
       issues.push(createIssue('INVALID_TRACKING_JSON', filePath, `tracking JSON 无效：${file} (${detail})`));
     }
+  }
+
+  return { count: files.length, issues };
+};
+
+const validateWorldFiles = async (
+  fs: ProjectFileSystem,
+  projectRoot: string
+): Promise<{ count: number; issues: ProjectValidationIssue[] }> => {
+  const worldDir = path.join(projectRoot, 'spec', 'world');
+  if (!await fs.pathExists(worldDir)) {
+    return {
+      count: 0,
+      issues: [createIssue('MISSING_WORLD_DIR', worldDir, '缺少 spec/world；旧项目可运行 upgrade 补齐 World Bible 模板', 'warning')]
+    };
+  }
+
+  const files = (await fs.readDir(worldDir))
+    .filter(file => file.endsWith('.yaml') || file.endsWith('.yml'))
+    .sort();
+  const issues: ProjectValidationIssue[] = [];
+
+  for (const file of files) {
+    const filePath = path.join(worldDir, file);
+    const result = parseWorldDocument(await fs.readFile(filePath), filePath);
+    issues.push(...result.issues.map(toWorldbuildingProjectIssue));
+  }
+
+  return { count: files.length, issues };
+};
+
+const validateCanonFiles = async (
+  fs: ProjectFileSystem,
+  projectRoot: string
+): Promise<{ count: number; issues: ProjectValidationIssue[] }> => {
+  const canonDir = path.join(projectRoot, 'spec', 'canon');
+  if (!await fs.pathExists(canonDir)) {
+    return {
+      count: 0,
+      issues: [createIssue('MISSING_CANON_DIR', canonDir, '缺少 spec/canon；旧项目可运行 upgrade 补齐 Canon Ledger 模板', 'warning')]
+    };
+  }
+
+  const files = (await fs.readDir(canonDir))
+    .filter(file => file.endsWith('.json'))
+    .sort();
+  const issues: ProjectValidationIssue[] = [];
+
+  for (const file of files) {
+    const filePath = path.join(canonDir, file);
+    const result = parseCanonDocument(await fs.readFile(filePath), filePath);
+    issues.push(...result.issues.map(toWorldbuildingProjectIssue));
   }
 
   return { count: files.length, issues };
@@ -301,6 +370,8 @@ export const validateProject = async (input: ValidateProjectInput): Promise<Proj
   const { projectRoot, fileSystem: fs } = input;
   const artifactScan = await scanStoryArtifacts({ projectRoot, fileSystem: fs });
   const trackingResult = await validateTrackingFiles(fs, projectRoot);
+  const worldResult = await validateWorldFiles(fs, projectRoot);
+  const canonResult = await validateCanonFiles(fs, projectRoot);
   const templateResult = await validateTemplates(fs, projectRoot, input.packageRoot);
   const agentContractResult = await validateAgentContract(fs, projectRoot, input.packageRoot);
   const writingRuleResult = await runWritingRules({
@@ -324,6 +395,8 @@ export const validateProject = async (input: ValidateProjectInput): Promise<Proj
     ...await validateProjectStructure(fs, projectRoot),
     ...artifactIssues,
     ...trackingResult.issues,
+    ...worldResult.issues,
+    ...canonResult.issues,
     ...taskIssues,
     ...writingRuleResult.issues.map(toProjectIssue),
     ...agentContractResult.issues,
@@ -339,7 +412,9 @@ export const validateProject = async (input: ValidateProjectInput): Promise<Proj
       tasks: artifactScan.stories.reduce((total, story) => total + story.tasks.length, 0),
       trackingFiles: trackingResult.count,
       templatesChecked: templateResult.templatesChecked,
-      agentCommandsChecked: agentContractResult.agentCommandsChecked
+      agentCommandsChecked: agentContractResult.agentCommandsChecked,
+      worldFiles: worldResult.count,
+      canonFiles: canonResult.count
     },
     issueCounts,
     issues
@@ -359,6 +434,8 @@ export const renderProjectValidation = (
     `故事：${result.summary.stories}`,
     `任务：${result.summary.tasks}`,
     `tracking JSON：${result.summary.trackingFiles}`,
+    `world 文件：${result.summary.worldFiles}`,
+    `canon 文件：${result.summary.canonFiles}`,
     `模板检查：${result.summary.templatesChecked}`,
     `generic commands：${result.summary.agentCommandsChecked}`,
     `问题：${result.issueCounts.error} error / ${result.issueCounts.warning} warning / ${result.issueCounts.info} info`

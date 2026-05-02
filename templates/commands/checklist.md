@@ -19,7 +19,7 @@ scripts:
 
 - `大纲质量` - 检查 outline.md 的完整性、清晰度、一致性
 - `角色设定` - 检查 spec/knowledge/characters.md
-- `世界观` - 检查 spec/knowledge/world-setting.md 及相关文档
+- `世界观` - 检查 spec/world/*.yaml、spec/knowledge/world-setting.md 及相关文档
 - `创作计划` - 检查 creative-plan.md / specification.md
 - `伏笔管理` - 检查 spec/tracking/plot-tracker.json 的伏笔定义
 
@@ -27,6 +27,7 @@ scripts:
 扫描已写章节，验证实际内容：
 
 - `世界观一致性` - 扫描章节内容，检查世界观描述矛盾
+- `Canon` - 检查 spec/canon/facts.json 的 evidence 和 propagation debt
 - `情节对齐` - 对比进度与大纲，检查情节发展
 - `数据同步` - 验证所有 tracking JSON 文件的同步性
 - `时间线` - 检查时间事件的逻辑连续性

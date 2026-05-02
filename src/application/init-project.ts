@@ -133,7 +133,9 @@ const createBaseDirs = async (
     'stories',
     'spec',
     'spec/tracking',
-    'spec/knowledge'
+    'spec/knowledge',
+    'spec/world',
+    'spec/canon'
   ];
 
   for (const dir of [...baseDirs, ...aiDirs]) {
@@ -248,6 +250,16 @@ const copyTemplatesAndKnowledge = async (
         await fs.writeFile(filePath, content);
       }
     }
+  }
+
+  const worldTemplatesDir = path.join(input.packageRoot, 'templates', 'world');
+  if (await fs.pathExists(worldTemplatesDir)) {
+    await fs.copy(worldTemplatesDir, path.join(projectPath, 'spec', 'world'));
+  }
+
+  const canonTemplatesDir = path.join(input.packageRoot, 'templates', 'canon');
+  if (await fs.pathExists(canonTemplatesDir)) {
+    await fs.copy(canonTemplatesDir, path.join(projectPath, 'spec', 'canon'));
   }
 };
 

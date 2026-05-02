@@ -2,7 +2,7 @@
 
 ## 状态
 
-Active planning。本文承接 B 系列任务，专注 World Bible、Canon Ledger、Entity Graph、Scene Cards、揭示节奏、角色声音、Reviewer Loop 和类型 Preset。
+Active planning。本文承接 B 系列任务，专注 World Bible、Canon Ledger、Entity Graph、Scene Cards、揭示节奏、角色声音、Reviewer Loop 和类型 Preset。Batch B0 已完成，当前待执行 B1-B3。
 
 ## 写作与世界观参考项目
 
@@ -458,24 +458,11 @@ novel preset:doctor
 
 后续执行以 Batch 为单位。旧 B0-B8 细项已合并为下列批次；细项只作为覆盖范围说明，不再作为独立开发门槛。
 
-### [ ] Batch B0：World / Canon 基座
+## 已完成批次
 
-合并原 B0-B2 与 shared N008-N011。
+- [x] Batch B0：World / Canon 基座。合并原 B0-B2 与 shared N008-N011，完成状态见 [full-refactor-completed.md](full-refactor-completed.md)。
 
-目标：
-
-- 新增 `docs/tech/worldbuilding-quality-roadmap.md`，明确 World Bible、Canon Ledger、Entity Graph、Scene Cards 的第一版边界。
-- 盘点现有 `spec/knowledge/*`、`spec/tracking/*`、`stories/*` 与新模型的映射关系。
-- 定义 `WorldFact`、`CanonFact`、`StoryEntity`、`StoryEdge`、`SceneCard`、`VoiceFingerprint` 最小 schema 草案。
-- 新增 `spec/world/` 与 `spec/canon/` 初始化模板草案。
-- 落地 World Bible 与 Canon Ledger 的 domain parser/validator、基础 CLI、`validate` issue 输出和写作读取/checklist 接入。
-
-验收：
-
-- 新项目有 `spec/world/` 与 `spec/canon/` 基础模板。
-- `novel validate --json` 输出 world/canon issue。
-- 没有 World Bible / Canon Ledger 的旧项目只给 warning，不阻断写作。
-- 写作流程不会自动重写正文，只生成 debt 和建议动作。
+## 待执行批次
 
 ### [ ] Batch B1：Entity Graph / Scene Card 创作结构
 

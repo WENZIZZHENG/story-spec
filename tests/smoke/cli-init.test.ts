@@ -61,6 +61,8 @@ describe('CLI init smoke', () => {
     await expect(readFile(path.join(projectPath, 'AGENTS.md'), 'utf-8')).resolves.toContain('Profile `slow-burn`');
     await expect(readFile(path.join(projectPath, '.specify', 'agent-contract.md'), 'utf-8')).resolves.toContain('Profile `adult`');
     await expect(readFile(path.join(projectPath, '.specify', 'agent-contract.md'), 'utf-8')).resolves.toContain('Novel Writer Agent Contract');
+    expect(await exists(path.join(projectPath, 'spec', 'world', 'rules.yaml'))).toBe(true);
+    expect(await exists(path.join(projectPath, 'spec', 'canon', 'facts.json'))).toBe(true);
 
     const statusResult = await execFileAsync('node', [
       cliPath,
@@ -148,6 +150,8 @@ describe('CLI init smoke', () => {
     expect(stdout).toContain('.specify/commands/constitution.md');
     expect(stdout).toContain('.specify/commands/write.md');
     expect(await exists(path.join(projectPath, '.specify', 'commands', 'write.md'))).toBe(true);
+    expect(await exists(path.join(projectPath, 'spec', 'world', 'rules.yaml'))).toBe(true);
+    expect(await exists(path.join(projectPath, 'spec', 'canon', 'facts.json'))).toBe(true);
     expect(await exists(path.join(projectPath, 'AGENTS.md'))).toBe(true);
     expect(await exists(path.join(projectPath, '.specify', 'agent-contract.md'))).toBe(true);
     expect(await exists(path.join(projectPath, '.codex'))).toBe(false);

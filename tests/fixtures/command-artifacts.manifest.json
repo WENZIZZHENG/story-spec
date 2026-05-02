@@ -33,7 +33,7 @@
     },
     {
       "path": "auggie/.augment/commands/checklist.md",
-      "sha256": "002cfadb70a239fb80575bd079904489b09124705fa83312f04adc352760f1f1",
+      "sha256": "3a513c338491ebd92433101a0b07260a2ee4ff06eb453d50606a09c91dc38956",
       "commandSource": {
         "command": "checklist",
         "kind": "legacy-template",
@@ -132,7 +132,7 @@
     },
     {
       "path": "auggie/.augment/commands/write.md",
-      "sha256": "d6e3a4665bb3086cda8b48ae6ce30c664e04e5e21f981888ec60dc0b94e277a9",
+      "sha256": "27342bf4bbe9d0e283b9265ad68906d9b6c29e3423a53c903a7e7c63ff4c3db3",
       "commandSource": {
         "command": "write",
         "kind": "command-spec",
@@ -245,12 +245,36 @@
       "sha256": "06255c106d3ee5a1a5c84afcc056a370589bc3bc8577d7e42a7934bfc7b9bede"
     },
     {
+      "path": "auggie/.specify/scripts/runtime/application/check-writing-state.js",
+      "sha256": "3d966a5256cefed94cc1cb9bde8a55c4ddac6d4efb146d4a0dbc6192b02dedb8"
+    },
+    {
+      "path": "auggie/.specify/scripts/runtime/domain/story-artifact.js",
+      "sha256": "010032f357a3154a9e939db41baa9b47bf72d20a7b4d3c1dba65c25c2af2d603"
+    },
+    {
+      "path": "auggie/.specify/scripts/runtime/script-runtime.js",
+      "sha256": "6ddcafa9fca67371f159c0feb8df4d0eda5cda0e80d45bcb11713f43db99ba6c"
+    },
+    {
       "path": "auggie/.specify/templates/agent/agent-contract.md",
       "sha256": "f4ba35ef8937a6c789ed96a8b25a7df1bb69757722cd4602b416f9e3b63aa0d9"
     },
     {
       "path": "auggie/.specify/templates/AGENTS.codex.md",
       "sha256": "a24fc0e1522818044206bec6210b97fa9fb4c10eb553401d4beeeba2f68c5b93"
+    },
+    {
+      "path": "auggie/.specify/templates/canon/contradictions.md",
+      "sha256": "dba9cc205e2e09c6b8d9a10b7a4cc9933ed73c13de0e351639ca4d5d40adafb8"
+    },
+    {
+      "path": "auggie/.specify/templates/canon/facts.json",
+      "sha256": "10bb3d031f0241e05f99c014a10c0bcde61605a40e3d231c5e47641667218f1d"
+    },
+    {
+      "path": "auggie/.specify/templates/canon/propagation-debt.json",
+      "sha256": "d489ec9a11b278e6bc21f807d1ff00ff8a621380ea78efbc7e0934a0caf75f50"
     },
     {
       "path": "auggie/.specify/templates/checklist-template.md",
@@ -315,6 +339,22 @@
     {
       "path": "auggie/.specify/templates/vscode-settings.json",
       "sha256": "875183e65cb2b8fd43111ef9f6b8e7b94fb8e3cdcfa9ae340cd9cf3eadaf06eb"
+    },
+    {
+      "path": "auggie/.specify/templates/world/factions.yaml",
+      "sha256": "e0a53fcc97aa33e0096deafbf432df55657e704024978f8c9be6731a9c4bdac1"
+    },
+    {
+      "path": "auggie/.specify/templates/world/locations.yaml",
+      "sha256": "e0a53fcc97aa33e0096deafbf432df55657e704024978f8c9be6731a9c4bdac1"
+    },
+    {
+      "path": "auggie/.specify/templates/world/rules.yaml",
+      "sha256": "f3488f9a248a54bfb6a65ae2e570575f65836d2b4938a27c7a3df073f15db69f"
+    },
+    {
+      "path": "auggie/.specify/templates/world/world-bible.md",
+      "sha256": "4c440963c59dfbabdf99d8eed0c2c81c262f4fc206b0ef769f7480304b2e912e"
     },
     {
       "path": "auggie/.specify/templates/writing-constitution-template.md",
@@ -420,7 +460,7 @@
     },
     {
       "path": "claude/.claude/commands/novel.checklist.md",
-      "sha256": "8bc6e608c07dfdafaab349de7b931c44e220467ffc81d5af8a218df5627da85b",
+      "sha256": "eb591a49e25330152afe2cf025ad1e0e2c6fced6e91817194ffffd10b4abdbd5",
       "commandSource": {
         "command": "checklist",
         "kind": "legacy-template",
@@ -519,7 +559,7 @@
     },
     {
       "path": "claude/.claude/commands/novel.write.md",
-      "sha256": "dda96fe36034efdb7716faf885df3d0f0d8fe2c4e5cd6c2f12fe68852a652111",
+      "sha256": "03cbda9e7bc40df681602806321c50051cb6f6ea124168ee0dd4fb0a39a3b200",
       "commandSource": {
         "command": "write",
         "kind": "command-spec",
@@ -632,12 +672,36 @@
       "sha256": "06255c106d3ee5a1a5c84afcc056a370589bc3bc8577d7e42a7934bfc7b9bede"
     },
     {
+      "path": "claude/.specify/scripts/runtime/application/check-writing-state.js",
+      "sha256": "3d966a5256cefed94cc1cb9bde8a55c4ddac6d4efb146d4a0dbc6192b02dedb8"
+    },
+    {
+      "path": "claude/.specify/scripts/runtime/domain/story-artifact.js",
+      "sha256": "010032f357a3154a9e939db41baa9b47bf72d20a7b4d3c1dba65c25c2af2d603"
+    },
+    {
+      "path": "claude/.specify/scripts/runtime/script-runtime.js",
+      "sha256": "6ddcafa9fca67371f159c0feb8df4d0eda5cda0e80d45bcb11713f43db99ba6c"
+    },
+    {
       "path": "claude/.specify/templates/agent/agent-contract.md",
       "sha256": "f4ba35ef8937a6c789ed96a8b25a7df1bb69757722cd4602b416f9e3b63aa0d9"
     },
     {
       "path": "claude/.specify/templates/AGENTS.codex.md",
       "sha256": "a24fc0e1522818044206bec6210b97fa9fb4c10eb553401d4beeeba2f68c5b93"
+    },
+    {
+      "path": "claude/.specify/templates/canon/contradictions.md",
+      "sha256": "dba9cc205e2e09c6b8d9a10b7a4cc9933ed73c13de0e351639ca4d5d40adafb8"
+    },
+    {
+      "path": "claude/.specify/templates/canon/facts.json",
+      "sha256": "10bb3d031f0241e05f99c014a10c0bcde61605a40e3d231c5e47641667218f1d"
+    },
+    {
+      "path": "claude/.specify/templates/canon/propagation-debt.json",
+      "sha256": "d489ec9a11b278e6bc21f807d1ff00ff8a621380ea78efbc7e0934a0caf75f50"
     },
     {
       "path": "claude/.specify/templates/checklist-template.md",
@@ -702,6 +766,22 @@
     {
       "path": "claude/.specify/templates/vscode-settings.json",
       "sha256": "875183e65cb2b8fd43111ef9f6b8e7b94fb8e3cdcfa9ae340cd9cf3eadaf06eb"
+    },
+    {
+      "path": "claude/.specify/templates/world/factions.yaml",
+      "sha256": "e0a53fcc97aa33e0096deafbf432df55657e704024978f8c9be6731a9c4bdac1"
+    },
+    {
+      "path": "claude/.specify/templates/world/locations.yaml",
+      "sha256": "e0a53fcc97aa33e0096deafbf432df55657e704024978f8c9be6731a9c4bdac1"
+    },
+    {
+      "path": "claude/.specify/templates/world/rules.yaml",
+      "sha256": "f3488f9a248a54bfb6a65ae2e570575f65836d2b4938a27c7a3df073f15db69f"
+    },
+    {
+      "path": "claude/.specify/templates/world/world-bible.md",
+      "sha256": "4c440963c59dfbabdf99d8eed0c2c81c262f4fc206b0ef769f7480304b2e912e"
     },
     {
       "path": "claude/.specify/templates/writing-constitution-template.md",
@@ -807,7 +887,7 @@
     },
     {
       "path": "codebuddy/.codebuddy/commands/checklist.md",
-      "sha256": "002cfadb70a239fb80575bd079904489b09124705fa83312f04adc352760f1f1",
+      "sha256": "3a513c338491ebd92433101a0b07260a2ee4ff06eb453d50606a09c91dc38956",
       "commandSource": {
         "command": "checklist",
         "kind": "legacy-template",
@@ -906,7 +986,7 @@
     },
     {
       "path": "codebuddy/.codebuddy/commands/write.md",
-      "sha256": "d6e3a4665bb3086cda8b48ae6ce30c664e04e5e21f981888ec60dc0b94e277a9",
+      "sha256": "27342bf4bbe9d0e283b9265ad68906d9b6c29e3423a53c903a7e7c63ff4c3db3",
       "commandSource": {
         "command": "write",
         "kind": "command-spec",
@@ -1019,12 +1099,36 @@
       "sha256": "06255c106d3ee5a1a5c84afcc056a370589bc3bc8577d7e42a7934bfc7b9bede"
     },
     {
+      "path": "codebuddy/.specify/scripts/runtime/application/check-writing-state.js",
+      "sha256": "3d966a5256cefed94cc1cb9bde8a55c4ddac6d4efb146d4a0dbc6192b02dedb8"
+    },
+    {
+      "path": "codebuddy/.specify/scripts/runtime/domain/story-artifact.js",
+      "sha256": "010032f357a3154a9e939db41baa9b47bf72d20a7b4d3c1dba65c25c2af2d603"
+    },
+    {
+      "path": "codebuddy/.specify/scripts/runtime/script-runtime.js",
+      "sha256": "6ddcafa9fca67371f159c0feb8df4d0eda5cda0e80d45bcb11713f43db99ba6c"
+    },
+    {
       "path": "codebuddy/.specify/templates/agent/agent-contract.md",
       "sha256": "f4ba35ef8937a6c789ed96a8b25a7df1bb69757722cd4602b416f9e3b63aa0d9"
     },
     {
       "path": "codebuddy/.specify/templates/AGENTS.codex.md",
       "sha256": "a24fc0e1522818044206bec6210b97fa9fb4c10eb553401d4beeeba2f68c5b93"
+    },
+    {
+      "path": "codebuddy/.specify/templates/canon/contradictions.md",
+      "sha256": "dba9cc205e2e09c6b8d9a10b7a4cc9933ed73c13de0e351639ca4d5d40adafb8"
+    },
+    {
+      "path": "codebuddy/.specify/templates/canon/facts.json",
+      "sha256": "10bb3d031f0241e05f99c014a10c0bcde61605a40e3d231c5e47641667218f1d"
+    },
+    {
+      "path": "codebuddy/.specify/templates/canon/propagation-debt.json",
+      "sha256": "d489ec9a11b278e6bc21f807d1ff00ff8a621380ea78efbc7e0934a0caf75f50"
     },
     {
       "path": "codebuddy/.specify/templates/checklist-template.md",
@@ -1089,6 +1193,22 @@
     {
       "path": "codebuddy/.specify/templates/vscode-settings.json",
       "sha256": "875183e65cb2b8fd43111ef9f6b8e7b94fb8e3cdcfa9ae340cd9cf3eadaf06eb"
+    },
+    {
+      "path": "codebuddy/.specify/templates/world/factions.yaml",
+      "sha256": "e0a53fcc97aa33e0096deafbf432df55657e704024978f8c9be6731a9c4bdac1"
+    },
+    {
+      "path": "codebuddy/.specify/templates/world/locations.yaml",
+      "sha256": "e0a53fcc97aa33e0096deafbf432df55657e704024978f8c9be6731a9c4bdac1"
+    },
+    {
+      "path": "codebuddy/.specify/templates/world/rules.yaml",
+      "sha256": "f3488f9a248a54bfb6a65ae2e570575f65836d2b4938a27c7a3df073f15db69f"
+    },
+    {
+      "path": "codebuddy/.specify/templates/world/world-bible.md",
+      "sha256": "4c440963c59dfbabdf99d8eed0c2c81c262f4fc206b0ef769f7480304b2e912e"
     },
     {
       "path": "codebuddy/.specify/templates/writing-constitution-template.md",
@@ -1194,7 +1314,7 @@
     },
     {
       "path": "codex/.codex/prompts/novel-checklist.md",
-      "sha256": "002cfadb70a239fb80575bd079904489b09124705fa83312f04adc352760f1f1",
+      "sha256": "3a513c338491ebd92433101a0b07260a2ee4ff06eb453d50606a09c91dc38956",
       "commandSource": {
         "command": "checklist",
         "kind": "legacy-template",
@@ -1293,7 +1413,7 @@
     },
     {
       "path": "codex/.codex/prompts/novel-write.md",
-      "sha256": "d6e3a4665bb3086cda8b48ae6ce30c664e04e5e21f981888ec60dc0b94e277a9",
+      "sha256": "27342bf4bbe9d0e283b9265ad68906d9b6c29e3423a53c903a7e7c63ff4c3db3",
       "commandSource": {
         "command": "write",
         "kind": "command-spec",
@@ -1406,12 +1526,36 @@
       "sha256": "06255c106d3ee5a1a5c84afcc056a370589bc3bc8577d7e42a7934bfc7b9bede"
     },
     {
+      "path": "codex/.specify/scripts/runtime/application/check-writing-state.js",
+      "sha256": "3d966a5256cefed94cc1cb9bde8a55c4ddac6d4efb146d4a0dbc6192b02dedb8"
+    },
+    {
+      "path": "codex/.specify/scripts/runtime/domain/story-artifact.js",
+      "sha256": "010032f357a3154a9e939db41baa9b47bf72d20a7b4d3c1dba65c25c2af2d603"
+    },
+    {
+      "path": "codex/.specify/scripts/runtime/script-runtime.js",
+      "sha256": "6ddcafa9fca67371f159c0feb8df4d0eda5cda0e80d45bcb11713f43db99ba6c"
+    },
+    {
       "path": "codex/.specify/templates/agent/agent-contract.md",
       "sha256": "f4ba35ef8937a6c789ed96a8b25a7df1bb69757722cd4602b416f9e3b63aa0d9"
     },
     {
       "path": "codex/.specify/templates/AGENTS.codex.md",
       "sha256": "a24fc0e1522818044206bec6210b97fa9fb4c10eb553401d4beeeba2f68c5b93"
+    },
+    {
+      "path": "codex/.specify/templates/canon/contradictions.md",
+      "sha256": "dba9cc205e2e09c6b8d9a10b7a4cc9933ed73c13de0e351639ca4d5d40adafb8"
+    },
+    {
+      "path": "codex/.specify/templates/canon/facts.json",
+      "sha256": "10bb3d031f0241e05f99c014a10c0bcde61605a40e3d231c5e47641667218f1d"
+    },
+    {
+      "path": "codex/.specify/templates/canon/propagation-debt.json",
+      "sha256": "d489ec9a11b278e6bc21f807d1ff00ff8a621380ea78efbc7e0934a0caf75f50"
     },
     {
       "path": "codex/.specify/templates/checklist-template.md",
@@ -1476,6 +1620,22 @@
     {
       "path": "codex/.specify/templates/vscode-settings.json",
       "sha256": "875183e65cb2b8fd43111ef9f6b8e7b94fb8e3cdcfa9ae340cd9cf3eadaf06eb"
+    },
+    {
+      "path": "codex/.specify/templates/world/factions.yaml",
+      "sha256": "e0a53fcc97aa33e0096deafbf432df55657e704024978f8c9be6731a9c4bdac1"
+    },
+    {
+      "path": "codex/.specify/templates/world/locations.yaml",
+      "sha256": "e0a53fcc97aa33e0096deafbf432df55657e704024978f8c9be6731a9c4bdac1"
+    },
+    {
+      "path": "codex/.specify/templates/world/rules.yaml",
+      "sha256": "f3488f9a248a54bfb6a65ae2e570575f65836d2b4938a27c7a3df073f15db69f"
+    },
+    {
+      "path": "codex/.specify/templates/world/world-bible.md",
+      "sha256": "4c440963c59dfbabdf99d8eed0c2c81c262f4fc206b0ef769f7480304b2e912e"
     },
     {
       "path": "codex/.specify/templates/writing-constitution-template.md",
@@ -1581,7 +1741,7 @@
     },
     {
       "path": "continue-check/.continue/prompts/checklist.md",
-      "sha256": "8413a692ae6f10493f02d6ab7fa9b6b32f28a4c26297139161c7238ceb2dc8ff",
+      "sha256": "b4f4087dbe2c20ee0e8617ecfecc24519f978823dda29c2217541cb152473e1e",
       "commandSource": {
         "command": "checklist",
         "kind": "legacy-template",
@@ -1680,7 +1840,7 @@
     },
     {
       "path": "continue-check/.continue/prompts/write.md",
-      "sha256": "be29095913d91f2aff0bf69cda7a861b1c29b734625a6e7b42ccdb545931116e",
+      "sha256": "4b3402cc2521442db7a3ef9f39b941a0113f375e98870f3fc8ef1a280a502796",
       "commandSource": {
         "command": "write",
         "kind": "command-spec",
@@ -1793,12 +1953,36 @@
       "sha256": "06255c106d3ee5a1a5c84afcc056a370589bc3bc8577d7e42a7934bfc7b9bede"
     },
     {
+      "path": "continue-check/.specify/scripts/runtime/application/check-writing-state.js",
+      "sha256": "3d966a5256cefed94cc1cb9bde8a55c4ddac6d4efb146d4a0dbc6192b02dedb8"
+    },
+    {
+      "path": "continue-check/.specify/scripts/runtime/domain/story-artifact.js",
+      "sha256": "010032f357a3154a9e939db41baa9b47bf72d20a7b4d3c1dba65c25c2af2d603"
+    },
+    {
+      "path": "continue-check/.specify/scripts/runtime/script-runtime.js",
+      "sha256": "6ddcafa9fca67371f159c0feb8df4d0eda5cda0e80d45bcb11713f43db99ba6c"
+    },
+    {
       "path": "continue-check/.specify/templates/agent/agent-contract.md",
       "sha256": "f4ba35ef8937a6c789ed96a8b25a7df1bb69757722cd4602b416f9e3b63aa0d9"
     },
     {
       "path": "continue-check/.specify/templates/AGENTS.codex.md",
       "sha256": "a24fc0e1522818044206bec6210b97fa9fb4c10eb553401d4beeeba2f68c5b93"
+    },
+    {
+      "path": "continue-check/.specify/templates/canon/contradictions.md",
+      "sha256": "dba9cc205e2e09c6b8d9a10b7a4cc9933ed73c13de0e351639ca4d5d40adafb8"
+    },
+    {
+      "path": "continue-check/.specify/templates/canon/facts.json",
+      "sha256": "10bb3d031f0241e05f99c014a10c0bcde61605a40e3d231c5e47641667218f1d"
+    },
+    {
+      "path": "continue-check/.specify/templates/canon/propagation-debt.json",
+      "sha256": "d489ec9a11b278e6bc21f807d1ff00ff8a621380ea78efbc7e0934a0caf75f50"
     },
     {
       "path": "continue-check/.specify/templates/checklist-template.md",
@@ -1863,6 +2047,22 @@
     {
       "path": "continue-check/.specify/templates/vscode-settings.json",
       "sha256": "875183e65cb2b8fd43111ef9f6b8e7b94fb8e3cdcfa9ae340cd9cf3eadaf06eb"
+    },
+    {
+      "path": "continue-check/.specify/templates/world/factions.yaml",
+      "sha256": "e0a53fcc97aa33e0096deafbf432df55657e704024978f8c9be6731a9c4bdac1"
+    },
+    {
+      "path": "continue-check/.specify/templates/world/locations.yaml",
+      "sha256": "e0a53fcc97aa33e0096deafbf432df55657e704024978f8c9be6731a9c4bdac1"
+    },
+    {
+      "path": "continue-check/.specify/templates/world/rules.yaml",
+      "sha256": "f3488f9a248a54bfb6a65ae2e570575f65836d2b4938a27c7a3df073f15db69f"
+    },
+    {
+      "path": "continue-check/.specify/templates/world/world-bible.md",
+      "sha256": "4c440963c59dfbabdf99d8eed0c2c81c262f4fc206b0ef769f7480304b2e912e"
     },
     {
       "path": "continue-check/.specify/templates/writing-constitution-template.md",
@@ -1968,7 +2168,7 @@
     },
     {
       "path": "copilot/.github/prompts/checklist.prompt.md",
-      "sha256": "002cfadb70a239fb80575bd079904489b09124705fa83312f04adc352760f1f1",
+      "sha256": "3a513c338491ebd92433101a0b07260a2ee4ff06eb453d50606a09c91dc38956",
       "commandSource": {
         "command": "checklist",
         "kind": "legacy-template",
@@ -2067,7 +2267,7 @@
     },
     {
       "path": "copilot/.github/prompts/write.prompt.md",
-      "sha256": "4224774c744a92f153d619c377e9348eaa0bb0db3d834e9132de7736963b0a2f",
+      "sha256": "4904d903939681b78d4bd2bd0ab22cd031fee49406c31aa11da5e6f85e6a573e",
       "commandSource": {
         "command": "write",
         "kind": "command-spec",
@@ -2180,12 +2380,36 @@
       "sha256": "06255c106d3ee5a1a5c84afcc056a370589bc3bc8577d7e42a7934bfc7b9bede"
     },
     {
+      "path": "copilot/.specify/scripts/runtime/application/check-writing-state.js",
+      "sha256": "3d966a5256cefed94cc1cb9bde8a55c4ddac6d4efb146d4a0dbc6192b02dedb8"
+    },
+    {
+      "path": "copilot/.specify/scripts/runtime/domain/story-artifact.js",
+      "sha256": "010032f357a3154a9e939db41baa9b47bf72d20a7b4d3c1dba65c25c2af2d603"
+    },
+    {
+      "path": "copilot/.specify/scripts/runtime/script-runtime.js",
+      "sha256": "6ddcafa9fca67371f159c0feb8df4d0eda5cda0e80d45bcb11713f43db99ba6c"
+    },
+    {
       "path": "copilot/.specify/templates/agent/agent-contract.md",
       "sha256": "f4ba35ef8937a6c789ed96a8b25a7df1bb69757722cd4602b416f9e3b63aa0d9"
     },
     {
       "path": "copilot/.specify/templates/AGENTS.codex.md",
       "sha256": "a24fc0e1522818044206bec6210b97fa9fb4c10eb553401d4beeeba2f68c5b93"
+    },
+    {
+      "path": "copilot/.specify/templates/canon/contradictions.md",
+      "sha256": "dba9cc205e2e09c6b8d9a10b7a4cc9933ed73c13de0e351639ca4d5d40adafb8"
+    },
+    {
+      "path": "copilot/.specify/templates/canon/facts.json",
+      "sha256": "10bb3d031f0241e05f99c014a10c0bcde61605a40e3d231c5e47641667218f1d"
+    },
+    {
+      "path": "copilot/.specify/templates/canon/propagation-debt.json",
+      "sha256": "d489ec9a11b278e6bc21f807d1ff00ff8a621380ea78efbc7e0934a0caf75f50"
     },
     {
       "path": "copilot/.specify/templates/checklist-template.md",
@@ -2250,6 +2474,22 @@
     {
       "path": "copilot/.specify/templates/vscode-settings.json",
       "sha256": "875183e65cb2b8fd43111ef9f6b8e7b94fb8e3cdcfa9ae340cd9cf3eadaf06eb"
+    },
+    {
+      "path": "copilot/.specify/templates/world/factions.yaml",
+      "sha256": "e0a53fcc97aa33e0096deafbf432df55657e704024978f8c9be6731a9c4bdac1"
+    },
+    {
+      "path": "copilot/.specify/templates/world/locations.yaml",
+      "sha256": "e0a53fcc97aa33e0096deafbf432df55657e704024978f8c9be6731a9c4bdac1"
+    },
+    {
+      "path": "copilot/.specify/templates/world/rules.yaml",
+      "sha256": "f3488f9a248a54bfb6a65ae2e570575f65836d2b4938a27c7a3df073f15db69f"
+    },
+    {
+      "path": "copilot/.specify/templates/world/world-bible.md",
+      "sha256": "4c440963c59dfbabdf99d8eed0c2c81c262f4fc206b0ef769f7480304b2e912e"
     },
     {
       "path": "copilot/.specify/templates/writing-constitution-template.md",
@@ -2355,7 +2595,7 @@
     },
     {
       "path": "cursor/.cursor/commands/checklist.md",
-      "sha256": "002cfadb70a239fb80575bd079904489b09124705fa83312f04adc352760f1f1",
+      "sha256": "3a513c338491ebd92433101a0b07260a2ee4ff06eb453d50606a09c91dc38956",
       "commandSource": {
         "command": "checklist",
         "kind": "legacy-template",
@@ -2454,7 +2694,7 @@
     },
     {
       "path": "cursor/.cursor/commands/write.md",
-      "sha256": "d6e3a4665bb3086cda8b48ae6ce30c664e04e5e21f981888ec60dc0b94e277a9",
+      "sha256": "27342bf4bbe9d0e283b9265ad68906d9b6c29e3423a53c903a7e7c63ff4c3db3",
       "commandSource": {
         "command": "write",
         "kind": "command-spec",
@@ -2567,12 +2807,36 @@
       "sha256": "06255c106d3ee5a1a5c84afcc056a370589bc3bc8577d7e42a7934bfc7b9bede"
     },
     {
+      "path": "cursor/.specify/scripts/runtime/application/check-writing-state.js",
+      "sha256": "3d966a5256cefed94cc1cb9bde8a55c4ddac6d4efb146d4a0dbc6192b02dedb8"
+    },
+    {
+      "path": "cursor/.specify/scripts/runtime/domain/story-artifact.js",
+      "sha256": "010032f357a3154a9e939db41baa9b47bf72d20a7b4d3c1dba65c25c2af2d603"
+    },
+    {
+      "path": "cursor/.specify/scripts/runtime/script-runtime.js",
+      "sha256": "6ddcafa9fca67371f159c0feb8df4d0eda5cda0e80d45bcb11713f43db99ba6c"
+    },
+    {
       "path": "cursor/.specify/templates/agent/agent-contract.md",
       "sha256": "f4ba35ef8937a6c789ed96a8b25a7df1bb69757722cd4602b416f9e3b63aa0d9"
     },
     {
       "path": "cursor/.specify/templates/AGENTS.codex.md",
       "sha256": "a24fc0e1522818044206bec6210b97fa9fb4c10eb553401d4beeeba2f68c5b93"
+    },
+    {
+      "path": "cursor/.specify/templates/canon/contradictions.md",
+      "sha256": "dba9cc205e2e09c6b8d9a10b7a4cc9933ed73c13de0e351639ca4d5d40adafb8"
+    },
+    {
+      "path": "cursor/.specify/templates/canon/facts.json",
+      "sha256": "10bb3d031f0241e05f99c014a10c0bcde61605a40e3d231c5e47641667218f1d"
+    },
+    {
+      "path": "cursor/.specify/templates/canon/propagation-debt.json",
+      "sha256": "d489ec9a11b278e6bc21f807d1ff00ff8a621380ea78efbc7e0934a0caf75f50"
     },
     {
       "path": "cursor/.specify/templates/checklist-template.md",
@@ -2637,6 +2901,22 @@
     {
       "path": "cursor/.specify/templates/vscode-settings.json",
       "sha256": "875183e65cb2b8fd43111ef9f6b8e7b94fb8e3cdcfa9ae340cd9cf3eadaf06eb"
+    },
+    {
+      "path": "cursor/.specify/templates/world/factions.yaml",
+      "sha256": "e0a53fcc97aa33e0096deafbf432df55657e704024978f8c9be6731a9c4bdac1"
+    },
+    {
+      "path": "cursor/.specify/templates/world/locations.yaml",
+      "sha256": "e0a53fcc97aa33e0096deafbf432df55657e704024978f8c9be6731a9c4bdac1"
+    },
+    {
+      "path": "cursor/.specify/templates/world/rules.yaml",
+      "sha256": "f3488f9a248a54bfb6a65ae2e570575f65836d2b4938a27c7a3df073f15db69f"
+    },
+    {
+      "path": "cursor/.specify/templates/world/world-bible.md",
+      "sha256": "4c440963c59dfbabdf99d8eed0c2c81c262f4fc206b0ef769f7480304b2e912e"
     },
     {
       "path": "cursor/.specify/templates/writing-constitution-template.md",
@@ -2742,7 +3022,7 @@
     },
     {
       "path": "gemini/.gemini/commands/novel/checklist.toml",
-      "sha256": "a4d55f91b6e7d7841a1dffe463d647919a3ee51d72eba87e03407b14d424c016",
+      "sha256": "099d274fa9de25f9d9ad94dfdbca11c5013cab973c875c50a3e6494189702db6",
       "commandSource": {
         "command": "checklist",
         "kind": "legacy-template",
@@ -2841,7 +3121,7 @@
     },
     {
       "path": "gemini/.gemini/commands/novel/write.toml",
-      "sha256": "c0622a8cbc3053f0dae576b164d0098104147137d72f56d00fca1395ce7228fe",
+      "sha256": "d2942269b362b812d10568771ee8c129804e944a14264ba70d5935b2a1b08626",
       "commandSource": {
         "command": "write",
         "kind": "command-spec",
@@ -2954,12 +3234,36 @@
       "sha256": "06255c106d3ee5a1a5c84afcc056a370589bc3bc8577d7e42a7934bfc7b9bede"
     },
     {
+      "path": "gemini/.specify/scripts/runtime/application/check-writing-state.js",
+      "sha256": "3d966a5256cefed94cc1cb9bde8a55c4ddac6d4efb146d4a0dbc6192b02dedb8"
+    },
+    {
+      "path": "gemini/.specify/scripts/runtime/domain/story-artifact.js",
+      "sha256": "010032f357a3154a9e939db41baa9b47bf72d20a7b4d3c1dba65c25c2af2d603"
+    },
+    {
+      "path": "gemini/.specify/scripts/runtime/script-runtime.js",
+      "sha256": "6ddcafa9fca67371f159c0feb8df4d0eda5cda0e80d45bcb11713f43db99ba6c"
+    },
+    {
       "path": "gemini/.specify/templates/agent/agent-contract.md",
       "sha256": "f4ba35ef8937a6c789ed96a8b25a7df1bb69757722cd4602b416f9e3b63aa0d9"
     },
     {
       "path": "gemini/.specify/templates/AGENTS.codex.md",
       "sha256": "a24fc0e1522818044206bec6210b97fa9fb4c10eb553401d4beeeba2f68c5b93"
+    },
+    {
+      "path": "gemini/.specify/templates/canon/contradictions.md",
+      "sha256": "dba9cc205e2e09c6b8d9a10b7a4cc9933ed73c13de0e351639ca4d5d40adafb8"
+    },
+    {
+      "path": "gemini/.specify/templates/canon/facts.json",
+      "sha256": "10bb3d031f0241e05f99c014a10c0bcde61605a40e3d231c5e47641667218f1d"
+    },
+    {
+      "path": "gemini/.specify/templates/canon/propagation-debt.json",
+      "sha256": "d489ec9a11b278e6bc21f807d1ff00ff8a621380ea78efbc7e0934a0caf75f50"
     },
     {
       "path": "gemini/.specify/templates/checklist-template.md",
@@ -3024,6 +3328,22 @@
     {
       "path": "gemini/.specify/templates/vscode-settings.json",
       "sha256": "875183e65cb2b8fd43111ef9f6b8e7b94fb8e3cdcfa9ae340cd9cf3eadaf06eb"
+    },
+    {
+      "path": "gemini/.specify/templates/world/factions.yaml",
+      "sha256": "e0a53fcc97aa33e0096deafbf432df55657e704024978f8c9be6731a9c4bdac1"
+    },
+    {
+      "path": "gemini/.specify/templates/world/locations.yaml",
+      "sha256": "e0a53fcc97aa33e0096deafbf432df55657e704024978f8c9be6731a9c4bdac1"
+    },
+    {
+      "path": "gemini/.specify/templates/world/rules.yaml",
+      "sha256": "f3488f9a248a54bfb6a65ae2e570575f65836d2b4938a27c7a3df073f15db69f"
+    },
+    {
+      "path": "gemini/.specify/templates/world/world-bible.md",
+      "sha256": "4c440963c59dfbabdf99d8eed0c2c81c262f4fc206b0ef769f7480304b2e912e"
     },
     {
       "path": "gemini/.specify/templates/writing-constitution-template.md",
@@ -3129,7 +3449,7 @@
     },
     {
       "path": "generic/.specify/commands/checklist.md",
-      "sha256": "a2839049b5203f9a42fcaac59c233a90a3b8838ef4da3358f50e9ccf9e89fceb",
+      "sha256": "44f29abf8ccdee97fde1a219f2040a361d0612cc59740fd309993cb6e19fd4a3",
       "commandSource": {
         "command": "checklist",
         "kind": "legacy-template",
@@ -3228,7 +3548,7 @@
     },
     {
       "path": "generic/.specify/commands/write.md",
-      "sha256": "f0d8d9d89f9bd48566687d8be053481da9a2d83cc0f319691da634d72dc0e8bc",
+      "sha256": "80e853dc578365feb933bce9fa3a4a2ee7a81120aafe74fe0e80a91296606298",
       "commandSource": {
         "command": "write",
         "kind": "command-spec",
@@ -3341,12 +3661,36 @@
       "sha256": "06255c106d3ee5a1a5c84afcc056a370589bc3bc8577d7e42a7934bfc7b9bede"
     },
     {
+      "path": "generic/.specify/scripts/runtime/application/check-writing-state.js",
+      "sha256": "3d966a5256cefed94cc1cb9bde8a55c4ddac6d4efb146d4a0dbc6192b02dedb8"
+    },
+    {
+      "path": "generic/.specify/scripts/runtime/domain/story-artifact.js",
+      "sha256": "010032f357a3154a9e939db41baa9b47bf72d20a7b4d3c1dba65c25c2af2d603"
+    },
+    {
+      "path": "generic/.specify/scripts/runtime/script-runtime.js",
+      "sha256": "6ddcafa9fca67371f159c0feb8df4d0eda5cda0e80d45bcb11713f43db99ba6c"
+    },
+    {
       "path": "generic/.specify/templates/agent/agent-contract.md",
       "sha256": "f4ba35ef8937a6c789ed96a8b25a7df1bb69757722cd4602b416f9e3b63aa0d9"
     },
     {
       "path": "generic/.specify/templates/AGENTS.codex.md",
       "sha256": "a24fc0e1522818044206bec6210b97fa9fb4c10eb553401d4beeeba2f68c5b93"
+    },
+    {
+      "path": "generic/.specify/templates/canon/contradictions.md",
+      "sha256": "dba9cc205e2e09c6b8d9a10b7a4cc9933ed73c13de0e351639ca4d5d40adafb8"
+    },
+    {
+      "path": "generic/.specify/templates/canon/facts.json",
+      "sha256": "10bb3d031f0241e05f99c014a10c0bcde61605a40e3d231c5e47641667218f1d"
+    },
+    {
+      "path": "generic/.specify/templates/canon/propagation-debt.json",
+      "sha256": "d489ec9a11b278e6bc21f807d1ff00ff8a621380ea78efbc7e0934a0caf75f50"
     },
     {
       "path": "generic/.specify/templates/checklist-template.md",
@@ -3411,6 +3755,22 @@
     {
       "path": "generic/.specify/templates/vscode-settings.json",
       "sha256": "875183e65cb2b8fd43111ef9f6b8e7b94fb8e3cdcfa9ae340cd9cf3eadaf06eb"
+    },
+    {
+      "path": "generic/.specify/templates/world/factions.yaml",
+      "sha256": "e0a53fcc97aa33e0096deafbf432df55657e704024978f8c9be6731a9c4bdac1"
+    },
+    {
+      "path": "generic/.specify/templates/world/locations.yaml",
+      "sha256": "e0a53fcc97aa33e0096deafbf432df55657e704024978f8c9be6731a9c4bdac1"
+    },
+    {
+      "path": "generic/.specify/templates/world/rules.yaml",
+      "sha256": "f3488f9a248a54bfb6a65ae2e570575f65836d2b4938a27c7a3df073f15db69f"
+    },
+    {
+      "path": "generic/.specify/templates/world/world-bible.md",
+      "sha256": "4c440963c59dfbabdf99d8eed0c2c81c262f4fc206b0ef769f7480304b2e912e"
     },
     {
       "path": "generic/.specify/templates/writing-constitution-template.md",
@@ -3516,7 +3876,7 @@
     },
     {
       "path": "kilocode/.kilocode/workflows/checklist.md",
-      "sha256": "e425bb9c1f25b7b82a763e3f8f52451228da0e41e18e6a3f1eb56dd1edd74eae",
+      "sha256": "ad732873a4bf44432f86b7aa421373551f8b961a6533f6ad89563e703773527a",
       "commandSource": {
         "command": "checklist",
         "kind": "legacy-template",
@@ -3615,7 +3975,7 @@
     },
     {
       "path": "kilocode/.kilocode/workflows/write.md",
-      "sha256": "dda96fe36034efdb7716faf885df3d0f0d8fe2c4e5cd6c2f12fe68852a652111",
+      "sha256": "03cbda9e7bc40df681602806321c50051cb6f6ea124168ee0dd4fb0a39a3b200",
       "commandSource": {
         "command": "write",
         "kind": "command-spec",
@@ -3728,12 +4088,36 @@
       "sha256": "06255c106d3ee5a1a5c84afcc056a370589bc3bc8577d7e42a7934bfc7b9bede"
     },
     {
+      "path": "kilocode/.specify/scripts/runtime/application/check-writing-state.js",
+      "sha256": "3d966a5256cefed94cc1cb9bde8a55c4ddac6d4efb146d4a0dbc6192b02dedb8"
+    },
+    {
+      "path": "kilocode/.specify/scripts/runtime/domain/story-artifact.js",
+      "sha256": "010032f357a3154a9e939db41baa9b47bf72d20a7b4d3c1dba65c25c2af2d603"
+    },
+    {
+      "path": "kilocode/.specify/scripts/runtime/script-runtime.js",
+      "sha256": "6ddcafa9fca67371f159c0feb8df4d0eda5cda0e80d45bcb11713f43db99ba6c"
+    },
+    {
       "path": "kilocode/.specify/templates/agent/agent-contract.md",
       "sha256": "f4ba35ef8937a6c789ed96a8b25a7df1bb69757722cd4602b416f9e3b63aa0d9"
     },
     {
       "path": "kilocode/.specify/templates/AGENTS.codex.md",
       "sha256": "a24fc0e1522818044206bec6210b97fa9fb4c10eb553401d4beeeba2f68c5b93"
+    },
+    {
+      "path": "kilocode/.specify/templates/canon/contradictions.md",
+      "sha256": "dba9cc205e2e09c6b8d9a10b7a4cc9933ed73c13de0e351639ca4d5d40adafb8"
+    },
+    {
+      "path": "kilocode/.specify/templates/canon/facts.json",
+      "sha256": "10bb3d031f0241e05f99c014a10c0bcde61605a40e3d231c5e47641667218f1d"
+    },
+    {
+      "path": "kilocode/.specify/templates/canon/propagation-debt.json",
+      "sha256": "d489ec9a11b278e6bc21f807d1ff00ff8a621380ea78efbc7e0934a0caf75f50"
     },
     {
       "path": "kilocode/.specify/templates/checklist-template.md",
@@ -3798,6 +4182,22 @@
     {
       "path": "kilocode/.specify/templates/vscode-settings.json",
       "sha256": "875183e65cb2b8fd43111ef9f6b8e7b94fb8e3cdcfa9ae340cd9cf3eadaf06eb"
+    },
+    {
+      "path": "kilocode/.specify/templates/world/factions.yaml",
+      "sha256": "e0a53fcc97aa33e0096deafbf432df55657e704024978f8c9be6731a9c4bdac1"
+    },
+    {
+      "path": "kilocode/.specify/templates/world/locations.yaml",
+      "sha256": "e0a53fcc97aa33e0096deafbf432df55657e704024978f8c9be6731a9c4bdac1"
+    },
+    {
+      "path": "kilocode/.specify/templates/world/rules.yaml",
+      "sha256": "f3488f9a248a54bfb6a65ae2e570575f65836d2b4938a27c7a3df073f15db69f"
+    },
+    {
+      "path": "kilocode/.specify/templates/world/world-bible.md",
+      "sha256": "4c440963c59dfbabdf99d8eed0c2c81c262f4fc206b0ef769f7480304b2e912e"
     },
     {
       "path": "kilocode/.specify/templates/writing-constitution-template.md",
@@ -3903,7 +4303,7 @@
     },
     {
       "path": "opencode/.opencode/command/checklist.md",
-      "sha256": "e425bb9c1f25b7b82a763e3f8f52451228da0e41e18e6a3f1eb56dd1edd74eae",
+      "sha256": "ad732873a4bf44432f86b7aa421373551f8b961a6533f6ad89563e703773527a",
       "commandSource": {
         "command": "checklist",
         "kind": "legacy-template",
@@ -4002,7 +4402,7 @@
     },
     {
       "path": "opencode/.opencode/command/write.md",
-      "sha256": "aad539494af6cdcc317cea9fcbc3e2cdf58ea6a3f11cabe5d8526bee8d95d592",
+      "sha256": "8f2c9c669484c2defb27a26996f1dac65ad060381b34dc01249f003db481f255",
       "commandSource": {
         "command": "write",
         "kind": "command-spec",
@@ -4115,12 +4515,36 @@
       "sha256": "06255c106d3ee5a1a5c84afcc056a370589bc3bc8577d7e42a7934bfc7b9bede"
     },
     {
+      "path": "opencode/.specify/scripts/runtime/application/check-writing-state.js",
+      "sha256": "3d966a5256cefed94cc1cb9bde8a55c4ddac6d4efb146d4a0dbc6192b02dedb8"
+    },
+    {
+      "path": "opencode/.specify/scripts/runtime/domain/story-artifact.js",
+      "sha256": "010032f357a3154a9e939db41baa9b47bf72d20a7b4d3c1dba65c25c2af2d603"
+    },
+    {
+      "path": "opencode/.specify/scripts/runtime/script-runtime.js",
+      "sha256": "6ddcafa9fca67371f159c0feb8df4d0eda5cda0e80d45bcb11713f43db99ba6c"
+    },
+    {
       "path": "opencode/.specify/templates/agent/agent-contract.md",
       "sha256": "f4ba35ef8937a6c789ed96a8b25a7df1bb69757722cd4602b416f9e3b63aa0d9"
     },
     {
       "path": "opencode/.specify/templates/AGENTS.codex.md",
       "sha256": "a24fc0e1522818044206bec6210b97fa9fb4c10eb553401d4beeeba2f68c5b93"
+    },
+    {
+      "path": "opencode/.specify/templates/canon/contradictions.md",
+      "sha256": "dba9cc205e2e09c6b8d9a10b7a4cc9933ed73c13de0e351639ca4d5d40adafb8"
+    },
+    {
+      "path": "opencode/.specify/templates/canon/facts.json",
+      "sha256": "10bb3d031f0241e05f99c014a10c0bcde61605a40e3d231c5e47641667218f1d"
+    },
+    {
+      "path": "opencode/.specify/templates/canon/propagation-debt.json",
+      "sha256": "d489ec9a11b278e6bc21f807d1ff00ff8a621380ea78efbc7e0934a0caf75f50"
     },
     {
       "path": "opencode/.specify/templates/checklist-template.md",
@@ -4185,6 +4609,22 @@
     {
       "path": "opencode/.specify/templates/vscode-settings.json",
       "sha256": "875183e65cb2b8fd43111ef9f6b8e7b94fb8e3cdcfa9ae340cd9cf3eadaf06eb"
+    },
+    {
+      "path": "opencode/.specify/templates/world/factions.yaml",
+      "sha256": "e0a53fcc97aa33e0096deafbf432df55657e704024978f8c9be6731a9c4bdac1"
+    },
+    {
+      "path": "opencode/.specify/templates/world/locations.yaml",
+      "sha256": "e0a53fcc97aa33e0096deafbf432df55657e704024978f8c9be6731a9c4bdac1"
+    },
+    {
+      "path": "opencode/.specify/templates/world/rules.yaml",
+      "sha256": "f3488f9a248a54bfb6a65ae2e570575f65836d2b4938a27c7a3df073f15db69f"
+    },
+    {
+      "path": "opencode/.specify/templates/world/world-bible.md",
+      "sha256": "4c440963c59dfbabdf99d8eed0c2c81c262f4fc206b0ef769f7480304b2e912e"
     },
     {
       "path": "opencode/.specify/templates/writing-constitution-template.md",
@@ -4290,7 +4730,7 @@
     },
     {
       "path": "q/.amazonq/prompts/checklist.md",
-      "sha256": "002cfadb70a239fb80575bd079904489b09124705fa83312f04adc352760f1f1",
+      "sha256": "3a513c338491ebd92433101a0b07260a2ee4ff06eb453d50606a09c91dc38956",
       "commandSource": {
         "command": "checklist",
         "kind": "legacy-template",
@@ -4389,7 +4829,7 @@
     },
     {
       "path": "q/.amazonq/prompts/write.md",
-      "sha256": "4224774c744a92f153d619c377e9348eaa0bb0db3d834e9132de7736963b0a2f",
+      "sha256": "4904d903939681b78d4bd2bd0ab22cd031fee49406c31aa11da5e6f85e6a573e",
       "commandSource": {
         "command": "write",
         "kind": "command-spec",
@@ -4502,12 +4942,36 @@
       "sha256": "06255c106d3ee5a1a5c84afcc056a370589bc3bc8577d7e42a7934bfc7b9bede"
     },
     {
+      "path": "q/.specify/scripts/runtime/application/check-writing-state.js",
+      "sha256": "3d966a5256cefed94cc1cb9bde8a55c4ddac6d4efb146d4a0dbc6192b02dedb8"
+    },
+    {
+      "path": "q/.specify/scripts/runtime/domain/story-artifact.js",
+      "sha256": "010032f357a3154a9e939db41baa9b47bf72d20a7b4d3c1dba65c25c2af2d603"
+    },
+    {
+      "path": "q/.specify/scripts/runtime/script-runtime.js",
+      "sha256": "6ddcafa9fca67371f159c0feb8df4d0eda5cda0e80d45bcb11713f43db99ba6c"
+    },
+    {
       "path": "q/.specify/templates/agent/agent-contract.md",
       "sha256": "f4ba35ef8937a6c789ed96a8b25a7df1bb69757722cd4602b416f9e3b63aa0d9"
     },
     {
       "path": "q/.specify/templates/AGENTS.codex.md",
       "sha256": "a24fc0e1522818044206bec6210b97fa9fb4c10eb553401d4beeeba2f68c5b93"
+    },
+    {
+      "path": "q/.specify/templates/canon/contradictions.md",
+      "sha256": "dba9cc205e2e09c6b8d9a10b7a4cc9933ed73c13de0e351639ca4d5d40adafb8"
+    },
+    {
+      "path": "q/.specify/templates/canon/facts.json",
+      "sha256": "10bb3d031f0241e05f99c014a10c0bcde61605a40e3d231c5e47641667218f1d"
+    },
+    {
+      "path": "q/.specify/templates/canon/propagation-debt.json",
+      "sha256": "d489ec9a11b278e6bc21f807d1ff00ff8a621380ea78efbc7e0934a0caf75f50"
     },
     {
       "path": "q/.specify/templates/checklist-template.md",
@@ -4572,6 +5036,22 @@
     {
       "path": "q/.specify/templates/vscode-settings.json",
       "sha256": "875183e65cb2b8fd43111ef9f6b8e7b94fb8e3cdcfa9ae340cd9cf3eadaf06eb"
+    },
+    {
+      "path": "q/.specify/templates/world/factions.yaml",
+      "sha256": "e0a53fcc97aa33e0096deafbf432df55657e704024978f8c9be6731a9c4bdac1"
+    },
+    {
+      "path": "q/.specify/templates/world/locations.yaml",
+      "sha256": "e0a53fcc97aa33e0096deafbf432df55657e704024978f8c9be6731a9c4bdac1"
+    },
+    {
+      "path": "q/.specify/templates/world/rules.yaml",
+      "sha256": "f3488f9a248a54bfb6a65ae2e570575f65836d2b4938a27c7a3df073f15db69f"
+    },
+    {
+      "path": "q/.specify/templates/world/world-bible.md",
+      "sha256": "4c440963c59dfbabdf99d8eed0c2c81c262f4fc206b0ef769f7480304b2e912e"
     },
     {
       "path": "q/.specify/templates/writing-constitution-template.md",
@@ -4677,7 +5157,7 @@
     },
     {
       "path": "qwen/.qwen/commands/checklist.toml",
-      "sha256": "a4d55f91b6e7d7841a1dffe463d647919a3ee51d72eba87e03407b14d424c016",
+      "sha256": "099d274fa9de25f9d9ad94dfdbca11c5013cab973c875c50a3e6494189702db6",
       "commandSource": {
         "command": "checklist",
         "kind": "legacy-template",
@@ -4776,7 +5256,7 @@
     },
     {
       "path": "qwen/.qwen/commands/write.toml",
-      "sha256": "c0622a8cbc3053f0dae576b164d0098104147137d72f56d00fca1395ce7228fe",
+      "sha256": "d2942269b362b812d10568771ee8c129804e944a14264ba70d5935b2a1b08626",
       "commandSource": {
         "command": "write",
         "kind": "command-spec",
@@ -4889,12 +5369,36 @@
       "sha256": "06255c106d3ee5a1a5c84afcc056a370589bc3bc8577d7e42a7934bfc7b9bede"
     },
     {
+      "path": "qwen/.specify/scripts/runtime/application/check-writing-state.js",
+      "sha256": "3d966a5256cefed94cc1cb9bde8a55c4ddac6d4efb146d4a0dbc6192b02dedb8"
+    },
+    {
+      "path": "qwen/.specify/scripts/runtime/domain/story-artifact.js",
+      "sha256": "010032f357a3154a9e939db41baa9b47bf72d20a7b4d3c1dba65c25c2af2d603"
+    },
+    {
+      "path": "qwen/.specify/scripts/runtime/script-runtime.js",
+      "sha256": "6ddcafa9fca67371f159c0feb8df4d0eda5cda0e80d45bcb11713f43db99ba6c"
+    },
+    {
       "path": "qwen/.specify/templates/agent/agent-contract.md",
       "sha256": "f4ba35ef8937a6c789ed96a8b25a7df1bb69757722cd4602b416f9e3b63aa0d9"
     },
     {
       "path": "qwen/.specify/templates/AGENTS.codex.md",
       "sha256": "a24fc0e1522818044206bec6210b97fa9fb4c10eb553401d4beeeba2f68c5b93"
+    },
+    {
+      "path": "qwen/.specify/templates/canon/contradictions.md",
+      "sha256": "dba9cc205e2e09c6b8d9a10b7a4cc9933ed73c13de0e351639ca4d5d40adafb8"
+    },
+    {
+      "path": "qwen/.specify/templates/canon/facts.json",
+      "sha256": "10bb3d031f0241e05f99c014a10c0bcde61605a40e3d231c5e47641667218f1d"
+    },
+    {
+      "path": "qwen/.specify/templates/canon/propagation-debt.json",
+      "sha256": "d489ec9a11b278e6bc21f807d1ff00ff8a621380ea78efbc7e0934a0caf75f50"
     },
     {
       "path": "qwen/.specify/templates/checklist-template.md",
@@ -4959,6 +5463,22 @@
     {
       "path": "qwen/.specify/templates/vscode-settings.json",
       "sha256": "875183e65cb2b8fd43111ef9f6b8e7b94fb8e3cdcfa9ae340cd9cf3eadaf06eb"
+    },
+    {
+      "path": "qwen/.specify/templates/world/factions.yaml",
+      "sha256": "e0a53fcc97aa33e0096deafbf432df55657e704024978f8c9be6731a9c4bdac1"
+    },
+    {
+      "path": "qwen/.specify/templates/world/locations.yaml",
+      "sha256": "e0a53fcc97aa33e0096deafbf432df55657e704024978f8c9be6731a9c4bdac1"
+    },
+    {
+      "path": "qwen/.specify/templates/world/rules.yaml",
+      "sha256": "f3488f9a248a54bfb6a65ae2e570575f65836d2b4938a27c7a3df073f15db69f"
+    },
+    {
+      "path": "qwen/.specify/templates/world/world-bible.md",
+      "sha256": "4c440963c59dfbabdf99d8eed0c2c81c262f4fc206b0ef769f7480304b2e912e"
     },
     {
       "path": "qwen/.specify/templates/writing-constitution-template.md",
@@ -5064,7 +5584,7 @@
     },
     {
       "path": "roocode/.roo/commands/checklist.md",
-      "sha256": "e425bb9c1f25b7b82a763e3f8f52451228da0e41e18e6a3f1eb56dd1edd74eae",
+      "sha256": "ad732873a4bf44432f86b7aa421373551f8b961a6533f6ad89563e703773527a",
       "commandSource": {
         "command": "checklist",
         "kind": "legacy-template",
@@ -5163,7 +5683,7 @@
     },
     {
       "path": "roocode/.roo/commands/write.md",
-      "sha256": "dda96fe36034efdb7716faf885df3d0f0d8fe2c4e5cd6c2f12fe68852a652111",
+      "sha256": "03cbda9e7bc40df681602806321c50051cb6f6ea124168ee0dd4fb0a39a3b200",
       "commandSource": {
         "command": "write",
         "kind": "command-spec",
@@ -5276,12 +5796,36 @@
       "sha256": "06255c106d3ee5a1a5c84afcc056a370589bc3bc8577d7e42a7934bfc7b9bede"
     },
     {
+      "path": "roocode/.specify/scripts/runtime/application/check-writing-state.js",
+      "sha256": "3d966a5256cefed94cc1cb9bde8a55c4ddac6d4efb146d4a0dbc6192b02dedb8"
+    },
+    {
+      "path": "roocode/.specify/scripts/runtime/domain/story-artifact.js",
+      "sha256": "010032f357a3154a9e939db41baa9b47bf72d20a7b4d3c1dba65c25c2af2d603"
+    },
+    {
+      "path": "roocode/.specify/scripts/runtime/script-runtime.js",
+      "sha256": "6ddcafa9fca67371f159c0feb8df4d0eda5cda0e80d45bcb11713f43db99ba6c"
+    },
+    {
       "path": "roocode/.specify/templates/agent/agent-contract.md",
       "sha256": "f4ba35ef8937a6c789ed96a8b25a7df1bb69757722cd4602b416f9e3b63aa0d9"
     },
     {
       "path": "roocode/.specify/templates/AGENTS.codex.md",
       "sha256": "a24fc0e1522818044206bec6210b97fa9fb4c10eb553401d4beeeba2f68c5b93"
+    },
+    {
+      "path": "roocode/.specify/templates/canon/contradictions.md",
+      "sha256": "dba9cc205e2e09c6b8d9a10b7a4cc9933ed73c13de0e351639ca4d5d40adafb8"
+    },
+    {
+      "path": "roocode/.specify/templates/canon/facts.json",
+      "sha256": "10bb3d031f0241e05f99c014a10c0bcde61605a40e3d231c5e47641667218f1d"
+    },
+    {
+      "path": "roocode/.specify/templates/canon/propagation-debt.json",
+      "sha256": "d489ec9a11b278e6bc21f807d1ff00ff8a621380ea78efbc7e0934a0caf75f50"
     },
     {
       "path": "roocode/.specify/templates/checklist-template.md",
@@ -5346,6 +5890,22 @@
     {
       "path": "roocode/.specify/templates/vscode-settings.json",
       "sha256": "875183e65cb2b8fd43111ef9f6b8e7b94fb8e3cdcfa9ae340cd9cf3eadaf06eb"
+    },
+    {
+      "path": "roocode/.specify/templates/world/factions.yaml",
+      "sha256": "e0a53fcc97aa33e0096deafbf432df55657e704024978f8c9be6731a9c4bdac1"
+    },
+    {
+      "path": "roocode/.specify/templates/world/locations.yaml",
+      "sha256": "e0a53fcc97aa33e0096deafbf432df55657e704024978f8c9be6731a9c4bdac1"
+    },
+    {
+      "path": "roocode/.specify/templates/world/rules.yaml",
+      "sha256": "f3488f9a248a54bfb6a65ae2e570575f65836d2b4938a27c7a3df073f15db69f"
+    },
+    {
+      "path": "roocode/.specify/templates/world/world-bible.md",
+      "sha256": "4c440963c59dfbabdf99d8eed0c2c81c262f4fc206b0ef769f7480304b2e912e"
     },
     {
       "path": "roocode/.specify/templates/writing-constitution-template.md",
@@ -5544,12 +6104,36 @@
       "sha256": "06255c106d3ee5a1a5c84afcc056a370589bc3bc8577d7e42a7934bfc7b9bede"
     },
     {
+      "path": "windsurf/.specify/scripts/runtime/application/check-writing-state.js",
+      "sha256": "3d966a5256cefed94cc1cb9bde8a55c4ddac6d4efb146d4a0dbc6192b02dedb8"
+    },
+    {
+      "path": "windsurf/.specify/scripts/runtime/domain/story-artifact.js",
+      "sha256": "010032f357a3154a9e939db41baa9b47bf72d20a7b4d3c1dba65c25c2af2d603"
+    },
+    {
+      "path": "windsurf/.specify/scripts/runtime/script-runtime.js",
+      "sha256": "6ddcafa9fca67371f159c0feb8df4d0eda5cda0e80d45bcb11713f43db99ba6c"
+    },
+    {
       "path": "windsurf/.specify/templates/agent/agent-contract.md",
       "sha256": "f4ba35ef8937a6c789ed96a8b25a7df1bb69757722cd4602b416f9e3b63aa0d9"
     },
     {
       "path": "windsurf/.specify/templates/AGENTS.codex.md",
       "sha256": "a24fc0e1522818044206bec6210b97fa9fb4c10eb553401d4beeeba2f68c5b93"
+    },
+    {
+      "path": "windsurf/.specify/templates/canon/contradictions.md",
+      "sha256": "dba9cc205e2e09c6b8d9a10b7a4cc9933ed73c13de0e351639ca4d5d40adafb8"
+    },
+    {
+      "path": "windsurf/.specify/templates/canon/facts.json",
+      "sha256": "10bb3d031f0241e05f99c014a10c0bcde61605a40e3d231c5e47641667218f1d"
+    },
+    {
+      "path": "windsurf/.specify/templates/canon/propagation-debt.json",
+      "sha256": "d489ec9a11b278e6bc21f807d1ff00ff8a621380ea78efbc7e0934a0caf75f50"
     },
     {
       "path": "windsurf/.specify/templates/checklist-template.md",
@@ -5616,6 +6200,22 @@
       "sha256": "875183e65cb2b8fd43111ef9f6b8e7b94fb8e3cdcfa9ae340cd9cf3eadaf06eb"
     },
     {
+      "path": "windsurf/.specify/templates/world/factions.yaml",
+      "sha256": "e0a53fcc97aa33e0096deafbf432df55657e704024978f8c9be6731a9c4bdac1"
+    },
+    {
+      "path": "windsurf/.specify/templates/world/locations.yaml",
+      "sha256": "e0a53fcc97aa33e0096deafbf432df55657e704024978f8c9be6731a9c4bdac1"
+    },
+    {
+      "path": "windsurf/.specify/templates/world/rules.yaml",
+      "sha256": "f3488f9a248a54bfb6a65ae2e570575f65836d2b4938a27c7a3df073f15db69f"
+    },
+    {
+      "path": "windsurf/.specify/templates/world/world-bible.md",
+      "sha256": "4c440963c59dfbabdf99d8eed0c2c81c262f4fc206b0ef769f7480304b2e912e"
+    },
+    {
       "path": "windsurf/.specify/templates/writing-constitution-template.md",
       "sha256": "26784c8e78e8636b6d09105ef9f6dcd3951c111517049cfbf23503a3e1b53b64"
     },
@@ -5631,7 +6231,7 @@
     },
     {
       "path": "windsurf/.windsurf/workflows/checklist.md",
-      "sha256": "e425bb9c1f25b7b82a763e3f8f52451228da0e41e18e6a3f1eb56dd1edd74eae",
+      "sha256": "ad732873a4bf44432f86b7aa421373551f8b961a6533f6ad89563e703773527a",
       "commandSource": {
         "command": "checklist",
         "kind": "legacy-template",
@@ -5730,7 +6330,7 @@
     },
     {
       "path": "windsurf/.windsurf/workflows/write.md",
-      "sha256": "dda96fe36034efdb7716faf885df3d0f0d8fe2c4e5cd6c2f12fe68852a652111",
+      "sha256": "03cbda9e7bc40df681602806321c50051cb6f6ea124168ee0dd4fb0a39a3b200",
       "commandSource": {
         "command": "write",
         "kind": "command-spec",

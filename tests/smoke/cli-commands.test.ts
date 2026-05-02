@@ -457,4 +457,40 @@ describe('CLI command modules smoke', () => {
     });
     expect(handoff.riskBoundaries.join('\n')).toContain('只读模式');
   });
+
+  it('checks world and canon documents as JSON', async () => {
+    const cwd = await makeTempDir();
+    await execFileAsync('node', [
+      cliPath,
+      'init',
+      'smoke',
+      '--agent',
+      'generic',
+      '--method',
+      'three-act',
+      '--no-git'
+    ], { cwd });
+
+    const projectPath = path.join(cwd, 'smoke');
+    const worldResult = await execFileAsync('node', [
+      cliPath,
+      'world:check',
+      '--json'
+    ], { cwd: projectPath });
+    const canonResult = await execFileAsync('node', [
+      cliPath,
+      'canon:check',
+      '--json'
+    ], { cwd: projectPath });
+
+    const world = JSON.parse(worldResult.stdout);
+    const canon = JSON.parse(canonResult.stdout);
+
+    expect(world.files.length).toBeGreaterThan(0);
+    expect(world.facts.length).toBeGreaterThan(0);
+    expect(world.issues).toEqual([]);
+    expect(canon.files.length).toBeGreaterThan(0);
+    expect(canon.facts.length).toBeGreaterThan(0);
+    expect(canon.issues).toEqual([]);
+  });
 });

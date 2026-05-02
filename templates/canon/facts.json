@@ -1,0 +1,17 @@
+{
+  "canonFacts": [
+    {
+      "id": "canon.example.fact",
+      "summary": "正文已经写成事实的示例。",
+      "type": "event",
+      "evidence": [
+        {
+          "path": "stories/001-story/content/chapter-001.md",
+          "quote": "用短摘录或说明指向证据"
+        }
+      ],
+      "affectedEntities": [],
+      "status": "draft"
+    }
+  ]
+}
