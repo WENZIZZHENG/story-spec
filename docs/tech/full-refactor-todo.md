@@ -197,7 +197,7 @@ src/
   - 验收：生成结果与现有 `build:commands` golden fixture 等价。
 - [x] `scripts/build/generate-commands.sh` 降级为兼容包装或移除
   - 验收：Windows 无 Git Bash 时仍可生成命令。
-- [ ] 支持模板 resolution stack
+- [x] 支持模板 resolution stack
   - 顺序：project-local overrides → presets → extensions → core templates。
   - 验收：覆盖规则有测试。
 
@@ -213,6 +213,8 @@ src/
 - 已新增 `src/prompt/build-commands.ts` 与 `scripts/build/build-commands.ts`，把命令产物生成、支持文件复制、平台输出目录映射迁移到 TypeScript/Node。
 - 已将 `scripts/build-commands.cjs` 改为 Node 入口，`scripts/build/generate-commands.sh` 降级为兼容包装；Windows 无 Git Bash 时可直接运行 `npm run build:commands`。
 - 已新增 `tests/unit/build-commands.test.ts`，覆盖 Codex/Gemini 命令生成、脚本路径重写、支持文件复制和 `spec/tracking`/`spec/knowledge` 空目录保护。
+- 已新增 `src/templates/resolver.ts`，支持 core、extension、preset、project-local 四层模板源解析，并返回最终模板清单与 override 记录。
+- 已新增 `tests/unit/template-resolver.test.ts`，覆盖 project → preset → extension → core 的覆盖优先级，以及解析结果写入目标目录。
 
 ## 阶段 5：脚本运行时统一
 
