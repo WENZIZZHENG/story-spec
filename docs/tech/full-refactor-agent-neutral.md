@@ -462,7 +462,7 @@ risk:
 - [x] A2-T003：初始化时生成通用 `AGENTS.md`，Codex profile 作为可选增强段。
 - [x] A2-T004：新增 `generic` renderer，输出 `.specify/commands/*.md`。
 - [x] A2-T005：新增 `novel contract:print` 与 `novel contract:sync`。
-- [ ] A2-T006：`validate` 增加 contract/commands 缺失检查。
+- [x] A2-T006：`validate` 增加 contract/commands 缺失检查。
 
 验收：
 

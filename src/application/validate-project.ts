@@ -25,7 +25,10 @@ export type ProjectValidationIssueCode =
   | WritingRuleIssue['code']
   | 'MISSING_PROJECT_CONFIG'
   | 'MISSING_PROJECT_DIR'
-  | 'MISSING_TEMPLATE';
+  | 'MISSING_TEMPLATE'
+  | 'MISSING_AGENT_CONTRACT'
+  | 'MISSING_AGENTS_FILE'
+  | 'MISSING_AGENT_COMMAND';
 
 export interface ProjectValidationIssue {
   severity: ValidationSeverity;
@@ -39,6 +42,7 @@ export interface ProjectValidationSummary {
   tasks: number;
   trackingFiles: number;
   templatesChecked: number;
+  agentCommandsChecked: number;
 }
 
 export interface ProjectValidationResult {
@@ -61,6 +65,11 @@ export interface RenderProjectValidationOptions {
 
 interface TemplateValidationResult {
   templatesChecked: number;
+  issues: ProjectValidationIssue[];
+}
+
+interface AgentContractValidationResult {
+  agentCommandsChecked: number;
   issues: ProjectValidationIssue[];
 }
 
@@ -181,11 +190,121 @@ const validateTemplates = async (
   };
 };
 
+const readProjectConfig = async (
+  fs: ProjectFileSystem,
+  projectRoot: string
+): Promise<Record<string, unknown>> => {
+  const configPath = path.join(projectRoot, '.specify', 'config.json');
+  if (!await fs.pathExists(configPath)) {
+    return {};
+  }
+
+  try {
+    return await fs.readJson<Record<string, unknown>>(configPath);
+  } catch {
+    return {};
+  }
+};
+
+const declaresGenericIntegration = (config: Record<string, unknown>): boolean => {
+  if (config.agent === 'generic' || config.ai === 'generic') {
+    return true;
+  }
+
+  if (!Array.isArray(config.integrations)) {
+    return false;
+  }
+
+  return config.integrations.some(integration => {
+    if (integration === 'generic') {
+      return true;
+    }
+
+    return typeof integration === 'object'
+      && integration !== null
+      && 'id' in integration
+      && integration.id === 'generic';
+  });
+};
+
+const listExpectedGenericCommands = async (
+  fs: ProjectFileSystem,
+  packageRoot?: string
+): Promise<string[]> => {
+  if (!packageRoot) {
+    return [];
+  }
+
+  const sourceDir = path.join(packageRoot, 'templates', 'commands');
+  if (!await fs.pathExists(sourceDir)) {
+    return [];
+  }
+
+  return (await fs.readDir(sourceDir))
+    .filter(file => file.endsWith('.md'))
+    .map(file => file)
+    .sort();
+};
+
+const validateAgentContract = async (
+  fs: ProjectFileSystem,
+  projectRoot: string,
+  packageRoot?: string
+): Promise<AgentContractValidationResult> => {
+  const issues: ProjectValidationIssue[] = [];
+  const contractPath = path.join(projectRoot, '.specify', 'agent-contract.md');
+  const agentsPath = path.join(projectRoot, 'AGENTS.md');
+
+  if (!await fs.pathExists(contractPath)) {
+    issues.push(createIssue(
+      'MISSING_AGENT_CONTRACT',
+      contractPath,
+      '缺少 .specify/agent-contract.md，请运行 novel contract:sync'
+    ));
+  }
+
+  if (!await fs.pathExists(agentsPath)) {
+    issues.push(createIssue(
+      'MISSING_AGENTS_FILE',
+      agentsPath,
+      '缺少 AGENTS.md，请运行 novel contract:sync'
+    ));
+  }
+
+  const config = await readProjectConfig(fs, projectRoot);
+  const commandsDir = path.join(projectRoot, '.specify', 'commands');
+  const shouldCheckCommands = declaresGenericIntegration(config) || await fs.pathExists(commandsDir);
+  if (!shouldCheckCommands) {
+    return {
+      agentCommandsChecked: 0,
+      issues
+    };
+  }
+
+  const expectedCommands = await listExpectedGenericCommands(fs, packageRoot);
+  for (const commandFile of expectedCommands) {
+    const commandPath = path.join(commandsDir, commandFile);
+    if (!await fs.pathExists(commandPath)) {
+      issues.push(createIssue(
+        'MISSING_AGENT_COMMAND',
+        commandPath,
+        `缺少 generic command：.specify/commands/${commandFile}`
+      ));
+    }
+  }
+
+  return {
+    agentCommandsChecked: expectedCommands.length,
+    issues
+  };
+};
+
 export const validateProject = async (input: ValidateProjectInput): Promise<ProjectValidationResult> => {
   const { projectRoot, fileSystem: fs } = input;
   const artifactScan = await scanStoryArtifacts({ projectRoot, fileSystem: fs });
   const trackingResult = await validateTrackingFiles(fs, projectRoot);
   const templateResult = await validateTemplates(fs, projectRoot, input.packageRoot);
+  const agentContractResult = await validateAgentContract(fs, projectRoot, input.packageRoot);
   const writingRuleResult = await runWritingRules({
     projectRoot,
     fileSystem: fs,
@@ -209,6 +328,7 @@ export const validateProject = async (input: ValidateProjectInput): Promise<Proj
     ...trackingResult.issues,
     ...taskIssues,
     ...writingRuleResult.issues.map(toProjectIssue),
+    ...agentContractResult.issues,
     ...templateResult.issues
   ]);
   const issueCounts = countIssuesBySeverity(issues);
@@ -220,7 +340,8 @@ export const validateProject = async (input: ValidateProjectInput): Promise<Proj
       stories: artifactScan.stories.length,
       tasks: artifactScan.stories.reduce((total, story) => total + story.tasks.length, 0),
       trackingFiles: trackingResult.count,
-      templatesChecked: templateResult.templatesChecked
+      templatesChecked: templateResult.templatesChecked,
+      agentCommandsChecked: agentContractResult.agentCommandsChecked
     },
     issueCounts,
     issues
@@ -241,6 +362,7 @@ export const renderProjectValidation = (
     `任务：${result.summary.tasks}`,
     `tracking JSON：${result.summary.trackingFiles}`,
     `模板检查：${result.summary.templatesChecked}`,
+    `generic commands：${result.summary.agentCommandsChecked}`,
     `问题：${result.issueCounts.error} error / ${result.issueCounts.warning} warning / ${result.issueCounts.info} info`
   ];
 
