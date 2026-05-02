@@ -1,6 +1,12 @@
 import fs from 'fs-extra';
+import os from 'node:os';
 import path from 'path';
 import yaml from 'js-yaml';
+import {
+  AGENT_INTEGRATIONS,
+  type AgentIntegration,
+  type AgentIntegrationId
+} from '../agent/registry.js';
 import {
   parsePluginManifest,
   type PluginCommand,
@@ -8,6 +14,9 @@ import {
   type PluginHook,
   type PluginManifest
 } from '../domain/plugin-manifest.js';
+import { parseCommandSpec } from '../prompt/command-spec.js';
+import type { CommandSource } from '../prompt/command-source.js';
+import { renderCommandForPlatform } from '../prompt/platform-renderers/index.js';
 import { AI_PLATFORMS, type AIPlatformId } from '../utils/ai-platforms.js';
 import { logger } from '../utils/logger.js';
 
@@ -23,9 +32,10 @@ export interface PluginInstallOperation {
   sourcePath: string;
   targetPath: string;
   conflict: boolean;
-  platform?: AIPlatformId;
+  platform?: AgentIntegrationId;
   id?: string;
   hook?: PluginHook;
+  generated?: boolean;
 }
 
 export interface PluginInstallConflict {
@@ -272,6 +282,23 @@ export class PluginManager {
     return platformIds
   }
 
+  private getAgentCommandDir(integration: AgentIntegration): string {
+    const target = integration.installTargets[0]
+    return path.join(path.dirname(this.pluginsDir), target.dir, target.commandsDir)
+  }
+
+  private async detectSupportedAgentIntegrations(): Promise<AgentIntegration[]> {
+    const integrations: AgentIntegration[] = []
+
+    for (const integration of AGENT_INTEGRATIONS) {
+      if (await fs.pathExists(this.getAgentCommandDir(integration))) {
+        integrations.push(integration)
+      }
+    }
+
+    return integrations
+  }
+
   private async createOperation(
     operation: Omit<PluginInstallOperation, 'conflict'>
   ): Promise<PluginInstallOperation> {
@@ -294,36 +321,88 @@ export class PluginManager {
     commands: PluginCommand[]
   ): Promise<PluginInstallOperation[]> {
     const operations: PluginInstallOperation[] = []
-    const supportedPlatformIds = await this.detectSupportedPlatformIds()
+    const supportedIntegrations = await this.detectSupportedAgentIntegrations()
 
     for (const command of commands) {
-      const commandSource = path.join(sourcePath, command.file)
-
-      for (const platformId of supportedPlatformIds) {
-        if (platformId === 'gemini') {
-          const cmdId = path.basename(command.id, path.extname(command.id))
-          const tomlSourcePath = path.join(sourcePath, 'commands-gemini', `${cmdId}.toml`)
-          operations.push(await this.createOperation({
-            kind: 'install-gemini-command',
-            sourcePath: await fs.pathExists(tomlSourcePath) ? tomlSourcePath : commandSource,
-            targetPath: path.join(this.getCommandDir(platformId), `${cmdId}.toml`),
-            platform: platformId,
-            id: command.id
-          }))
-          continue
-        }
+      for (const integration of supportedIntegrations) {
+        const rendered = await this.renderPluginCommandToCache(pluginName, sourcePath, command, integration.id)
 
         operations.push(await this.createOperation({
-          kind: 'install-command',
-          sourcePath: commandSource,
-          targetPath: path.join(this.getCommandDir(platformId), `${command.id}.md`),
-          platform: platformId,
-          id: command.id
+          kind: integration.id === 'gemini' ? 'install-gemini-command' : 'install-command',
+          sourcePath: rendered.sourcePath,
+          targetPath: path.join(this.getAgentCommandDir(integration), rendered.outputFile),
+          platform: integration.id,
+          id: command.id,
+          generated: true
         }))
       }
     }
 
     return operations
+  }
+
+  private async createPluginCommandSource(
+    sourcePath: string,
+    command: PluginCommand
+  ): Promise<CommandSource> {
+    const commandFilePath = path.join(sourcePath, command.file)
+    const commandDir = path.dirname(commandFilePath)
+    const commandId = path.basename(command.id, path.extname(command.id))
+    const specPath = path.join(commandDir, `${commandId}.command.yaml`)
+    const promptPath = path.join(commandDir, `${commandId}.prompt.md`)
+
+    if (await fs.pathExists(specPath) && await fs.pathExists(promptPath)) {
+      const result = parseCommandSpec(await fs.readFile(specPath, 'utf-8'), specPath)
+      if (!result.spec) {
+        throw new Error(result.issues.map(item => `${item.path}: ${item.message}`).join('\n'))
+      }
+
+      return {
+        kind: 'command-spec',
+        commandName: command.id,
+        spec: result.spec,
+        promptBody: await fs.readFile(promptPath, 'utf-8'),
+        sourcePath: specPath,
+        promptPath
+      }
+    }
+
+    return {
+      kind: 'legacy-template',
+      commandName: command.id,
+      template: await fs.readFile(commandFilePath, 'utf-8'),
+      sourcePath: commandFilePath
+    }
+  }
+
+  private async renderPluginCommandToCache(
+    pluginName: string,
+    sourcePath: string,
+    command: PluginCommand,
+    platformId: AgentIntegrationId
+  ): Promise<{ sourcePath: string; outputFile: string }> {
+    const commandSource = await this.createPluginCommandSource(sourcePath, command)
+    const rendered = renderCommandForPlatform({
+      commandName: command.id,
+      commandSource,
+      platform: platformId,
+      scriptVariant: 'sh'
+    })
+    const cachePath = path.join(
+      os.tmpdir(),
+      'novel-writer-plugin-rendered-commands',
+      pluginName,
+      path.basename(sourcePath),
+      'rendered-commands',
+      platformId,
+      rendered.outputFile
+    )
+
+    await fs.outputFile(cachePath, rendered.content)
+    return {
+      sourcePath: cachePath,
+      outputFile: rendered.outputFile
+    }
   }
 
   private async createExpertOperations(

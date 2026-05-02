@@ -76,6 +76,43 @@ hooks:
   return sourcePath;
 };
 
+const createCommandSpecPluginSource = async () => {
+  const sourcePath = await makeTempDir();
+
+  await writeFixtureFile(sourcePath, 'config.yaml', `name: spec-plugin
+version: 1.0.0
+description: Spec plugin
+type: feature
+commands:
+  - id: spec-command
+    file: commands/spec-command.md
+    description: Spec command
+`);
+  await writeFixtureFile(sourcePath, 'commands/spec-command.md', '# legacy fallback');
+  await writeFixtureFile(sourcePath, 'commands/spec-command.command.yaml', `id: spec-command
+title: Spec command
+stage: custom
+description: Rendered from spec
+arguments:
+  hint: "[input]"
+requiredReads:
+  - stories/*/tasks.md
+allowedWrites:
+  - spec/reports/**
+scripts:
+  check:
+    capability: spec-check
+    sh: scripts/bash/spec-check.sh
+    ps: scripts/powershell/spec-check.ps1
+`);
+  await writeFixtureFile(sourcePath, 'commands/spec-command.prompt.md', `Input: $ARGUMENTS
+Agent: __AGENT__
+Run {SCRIPT}
+`);
+
+  return sourcePath;
+};
+
 const createProjectRoot = async () => {
   const projectRoot = await makeTempDir();
   await mkdir(path.join(projectRoot, '.claude', 'commands'), { recursive: true });
@@ -95,7 +132,7 @@ describe('PluginManager install plan', () => {
     const manager = new PluginManager(projectRoot);
 
     await mkdir(path.join(projectRoot, 'plugins', 'demo-plugin'), { recursive: true });
-    await writeFixtureFile(projectRoot, '.claude/commands/demo-command.md', 'existing');
+    await writeFixtureFile(projectRoot, '.claude/commands/novel.demo-command.md', 'existing');
 
     const plan = await manager.planInstallPlugin('demo-plugin', sourcePath);
 
@@ -106,14 +143,14 @@ describe('PluginManager install plan', () => {
       conflict: operation.conflict
     }))).toEqual(expect.arrayContaining([
       { kind: 'copy-plugin', target: 'plugins/demo-plugin', conflict: true },
-      { kind: 'install-command', target: '.claude/commands/demo-command.md', conflict: true },
+      { kind: 'install-command', target: '.claude/commands/novel.demo-command.md', conflict: true },
       { kind: 'install-command', target: '.cursor/commands/demo-command.md', conflict: false },
       { kind: 'install-gemini-command', target: '.gemini/commands/demo-command.toml', conflict: false },
       { kind: 'register-expert', target: 'experts/plugins/demo-plugin/demo-expert.md', conflict: false }
     ]));
     expect(plan.conflicts.map(conflict => path.relative(projectRoot, conflict.targetPath).replace(/\\/g, '/'))).toEqual([
       'plugins/demo-plugin',
-      '.claude/commands/demo-command.md'
+      '.claude/commands/novel.demo-command.md'
     ]);
   });
 
@@ -126,7 +163,7 @@ describe('PluginManager install plan', () => {
     await manager.applyInstallPlan(plan);
 
     await expect(exists(path.join(projectRoot, 'plugins', 'demo-plugin', 'config.yaml'))).resolves.toBe(true);
-    await expect(exists(path.join(projectRoot, '.claude', 'commands', 'demo-command.md'))).resolves.toBe(true);
+    await expect(exists(path.join(projectRoot, '.claude', 'commands', 'novel.demo-command.md'))).resolves.toBe(true);
     await expect(exists(path.join(projectRoot, '.cursor', 'commands', 'demo-command.md'))).resolves.toBe(true);
     await expect(exists(path.join(projectRoot, '.gemini', 'commands', 'demo-command.toml'))).resolves.toBe(true);
     await expect(exists(path.join(projectRoot, 'experts', 'plugins', 'demo-plugin', 'demo-expert.md'))).resolves.toBe(true);
@@ -166,16 +203,46 @@ describe('PluginManager install plan', () => {
     const sourcePath = await createPluginSource();
     const manager = new PluginManager(projectRoot);
 
-    await writeFixtureFile(projectRoot, '.claude/commands/demo-command.md', 'existing');
+    await writeFixtureFile(projectRoot, '.claude/commands/novel.demo-command.md', 'existing');
     const plan = await manager.planInstallPlugin('demo-plugin', sourcePath);
 
     await expect(manager.applyInstallPlan(plan)).rejects.toMatchObject({
       name: 'PluginInstallConflictError'
     });
-    await expect(readFile(path.join(projectRoot, '.claude/commands/demo-command.md'), 'utf-8')).resolves.toBe('existing');
+    await expect(readFile(path.join(projectRoot, '.claude/commands/novel.demo-command.md'), 'utf-8')).resolves.toBe('existing');
 
     await manager.applyInstallPlan(plan, { force: true });
 
-    await expect(readFile(path.join(projectRoot, '.claude/commands/demo-command.md'), 'utf-8')).resolves.toContain('Run demo');
+    await expect(readFile(path.join(projectRoot, '.claude/commands/novel.demo-command.md'), 'utf-8')).resolves.toContain('Run demo');
+  });
+
+  it('renders plugin CommandSpec commands through the agent renderers', async () => {
+    const projectRoot = await createProjectRoot();
+    const sourcePath = await createCommandSpecPluginSource();
+    const manager = new PluginManager(projectRoot);
+
+    await mkdir(path.join(projectRoot, '.codex', 'prompts'), { recursive: true });
+    await mkdir(path.join(projectRoot, '.specify', 'commands'), { recursive: true });
+
+    const plan = await manager.planInstallPlugin('spec-plugin', sourcePath);
+
+    expect(plan.operations.map(operation => ({
+      kind: operation.kind,
+      target: path.relative(projectRoot, operation.targetPath).replace(/\\/g, '/'),
+      generated: operation.generated
+    }))).toEqual(expect.arrayContaining([
+      { kind: 'install-command', target: '.codex/prompts/novel-spec-command.md', generated: true },
+      { kind: 'install-gemini-command', target: '.gemini/commands/spec-command.toml', generated: true },
+      { kind: 'install-command', target: '.specify/commands/spec-command.md', generated: true }
+    ]));
+
+    await manager.applyInstallPlan(plan);
+
+    await expect(readFile(path.join(projectRoot, '.codex', 'prompts', 'novel-spec-command.md'), 'utf-8'))
+      .resolves.toContain('Agent: codex');
+    await expect(readFile(path.join(projectRoot, '.gemini', 'commands', 'spec-command.toml'), 'utf-8'))
+      .resolves.toContain('description = "Rendered from spec"');
+    await expect(readFile(path.join(projectRoot, '.specify', 'commands', 'spec-command.md'), 'utf-8'))
+      .resolves.toContain('- `stories/*/tasks.md`');
   });
 });

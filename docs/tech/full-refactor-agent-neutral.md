@@ -508,7 +508,7 @@ risk:
 目标：插件接入新 registry 和 resolution stack。
 
 - [x] A5-T001：扩展 `PluginManifest`，增加 `kind`、`priority`、`provides`、`overrides`。
-- [ ] A5-T002：插件命令先注册到 command spec registry，再由 agent renderer 输出。
+- [x] A5-T002：插件命令先注册到 command spec registry，再由 agent renderer 输出。
 - [ ] A5-T003：实现 project override / preset / extension / core 的最终来源诊断。
 - [ ] A5-T004：`plugins:add --dry-run` 显示对所有 agent integration 的影响。
 - [ ] A5-T005：评估是否新增 `preset:add`、`extension:add`，或继续复用 `plugins:add`。
