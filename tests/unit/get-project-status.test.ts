@@ -39,7 +39,10 @@ const createProjectFixture = async () => {
   await mkdir(path.join(storyPath, 'content'), { recursive: true });
   await writeFile(path.join(storyPath, 'specification.md'), '- **版本**：v1');
   await writeFile(path.join(storyPath, 'creative-plan.md'), '版本: plan-v1');
-  await writeFile(path.join(storyPath, 'tasks.md'), '- [ ] **T001** 起草第一章');
+  await writeFile(path.join(storyPath, 'tasks.md'), `- [ ] [P0] **T001** - 起草第一章
+  - **依赖**：无
+  - **输出**：\`content/chapter-02.md\`
+`);
   await writeFile(path.join(storyPath, 'content', 'chapter-01.md'), '# 第一章\n\n一段正文。');
 
   return projectRoot;
@@ -76,7 +79,7 @@ describe('getProjectStatus', () => {
         hasTasks: true,
         specificationVersion: 'v1',
         creativePlanVersion: 'plan-v1',
-        nextTask: 'T001 起草第一章',
+        nextTask: 'T001 - 起草第一章',
         chapterFiles: 1,
         contentFiles: 1
       }
@@ -85,7 +88,13 @@ describe('getProjectStatus', () => {
     expect(status.tracking.find(item => item.file === 'broken.json')).toMatchObject({
       valid: false
     });
-    expect(status.nextActions).toContain('下一步任务：T001 起草第一章');
+    expect(status.blockers).toContainEqual({
+      severity: 'warning',
+      code: 'MISSING_TASK_OUTPUT',
+      message: '任务 T001 的输出文件不存在: content/chapter-02.md',
+      path: path.join(projectRoot, 'stories', '001-demo', 'content', 'chapter-02.md')
+    });
+    expect(status.nextActions).toContain('下一步任务：T001 - 起草第一章');
   });
 
   it('renders the common status model for CLI output', async () => {
@@ -102,6 +111,8 @@ describe('getProjectStatus', () => {
     expect(output).toContain('项目：status-demo');
     expect(output).toContain('当前故事：001-demo');
     expect(output).toContain('追踪 JSON：存在错误');
+    expect(output).toContain('阻塞原因：');
+    expect(output).toContain('MISSING_TASK_OUTPUT');
     expect(output).toContain('建议下一步：');
   });
 

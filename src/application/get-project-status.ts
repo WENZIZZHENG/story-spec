@@ -1,5 +1,8 @@
 import path from 'node:path';
 import { AI_PLATFORMS } from '../utils/ai-platforms.js';
+import type { ArtifactIssue } from '../validation/artifact-scanner.js';
+import { scanStoryArtifacts } from '../validation/artifact-scanner.js';
+import { createArtifactGraph } from '../validation/artifact-graph.js';
 import type { GitAdapter, ProjectFileSystem } from './project-ports.js';
 
 export interface StorySummary {
@@ -42,6 +45,7 @@ export interface ProjectStatus {
   };
   story: StorySummary | null;
   tracking: TrackingSummary[];
+  blockers: ArtifactIssue[];
   git: GitSummary;
   nextActions: string[];
 }
@@ -89,6 +93,7 @@ const readMarkdownVersion = async (fs: ProjectFileSystem, filePath: string): Pro
 
 const normalizeTaskLine = (line: string): string => line
   .replace(/^\s*-\s*\[\s\]\s*/, '')
+  .replace(/^\[[^\]]+\]\s*/, '')
   .replace(/\*\*/g, '')
   .trim();
 
@@ -283,6 +288,10 @@ const buildNextActions = (status: Omit<ProjectStatus, 'nextActions'>): string[] 
     actions.push(`修复追踪 JSON：${invalidTracking.map(item => item.file).join(', ')}`);
   }
 
+  if (status.blockers.length > 0) {
+    actions.push(`处理阻塞原因：${status.blockers.map(item => item.code).join(', ')}`);
+  }
+
   if (status.git.dirty) {
     actions.push('提交前审阅 `git diff`，确认没有混入无关改动');
   }
@@ -292,6 +301,8 @@ const buildNextActions = (status: Omit<ProjectStatus, 'nextActions'>): string[] 
 
 export const getProjectStatus = async (input: GetProjectStatusInput): Promise<ProjectStatus> => {
   const { projectRoot, fileSystem: fs, git } = input;
+  const artifactScan = await scanStoryArtifacts({ projectRoot, fileSystem: fs });
+  const artifactGraph = createArtifactGraph(artifactScan);
 
   const config = await readJsonSafe(fs, path.join(projectRoot, '.specify', 'config.json'));
   const baseStatus = {
@@ -306,6 +317,7 @@ export const getProjectStatus = async (input: GetProjectStatusInput): Promise<Pr
     },
     story: await buildStorySummary(fs, projectRoot),
     tracking: await validateTracking(fs, projectRoot),
+    blockers: artifactGraph.getBlockedTasks().flatMap(item => item.issues),
     git: await readGitSummary(git, projectRoot)
   };
 
@@ -347,6 +359,14 @@ export const renderProjectStatus = (status: ProjectStatus): string => {
   lines.push(`追踪 JSON：${status.tracking.length === 0 ? '未发现' : trackingOk ? '全部有效' : '存在错误'}`);
   for (const item of status.tracking.filter(item => !item.valid)) {
     lines.push(`- ${item.file}: ${item.error}`);
+  }
+
+  if (status.blockers.length > 0) {
+    lines.push('');
+    lines.push('阻塞原因：');
+    for (const blocker of status.blockers) {
+      lines.push(`- [${blocker.severity}] ${blocker.code}: ${blocker.message}`);
+    }
   }
 
   lines.push(`Git 状态：${status.git.available ? status.git.dirty ? `${status.git.changedFiles} 个改动` : '干净' : '不可用'}`);

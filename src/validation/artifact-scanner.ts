@@ -1,5 +1,6 @@
 import path from 'node:path';
-import fs from 'fs-extra';
+import fsExtra from 'fs-extra';
+import type { ProjectFileSystem } from '../application/project-ports.js';
 import {
   parseWritingTasksFromMarkdown,
   type StoryArtifact,
@@ -41,9 +42,18 @@ export interface ArtifactScanResult {
 
 export interface ScanStoryArtifactsInput {
   projectRoot: string;
+  fileSystem?: ProjectFileSystem;
 }
 
+const nodeFileSystem = {
+  pathExists: (filePath: string) => fsExtra.pathExists(filePath),
+  readDir: (dirPath: string) => fsExtra.readdir(dirPath),
+  readFile: (filePath: string) => fsExtra.readFile(filePath, 'utf-8'),
+  stat: (filePath: string) => fsExtra.stat(filePath)
+} as Pick<ProjectFileSystem, 'pathExists' | 'readDir' | 'readFile' | 'stat'>;
+
 const artifactExists = async (
+  fs: Pick<ProjectFileSystem, 'pathExists'>,
   kind: StoryArtifact['kind'],
   filePath: string
 ): Promise<StoryArtifact> => ({
@@ -52,31 +62,42 @@ const artifactExists = async (
   exists: await fs.pathExists(filePath)
 });
 
-const listDirectories = async (dirPath: string): Promise<string[]> => {
+const listDirectories = async (
+  fs: Pick<ProjectFileSystem, 'pathExists' | 'readDir' | 'stat'>,
+  dirPath: string
+): Promise<string[]> => {
   if (!await fs.pathExists(dirPath)) {
     return [];
   }
 
-  const entries = await fs.readdir(dirPath, { withFileTypes: true });
-  return entries
-    .filter(entry => entry.isDirectory())
-    .map(entry => entry.name)
-    .sort();
+  const entries = await fs.readDir(dirPath);
+  const dirs: string[] = [];
+  for (const entry of entries) {
+    if ((await fs.stat(path.join(dirPath, entry))).isDirectory()) {
+      dirs.push(entry);
+    }
+  }
+
+  return dirs.sort();
 };
 
-const listMarkdownFiles = async (dirPath: string): Promise<string[]> => {
+const listMarkdownFiles = async (
+  fs: Pick<ProjectFileSystem, 'pathExists' | 'readDir' | 'stat'>,
+  dirPath: string
+): Promise<string[]> => {
   if (!await fs.pathExists(dirPath)) {
     return [];
   }
 
-  const entries = await fs.readdir(dirPath, { withFileTypes: true });
+  const entries = await fs.readDir(dirPath);
   const files: string[] = [];
 
   for (const entry of entries) {
-    const entryPath = path.join(dirPath, entry.name);
-    if (entry.isDirectory()) {
-      files.push(...await listMarkdownFiles(entryPath));
-    } else if (entry.isFile() && entry.name.endsWith('.md')) {
+    const entryPath = path.join(dirPath, entry);
+    const stat = await fs.stat(entryPath);
+    if (stat.isDirectory()) {
+      files.push(...await listMarkdownFiles(fs, entryPath));
+    } else if (stat.isFile() && entry.endsWith('.md')) {
       files.push(entryPath);
     }
   }
@@ -95,29 +116,37 @@ const createMissingIssue = (
   path: filePath
 });
 
-const readTasks = async (storyPath: string, tasksPath: string): Promise<WritingTask[]> => {
+const readTasks = async (
+  fs: Pick<ProjectFileSystem, 'pathExists' | 'readFile'>,
+  storyPath: string,
+  tasksPath: string
+): Promise<WritingTask[]> => {
   if (!await fs.pathExists(tasksPath)) {
     return [];
   }
 
-  return parseWritingTasksFromMarkdown(await fs.readFile(tasksPath, 'utf-8'), {
+  return parseWritingTasksFromMarkdown(await fs.readFile(tasksPath), {
     storyPath,
     tasksPath
   });
 };
 
-const scanStory = async (projectRoot: string, storyName: string): Promise<ScannedStoryProject> => {
+const scanStory = async (
+  fs: Pick<ProjectFileSystem, 'pathExists' | 'readDir' | 'readFile' | 'stat'>,
+  projectRoot: string,
+  storyName: string
+): Promise<ScannedStoryProject> => {
   const storyPath = path.join(projectRoot, 'stories', storyName);
   const specificationPath = path.join(storyPath, 'specification.md');
   const creativePlanPath = path.join(storyPath, 'creative-plan.md');
   const tasksPath = path.join(storyPath, 'tasks.md');
   const contentDir = path.join(storyPath, 'content');
-  const tasks = await readTasks(storyPath, tasksPath);
-  const contentFiles = await listMarkdownFiles(contentDir);
+  const tasks = await readTasks(fs, storyPath, tasksPath);
+  const contentFiles = await listMarkdownFiles(fs, contentDir);
   const artifacts: StoryArtifact[] = [
-    await artifactExists('specification', specificationPath),
-    await artifactExists('creative-plan', creativePlanPath),
-    await artifactExists('tasks', tasksPath),
+    await artifactExists(fs, 'specification', specificationPath),
+    await artifactExists(fs, 'creative-plan', creativePlanPath),
+    await artifactExists(fs, 'tasks', tasksPath),
     ...contentFiles.map(filePath => ({
       kind: 'chapter' as const,
       path: filePath,
@@ -160,7 +189,10 @@ const scanStory = async (projectRoot: string, storyName: string): Promise<Scanne
   };
 };
 
-const scanTracking = async (projectRoot: string): Promise<{
+const scanTracking = async (
+  fs: Pick<ProjectFileSystem, 'pathExists' | 'readDir' | 'readFile'>,
+  projectRoot: string
+): Promise<{
   tracking: TrackingArtifact[];
   issues: ArtifactIssue[];
 }> => {
@@ -169,7 +201,7 @@ const scanTracking = async (projectRoot: string): Promise<{
     return { tracking: [], issues: [] };
   }
 
-  const files = (await fs.readdir(trackingDir))
+  const files = (await fs.readDir(trackingDir))
     .filter(file => file.endsWith('.json'))
     .sort();
   const tracking: TrackingArtifact[] = [];
@@ -178,7 +210,7 @@ const scanTracking = async (projectRoot: string): Promise<{
   for (const file of files) {
     const filePath = path.join(trackingDir, file);
     try {
-      JSON.parse(await fs.readFile(filePath, 'utf-8'));
+      JSON.parse(await fs.readFile(filePath));
       tracking.push({ file, path: filePath, valid: true });
     } catch (error) {
       const message = error instanceof Error ? error.message : String(error);
@@ -198,9 +230,10 @@ const scanTracking = async (projectRoot: string): Promise<{
 export const scanStoryArtifacts = async (
   input: ScanStoryArtifactsInput
 ): Promise<ArtifactScanResult> => {
-  const storyNames = await listDirectories(path.join(input.projectRoot, 'stories'));
-  const stories = await Promise.all(storyNames.map(storyName => scanStory(input.projectRoot, storyName)));
-  const trackingResult = await scanTracking(input.projectRoot);
+  const fs = input.fileSystem ?? nodeFileSystem;
+  const storyNames = await listDirectories(fs, path.join(input.projectRoot, 'stories'));
+  const stories = await Promise.all(storyNames.map(storyName => scanStory(fs, input.projectRoot, storyName)));
+  const trackingResult = await scanTracking(fs, input.projectRoot);
 
   return {
     projectRoot: input.projectRoot,

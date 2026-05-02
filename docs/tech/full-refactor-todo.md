@@ -182,7 +182,7 @@ src/
   - 验收：可扫描 `stories/*`、`spec/tracking/*.json`，返回缺失、过期、非法状态。
 - [x] 新增 artifact graph
   - 验收：能回答“哪个章节受哪个任务/线索/角色状态影响”。
-- [ ] `codex-status` 改用 graph
+- [x] `codex-status` 改用 graph
   - 验收：输出不回退，并新增阻塞原因列表。
 
 阶段备注：
@@ -194,6 +194,8 @@ src/
 - 已新增 `tests/unit/artifact-scanner.test.ts`，覆盖缺失 `creative-plan.md`/`tasks.md`、任务输出缺失，以及非法 tracking JSON。
 - 已新增 `src/validation/artifact-graph.ts`，基于扫描结果建立任务、章节输出、线索和阻塞 issue 的查询索引。
 - 已新增 `tests/unit/artifact-graph.test.ts`，覆盖章节影响查询、线索关联任务查询和阻塞任务查询。
+- 已将 `src/application/get-project-status.ts` 接入 artifact scanner/graph，新增 `blockers` 字段与 CLI 渲染中的“阻塞原因”列表。
+- 已扩展 `tests/unit/get-project-status.test.ts`，覆盖 graph blocker 不影响原有 status summary，并验证内存文件系统路径仍可运行。
 
 ## 阶段 4：模板与 prompt compiler 体系
 
