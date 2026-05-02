@@ -29,6 +29,7 @@ describe('CLI command modules smoke', () => {
 
     expect(help).toContain('init [options] [name]');
     expect(help).toContain('agent:list [options]');
+    expect(help).toContain('contract:print [options]');
     expect(help).toContain('plugins:add [options] <name>');
     expect(help).toContain('upgrade [options]');
     expect(help).toContain('status [options]');
@@ -37,6 +38,19 @@ describe('CLI command modules smoke', () => {
     expect(help).toContain('validate [options]');
     expect(info).toContain('三幕结构');
     expect(info).toContain('雪花十步');
+  });
+
+  it('prints the default agent contract', async () => {
+    const { stdout } = await execFileAsync('node', [
+      cliPath,
+      'contract:print',
+      '--project-name',
+      '星河'
+    ], { cwd: repoRoot });
+
+    expect(stdout).toContain('Novel Writer Agent Contract');
+    expect(stdout).toContain('星河');
+    expect(stdout).toContain('.specify/agent-contract.md');
   });
 
   it('lists agent integrations as JSON', async () => {

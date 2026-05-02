@@ -2,6 +2,7 @@ import { Command } from '@commander-js/extra-typings';
 import { registerAgentCommand } from './commands/agent.command.js';
 import { registerInitCommand } from './commands/init.command.js';
 import { registerCheckStatusCommand } from './commands/check-status.command.js';
+import { registerContractCommand } from './commands/contract.command.js';
 import { registerHandoffCommand } from './commands/handoff.command.js';
 import { registerInfoCommand } from './commands/info.command.js';
 import { registerPluginsCommand } from './commands/plugins.command.js';
@@ -44,6 +45,7 @@ export function runProgram(argv: string[]): void {
 
   registerInitCommand(program, { packageRoot });
   registerAgentCommand(program);
+  registerContractCommand(program, { packageRoot });
   registerCheckStatusCommand(program);
   registerHandoffCommand(program);
   registerTasksBoardCommand(program);

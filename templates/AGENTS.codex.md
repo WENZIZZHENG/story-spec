@@ -35,9 +35,3 @@
 - Drafts: `stories/*/content/`.
 - Tracking: `spec/tracking/`.
 - Knowledge: `spec/knowledge/`.
-
-## Commit Attribution
-AI commits MUST include:
-```text
-Co-Authored-By: (the agent model's name and attribution byline)
-```

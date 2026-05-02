@@ -455,11 +455,11 @@ risk:
 
 目标：让无 slash command 的任意 agent 也能使用 Novel Writer。
 
-- [ ] A2-T001：新增 `templates/agent/agent-contract.md`。
+- [x] A2-T001：新增 `templates/agent/agent-contract.md`。
 - [ ] A2-T002：初始化时生成 `.specify/agent-contract.md`。
 - [ ] A2-T003：初始化时生成通用 `AGENTS.md`，Codex profile 作为可选增强段。
 - [ ] A2-T004：新增 `generic` renderer，输出 `.specify/commands/*.md`。
-- [ ] A2-T005：新增 `novel contract:print` 与 `novel contract:sync`。
+- [ ] A2-T005：新增 `novel contract:print` 与 `novel contract:sync`。（`contract:print` 已完成，`contract:sync` 待完成）
 - [ ] A2-T006：`validate` 增加 contract/commands 缺失检查。
 
 验收：

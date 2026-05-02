@@ -1,4 +1,5 @@
 import path from 'path';
+import { renderAgentsProfileSection } from '../agent/contract.js';
 import { getVersion } from '../version.js';
 import {
   getAIInitDirs,
@@ -66,63 +67,6 @@ prompt = ${promptValue}
 
 const emit = (input: InitProjectInput, event: InitProjectEvent): void => {
   input.onEvent?.(event);
-};
-
-const AGENTS_PROFILE_SECTIONS: Record<string, string[]> = {
-  adult: [
-    'Adult material may be tracked in planning files as plot function, consent boundary, motivation, relationship change, and consequence.',
-    'Do not flatten intimate or violent material into spectacle; preserve empathy, agency, aftermath, and authorial intent.'
-  ],
-  'slow-burn': [
-    'Prefer gradual emotional escalation and delayed payoff; do not rush attraction, trust, reconciliation, or betrayal.',
-    'When a scene feels quiet, protect subtext, hesitation, and accumulated detail instead of forcing a fast turn.'
-  ],
-  adventure: [
-    'Keep exploration, discovery, danger, and external stakes visible in plans and tasks.',
-    'Balance emotional beats with concrete movement through places, factions, artifacts, and obstacles.'
-  ],
-  romance: [
-    'Track relationship state changes explicitly: trust, desire, conflict, vulnerability, distance, and repair.',
-    'Respect each character as a full person with motives outside the romance line.'
-  ],
-  'multi-thread': [
-    'Maintain separate plot threads with clear active chapters, intersections, dependencies, and payoff timing.',
-    'Before writing, check whether the task advances the intended thread or accidentally steals another thread\'s reveal.'
-  ]
-};
-
-const normalizeAgentsProfiles = (profiles?: string): string[] => {
-  if (!profiles) {
-    return [];
-  }
-
-  return [...new Set(profiles
-    .split(',')
-    .map(profile => profile.trim().toLowerCase())
-    .filter(profile => profile.length > 0))];
-};
-
-const renderAgentsProfileSection = (profiles?: string): string => {
-  const selectedProfiles = normalizeAgentsProfiles(profiles);
-  if (selectedProfiles.length === 0) {
-    return '- Default profile: follow the project constitution and task metadata.';
-  }
-
-  const lines: string[] = [];
-  for (const profile of selectedProfiles) {
-    const section = AGENTS_PROFILE_SECTIONS[profile];
-    if (!section) {
-      lines.push(`- Custom profile \`${profile}\`: follow project-local notes in constitution, specification, tasks, and tracking files.`);
-      continue;
-    }
-
-    lines.push(`- Profile \`${profile}\`:`);
-    for (const rule of section) {
-      lines.push(`  - ${rule}`);
-    }
-  }
-
-  return lines.join('\n');
 };
 
 const ensureBashExecutable = async (fs: ProjectFileSystem, bashDir: string): Promise<void> => {
