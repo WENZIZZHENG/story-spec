@@ -1,4 +1,3 @@
-import fs from 'fs-extra';
 import path from 'node:path';
 import { getVersion } from '../version.js';
 import {
@@ -6,6 +5,7 @@ import {
   getAIPlatform,
   type AIPlatformConfig
 } from '../utils/ai-platforms.js';
+import type { ProjectFileSystem } from './project-ports.js';
 
 export interface UpdateContent {
   commands: boolean;
@@ -51,6 +51,7 @@ export interface UpgradeProjectPlanInput {
   ai?: string;
   all?: boolean;
   updateContent: UpdateContent;
+  fileSystem: ProjectFileSystem;
 }
 
 export interface UpgradeProjectPlan {
@@ -88,6 +89,7 @@ const emit = (
 };
 
 const countFiles = async (
+  fs: ProjectFileSystem,
   dir: string,
   predicate: (fileName: string) => boolean,
   recursive = false
@@ -97,13 +99,13 @@ const countFiles = async (
   }
 
   let count = 0;
-  const items = await fs.readdir(dir);
+  const items = await fs.readDir(dir);
 
   for (const item of items) {
     const itemPath = path.join(dir, item);
     const stat = await fs.stat(itemPath);
     if (recursive && stat.isDirectory()) {
-      count += await countFiles(itemPath, predicate, true);
+      count += await countFiles(fs, itemPath, predicate, true);
     } else if (stat.isFile() && predicate(item)) {
       count += 1;
     }
@@ -112,7 +114,11 @@ const countFiles = async (
   return count;
 };
 
-const copyIfExists = async (source: string, dest: string): Promise<boolean> => {
+const copyIfExists = async (
+  fs: ProjectFileSystem,
+  source: string,
+  dest: string
+): Promise<boolean> => {
   if (!await fs.pathExists(source)) {
     return false;
   }
@@ -121,7 +127,10 @@ const copyIfExists = async (source: string, dest: string): Promise<boolean> => {
   return true;
 };
 
-const detectInstalledAI = async (projectPath: string) => {
+const detectInstalledAI = async (
+  fs: ProjectFileSystem,
+  projectPath: string
+) => {
   const installedAI: AIPlatformConfig[] = [];
 
   for (const aiConfig of AI_PLATFORMS) {
@@ -152,13 +161,14 @@ const resolveTargetAI = (
 export const createUpgradeProjectPlan = async (
   input: UpgradeProjectPlanInput
 ): Promise<UpgradeProjectPlan> => {
+  const fs = input.fileSystem;
   const configPath = path.join(input.projectPath, '.specify', 'config.json');
   if (!await fs.pathExists(configPath)) {
     throw new UpgradeProjectError('NOT_PROJECT', '当前目录不是 novel-writer 项目');
   }
 
   const config = await fs.readJson(configPath) as Record<string, unknown>;
-  const installedAI = await detectInstalledAI(input.projectPath);
+  const installedAI = await detectInstalledAI(fs, input.projectPath);
   if (installedAI.length === 0) {
     throw new UpgradeProjectError('NO_AI_INSTALLED', '未检测到任何 AI 配置目录');
   }
@@ -179,6 +189,7 @@ export const createUpgradeProjectPlan = async (
 };
 
 const updateCommands = async (
+  fs: ProjectFileSystem,
   targetAI: AIPlatformConfig[],
   projectPath: string,
   packageRoot: string,
@@ -203,7 +214,7 @@ const updateCommands = async (
         await fs.copy(sourceCommandsDir, targetCommandsDir, { overwrite: true });
       }
 
-      const commandCount = await countFiles(sourceCommandsDir, file =>
+      const commandCount = await countFiles(fs, sourceCommandsDir, file =>
         file.endsWith('.md') || file.endsWith('.toml')
       );
       count += commandCount;
@@ -232,6 +243,7 @@ const updateCommands = async (
 };
 
 const updateScripts = async (
+  fs: ProjectFileSystem,
   projectPath: string,
   packageRoot: string,
   dryRun: boolean,
@@ -250,15 +262,15 @@ const updateScripts = async (
 
     const bashDir = path.join(scriptsDest, 'bash');
     if (await fs.pathExists(bashDir)) {
-      const bashFiles = await fs.readdir(bashDir);
+      const bashFiles = await fs.readDir(bashDir);
       await Promise.all(bashFiles
         .filter(file => file.endsWith('.sh'))
         .map(file => fs.chmod(path.join(bashDir, file), 0o755)));
     }
   }
 
-  const bashCount = await countFiles(path.join(scriptsSource, 'bash'), file => file.endsWith('.sh'));
-  const powershellCount = await countFiles(path.join(scriptsSource, 'powershell'), file => file.endsWith('.ps1'));
+  const bashCount = await countFiles(fs, path.join(scriptsSource, 'bash'), file => file.endsWith('.sh'));
+  const powershellCount = await countFiles(fs, path.join(scriptsSource, 'powershell'), file => file.endsWith('.ps1'));
 
   emit(onEvent, { type: 'info', message: `更新 ${bashCount} 个 bash 脚本` });
   emit(onEvent, { type: 'info', message: `更新 ${powershellCount} 个 powershell 脚本` });
@@ -267,6 +279,7 @@ const updateScripts = async (
 };
 
 const updateTemplates = async (
+  fs: ProjectFileSystem,
   projectPath: string,
   packageRoot: string,
   dryRun: boolean,
@@ -284,7 +297,7 @@ const updateTemplates = async (
     await fs.copy(templatesSource, templatesDest, { overwrite: true });
   }
 
-  const templateCount = await countFiles(templatesSource, file =>
+  const templateCount = await countFiles(fs, templatesSource, file =>
     file.endsWith('.md') || file.endsWith('.yaml') || file.endsWith('.json'),
     true
   );
@@ -294,6 +307,7 @@ const updateTemplates = async (
 };
 
 const updateMemory = async (
+  fs: ProjectFileSystem,
   projectPath: string,
   packageRoot: string,
   dryRun: boolean,
@@ -311,13 +325,14 @@ const updateMemory = async (
     await fs.copy(memorySource, memoryDest, { overwrite: true });
   }
 
-  const memoryCount = await countFiles(memorySource, file => file.endsWith('.md'), true);
+  const memoryCount = await countFiles(fs, memorySource, file => file.endsWith('.md'), true);
   emit(onEvent, { type: 'info', message: `更新 ${memoryCount} 个记忆文件` });
 
   return memoryCount;
 };
 
 const updateSpec = async (
+  fs: ProjectFileSystem,
   projectPath: string,
   packageRoot: string,
   dryRun: boolean,
@@ -332,7 +347,7 @@ const updateSpec = async (
   }
 
   let count = 0;
-  const specItems = await fs.readdir(specSource);
+  const specItems = await fs.readDir(specSource);
 
   for (const item of specItems) {
     if (USER_SPEC_DIRS.has(item)) {
@@ -348,7 +363,7 @@ const updateSpec = async (
     }
 
     count += stat.isDirectory()
-      ? await countFiles(sourcePath, file => file.endsWith('.md') || file.endsWith('.json'), true)
+      ? await countFiles(fs, sourcePath, file => file.endsWith('.md') || file.endsWith('.json'), true)
       : 1;
   }
 
@@ -358,6 +373,7 @@ const updateSpec = async (
 };
 
 const updateExperts = async (
+  fs: ProjectFileSystem,
   projectPath: string,
   packageRoot: string,
   dryRun: boolean,
@@ -380,13 +396,14 @@ const updateExperts = async (
     await fs.copy(expertsSource, expertsDest, { overwrite: true });
   }
 
-  const expertsCount = await countFiles(expertsSource, file => file.endsWith('.md'), true);
+  const expertsCount = await countFiles(fs, expertsSource, file => file.endsWith('.md'), true);
   emit(onEvent, { type: 'info', message: `更新 ${expertsCount} 个专家文件` });
 
   return expertsCount;
 };
 
 const createBackup = async (
+  fs: ProjectFileSystem,
   plan: UpgradeProjectPlan,
   onEvent: UpgradeProjectInput['onEvent']
 ): Promise<string> => {
@@ -400,7 +417,7 @@ const createBackup = async (
     for (const aiConfig of plan.targetAI) {
       const source = path.join(plan.projectPath, aiConfig.dir);
       const dest = path.join(backupPath, aiConfig.dir);
-      if (await copyIfExists(source, dest)) {
+      if (await copyIfExists(fs, source, dest)) {
         emit(onEvent, { type: 'info', message: `备份 ${aiConfig.dir}/` });
       }
     }
@@ -408,21 +425,21 @@ const createBackup = async (
 
   if (plan.updateContent.scripts) {
     const source = path.join(plan.projectPath, '.specify', 'scripts');
-    if (await copyIfExists(source, path.join(backupPath, '.specify', 'scripts'))) {
+    if (await copyIfExists(fs, source, path.join(backupPath, '.specify', 'scripts'))) {
       emit(onEvent, { type: 'info', message: '备份 .specify/scripts/' });
     }
   }
 
   if (plan.updateContent.templates) {
     const source = path.join(plan.projectPath, '.specify', 'templates');
-    if (await copyIfExists(source, path.join(backupPath, '.specify', 'templates'))) {
+    if (await copyIfExists(fs, source, path.join(backupPath, '.specify', 'templates'))) {
       emit(onEvent, { type: 'info', message: '备份 .specify/templates/' });
     }
   }
 
   if (plan.updateContent.memory) {
     const source = path.join(plan.projectPath, '.specify', 'memory');
-    if (await copyIfExists(source, path.join(backupPath, '.specify', 'memory'))) {
+    if (await copyIfExists(fs, source, path.join(backupPath, '.specify', 'memory'))) {
       emit(onEvent, { type: 'info', message: '备份 .specify/memory/' });
     }
   }
@@ -445,12 +462,13 @@ const createBackup = async (
 export const upgradeProject = async (
   input: UpgradeProjectInput
 ): Promise<UpgradeProjectResult> => {
+  const fs = input.fileSystem;
   const plan = await createUpgradeProjectPlan(input);
   const dryRun = !!input.dryRun;
 
   let backupPath = '';
   if (input.backup !== false && !dryRun) {
-    backupPath = await createBackup(plan, input.onEvent);
+    backupPath = await createBackup(fs, plan, input.onEvent);
   }
 
   const stats: UpgradeStats = {
@@ -465,32 +483,32 @@ export const upgradeProject = async (
 
   if (plan.updateContent.commands) {
     emit(input.onEvent, { type: 'progress', message: '更新命令文件...' });
-    stats.commands = await updateCommands(plan.targetAI, plan.projectPath, input.packageRoot, dryRun, input.onEvent);
+    stats.commands = await updateCommands(fs, plan.targetAI, plan.projectPath, input.packageRoot, dryRun, input.onEvent);
   }
 
   if (plan.updateContent.scripts) {
     emit(input.onEvent, { type: 'progress', message: '更新脚本文件...' });
-    stats.scripts = await updateScripts(plan.projectPath, input.packageRoot, dryRun, input.onEvent);
+    stats.scripts = await updateScripts(fs, plan.projectPath, input.packageRoot, dryRun, input.onEvent);
   }
 
   if (plan.updateContent.spec) {
     emit(input.onEvent, { type: 'progress', message: '更新写作规范和预设...' });
-    stats.spec = await updateSpec(plan.projectPath, input.packageRoot, dryRun, input.onEvent);
+    stats.spec = await updateSpec(fs, plan.projectPath, input.packageRoot, dryRun, input.onEvent);
   }
 
   if (plan.updateContent.experts) {
     emit(input.onEvent, { type: 'progress', message: '更新专家模式文件...' });
-    stats.experts = await updateExperts(plan.projectPath, input.packageRoot, dryRun, input.onEvent);
+    stats.experts = await updateExperts(fs, plan.projectPath, input.packageRoot, dryRun, input.onEvent);
   }
 
   if (plan.updateContent.templates) {
     emit(input.onEvent, { type: 'progress', message: '更新模板文件...' });
-    stats.templates = await updateTemplates(plan.projectPath, input.packageRoot, dryRun, input.onEvent);
+    stats.templates = await updateTemplates(fs, plan.projectPath, input.packageRoot, dryRun, input.onEvent);
   }
 
   if (plan.updateContent.memory) {
     emit(input.onEvent, { type: 'progress', message: '更新记忆文件...' });
-    stats.memory = await updateMemory(plan.projectPath, input.packageRoot, dryRun, input.onEvent);
+    stats.memory = await updateMemory(fs, plan.projectPath, input.packageRoot, dryRun, input.onEvent);
   }
 
   if (!dryRun) {

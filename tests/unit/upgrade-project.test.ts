@@ -7,6 +7,7 @@ import {
   UpgradeProjectError,
   type UpgradeProjectEvent
 } from '../../src/application/upgrade-project.js';
+import { nodeFileSystem } from '../../src/infrastructure/node-file-system.js';
 
 const tempDirs: string[] = [];
 
@@ -92,6 +93,7 @@ describe('upgradeProject', () => {
         spec: false,
         experts: false
       },
+      fileSystem: nodeFileSystem,
       dryRun: true,
       backup: true,
       onEvent: event => events.push(event)
@@ -123,6 +125,7 @@ describe('upgradeProject', () => {
         spec: true,
         experts: false
       },
+      fileSystem: nodeFileSystem,
       dryRun: false,
       backup: true
     });
@@ -156,6 +159,7 @@ describe('upgradeProject', () => {
         spec: true,
         experts: false
       },
+      fileSystem: nodeFileSystem,
       dryRun: true,
       backup: false
     })).rejects.toMatchObject({

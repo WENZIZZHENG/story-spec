@@ -2,6 +2,8 @@ import type { Command } from '@commander-js/extra-typings';
 import chalk from 'chalk';
 import { execSync } from 'child_process';
 import { getProjectStatus, renderProjectStatus } from '../../application/get-project-status.js';
+import { commandGitAdapter } from '../../infrastructure/command-git-adapter.js';
+import { nodeFileSystem } from '../../infrastructure/node-file-system.js';
 import { ensureProjectRoot } from '../../utils/project.js';
 
 export function registerCheckStatusCommand(program: Command): void {
@@ -53,7 +55,11 @@ export function registerCheckStatusCommand(program: Command): void {
     .action(async (options) => {
       try {
         const projectPath = await ensureProjectRoot();
-        const status = await getProjectStatus(projectPath);
+        const status = await getProjectStatus({
+          projectRoot: projectPath,
+          fileSystem: nodeFileSystem,
+          git: commandGitAdapter
+        });
 
         if (options.json) {
           console.log(JSON.stringify(status, null, 2));

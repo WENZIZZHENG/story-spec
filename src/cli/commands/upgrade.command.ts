@@ -8,6 +8,7 @@ import {
   type UpgradeProjectEvent,
   type UpgradeStats
 } from '../../application/upgrade-project.js';
+import { nodeFileSystem } from '../../infrastructure/node-file-system.js';
 import { AI_PLATFORM_OPTIONS } from '../../utils/ai-platforms.js';
 
 type UpgradeCommandOptions = {
@@ -219,7 +220,8 @@ export function registerUpgradeCommand(program: Command, context: { packageRoot:
           projectPath,
           ai: options.ai,
           all: options.all,
-          updateContent
+          updateContent,
+          fileSystem: nodeFileSystem
         });
 
         console.log(chalk.cyan('\n📦 Novel Writer 项目升级\n'));
@@ -244,6 +246,7 @@ export function registerUpgradeCommand(program: Command, context: { packageRoot:
           ai: options.ai,
           all: options.all,
           updateContent,
+          fileSystem: nodeFileSystem,
           backup: options.backup,
           dryRun: options.dryRun,
           onEvent: displayUpgradeEvent

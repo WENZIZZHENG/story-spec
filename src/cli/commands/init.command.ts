@@ -2,6 +2,9 @@ import type { Command } from '@commander-js/extra-typings';
 import chalk from 'chalk';
 import ora from 'ora';
 import { initProject } from '../../application/init-project.js';
+import { commandGitAdapter } from '../../infrastructure/command-git-adapter.js';
+import { nodeFileSystem } from '../../infrastructure/node-file-system.js';
+import { pluginManagerInstaller } from '../../infrastructure/plugin-manager-installer.js';
 import {
   AI_PLATFORM_OPTIONS,
   AI_PLATFORMS,
@@ -111,6 +114,9 @@ export function registerInitCommand(program: Command, context: InitCommandContex
           git: options.git !== false,
           withExperts: !!options.withExperts,
           plugins: options.plugins,
+          fileSystem: nodeFileSystem,
+          gitAdapter: commandGitAdapter,
+          pluginInstaller: pluginManagerInstaller,
           onEvent: event => {
             if (event.type === 'progress') {
               spinner.text = event.message;

@@ -6,6 +6,9 @@ import {
   getProjectStatus,
   renderProjectStatus
 } from '../../src/application/get-project-status.js';
+import { commandGitAdapter } from '../../src/infrastructure/command-git-adapter.js';
+import { nodeFileSystem } from '../../src/infrastructure/node-file-system.js';
+import { MemoryFileSystem } from '../helpers/memory-file-system.js';
 
 const tempDirs: string[] = [];
 
@@ -50,7 +53,11 @@ describe('getProjectStatus', () => {
   it('summarizes project, codex handoff files, story progress, tracking, and next actions', async () => {
     const projectRoot = await createProjectFixture();
 
-    const status = await getProjectStatus(projectRoot);
+    const status = await getProjectStatus({
+      projectRoot,
+      fileSystem: nodeFileSystem,
+      git: commandGitAdapter
+    });
 
     expect(status).toMatchObject({
       projectRoot,
@@ -83,7 +90,11 @@ describe('getProjectStatus', () => {
 
   it('renders the common status model for CLI output', async () => {
     const projectRoot = await createProjectFixture();
-    const status = await getProjectStatus(projectRoot);
+    const status = await getProjectStatus({
+      projectRoot,
+      fileSystem: nodeFileSystem,
+      git: commandGitAdapter
+    });
 
     const output = renderProjectStatus(status);
 
@@ -92,5 +103,37 @@ describe('getProjectStatus', () => {
     expect(output).toContain('当前故事：001-demo');
     expect(output).toContain('追踪 JSON：存在错误');
     expect(output).toContain('建议下一步：');
+  });
+
+  it('can run against an in-memory project store', async () => {
+    const projectRoot = path.join(os.tmpdir(), 'memory-novel-project');
+    const fileSystem = new MemoryFileSystem(projectRoot);
+
+    await fileSystem.ensureDir(path.join(projectRoot, '.specify'));
+    await fileSystem.writeJson(path.join(projectRoot, '.specify', 'config.json'), {
+      name: 'memory-demo',
+      version: '1.0.0'
+    });
+    await fileSystem.ensureDir(path.join(projectRoot, '.codex', 'prompts'));
+
+    const status = await getProjectStatus({
+      projectRoot,
+      fileSystem,
+      git: {
+        init: async () => undefined,
+        addAll: async () => undefined,
+        commit: async () => undefined,
+        statusShort: async () => ['M stories/demo/tasks.md']
+      }
+    });
+
+    expect(status.projectName).toBe('memory-demo');
+    expect(status.codex.prompts).toBe(true);
+    expect(status.git).toMatchObject({
+      available: true,
+      dirty: true,
+      changedFiles: 1
+    });
+    expect(status.nextActions).toContain('补充 `AGENTS.md`，让 Codex 明确只读/规划/写作边界');
   });
 });

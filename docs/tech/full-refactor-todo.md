@@ -157,7 +157,7 @@ src/
   - 验收：备份、dry-run、选择性更新可测试。
 - [x] 新建 `application/get-project-status.ts`
   - 验收：`codex-status` 和后续通用 `status` 共用状态模型。
-- [ ] 所有 use case 仅依赖接口，不直接依赖 `fs-extra`
+- [x] 所有 use case 仅依赖接口，不直接依赖 `fs-extra`
   - 验收：单元测试可用内存 fake store。
 
 阶段备注：
@@ -168,7 +168,9 @@ src/
 - 已新增 `tests/unit/upgrade-project.test.ts` 覆盖 dry-run 不落盘、选择性更新、备份、用户 `spec/tracking` 与 `spec/knowledge` 保护，以及非项目目录错误。
 - 已新增 `src/application/get-project-status.ts`，提供通用 `ProjectStatus` 状态模型；`codex-status` CLI 改为调用 application 层，旧 `utils/codex-status.ts` 保留兼容导出。
 - 已新增 `tests/unit/get-project-status.test.ts` 覆盖项目摘要、Codex 接手文件、故事进度、追踪 JSON 与渲染输出。
-- 当前 `init-project.ts` 仍直接依赖 `fs-extra`，后续阶段再抽 filesystem store 接口。
+- 已新增 `src/application/project-ports.ts`，定义 `ProjectFileSystem`、`GitAdapter`、`PluginInstaller` 端口。
+- 已新增 `src/infrastructure/node-file-system.ts`、`command-git-adapter.ts`、`plugin-manager-installer.ts`，由 CLI 注入 Node/fs-extra/Git/插件管理器实现。
+- 已新增 `tests/helpers/memory-file-system.ts`，并在 `get-project-status` 单元测试中用内存 fake store 覆盖 application 层无真实文件系统依赖的路径。
 
 ## 阶段 3：项目 artifact graph
 

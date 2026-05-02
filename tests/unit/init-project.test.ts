@@ -7,6 +7,7 @@ import {
   InitProjectError,
   type InitProjectEvent
 } from '../../src/application/init-project.js';
+import { nodeFileSystem } from '../../src/infrastructure/node-file-system.js';
 
 const tempDirs: string[] = [];
 
@@ -64,6 +65,7 @@ describe('initProject', () => {
       method: 'three-act',
       git: false,
       withExperts: false,
+      fileSystem: nodeFileSystem,
       onEvent: event => events.push(event)
     });
 
@@ -94,7 +96,8 @@ describe('initProject', () => {
       all: false,
       method: 'three-act',
       git: false,
-      withExperts: false
+      withExperts: false,
+      fileSystem: nodeFileSystem
     })).rejects.toMatchObject({
       name: 'InitProjectError',
       code: 'PROJECT_EXISTS'

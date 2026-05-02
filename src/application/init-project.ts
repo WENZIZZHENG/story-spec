@@ -1,13 +1,11 @@
-import { execSync } from 'child_process';
-import fs from 'fs-extra';
 import path from 'path';
-import { PluginManager } from '../plugins/manager.js';
 import { getVersion } from '../version.js';
 import {
   getAIInitDirs,
   getTargetAIPlatforms,
   type AIPlatformConfig
 } from '../utils/ai-platforms.js';
+import type { GitAdapter, PluginInstaller, ProjectFileSystem } from './project-ports.js';
 
 export type InitProjectEvent =
   | { type: 'progress'; message: string }
@@ -25,6 +23,9 @@ export interface InitProjectInput {
   git: boolean;
   withExperts: boolean;
   plugins?: string;
+  fileSystem: ProjectFileSystem;
+  gitAdapter?: GitAdapter;
+  pluginInstaller?: PluginInstaller;
   onEvent?: (event: InitProjectEvent) => void;
 }
 
@@ -66,12 +67,12 @@ const emit = (input: InitProjectInput, event: InitProjectEvent): void => {
   input.onEvent?.(event);
 };
 
-const ensureBashExecutable = async (bashDir: string): Promise<void> => {
+const ensureBashExecutable = async (fs: ProjectFileSystem, bashDir: string): Promise<void> => {
   if (!await fs.pathExists(bashDir)) {
     return;
   }
 
-  const bashFiles = await fs.readdir(bashDir);
+  const bashFiles = await fs.readDir(bashDir);
   for (const file of bashFiles) {
     if (file.endsWith('.sh')) {
       await fs.chmod(path.join(bashDir, file), 0o755);
@@ -80,6 +81,7 @@ const ensureBashExecutable = async (bashDir: string): Promise<void> => {
 };
 
 const resolveProjectTarget = async (input: InitProjectInput): Promise<{ projectName: string; projectPath: string }> => {
+  const fs = input.fileSystem;
   if (input.here) {
     const projectPath = input.cwd;
     return {
@@ -104,7 +106,11 @@ const resolveProjectTarget = async (input: InitProjectInput): Promise<{ projectN
   };
 };
 
-const createBaseDirs = async (projectPath: string, aiDirs: string[]): Promise<void> => {
+const createBaseDirs = async (
+  fs: ProjectFileSystem,
+  projectPath: string,
+  aiDirs: string[]
+): Promise<void> => {
   const baseDirs = [
     '.specify',
     '.specify/memory',
@@ -124,6 +130,7 @@ const createBaseDirs = async (projectPath: string, aiDirs: string[]): Promise<vo
 };
 
 const writeProjectConfig = async (
+  fs: ProjectFileSystem,
   projectPath: string,
   projectName: string,
   input: InitProjectInput
@@ -141,6 +148,7 @@ const writeProjectConfig = async (
 };
 
 const copyPlatformArtifacts = async (
+  fs: ProjectFileSystem,
   projectPath: string,
   targetPlatforms: AIPlatformConfig[],
   input: InitProjectInput
@@ -159,17 +167,22 @@ const copyPlatformArtifacts = async (
   }
 };
 
-const copyFallbackScripts = async (projectPath: string, packageRoot: string): Promise<void> => {
+const copyFallbackScripts = async (
+  fs: ProjectFileSystem,
+  projectPath: string,
+  packageRoot: string
+): Promise<void> => {
   const scriptsDir = path.join(packageRoot, 'scripts');
   const scriptsDest = path.join(projectPath, '.specify', 'scripts');
 
   if (await fs.pathExists(scriptsDir) && !await fs.pathExists(scriptsDest)) {
     await fs.copy(scriptsDir, scriptsDest);
-    await ensureBashExecutable(path.join(scriptsDest, 'bash'));
+    await ensureBashExecutable(fs, path.join(scriptsDest, 'bash'));
   }
 };
 
 const copyTemplatesAndKnowledge = async (
+  fs: ProjectFileSystem,
   projectPath: string,
   projectName: string,
   targetPlatforms: AIPlatformConfig[],
@@ -184,7 +197,7 @@ const copyTemplatesAndKnowledge = async (
     const codexAgentsSource = path.join(templatesDir, 'AGENTS.codex.md');
     const codexAgentsDest = path.join(projectPath, 'AGENTS.md');
     if (await fs.pathExists(codexAgentsSource) && !await fs.pathExists(codexAgentsDest)) {
-      const content = (await fs.readFile(codexAgentsSource, 'utf-8'))
+      const content = (await fs.readFile(codexAgentsSource))
         .replace(/\{\{PROJECT_NAME\}\}/g, projectName);
       await fs.writeFile(codexAgentsDest, content);
     }
@@ -205,12 +218,12 @@ const copyTemplatesAndKnowledge = async (
     const userKnowledgeDir = path.join(projectPath, 'spec', 'knowledge');
     await fs.copy(knowledgeTemplatesDir, userKnowledgeDir);
 
-    const knowledgeFiles = await fs.readdir(userKnowledgeDir);
+    const knowledgeFiles = await fs.readDir(userKnowledgeDir);
     const currentDate = new Date().toISOString().split('T')[0];
     for (const file of knowledgeFiles) {
       if (file.endsWith('.md')) {
         const filePath = path.join(userKnowledgeDir, file);
-        const content = (await fs.readFile(filePath, 'utf-8'))
+        const content = (await fs.readFile(filePath))
           .replace(/\[日期\]/g, currentDate);
         await fs.writeFile(filePath, content);
       }
@@ -218,14 +231,18 @@ const copyTemplatesAndKnowledge = async (
   }
 };
 
-const copySpec = async (projectPath: string, packageRoot: string): Promise<void> => {
+const copySpec = async (
+  fs: ProjectFileSystem,
+  projectPath: string,
+  packageRoot: string
+): Promise<void> => {
   const specDir = path.join(packageRoot, 'spec');
   if (!await fs.pathExists(specDir)) {
     return;
   }
 
   const userSpecDir = path.join(projectPath, 'spec');
-  const specItems = await fs.readdir(specDir);
+  const specItems = await fs.readDir(specDir);
   for (const item of specItems) {
     if (item !== 'tracking' && item !== 'knowledge') {
       await fs.copy(path.join(specDir, item), path.join(userSpecDir, item), { overwrite: false });
@@ -234,6 +251,7 @@ const copySpec = async (projectPath: string, packageRoot: string): Promise<void>
 };
 
 const copyPlatformExtras = async (
+  fs: ProjectFileSystem,
   projectPath: string,
   targetPlatforms: AIPlatformConfig[],
   input: InitProjectInput
@@ -265,6 +283,7 @@ const copyPlatformExtras = async (
 };
 
 const installExperts = async (
+  fs: ProjectFileSystem,
   projectPath: string,
   aiDirs: string[],
   input: InitProjectInput
@@ -285,7 +304,7 @@ const installExperts = async (
     return;
   }
 
-  const expertContent = await fs.readFile(expertCommandSource, 'utf-8');
+  const expertContent = await fs.readFile(expertCommandSource);
   for (const aiDir of aiDirs) {
     if (aiDir.includes('claude') || aiDir.includes('cursor') || aiDir.includes('windsurf') || aiDir.includes('.roo')) {
       await fs.writeFile(path.join(projectPath, aiDir, 'expert.md'), expertContent);
@@ -305,15 +324,19 @@ const installPlugins = async (projectPath: string, input: InitProjectInput): Pro
     return;
   }
 
+  if (!input.pluginInstaller) {
+    emit(input, { type: 'warning', message: '\n警告: 未配置插件安装器，跳过插件安装' });
+    return;
+  }
+
   emit(input, { type: 'progress', message: '安装插件...' });
 
   const pluginNames = input.plugins.split(',').map(plugin => plugin.trim());
-  const pluginManager = new PluginManager(projectPath);
 
   for (const pluginName of pluginNames) {
     const builtinPluginPath = path.join(input.packageRoot, 'plugins', pluginName);
-    if (await fs.pathExists(builtinPluginPath)) {
-      await pluginManager.installPlugin(pluginName, builtinPluginPath);
+    if (await input.fileSystem.pathExists(builtinPluginPath)) {
+      await input.pluginInstaller.install(projectPath, pluginName, builtinPluginPath);
     } else {
       emit(input, {
         type: 'warning',
@@ -328,8 +351,13 @@ const initializeGit = async (projectPath: string, input: InitProjectInput): Prom
     return;
   }
 
+  if (!input.gitAdapter) {
+    emit(input, { type: 'warning', message: '\n提示: 未配置 Git 适配器，已跳过 Git 初始化' });
+    return;
+  }
+
   try {
-    execSync('git init', { cwd: projectPath, stdio: 'ignore' });
+    await input.gitAdapter.init(projectPath);
 
     const gitignore = `# 临时文件
 *.tmp
@@ -346,28 +374,29 @@ const initializeGit = async (projectPath: string, input: InitProjectInput): Prom
 # 节点模块
 node_modules/
 `;
-    await fs.writeFile(path.join(projectPath, '.gitignore'), gitignore);
+    await input.fileSystem.writeFile(path.join(projectPath, '.gitignore'), gitignore);
 
-    execSync('git add .', { cwd: projectPath, stdio: 'ignore' });
-    execSync('git commit -m "初始化小说项目"', { cwd: projectPath, stdio: 'ignore' });
+    await input.gitAdapter.addAll(projectPath);
+    await input.gitAdapter.commit(projectPath, '初始化小说项目');
   } catch {
     emit(input, { type: 'warning', message: '\n提示: Git 初始化失败，但项目已创建成功' });
   }
 };
 
 export async function initProject(input: InitProjectInput): Promise<InitProjectResult> {
+  const fs = input.fileSystem;
   const { projectName, projectPath } = await resolveProjectTarget(input);
   const targetPlatforms = getTargetAIPlatforms(input.all, input.ai);
   const aiDirs = getAIInitDirs(targetPlatforms);
 
-  await createBaseDirs(projectPath, aiDirs);
-  await writeProjectConfig(projectPath, projectName, input);
-  await copyPlatformArtifacts(projectPath, targetPlatforms, input);
-  await copyFallbackScripts(projectPath, input.packageRoot);
-  await copyTemplatesAndKnowledge(projectPath, projectName, targetPlatforms, input);
-  await copySpec(projectPath, input.packageRoot);
-  await copyPlatformExtras(projectPath, targetPlatforms, input);
-  await installExperts(projectPath, aiDirs, input);
+  await createBaseDirs(fs, projectPath, aiDirs);
+  await writeProjectConfig(fs, projectPath, projectName, input);
+  await copyPlatformArtifacts(fs, projectPath, targetPlatforms, input);
+  await copyFallbackScripts(fs, projectPath, input.packageRoot);
+  await copyTemplatesAndKnowledge(fs, projectPath, projectName, targetPlatforms, input);
+  await copySpec(fs, projectPath, input.packageRoot);
+  await copyPlatformExtras(fs, projectPath, targetPlatforms, input);
+  await installExperts(fs, projectPath, aiDirs, input);
   await installPlugins(projectPath, input);
   await initializeGit(projectPath, input);
 

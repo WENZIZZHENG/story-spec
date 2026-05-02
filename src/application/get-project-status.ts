@@ -1,7 +1,6 @@
-import { execSync } from 'node:child_process';
 import path from 'node:path';
-import fs from 'fs-extra';
-import { getProjectInfo } from '../utils/project.js';
+import { AI_PLATFORMS } from '../utils/ai-platforms.js';
+import type { GitAdapter, ProjectFileSystem } from './project-ports.js';
 
 export interface StorySummary {
   name: string;
@@ -49,7 +48,13 @@ export interface ProjectStatus {
 
 export type CodexStatus = ProjectStatus;
 
-const readJsonSafe = async (filePath: string): Promise<Record<string, unknown>> => {
+export interface GetProjectStatusInput {
+  projectRoot: string;
+  fileSystem: ProjectFileSystem;
+  git: GitAdapter;
+}
+
+const readJsonSafe = async (fs: ProjectFileSystem, filePath: string): Promise<Record<string, unknown>> => {
   try {
     return await fs.readJson(filePath);
   } catch {
@@ -73,12 +78,12 @@ const extractVersion = (content: string): string => {
   return '未标注';
 };
 
-const readMarkdownVersion = async (filePath: string): Promise<string> => {
+const readMarkdownVersion = async (fs: ProjectFileSystem, filePath: string): Promise<string> => {
   if (!await fs.pathExists(filePath)) {
     return '缺失';
   }
 
-  const content = await fs.readFile(filePath, 'utf-8');
+  const content = await fs.readFile(filePath);
   return extractVersion(content);
 };
 
@@ -87,12 +92,12 @@ const normalizeTaskLine = (line: string): string => line
   .replace(/\*\*/g, '')
   .trim();
 
-const findNextTask = async (tasksPath: string): Promise<string> => {
+const findNextTask = async (fs: ProjectFileSystem, tasksPath: string): Promise<string> => {
   if (!await fs.pathExists(tasksPath)) {
     return '缺失 tasks.md';
   }
 
-  const content = await fs.readFile(tasksPath, 'utf-8');
+  const content = await fs.readFile(tasksPath);
   const lines = content.split(/\r?\n/);
   const numberedTask = lines.find(line =>
     /^\s*-\s*\[\s\]\s*(?:\[[^\]]+\]\s*)?(?:\*\*)?T\d+/i.test(line)
@@ -102,19 +107,19 @@ const findNextTask = async (tasksPath: string): Promise<string> => {
   return anyTask ? normalizeTaskLine(anyTask) : '暂无未完成任务';
 };
 
-const listMarkdownFiles = async (dirPath: string): Promise<string[]> => {
+const listMarkdownFiles = async (fs: ProjectFileSystem, dirPath: string): Promise<string[]> => {
   if (!await fs.pathExists(dirPath)) {
     return [];
   }
 
   const result: string[] = [];
-  const entries = await fs.readdir(dirPath);
+  const entries = await fs.readDir(dirPath);
 
   for (const entry of entries) {
     const fullPath = path.join(dirPath, entry);
     const stat = await fs.stat(fullPath);
     if (stat.isDirectory()) {
-      result.push(...await listMarkdownFiles(fullPath));
+      result.push(...await listMarkdownFiles(fs, fullPath));
     } else if (entry.endsWith('.md')) {
       result.push(fullPath);
     }
@@ -123,11 +128,11 @@ const listMarkdownFiles = async (dirPath: string): Promise<string[]> => {
   return result;
 };
 
-const countContentChars = async (files: string[]): Promise<number> => {
+const countContentChars = async (fs: ProjectFileSystem, files: string[]): Promise<number> => {
   let total = 0;
 
   for (const file of files) {
-    const content = await fs.readFile(file, 'utf-8');
+    const content = await fs.readFile(file);
     const normalized = content
       .replace(/```[\s\S]*?```/g, '')
       .replace(/[#>*_`\-\[\]()]/g, '')
@@ -138,13 +143,13 @@ const countContentChars = async (files: string[]): Promise<number> => {
   return total;
 };
 
-const findLatestStory = async (projectRoot: string): Promise<string | null> => {
+const findLatestStory = async (fs: ProjectFileSystem, projectRoot: string): Promise<string | null> => {
   const storiesDir = path.join(projectRoot, 'stories');
   if (!await fs.pathExists(storiesDir)) {
     return null;
   }
 
-  const entries = await fs.readdir(storiesDir);
+  const entries = await fs.readDir(storiesDir);
   const dirs: Array<{ path: string; mtimeMs: number }> = [];
 
   for (const entry of entries) {
@@ -159,8 +164,8 @@ const findLatestStory = async (projectRoot: string): Promise<string | null> => {
   return dirs[0]?.path ?? null;
 };
 
-const buildStorySummary = async (projectRoot: string): Promise<StorySummary | null> => {
-  const storyPath = await findLatestStory(projectRoot);
+const buildStorySummary = async (fs: ProjectFileSystem, projectRoot: string): Promise<StorySummary | null> => {
+  const storyPath = await findLatestStory(fs, projectRoot);
   if (!storyPath) {
     return null;
   }
@@ -169,7 +174,7 @@ const buildStorySummary = async (projectRoot: string): Promise<StorySummary | nu
   const creativePlanPath = path.join(storyPath, 'creative-plan.md');
   const tasksPath = path.join(storyPath, 'tasks.md');
   const contentDir = path.join(storyPath, 'content');
-  const contentFiles = await listMarkdownFiles(contentDir);
+  const contentFiles = await listMarkdownFiles(fs, contentDir);
   const chapterFiles = contentFiles.filter(file =>
     /(?:chapter|第)\s*[-_0-9一二三四五六七八九十百千零〇]+/i.test(path.basename(file))
   ).length;
@@ -180,23 +185,23 @@ const buildStorySummary = async (projectRoot: string): Promise<StorySummary | nu
     hasSpecification: await fs.pathExists(specificationPath),
     hasCreativePlan: await fs.pathExists(creativePlanPath),
     hasTasks: await fs.pathExists(tasksPath),
-    specificationVersion: await readMarkdownVersion(specificationPath),
-    creativePlanVersion: await readMarkdownVersion(creativePlanPath),
-    tasksVersion: await readMarkdownVersion(tasksPath),
-    nextTask: await findNextTask(tasksPath),
+    specificationVersion: await readMarkdownVersion(fs, specificationPath),
+    creativePlanVersion: await readMarkdownVersion(fs, creativePlanPath),
+    tasksVersion: await readMarkdownVersion(fs, tasksPath),
+    nextTask: await findNextTask(fs, tasksPath),
     chapterFiles,
     contentFiles: contentFiles.length,
-    contentChars: await countContentChars(contentFiles)
+    contentChars: await countContentChars(fs, contentFiles)
   };
 };
 
-const validateTracking = async (projectRoot: string): Promise<TrackingSummary[]> => {
+const validateTracking = async (fs: ProjectFileSystem, projectRoot: string): Promise<TrackingSummary[]> => {
   const trackingDir = path.join(projectRoot, 'spec', 'tracking');
   if (!await fs.pathExists(trackingDir)) {
     return [];
   }
 
-  const files = (await fs.readdir(trackingDir))
+  const files = (await fs.readDir(trackingDir))
     .filter(file => file.endsWith('.json'))
     .sort();
 
@@ -204,7 +209,7 @@ const validateTracking = async (projectRoot: string): Promise<TrackingSummary[]>
   for (const file of files) {
     const filePath = path.join(trackingDir, file);
     try {
-      JSON.parse(await fs.readFile(filePath, 'utf-8'));
+      JSON.parse(await fs.readFile(filePath));
       result.push({ file, valid: true });
     } catch (error) {
       result.push({ file, valid: false, error: error instanceof Error ? error.message : String(error) });
@@ -214,14 +219,9 @@ const validateTracking = async (projectRoot: string): Promise<TrackingSummary[]>
   return result;
 };
 
-const readGitSummary = (projectRoot: string): GitSummary => {
+const readGitSummary = async (git: GitAdapter, projectRoot: string): Promise<GitSummary> => {
   try {
-    const output = execSync('git status --short', {
-      cwd: projectRoot,
-      encoding: 'utf-8',
-      stdio: ['ignore', 'pipe', 'ignore']
-    });
-    const files = output.split(/\r?\n/).map(line => line.trim()).filter(Boolean);
+    const files = await git.statusShort(projectRoot);
     return {
       available: true,
       dirty: files.length > 0,
@@ -236,6 +236,21 @@ const readGitSummary = (projectRoot: string): GitSummary => {
       files: []
     };
   }
+};
+
+const detectConfiguredAI = async (
+  fs: ProjectFileSystem,
+  projectRoot: string
+): Promise<string[]> => {
+  const configuredAI: string[] = [];
+
+  for (const platform of AI_PLATFORMS) {
+    if (await fs.pathExists(path.join(projectRoot, platform.dir))) {
+      configuredAI.push(platform.name);
+    }
+  }
+
+  return configuredAI;
 };
 
 const buildNextActions = (status: Omit<ProjectStatus, 'nextActions'>): string[] => {
@@ -275,22 +290,23 @@ const buildNextActions = (status: Omit<ProjectStatus, 'nextActions'>): string[] 
   return actions;
 };
 
-export const getProjectStatus = async (projectRoot: string): Promise<ProjectStatus> => {
-  const config = await readJsonSafe(path.join(projectRoot, '.specify', 'config.json'));
-  const projectInfo = await getProjectInfo(projectRoot);
+export const getProjectStatus = async (input: GetProjectStatusInput): Promise<ProjectStatus> => {
+  const { projectRoot, fileSystem: fs, git } = input;
+
+  const config = await readJsonSafe(fs, path.join(projectRoot, '.specify', 'config.json'));
   const baseStatus = {
     projectRoot,
     projectName: String(config.name ?? path.basename(projectRoot)),
-    version: projectInfo?.version ?? String(config.version ?? '未知'),
+    version: String(config.version ?? '未知'),
     method: String(config.method ?? '未设置'),
-    configuredAI: projectInfo?.installedAI ?? [],
+    configuredAI: await detectConfiguredAI(fs, projectRoot),
     codex: {
       prompts: await fs.pathExists(path.join(projectRoot, '.codex', 'prompts')),
       agentsFile: await fs.pathExists(path.join(projectRoot, 'AGENTS.md'))
     },
-    story: await buildStorySummary(projectRoot),
-    tracking: await validateTracking(projectRoot),
-    git: readGitSummary(projectRoot)
+    story: await buildStorySummary(fs, projectRoot),
+    tracking: await validateTracking(fs, projectRoot),
+    git: await readGitSummary(git, projectRoot)
   };
 
   return {
