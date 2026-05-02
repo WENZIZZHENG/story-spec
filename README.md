@@ -72,9 +72,10 @@ novel codex-status
 novel codex-status --json
 novel validate
 novel validate --json
+novel validate --severity error
 ```
 
-`codex-status` 会汇总当前故事、规格/计划/任务、追踪 JSON、Codex prompts、`AGENTS.md` 和 Git 改动，帮助判断是否已经可以直接执行 `/novel-write`。`validate` 会检查项目结构、tracking JSON、任务字段和模板缺失，适合在生成计划后或写作前做硬校验。
+`codex-status` 会汇总当前故事、规格/计划/任务、追踪 JSON、Codex prompts、`AGENTS.md` 和 Git 改动，帮助判断是否已经可以直接执行 `/novel-write`。`validate` 会检查项目结构、tracking JSON、任务字段、模板缺失和写作规则，并支持按 `error`、`warning`、`info` 过滤输出，适合在生成计划后或写作前做硬校验。
 
 ## 📦 升级现有项目
 
@@ -226,6 +227,7 @@ novel codex-status --json         # 输出结构化状态
 ```bash
 novel validate                    # 校验项目结构、tracking、任务和模板
 novel validate --json             # 输出结构化校验结果
+novel validate --severity error   # 只输出 error 级问题
 ```
 
 </details>

@@ -13,6 +13,11 @@ import {
   runWritingRules,
   type WritingRuleIssue
 } from '../validation/rules/writing-rules.js';
+import {
+  countIssuesBySeverity,
+  filterIssuesBySeverity,
+  sortIssuesBySeverity
+} from '../validation/severity.js';
 
 export type ProjectValidationIssueCode =
   | ValidationIssue['code']
@@ -50,6 +55,10 @@ export interface ValidateProjectInput {
   fileSystem: ProjectFileSystem;
 }
 
+export interface RenderProjectValidationOptions {
+  minSeverity?: ValidationSeverity;
+}
+
 interface TemplateValidationResult {
   templatesChecked: number;
   issues: ProjectValidationIssue[];
@@ -65,12 +74,6 @@ const createIssue = (
   code,
   path: pathValue,
   message
-});
-
-const countIssues = (issues: readonly ProjectValidationIssue[]): Record<ValidationSeverity, number> => ({
-  error: issues.filter(issue => issue.severity === 'error').length,
-  warning: issues.filter(issue => issue.severity === 'warning').length,
-  info: issues.filter(issue => issue.severity === 'info').length
 });
 
 const toProjectIssue = (issue: ValidationIssue | ArtifactIssue | WritingRuleIssue): ProjectValidationIssue => ({
@@ -200,15 +203,15 @@ export const validateProject = async (input: ValidateProjectInput): Promise<Proj
   const artifactIssues = artifactScan.issues
     .filter(issue => issue.code !== 'INVALID_TRACKING_JSON')
     .map(toProjectIssue);
-  const issues = [
+  const issues = sortIssuesBySeverity([
     ...await validateProjectStructure(fs, projectRoot),
     ...artifactIssues,
     ...trackingResult.issues,
     ...taskIssues,
     ...writingRuleResult.issues.map(toProjectIssue),
     ...templateResult.issues
-  ].sort((left, right) => left.path.localeCompare(right.path) || left.code.localeCompare(right.code));
-  const issueCounts = countIssues(issues);
+  ]);
+  const issueCounts = countIssuesBySeverity(issues);
 
   return {
     projectRoot,
@@ -224,7 +227,11 @@ export const validateProject = async (input: ValidateProjectInput): Promise<Proj
   };
 };
 
-export const renderProjectValidation = (result: ProjectValidationResult): string => {
+export const renderProjectValidation = (
+  result: ProjectValidationResult,
+  options: RenderProjectValidationOptions = {}
+): string => {
+  const visibleIssues = filterIssuesBySeverity(result.issues, options.minSeverity ?? 'info');
   const lines = [
     'Novel Writer 项目校验',
     '',
@@ -237,9 +244,9 @@ export const renderProjectValidation = (result: ProjectValidationResult): string
     `问题：${result.issueCounts.error} error / ${result.issueCounts.warning} warning / ${result.issueCounts.info} info`
   ];
 
-  if (result.issues.length > 0) {
+  if (visibleIssues.length > 0) {
     lines.push('', '问题列表：');
-    for (const issue of result.issues) {
+    for (const issue of visibleIssues) {
       lines.push(`- [${issue.severity}] ${issue.code}: ${issue.path} - ${issue.message}`);
     }
   }

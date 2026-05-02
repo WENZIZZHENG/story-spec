@@ -264,7 +264,7 @@ src/
   - 验收：检查项目结构、tracking JSON、任务字段、模板缺失。
 - [x] 写作规则 checker 化
   - 候选：角色称呼、时间线、世界观、任务依赖、章节字数。
-- [ ] 支持 severity
+- [x] 支持 severity
   - 级别：error、warning、info。
 
 阶段备注：
@@ -278,6 +278,9 @@ src/
 - 已新增 `src/validation/rules/writing-rules.ts`，把写作规则抽象为可注册 `WritingRule`，默认覆盖任务依赖、章节字数、timeline 章节顺序、角色禁用称呼和常见误名。
 - `validateProject` 已接入默认写作规则包，统一输出 `UNKNOWN_TASK_DEPENDENCY`、`CHAPTER_TOO_SHORT`、`TIMELINE_CHAPTER_ORDER`、`FORBIDDEN_CHARACTER_ADDRESS`、`COMMON_CHARACTER_SUBSTITUTION` 等 issue。
 - 已新增 `tests/unit/writing-rules.test.ts`，并扩展 `tests/unit/validate-project.test.ts` 覆盖规则包接入。
+- 已新增 `src/validation/severity.ts`，统一 severity 合法值、计数、排序与最小级别过滤。
+- `novel validate` 已支持 `--severity error|warning|info`，JSON 输出包含 `minSeverity` 并按级别过滤 `issues`，但 `valid` 与 exit code 仍基于完整 error 计数判断。
+- 已新增 `tests/unit/validation-severity.test.ts`，并扩展 validate 单元测试和 CLI smoke 覆盖 severity 过滤。
 
 ## 阶段 8：测试与 CI
 

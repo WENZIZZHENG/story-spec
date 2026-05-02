@@ -84,4 +84,19 @@ describe('validateProject', () => {
     expect(output).toContain('MISSING_TEMPLATE');
     expect(output).toContain('INVALID_TRACKING_JSON');
   });
+
+  it('can render only issues at or above a severity level', async () => {
+    const { projectRoot, packageRoot, fileSystem } = await createFileSystem();
+    const result = await validateProject({
+      projectRoot,
+      packageRoot,
+      fileSystem
+    });
+
+    const output = renderProjectValidation(result, { minSeverity: 'error' });
+
+    expect(output).toContain('[error]');
+    expect(output).not.toContain('[warning]');
+    expect(output).not.toContain('[info]');
+  });
 });

@@ -80,6 +80,18 @@ describe('CLI init smoke', () => {
     expect(validation.valid).toBe(true);
     expect(validation.summary.trackingFiles).toBe(golden.codex.status.trackingFiles);
     expect(validation.issues).toEqual([]);
+
+    const filteredValidateResult = await execFileAsync('node', [
+      cliPath,
+      'validate',
+      '--json',
+      '--severity',
+      'error'
+    ], { cwd: projectPath });
+    const filteredValidation = JSON.parse(filteredValidateResult.stdout);
+
+    expect(filteredValidation.minSeverity).toBe('error');
+    expect(filteredValidation.issues).toEqual([]);
   });
 
   it('initializes every configured AI platform with command directories', async () => {
