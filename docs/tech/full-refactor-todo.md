@@ -149,7 +149,7 @@ src/
 
 目标：CLI 不直接做文件复制、Git 初始化、模板替换。
 
-- [ ] 新建 `application/init-project.ts`
+- [x] 新建 `application/init-project.ts`
   - 输入：项目名、路径、目标平台、写作方法、插件、git/expert 选项。
   - 输出：结构化 `InitProjectResult`。
   - 验收：CLI action 只负责解析参数和打印结果。
@@ -159,6 +159,12 @@ src/
   - 验收：`codex-status` 和后续通用 `status` 共用状态模型。
 - [ ] 所有 use case 仅依赖接口，不直接依赖 `fs-extra`
   - 验收：单元测试可用内存 fake store。
+
+阶段备注：
+
+- 已新增 `src/application/init-project.ts`，把 `init` 的项目目录创建、模板复制、插件安装和 Git 初始化移入 application 层。
+- 已新增 `tests/unit/init-project.test.ts` 直接覆盖 use case 的 Codex 项目生成和已存在目录错误。
+- 当前 `init-project.ts` 仍直接依赖 `fs-extra`，后续阶段再抽 filesystem store 接口。
 
 ## 阶段 3：项目 artifact graph
 
