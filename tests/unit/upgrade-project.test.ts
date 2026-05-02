@@ -141,8 +141,46 @@ describe('upgradeProject', () => {
     await expect(readFile(path.join(projectPath, 'spec', 'tracking', 'plot-tracker.json'), 'utf8')).resolves.toBe('{"user":true}');
     await expect(exists(path.join(projectPath, 'spec', 'tracking', 'should-not-copy.json'))).resolves.toBe(false);
 
-    const config = JSON.parse(await readFile(path.join(projectPath, '.specify', 'config.json'), 'utf8')) as { version: string };
+    const config = JSON.parse(await readFile(path.join(projectPath, '.specify', 'config.json'), 'utf8')) as {
+      version: string;
+      integrations: Array<{ id: string }>;
+    };
     expect(config.version).not.toBe('0.1.0');
+    expect(config.integrations).toEqual(expect.arrayContaining([
+      expect.objectContaining({ id: 'codex' })
+    ]));
+  });
+
+  it('infers installed legacy AI directories into config integrations during upgrade', async () => {
+    const packageRoot = await createPackageRootFixture();
+    const projectPath = await createProjectFixture();
+
+    await upgradeProject({
+      projectPath,
+      packageRoot,
+      updateContent: {
+        commands: true,
+        scripts: false,
+        templates: false,
+        memory: false,
+        spec: false,
+        experts: false
+      },
+      fileSystem: nodeFileSystem,
+      dryRun: false,
+      backup: false
+    });
+
+    const config = JSON.parse(await readFile(path.join(projectPath, '.specify', 'config.json'), 'utf8')) as {
+      integrations: Array<{ id: string; renderer: string; commandSurface: string }>;
+    };
+    expect(config.integrations).toEqual([
+      expect.objectContaining({
+        id: 'codex',
+        renderer: 'codex',
+        commandSurface: 'slash-command'
+      })
+    ]);
   });
 
   it('can add generic agent commands to an existing project', async () => {
