@@ -49,6 +49,8 @@ Run {SCRIPT}
   await writeFile(path.join(rootDir, 'scripts', 'bash', 'plan-story.sh'), '#!/usr/bin/env bash');
   await writeFile(path.join(rootDir, 'scripts', 'powershell', 'plan-story.ps1'), 'Write-Output plan');
   await writeFile(path.join(rootDir, 'scripts', 'helper.cjs'), 'module.exports = {};');
+  await mkdir(path.join(rootDir, 'dist'), { recursive: true });
+  await writeFile(path.join(rootDir, 'dist', 'script-runtime.js'), 'console.log("runtime")');
 
   await mkdir(path.join(rootDir, 'experts', 'core'), { recursive: true });
   await writeFile(path.join(rootDir, 'experts', 'core', 'plot.md'), '# plot');
@@ -97,6 +99,7 @@ describe('buildCommandArtifacts', () => {
     await expect(exists(path.join(outDir, 'codex', '.specify', 'memory', 'constitution.md'))).resolves.toBe(true);
     await expect(exists(path.join(outDir, 'codex', '.specify', 'scripts', 'bash', 'plan-story.sh'))).resolves.toBe(true);
     await expect(exists(path.join(outDir, 'codex', '.specify', 'scripts', 'helper.cjs'))).resolves.toBe(true);
+    await expect(exists(path.join(outDir, 'codex', '.specify', 'scripts', 'runtime', 'script-runtime.js'))).resolves.toBe(true);
     await expect(exists(path.join(outDir, 'codex', '.specify', 'templates', 'knowledge', 'world.md'))).resolves.toBe(true);
     await expect(exists(path.join(outDir, 'codex', '.specify', 'templates', 'commands', 'plan.md'))).resolves.toBe(false);
     await expect(exists(path.join(outDir, 'codex', 'spec', 'presets', 'three-act.md'))).resolves.toBe(true);

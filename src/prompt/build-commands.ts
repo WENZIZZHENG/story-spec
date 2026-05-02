@@ -111,6 +111,11 @@ const copyScriptSupportFiles = async (
       await fs.copy(sourcePath, path.join(scriptsDest, entry));
     }
   }
+
+  await copyIfExists(
+    path.join(rootDir, 'dist', 'script-runtime.js'),
+    path.join(scriptsDest, 'runtime', 'script-runtime.js')
+  );
 };
 
 const copyTemplateSupportFiles = async (rootDir: string, specDir: string): Promise<void> => {

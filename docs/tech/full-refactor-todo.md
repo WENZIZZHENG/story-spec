@@ -238,7 +238,7 @@ src/
   - 验收：JS/TS 层能调用 `analyze-story`、`check-writing-state` 等能力。
 - [x] 优先迁移纯文件扫描脚本到 TypeScript
   - 候选：word count、state scan、tracking JSON validation。
-- [ ] 保留 shell compatibility layer
+- [x] 保留 shell compatibility layer
   - 验收：旧 prompt 中脚本路径仍能工作。
 
 阶段备注：
@@ -250,6 +250,10 @@ src/
 - 已新增 `src/application/check-writing-state.ts`，将 `check-writing-state` 的纯文件扫描能力迁移到 TypeScript。
 - TS scanner 覆盖写作宪法/规格/计划/任务文档完整性、任务进度、正文可见字符统计、章节字数范围和 tracking JSON 有效性。
 - 已新增 `tests/unit/check-writing-state.test.ts`，覆盖状态模型、字数统计规则和 checklist 兼容输出。
+- 已新增 `src/script-runtime.ts`，提供 `check-writing-state` runtime 入口，支持 `--project-root`、`--story`、`--checklist`、`--json`。
+- 已将 `scripts/bash/check-writing-state.sh` 与 `scripts/powershell/check-writing-state.ps1` 降级为 runtime wrapper，保留旧脚本路径。
+- `buildCommandArtifacts` 会把 `dist/script-runtime.js` 复制到 `.specify/scripts/runtime/`，让已生成项目中的旧 prompt 脚本路径可继续工作。
+- 已新增 `tests/smoke/script-runtime.test.ts`，覆盖 runtime 直接调用和 PowerShell wrapper 兼容调用。
 
 ## 阶段 6：插件与扩展系统重构
 
