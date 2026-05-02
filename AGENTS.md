@@ -5,12 +5,6 @@
 - npm scripts are canonical for contributors: `npm run build`, `npm run build:commands`, `npm run dev -- --help`.
 - Do not add `package-lock.json` unless intentionally migrating package managers.
 
-## Commit Attribution
-AI commits MUST include:
-```text
-Co-Authored-By: (the agent model's name and attribution byline)
-```
-
 ## Commands
 | Task | Command |
 |------|---------|
