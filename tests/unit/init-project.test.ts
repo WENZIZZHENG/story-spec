@@ -32,11 +32,12 @@ const createPackageRootFixture = async () => {
   await mkdir(path.join(packageRoot, 'dist', 'codex', '.codex', 'prompts'), { recursive: true });
   await writeFile(path.join(packageRoot, 'dist', 'codex', '.codex', 'prompts', 'novel-write.md'), '# write');
 
+  await mkdir(path.join(packageRoot, 'templates', 'agent'), { recursive: true });
   await mkdir(path.join(packageRoot, 'templates', 'tracking'), { recursive: true });
   await mkdir(path.join(packageRoot, 'templates', 'knowledge'), { recursive: true });
   await writeFile(
-    path.join(packageRoot, 'templates', 'AGENTS.codex.md'),
-    '# {{PROJECT_NAME}}\n\n{{AGENTS_PROFILE_SECTION}}\n'
+    path.join(packageRoot, 'templates', 'agent', 'agent-contract.md'),
+    '# Contract {{PROJECT_NAME}}\n\n{{AGENTS_PROFILE_SECTION}}\n'
   );
   await writeFile(path.join(packageRoot, 'templates', 'tracking', 'plot-tracker.json'), '{}');
   await writeFile(path.join(packageRoot, 'templates', 'knowledge', 'world-setting.md'), 'updated [日期]');
@@ -79,8 +80,10 @@ describe('initProject', () => {
 
     const projectPath = path.join(cwd, 'smoke');
     await expect(exists(path.join(projectPath, '.specify', 'config.json'))).resolves.toBe(true);
+    await expect(exists(path.join(projectPath, '.specify', 'agent-contract.md'))).resolves.toBe(true);
     await expect(exists(path.join(projectPath, '.codex', 'prompts', 'novel-write.md'))).resolves.toBe(true);
     await expect(exists(path.join(projectPath, 'AGENTS.md'))).resolves.toBe(true);
+    await expect(readFile(path.join(projectPath, '.specify', 'agent-contract.md'), 'utf-8')).resolves.toContain('Contract smoke');
     await expect(readFile(path.join(projectPath, 'AGENTS.md'), 'utf-8')).resolves.toContain('Default profile');
     await expect(exists(path.join(projectPath, 'spec', 'tracking', 'plot-tracker.json'))).resolves.toBe(true);
     await expect(exists(path.join(projectPath, 'spec', 'knowledge', 'world-setting.md'))).resolves.toBe(true);
@@ -111,6 +114,7 @@ describe('initProject', () => {
     expect(agents).toContain('gradual emotional escalation');
     expect(agents).toContain('Profile `adventure`');
     expect(agents).toContain('external stakes');
+    await expect(readFile(path.join(cwd, 'profiled', '.specify', 'agent-contract.md'), 'utf-8')).resolves.toContain('Profile `adult`');
   });
 
   it('rejects an existing project directory', async () => {

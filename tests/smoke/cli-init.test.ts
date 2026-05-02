@@ -58,6 +58,8 @@ describe('CLI init smoke', () => {
     expect(prompts.filter(file => file.endsWith('.md'))).toHaveLength(golden.codex.promptCount);
     await expect(readFile(path.join(projectPath, 'AGENTS.md'), 'utf-8')).resolves.toContain('Profile `adult`');
     await expect(readFile(path.join(projectPath, 'AGENTS.md'), 'utf-8')).resolves.toContain('Profile `slow-burn`');
+    await expect(readFile(path.join(projectPath, '.specify', 'agent-contract.md'), 'utf-8')).resolves.toContain('Profile `adult`');
+    await expect(readFile(path.join(projectPath, '.specify', 'agent-contract.md'), 'utf-8')).resolves.toContain('Novel Writer Agent Contract');
 
     const statusResult = await execFileAsync('node', [
       cliPath,

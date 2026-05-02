@@ -16,6 +16,7 @@
     ],
     "requiredFiles": [
       "AGENTS.md",
+      ".specify/agent-contract.md",
       ".codex/prompts/novel-constitution.md",
       ".codex/prompts/novel-write.md",
       ".specify/config.json",

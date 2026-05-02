@@ -188,8 +188,12 @@
       "sha256": "6ddcafa9fca67371f159c0feb8df4d0eda5cda0e80d45bcb11713f43db99ba6c"
     },
     {
+      "path": "auggie/.specify/templates/agent/agent-contract.md",
+      "sha256": "f4ba35ef8937a6c789ed96a8b25a7df1bb69757722cd4602b416f9e3b63aa0d9"
+    },
+    {
       "path": "auggie/.specify/templates/AGENTS.codex.md",
-      "sha256": "021af3ad7ba2d6a278cd6304b165fd89b1e3541f9bd7b4acf9341334644b86e2"
+      "sha256": "a24fc0e1522818044206bec6210b97fa9fb4c10eb553401d4beeeba2f68c5b93"
     },
     {
       "path": "auggie/.specify/templates/checklist-template.md",
@@ -516,8 +520,12 @@
       "sha256": "6ddcafa9fca67371f159c0feb8df4d0eda5cda0e80d45bcb11713f43db99ba6c"
     },
     {
+      "path": "claude/.specify/templates/agent/agent-contract.md",
+      "sha256": "f4ba35ef8937a6c789ed96a8b25a7df1bb69757722cd4602b416f9e3b63aa0d9"
+    },
+    {
       "path": "claude/.specify/templates/AGENTS.codex.md",
-      "sha256": "021af3ad7ba2d6a278cd6304b165fd89b1e3541f9bd7b4acf9341334644b86e2"
+      "sha256": "a24fc0e1522818044206bec6210b97fa9fb4c10eb553401d4beeeba2f68c5b93"
     },
     {
       "path": "claude/.specify/templates/checklist-template.md",
@@ -844,8 +852,12 @@
       "sha256": "6ddcafa9fca67371f159c0feb8df4d0eda5cda0e80d45bcb11713f43db99ba6c"
     },
     {
+      "path": "codebuddy/.specify/templates/agent/agent-contract.md",
+      "sha256": "f4ba35ef8937a6c789ed96a8b25a7df1bb69757722cd4602b416f9e3b63aa0d9"
+    },
+    {
       "path": "codebuddy/.specify/templates/AGENTS.codex.md",
-      "sha256": "021af3ad7ba2d6a278cd6304b165fd89b1e3541f9bd7b4acf9341334644b86e2"
+      "sha256": "a24fc0e1522818044206bec6210b97fa9fb4c10eb553401d4beeeba2f68c5b93"
     },
     {
       "path": "codebuddy/.specify/templates/checklist-template.md",
@@ -1172,8 +1184,12 @@
       "sha256": "6ddcafa9fca67371f159c0feb8df4d0eda5cda0e80d45bcb11713f43db99ba6c"
     },
     {
+      "path": "codex/.specify/templates/agent/agent-contract.md",
+      "sha256": "f4ba35ef8937a6c789ed96a8b25a7df1bb69757722cd4602b416f9e3b63aa0d9"
+    },
+    {
       "path": "codex/.specify/templates/AGENTS.codex.md",
-      "sha256": "021af3ad7ba2d6a278cd6304b165fd89b1e3541f9bd7b4acf9341334644b86e2"
+      "sha256": "a24fc0e1522818044206bec6210b97fa9fb4c10eb553401d4beeeba2f68c5b93"
     },
     {
       "path": "codex/.specify/templates/checklist-template.md",
@@ -1500,8 +1516,12 @@
       "sha256": "6ddcafa9fca67371f159c0feb8df4d0eda5cda0e80d45bcb11713f43db99ba6c"
     },
     {
+      "path": "copilot/.specify/templates/agent/agent-contract.md",
+      "sha256": "f4ba35ef8937a6c789ed96a8b25a7df1bb69757722cd4602b416f9e3b63aa0d9"
+    },
+    {
       "path": "copilot/.specify/templates/AGENTS.codex.md",
-      "sha256": "021af3ad7ba2d6a278cd6304b165fd89b1e3541f9bd7b4acf9341334644b86e2"
+      "sha256": "a24fc0e1522818044206bec6210b97fa9fb4c10eb553401d4beeeba2f68c5b93"
     },
     {
       "path": "copilot/.specify/templates/checklist-template.md",
@@ -1828,8 +1848,12 @@
       "sha256": "6ddcafa9fca67371f159c0feb8df4d0eda5cda0e80d45bcb11713f43db99ba6c"
     },
     {
+      "path": "cursor/.specify/templates/agent/agent-contract.md",
+      "sha256": "f4ba35ef8937a6c789ed96a8b25a7df1bb69757722cd4602b416f9e3b63aa0d9"
+    },
+    {
       "path": "cursor/.specify/templates/AGENTS.codex.md",
-      "sha256": "021af3ad7ba2d6a278cd6304b165fd89b1e3541f9bd7b4acf9341334644b86e2"
+      "sha256": "a24fc0e1522818044206bec6210b97fa9fb4c10eb553401d4beeeba2f68c5b93"
     },
     {
       "path": "cursor/.specify/templates/checklist-template.md",
@@ -2156,8 +2180,12 @@
       "sha256": "6ddcafa9fca67371f159c0feb8df4d0eda5cda0e80d45bcb11713f43db99ba6c"
     },
     {
+      "path": "gemini/.specify/templates/agent/agent-contract.md",
+      "sha256": "f4ba35ef8937a6c789ed96a8b25a7df1bb69757722cd4602b416f9e3b63aa0d9"
+    },
+    {
       "path": "gemini/.specify/templates/AGENTS.codex.md",
-      "sha256": "021af3ad7ba2d6a278cd6304b165fd89b1e3541f9bd7b4acf9341334644b86e2"
+      "sha256": "a24fc0e1522818044206bec6210b97fa9fb4c10eb553401d4beeeba2f68c5b93"
     },
     {
       "path": "gemini/.specify/templates/checklist-template.md",
@@ -2484,8 +2512,12 @@
       "sha256": "6ddcafa9fca67371f159c0feb8df4d0eda5cda0e80d45bcb11713f43db99ba6c"
     },
     {
+      "path": "kilocode/.specify/templates/agent/agent-contract.md",
+      "sha256": "f4ba35ef8937a6c789ed96a8b25a7df1bb69757722cd4602b416f9e3b63aa0d9"
+    },
+    {
       "path": "kilocode/.specify/templates/AGENTS.codex.md",
-      "sha256": "021af3ad7ba2d6a278cd6304b165fd89b1e3541f9bd7b4acf9341334644b86e2"
+      "sha256": "a24fc0e1522818044206bec6210b97fa9fb4c10eb553401d4beeeba2f68c5b93"
     },
     {
       "path": "kilocode/.specify/templates/checklist-template.md",
@@ -2812,8 +2844,12 @@
       "sha256": "6ddcafa9fca67371f159c0feb8df4d0eda5cda0e80d45bcb11713f43db99ba6c"
     },
     {
+      "path": "opencode/.specify/templates/agent/agent-contract.md",
+      "sha256": "f4ba35ef8937a6c789ed96a8b25a7df1bb69757722cd4602b416f9e3b63aa0d9"
+    },
+    {
       "path": "opencode/.specify/templates/AGENTS.codex.md",
-      "sha256": "021af3ad7ba2d6a278cd6304b165fd89b1e3541f9bd7b4acf9341334644b86e2"
+      "sha256": "a24fc0e1522818044206bec6210b97fa9fb4c10eb553401d4beeeba2f68c5b93"
     },
     {
       "path": "opencode/.specify/templates/checklist-template.md",
@@ -3140,8 +3176,12 @@
       "sha256": "6ddcafa9fca67371f159c0feb8df4d0eda5cda0e80d45bcb11713f43db99ba6c"
     },
     {
+      "path": "q/.specify/templates/agent/agent-contract.md",
+      "sha256": "f4ba35ef8937a6c789ed96a8b25a7df1bb69757722cd4602b416f9e3b63aa0d9"
+    },
+    {
       "path": "q/.specify/templates/AGENTS.codex.md",
-      "sha256": "021af3ad7ba2d6a278cd6304b165fd89b1e3541f9bd7b4acf9341334644b86e2"
+      "sha256": "a24fc0e1522818044206bec6210b97fa9fb4c10eb553401d4beeeba2f68c5b93"
     },
     {
       "path": "q/.specify/templates/checklist-template.md",
@@ -3468,8 +3508,12 @@
       "sha256": "6ddcafa9fca67371f159c0feb8df4d0eda5cda0e80d45bcb11713f43db99ba6c"
     },
     {
+      "path": "qwen/.specify/templates/agent/agent-contract.md",
+      "sha256": "f4ba35ef8937a6c789ed96a8b25a7df1bb69757722cd4602b416f9e3b63aa0d9"
+    },
+    {
       "path": "qwen/.specify/templates/AGENTS.codex.md",
-      "sha256": "021af3ad7ba2d6a278cd6304b165fd89b1e3541f9bd7b4acf9341334644b86e2"
+      "sha256": "a24fc0e1522818044206bec6210b97fa9fb4c10eb553401d4beeeba2f68c5b93"
     },
     {
       "path": "qwen/.specify/templates/checklist-template.md",
@@ -3796,8 +3840,12 @@
       "sha256": "6ddcafa9fca67371f159c0feb8df4d0eda5cda0e80d45bcb11713f43db99ba6c"
     },
     {
+      "path": "roocode/.specify/templates/agent/agent-contract.md",
+      "sha256": "f4ba35ef8937a6c789ed96a8b25a7df1bb69757722cd4602b416f9e3b63aa0d9"
+    },
+    {
       "path": "roocode/.specify/templates/AGENTS.codex.md",
-      "sha256": "021af3ad7ba2d6a278cd6304b165fd89b1e3541f9bd7b4acf9341334644b86e2"
+      "sha256": "a24fc0e1522818044206bec6210b97fa9fb4c10eb553401d4beeeba2f68c5b93"
     },
     {
       "path": "roocode/.specify/templates/checklist-template.md",
@@ -4072,8 +4120,12 @@
       "sha256": "6ddcafa9fca67371f159c0feb8df4d0eda5cda0e80d45bcb11713f43db99ba6c"
     },
     {
+      "path": "windsurf/.specify/templates/agent/agent-contract.md",
+      "sha256": "f4ba35ef8937a6c789ed96a8b25a7df1bb69757722cd4602b416f9e3b63aa0d9"
+    },
+    {
       "path": "windsurf/.specify/templates/AGENTS.codex.md",
-      "sha256": "021af3ad7ba2d6a278cd6304b165fd89b1e3541f9bd7b4acf9341334644b86e2"
+      "sha256": "a24fc0e1522818044206bec6210b97fa9fb4c10eb553401d4beeeba2f68c5b93"
     },
     {
       "path": "windsurf/.specify/templates/checklist-template.md",

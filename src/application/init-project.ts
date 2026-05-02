@@ -1,5 +1,5 @@
 import path from 'path';
-import { renderAgentsProfileSection } from '../agent/contract.js';
+import { writeAgentContract } from '../agent/contract.js';
 import { getVersion } from '../version.js';
 import {
   getAIInitDirs,
@@ -187,7 +187,6 @@ const copyTemplatesAndKnowledge = async (
   fs: ProjectFileSystem,
   projectPath: string,
   projectName: string,
-  targetPlatforms: AIPlatformConfig[],
   input: InitProjectInput
 ): Promise<void> => {
   const templatesDir = path.join(input.packageRoot, 'templates');
@@ -195,15 +194,14 @@ const copyTemplatesAndKnowledge = async (
     await fs.copy(templatesDir, path.join(projectPath, '.specify', 'templates'));
   }
 
-  if (targetPlatforms.some(platform => platform.name === 'codex')) {
-    const codexAgentsSource = path.join(templatesDir, 'AGENTS.codex.md');
-    const codexAgentsDest = path.join(projectPath, 'AGENTS.md');
-    if (await fs.pathExists(codexAgentsSource) && !await fs.pathExists(codexAgentsDest)) {
-      const content = (await fs.readFile(codexAgentsSource))
-        .replace(/\{\{PROJECT_NAME\}\}/g, projectName)
-        .replace(/\{\{AGENTS_PROFILE_SECTION\}\}/g, renderAgentsProfileSection(input.agentsProfile));
-      await fs.writeFile(codexAgentsDest, content);
-    }
+  if (await fs.pathExists(path.join(templatesDir, 'agent', 'agent-contract.md'))) {
+    await writeAgentContract({
+      packageRoot: input.packageRoot,
+      projectRoot: projectPath,
+      projectName,
+      agentsProfile: input.agentsProfile,
+      fileSystem: fs
+    });
   }
 
   const memoryDir = path.join(input.packageRoot, 'memory');
@@ -396,7 +394,7 @@ export async function initProject(input: InitProjectInput): Promise<InitProjectR
   await writeProjectConfig(fs, projectPath, projectName, input);
   await copyPlatformArtifacts(fs, projectPath, targetPlatforms, input);
   await copyFallbackScripts(fs, projectPath, input.packageRoot);
-  await copyTemplatesAndKnowledge(fs, projectPath, projectName, targetPlatforms, input);
+  await copyTemplatesAndKnowledge(fs, projectPath, projectName, input);
   await copySpec(fs, projectPath, input.packageRoot);
   await copyPlatformExtras(fs, projectPath, targetPlatforms, input);
   await installExperts(fs, projectPath, aiDirs, input);

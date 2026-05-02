@@ -46,6 +46,15 @@ export interface LoadAgentContractResult {
   path: string;
 }
 
+export interface WriteAgentContractInput {
+  packageRoot: string;
+  projectRoot: string;
+  projectName: string;
+  agentsProfile?: string;
+  fileSystem: ProjectFileSystem;
+  overwrite?: boolean;
+}
+
 const normalizeAgentsProfiles = (profiles?: string): string[] => {
   if (!profiles) {
     return [];
@@ -117,4 +126,33 @@ export const loadAgentContract = async (
     source: 'template',
     path: templatePath
   };
+};
+
+export const writeAgentContract = async (
+  input: WriteAgentContractInput
+): Promise<string> => {
+  const templatePath = getAgentContractTemplatePath(input.packageRoot);
+  const template = await input.fileSystem.readFile(templatePath);
+  const content = renderAgentContract({
+    template,
+    projectName: input.projectName,
+    agentsProfile: input.agentsProfile
+  });
+
+  const projectContractPath = getProjectAgentContractPath(input.projectRoot);
+  const agentsPath = path.join(input.projectRoot, 'AGENTS.md');
+  const shouldWriteProjectContract = input.overwrite ?? !(await input.fileSystem.pathExists(projectContractPath));
+  const shouldWriteAgents = input.overwrite ?? !(await input.fileSystem.pathExists(agentsPath));
+
+  if (shouldWriteProjectContract) {
+    await input.fileSystem.ensureDir(path.dirname(projectContractPath));
+    await input.fileSystem.writeFile(projectContractPath, content);
+  }
+
+  if (shouldWriteAgents) {
+    await input.fileSystem.ensureDir(path.dirname(agentsPath));
+    await input.fileSystem.writeFile(agentsPath, content);
+  }
+
+  return content;
 };
