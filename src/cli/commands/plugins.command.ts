@@ -13,9 +13,31 @@ const renderInstallPlan = (projectPath: string, plan: PluginInstallPlan): void =
   console.log(chalk.yellow('\n预览模式：不会写入任何文件\n'));
   console.log(chalk.cyan('将写入:'));
 
-  for (const operation of plan.operations) {
+  for (const operation of plan.operations.filter(operation =>
+    operation.kind !== 'install-command' && operation.kind !== 'install-gemini-command'
+  )) {
     const label = operation.conflict ? chalk.red('冲突') : chalk.green('写入');
     console.log(`  [${label}] ${formatProjectRelativePath(projectPath, operation.targetPath)}`);
+  }
+
+  console.log(chalk.cyan('\nAgent integration 影响:'));
+  for (const impact of plan.agentImpacts) {
+    const installedLabel = impact.installed ? chalk.green('已安装') : chalk.gray('未安装，跳过');
+    console.log(`  ${impact.displayName} (${impact.agent}) - ${installedLabel}`);
+
+    if (!impact.installed) {
+      console.log(chalk.gray(`    命令目录: ${formatProjectRelativePath(projectPath, impact.commandsDir)}`));
+      continue;
+    }
+
+    for (const commandImpact of impact.commandImpacts) {
+      const label = commandImpact.status === 'conflict'
+        ? chalk.red('冲突')
+        : commandImpact.status === 'write'
+          ? chalk.green('写入')
+          : chalk.gray('跳过');
+      console.log(`    [${label}] ${commandImpact.commandId} -> ${formatProjectRelativePath(projectPath, commandImpact.targetPath)}`);
+    }
   }
 
   if (plan.conflicts.length > 0) {

@@ -152,6 +152,25 @@ describe('PluginManager install plan', () => {
       'plugins/demo-plugin',
       '.claude/commands/novel.demo-command.md'
     ]);
+    expect(plan.agentImpacts.map(impact => ({
+      agent: impact.agent,
+      installed: impact.installed,
+      statuses: impact.commandImpacts.map(commandImpact => commandImpact.status),
+      targets: impact.commandImpacts.map(commandImpact => path.relative(projectRoot, commandImpact.targetPath).replace(/\\/g, '/'))
+    }))).toEqual(expect.arrayContaining([
+      {
+        agent: 'claude',
+        installed: true,
+        statuses: ['conflict'],
+        targets: ['.claude/commands/novel.demo-command.md']
+      },
+      {
+        agent: 'codex',
+        installed: false,
+        statuses: ['skipped'],
+        targets: ['.codex/prompts/novel-demo-command.md']
+      }
+    ]));
   });
 
   it('applies a previously generated install plan', async () => {
@@ -234,6 +253,18 @@ describe('PluginManager install plan', () => {
       { kind: 'install-command', target: '.codex/prompts/novel-spec-command.md', generated: true },
       { kind: 'install-gemini-command', target: '.gemini/commands/spec-command.toml', generated: true },
       { kind: 'install-command', target: '.specify/commands/spec-command.md', generated: true }
+    ]));
+    expect(plan.agentImpacts.map(impact => ({
+      agent: impact.agent,
+      installed: impact.installed,
+      target: impact.commandImpacts[0]?.targetPath
+        ? path.relative(projectRoot, impact.commandImpacts[0].targetPath).replace(/\\/g, '/')
+        : undefined,
+      status: impact.commandImpacts[0]?.status
+    }))).toEqual(expect.arrayContaining([
+      { agent: 'codex', installed: true, target: '.codex/prompts/novel-spec-command.md', status: 'write' },
+      { agent: 'generic', installed: true, target: '.specify/commands/spec-command.md', status: 'write' },
+      { agent: 'q', installed: false, target: '.amazonq/prompts/spec-command.md', status: 'skipped' }
     ]));
 
     await manager.applyInstallPlan(plan);

@@ -130,7 +130,7 @@ describe('CLI command modules smoke', () => {
     ], { cwd });
 
     const projectPath = path.join(cwd, 'smoke');
-    await writeFile(path.join(projectPath, '.codex', 'prompts', 'translate.md'), 'existing');
+    await writeFile(path.join(projectPath, '.codex', 'prompts', 'novel-translate.md'), 'existing');
 
     const { stdout } = await execFileAsync('node', [
       cliPath,
@@ -141,7 +141,11 @@ describe('CLI command modules smoke', () => {
 
     expect(stdout).toContain('预览模式');
     expect(stdout).toContain('plugins/translate');
-    expect(stdout).toContain('.codex/prompts/translate.md');
+    expect(stdout).toContain('Agent integration 影响');
+    expect(stdout).toContain('Codex CLI (codex)');
+    expect(stdout).toContain('.codex/prompts/novel-translate.md');
+    expect(stdout).toContain('Generic Markdown Agent (generic)');
+    expect(stdout).toContain('未安装，跳过');
     expect(stdout).toContain('冲突');
   });
 
@@ -159,7 +163,7 @@ describe('CLI command modules smoke', () => {
     ], { cwd });
 
     const projectPath = path.join(cwd, 'smoke');
-    const commandPath = path.join(projectPath, '.codex', 'prompts', 'translate.md');
+    const commandPath = path.join(projectPath, '.codex', 'prompts', 'novel-translate.md');
     await writeFile(commandPath, 'existing');
 
     await expect(execFileAsync('node', [

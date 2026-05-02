@@ -44,12 +44,32 @@ export interface PluginInstallConflict {
   id?: string;
 }
 
+export type PluginAgentImpactStatus = 'write' | 'conflict' | 'skipped';
+
+export interface PluginAgentCommandImpact {
+  commandId: string;
+  sourcePath: string;
+  targetPath: string;
+  outputFile: string;
+  generated: boolean;
+  status: PluginAgentImpactStatus;
+}
+
+export interface PluginAgentImpact {
+  agent: AgentIntegrationId;
+  displayName: string;
+  installed: boolean;
+  commandsDir: string;
+  commandImpacts: PluginAgentCommandImpact[];
+}
+
 export interface PluginInstallPlan {
   pluginName: string;
   sourcePath: string;
   manifest: PluginManifest;
   operations: PluginInstallOperation[];
   conflicts: PluginInstallConflict[];
+  agentImpacts: PluginAgentImpact[];
 }
 
 export interface ApplyInstallPlanOptions {
@@ -316,29 +336,66 @@ export class PluginManager {
   }
 
   private async createCommandOperations(
-    pluginName: string,
-    sourcePath: string,
-    commands: PluginCommand[]
+    agentImpacts: PluginAgentImpact[]
   ): Promise<PluginInstallOperation[]> {
     const operations: PluginInstallOperation[] = []
-    const supportedIntegrations = await this.detectSupportedAgentIntegrations()
 
-    for (const command of commands) {
-      for (const integration of supportedIntegrations) {
-        const rendered = await this.renderPluginCommandToCache(pluginName, sourcePath, command, integration.id)
+    for (const impact of agentImpacts) {
+      if (!impact.installed) {
+        continue
+      }
 
+      for (const commandImpact of impact.commandImpacts) {
         operations.push(await this.createOperation({
-          kind: integration.id === 'gemini' ? 'install-gemini-command' : 'install-command',
-          sourcePath: rendered.sourcePath,
-          targetPath: path.join(this.getAgentCommandDir(integration), rendered.outputFile),
-          platform: integration.id,
-          id: command.id,
-          generated: true
+          kind: impact.agent === 'gemini' ? 'install-gemini-command' : 'install-command',
+          sourcePath: commandImpact.sourcePath,
+          targetPath: commandImpact.targetPath,
+          platform: impact.agent,
+          id: commandImpact.commandId,
+          generated: commandImpact.generated
         }))
       }
     }
 
     return operations
+  }
+
+  private async createAgentImpacts(
+    pluginName: string,
+    sourcePath: string,
+    commands: PluginCommand[]
+  ): Promise<PluginAgentImpact[]> {
+    const impacts: PluginAgentImpact[] = []
+
+    for (const integration of AGENT_INTEGRATIONS) {
+      const commandsDir = this.getAgentCommandDir(integration)
+      const installed = await fs.pathExists(commandsDir)
+      const commandImpacts: PluginAgentCommandImpact[] = []
+
+      for (const command of commands) {
+        const rendered = await this.renderPluginCommandToCache(pluginName, sourcePath, command, integration.id)
+        const targetPath = path.join(commandsDir, rendered.outputFile)
+        const conflict = installed && await fs.pathExists(targetPath)
+        commandImpacts.push({
+          commandId: command.id,
+          sourcePath: rendered.sourcePath,
+          targetPath,
+          outputFile: rendered.outputFile,
+          generated: true,
+          status: !installed ? 'skipped' : conflict ? 'conflict' : 'write'
+        })
+      }
+
+      impacts.push({
+        agent: integration.id,
+        displayName: integration.displayName,
+        installed,
+        commandsDir,
+        commandImpacts
+      })
+    }
+
+    return impacts
   }
 
   private async createPluginCommandSource(
@@ -449,6 +506,7 @@ export class PluginManager {
 
   async planInstallPlugin(pluginName: string, sourcePath: string): Promise<PluginInstallPlan> {
     const manifest = await this.loadManifestFromSource(sourcePath)
+    const agentImpacts = await this.createAgentImpacts(pluginName, sourcePath, manifest.commands)
     const operations: PluginInstallOperation[] = [
       await this.createOperation({
         kind: 'copy-plugin',
@@ -456,7 +514,7 @@ export class PluginManager {
         targetPath: path.join(this.pluginsDir, pluginName),
         id: pluginName
       }),
-      ...await this.createCommandOperations(pluginName, sourcePath, manifest.commands),
+      ...await this.createCommandOperations(agentImpacts),
       ...await this.createExpertOperations(pluginName, sourcePath, manifest.experts),
       ...await this.createHookOperations(sourcePath, manifest.hooks)
     ]
@@ -472,7 +530,8 @@ export class PluginManager {
           targetPath: operation.targetPath,
           operation: operation.kind,
           id: operation.id
-        }))
+        })),
+      agentImpacts
     }
   }
 
