@@ -10,6 +10,24 @@ export const PLUGIN_TYPES = [
 
 export type PluginType = typeof PLUGIN_TYPES[number];
 
+export const PLUGIN_KINDS = [
+  'extension',
+  'preset',
+  'style-pack',
+  'market-bridge'
+] as const;
+
+export type PluginKind = typeof PLUGIN_KINDS[number];
+
+export type PluginProvidedCapability =
+  | 'commands'
+  | 'templates'
+  | 'knowledge'
+  | 'tracking-rules'
+  | 'experts'
+  | 'hooks'
+  | string;
+
 export const PLUGIN_HOOK_POINTS = [
   'post-init',
   'pre-prompt-compile',
@@ -54,6 +72,8 @@ export interface PluginManifest {
   name: string;
   version: string;
   type: PluginType;
+  kind: PluginKind;
+  priority: number;
   description?: string;
   displayName?: string;
   author?: string;
@@ -64,6 +84,8 @@ export interface PluginManifest {
   trackingRules: PluginTrackingRule[];
   experts: PluginExpert[];
   hooks: PluginHook[];
+  provides: PluginProvidedCapability[];
+  overrides: string[];
   dependencies?: {
     core?: string;
   };
@@ -89,6 +111,7 @@ export interface ParsePluginManifestResult {
 }
 
 const PLUGIN_TYPE_SET = new Set<string>(PLUGIN_TYPES);
+const PLUGIN_KIND_SET = new Set<string>(PLUGIN_KINDS);
 const HOOK_POINT_SET = new Set<string>(PLUGIN_HOOK_POINTS);
 const HOOK_STRATEGIES = new Set<PluginHookStrategy>(['append', 'prepend', 'replace-marker']);
 
@@ -235,6 +258,56 @@ const normalizeHooks = (value: unknown, issues: PluginManifestIssue[]): PluginHo
 const readOptionalString = (value: unknown): string | undefined =>
   isNonEmptyString(value) ? value : undefined;
 
+const normalizePluginKind = (raw: Record<string, unknown>, issues: PluginManifestIssue[]): PluginKind => {
+  if (raw.kind !== undefined) {
+    if (!isNonEmptyString(raw.kind) || !PLUGIN_KIND_SET.has(raw.kind)) {
+      issues.push(issue('plugin.kind', `插件 kind 必须是 ${PLUGIN_KINDS.join('/')}`));
+      return 'extension';
+    }
+
+    return raw.kind as PluginKind;
+  }
+
+  return raw.type === 'style' ? 'style-pack' : 'extension';
+};
+
+const normalizePriority = (value: unknown, issues: PluginManifestIssue[]): number => {
+  if (value === undefined) {
+    return 0;
+  }
+
+  if (typeof value !== 'number' || !Number.isInteger(value)) {
+    issues.push(issue('plugin.priority', '插件 priority 必须是整数'));
+    return 0;
+  }
+
+  return value;
+};
+
+const normalizeStringArray = (
+  value: unknown,
+  pathName: string,
+  issues: PluginManifestIssue[]
+): string[] => {
+  if (value === undefined) {
+    return [];
+  }
+
+  if (!Array.isArray(value)) {
+    issues.push(issue(pathName, '字段必须是字符串数组'));
+    return [];
+  }
+
+  return value.flatMap((entry, index) => {
+    if (!isNonEmptyString(entry)) {
+      issues.push(issue(`${pathName}[${index}]`, '数组项必须是非空字符串'));
+      return [];
+    }
+
+    return [entry];
+  });
+};
+
 export const parsePluginManifest = (raw: unknown): ParsePluginManifestResult => {
   const issues: PluginManifestIssue[] = [];
 
@@ -256,6 +329,8 @@ export const parsePluginManifest = (raw: unknown): ParsePluginManifestResult => 
     issues.push(issue('plugin.type', `插件 type 必须是 ${PLUGIN_TYPES.join('/')}`));
   }
 
+  const kind = normalizePluginKind(raw, issues);
+  const priority = normalizePriority(raw.priority, issues);
   const commands = normalizeCapabilityArray(raw.commands, 'plugin.commands', issues, {
     requireId: true,
     requireDescription: true
@@ -268,6 +343,8 @@ export const parsePluginManifest = (raw: unknown): ParsePluginManifestResult => 
     requireTitle: false
   }) as PluginExpert[];
   const hooks = normalizeHooks(raw.hooks, issues);
+  const provides = normalizeStringArray(raw.provides, 'plugin.provides', issues);
+  const overrides = normalizeStringArray(raw.overrides, 'plugin.overrides', issues);
   const features = Array.isArray(raw.features)
     ? raw.features.filter(isNonEmptyString)
     : [];
@@ -282,12 +359,16 @@ export const parsePluginManifest = (raw: unknown): ParsePluginManifestResult => 
       name: raw.name as string,
       version: raw.version as string,
       type: raw.type as PluginType,
+      kind,
+      priority,
       commands,
       templates,
       knowledge,
       trackingRules,
       experts,
       hooks,
+      provides,
+      overrides,
       features,
       ...(readOptionalString(raw.description) ? { description: raw.description as string } : {}),
       ...(readOptionalString(raw.displayName) ? { displayName: raw.displayName as string } : {}),

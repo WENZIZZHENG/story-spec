@@ -5,6 +5,7 @@ import { describe, expect, it } from 'vitest';
 import {
   parsePluginManifest,
   PLUGIN_HOOK_POINTS,
+  PLUGIN_KINDS,
   PLUGIN_TYPES
 } from '../../src/domain/plugin-manifest.js';
 
@@ -18,6 +19,10 @@ describe('PluginManifest', () => {
       displayName: '类型知识库',
       description: '类型知识库插件',
       type: 'knowledge',
+      kind: 'preset',
+      priority: 20,
+      provides: ['knowledge', 'commands'],
+      overrides: ['templates/commands/write'],
       commands: [
         { id: 'genre-plan', name: '类型规划', file: 'commands/plan.md', description: '增强规划' }
       ],
@@ -57,6 +62,10 @@ describe('PluginManifest', () => {
       version: '1.2.3',
       displayName: '类型知识库',
       type: 'knowledge',
+      kind: 'preset',
+      priority: 20,
+      provides: ['knowledge', 'commands'],
+      overrides: ['templates/commands/write'],
       commands: [
         { id: 'genre-plan', name: '类型规划', file: 'commands/plan.md', description: '增强规划' }
       ],
@@ -111,14 +120,46 @@ describe('PluginManifest', () => {
         name: expect.any(String),
         version: expect.any(String),
         type: expect.stringMatching(new RegExp(`^(${PLUGIN_TYPES.join('|')})$`)),
+        kind: expect.stringMatching(new RegExp(`^(${PLUGIN_KINDS.join('|')})$`)),
+        priority: expect.any(Number),
         commands: expect.any(Array),
         templates: expect.any(Array),
         knowledge: expect.any(Array),
         trackingRules: expect.any(Array),
         experts: expect.any(Array),
-        hooks: expect.any(Array)
+        hooks: expect.any(Array),
+        provides: expect.any(Array),
+        overrides: expect.any(Array)
       }));
     }
+  });
+
+  it('derives new plugin kind defaults from legacy type fields', () => {
+    const style = parsePluginManifest({
+      name: 'style-plugin',
+      version: '1.0.0',
+      type: 'style'
+    });
+    const feature = parsePluginManifest({
+      name: 'feature-plugin',
+      version: '1.0.0',
+      type: 'feature'
+    });
+
+    expect(style.issues).toEqual([]);
+    expect(style.manifest).toMatchObject({
+      kind: 'style-pack',
+      priority: 0,
+      provides: [],
+      overrides: []
+    });
+    expect(feature.issues).toEqual([]);
+    expect(feature.manifest).toMatchObject({
+      kind: 'extension',
+      priority: 0,
+      provides: [],
+      overrides: []
+    });
   });
 
   it('reports invalid required fields and hook points without throwing', () => {
@@ -126,6 +167,10 @@ describe('PluginManifest', () => {
       name: '',
       version: '',
       type: 'unknown',
+      kind: 'unknown',
+      priority: 'high',
+      provides: ['commands', ''],
+      overrides: 'templates/commands/write',
       commands: [{ id: '', file: '', description: '' }],
       experts: [{ id: 'expert', file: '' }],
       hooks: [{ point: 'during-everything' }]
@@ -136,6 +181,10 @@ describe('PluginManifest', () => {
       expect.objectContaining({ path: 'plugin.name' }),
       expect.objectContaining({ path: 'plugin.version' }),
       expect.objectContaining({ path: 'plugin.type' }),
+      expect.objectContaining({ path: 'plugin.kind' }),
+      expect.objectContaining({ path: 'plugin.priority' }),
+      expect.objectContaining({ path: 'plugin.provides[1]' }),
+      expect.objectContaining({ path: 'plugin.overrides' }),
       expect.objectContaining({ path: 'plugin.commands[0].id' }),
       expect.objectContaining({ path: 'plugin.experts[0].file' }),
       expect.objectContaining({ path: 'plugin.hooks[0].point' })
