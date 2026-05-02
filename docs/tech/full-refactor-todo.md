@@ -178,7 +178,7 @@ src/
 
 - [x] 定义 `StoryArtifact`、`StoryProject`、`WritingTask` 类型
   - 验收：`tasks.md` 中的输出路径、依赖、状态可解析。
-- [ ] 新增 artifact scanner
+- [x] 新增 artifact scanner
   - 验收：可扫描 `stories/*`、`spec/tracking/*.json`，返回缺失、过期、非法状态。
 - [ ] 新增 artifact graph
   - 验收：能回答“哪个章节受哪个任务/线索/角色状态影响”。
@@ -190,6 +190,8 @@ src/
 - 已新增 `src/domain/story-artifact.ts`，定义 `StoryArtifact`、`StoryProject`、`WritingTask`、任务状态/优先级等领域类型。
 - 已新增 `parseWritingTasksFromMarkdown`，可解析 `tasks.md` 中的任务状态、优先级、`WRITE-READY`/`PLAN-ONLY` 标记、依赖、输出路径、必须读取、允许修改、涉及线索和验收标准。
 - 已新增 `tests/unit/story-artifact.test.ts`，用接近真实任务模板的 Markdown 片段覆盖任务元数据解析。
+- 已新增 `src/validation/artifact-scanner.ts`，扫描 `stories/*`、任务输出文件和 `spec/tracking/*.json`，返回故事级与全局 issue。
+- 已新增 `tests/unit/artifact-scanner.test.ts`，覆盖缺失 `creative-plan.md`/`tasks.md`、任务输出缺失，以及非法 tracking JSON。
 
 ## 阶段 4：模板与 prompt compiler 体系
 
