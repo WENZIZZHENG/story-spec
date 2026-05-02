@@ -262,7 +262,7 @@ src/
   - 对象：tracking JSON、plugin manifest、AI platform registry、task metadata。
 - [x] 新增 `novel validate`
   - 验收：检查项目结构、tracking JSON、任务字段、模板缺失。
-- [ ] 写作规则 checker 化
+- [x] 写作规则 checker 化
   - 候选：角色称呼、时间线、世界观、任务依赖、章节字数。
 - [ ] 支持 severity
   - 级别：error、warning、info。
@@ -275,6 +275,9 @@ src/
 - 已新增 `src/application/validate-project.ts` 与 `src/cli/commands/validate.command.ts`，提供 `novel validate` / `novel validate --json`。
 - `validateProject` 会聚合项目结构、artifact scanner、tracking JSON 顶层结构、WritingTask 元数据和核心模板缺失检查；CLI 在 error 存在时返回非零 exit code。
 - 已新增 `tests/unit/validate-project.test.ts`，并在 `tests/smoke/cli-init.test.ts` 覆盖初始化项目后的 `novel validate --json`。
+- 已新增 `src/validation/rules/writing-rules.ts`，把写作规则抽象为可注册 `WritingRule`，默认覆盖任务依赖、章节字数、timeline 章节顺序、角色禁用称呼和常见误名。
+- `validateProject` 已接入默认写作规则包，统一输出 `UNKNOWN_TASK_DEPENDENCY`、`CHAPTER_TOO_SHORT`、`TIMELINE_CHAPTER_ORDER`、`FORBIDDEN_CHARACTER_ADDRESS`、`COMMON_CHARACTER_SUBSTITUTION` 等 issue。
+- 已新增 `tests/unit/writing-rules.test.ts`，并扩展 `tests/unit/validate-project.test.ts` 覆盖规则包接入。
 
 ## 阶段 8：测试与 CI
 

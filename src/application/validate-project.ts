@@ -8,10 +8,16 @@ import {
   type ValidationIssue,
   type ValidationSeverity
 } from '../validation/schema/index.js';
+import {
+  createDefaultWritingRules,
+  runWritingRules,
+  type WritingRuleIssue
+} from '../validation/rules/writing-rules.js';
 
 export type ProjectValidationIssueCode =
   | ValidationIssue['code']
   | ArtifactIssue['code']
+  | WritingRuleIssue['code']
   | 'MISSING_PROJECT_CONFIG'
   | 'MISSING_PROJECT_DIR'
   | 'MISSING_TEMPLATE';
@@ -67,7 +73,7 @@ const countIssues = (issues: readonly ProjectValidationIssue[]): Record<Validati
   info: issues.filter(issue => issue.severity === 'info').length
 });
 
-const toProjectIssue = (issue: ValidationIssue | ArtifactIssue): ProjectValidationIssue => ({
+const toProjectIssue = (issue: ValidationIssue | ArtifactIssue | WritingRuleIssue): ProjectValidationIssue => ({
   severity: issue.severity,
   code: issue.code,
   path: issue.path,
@@ -177,6 +183,12 @@ export const validateProject = async (input: ValidateProjectInput): Promise<Proj
   const artifactScan = await scanStoryArtifacts({ projectRoot, fileSystem: fs });
   const trackingResult = await validateTrackingFiles(fs, projectRoot);
   const templateResult = await validateTemplates(fs, projectRoot, input.packageRoot);
+  const writingRuleResult = await runWritingRules({
+    projectRoot,
+    fileSystem: fs,
+    artifactScan,
+    rules: createDefaultWritingRules()
+  });
   const taskIssues = artifactScan.stories.flatMap(story =>
     story.tasks.flatMap(task =>
       validateWritingTask(task).map(issue => ({
@@ -193,6 +205,7 @@ export const validateProject = async (input: ValidateProjectInput): Promise<Proj
     ...artifactIssues,
     ...trackingResult.issues,
     ...taskIssues,
+    ...writingRuleResult.issues.map(toProjectIssue),
     ...templateResult.issues
   ].sort((left, right) => left.path.localeCompare(right.path) || left.code.localeCompare(right.code));
   const issueCounts = countIssues(issues);

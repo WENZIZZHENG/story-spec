@@ -33,7 +33,7 @@ const createFileSystem = async () => {
   await fileSystem.writeFile(path.join(storyPath, 'specification.md'), '# spec');
   await fileSystem.writeFile(path.join(storyPath, 'creative-plan.md'), '# plan');
   await fileSystem.writeFile(path.join(storyPath, 'tasks.md'), `- [ ] [P9] **T001** -    
-  - **依赖**：无
+  - **依赖**：T099
 `);
 
   return { projectRoot, packageRoot, fileSystem };
@@ -63,6 +63,7 @@ describe('validateProject', () => {
       expect.objectContaining({ code: 'MISSING_TASK_TITLE' }),
       expect.objectContaining({ code: 'INVALID_TASK_PRIORITY' }),
       expect.objectContaining({ code: 'MISSING_TASK_OUTPUT' }),
+      expect.objectContaining({ code: 'UNKNOWN_TASK_DEPENDENCY', severity: 'error' }),
       expect.objectContaining({ code: 'MISSING_TEMPLATE', path: path.join(projectRoot, '.specify', 'templates', 'commands', 'write.md') })
     ]));
   });
