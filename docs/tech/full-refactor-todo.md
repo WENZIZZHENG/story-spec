@@ -234,12 +234,19 @@ src/
 
 - [x] 盘点所有脚本功能
   - 输出：`docs/tech/script-inventory.md`。
-- [ ] 抽象 script runner
+- [x] 抽象 script runner
   - 验收：JS/TS 层能调用 `analyze-story`、`check-writing-state` 等能力。
 - [ ] 优先迁移纯文件扫描脚本到 TypeScript
   - 候选：word count、state scan、tracking JSON validation。
 - [ ] 保留 shell compatibility layer
   - 验收：旧 prompt 中脚本路径仍能工作。
+
+阶段备注：
+
+- 已新增 `src/application/run-script.ts`，提供 `runNovelScript`、`ScriptExecution`、`ScriptExecutor` 和结构化 `ScriptRunnerError`。
+- runner 支持项目本地 `.specify/scripts/<platform>/` 优先、包内 `scripts/<platform>/` 回退，并可调用 `analyze-story`、`check-writing-state` 等脚本能力。
+- 已新增 `src/infrastructure/node-script-executor.ts`，把真实 `execFile` 调用隔离在 infrastructure 层，application 层只依赖 executor 接口。
+- 已新增 `tests/unit/script-runner.test.ts`，覆盖项目本地优先、包内回退、PowerShell 参数构造和缺脚本错误。
 
 ## 阶段 6：插件与扩展系统重构
 
