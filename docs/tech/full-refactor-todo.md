@@ -330,7 +330,7 @@ src/
 
 目标：重构完成后外部用户仍能清楚升级。
 
-- [ ] 新增 `docs/architecture.md` 或更新现有架构图
+- [x] 新增 `docs/architecture.md` 或更新现有架构图
   - 验收：模块边界、数据流、extension flow 可视化。
 - [ ] 引入 changeset 风格变更记录
   - 验收：CLI 行为、模板契约、生成产物变化都有记录。
@@ -338,6 +338,9 @@ src/
   - 验收：新用户仍可 5 分钟 init + status + prompt。
 - [ ] 编写迁移指南
   - 验收：旧项目如何 `upgrade`、如何保留自定义模板。
+
+阶段备注：
+- 已更新 `docs/tech/architecture.md`，以当前重构后的 CLI/application/domain/infrastructure/prompt/templates/plugins/validation 边界为准，并补充模块边界、初始化流、命令产物流、状态校验流和插件扩展流 Mermaid 图。
 
 ## 阶段 10：Codex 专项增强
 
