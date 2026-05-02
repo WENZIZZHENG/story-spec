@@ -384,7 +384,7 @@ risk:
 - 现有 `plugins/*/config.yaml` 增加 `kind: extension | preset | style-pack | market-bridge`。
 - 插件命令安装不再直接复制到平台目录，而是先进入 command spec registry，再由 renderer 输出。
 - 同名命令冲突按 stack 解决，并在 `agent:doctor` 中显示最终来源。
-- `plugins:add` 保留兼容，但文档逐步迁移到 `extension:add` 或 `preset:add` 是否另行决策。
+- `plugins:add` 保留为当前统一入口；`extension:add` / `preset:add` 延后到领域包成型后作为薄 alias 评估。
 
 ## 数据与迁移策略
 
@@ -511,7 +511,7 @@ risk:
 - [x] A5-T002：插件命令先注册到 command spec registry，再由 agent renderer 输出。
 - [x] A5-T003：实现 project override / preset / extension / core 的最终来源诊断。
 - [x] A5-T004：`plugins:add --dry-run` 显示对所有 agent integration 的影响。
-- [ ] A5-T005：评估是否新增 `preset:add`、`extension:add`，或继续复用 `plugins:add`。
+- [x] A5-T005：评估是否新增 `preset:add`、`extension:add`，或继续复用 `plugins:add`。
 
 验收：
 
