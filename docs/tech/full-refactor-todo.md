@@ -356,13 +356,14 @@ src/
 - [x] 任务到 issue / task board
   - 借鉴 Spec Kit 的 task-to-issues 思路。
   - 验收：`tasks.md` 可转为 GitHub issues 或本地 JSON board。
-- [ ] 断点续写上下文包
+- [x] 断点续写上下文包
   - 验收：生成 `handoff.md`，包含当前章节、未完成任务、必须读取文件、风险边界。
 
 阶段备注：
 - 已新增 `novel status` 通用项目状态入口，`codex-status` 保留为兼容别名；状态模型新增 `handoff` 字段并保留旧 `codex` 字段，避免破坏自动化读取。
 - 已新增 `--agents-profile` 初始化选项，并通过 `templates/AGENTS.codex.md` 的 `{{AGENTS_PROFILE_SECTION}}` 为 Codex 项目生成成人向、慢热、冒险、恋爱、多线叙事等可组合边界画像。
 - 已新增 `novel tasks:board`，可把最近或指定故事的 `tasks.md` 导出为 `task-board.json`，每个任务包含状态列、上下文边界、验收标准和 GitHub issue 草稿。
+- 已新增 `novel handoff`，可生成 `handoff.md` 或 `--json` 结构化上下文包，包含当前章节、下一任务、未完成任务、必须读取文件、允许修改文件、风险边界和 blocker。
 
 ## 执行顺序
 

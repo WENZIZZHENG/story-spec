@@ -31,6 +31,7 @@ describe('CLI command modules smoke', () => {
     expect(help).toContain('plugins:add [options] <name>');
     expect(help).toContain('upgrade [options]');
     expect(help).toContain('status [options]');
+    expect(help).toContain('handoff [options] [story]');
     expect(help).toContain('tasks:board [options] [story]');
     expect(help).toContain('validate [options]');
     expect(info).toContain('三幕结构');
@@ -172,5 +173,44 @@ describe('CLI command modules smoke', () => {
     expect(board.story.name).toBe('001-demo');
     expect(board.summary.total).toBe(1);
     expect(board.tasks[0].githubIssue.title).toBe('[P0] T001 起草第一章');
+  });
+
+  it('generates a JSON handoff package', async () => {
+    const cwd = await makeTempDir();
+    await execFileAsync('node', [
+      cliPath,
+      'init',
+      'smoke',
+      '--ai',
+      'codex',
+      '--method',
+      'three-act',
+      '--no-git'
+    ], { cwd });
+
+    const projectPath = path.join(cwd, 'smoke');
+    const storyPath = path.join(projectPath, 'stories', '001-demo');
+    await mkdir(storyPath, { recursive: true });
+    await writeFile(path.join(storyPath, 'specification.md'), '# spec');
+    await writeFile(path.join(storyPath, 'creative-plan.md'), '# plan');
+    await writeFile(path.join(storyPath, 'tasks.md'), `- [ ] [P0] [WRITE-READY] **T001** - 起草第一章
+  - **必须读取**：
+    - \`specification.md\`
+  - **允许修改**：
+    - \`content/chapter-001.md\`
+  - **依赖**：无
+  - **输出**：\`content/chapter-001.md\`
+`);
+
+    const { stdout } = await execFileAsync('node', [
+      cliPath,
+      'handoff',
+      '--json'
+    ], { cwd: projectPath });
+
+    const handoff = JSON.parse(stdout);
+    expect(handoff.story.name).toBe('001-demo');
+    expect(handoff.nextTask.id).toBe('T001');
+    expect(handoff.currentChapter.path).toBe('stories/001-demo/content/chapter-001.md');
   });
 });
