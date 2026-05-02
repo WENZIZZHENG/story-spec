@@ -191,6 +191,8 @@ AGENTS.md
 
 `AGENTS.md` 是给支持该约定的 agent 直接读取的入口；`.specify/agent-contract.md` 是 Novel Writer 自己的协议源，便于 `contract:sync` 和 validate 对比。
 
+`novel contract:sync` 默认以项目内 `.specify/agent-contract.md` 为源，同步根目录 `AGENTS.md`；当项目 contract 缺失，或用户显式传入 `--from-template` 时，才从包模板 `templates/agent/agent-contract.md` 渲染并重建两份 contract 文件。
+
 ### Contract 必须包含
 
 - 项目身份：这是 Novel Writer 小说项目，而不是代码开发项目。
@@ -459,7 +461,7 @@ risk:
 - [x] A2-T002：初始化时生成 `.specify/agent-contract.md`。
 - [x] A2-T003：初始化时生成通用 `AGENTS.md`，Codex profile 作为可选增强段。
 - [x] A2-T004：新增 `generic` renderer，输出 `.specify/commands/*.md`。
-- [ ] A2-T005：新增 `novel contract:print` 与 `novel contract:sync`。（`contract:print` 已完成，`contract:sync` 待完成）
+- [x] A2-T005：新增 `novel contract:print` 与 `novel contract:sync`。
 - [ ] A2-T006：`validate` 增加 contract/commands 缺失检查。
 
 验收：

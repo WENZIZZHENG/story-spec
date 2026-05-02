@@ -7,6 +7,7 @@ import {
   renderAgentsProfileSection,
   writeAgentContract
 } from '../../src/agent/contract.js';
+import { syncAgentContract } from '../../src/application/sync-agent-contract.js';
 import { MemoryFileSystem } from '../helpers/memory-file-system.js';
 
 describe('agent contract', () => {
@@ -84,5 +85,87 @@ describe('agent contract', () => {
     expect(content).toContain('Profile `romance`');
     await expect(fs.readFile(getProjectAgentContractPath(projectRoot))).resolves.toBe(content);
     await expect(fs.readFile(path.join(projectRoot, 'AGENTS.md'))).resolves.toBe(content);
+  });
+
+  it('syncs AGENTS.md from the project contract by default', async () => {
+    const root = path.join('D:', 'workspace');
+    const packageRoot = path.join(root, 'package');
+    const projectRoot = path.join(root, 'story');
+    const fs = new MemoryFileSystem(root);
+    const projectContractPath = getProjectAgentContractPath(projectRoot);
+
+    await fs.writeFile(path.join(projectRoot, '.specify', 'config.json'), '{"name":"星河"}');
+    await fs.writeFile(path.join(packageRoot, 'templates', 'agent', 'agent-contract.md'), 'template {{PROJECT_NAME}}');
+    await fs.writeFile(projectContractPath, 'project contract');
+    await fs.writeFile(path.join(projectRoot, 'AGENTS.md'), 'old agents');
+
+    const result = await syncAgentContract({
+      packageRoot,
+      projectRoot,
+      fileSystem: fs
+    });
+
+    expect(result.source).toBe('project');
+    expect(result.targets).toMatchObject([
+      { relativePath: '.specify/agent-contract.md', action: 'source' },
+      { relativePath: 'AGENTS.md', action: 'write' }
+    ]);
+    await expect(fs.readFile(path.join(projectRoot, 'AGENTS.md'))).resolves.toBe('project contract');
+    await expect(fs.readFile(projectContractPath)).resolves.toBe('project contract');
+  });
+
+  it('can rebuild both contract files from the package template', async () => {
+    const root = path.join('D:', 'workspace');
+    const packageRoot = path.join(root, 'package');
+    const projectRoot = path.join(root, 'story');
+    const fs = new MemoryFileSystem(root);
+
+    await fs.writeFile(path.join(projectRoot, '.specify', 'config.json'), JSON.stringify({ name: '配置名' }));
+    await fs.writeFile(
+      path.join(packageRoot, 'templates', 'agent', 'agent-contract.md'),
+      '# {{PROJECT_NAME}}\n\n{{AGENTS_PROFILE_SECTION}}\n'
+    );
+    await fs.writeFile(getProjectAgentContractPath(projectRoot), 'old contract');
+
+    const result = await syncAgentContract({
+      packageRoot,
+      projectRoot,
+      fromTemplate: true,
+      agentsProfile: 'romance',
+      fileSystem: fs
+    });
+
+    expect(result.source).toBe('template');
+    expect(result.targets).toMatchObject([
+      { relativePath: '.specify/agent-contract.md', action: 'write' },
+      { relativePath: 'AGENTS.md', action: 'write' }
+    ]);
+    await expect(fs.readFile(getProjectAgentContractPath(projectRoot))).resolves.toContain('# 配置名');
+    await expect(fs.readFile(path.join(projectRoot, 'AGENTS.md'))).resolves.toContain('Profile `romance`');
+  });
+
+  it('reports planned writes without changing files in dry-run mode', async () => {
+    const root = path.join('D:', 'workspace');
+    const packageRoot = path.join(root, 'package');
+    const projectRoot = path.join(root, 'story');
+    const fs = new MemoryFileSystem(root);
+
+    await fs.writeFile(path.join(packageRoot, 'templates', 'agent', 'agent-contract.md'), 'template {{PROJECT_NAME}}');
+    await fs.writeFile(getProjectAgentContractPath(projectRoot), 'project contract');
+    await fs.writeFile(path.join(projectRoot, 'AGENTS.md'), 'old agents');
+
+    const result = await syncAgentContract({
+      packageRoot,
+      projectRoot,
+      dryRun: true,
+      fileSystem: fs
+    });
+
+    expect(result.dryRun).toBe(true);
+    expect(result.targets).toMatchObject([
+      { relativePath: '.specify/agent-contract.md', action: 'source' },
+      { relativePath: 'AGENTS.md', action: 'write' }
+    ]);
+    await expect(fs.readFile(path.join(projectRoot, 'AGENTS.md'))).resolves.toBe('old agents');
   });
 });

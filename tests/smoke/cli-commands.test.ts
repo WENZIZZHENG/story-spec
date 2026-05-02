@@ -30,6 +30,7 @@ describe('CLI command modules smoke', () => {
     expect(help).toContain('init [options] [name]');
     expect(help).toContain('agent:list [options]');
     expect(help).toContain('contract:print [options]');
+    expect(help).toContain('contract:sync [options]');
     expect(help).toContain('plugins:add [options] <name>');
     expect(help).toContain('upgrade [options]');
     expect(help).toContain('status [options]');
@@ -51,6 +52,41 @@ describe('CLI command modules smoke', () => {
     expect(stdout).toContain('Novel Writer Agent Contract');
     expect(stdout).toContain('星河');
     expect(stdout).toContain('.specify/agent-contract.md');
+  });
+
+  it('previews syncing agent contract in a project', async () => {
+    const cwd = await makeTempDir();
+    await execFileAsync('node', [
+      cliPath,
+      'init',
+      'smoke',
+      '--ai',
+      'codex',
+      '--method',
+      'three-act',
+      '--no-git'
+    ], { cwd });
+
+    const projectPath = path.join(cwd, 'smoke');
+    const { stdout } = await execFileAsync('node', [
+      cliPath,
+      'contract:sync',
+      '--dry-run',
+      '--json'
+    ], { cwd: projectPath });
+
+    const result = JSON.parse(stdout);
+    expect(result.source).toBe('project');
+    expect(result.dryRun).toBe(true);
+    expect(result.targets).toEqual(expect.arrayContaining([
+      expect.objectContaining({
+        relativePath: '.specify/agent-contract.md',
+        action: 'source'
+      }),
+      expect.objectContaining({
+        relativePath: 'AGENTS.md'
+      })
+    ]));
   });
 
   it('lists agent integrations as JSON', async () => {
