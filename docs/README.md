@@ -13,6 +13,7 @@ docs/
 ├── installation.md       # 安装指南
 ├── quickstart.md         # 快速入门
 ├── workflow.md           # 创作流程
+├── migration-guide.md    # 重构迁移指南
 ├── commands.md           # 斜杠命令详解 ⭐新增
 ├── writing-methods.md    # 写作方法详解 ⭐新增
 ├── best-practices.md     # 最佳实践指南 ⭐新增
@@ -94,12 +95,13 @@ docs/
 
 #### 进阶文档
 8. **upgrade-guide.md** - 版本升级说明和迁移指南
-9. **word-count-guide.md** - 中文字数统计最佳实践
-10. **writing/practical-guide.md** - SDD 实战指南（基于《重返1984》案例）
+9. **migration-guide.md** - 重构后旧项目迁移、保留自定义模板和升级后验证
+10. **word-count-guide.md** - 中文字数统计最佳实践
+11. **writing/practical-guide.md** - SDD 实战指南（基于《重返1984》案例）
 
 #### 技术文档（⭐新增）
-11. **tech/README.md** - 技术文档索引
-12. **tech/architecture.md** - 完整技术架构文档
+12. **tech/README.md** - 技术文档索引
+13. **tech/architecture.md** - 完整技术架构文档
     - 架构图（可视化系统设计）
     - 核心组件（CLI、AI 集成、插件系统）
     - 七步方法论实现机制

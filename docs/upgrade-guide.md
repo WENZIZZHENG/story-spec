@@ -2,6 +2,8 @@
 
 > 如何将现有项目升级到最新版本
 
+> 如果你正在从旧项目迁移到重构后的命令产物、TypeScript runtime、插件 manifest 和校验体系，请先阅读 [重构迁移指南](migration-guide.md)。
+
 ## 适用场景
 
 - ✅ 已有项目使用旧版本 novel-writer-cn 创建

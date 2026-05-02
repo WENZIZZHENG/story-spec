@@ -336,13 +336,14 @@ src/
   - 验收：CLI 行为、模板契约、生成产物变化都有记录。
 - [x] 更新 README 快速路径
   - 验收：新用户仍可 5 分钟 init + status + prompt。
-- [ ] 编写迁移指南
+- [x] 编写迁移指南
   - 验收：旧项目如何 `upgrade`、如何保留自定义模板。
 
 阶段备注：
 - 已更新 `docs/tech/architecture.md`，以当前重构后的 CLI/application/domain/infrastructure/prompt/templates/plugins/validation 边界为准，并补充模块边界、初始化流、命令产物流、状态校验流和插件扩展流 Mermaid 图。
 - 已新增 `changes/` 轻量变更记录目录与 `npm run check:changes`，每条记录必须覆盖 CLI 行为、模板契约、生成产物和验证四个维度，并已接入 `npm run verify`。
 - 已更新 README 快速开始为 5 分钟路径，覆盖安装、`init --ai codex`、`codex-status`、`validate` 和平台 slash command 对照。
+- 已新增 `docs/migration-guide.md`，说明旧项目保守升级、自定义命令/模板保留、插件迁移、回滚和升级后验收清单，并从升级指南与文档首页链接。
 
 ## 阶段 10：Codex 专项增强
 

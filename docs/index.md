@@ -13,6 +13,7 @@
 - [安装指南](installation.md)
 - [快速入门](quickstart.md)
 - [创作流程](workflow.md)
+- [重构迁移指南](migration-guide.md)
 
 ## 核心理念
 
