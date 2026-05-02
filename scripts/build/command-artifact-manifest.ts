@@ -6,12 +6,21 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import {
   buildCommandArtifacts,
-  BUILD_COMMAND_AGENTS
+  BUILD_COMMAND_AGENTS,
+  getBuildCommandOutputPath
 } from '../../src/prompt/build-commands.js';
+import { listCommandSources } from '../../src/prompt/command-source.js';
+import { getPlatformRenderer } from '../../src/prompt/platform-renderers/index.js';
 
 interface ArtifactEntry {
   path: string;
   sha256: string;
+  commandSource?: {
+    command: string;
+    kind: 'legacy-template' | 'command-spec';
+    sourcePath: string;
+    promptPath?: string;
+  };
 }
 
 interface ArtifactManifest {
@@ -25,6 +34,8 @@ const dirname = path.dirname(fileURLToPath(import.meta.url));
 const rootDir = path.join(dirname, '..', '..');
 const manifestPath = path.join(rootDir, 'tests', 'fixtures', 'command-artifacts.manifest.json');
 const scripts = ['sh'] as const;
+
+type CommandSourceByOutputPath = Map<string, ArtifactEntry['commandSource']>;
 
 const walkFiles = async (dir: string): Promise<string[]> => {
   const files: string[] = [];
@@ -50,6 +61,29 @@ const hashFile = async (filePath: string): Promise<string> => {
   return hash.digest('hex');
 };
 
+const normalizePath = (filePath: string): string => path.relative(rootDir, filePath).replace(/\\/g, '/');
+
+const createCommandSourceIndex = async (): Promise<CommandSourceByOutputPath> => {
+  const commandSources = await listCommandSources(rootDir);
+  const index: CommandSourceByOutputPath = new Map();
+
+  for (const agent of BUILD_COMMAND_AGENTS) {
+    const renderer = getPlatformRenderer(agent);
+
+    for (const source of commandSources) {
+      const outputPath = getBuildCommandOutputPath(agent, renderer, source.commandName);
+      index.set(outputPath, {
+        command: source.commandName,
+        kind: source.kind,
+        sourcePath: normalizePath(source.sourcePath),
+        ...source.kind === 'command-spec' ? { promptPath: normalizePath(source.promptPath) } : {}
+      });
+    }
+  }
+
+  return index;
+};
+
 const createManifest = async (): Promise<ArtifactManifest> => {
   const outDir = path.join(os.tmpdir(), `novel-command-artifacts-${Date.now()}`);
 
@@ -62,10 +96,17 @@ const createManifest = async (): Promise<ArtifactManifest> => {
     });
 
     const files = await walkFiles(outDir);
-    const entries = await Promise.all(files.map(async filePath => ({
-      path: path.relative(outDir, filePath).replace(/\\/g, '/'),
-      sha256: await hashFile(filePath)
-    })));
+    const commandSourceIndex = await createCommandSourceIndex();
+    const entries = await Promise.all(files.map(async filePath => {
+      const relativePath = path.relative(outDir, filePath).replace(/\\/g, '/');
+      const commandSource = commandSourceIndex.get(relativePath);
+
+      return {
+        path: relativePath,
+        sha256: await hashFile(filePath),
+        ...commandSource ? { commandSource } : {}
+      };
+    }));
 
     return {
       generatedBy: 'scripts/build/command-artifact-manifest.ts',

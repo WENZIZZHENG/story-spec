@@ -3,7 +3,10 @@ import fs from 'fs-extra';
 import type { AgentIntegrationId } from '../agent/registry.js';
 import type { ScriptVariant } from './compiler.js';
 import { listCommandSources } from './command-source.js';
-import { renderCommandForPlatform } from './platform-renderers/index.js';
+import {
+  renderCommandForPlatform,
+  type PlatformRenderer
+} from './platform-renderers/index.js';
 
 export const BUILD_COMMAND_AGENTS = [
   'generic',
@@ -65,6 +68,16 @@ const PLATFORM_COMMAND_DIRS: Record<BuildCommandAgent, string> = {
   codebuddy: path.join('.codebuddy', 'commands'),
   q: path.join('.amazonq', 'prompts')
 };
+
+export const getBuildCommandOutputPath = (
+  agent: BuildCommandAgent,
+  renderer: PlatformRenderer,
+  commandName: string
+): string => path.join(
+  agent,
+  PLATFORM_COMMAND_DIRS[agent],
+  `${renderer.namespace}${commandName}.${renderer.extension}`
+).replace(/\\/g, '/');
 
 const getScriptDirectoryName = (script: ScriptVariant): 'bash' | 'powershell' => (
   script === 'sh' ? 'bash' : 'powershell'
