@@ -258,7 +258,7 @@ src/
 
 目标：把“AI 应该写对”变成“程序能检查”。
 
-- [ ] 引入 JSON schema 或 Zod
+- [x] 引入 JSON schema 或 Zod
   - 对象：tracking JSON、plugin manifest、AI platform registry、task metadata。
 - [ ] 新增 `novel validate`
   - 验收：检查项目结构、tracking JSON、任务字段、模板缺失。
@@ -266,6 +266,12 @@ src/
   - 候选：角色称呼、时间线、世界观、任务依赖、章节字数。
 - [ ] 支持 severity
   - 级别：error、warning、info。
+
+阶段备注：
+
+- 已新增 `src/validation/schema/index.ts`，提供统一 `ValidationIssue`、severity 和轻量 typed validators。
+- 已覆盖 AI platform registry、tracking JSON 顶层结构、WritingTask 元数据、plugin manifest 基础字段校验；暂未引入外部 Zod 依赖，避免增加安装和 lockfile 变更。
+- 已新增 `tests/unit/schema-validators.test.ts`，验证当前 registry 为合法，并覆盖重复平台、非法命令前缀、无效任务、无效插件 manifest 等失败路径。
 
 ## 阶段 8：测试与 CI
 
