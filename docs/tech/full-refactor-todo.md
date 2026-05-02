@@ -153,7 +153,7 @@ src/
   - 输入：项目名、路径、目标平台、写作方法、插件、git/expert 选项。
   - 输出：结构化 `InitProjectResult`。
   - 验收：CLI action 只负责解析参数和打印结果。
-- [ ] 新建 `application/upgrade-project.ts`
+- [x] 新建 `application/upgrade-project.ts`
   - 验收：备份、dry-run、选择性更新可测试。
 - [ ] 新建 `application/get-project-status.ts`
   - 验收：`codex-status` 和后续通用 `status` 共用状态模型。
@@ -164,6 +164,8 @@ src/
 
 - 已新增 `src/application/init-project.ts`，把 `init` 的项目目录创建、模板复制、插件安装和 Git 初始化移入 application 层。
 - 已新增 `tests/unit/init-project.test.ts` 直接覆盖 use case 的 Codex 项目生成和已存在目录错误。
+- 已新增 `src/application/upgrade-project.ts`，把 `upgrade` 的项目检测、平台选择、备份、选择性更新、dry-run 和版本写回移入 application 层。
+- 已新增 `tests/unit/upgrade-project.test.ts` 覆盖 dry-run 不落盘、选择性更新、备份、用户 `spec/tracking` 与 `spec/knowledge` 保护，以及非项目目录错误。
 - 当前 `init-project.ts` 仍直接依赖 `fs-extra`，后续阶段再抽 filesystem store 接口。
 
 ## 阶段 3：项目 artifact graph
