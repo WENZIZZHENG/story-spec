@@ -260,7 +260,7 @@ src/
 
 - [x] 引入 JSON schema 或 Zod
   - 对象：tracking JSON、plugin manifest、AI platform registry、task metadata。
-- [ ] 新增 `novel validate`
+- [x] 新增 `novel validate`
   - 验收：检查项目结构、tracking JSON、任务字段、模板缺失。
 - [ ] 写作规则 checker 化
   - 候选：角色称呼、时间线、世界观、任务依赖、章节字数。
@@ -272,6 +272,9 @@ src/
 - 已新增 `src/validation/schema/index.ts`，提供统一 `ValidationIssue`、severity 和轻量 typed validators。
 - 已覆盖 AI platform registry、tracking JSON 顶层结构、WritingTask 元数据、plugin manifest 基础字段校验；暂未引入外部 Zod 依赖，避免增加安装和 lockfile 变更。
 - 已新增 `tests/unit/schema-validators.test.ts`，验证当前 registry 为合法，并覆盖重复平台、非法命令前缀、无效任务、无效插件 manifest 等失败路径。
+- 已新增 `src/application/validate-project.ts` 与 `src/cli/commands/validate.command.ts`，提供 `novel validate` / `novel validate --json`。
+- `validateProject` 会聚合项目结构、artifact scanner、tracking JSON 顶层结构、WritingTask 元数据和核心模板缺失检查；CLI 在 error 存在时返回非零 exit code。
+- 已新增 `tests/unit/validate-project.test.ts`，并在 `tests/smoke/cli-init.test.ts` 覆盖初始化项目后的 `novel validate --json`。
 
 ## 阶段 8：测试与 CI
 

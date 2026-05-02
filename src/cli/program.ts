@@ -4,6 +4,7 @@ import { registerCheckStatusCommand } from './commands/check-status.command.js';
 import { registerInfoCommand } from './commands/info.command.js';
 import { registerPluginsCommand } from './commands/plugins.command.js';
 import { registerUpgradeCommand } from './commands/upgrade.command.js';
+import { registerValidateCommand } from './commands/validate.command.js';
 import chalk from 'chalk';
 import path from 'path';
 import { fileURLToPath } from 'url';
@@ -42,6 +43,7 @@ export function runProgram(argv: string[]): void {
   registerCheckStatusCommand(program);
   registerPluginsCommand(program, { packageRoot });
   registerUpgradeCommand(program, { packageRoot });
+  registerValidateCommand(program, { packageRoot });
   registerInfoCommand(program);
 
   program.on('--help', () => {
@@ -52,6 +54,7 @@ export function runProgram(argv: string[]): void {
     console.log('  $ novel init --here              # 在当前目录初始化');
     console.log('  $ novel check                    # 检查环境');
     console.log('  $ novel codex-status             # 查看 Codex 接手状态');
+    console.log('  $ novel validate                 # 校验项目结构和写作产物');
     console.log('  $ novel info                     # 查看写作方法');
     console.log('');
     console.log(chalk.cyan('核心创作命令:'));
