@@ -4,6 +4,7 @@ import os from 'node:os';
 import path from 'node:path';
 import { promisify } from 'node:util';
 import { afterEach, describe, expect, it } from 'vitest';
+import golden from '../fixtures/cli-init-golden.json' with { type: 'json' };
 
 const execFileAsync = promisify(execFile);
 const repoRoot = path.resolve(import.meta.dirname, '..', '..');
@@ -46,10 +47,27 @@ describe('CLI init smoke', () => {
     const projectPath = path.join(cwd, 'smoke');
     const prompts = await readdir(path.join(projectPath, '.codex', 'prompts'));
 
-    expect(stdout).toContain('/novel-constitution');
-    expect(stdout).toContain('/novel-write');
-    expect(await exists(path.join(projectPath, 'AGENTS.md'))).toBe(true);
-    expect(prompts.filter(file => file.endsWith('.md'))).toHaveLength(13);
+    golden.codex.requiredStdout.forEach(text => {
+      expect(stdout).toContain(text);
+    });
+    await Promise.all(golden.codex.requiredFiles.map(async file => {
+      expect(await exists(path.join(projectPath, file))).toBe(true);
+    }));
+    expect(prompts.filter(file => file.endsWith('.md'))).toHaveLength(golden.codex.promptCount);
+
+    const statusResult = await execFileAsync('node', [
+      cliPath,
+      'codex-status',
+      '--json'
+    ], { cwd: projectPath });
+    const status = JSON.parse(statusResult.stdout);
+
+    expect(status.projectName).toBe(golden.codex.status.projectName);
+    expect(status.method).toBe(golden.codex.status.method);
+    expect(status.configuredAI).toEqual(golden.codex.status.configuredAI);
+    expect(status.codex.prompts).toBe(true);
+    expect(status.codex.agentsFile).toBe(true);
+    expect(status.tracking).toHaveLength(golden.codex.status.trackingFiles);
   });
 
   it('initializes every configured AI platform with command directories', async () => {
@@ -65,24 +83,7 @@ describe('CLI init smoke', () => {
     ], { cwd });
 
     const projectPath = path.join(cwd, 'smoke');
-    const expectedDirs = [
-      '.claude/commands',
-      '.cursor/commands',
-      '.gemini/commands',
-      '.windsurf/workflows',
-      '.roo/commands',
-      '.github/prompts',
-      '.vscode',
-      '.qwen/commands',
-      '.opencode/command',
-      '.codex/prompts',
-      '.kilocode/workflows',
-      '.augment/commands',
-      '.codebuddy/commands',
-      '.amazonq/prompts'
-    ];
-
-    await Promise.all(expectedDirs.map(async dir => {
+    await Promise.all(golden.allPlatforms.expectedDirs.map(async dir => {
       expect(await exists(path.join(projectPath, dir))).toBe(true);
     }));
   });

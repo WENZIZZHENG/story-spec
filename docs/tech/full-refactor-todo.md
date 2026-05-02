@@ -108,7 +108,7 @@ src/
   - 验收：测试可在临时目录执行 `init --ai codex --no-git`、`init --all --no-git`、`codex-status --json`。
   - 文件：`tests/cli-smoke.test.ts`。
   - 验证：`npm test -- cli-smoke`。
-- [ ] 记录 golden output
+- [x] 记录 golden output
   - 验收：关键生成目录、prompt 数量、AGENTS.md 生成行为有快照或断言。
   - 文件：`tests/fixtures/`。
 - [x] 加入 `npm run verify`
@@ -120,23 +120,24 @@ src/
 - 已新增 `tests/unit/ai-platforms.test.ts` 覆盖 AI platform registry。
 - 已新增 `tests/unit/project.test.ts` 覆盖项目根目录查找和 AI 配置检测。
 - 已新增 `tests/smoke/cli-init.test.ts` 覆盖 `init --ai codex` 与 `init --all`。
+- 已新增 `tests/fixtures/cli-init-golden.json` 固化 Codex prompt 数量、关键输出、关键文件和全平台目录。
 - 本机没有 `bun` 可执行文件，因此本轮未刷新 `bun.lock`；已用 `npm install --package-lock=false --ignore-scripts` 安装依赖且未生成 `package-lock.json`。
 
 ## 阶段 1：CLI 拆分为命令模块
 
 目标：把 `src/cli.ts` 从 1000+ 行降到只负责 program wiring。
 
-- [ ] 新建 `src/cli/program.ts`
+- [x] 新建 `src/cli/program.ts`
   - 验收：`dist/cli.js` 只导入并运行 program。
   - 验证：`node dist/cli.js --help`。
-- [ ] 拆 `init` 为 `src/cli/commands/init.command.ts`
+- [x] 拆 `init` 为 `src/cli/commands/init.command.ts`
   - 验收：`init --ai codex`、`init --all` 行为与阶段 0 smoke 一致。
   - 依赖：阶段 0。
 - [ ] 拆 `upgrade` 为 `src/cli/commands/upgrade.command.ts`
   - 验收：`upgrade --dry-run` 和现有输出一致，备份逻辑不丢。
 - [ ] 拆插件命令为 `plugins.command.ts`
   - 验收：`plugins:list/add/remove` 不改变命令名。
-- [ ] 保留兼容导出
+- [x] 保留兼容导出
   - 验收：package bin 仍指向 `dist/cli.js`。
 
 ## 阶段 2：应用层 use case 化
@@ -187,7 +188,7 @@ src/
 
 目标：解决 Bash/PowerShell 双维护。
 
-- [ ] 盘点所有脚本功能
+- [x] 盘点所有脚本功能
   - 输出：`docs/tech/script-inventory.md`。
 - [ ] 抽象 script runner
   - 验收：JS/TS 层能调用 `analyze-story`、`check-writing-state` 等能力。
@@ -302,10 +303,10 @@ src/
 
 - [x] T001：引入 Vitest，并为 `src/utils/ai-platforms.ts` 写 registry 测试。
 - [x] T002：写 CLI smoke 测试，覆盖 `init --ai codex` 与 `init --all`。
-- [ ] T003：拆出 `src/cli/program.ts`，保持 `src/cli.ts` 为最小 bin 入口。
-- [ ] T004：拆出 `init.command.ts`，但暂不改 init 内部业务逻辑。
-- [ ] T005：为当前 `build:commands` 生成结果建立 golden fixture。
-- [ ] T006：新增 `docs/tech/script-inventory.md`，盘点 Bash/PowerShell 对应关系。
+- [x] T003：拆出 `src/cli/program.ts`，保持 `src/cli.ts` 为最小 bin 入口。
+- [x] T004：拆出 `init.command.ts`，但暂不改 init 内部业务逻辑。
+- [x] T005：为当前 `build:commands` 生成结果建立 golden fixture。
+- [x] T006：新增 `docs/tech/script-inventory.md`，盘点 Bash/PowerShell 对应关系。
 
 ## 参考链接
 

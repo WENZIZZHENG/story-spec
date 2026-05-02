@@ -1,0 +1,44 @@
+{
+  "codex": {
+    "promptCount": 13,
+    "status": {
+      "projectName": "smoke",
+      "method": "three-act",
+      "configuredAI": ["codex"],
+      "trackingFiles": 5
+    },
+    "requiredStdout": [
+      "/novel-constitution",
+      "/novel-specify",
+      "/novel-tasks",
+      "/novel-write",
+      "/novel-analyze"
+    ],
+    "requiredFiles": [
+      "AGENTS.md",
+      ".codex/prompts/novel-constitution.md",
+      ".codex/prompts/novel-write.md",
+      ".specify/config.json",
+      "spec/tracking/plot-tracker.json",
+      "spec/knowledge/world-setting.md"
+    ]
+  },
+  "allPlatforms": {
+    "expectedDirs": [
+      ".claude/commands",
+      ".cursor/commands",
+      ".gemini/commands",
+      ".windsurf/workflows",
+      ".roo/commands",
+      ".github/prompts",
+      ".vscode",
+      ".qwen/commands",
+      ".opencode/command",
+      ".codex/prompts",
+      ".kilocode/workflows",
+      ".augment/commands",
+      ".codebuddy/commands",
+      ".amazonq/prompts"
+    ]
+  }
+}
