@@ -37,14 +37,26 @@ Input: $ARGUMENTS
 Agent: __AGENT__
 Run {SCRIPT}
 `);
-  await writeFile(path.join(rootDir, 'templates', 'commands', 'plan.command.yaml'), `id: plan
-title: Plan story
-stage: planning
-description: Plan story
-requiredReads: []
-allowedWrites: []
+  await writeFile(path.join(rootDir, 'templates', 'commands', 'write.command.yaml'), `id: write
+title: Write chapter
+stage: drafting
+description: Write chapter from tasks
+arguments:
+  hint: "[task]"
+requiredReads:
+  - stories/*/tasks.md
+allowedWrites:
+  - stories/*/content/**
+scripts:
+  check:
+    capability: check-writing-state
+    sh: scripts/bash/check-writing-state.sh
+    ps: scripts/powershell/check-writing-state.ps1
 `);
-  await writeFile(path.join(rootDir, 'templates', 'commands', 'plan.prompt.md'), 'Prompt body without legacy frontmatter');
+  await writeFile(path.join(rootDir, 'templates', 'commands', 'write.prompt.md'), `Input: $ARGUMENTS
+Agent: __AGENT__
+Run {SCRIPT}
+`);
 
   await mkdir(path.join(rootDir, 'templates', 'knowledge'), { recursive: true });
   await writeFile(path.join(rootDir, 'templates', 'knowledge', 'world.md'), '# world');
@@ -94,19 +106,27 @@ describe('buildCommandArtifacts', () => {
     });
 
     expect(result.variants).toEqual([
-      { agent: 'codex', script: 'sh', commandCount: 1 },
-      { agent: 'gemini', script: 'sh', commandCount: 1 }
+      { agent: 'codex', script: 'sh', commandCount: 2 },
+      { agent: 'gemini', script: 'sh', commandCount: 2 }
     ]);
 
     const codexPrompt = await readFile(path.join(outDir, 'codex', '.codex', 'prompts', 'novel-plan.md'), 'utf-8');
     expect(codexPrompt).not.toMatch(/^---/);
     expect(codexPrompt).toContain('Agent: codex');
     expect(codexPrompt).toContain('.specify/scripts/bash/plan-story.sh');
+    const codexSpecPrompt = await readFile(path.join(outDir, 'codex', '.codex', 'prompts', 'novel-write.md'), 'utf-8');
+    expect(codexSpecPrompt).not.toMatch(/^---/);
+    expect(codexSpecPrompt).toContain('Agent: codex');
+    expect(codexSpecPrompt).toContain('.specify/scripts/bash/check-writing-state.sh');
 
     const geminiPrompt = await readFile(path.join(outDir, 'gemini', '.gemini', 'commands', 'novel', 'plan.toml'), 'utf-8');
     expect(geminiPrompt).toContain('description = "Plan story"');
     expect(geminiPrompt).toContain('Input: {{args}}');
     expect(geminiPrompt).toContain('.specify/scripts/bash/plan-story.sh');
+    const geminiSpecPrompt = await readFile(path.join(outDir, 'gemini', '.gemini', 'commands', 'novel', 'write.toml'), 'utf-8');
+    expect(geminiSpecPrompt).toContain('description = "Write chapter from tasks"');
+    expect(geminiSpecPrompt).toContain('Input: {{args}}');
+    expect(geminiSpecPrompt).toContain('.specify/scripts/bash/check-writing-state.sh');
 
     await expect(exists(path.join(outDir, 'codex', '.specify', 'memory', 'constitution.md'))).resolves.toBe(true);
     await expect(exists(path.join(outDir, 'codex', '.specify', 'scripts', 'bash', 'plan-story.sh'))).resolves.toBe(true);
@@ -134,11 +154,17 @@ describe('buildCommandArtifacts', () => {
     });
 
     expect(result.variants).toEqual([
-      { agent: 'generic', script: 'sh', commandCount: 1 }
+      { agent: 'generic', script: 'sh', commandCount: 2 }
     ]);
 
     const genericCommand = await readFile(path.join(outDir, 'generic', '.specify', 'commands', 'plan.md'), 'utf-8');
     expect(genericCommand).toContain('# Plan story');
+    const genericSpecCommand = await readFile(path.join(outDir, 'generic', '.specify', 'commands', 'write.md'), 'utf-8');
+    expect(genericSpecCommand).toContain('# Write chapter');
+    expect(genericSpecCommand).toContain('[task]');
+    expect(genericSpecCommand).toContain('- `stories/*/tasks.md`');
+    expect(genericSpecCommand).toContain('- `stories/*/content/**`');
+    expect(genericSpecCommand).toContain('.specify/scripts/bash/check-writing-state.sh');
     expect(genericCommand).toContain('## 前置条件');
     expect(genericCommand).toContain('## 必须读取');
     expect(genericCommand).toContain('## 允许写入');

@@ -2,6 +2,7 @@ import path from 'node:path';
 import fs from 'fs-extra';
 import type { AgentIntegrationId } from '../agent/registry.js';
 import type { ScriptVariant } from './compiler.js';
+import { listCommandSources } from './command-source.js';
 import { renderCommandForPlatform } from './platform-renderers/index.js';
 
 export const BUILD_COMMAND_AGENTS = [
@@ -68,19 +69,6 @@ const PLATFORM_COMMAND_DIRS: Record<BuildCommandAgent, string> = {
 const getScriptDirectoryName = (script: ScriptVariant): 'bash' | 'powershell' => (
   script === 'sh' ? 'bash' : 'powershell'
 );
-
-const listCommandTemplates = async (rootDir: string): Promise<string[]> => {
-  const commandsDir = path.join(rootDir, 'templates', 'commands');
-  if (!await fs.pathExists(commandsDir)) {
-    return [];
-  }
-
-  const entries = await fs.readdir(commandsDir);
-  return entries
-    .filter(entry => entry.endsWith('.md') && !entry.endsWith('.prompt.md'))
-    .sort()
-    .map(entry => path.join(commandsDir, entry));
-};
 
 const copyIfExists = async (sourcePath: string, targetPath: string): Promise<boolean> => {
   if (!await fs.pathExists(sourcePath)) {
@@ -225,13 +213,11 @@ const generatePlatformCommands = async (
   const outputDir = path.join(baseDir, PLATFORM_COMMAND_DIRS[agent]);
   await fs.ensureDir(outputDir);
 
-  const templates = await listCommandTemplates(rootDir);
-  for (const templatePath of templates) {
-    const template = await fs.readFile(templatePath, 'utf-8');
-    const commandName = path.basename(templatePath, '.md');
+  const commandSources = await listCommandSources(rootDir);
+  for (const commandSource of commandSources) {
     const rendered = renderCommandForPlatform({
-      commandName,
-      template,
+      commandName: commandSource.commandName,
+      commandSource,
       platform: agent,
       scriptVariant: script
     });
@@ -239,7 +225,7 @@ const generatePlatformCommands = async (
     await fs.writeFile(path.join(outputDir, rendered.outputFile), rendered.content);
   }
 
-  return templates.length;
+  return commandSources.length;
 };
 
 export const buildCommandArtifacts = async (

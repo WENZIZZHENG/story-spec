@@ -18,6 +18,7 @@ import {
   filterIssuesBySeverity,
   sortIssuesBySeverity
 } from '../validation/severity.js';
+import { getCommandOutputFileNamesFromEntries } from '../prompt/command-source.js';
 
 export type ProjectValidationIssueCode =
   | ValidationIssue['code']
@@ -240,10 +241,7 @@ const listExpectedGenericCommands = async (
     return [];
   }
 
-  return (await fs.readDir(sourceDir))
-    .filter(file => file.endsWith('.md'))
-    .map(file => file)
-    .sort();
+  return getCommandOutputFileNamesFromEntries(await fs.readDir(sourceDir));
 };
 
 const validateAgentContract = async (

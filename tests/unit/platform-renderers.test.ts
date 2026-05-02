@@ -5,6 +5,7 @@ import {
   getPlatformRenderer,
   renderCommandForPlatform
 } from '../../src/prompt/platform-renderers/index.js';
+import { parseCommandSpec } from '../../src/prompt/command-spec.js';
 
 const template = `---
 description: 生成创作计划
@@ -17,6 +18,29 @@ scripts:
 用户输入：$ARGUMENTS
 Agent: __AGENT__
 运行 {SCRIPT}
+`;
+
+const commandSpec = parseCommandSpec(`id: write
+title: Write chapter
+stage: drafting
+description: Write chapter from tasks
+arguments:
+  hint: "[task]"
+requiredReads:
+  - .specify/memory/constitution.md
+  - stories/*/tasks.md
+allowedWrites:
+  - stories/*/content/**
+scripts:
+  check:
+    capability: check-writing-state
+    sh: .specify/scripts/bash/check-writing-state.sh
+    ps: .specify/scripts/powershell/check-writing-state.ps1
+`, 'write.command.yaml').spec!;
+
+const promptBody = `Input: $ARGUMENTS
+Agent: __AGENT__
+Run {SCRIPT}
 `;
 
 describe('platform renderers', () => {
@@ -88,5 +112,39 @@ describe('platform renderers', () => {
     expect(generic.content).toContain('## 必须读取');
     expect(generic.content).toContain('## 允许写入');
     expect(generic.content).toContain('## 降级方案');
+  });
+  it('renders CommandSpec sources without legacy template frontmatter', () => {
+    const commandSource = {
+      kind: 'command-spec' as const,
+      commandName: 'write',
+      spec: commandSpec,
+      promptBody,
+      sourcePath: 'templates/commands/write.command.yaml',
+      promptPath: 'templates/commands/write.prompt.md'
+    };
+    const codex = renderCommandForPlatform({
+      commandName: 'write',
+      commandSource,
+      platform: 'codex',
+      scriptVariant: 'sh'
+    });
+    const generic = renderCommandForPlatform({
+      commandName: 'write',
+      commandSource,
+      platform: 'generic',
+      scriptVariant: 'ps'
+    });
+
+    expect(codex.outputFile).toBe('novel-write.md');
+    expect(codex.content).not.toMatch(/^---/);
+    expect(codex.content).toContain('Agent: codex');
+    expect(codex.content).toContain('.specify/scripts/bash/check-writing-state.sh');
+
+    expect(generic.outputFile).toBe('write.md');
+    expect(generic.content).toContain('# Write chapter');
+    expect(generic.content).toContain('[task]');
+    expect(generic.content).toContain('- `.specify/memory/constitution.md`');
+    expect(generic.content).toContain('- `stories/*/content/**`');
+    expect(generic.content).toContain('.specify/scripts/powershell/check-writing-state.ps1');
   });
 });

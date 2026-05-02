@@ -1,5 +1,7 @@
 import type { AgentIntegrationId } from '../../agent/registry.js';
+import type { CommandSource } from '../command-source.js';
 import {
+  compileCommandSpec,
   compileCommandTemplate,
   type CommandOutputFormat,
   type ScriptVariant
@@ -15,7 +17,8 @@ export interface PlatformRenderer {
 
 export interface RenderCommandForPlatformInput {
   commandName: string;
-  template: string;
+  template?: string;
+  commandSource?: CommandSource;
   platform: AgentIntegrationId;
   scriptVariant: ScriptVariant;
 }
@@ -133,17 +136,30 @@ export const getAllPlatformRenderers = (): PlatformRenderer[] => Object.values(P
 
 export const renderCommandForPlatform = (input: RenderCommandForPlatformInput): RenderedCommand => {
   const renderer = getPlatformRenderer(input.platform);
-  const outputFile = `${renderer.namespace}${input.commandName}.${renderer.extension}`;
-
-  return {
-    outputFile,
-    renderer,
-    content: compileCommandTemplate({
-      template: input.template,
+  const commandName = input.commandSource?.commandName ?? input.commandName;
+  const outputFile = `${renderer.namespace}${commandName}.${renderer.extension}`;
+  const content = input.commandSource?.kind === 'command-spec'
+    ? compileCommandSpec({
+      spec: input.commandSource.spec,
+      promptBody: input.commandSource.promptBody,
       agent: renderer.platform,
       argFormat: renderer.argFormat,
       scriptVariant: input.scriptVariant,
       outputFormat: renderer.outputFormat
     })
+    : compileCommandTemplate({
+      template: input.commandSource?.kind === 'legacy-template'
+        ? input.commandSource.template
+        : input.template ?? '',
+      agent: renderer.platform,
+      argFormat: renderer.argFormat,
+      scriptVariant: input.scriptVariant,
+      outputFormat: renderer.outputFormat
+    });
+
+  return {
+    outputFile,
+    renderer,
+    content
   };
 };
