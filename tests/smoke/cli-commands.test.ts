@@ -39,6 +39,7 @@ describe('CLI command modules smoke', () => {
     expect(help).toContain('handoff [options] [story]');
     expect(help).toContain('tasks:board [options] [story]');
     expect(help).toContain('validate [options]');
+    expect(help).toContain('review [options]');
     expect(info).toContain('三幕结构');
     expect(info).toContain('雪花十步');
   });
@@ -563,5 +564,85 @@ describe('CLI command modules smoke', () => {
     expect(compiled.draftPaths).toContain('stories/*/content/chapter-001.md');
     expect(impact.edges.length).toBeGreaterThan(0);
     expect(impact.evidencePaths.length).toBeGreaterThan(0);
+  });
+
+  it('checks voice fingerprints as JSON', async () => {
+    const cwd = await makeTempDir();
+    await execFileAsync('node', [
+      cliPath,
+      'init',
+      'smoke',
+      '--agent',
+      'generic',
+      '--method',
+      'three-act',
+      '--no-git'
+    ], { cwd });
+
+    const projectPath = path.join(cwd, 'smoke');
+    const voiceResult = await execFileAsync('node', [
+      cliPath,
+      'voice:check',
+      '--json'
+    ], { cwd: projectPath });
+    const sampleResult = await execFileAsync('node', [
+      cliPath,
+      'voice:sample',
+      'entity.protagonist',
+      '--json'
+    ], { cwd: projectPath });
+
+    const voice = JSON.parse(voiceResult.stdout);
+    const sample = JSON.parse(sampleResult.stdout);
+
+    expect(voice.fingerprints.length).toBeGreaterThan(0);
+    expect(voice.issues).toEqual([]);
+    expect(sample.fingerprint.characterId).toBe('entity.protagonist');
+    expect(sample.samples.length).toBeGreaterThan(0);
+  });
+
+  it('runs reviewer loop as JSON', async () => {
+    const cwd = await makeTempDir();
+    await execFileAsync('node', [
+      cliPath,
+      'init',
+      'smoke',
+      '--agent',
+      'generic',
+      '--method',
+      'three-act',
+      '--no-git'
+    ], { cwd });
+
+    const projectPath = path.join(cwd, 'smoke');
+    const reviewResult = await execFileAsync('node', [
+      cliPath,
+      'review',
+      '--panel',
+      'worldbuilding,voice,editor',
+      '--chapter',
+      '001',
+      '--json'
+    ], { cwd: projectPath });
+
+    const review = JSON.parse(reviewResult.stdout);
+    expect(review.reviewers.map((reviewer: { id: string }) => reviewer.id)).toEqual([
+      'worldbuilding',
+      'voice',
+      'editor'
+    ]);
+    expect(review.chapter).toBe('001');
+    expect(review.findings.every((finding: {
+      path: string;
+      severity: string;
+      evidence: string;
+      suggestedAction: string;
+    }) => (
+      typeof finding.path === 'string'
+      && typeof finding.severity === 'string'
+      && typeof finding.evidence === 'string'
+      && typeof finding.suggestedAction === 'string'
+    ))).toBe(true);
+    expect(review.taskDrafts).toEqual(expect.any(Array));
   });
 });

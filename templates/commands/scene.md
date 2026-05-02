@@ -1,7 +1,7 @@
 ---
 description: 规划、检查或执行 Scene Card 工作流
 argument-hint: [plan | write | review] [章节或场景ID]
-allowed-tools: Read(//stories/**/specification.md), Read(stories/**/specification.md), Read(//stories/**/creative-plan.md), Read(stories/**/creative-plan.md), Read(//stories/**/tasks.md), Read(stories/**/tasks.md), Read(//stories/**/scenes/**), Read(stories/**/scenes/**), Read(//spec/graph/*.json), Read(spec/graph/*.json), Read(//spec/world/*.yaml), Read(spec/world/*.yaml), Read(//spec/canon/*.json), Read(spec/canon/*.json), Write(//stories/**/scenes/**), Write(stories/**/scenes/**), Write(//stories/**/content/**), Write(stories/**/content/**), Bash(find:*), Bash(*)
+allowed-tools: Read(//stories/**/specification.md), Read(stories/**/specification.md), Read(//stories/**/creative-plan.md), Read(stories/**/creative-plan.md), Read(//stories/**/tasks.md), Read(stories/**/tasks.md), Read(//stories/**/scenes/**), Read(stories/**/scenes/**), Read(//spec/graph/*.json), Read(spec/graph/*.json), Read(//spec/world/*.yaml), Read(spec/world/*.yaml), Read(//spec/canon/*.json), Read(spec/canon/*.json), Read(//spec/voice/**), Read(spec/voice/**), Write(//stories/**/scenes/**), Write(stories/**/scenes/**), Write(//stories/**/content/**), Write(stories/**/content/**), Bash(find:*), Bash(*)
 model: claude-sonnet-4-5-20250929
 scripts:
   sh: echo ""
@@ -29,6 +29,7 @@ scripts:
 - `spec/graph/edges.json`
 - `spec/world/*.yaml`
 - `spec/canon/*.json`
+- `spec/voice/**`
 
 ## 执行要求
 
@@ -37,7 +38,8 @@ scripts:
 3. `entities` 必须引用 Entity Graph 中的显式 entity；不能用 AI 推断当作已确认事实。
 4. `worldElements` 与 `canonFacts` 只引用已存在或待人工确认的条目。
 5. 写正文时只写 `draftPath` 指向的章节，不改其他章节。
-6. review 模式只输出问题、依据路径和建议动作，不自动覆盖正文。
+6. 涉及对白的 scene 必须读取相关 VoiceFingerprint，检查禁用词、称呼和冲突表达。
+7. review 模式只输出问题、依据路径和建议动作，不自动覆盖正文。
 
 ## 完成报告
 

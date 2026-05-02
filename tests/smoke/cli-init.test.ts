@@ -64,6 +64,7 @@ describe('CLI init smoke', () => {
     expect(await exists(path.join(projectPath, 'spec', 'world', 'rules.yaml'))).toBe(true);
     expect(await exists(path.join(projectPath, 'spec', 'canon', 'facts.json'))).toBe(true);
     expect(await exists(path.join(projectPath, 'spec', 'graph', 'entities.json'))).toBe(true);
+    expect(await exists(path.join(projectPath, 'spec', 'voice', 'character-voices.yaml'))).toBe(true);
 
     const statusResult = await execFileAsync('node', [
       cliPath,
@@ -154,6 +155,7 @@ describe('CLI init smoke', () => {
     expect(await exists(path.join(projectPath, 'spec', 'world', 'rules.yaml'))).toBe(true);
     expect(await exists(path.join(projectPath, 'spec', 'canon', 'facts.json'))).toBe(true);
     expect(await exists(path.join(projectPath, 'spec', 'graph', 'entities.json'))).toBe(true);
+    expect(await exists(path.join(projectPath, 'spec', 'voice', 'character-voices.yaml'))).toBe(true);
     expect(await exists(path.join(projectPath, 'AGENTS.md'))).toBe(true);
     expect(await exists(path.join(projectPath, '.specify', 'agent-contract.md'))).toBe(true);
     expect(await exists(path.join(projectPath, '.codex'))).toBe(false);

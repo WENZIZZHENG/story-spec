@@ -24,6 +24,7 @@ export interface SceneInspectionResult {
   storyPath?: string;
   files: string[];
   scenes: SceneCard[];
+  sceneSources: Array<{ sceneId: string; path: string; chapter: string }>;
   issues: StoryStructureIssue[];
 }
 
@@ -218,6 +219,9 @@ export const inspectScenes = async (
     scenes: scenes.sort((left, right) =>
       left.chapter.localeCompare(right.chapter) || left.order - right.order || left.id.localeCompare(right.id)
     ),
+    sceneSources: sceneSources
+      .map(({ scene, file }) => ({ sceneId: scene.id, path: file, chapter: scene.chapter }))
+      .sort((left, right) => left.sceneId.localeCompare(right.sceneId) || left.path.localeCompare(right.path)),
     issues
   };
 };

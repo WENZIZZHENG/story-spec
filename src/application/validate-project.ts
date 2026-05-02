@@ -23,6 +23,8 @@ import {
   inspectStoryGraph
 } from './inspect-story-structure.js';
 import type { StoryStructureIssue } from '../domain/story-structure.js';
+import { inspectVoice } from './inspect-voice.js';
+import type { VoiceIssue } from '../domain/voice.js';
 import {
   countIssuesBySeverity,
   filterIssuesBySeverity,
@@ -36,11 +38,13 @@ export type ProjectValidationIssueCode =
   | WritingRuleIssue['code']
   | WorldbuildingIssue['code']
   | StoryStructureIssue['code']
+  | VoiceIssue['code']
   | 'MISSING_PROJECT_CONFIG'
   | 'MISSING_PROJECT_DIR'
   | 'MISSING_WORLD_DIR'
   | 'MISSING_CANON_DIR'
   | 'MISSING_GRAPH_DIR'
+  | 'MISSING_VOICE_DIR'
   | 'MISSING_TEMPLATE'
   | 'MISSING_AGENT_CONTRACT'
   | 'MISSING_AGENTS_FILE'
@@ -64,6 +68,7 @@ export interface ProjectValidationSummary {
   graphEntities: number;
   graphEdges: number;
   scenes: number;
+  voiceFingerprints: number;
 }
 
 export interface ProjectValidationResult {
@@ -121,6 +126,13 @@ const toWorldbuildingProjectIssue = (issue: WorldbuildingIssue): ProjectValidati
 });
 
 const toStoryStructureProjectIssue = (issue: StoryStructureIssue): ProjectValidationIssue => ({
+  severity: issue.severity,
+  code: issue.code,
+  path: issue.path,
+  message: issue.message
+});
+
+const toVoiceProjectIssue = (issue: VoiceIssue): ProjectValidationIssue => ({
   severity: issue.severity,
   code: issue.code,
   path: issue.path,
@@ -281,6 +293,28 @@ const validateStoryStructureFiles = async (
   };
 };
 
+const validateVoiceFiles = async (
+  fs: ProjectFileSystem,
+  projectRoot: string
+): Promise<{ voiceFingerprints: number; issues: ProjectValidationIssue[] }> => {
+  const voiceDir = path.join(projectRoot, 'spec', 'voice');
+  const issues: ProjectValidationIssue[] = [];
+
+  if (!await fs.pathExists(voiceDir)) {
+    issues.push(createIssue('MISSING_VOICE_DIR', voiceDir, '缺少 spec/voice；旧项目可运行 upgrade 补齐 VoiceFingerprint 模板', 'warning'));
+  }
+
+  const voice = await inspectVoice({ projectRoot, fileSystem: fs });
+
+  return {
+    voiceFingerprints: voice.fingerprints.length,
+    issues: [
+      ...issues,
+      ...voice.issues.map(toVoiceProjectIssue)
+    ]
+  };
+};
+
 const validateTemplates = async (
   fs: ProjectFileSystem,
   projectRoot: string,
@@ -421,6 +455,7 @@ export const validateProject = async (input: ValidateProjectInput): Promise<Proj
   const worldResult = await validateWorldFiles(fs, projectRoot);
   const canonResult = await validateCanonFiles(fs, projectRoot);
   const storyStructureResult = await validateStoryStructureFiles(fs, projectRoot);
+  const voiceResult = await validateVoiceFiles(fs, projectRoot);
   const templateResult = await validateTemplates(fs, projectRoot, input.packageRoot);
   const agentContractResult = await validateAgentContract(fs, projectRoot, input.packageRoot);
   const writingRuleResult = await runWritingRules({
@@ -447,6 +482,7 @@ export const validateProject = async (input: ValidateProjectInput): Promise<Proj
     ...worldResult.issues,
     ...canonResult.issues,
     ...storyStructureResult.issues,
+    ...voiceResult.issues,
     ...taskIssues,
     ...writingRuleResult.issues.map(toProjectIssue),
     ...agentContractResult.issues,
@@ -467,7 +503,8 @@ export const validateProject = async (input: ValidateProjectInput): Promise<Proj
       canonFiles: canonResult.count,
       graphEntities: storyStructureResult.graphEntities,
       graphEdges: storyStructureResult.graphEdges,
-      scenes: storyStructureResult.scenes
+      scenes: storyStructureResult.scenes,
+      voiceFingerprints: voiceResult.voiceFingerprints
     },
     issueCounts,
     issues
@@ -492,6 +529,7 @@ export const renderProjectValidation = (
     `graph entities：${result.summary.graphEntities}`,
     `graph edges：${result.summary.graphEdges}`,
     `scene cards：${result.summary.scenes}`,
+    `voice fingerprints：${result.summary.voiceFingerprints}`,
     `模板检查：${result.summary.templatesChecked}`,
     `generic commands：${result.summary.agentCommandsChecked}`,
     `问题：${result.issueCounts.error} error / ${result.issueCounts.warning} warning / ${result.issueCounts.info} info`

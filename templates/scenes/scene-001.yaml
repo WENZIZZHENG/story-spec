@@ -11,12 +11,14 @@ emotionalTurn: 从安稳转向不安
 entities:
   - entity.protagonist
 worldElements:
-  - world.rule.example
+  - world.example.rule
 canonFacts:
-  - canon.fact.example
-reveals: []
+  - canon.example.fact
+reveals:
+  - 读者首次看到示例世界规则如何限制主角选择
 foreshadowing:
-  planted: []
+  planted:
+    - 示例规则后续会带来代价
   paidOff: []
 requiredReads:
   - .specify/memory/constitution.md

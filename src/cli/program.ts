@@ -11,6 +11,8 @@ import { registerUpgradeCommand } from './commands/upgrade.command.js';
 import { registerValidateCommand } from './commands/validate.command.js';
 import { registerWorldbuildingCommand } from './commands/worldbuilding.command.js';
 import { registerStoryStructureCommand } from './commands/story-structure.command.js';
+import { registerVoiceCommand } from './commands/voice.command.js';
+import { registerReviewCommand } from './commands/review.command.js';
 import chalk from 'chalk';
 import path from 'path';
 import { fileURLToPath } from 'url';
@@ -56,6 +58,8 @@ export function runProgram(argv: string[]): void {
   registerValidateCommand(program, { packageRoot });
   registerWorldbuildingCommand(program);
   registerStoryStructureCommand(program, { packageRoot });
+  registerVoiceCommand(program);
+  registerReviewCommand(program, { packageRoot });
   registerInfoCommand(program);
 
   program.on('--help', () => {

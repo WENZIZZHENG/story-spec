@@ -15,6 +15,11 @@
 - 新增 `entity:list`、`graph:build`、`graph:check`、`graph:impact`、`scene:init`、`scene:list`、`scene:check`、`scene:compile` CLI。
 - 新增 `/scene` 通用命令模板；`/tasks` 和 `/write` 可携带 Scene Card 与 Entity Graph 上下文。
 - `handoff` 与 `tasks:board` 输出结构上下文和相关 scene/entity 信息。
+- 新项目初始化新增 `spec/voice/` VoiceFingerprint 模板、叙述声音说明和角色声音样本。
+- 新增 `voice:list`、`voice:check`、`voice:sample` CLI，用于查看角色声音指纹和样本。
+- `novel validate` 接入 VoiceFingerprint 校验，并新增世界观密度、揭示节奏、伏笔闭环 Scene Card 质量规则。
+- 新增 `novel review` reviewer loop，按 worldbuilding、voice、continuity、editor、reader 输出结构化 findings 与任务草稿。
+- `/analyze` 增加 `world-density` 与 `reveal-pacing` 专项；新增 `/review` 通用命令模板。
 
 ### 文档
 

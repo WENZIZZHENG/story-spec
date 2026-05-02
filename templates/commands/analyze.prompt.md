@@ -56,6 +56,14 @@
 - `foreshadow`：检查伏笔埋设、回收与遗漏。
 - `logic`：检查时间线、因果链、能力设定和世界规则。
 - `style`：检查文风、句式、用词和风格参考一致性。
+- `world-density`：按 chapter/scene 统计 WorldFact、CanonFact 与 Scene Card 承载密度，识别设定堆砌。
+- `reveal-pacing`：检查 reveals、foreshadowing、worldElements 和 canonFacts 是否形成清晰揭示节奏。
+
+## Reviewer Loop
+
+- 可运行 `novel review --json` 获取结构化 reviewer findings。
+- findings 必须保留 `path`、`severity`、`evidence`、`suggestedAction`。
+- reviewer loop 只生成建议和任务草稿，不直接覆盖正文。
 
 ## 写入边界
 

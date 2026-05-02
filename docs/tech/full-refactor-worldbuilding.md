@@ -2,7 +2,7 @@
 
 ## 状态
 
-Active planning。本文承接 B 系列任务，专注 World Bible、Canon Ledger、Entity Graph、Scene Cards、揭示节奏、角色声音、Reviewer Loop 和类型 Preset。Batch B0-B1 已完成，当前待执行 B2-B3。
+Active planning。本文承接 B 系列任务，专注 World Bible、Canon Ledger、Entity Graph、Scene Cards、揭示节奏、角色声音、Reviewer Loop 和类型 Preset。Batch B0-B2 已完成，当前待执行 B3。
 
 ## 写作与世界观参考项目
 
@@ -462,24 +462,9 @@ novel preset:doctor
 
 - [x] Batch B0：World / Canon 基座。合并原 B0-B2 与 shared N008-N011，完成状态见 [full-refactor-completed.md](full-refactor-completed.md)。
 - [x] Batch B1：Entity Graph / Scene Card 创作结构。合并原 B3-B4，完成状态见 [full-refactor-completed.md](full-refactor-completed.md)。
+- [x] Batch B2：Worldbuilding Quality / Voice / Reviewer。合并原 B5-B7，完成状态见 [full-refactor-completed.md](full-refactor-completed.md)。
 
 ## 待执行批次
-
-### [ ] Batch B2：Worldbuilding Quality / Voice / Reviewer
-
-合并原 B5-B7。
-
-目标：
-
-- 新增世界观密度、揭示节奏、伏笔检查规则，并接入 analyze / validate / reviewer findings。
-- 新增 VoiceFingerprint 模板、schema、validator、`voice:*` CLI 和相关 commands。
-- 建立 reviewer registry 与 `novel review` / review commands，输出结构化 findings 和任务草稿。
-
-验收：
-
-- 所有 finding 必须引用 chapter/scene/world/canon 路径，包含 severity、evidence、suggestedAction。
-- 无 scene card 时能 fallback 到章节级检查。
-- voice rewrite 和 reviewer loop 默认输出建议或任务草稿，不直接覆盖正文。
 
 ### [ ] Batch B3：Genre Preset 包
 

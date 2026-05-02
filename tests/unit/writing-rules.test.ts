@@ -24,6 +24,28 @@ const createRuleFixture = async () => {
 `);
   await fileSystem.writeFile(path.join(storyRoot, 'content', 'chapter-001.md'), '李明叫他主角。');
   await fileSystem.writeFile(path.join(storyRoot, 'content', 'chapter-002.md'), '短。');
+  await fileSystem.writeFile(path.join(storyRoot, 'scenes', 'scene-001.yaml'), `id: scene-001
+chapter: chapter-001
+order: 1
+pov: 晏无
+location: 起点
+time: 第一夜
+sceneGoal: 让主角发现规则
+conflict: 规则压迫选择
+outcome: 主角被迫承担代价
+worldElements:
+  - world.rule.1
+  - world.rule.2
+  - world.rule.3
+canonFacts:
+  - canon.fact.1
+  - canon.fact.2
+reveals: []
+foreshadowing:
+  planted:
+    - 黑印
+  paidOff: []
+`);
 
   await fileSystem.ensureDir(path.join(projectRoot, 'spec', 'tracking'));
   await fileSystem.writeJson(path.join(projectRoot, 'spec', 'tracking', 'timeline.json'), {
@@ -88,6 +110,66 @@ describe('writing rules', () => {
       expect.objectContaining({
         code: 'COMMON_CHARACTER_SUBSTITUTION',
         severity: 'warning',
+        path: path.join(projectRoot, 'stories', 'demo', 'content', 'chapter-001.md')
+      }),
+      expect.objectContaining({
+        code: 'WORLD_DENSITY_HIGH',
+        severity: 'warning',
+        path: path.join(projectRoot, 'stories', 'demo', 'scenes', 'scene-001.yaml#scene-001.worldElements')
+      }),
+      expect.objectContaining({
+        code: 'REVEAL_PACING_GAP',
+        severity: 'info',
+        path: path.join(projectRoot, 'stories', 'demo', 'scenes', 'scene-001.yaml#scene-001.reveals')
+      }),
+      expect.objectContaining({
+        code: 'FORESHADOWING_OPEN_LOOP',
+        severity: 'info',
+        path: path.join(projectRoot, 'stories', 'demo', 'scenes', 'scene-001.yaml#scene-001.foreshadowing')
+      })
+    ]));
+  });
+
+  it('falls back to chapter-level world density checks when scene cards are missing', async () => {
+    const projectRoot = path.join(os.tmpdir(), 'memory-novel-writing-rules-fallback');
+    const fileSystem = new MemoryFileSystem(projectRoot);
+    const storyRoot = path.join(projectRoot, 'stories', 'demo');
+
+    await fileSystem.writeFile(path.join(projectRoot, 'spec', 'world', 'rules.yaml'), `worldFacts:
+  - id: world.rule
+    title: 灵气法则
+    summary: rule
+    storyFunction: conflict
+    constraints:
+      - cost
+`);
+    await fileSystem.writeFile(path.join(projectRoot, 'spec', 'canon', 'facts.json'), JSON.stringify({
+      canonFacts: [{
+        id: 'canon.fact',
+        summary: 'fact',
+        evidence: [{ path: 'stories/demo/content/chapter-001.md' }]
+      }]
+    }));
+    await fileSystem.writeFile(path.join(storyRoot, 'specification.md'), '# spec');
+    await fileSystem.writeFile(path.join(storyRoot, 'creative-plan.md'), '# plan');
+    await fileSystem.writeFile(path.join(storyRoot, 'tasks.md'), '- [ ] [P0] **T001** - 第一章');
+    await fileSystem.writeFile(path.join(storyRoot, 'content', 'chapter-001.md'), '灵气法则 与 world.rule 和 canon.fact 都在这里出现。');
+
+    const result = await runWritingRules({
+      projectRoot,
+      fileSystem,
+      artifactScan: await scanStoryArtifacts({ projectRoot, fileSystem }),
+      rules: createDefaultWritingRules({ minChapterChars: 1, maxSceneWorldReferences: 2 })
+    });
+
+    expect(result.issues).toEqual(expect.arrayContaining([
+      expect.objectContaining({
+        code: 'WORLD_DENSITY_HIGH',
+        path: path.join(projectRoot, 'stories', 'demo', 'content', 'chapter-001.md')
+      }),
+      expect.objectContaining({
+        code: 'REVEAL_PACING_GAP',
+        severity: 'info',
         path: path.join(projectRoot, 'stories', 'demo', 'content', 'chapter-001.md')
       })
     ]));

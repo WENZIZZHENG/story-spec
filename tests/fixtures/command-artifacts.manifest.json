@@ -23,7 +23,7 @@
   "files": [
     {
       "path": "auggie/.augment/commands/analyze.md",
-      "sha256": "aee67a7fd98b5b9cdf5e614c79cd8fe9d41008de01a16b969179f1a94e061f1b",
+      "sha256": "8c98e0a822db4744a814d5945e99125b2e2784b2a033a40034705830b58df20a",
       "commandSource": {
         "command": "analyze",
         "kind": "command-spec",
@@ -86,8 +86,17 @@
       }
     },
     {
+      "path": "auggie/.augment/commands/review.md",
+      "sha256": "3670664b9ac64d3e18cc9fe761fff997ea094fcc98c5caccb689deaf05fb5131",
+      "commandSource": {
+        "command": "review",
+        "kind": "legacy-template",
+        "sourcePath": "templates/commands/review.md"
+      }
+    },
+    {
       "path": "auggie/.augment/commands/scene.md",
-      "sha256": "2f88607ca8cd2fb1d9565620bd27c858427b2a9e18cdd8d896a63bbaf247d637",
+      "sha256": "adeb1fa9244ed7f1971a26053adfb039262f634b5250a1d1690efb27cc2cc01f",
       "commandSource": {
         "command": "scene",
         "kind": "legacy-template",
@@ -141,7 +150,7 @@
     },
     {
       "path": "auggie/.augment/commands/write.md",
-      "sha256": "1abe259fbfc4ec10e00c828a39ddef32986ff807467335d4ab250b50f8683e7f",
+      "sha256": "12eb7da87062a427a8f90fa8dcdd334d8f145b3e85fcec19cabc71806b384f0d",
       "commandSource": {
         "command": "write",
         "kind": "command-spec",
@@ -335,7 +344,7 @@
     },
     {
       "path": "auggie/.specify/templates/scenes/scene-001.yaml",
-      "sha256": "cc348bc4d24d4e296d104769373a452927523d6727c1b3156fc9139f7ab58c32"
+      "sha256": "b48effcec4e1f9eb35d7771cf7b80e1b0ffcd740d4f606c7ab9eb2b423fce863"
     },
     {
       "path": "auggie/.specify/templates/story-template.md",
@@ -360,6 +369,18 @@
     {
       "path": "auggie/.specify/templates/tracking/validation-rules.json",
       "sha256": "43d783508b85efe6dcfa70bb73493f9bddea45c5a26a408f379bf0b91aac47fe"
+    },
+    {
+      "path": "auggie/.specify/templates/voice/character-voices.yaml",
+      "sha256": "858130af690617f9cd6ba3095e8ec44c2c3ed391365a8e8bd6b1e0da23c3272a"
+    },
+    {
+      "path": "auggie/.specify/templates/voice/narrator-voice.md",
+      "sha256": "b6e2d352d1b706828333c70bacaa2bb088e70208b456c4d86b759d80ed8138e5"
+    },
+    {
+      "path": "auggie/.specify/templates/voice/samples/character-001.md",
+      "sha256": "3e5c580fae1bc38108a0bc2b1872973ca36e20e0b4220528e43aecead08387ec"
     },
     {
       "path": "auggie/.specify/templates/vscode-settings.json",
@@ -475,7 +496,7 @@
     },
     {
       "path": "claude/.claude/commands/novel.analyze.md",
-      "sha256": "75b4aab7e21bfb559fbb48d0b2b24cb6c271e645115d8ba5c1f9ec6de30641b4",
+      "sha256": "f1e7fce067211e7b6345ddf403f5c5467dcdca7251856c9241782f879ef73757",
       "commandSource": {
         "command": "analyze",
         "kind": "command-spec",
@@ -538,8 +559,17 @@
       }
     },
     {
+      "path": "claude/.claude/commands/novel.review.md",
+      "sha256": "403e3ddccc66b72c796c9d7080861c1e926756a29f8aad64da518049f61c9640",
+      "commandSource": {
+        "command": "review",
+        "kind": "legacy-template",
+        "sourcePath": "templates/commands/review.md"
+      }
+    },
+    {
       "path": "claude/.claude/commands/novel.scene.md",
-      "sha256": "546e886005877d46329a84b88e168044e3164381f674f16d4052015f2043cf1d",
+      "sha256": "93006fa661c93b96ed7cc3c660bccdff44ef507fd9eb1bcb18ef8304f6efd23e",
       "commandSource": {
         "command": "scene",
         "kind": "legacy-template",
@@ -593,7 +623,7 @@
     },
     {
       "path": "claude/.claude/commands/novel.write.md",
-      "sha256": "750cf97e067b0677e109983beac409987cb7e2496b07a19d5e5694ec9c44c409",
+      "sha256": "eda65b390740c8aef468f85c716da9b8e82cab7a6d137c94698077d4b1ebda46",
       "commandSource": {
         "command": "write",
         "kind": "command-spec",
@@ -787,7 +817,7 @@
     },
     {
       "path": "claude/.specify/templates/scenes/scene-001.yaml",
-      "sha256": "cc348bc4d24d4e296d104769373a452927523d6727c1b3156fc9139f7ab58c32"
+      "sha256": "b48effcec4e1f9eb35d7771cf7b80e1b0ffcd740d4f606c7ab9eb2b423fce863"
     },
     {
       "path": "claude/.specify/templates/story-template.md",
@@ -812,6 +842,18 @@
     {
       "path": "claude/.specify/templates/tracking/validation-rules.json",
       "sha256": "43d783508b85efe6dcfa70bb73493f9bddea45c5a26a408f379bf0b91aac47fe"
+    },
+    {
+      "path": "claude/.specify/templates/voice/character-voices.yaml",
+      "sha256": "858130af690617f9cd6ba3095e8ec44c2c3ed391365a8e8bd6b1e0da23c3272a"
+    },
+    {
+      "path": "claude/.specify/templates/voice/narrator-voice.md",
+      "sha256": "b6e2d352d1b706828333c70bacaa2bb088e70208b456c4d86b759d80ed8138e5"
+    },
+    {
+      "path": "claude/.specify/templates/voice/samples/character-001.md",
+      "sha256": "3e5c580fae1bc38108a0bc2b1872973ca36e20e0b4220528e43aecead08387ec"
     },
     {
       "path": "claude/.specify/templates/vscode-settings.json",
@@ -927,7 +969,7 @@
     },
     {
       "path": "codebuddy/.codebuddy/commands/analyze.md",
-      "sha256": "aee67a7fd98b5b9cdf5e614c79cd8fe9d41008de01a16b969179f1a94e061f1b",
+      "sha256": "8c98e0a822db4744a814d5945e99125b2e2784b2a033a40034705830b58df20a",
       "commandSource": {
         "command": "analyze",
         "kind": "command-spec",
@@ -990,8 +1032,17 @@
       }
     },
     {
+      "path": "codebuddy/.codebuddy/commands/review.md",
+      "sha256": "3670664b9ac64d3e18cc9fe761fff997ea094fcc98c5caccb689deaf05fb5131",
+      "commandSource": {
+        "command": "review",
+        "kind": "legacy-template",
+        "sourcePath": "templates/commands/review.md"
+      }
+    },
+    {
       "path": "codebuddy/.codebuddy/commands/scene.md",
-      "sha256": "2f88607ca8cd2fb1d9565620bd27c858427b2a9e18cdd8d896a63bbaf247d637",
+      "sha256": "adeb1fa9244ed7f1971a26053adfb039262f634b5250a1d1690efb27cc2cc01f",
       "commandSource": {
         "command": "scene",
         "kind": "legacy-template",
@@ -1045,7 +1096,7 @@
     },
     {
       "path": "codebuddy/.codebuddy/commands/write.md",
-      "sha256": "1abe259fbfc4ec10e00c828a39ddef32986ff807467335d4ab250b50f8683e7f",
+      "sha256": "12eb7da87062a427a8f90fa8dcdd334d8f145b3e85fcec19cabc71806b384f0d",
       "commandSource": {
         "command": "write",
         "kind": "command-spec",
@@ -1239,7 +1290,7 @@
     },
     {
       "path": "codebuddy/.specify/templates/scenes/scene-001.yaml",
-      "sha256": "cc348bc4d24d4e296d104769373a452927523d6727c1b3156fc9139f7ab58c32"
+      "sha256": "b48effcec4e1f9eb35d7771cf7b80e1b0ffcd740d4f606c7ab9eb2b423fce863"
     },
     {
       "path": "codebuddy/.specify/templates/story-template.md",
@@ -1264,6 +1315,18 @@
     {
       "path": "codebuddy/.specify/templates/tracking/validation-rules.json",
       "sha256": "43d783508b85efe6dcfa70bb73493f9bddea45c5a26a408f379bf0b91aac47fe"
+    },
+    {
+      "path": "codebuddy/.specify/templates/voice/character-voices.yaml",
+      "sha256": "858130af690617f9cd6ba3095e8ec44c2c3ed391365a8e8bd6b1e0da23c3272a"
+    },
+    {
+      "path": "codebuddy/.specify/templates/voice/narrator-voice.md",
+      "sha256": "b6e2d352d1b706828333c70bacaa2bb088e70208b456c4d86b759d80ed8138e5"
+    },
+    {
+      "path": "codebuddy/.specify/templates/voice/samples/character-001.md",
+      "sha256": "3e5c580fae1bc38108a0bc2b1872973ca36e20e0b4220528e43aecead08387ec"
     },
     {
       "path": "codebuddy/.specify/templates/vscode-settings.json",
@@ -1379,7 +1442,7 @@
     },
     {
       "path": "codex/.codex/prompts/novel-analyze.md",
-      "sha256": "aee67a7fd98b5b9cdf5e614c79cd8fe9d41008de01a16b969179f1a94e061f1b",
+      "sha256": "8c98e0a822db4744a814d5945e99125b2e2784b2a033a40034705830b58df20a",
       "commandSource": {
         "command": "analyze",
         "kind": "command-spec",
@@ -1442,8 +1505,17 @@
       }
     },
     {
+      "path": "codex/.codex/prompts/novel-review.md",
+      "sha256": "3670664b9ac64d3e18cc9fe761fff997ea094fcc98c5caccb689deaf05fb5131",
+      "commandSource": {
+        "command": "review",
+        "kind": "legacy-template",
+        "sourcePath": "templates/commands/review.md"
+      }
+    },
+    {
       "path": "codex/.codex/prompts/novel-scene.md",
-      "sha256": "2f88607ca8cd2fb1d9565620bd27c858427b2a9e18cdd8d896a63bbaf247d637",
+      "sha256": "adeb1fa9244ed7f1971a26053adfb039262f634b5250a1d1690efb27cc2cc01f",
       "commandSource": {
         "command": "scene",
         "kind": "legacy-template",
@@ -1497,7 +1569,7 @@
     },
     {
       "path": "codex/.codex/prompts/novel-write.md",
-      "sha256": "1abe259fbfc4ec10e00c828a39ddef32986ff807467335d4ab250b50f8683e7f",
+      "sha256": "12eb7da87062a427a8f90fa8dcdd334d8f145b3e85fcec19cabc71806b384f0d",
       "commandSource": {
         "command": "write",
         "kind": "command-spec",
@@ -1691,7 +1763,7 @@
     },
     {
       "path": "codex/.specify/templates/scenes/scene-001.yaml",
-      "sha256": "cc348bc4d24d4e296d104769373a452927523d6727c1b3156fc9139f7ab58c32"
+      "sha256": "b48effcec4e1f9eb35d7771cf7b80e1b0ffcd740d4f606c7ab9eb2b423fce863"
     },
     {
       "path": "codex/.specify/templates/story-template.md",
@@ -1716,6 +1788,18 @@
     {
       "path": "codex/.specify/templates/tracking/validation-rules.json",
       "sha256": "43d783508b85efe6dcfa70bb73493f9bddea45c5a26a408f379bf0b91aac47fe"
+    },
+    {
+      "path": "codex/.specify/templates/voice/character-voices.yaml",
+      "sha256": "858130af690617f9cd6ba3095e8ec44c2c3ed391365a8e8bd6b1e0da23c3272a"
+    },
+    {
+      "path": "codex/.specify/templates/voice/narrator-voice.md",
+      "sha256": "b6e2d352d1b706828333c70bacaa2bb088e70208b456c4d86b759d80ed8138e5"
+    },
+    {
+      "path": "codex/.specify/templates/voice/samples/character-001.md",
+      "sha256": "3e5c580fae1bc38108a0bc2b1872973ca36e20e0b4220528e43aecead08387ec"
     },
     {
       "path": "codex/.specify/templates/vscode-settings.json",
@@ -1831,7 +1915,7 @@
     },
     {
       "path": "continue-check/.continue/prompts/analyze.md",
-      "sha256": "f3aa4d6bb1bd39b5fde1651497ea693359b7cd3b367ad5d79257f91232442166",
+      "sha256": "9338e681cf5b04a46efd37c7c63629a7d381a5ace369c50df66175b40f5fafba",
       "commandSource": {
         "command": "analyze",
         "kind": "command-spec",
@@ -1894,8 +1978,17 @@
       }
     },
     {
+      "path": "continue-check/.continue/prompts/review.md",
+      "sha256": "b837291ca240f6635e8f9698332a92e76876f82634cf210a268d5924724236c4",
+      "commandSource": {
+        "command": "review",
+        "kind": "legacy-template",
+        "sourcePath": "templates/commands/review.md"
+      }
+    },
+    {
       "path": "continue-check/.continue/prompts/scene.md",
-      "sha256": "0c3a58c3c17bcece6d6729863036eb60cc4a73d37cf640de6e7126ef39c8255f",
+      "sha256": "7512352f6152fb9bd44e6e0c7114fc6d32041a213e025dd09b5468984b784a62",
       "commandSource": {
         "command": "scene",
         "kind": "legacy-template",
@@ -1949,7 +2042,7 @@
     },
     {
       "path": "continue-check/.continue/prompts/write.md",
-      "sha256": "c7a92319a1d7a7acf012898ed8ab07f0d44eb2955318c6d276428bfa361ec8ad",
+      "sha256": "1eada28a00b7ba1d1a88d63a99ac0c1285e2ede1e2ad23fd106de7b93618e90a",
       "commandSource": {
         "command": "write",
         "kind": "command-spec",
@@ -2143,7 +2236,7 @@
     },
     {
       "path": "continue-check/.specify/templates/scenes/scene-001.yaml",
-      "sha256": "cc348bc4d24d4e296d104769373a452927523d6727c1b3156fc9139f7ab58c32"
+      "sha256": "b48effcec4e1f9eb35d7771cf7b80e1b0ffcd740d4f606c7ab9eb2b423fce863"
     },
     {
       "path": "continue-check/.specify/templates/story-template.md",
@@ -2168,6 +2261,18 @@
     {
       "path": "continue-check/.specify/templates/tracking/validation-rules.json",
       "sha256": "43d783508b85efe6dcfa70bb73493f9bddea45c5a26a408f379bf0b91aac47fe"
+    },
+    {
+      "path": "continue-check/.specify/templates/voice/character-voices.yaml",
+      "sha256": "858130af690617f9cd6ba3095e8ec44c2c3ed391365a8e8bd6b1e0da23c3272a"
+    },
+    {
+      "path": "continue-check/.specify/templates/voice/narrator-voice.md",
+      "sha256": "b6e2d352d1b706828333c70bacaa2bb088e70208b456c4d86b759d80ed8138e5"
+    },
+    {
+      "path": "continue-check/.specify/templates/voice/samples/character-001.md",
+      "sha256": "3e5c580fae1bc38108a0bc2b1872973ca36e20e0b4220528e43aecead08387ec"
     },
     {
       "path": "continue-check/.specify/templates/vscode-settings.json",
@@ -2283,7 +2388,7 @@
     },
     {
       "path": "copilot/.github/prompts/analyze.prompt.md",
-      "sha256": "5b7512718b733acd2238d8e1aa32afa530862df1c22f66fb50a392ba880df82a",
+      "sha256": "600c523bd9cb28db29410711ef7d5b6748319352f6611767f6a8e411d51748c3",
       "commandSource": {
         "command": "analyze",
         "kind": "command-spec",
@@ -2346,8 +2451,17 @@
       }
     },
     {
+      "path": "copilot/.github/prompts/review.prompt.md",
+      "sha256": "3670664b9ac64d3e18cc9fe761fff997ea094fcc98c5caccb689deaf05fb5131",
+      "commandSource": {
+        "command": "review",
+        "kind": "legacy-template",
+        "sourcePath": "templates/commands/review.md"
+      }
+    },
+    {
       "path": "copilot/.github/prompts/scene.prompt.md",
-      "sha256": "2f88607ca8cd2fb1d9565620bd27c858427b2a9e18cdd8d896a63bbaf247d637",
+      "sha256": "adeb1fa9244ed7f1971a26053adfb039262f634b5250a1d1690efb27cc2cc01f",
       "commandSource": {
         "command": "scene",
         "kind": "legacy-template",
@@ -2401,7 +2515,7 @@
     },
     {
       "path": "copilot/.github/prompts/write.prompt.md",
-      "sha256": "e462488880f8e5263e36cb8342cd3eccc0845e0e2bf6fdce5be52ff9dc88d2f0",
+      "sha256": "f676b1ed7931e914e2777adaffca6677907ed6f3b7af8a5f364f425129037031",
       "commandSource": {
         "command": "write",
         "kind": "command-spec",
@@ -2595,7 +2709,7 @@
     },
     {
       "path": "copilot/.specify/templates/scenes/scene-001.yaml",
-      "sha256": "cc348bc4d24d4e296d104769373a452927523d6727c1b3156fc9139f7ab58c32"
+      "sha256": "b48effcec4e1f9eb35d7771cf7b80e1b0ffcd740d4f606c7ab9eb2b423fce863"
     },
     {
       "path": "copilot/.specify/templates/story-template.md",
@@ -2620,6 +2734,18 @@
     {
       "path": "copilot/.specify/templates/tracking/validation-rules.json",
       "sha256": "43d783508b85efe6dcfa70bb73493f9bddea45c5a26a408f379bf0b91aac47fe"
+    },
+    {
+      "path": "copilot/.specify/templates/voice/character-voices.yaml",
+      "sha256": "858130af690617f9cd6ba3095e8ec44c2c3ed391365a8e8bd6b1e0da23c3272a"
+    },
+    {
+      "path": "copilot/.specify/templates/voice/narrator-voice.md",
+      "sha256": "b6e2d352d1b706828333c70bacaa2bb088e70208b456c4d86b759d80ed8138e5"
+    },
+    {
+      "path": "copilot/.specify/templates/voice/samples/character-001.md",
+      "sha256": "3e5c580fae1bc38108a0bc2b1872973ca36e20e0b4220528e43aecead08387ec"
     },
     {
       "path": "copilot/.specify/templates/vscode-settings.json",
@@ -2735,7 +2861,7 @@
     },
     {
       "path": "cursor/.cursor/commands/analyze.md",
-      "sha256": "aee67a7fd98b5b9cdf5e614c79cd8fe9d41008de01a16b969179f1a94e061f1b",
+      "sha256": "8c98e0a822db4744a814d5945e99125b2e2784b2a033a40034705830b58df20a",
       "commandSource": {
         "command": "analyze",
         "kind": "command-spec",
@@ -2798,8 +2924,17 @@
       }
     },
     {
+      "path": "cursor/.cursor/commands/review.md",
+      "sha256": "3670664b9ac64d3e18cc9fe761fff997ea094fcc98c5caccb689deaf05fb5131",
+      "commandSource": {
+        "command": "review",
+        "kind": "legacy-template",
+        "sourcePath": "templates/commands/review.md"
+      }
+    },
+    {
       "path": "cursor/.cursor/commands/scene.md",
-      "sha256": "2f88607ca8cd2fb1d9565620bd27c858427b2a9e18cdd8d896a63bbaf247d637",
+      "sha256": "adeb1fa9244ed7f1971a26053adfb039262f634b5250a1d1690efb27cc2cc01f",
       "commandSource": {
         "command": "scene",
         "kind": "legacy-template",
@@ -2853,7 +2988,7 @@
     },
     {
       "path": "cursor/.cursor/commands/write.md",
-      "sha256": "1abe259fbfc4ec10e00c828a39ddef32986ff807467335d4ab250b50f8683e7f",
+      "sha256": "12eb7da87062a427a8f90fa8dcdd334d8f145b3e85fcec19cabc71806b384f0d",
       "commandSource": {
         "command": "write",
         "kind": "command-spec",
@@ -3047,7 +3182,7 @@
     },
     {
       "path": "cursor/.specify/templates/scenes/scene-001.yaml",
-      "sha256": "cc348bc4d24d4e296d104769373a452927523d6727c1b3156fc9139f7ab58c32"
+      "sha256": "b48effcec4e1f9eb35d7771cf7b80e1b0ffcd740d4f606c7ab9eb2b423fce863"
     },
     {
       "path": "cursor/.specify/templates/story-template.md",
@@ -3072,6 +3207,18 @@
     {
       "path": "cursor/.specify/templates/tracking/validation-rules.json",
       "sha256": "43d783508b85efe6dcfa70bb73493f9bddea45c5a26a408f379bf0b91aac47fe"
+    },
+    {
+      "path": "cursor/.specify/templates/voice/character-voices.yaml",
+      "sha256": "858130af690617f9cd6ba3095e8ec44c2c3ed391365a8e8bd6b1e0da23c3272a"
+    },
+    {
+      "path": "cursor/.specify/templates/voice/narrator-voice.md",
+      "sha256": "b6e2d352d1b706828333c70bacaa2bb088e70208b456c4d86b759d80ed8138e5"
+    },
+    {
+      "path": "cursor/.specify/templates/voice/samples/character-001.md",
+      "sha256": "3e5c580fae1bc38108a0bc2b1872973ca36e20e0b4220528e43aecead08387ec"
     },
     {
       "path": "cursor/.specify/templates/vscode-settings.json",
@@ -3187,7 +3334,7 @@
     },
     {
       "path": "gemini/.gemini/commands/novel/analyze.toml",
-      "sha256": "1b6b15f2fdce87bca43cf55feacf91cab769cddc9b93725457fbc144b8647a07",
+      "sha256": "30de21700c6bb8a20ce12b6743439c2d060e4c9ae20f582d6e94e6470ecf378a",
       "commandSource": {
         "command": "analyze",
         "kind": "command-spec",
@@ -3250,8 +3397,17 @@
       }
     },
     {
+      "path": "gemini/.gemini/commands/novel/review.toml",
+      "sha256": "5c0b67072a16a3a630c76f2323387398d3894611250ae34828e481aa47b83e3e",
+      "commandSource": {
+        "command": "review",
+        "kind": "legacy-template",
+        "sourcePath": "templates/commands/review.md"
+      }
+    },
+    {
       "path": "gemini/.gemini/commands/novel/scene.toml",
-      "sha256": "656cb9311fe106373a04be963124408bfc235951a485514da98f21706e645837",
+      "sha256": "24aedb822d00c1a30017ab1f6822c50a30e135d71edec880d9b8d6c7e34d228b",
       "commandSource": {
         "command": "scene",
         "kind": "legacy-template",
@@ -3305,7 +3461,7 @@
     },
     {
       "path": "gemini/.gemini/commands/novel/write.toml",
-      "sha256": "b373177dd0c2167c2eb2e7a544d355bd7bf24f187f8325cca4325d55c055130d",
+      "sha256": "dfb2c516093ea76ec1b597deb3685bf09a7fe6d7095e9d2613596a8e956e318a",
       "commandSource": {
         "command": "write",
         "kind": "command-spec",
@@ -3499,7 +3655,7 @@
     },
     {
       "path": "gemini/.specify/templates/scenes/scene-001.yaml",
-      "sha256": "cc348bc4d24d4e296d104769373a452927523d6727c1b3156fc9139f7ab58c32"
+      "sha256": "b48effcec4e1f9eb35d7771cf7b80e1b0ffcd740d4f606c7ab9eb2b423fce863"
     },
     {
       "path": "gemini/.specify/templates/story-template.md",
@@ -3524,6 +3680,18 @@
     {
       "path": "gemini/.specify/templates/tracking/validation-rules.json",
       "sha256": "43d783508b85efe6dcfa70bb73493f9bddea45c5a26a408f379bf0b91aac47fe"
+    },
+    {
+      "path": "gemini/.specify/templates/voice/character-voices.yaml",
+      "sha256": "858130af690617f9cd6ba3095e8ec44c2c3ed391365a8e8bd6b1e0da23c3272a"
+    },
+    {
+      "path": "gemini/.specify/templates/voice/narrator-voice.md",
+      "sha256": "b6e2d352d1b706828333c70bacaa2bb088e70208b456c4d86b759d80ed8138e5"
+    },
+    {
+      "path": "gemini/.specify/templates/voice/samples/character-001.md",
+      "sha256": "3e5c580fae1bc38108a0bc2b1872973ca36e20e0b4220528e43aecead08387ec"
     },
     {
       "path": "gemini/.specify/templates/vscode-settings.json",
@@ -3639,7 +3807,7 @@
     },
     {
       "path": "generic/.specify/commands/analyze.md",
-      "sha256": "6c0c6bb10bc57fad1f267d3c657b878abf566295513a5c6ee45cf037a828d74b",
+      "sha256": "778ab2b5aaea7c80d830d39a51f9d134a49d1b20b1a4beeae831ed1336b2255f",
       "commandSource": {
         "command": "analyze",
         "kind": "command-spec",
@@ -3702,8 +3870,17 @@
       }
     },
     {
+      "path": "generic/.specify/commands/review.md",
+      "sha256": "a9f5e1a01827b70f035e1cb5edfbb5b1d01d21e092c821eade1f3a4da111e25b",
+      "commandSource": {
+        "command": "review",
+        "kind": "legacy-template",
+        "sourcePath": "templates/commands/review.md"
+      }
+    },
+    {
       "path": "generic/.specify/commands/scene.md",
-      "sha256": "c34229890435987bdad4dca926db2b9aa3819a1da275f53ab386ea7a7836d211",
+      "sha256": "44bee62ad4317e2e089d0d04522696dc044794e5a66e50761bcee663173467a3",
       "commandSource": {
         "command": "scene",
         "kind": "legacy-template",
@@ -3757,7 +3934,7 @@
     },
     {
       "path": "generic/.specify/commands/write.md",
-      "sha256": "4f6f2a7860a6736f84d36dc504e1b10e2ff4586a03b3192f5a6ddc3d5c6c9e4e",
+      "sha256": "23e014dfe5270a1b23c90df7326933b9ad5ee46d2fe489cf8f2f54eb00990db6",
       "commandSource": {
         "command": "write",
         "kind": "command-spec",
@@ -3951,7 +4128,7 @@
     },
     {
       "path": "generic/.specify/templates/scenes/scene-001.yaml",
-      "sha256": "cc348bc4d24d4e296d104769373a452927523d6727c1b3156fc9139f7ab58c32"
+      "sha256": "b48effcec4e1f9eb35d7771cf7b80e1b0ffcd740d4f606c7ab9eb2b423fce863"
     },
     {
       "path": "generic/.specify/templates/story-template.md",
@@ -3976,6 +4153,18 @@
     {
       "path": "generic/.specify/templates/tracking/validation-rules.json",
       "sha256": "43d783508b85efe6dcfa70bb73493f9bddea45c5a26a408f379bf0b91aac47fe"
+    },
+    {
+      "path": "generic/.specify/templates/voice/character-voices.yaml",
+      "sha256": "858130af690617f9cd6ba3095e8ec44c2c3ed391365a8e8bd6b1e0da23c3272a"
+    },
+    {
+      "path": "generic/.specify/templates/voice/narrator-voice.md",
+      "sha256": "b6e2d352d1b706828333c70bacaa2bb088e70208b456c4d86b759d80ed8138e5"
+    },
+    {
+      "path": "generic/.specify/templates/voice/samples/character-001.md",
+      "sha256": "3e5c580fae1bc38108a0bc2b1872973ca36e20e0b4220528e43aecead08387ec"
     },
     {
       "path": "generic/.specify/templates/vscode-settings.json",
@@ -4091,7 +4280,7 @@
     },
     {
       "path": "kilocode/.kilocode/workflows/analyze.md",
-      "sha256": "75b4aab7e21bfb559fbb48d0b2b24cb6c271e645115d8ba5c1f9ec6de30641b4",
+      "sha256": "f1e7fce067211e7b6345ddf403f5c5467dcdca7251856c9241782f879ef73757",
       "commandSource": {
         "command": "analyze",
         "kind": "command-spec",
@@ -4154,8 +4343,17 @@
       }
     },
     {
+      "path": "kilocode/.kilocode/workflows/review.md",
+      "sha256": "71b936e7454f2a5e13d641975146a2a5144368637f87b2f5b6cfc26d3ff719e2",
+      "commandSource": {
+        "command": "review",
+        "kind": "legacy-template",
+        "sourcePath": "templates/commands/review.md"
+      }
+    },
+    {
       "path": "kilocode/.kilocode/workflows/scene.md",
-      "sha256": "2982b0a090457c412134bba9b58506d47e19a72b42835bf2d9a36a7f5911a8b1",
+      "sha256": "c5537874e0bf8d52a5736de92a6a6b356e388145145fe30edd16e18fcd6a14b3",
       "commandSource": {
         "command": "scene",
         "kind": "legacy-template",
@@ -4209,7 +4407,7 @@
     },
     {
       "path": "kilocode/.kilocode/workflows/write.md",
-      "sha256": "750cf97e067b0677e109983beac409987cb7e2496b07a19d5e5694ec9c44c409",
+      "sha256": "eda65b390740c8aef468f85c716da9b8e82cab7a6d137c94698077d4b1ebda46",
       "commandSource": {
         "command": "write",
         "kind": "command-spec",
@@ -4403,7 +4601,7 @@
     },
     {
       "path": "kilocode/.specify/templates/scenes/scene-001.yaml",
-      "sha256": "cc348bc4d24d4e296d104769373a452927523d6727c1b3156fc9139f7ab58c32"
+      "sha256": "b48effcec4e1f9eb35d7771cf7b80e1b0ffcd740d4f606c7ab9eb2b423fce863"
     },
     {
       "path": "kilocode/.specify/templates/story-template.md",
@@ -4428,6 +4626,18 @@
     {
       "path": "kilocode/.specify/templates/tracking/validation-rules.json",
       "sha256": "43d783508b85efe6dcfa70bb73493f9bddea45c5a26a408f379bf0b91aac47fe"
+    },
+    {
+      "path": "kilocode/.specify/templates/voice/character-voices.yaml",
+      "sha256": "858130af690617f9cd6ba3095e8ec44c2c3ed391365a8e8bd6b1e0da23c3272a"
+    },
+    {
+      "path": "kilocode/.specify/templates/voice/narrator-voice.md",
+      "sha256": "b6e2d352d1b706828333c70bacaa2bb088e70208b456c4d86b759d80ed8138e5"
+    },
+    {
+      "path": "kilocode/.specify/templates/voice/samples/character-001.md",
+      "sha256": "3e5c580fae1bc38108a0bc2b1872973ca36e20e0b4220528e43aecead08387ec"
     },
     {
       "path": "kilocode/.specify/templates/vscode-settings.json",
@@ -4543,7 +4753,7 @@
     },
     {
       "path": "opencode/.opencode/command/analyze.md",
-      "sha256": "bf80f71d165ba971cd3e20b7678c8b68f33e9cb77fb7fef41e321ae042461fdc",
+      "sha256": "26d86c69bb3480d72b3f8554e2f01d281d938512b51e85b6ca7c049214179cd9",
       "commandSource": {
         "command": "analyze",
         "kind": "command-spec",
@@ -4606,8 +4816,17 @@
       }
     },
     {
+      "path": "opencode/.opencode/command/review.md",
+      "sha256": "f9882b2eb8a5715fb4ae8c15229de00bcedfbcbec99146b59f8070f24c7e7163",
+      "commandSource": {
+        "command": "review",
+        "kind": "legacy-template",
+        "sourcePath": "templates/commands/review.md"
+      }
+    },
+    {
       "path": "opencode/.opencode/command/scene.md",
-      "sha256": "227a1f340bf647501e0d1473cd08906cbbd933850f65f8521c62832ee840bbef",
+      "sha256": "d6174147e3ac12f71e0e6cd4399363c4f8a08116ec781e809dccb8649b2273a6",
       "commandSource": {
         "command": "scene",
         "kind": "legacy-template",
@@ -4661,7 +4880,7 @@
     },
     {
       "path": "opencode/.opencode/command/write.md",
-      "sha256": "8a8dae94c5d8cfb10528f1aea866eab93647adefe4246e22eeddeafe3055396f",
+      "sha256": "0a81f71e450c92ecfc043ca5817eddb988a442cb3b6a8957cf9705746d548d21",
       "commandSource": {
         "command": "write",
         "kind": "command-spec",
@@ -4855,7 +5074,7 @@
     },
     {
       "path": "opencode/.specify/templates/scenes/scene-001.yaml",
-      "sha256": "cc348bc4d24d4e296d104769373a452927523d6727c1b3156fc9139f7ab58c32"
+      "sha256": "b48effcec4e1f9eb35d7771cf7b80e1b0ffcd740d4f606c7ab9eb2b423fce863"
     },
     {
       "path": "opencode/.specify/templates/story-template.md",
@@ -4880,6 +5099,18 @@
     {
       "path": "opencode/.specify/templates/tracking/validation-rules.json",
       "sha256": "43d783508b85efe6dcfa70bb73493f9bddea45c5a26a408f379bf0b91aac47fe"
+    },
+    {
+      "path": "opencode/.specify/templates/voice/character-voices.yaml",
+      "sha256": "858130af690617f9cd6ba3095e8ec44c2c3ed391365a8e8bd6b1e0da23c3272a"
+    },
+    {
+      "path": "opencode/.specify/templates/voice/narrator-voice.md",
+      "sha256": "b6e2d352d1b706828333c70bacaa2bb088e70208b456c4d86b759d80ed8138e5"
+    },
+    {
+      "path": "opencode/.specify/templates/voice/samples/character-001.md",
+      "sha256": "3e5c580fae1bc38108a0bc2b1872973ca36e20e0b4220528e43aecead08387ec"
     },
     {
       "path": "opencode/.specify/templates/vscode-settings.json",
@@ -4995,7 +5226,7 @@
     },
     {
       "path": "q/.amazonq/prompts/analyze.md",
-      "sha256": "5b7512718b733acd2238d8e1aa32afa530862df1c22f66fb50a392ba880df82a",
+      "sha256": "600c523bd9cb28db29410711ef7d5b6748319352f6611767f6a8e411d51748c3",
       "commandSource": {
         "command": "analyze",
         "kind": "command-spec",
@@ -5058,8 +5289,17 @@
       }
     },
     {
+      "path": "q/.amazonq/prompts/review.md",
+      "sha256": "3670664b9ac64d3e18cc9fe761fff997ea094fcc98c5caccb689deaf05fb5131",
+      "commandSource": {
+        "command": "review",
+        "kind": "legacy-template",
+        "sourcePath": "templates/commands/review.md"
+      }
+    },
+    {
       "path": "q/.amazonq/prompts/scene.md",
-      "sha256": "2f88607ca8cd2fb1d9565620bd27c858427b2a9e18cdd8d896a63bbaf247d637",
+      "sha256": "adeb1fa9244ed7f1971a26053adfb039262f634b5250a1d1690efb27cc2cc01f",
       "commandSource": {
         "command": "scene",
         "kind": "legacy-template",
@@ -5113,7 +5353,7 @@
     },
     {
       "path": "q/.amazonq/prompts/write.md",
-      "sha256": "e462488880f8e5263e36cb8342cd3eccc0845e0e2bf6fdce5be52ff9dc88d2f0",
+      "sha256": "f676b1ed7931e914e2777adaffca6677907ed6f3b7af8a5f364f425129037031",
       "commandSource": {
         "command": "write",
         "kind": "command-spec",
@@ -5307,7 +5547,7 @@
     },
     {
       "path": "q/.specify/templates/scenes/scene-001.yaml",
-      "sha256": "cc348bc4d24d4e296d104769373a452927523d6727c1b3156fc9139f7ab58c32"
+      "sha256": "b48effcec4e1f9eb35d7771cf7b80e1b0ffcd740d4f606c7ab9eb2b423fce863"
     },
     {
       "path": "q/.specify/templates/story-template.md",
@@ -5332,6 +5572,18 @@
     {
       "path": "q/.specify/templates/tracking/validation-rules.json",
       "sha256": "43d783508b85efe6dcfa70bb73493f9bddea45c5a26a408f379bf0b91aac47fe"
+    },
+    {
+      "path": "q/.specify/templates/voice/character-voices.yaml",
+      "sha256": "858130af690617f9cd6ba3095e8ec44c2c3ed391365a8e8bd6b1e0da23c3272a"
+    },
+    {
+      "path": "q/.specify/templates/voice/narrator-voice.md",
+      "sha256": "b6e2d352d1b706828333c70bacaa2bb088e70208b456c4d86b759d80ed8138e5"
+    },
+    {
+      "path": "q/.specify/templates/voice/samples/character-001.md",
+      "sha256": "3e5c580fae1bc38108a0bc2b1872973ca36e20e0b4220528e43aecead08387ec"
     },
     {
       "path": "q/.specify/templates/vscode-settings.json",
@@ -5447,7 +5699,7 @@
     },
     {
       "path": "qwen/.qwen/commands/analyze.toml",
-      "sha256": "1b6b15f2fdce87bca43cf55feacf91cab769cddc9b93725457fbc144b8647a07",
+      "sha256": "30de21700c6bb8a20ce12b6743439c2d060e4c9ae20f582d6e94e6470ecf378a",
       "commandSource": {
         "command": "analyze",
         "kind": "command-spec",
@@ -5510,8 +5762,17 @@
       }
     },
     {
+      "path": "qwen/.qwen/commands/review.toml",
+      "sha256": "5c0b67072a16a3a630c76f2323387398d3894611250ae34828e481aa47b83e3e",
+      "commandSource": {
+        "command": "review",
+        "kind": "legacy-template",
+        "sourcePath": "templates/commands/review.md"
+      }
+    },
+    {
       "path": "qwen/.qwen/commands/scene.toml",
-      "sha256": "656cb9311fe106373a04be963124408bfc235951a485514da98f21706e645837",
+      "sha256": "24aedb822d00c1a30017ab1f6822c50a30e135d71edec880d9b8d6c7e34d228b",
       "commandSource": {
         "command": "scene",
         "kind": "legacy-template",
@@ -5565,7 +5826,7 @@
     },
     {
       "path": "qwen/.qwen/commands/write.toml",
-      "sha256": "b373177dd0c2167c2eb2e7a544d355bd7bf24f187f8325cca4325d55c055130d",
+      "sha256": "dfb2c516093ea76ec1b597deb3685bf09a7fe6d7095e9d2613596a8e956e318a",
       "commandSource": {
         "command": "write",
         "kind": "command-spec",
@@ -5759,7 +6020,7 @@
     },
     {
       "path": "qwen/.specify/templates/scenes/scene-001.yaml",
-      "sha256": "cc348bc4d24d4e296d104769373a452927523d6727c1b3156fc9139f7ab58c32"
+      "sha256": "b48effcec4e1f9eb35d7771cf7b80e1b0ffcd740d4f606c7ab9eb2b423fce863"
     },
     {
       "path": "qwen/.specify/templates/story-template.md",
@@ -5784,6 +6045,18 @@
     {
       "path": "qwen/.specify/templates/tracking/validation-rules.json",
       "sha256": "43d783508b85efe6dcfa70bb73493f9bddea45c5a26a408f379bf0b91aac47fe"
+    },
+    {
+      "path": "qwen/.specify/templates/voice/character-voices.yaml",
+      "sha256": "858130af690617f9cd6ba3095e8ec44c2c3ed391365a8e8bd6b1e0da23c3272a"
+    },
+    {
+      "path": "qwen/.specify/templates/voice/narrator-voice.md",
+      "sha256": "b6e2d352d1b706828333c70bacaa2bb088e70208b456c4d86b759d80ed8138e5"
+    },
+    {
+      "path": "qwen/.specify/templates/voice/samples/character-001.md",
+      "sha256": "3e5c580fae1bc38108a0bc2b1872973ca36e20e0b4220528e43aecead08387ec"
     },
     {
       "path": "qwen/.specify/templates/vscode-settings.json",
@@ -5899,7 +6172,7 @@
     },
     {
       "path": "roocode/.roo/commands/analyze.md",
-      "sha256": "75b4aab7e21bfb559fbb48d0b2b24cb6c271e645115d8ba5c1f9ec6de30641b4",
+      "sha256": "f1e7fce067211e7b6345ddf403f5c5467dcdca7251856c9241782f879ef73757",
       "commandSource": {
         "command": "analyze",
         "kind": "command-spec",
@@ -5962,8 +6235,17 @@
       }
     },
     {
+      "path": "roocode/.roo/commands/review.md",
+      "sha256": "71b936e7454f2a5e13d641975146a2a5144368637f87b2f5b6cfc26d3ff719e2",
+      "commandSource": {
+        "command": "review",
+        "kind": "legacy-template",
+        "sourcePath": "templates/commands/review.md"
+      }
+    },
+    {
       "path": "roocode/.roo/commands/scene.md",
-      "sha256": "2982b0a090457c412134bba9b58506d47e19a72b42835bf2d9a36a7f5911a8b1",
+      "sha256": "c5537874e0bf8d52a5736de92a6a6b356e388145145fe30edd16e18fcd6a14b3",
       "commandSource": {
         "command": "scene",
         "kind": "legacy-template",
@@ -6017,7 +6299,7 @@
     },
     {
       "path": "roocode/.roo/commands/write.md",
-      "sha256": "750cf97e067b0677e109983beac409987cb7e2496b07a19d5e5694ec9c44c409",
+      "sha256": "eda65b390740c8aef468f85c716da9b8e82cab7a6d137c94698077d4b1ebda46",
       "commandSource": {
         "command": "write",
         "kind": "command-spec",
@@ -6211,7 +6493,7 @@
     },
     {
       "path": "roocode/.specify/templates/scenes/scene-001.yaml",
-      "sha256": "cc348bc4d24d4e296d104769373a452927523d6727c1b3156fc9139f7ab58c32"
+      "sha256": "b48effcec4e1f9eb35d7771cf7b80e1b0ffcd740d4f606c7ab9eb2b423fce863"
     },
     {
       "path": "roocode/.specify/templates/story-template.md",
@@ -6236,6 +6518,18 @@
     {
       "path": "roocode/.specify/templates/tracking/validation-rules.json",
       "sha256": "43d783508b85efe6dcfa70bb73493f9bddea45c5a26a408f379bf0b91aac47fe"
+    },
+    {
+      "path": "roocode/.specify/templates/voice/character-voices.yaml",
+      "sha256": "858130af690617f9cd6ba3095e8ec44c2c3ed391365a8e8bd6b1e0da23c3272a"
+    },
+    {
+      "path": "roocode/.specify/templates/voice/narrator-voice.md",
+      "sha256": "b6e2d352d1b706828333c70bacaa2bb088e70208b456c4d86b759d80ed8138e5"
+    },
+    {
+      "path": "roocode/.specify/templates/voice/samples/character-001.md",
+      "sha256": "3e5c580fae1bc38108a0bc2b1872973ca36e20e0b4220528e43aecead08387ec"
     },
     {
       "path": "roocode/.specify/templates/vscode-settings.json",
@@ -6535,7 +6829,7 @@
     },
     {
       "path": "windsurf/.specify/templates/scenes/scene-001.yaml",
-      "sha256": "cc348bc4d24d4e296d104769373a452927523d6727c1b3156fc9139f7ab58c32"
+      "sha256": "b48effcec4e1f9eb35d7771cf7b80e1b0ffcd740d4f606c7ab9eb2b423fce863"
     },
     {
       "path": "windsurf/.specify/templates/story-template.md",
@@ -6560,6 +6854,18 @@
     {
       "path": "windsurf/.specify/templates/tracking/validation-rules.json",
       "sha256": "43d783508b85efe6dcfa70bb73493f9bddea45c5a26a408f379bf0b91aac47fe"
+    },
+    {
+      "path": "windsurf/.specify/templates/voice/character-voices.yaml",
+      "sha256": "858130af690617f9cd6ba3095e8ec44c2c3ed391365a8e8bd6b1e0da23c3272a"
+    },
+    {
+      "path": "windsurf/.specify/templates/voice/narrator-voice.md",
+      "sha256": "b6e2d352d1b706828333c70bacaa2bb088e70208b456c4d86b759d80ed8138e5"
+    },
+    {
+      "path": "windsurf/.specify/templates/voice/samples/character-001.md",
+      "sha256": "3e5c580fae1bc38108a0bc2b1872973ca36e20e0b4220528e43aecead08387ec"
     },
     {
       "path": "windsurf/.specify/templates/vscode-settings.json",
@@ -6587,7 +6893,7 @@
     },
     {
       "path": "windsurf/.windsurf/workflows/analyze.md",
-      "sha256": "75b4aab7e21bfb559fbb48d0b2b24cb6c271e645115d8ba5c1f9ec6de30641b4",
+      "sha256": "f1e7fce067211e7b6345ddf403f5c5467dcdca7251856c9241782f879ef73757",
       "commandSource": {
         "command": "analyze",
         "kind": "command-spec",
@@ -6650,8 +6956,17 @@
       }
     },
     {
+      "path": "windsurf/.windsurf/workflows/review.md",
+      "sha256": "71b936e7454f2a5e13d641975146a2a5144368637f87b2f5b6cfc26d3ff719e2",
+      "commandSource": {
+        "command": "review",
+        "kind": "legacy-template",
+        "sourcePath": "templates/commands/review.md"
+      }
+    },
+    {
       "path": "windsurf/.windsurf/workflows/scene.md",
-      "sha256": "2982b0a090457c412134bba9b58506d47e19a72b42835bf2d9a36a7f5911a8b1",
+      "sha256": "c5537874e0bf8d52a5736de92a6a6b356e388145145fe30edd16e18fcd6a14b3",
       "commandSource": {
         "command": "scene",
         "kind": "legacy-template",
@@ -6705,7 +7020,7 @@
     },
     {
       "path": "windsurf/.windsurf/workflows/write.md",
-      "sha256": "750cf97e067b0677e109983beac409987cb7e2496b07a19d5e5694ec9c44c409",
+      "sha256": "eda65b390740c8aef468f85c716da9b8e82cab7a6d137c94698077d4b1ebda46",
       "commandSource": {
         "command": "write",
         "kind": "command-spec",

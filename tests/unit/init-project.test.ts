@@ -40,6 +40,7 @@ const createPackageRootFixture = async () => {
   await mkdir(path.join(packageRoot, 'templates', 'world'), { recursive: true });
   await mkdir(path.join(packageRoot, 'templates', 'canon'), { recursive: true });
   await mkdir(path.join(packageRoot, 'templates', 'graph'), { recursive: true });
+  await mkdir(path.join(packageRoot, 'templates', 'voice'), { recursive: true });
   await writeFile(
     path.join(packageRoot, 'templates', 'agent', 'agent-contract.md'),
     '# Contract {{PROJECT_NAME}}\n\n{{AGENTS_PROFILE_SECTION}}\n'
@@ -49,6 +50,7 @@ const createPackageRootFixture = async () => {
   await writeFile(path.join(packageRoot, 'templates', 'world', 'rules.yaml'), 'worldFacts: []');
   await writeFile(path.join(packageRoot, 'templates', 'canon', 'facts.json'), '{"canonFacts": []}');
   await writeFile(path.join(packageRoot, 'templates', 'graph', 'entities.json'), '{"entities": []}');
+  await writeFile(path.join(packageRoot, 'templates', 'voice', 'character-voices.yaml'), 'voiceFingerprints: []');
 
   await mkdir(path.join(packageRoot, 'spec', 'presets', 'three-act'), { recursive: true });
   await writeFile(path.join(packageRoot, 'spec', 'config.json'), '{}');
@@ -98,6 +100,7 @@ describe('initProject', () => {
     await expect(exists(path.join(projectPath, 'spec', 'world', 'rules.yaml'))).resolves.toBe(true);
     await expect(exists(path.join(projectPath, 'spec', 'canon', 'facts.json'))).resolves.toBe(true);
     await expect(exists(path.join(projectPath, 'spec', 'graph', 'entities.json'))).resolves.toBe(true);
+    await expect(exists(path.join(projectPath, 'spec', 'voice', 'character-voices.yaml'))).resolves.toBe(true);
   });
 
   it('renders configured AGENTS.md writing profiles for Codex projects', async () => {

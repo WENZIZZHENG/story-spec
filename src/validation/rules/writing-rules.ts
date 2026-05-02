@@ -1,5 +1,8 @@
 import path from 'node:path';
 import type { ProjectFileSystem } from '../../application/project-ports.js';
+import { inspectScenes } from '../../application/inspect-story-structure.js';
+import { inspectCanon, inspectWorld } from '../../application/inspect-worldbuilding.js';
+import type { SceneCard } from '../../domain/story-structure.js';
 import type {
   ArtifactScanResult,
   ScannedStoryProject
@@ -11,7 +14,10 @@ export type WritingRuleIssueCode =
   | 'CHAPTER_TOO_SHORT'
   | 'TIMELINE_CHAPTER_ORDER'
   | 'FORBIDDEN_CHARACTER_ADDRESS'
-  | 'COMMON_CHARACTER_SUBSTITUTION';
+  | 'COMMON_CHARACTER_SUBSTITUTION'
+  | 'WORLD_DENSITY_HIGH'
+  | 'REVEAL_PACING_GAP'
+  | 'FORESHADOWING_OPEN_LOOP';
 
 export interface WritingRuleIssue {
   severity: ValidationSeverity;
@@ -42,6 +48,7 @@ export interface WritingRulesResult {
 
 export interface DefaultWritingRulesOptions {
   minChapterChars?: number;
+  maxSceneWorldReferences?: number;
 }
 
 interface TimelineEventLike {
@@ -52,6 +59,11 @@ interface CharacterSubstitutionLike {
   wrong?: unknown;
   correct?: unknown;
   context?: unknown;
+}
+
+interface SceneSource {
+  scene: SceneCard;
+  path: string;
 }
 
 const issue = (
@@ -90,6 +102,73 @@ const collectChapterArtifacts = (story: ScannedStoryProject): string[] => story.
   .filter(artifact => artifact.kind === 'chapter' && artifact.exists)
   .map(artifact => artifact.path)
   .sort();
+
+const collectSceneSources = async (
+  projectRoot: string,
+  fileSystem: ProjectFileSystem
+): Promise<SceneSource[]> => {
+  const sceneResult = await inspectScenes({ projectRoot, fileSystem });
+  return sceneResult.scenes.map(scene => ({
+    scene,
+    path: sceneResult.sceneSources.find(source => source.sceneId === scene.id)?.path
+      ?? path.join(projectRoot, 'stories', '*', 'scenes', `${scene.id}.yaml`)
+  }));
+};
+
+const collectWorldbuildingSignals = async (
+  projectRoot: string,
+  fileSystem: ProjectFileSystem
+): Promise<string[]> => {
+  const [world, canon] = await Promise.all([
+    inspectWorld({ projectRoot, fileSystem }),
+    inspectCanon({ projectRoot, fileSystem })
+  ]);
+
+  return [
+    ...world.facts.flatMap(fact => [fact.id, fact.title]),
+    ...canon.facts.map(fact => fact.id)
+  ].filter(isNonEmptyString);
+};
+
+const createChapterQualityFallbackIssues = async (
+  projectRoot: string,
+  fileSystem: ProjectFileSystem,
+  artifactScan: ArtifactScanResult,
+  maxSceneWorldReferences: number
+): Promise<WritingRuleIssue[]> => {
+  const signals = await collectWorldbuildingSignals(projectRoot, fileSystem);
+  if (signals.length === 0) {
+    return [];
+  }
+
+  const issues: WritingRuleIssue[] = [];
+  for (const story of artifactScan.stories) {
+    for (const chapterPath of collectChapterArtifacts(story)) {
+      const content = await fileSystem.readFile(chapterPath);
+      const referencedSignals = signals.filter(signal => content.includes(signal));
+      if (referencedSignals.length === 0) {
+        continue;
+      }
+
+      if (referencedSignals.length > maxSceneWorldReferences) {
+        issues.push(issue(
+          'WORLD_DENSITY_HIGH',
+          chapterPath,
+          `章节正文显式引用 ${referencedSignals.length} 条 world/canon 信号；缺少 Scene Card 时建议补章节级揭示节奏记录`
+        ));
+      }
+
+      issues.push(issue(
+        'REVEAL_PACING_GAP',
+        chapterPath,
+        '章节正文引用了 world/canon 信号但没有 Scene Card reveals，建议补卡或在分析报告中记录读者可见信息',
+        'info'
+      ));
+    }
+  }
+
+  return issues;
+};
 
 const createTaskDependencyRule = (): WritingRule => ({
   id: 'task-dependencies',
@@ -247,13 +326,58 @@ const createCharacterWordingRule = (): WritingRule => ({
   }
 });
 
+const createSceneQualityRule = (maxSceneWorldReferences: number): WritingRule => ({
+  id: 'scene-quality',
+  description: '检查 Scene Card 的世界观密度、揭示节奏和伏笔闭环',
+  run: async ({ projectRoot, fileSystem, artifactScan }) => {
+    const sceneSources = await collectSceneSources(projectRoot, fileSystem);
+    const issues: WritingRuleIssue[] = [];
+
+    if (sceneSources.length === 0) {
+      return createChapterQualityFallbackIssues(projectRoot, fileSystem, artifactScan, maxSceneWorldReferences);
+    }
+
+    for (const { scene, path: scenePath } of sceneSources) {
+      const worldReferenceCount = scene.worldElements.length + scene.canonFacts.length;
+      if (worldReferenceCount > maxSceneWorldReferences) {
+        issues.push(issue(
+          'WORLD_DENSITY_HIGH',
+          `${scenePath}#${scene.id}.worldElements`,
+          `场景 ${scene.id} 承载 ${worldReferenceCount} 条 world/canon 引用，建议拆分揭示或减少解释密度`
+        ));
+      }
+
+      if (worldReferenceCount > 0 && scene.reveals.length === 0) {
+        issues.push(issue(
+          'REVEAL_PACING_GAP',
+          `${scenePath}#${scene.id}.reveals`,
+          `场景 ${scene.id} 使用 world/canon 引用但没有声明 reveals，读者可见信息节奏不清晰`,
+          'info'
+        ));
+      }
+
+      if (scene.foreshadowing.planted.length > 0 && scene.foreshadowing.paidOff.length === 0) {
+        issues.push(issue(
+          'FORESHADOWING_OPEN_LOOP',
+          `${scenePath}#${scene.id}.foreshadowing`,
+          `场景 ${scene.id} 埋下 ${scene.foreshadowing.planted.length} 个伏笔但没有回收记录，请确认后续回收任务`,
+          'info'
+        ));
+      }
+    }
+
+    return issues;
+  }
+});
+
 export const createDefaultWritingRules = (
   options: DefaultWritingRulesOptions = {}
 ): WritingRule[] => [
   createTaskDependencyRule(),
   createChapterLengthRule(options.minChapterChars ?? 500),
   createTimelineRule(),
-  createCharacterWordingRule()
+  createCharacterWordingRule(),
+  createSceneQualityRule(options.maxSceneWorldReferences ?? 4)
 ];
 
 export const runWritingRules = async (input: RunWritingRulesInput): Promise<WritingRulesResult> => {

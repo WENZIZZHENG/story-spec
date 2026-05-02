@@ -3,7 +3,7 @@ title: 作品分析
 stage: analysis
 description: 根据当前创作阶段执行框架一致性或内容质量分析
 arguments:
-  hint: "[--type=framework|content] [--focus=opening|pacing|character|foreshadow|logic|style]"
+  hint: "[--type=framework|content] [--focus=opening|pacing|character|foreshadow|logic|style|world-density|reveal-pacing]"
 requiredReads:
   - .specify/agent-contract.md
   - .specify/memory/constitution.md
@@ -12,6 +12,11 @@ requiredReads:
   - stories/*/tasks.md
   - stories/*/content/**
   - spec/tracking/*.json
+  - spec/world/*.yaml
+  - spec/canon/*.json
+  - spec/graph/*.json
+  - spec/voice/**
+  - stories/*/scenes/*.yaml
   - spec/knowledge/*
 allowedWrites:
   - stories/*/analysis-report.md

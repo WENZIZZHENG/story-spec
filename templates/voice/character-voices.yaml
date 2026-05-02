@@ -1,0 +1,19 @@
+schemaVersion: "1.0"
+voiceFingerprints:
+  - characterId: entity.protagonist
+    sentenceLength: mixed
+    diction:
+      - 克制
+      - 直接
+    forbiddenWords:
+      - 随便吧
+    addressRules:
+      elder: 您
+      peer: 你
+      self: 我
+    emotionalExpression: 先行动，再用短句说明立场
+    conflictStyle: direct
+    lieMarkers:
+      - 回避关键称谓
+    samplePaths:
+      - spec/voice/samples/character-001.md

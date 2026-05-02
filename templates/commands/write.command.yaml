@@ -14,6 +14,7 @@ requiredReads:
   - spec/world/*.yaml
   - spec/canon/*.json
   - spec/graph/*.json
+  - spec/voice/**
   - stories/*/scenes/*.yaml
   - spec/knowledge/*
 allowedWrites:
