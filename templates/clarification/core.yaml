@@ -1,0 +1,86 @@
+id: core
+name: 通用创作澄清
+description: 适用于所有小说项目的基础创作决策。
+keywords:
+  - 小说
+  - 创意
+  - 主角
+  - 舞台
+  - 文风
+questions:
+  - id: core.premise
+    stage: specify
+    topic: premise
+    question: 这本小说最想保留的一句话核心创意是什么？
+    whyItMatters: 核心创意是作者控制权的边界，后续规格不能替你改掉它。
+    type: textarea
+    required: true
+    exampleAnswers:
+      - 一个程序员穿越后把法术当运行时调试，但故事先从轻松小冒险开始。
+      - 主角不急着称霸异界，而是逐步理解这个文明为什么会走向危机。
+      - 建设和思想改造只是解决问题的工具，重点仍是冒险、关系和威胁揭示。
+  - id: core.protagonist
+    stage: specify
+    topic: protagonist
+    question: 主角开局最重要的性格缺口或能力盲区是什么？
+    whyItMatters: 缺口决定成长线，也能避免主角一开始就替故事解决所有问题。
+    type: text
+    required: true
+    exampleAnswers:
+      - 他擅长修 bug，但不擅长理解人，所以早期常把异界关系当系统问题处理。
+      - 她理论强、行动慢，必须靠冒险伙伴把想法变成现场判断。
+      - 他很会写脚本，却缺少工程纪律，魔法事故常由自己的捷径引发。
+  - id: core.stage
+    stage: specify
+    topic: setting
+    question: 故事第一卷主要发生在哪类舞台？
+    whyItMatters: 舞台会限制冒险单元、关系进展和文明威胁的露出速度。
+    type: single-choice
+    required: false
+    options:
+      - value: border-town
+        label: 边境小城
+        description: 适合轻松冒险和慢慢揭示大危机。
+      - value: academy
+        label: 学院或工坊
+        description: 适合展示规则学习、同伴关系和技术体系。
+      - value: caravan
+        label: 旅队路线
+        description: 适合单元冒险和不断接触新文明碎片。
+    exampleAnswers:
+      - 边境小城，问题看似很小，但每个异常都指向旧文明系统。
+      - 学院工坊，主角先被当成奇怪学徒，慢慢暴露编程思路的价值。
+      - 旅队路线，每站解决一个局部问题，同时积累世界真相。
+  - id: core.tone
+    stage: specify
+    topic: tone
+    question: 轻松感主要来自哪里？
+    whyItMatters: 轻松来源会决定叙事口感，避免文明级威胁过早压垮阅读体验。
+    type: multi-choice
+    required: false
+    exampleAnswers:
+      - 角色吐槽和小队互损，但关键选择仍有后果。
+      - 法术调试事故的喜剧感，问题越修越发现底层系统不对。
+      - 冒险单元像旅行见闻，危险存在但不走压抑黑暗风。
+  - id: core.relationship-line
+    stage: specify
+    topic: relationship
+    question: 慢热感情线在早期承担什么功能？
+    whyItMatters: 感情线如果只是奖励，会被主线挤掉；功能清楚才能慢热而不空转。
+    type: textarea
+    required: false
+    exampleAnswers:
+      - 关系对象帮助主角理解异界伦理，主角帮助对方看见制度漏洞。
+      - 两人先是任务搭档，信任来自一次次小问题处理，不急着表白。
+      - 感情线承担文明差异冲突，让“改变世界”先从理解一个人开始。
+  - id: core.scope
+    stage: specify
+    topic: scope
+    question: 第一阶段最不想让 AI 直接替你定稿的部分是什么？
+    whyItMatters: 这会被标记为需要澄清，防止 AI 把建议写成正典。
+    type: textarea
+    required: true
+    exampleAnswers:
+      - 主角身份、感情对象和文明威胁真相都先不要定死。
+      - 可以建议法术规则，但不要直接设定完整等级体系。
+      - 可以给冒险单元方向，但不要替我决定结局和反派身份。

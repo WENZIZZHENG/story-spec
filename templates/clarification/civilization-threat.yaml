@@ -1,0 +1,44 @@
+id: civilization-threat
+name: 文明级威胁
+description: 处理局部异常、长线威胁形态、揭示节奏和终局代价。
+keywords:
+  - 文明级
+  - 威胁
+  - 危机
+  - 灾难
+  - 旧文明
+  - 终局
+questions:
+  - id: threat.first-symptom
+    stage: specify
+    topic: threat
+    question: 文明级威胁最早以什么“小异常”出现？
+    whyItMatters: 小异常能让大威胁慢慢露出，不破坏轻松冒险的开局。
+    type: textarea
+    required: true
+    exampleAnswers:
+      - 某些法术偶尔返回不该存在的旧日志，像系统在梦游。
+      - 边境小城的作物和魔法工具出现同步故障，但大家只当成季节问题。
+      - 古代遗迹里的防护脚本开始自动更新，说明沉睡系统正在苏醒。
+  - id: threat.shape
+    stage: specify
+    topic: threat
+    question: 你更想要哪类文明级威胁？
+    whyItMatters: 威胁形态决定终局是战斗、修复、迁移还是价值选择。
+    type: single-choice
+    required: false
+    exampleAnswers:
+      - 旧文明运行时重启，会把现文明当成异常进程清理。
+      - 魔法资源的底层协议即将枯竭，所有势力都误以为是战争导致。
+      - 人们思想中的禁忌其实是防火墙，思想改造可能解除保护也可能释放灾难。
+  - id: threat.reveal-pace
+    stage: specify
+    topic: threat
+    question: 威胁揭示节奏要多慢？
+    whyItMatters: 揭示节奏会影响每卷悬念密度，也保护轻松冒险不被大设定吞掉。
+    type: textarea
+    required: false
+    exampleAnswers:
+      - 第一卷只让读者看到三次异常，不解释真相。
+      - 每个冒险单元解决小问题，同时留下一个底层系统线索。
+      - 角色先误判成地方阴谋，第二卷才意识到这是文明尺度问题。

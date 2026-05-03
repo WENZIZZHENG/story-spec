@@ -1,0 +1,43 @@
+id: kingdom-building-support
+name: 建设流支撑工具
+description: 处理建设目标、反作用力、工具边界和避免纯种田。
+keywords:
+  - 建设
+  - 种田
+  - 文明改造
+  - 思想改造
+  - 工具
+questions:
+  - id: building.boundary
+    stage: specify
+    topic: building
+    question: 建设流在故事里应该承担什么边界？
+    whyItMatters: 边界清楚后，建设会服务冒险和威胁解决，而不是把故事变成纯种田。
+    type: textarea
+    required: true
+    exampleAnswers:
+      - 建设只解决冒险中的具体痛点，比如通信、记录、治疗和教育。
+      - 建设是主角影响世界的副产品，主线仍是探索异常和关系成长。
+      - 建设成果会带来反作用力，旧势力和底层系统都会响应。
+  - id: building.resistance
+    stage: specify
+    topic: building
+    question: 思想改造遇到的主要阻力是什么？
+    whyItMatters: 阻力决定主题复杂度，避免主角单方面输出现代观念就获胜。
+    type: textarea
+    required: false
+    exampleAnswers:
+      - 旧制度确实保护过人们，所以改变会触发真实恐惧。
+      - 本地人不是愚昧，而是缺少安全试错的空间。
+      - 主角的工程理性会伤害某些关系，必须学会协商。
+  - id: building.not-farming
+    stage: specify
+    topic: building
+    question: 哪些“纯种田”内容你明确不想写太多？
+    whyItMatters: 排除项能帮助后续任务把建设控制在支撑工具的位置。
+    type: multi-choice
+    required: false
+    exampleAnswers:
+      - 不长篇写生产流水线和领地财政。
+      - 不把技术升级当唯一爽点，要和人物选择绑定。
+      - 不让主角靠现代知识碾压所有本地人。

@@ -1,0 +1,43 @@
+id: cozy-adventure
+name: 轻松冒险
+description: 处理轻松来源、冒险单元、团队结构和危险强度。
+keywords:
+  - 轻松
+  - 冒险
+  - 小队
+  - 旅行
+  - 日常
+questions:
+  - id: adventure.unit-shape
+    stage: specify
+    topic: adventure
+    question: 早期冒险单元更像哪种结构？
+    whyItMatters: 单元结构决定故事是旅行见闻、案件解决还是团队成长。
+    type: single-choice
+    required: false
+    exampleAnswers:
+      - 每到一个地方修一个魔法小问题，顺手发现旧文明线索。
+      - 小队接委托，委托看似日常，解决方式体现编程施法。
+      - 学院或工坊任务，每次像课程项目，也推进关系线。
+  - id: adventure.danger-level
+    stage: specify
+    topic: adventure
+    question: 轻松冒险中的危险强度到哪里为止？
+    whyItMatters: 危险强度决定读者安全感和文明威胁的压迫感。
+    type: textarea
+    required: false
+    exampleAnswers:
+      - 早期以受伤、损失和误会为主，不轻易死人。
+      - 可以有严肃后果，但通过角色互动和解决过程保持轻快。
+      - 危险真实存在，只是叙事不走绝望压抑路线。
+  - id: adventure.team-role
+    stage: specify
+    topic: adventure
+    question: 小队中谁负责把主角从“只会修系统”拉回人情现场？
+    whyItMatters: 这个角色能保护思想改造不变成单向输出，也能制造轻松互动。
+    type: text
+    required: false
+    exampleAnswers:
+      - 本地向导，懂人情世故但不懂技术，经常翻译主角的奇怪说法。
+      - 感情线对象，能指出主角方案对普通人的压力。
+      - 年轻学徒，崇拜主角但会把主角的半成品工具用出事故。

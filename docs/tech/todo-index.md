@@ -8,7 +8,7 @@ Active。本文是 Novel Writer 当前唯一的活跃待办入口。详细规则
 
 | 优先级 | 路线 | 状态 | 范围 | 下一步 |
 | --- | --- | --- | --- | --- |
-| P1 | [creative-control-roadmap.md](creative-control-roadmap.md) | Active | 澄清优先、示例分叉、写入前预览、来源追踪、创作状态可见 | D0 已完成；继续从 D1 问题库与题材 Preset 推进 |
+| P1 | [creative-control-roadmap.md](creative-control-roadmap.md) | Active | 澄清优先、示例分叉、写入前预览、来源追踪、创作状态可见 | D0-D1 已完成；继续从 D2 `/novel-clarify` 创作访谈升级推进 |
 
 ## 暂不作为活跃待办
 

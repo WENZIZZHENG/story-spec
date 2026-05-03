@@ -1,0 +1,43 @@
+id: portal-fantasy
+name: 异界穿越
+description: 处理穿越机制、回家动机、异界秩序和文明差异。
+keywords:
+  - 异界
+  - 穿越
+  - 传送
+  - 回家
+  - 文明差异
+questions:
+  - id: portal.entry-mechanism
+    stage: specify
+    topic: portal
+    question: 主角是怎样来到异界的？
+    whyItMatters: 穿越机制决定主角是否能回头、是否被某种系统选中，以及早期目标强度。
+    type: single-choice
+    required: false
+    exampleAnswers:
+      - 线上事故中调试异常日志，被一段像魔法阵的调用栈拖入异界。
+      - 普通意外穿越，没有系统提示，主角必须自己验证世界规则。
+      - 被异界某个失败召唤拉来，但召唤者也不理解真正原因。
+  - id: portal.return-motive
+    stage: specify
+    topic: portal
+    question: 主角开局想回家吗？
+    whyItMatters: 回家动机会影响冒险节奏，也决定主角对异界关系投入的速度。
+    type: single-choice
+    required: false
+    exampleAnswers:
+      - 一开始想回去，但每次调查回家线索都会牵出更大的文明异常。
+      - 不急着回去，因为现实生活也有疲惫感，异界反而给了喘息空间。
+      - 想回去和想留下拉扯，慢热感情线会让这个选择变复杂。
+  - id: portal.civilization-gap
+    stage: specify
+    topic: civilization
+    question: 异界和主角原世界最大的认知差异是什么？
+    whyItMatters: 文明差异能支撑思想改造，但不会让故事变成纯说教。
+    type: textarea
+    required: false
+    exampleAnswers:
+      - 异界把魔法视为血统恩赐，主角把它看成可学习、可调试的公共技术。
+      - 异界重视神谕和等级，主角更习惯日志、证据和复盘。
+      - 异界害怕改变旧制度，因为历史上每次改革都触发过灾难。

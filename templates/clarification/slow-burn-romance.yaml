@@ -1,0 +1,43 @@
+id: slow-burn-romance
+name: 慢热感情
+description: 处理关系起点、边界、误会、升温节奏和确认节点。
+keywords:
+  - 慢热
+  - 感情
+  - 恋爱
+  - 关系
+  - CP
+questions:
+  - id: romance.starting-dynamic
+    stage: specify
+    topic: romance
+    question: 感情线开局是什么关系？
+    whyItMatters: 起点决定慢热的阻力来自误解、立场差异还是共同目标。
+    type: single-choice
+    required: false
+    exampleAnswers:
+      - 任务搭档，互相觉得对方方法离谱，但都能补上自己的短板。
+      - 临时雇佣关系，信任从一次次履约和救场里长出来。
+      - 对立阵营的低烈度合作，先互相试探，不急着亲密。
+  - id: romance-boundaries
+    stage: specify
+    topic: romance
+    question: 你希望感情线慢热到什么程度？
+    whyItMatters: 慢热尺度会影响每卷关系节点，避免忽然加速或长期无进展。
+    type: textarea
+    required: false
+    exampleAnswers:
+      - 第一卷只建立信任和默契，第二卷才出现明确心动。
+      - 早期有暧昧但双方都不点破，关系推进靠共同解决危机。
+      - 感情更克制，重点是彼此价值观被慢慢改变。
+  - id: romance.conflict-function
+    stage: specify
+    topic: romance
+    question: 感情线和主线冲突怎样互相影响？
+    whyItMatters: 感情线要参与主题表达，否则容易变成主线间隙奖励。
+    type: textarea
+    required: false
+    exampleAnswers:
+      - 对方代表异界旧秩序中善良但受限的一面，主角必须先理解再改变。
+      - 两人的信任会决定主角能否获得本地知识，而不是只靠外来技术碾压。
+      - 感情对象能指出主角工程思维的盲点，让思想改造不变成单向输出。
