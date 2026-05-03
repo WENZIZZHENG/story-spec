@@ -1,6 +1,7 @@
 import os from 'node:os';
 import path from 'node:path';
 import { describe, expect, it } from 'vitest';
+import programmingCastingFixture from '../fixtures/co-creation/programming-casting.json' with { type: 'json' };
 import {
   createStoryIdea,
   getStoryNext
@@ -59,6 +60,44 @@ describe('story onboarding', () => {
       command: 'storyspec interview 法术编译纪元'
     });
     expect(result.actions.map(action => action.command)).toContain('storyspec preview specify 法术编译纪元');
+  });
+
+  it('keeps the programming-casting sample in co-creation before downstream planning', async () => {
+    const { projectRoot, fileSystem } = await createProject();
+    await createStoryIdea({
+      projectRoot,
+      fileSystem,
+      name: programmingCastingFixture.story,
+      idea: [
+        programmingCastingFixture.idea,
+        ...programmingCastingFixture.preferences,
+        programmingCastingFixture.confirmed.threat,
+        `编程施法偏${programmingCastingFixture.confirmed.magicStyle}`
+      ].join('；')
+    });
+
+    const result = await getStoryNext({
+      projectRoot,
+      fileSystem,
+      story: programmingCastingFixture.story
+    });
+
+    expect(result.stage).toBe('idea');
+    expect(result.creativeGaps.join('\n')).toContain('核心伙伴');
+    expect(result.creativeGaps.join('\n')).toContain('第一舞台');
+    expect(result.coCreationEntrypoints.map(entry => entry.id)).toEqual(expect.arrayContaining([
+      'protagonist',
+      'stage',
+      'power',
+      'faction',
+      'conflict'
+    ]));
+    expect(result.coCreationEntrypoints[0]).toEqual(expect.objectContaining({
+      command: expect.stringContaining('storyspec interview 编程施法'),
+      reason: expect.stringContaining('候选')
+    }));
+    expect(result.actions[0].command).toBe('storyspec interview 编程施法');
+    expect(result.actions.map(action => action.command)).not.toContain('继续运行平台对应 plan 命令');
   });
 
   it('surfaces unconfirmed AI suggestions before moving downstream', async () => {

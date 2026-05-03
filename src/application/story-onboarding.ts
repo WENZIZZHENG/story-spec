@@ -57,6 +57,13 @@ export interface StoryNextAction {
   reason: string;
 }
 
+export interface StoryCoCreationEntrypoint {
+  id: 'protagonist' | 'partner' | 'stage' | 'power' | 'faction' | 'conflict';
+  label: string;
+  command: string;
+  reason: string;
+}
+
 export interface StoryNextResult {
   projectRoot: string;
   story: string;
@@ -65,6 +72,7 @@ export interface StoryNextResult {
   issues: string[];
   creativeGaps: string[];
   pendingQuestions: string[];
+  coCreationEntrypoints: StoryCoCreationEntrypoint[];
   actions: StoryNextAction[];
 }
 
@@ -149,6 +157,56 @@ const action = (priority: number, command: string, reason: string): StoryNextAct
   reason
 });
 
+const buildCoCreationEntrypoints = (
+  story: string,
+  stage: StoryMaturityStage
+): StoryCoCreationEntrypoint[] => {
+  if (stage !== 'idea' && stage !== 'interviewing') {
+    return [];
+  }
+
+  const interviewCommand = `storyspec interview ${story}`;
+
+  return [
+    {
+      id: 'protagonist',
+      label: '主角入口',
+      command: interviewCommand,
+      reason: '先把主角欲望、误判和成长代价做成候选，不急着定稿。'
+    },
+    {
+      id: 'partner',
+      label: '伙伴入口',
+      command: interviewCommand,
+      reason: '探索谁能挑战主角、制造关系张力，并保持候选状态。'
+    },
+    {
+      id: 'stage',
+      label: '舞台入口',
+      command: interviewCommand,
+      reason: '把第一舞台、资源结构和普通人压力做成可比较候选。'
+    },
+    {
+      id: 'power',
+      label: '能力入口',
+      command: interviewCommand,
+      reason: '先确认能力爽点、限制和失败后果，再进入规格或计划。'
+    },
+    {
+      id: 'faction',
+      label: '势力入口',
+      command: interviewCommand,
+      reason: '探索谁垄断知识、资源或合法性，以及主角第一碰撞点。'
+    },
+    {
+      id: 'conflict',
+      label: '冲突入口',
+      command: interviewCommand,
+      reason: '比较第一卷阻力、阶段胜利、代价和更大危机入口。'
+    }
+  ];
+};
+
 const buildActions = (
   result: Omit<StoryNextResult, 'actions'>
 ): StoryNextAction[] => {
@@ -223,7 +281,8 @@ export const getStoryNext = async (
     pendingQuestions: [
       ...creativeControl.pendingQuestions,
       ...creativeControl.cannotFinalize.filter(item => item.startsWith('AI 建议待确认'))
-    ]
+    ],
+    coCreationEntrypoints: buildCoCreationEntrypoints(story.name, story.stage)
   };
 
   return {
@@ -252,6 +311,11 @@ export const renderStoryNext = (result: StoryNextResult): string => [
   '',
   '建议动作：',
   ...result.actions.map(item => `- ${item.command}：${item.reason}`),
+  '',
+  '共创入口：',
+  ...(result.coCreationEntrypoints.length > 0
+    ? result.coCreationEntrypoints.map(item => `- ${item.label}：${item.command}。${item.reason}`)
+    : ['- 当前阶段暂无专门入口；请按建议动作继续。']),
   '',
   '创作缺口：',
   ...(result.creativeGaps.length > 0 ? result.creativeGaps.map(item => `- ${item}`) : ['- 暂无明显缺口。']),

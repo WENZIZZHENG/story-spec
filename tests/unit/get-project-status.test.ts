@@ -246,13 +246,13 @@ describe('getProjectStatus', () => {
       hasCreativePlan: false,
       hasTasks: false
     });
-    expect(status.story?.creativeGaps).toContain('主角身份、初始舞台和第一卷冲突仍未确认');
+    expect(status.story?.creativeGaps).toContain('主角欲望、核心伙伴、第一舞台和第一卷冲突仍未确认');
     expect(status.nextActions).toContain('继续创作访谈：回答 3 个早期问题，或运行 `/clarify` 生成澄清记录');
     expect(status.nextActions).not.toContain('先补齐 `stories/*/specification.md`');
 
     const output = renderProjectStatus(status);
     expect(output).toContain('创作阶段：idea');
     expect(output).toContain('创作缺口：');
-    expect(output).toContain('主角身份、初始舞台和第一卷冲突仍未确认');
+    expect(output).toContain('主角欲望、核心伙伴、第一舞台和第一卷冲突仍未确认');
   });
 });

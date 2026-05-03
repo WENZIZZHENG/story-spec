@@ -104,8 +104,8 @@ export const getStoryStageCreativeGaps = (stage: StoryMaturityStage): string[] =
   switch (stage) {
     case 'idea':
       return [
-        '主角身份、初始舞台和第一卷冲突仍未确认',
-        '类型标签还没有转成可执行的故事选择'
+        '主角欲望、核心伙伴、第一舞台和第一卷冲突仍未确认',
+        '能力边界、势力冲突细节和类型标签还没有转成可执行的故事选择'
       ];
     case 'interviewing':
       return [
