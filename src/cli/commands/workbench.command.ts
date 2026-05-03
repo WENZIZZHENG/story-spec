@@ -74,6 +74,10 @@ import {
   renderStyleExplain,
   renderStyleLint
 } from '../../application/manage-style.js';
+import {
+  renderClarificationRollbackSummary,
+  rollbackLatestClarificationAnswer
+} from '../../application/manage-clarifications.js';
 import { nodeFileSystem } from '../../infrastructure/node-file-system.js';
 import { ensureProjectRoot } from '../../utils/project.js';
 import { StorySelectionError } from '../../application/workbench-utils.js';
@@ -531,6 +535,30 @@ export const registerWorkbenchCommand = (program: Command): void => {
           : renderBranchPromote(result));
       } catch (error: any) {
         handleWorkbenchError(error, 'Branch promote 失败');
+      }
+    });
+
+  program
+    .command('clarification:rollback')
+    .option('--story <story>', '故事目录名或路径，默认使用最近更新的 stories/*')
+    .option('--question <id>', '指定要退回候选的问题 ID；不传则退回最近一次确认')
+    .option('--json', '输出 JSON，便于自动化读取')
+    .description('把最近一次确认退回候选，保留原答案和来源证据，不修改正文或正典文件')
+    .action(async (commandOptions) => {
+      try {
+        const projectRoot = await ensureProjectRoot();
+        const result = await rollbackLatestClarificationAnswer({
+          projectRoot,
+          fileSystem: nodeFileSystem,
+          story: commandOptions.story,
+          questionId: commandOptions.question
+        });
+
+        console.log(commandOptions.json
+          ? JSON.stringify(result, null, 2)
+          : renderClarificationRollbackSummary(result));
+      } catch (error: any) {
+        handleWorkbenchError(error, 'Clarification rollback 失败');
       }
     });
 

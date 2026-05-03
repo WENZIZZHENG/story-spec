@@ -38,6 +38,7 @@ describe('CLI command modules smoke', () => {
     expect(help).toContain('story:new [options] <name>');
     expect(help).toContain('next [options] [story]');
     expect(help).toContain('creative:report [options] [story]');
+    expect(help).toContain('clarification:rollback');
     expect(help).toContain('preview');
     expect(help).toContain('apply [options] <previewId>');
     expect(help).toContain('plugins:add [options] <name>');
@@ -944,6 +945,62 @@ reveals:
     expect(applied.applied).toBe(true);
     await expect(readFile(path.join(projectPath, 'stories', '法术编译纪元', 'specification.md'), 'utf-8'))
       .resolves.toContain('## 用户已确认');
+  });
+
+  it('rolls back a confirmed clarification answer into a candidate from the CLI', async () => {
+    const cwd = await makeTempDir();
+    await execFileAsync('node', [
+      cliPath,
+      'init',
+      'smoke',
+      '--agent',
+      'generic',
+      '--method',
+      'three-act',
+      '--no-git'
+    ], { cwd });
+
+    const projectPath = path.join(cwd, 'smoke');
+    await execFileAsync('node', [
+      cliPath,
+      'story:new',
+      '法术编译纪元',
+      '--idea',
+      '异界穿越、轻松冒险、编程施法',
+      '--json'
+    ], { cwd: projectPath });
+    await execFileAsync('node', [
+      cliPath,
+      'interview',
+      '法术编译纪元',
+      '--premise',
+      '异界穿越、轻松冒险、编程施法',
+      '--answers',
+      'core.premise=编程施法只是工具，开局仍然是轻松冒险。;magic.rule-hardness=中间路线，关键战斗讲规则，日常冒险保持轻巧。',
+      '--max-questions',
+      '2',
+      '--json'
+    ], { cwd: projectPath });
+
+    const rollbackResult = await execFileAsync('node', [
+      cliPath,
+      'clarification:rollback',
+      '--story',
+      '法术编译纪元',
+      '--question',
+      'magic.rule-hardness',
+      '--json'
+    ], { cwd: projectPath });
+    const rollback = JSON.parse(rollbackResult.stdout);
+
+    expect(rollback.rolledBack).toMatchObject({
+      questionId: 'magic.rule-hardness',
+      previousConfirmed: true,
+      nextConfirmed: false,
+      nextSource: 'ai-suggested'
+    });
+    await expect(readFile(path.join(projectPath, 'stories', '法术编译纪元', 'clarifications.md'), 'utf-8'))
+      .resolves.toContain('AI 建议，待确认');
   });
 
   it('runs dialogue, branch, promise, and tension commands as JSON', async () => {

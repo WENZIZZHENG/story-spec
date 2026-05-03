@@ -346,6 +346,66 @@ describe('story onboarding', () => {
     expect(rendered).toContain('storyspec interview 编程施法 --focus scene');
   });
 
+  it('offers low-burden today modes and a minimum fun loop before heavy planning', async () => {
+    const { projectRoot, fileSystem } = await createProject();
+    await createStoryIdea({
+      projectRoot,
+      fileSystem,
+      name: programmingCastingFixture.story,
+      idea: [
+        programmingCastingFixture.idea,
+        ...programmingCastingFixture.preferences,
+        programmingCastingFixture.confirmed.threat,
+        `编程施法偏${programmingCastingFixture.confirmed.magicStyle}`
+      ].join('；')
+    });
+
+    const result = await getStoryNext({
+      projectRoot,
+      fileSystem,
+      story: programmingCastingFixture.story
+    });
+
+    expect(result.todayCreationModes.map(mode => mode.id)).toEqual([
+      'play-character',
+      'write-scene',
+      'organize-setting',
+      'compare-branches',
+      'free-chat'
+    ]);
+    expect(result.todayCreationModes.map(mode => mode.label)).toContain('我只想随便聊聊');
+
+    for (const mode of result.todayCreationModes) {
+      expect(mode.maxQuestions).toBeLessThanOrEqual(2);
+      expect(mode.candidateLimit).toBe(2);
+      expect(mode.writesFiles).toBe(false);
+      expect(mode.command).toContain('--max-questions 2');
+      expect(mode.command).toContain('--no-write');
+      expect(mode.responseOptions).toEqual(['确认', '改写', '拒绝', '稍后']);
+      expect(mode.canonBoundary).toContain('候选');
+      expect(mode.outputContract).toContain('不写入文件');
+      expect(mode.toneGuide).toContain('短');
+    }
+
+    expect(result.todayCreationModes.find(mode => mode.id === 'play-character')?.entrypointIds)
+      .toEqual(expect.arrayContaining(['protagonist', 'partner']));
+    expect(result.minimumFunLoop.steps).toEqual([
+      '选择一个今日创作模式',
+      '看 2 个有后果的候选',
+      '确认、改写、拒绝或稍后',
+      '得到一句创作回声',
+      '核心要素不足时阻止完整 plan'
+    ]);
+    expect(result.minimumFunLoop.planGate).toContain('不生成完整 creative-plan');
+
+    const rendered = renderStoryNext(result);
+
+    expect(rendered).toContain('今日创作模式');
+    expect(rendered).toContain('我只想随便聊聊');
+    expect(rendered).toContain('最小快乐闭环');
+    expect(rendered).toContain('不写入文件');
+  });
+
   it('keeps co-creation entrypoints available after specification when core elements are still immature', async () => {
     const { projectRoot, fileSystem } = await createProject();
     const storyPath = path.join(projectRoot, 'stories', 'demo');

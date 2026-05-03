@@ -22,6 +22,13 @@ export type StoryCoCreationEntrypointId =
   | 'ending'
   | 'branch';
 
+export type TodayCreationModeId =
+  | 'play-character'
+  | 'write-scene'
+  | 'organize-setting'
+  | 'compare-branches'
+  | 'free-chat';
+
 export interface CoCreationModeDefinition {
   id: StoryCreationModeId;
   label: string;
@@ -55,6 +62,20 @@ export interface CoCreationEntrypointDefinition {
   exampleAnswers: string[];
 }
 
+export interface TodayCreationModeDefinition {
+  id: TodayCreationModeId;
+  label: string;
+  entrypointIds: StoryCoCreationEntrypointId[];
+  maxQuestions: number;
+  candidateLimit: number;
+  writesFiles: boolean;
+  outputContract: string;
+  canonBoundary: string;
+  toneGuide: string;
+  reason: string;
+  responseOptions: string[];
+}
+
 export const CO_CREATION_MODES: readonly CoCreationModeDefinition[] = [
   {
     id: 'discover',
@@ -85,6 +106,76 @@ export const CO_CREATION_MODES: readonly CoCreationModeDefinition[] = [
     label: '回顾修订',
     commandKind: 'creative-report',
     reason: '回看已经创造出的内容、未决项和偏离风险。'
+  }
+];
+
+const TODAY_RESPONSE_OPTIONS = ['确认', '改写', '拒绝', '稍后'];
+
+export const TODAY_CREATION_MODES: readonly TodayCreationModeDefinition[] = [
+  {
+    id: 'play-character',
+    label: '我想玩角色',
+    entrypointIds: ['protagonist', 'partner'],
+    maxQuestions: 2,
+    candidateLimit: 2,
+    writesFiles: false,
+    outputContract: '只给 2 个角色/关系候选和一句创作回声，不写入文件。',
+    canonBoundary: '所有角色与关系内容保持候选状态，作者确认前不进入正典。',
+    toneGuide: '短、有画面、有关系张力。',
+    reason: '先让人物变得会行动、会误判、会彼此牵动。证据来自 Inquirer.js 的最小问题集思路。',
+    responseOptions: TODAY_RESPONSE_OPTIONS
+  },
+  {
+    id: 'write-scene',
+    label: '我想写一幕',
+    entrypointIds: ['scene', 'stage', 'power'],
+    maxQuestions: 2,
+    candidateLimit: 2,
+    writesFiles: false,
+    outputContract: '只给 2 个可写场景候选，不写入文件，不生成章节正文。',
+    canonBoundary: 'Scene Card 只是候选，涉及人物、世界和能力的事实需单独确认。',
+    toneGuide: '短、具体、有开头动作和结尾钩子。',
+    reason: '像 Twine 从任意节点进入，先试一幕能不能写动。',
+    responseOptions: TODAY_RESPONSE_OPTIONS
+  },
+  {
+    id: 'organize-setting',
+    label: '我想整理设定',
+    entrypointIds: ['world', 'stage', 'faction', 'power'],
+    maxQuestions: 2,
+    candidateLimit: 2,
+    writesFiles: false,
+    outputContract: '只整理 2 个设定候选和确认边界，不写入文件，不写入 World Bible。',
+    canonBoundary: '世界规则、势力和能力边界都是候选，确认前不能当作正典。',
+    toneGuide: '短、可比较、先讲故事里的具体压力。',
+    reason: '借鉴 Cucumber.js 的场景化验收，把设定落到行为和后果。',
+    responseOptions: TODAY_RESPONSE_OPTIONS
+  },
+  {
+    id: 'compare-branches',
+    label: '我想比较分支',
+    entrypointIds: ['branch', 'conflict', 'ending'],
+    maxQuestions: 2,
+    candidateLimit: 2,
+    writesFiles: false,
+    outputContract: '只比较 2 条 what-if 风味、代价和下一幕测试，不写入文件，不 promote 分支。',
+    canonBoundary: '分支候选只是探索路径，没有 promote 前不得覆盖主线正典。',
+    toneGuide: '短、讲取舍、每条分支都给一个牺牲。',
+    reason: '借鉴 Twine 的路径探索，但保留为文本候选。',
+    responseOptions: TODAY_RESPONSE_OPTIONS
+  },
+  {
+    id: 'free-chat',
+    label: '我只想随便聊聊',
+    entrypointIds: ['power', 'stage', 'protagonist'],
+    maxQuestions: 2,
+    candidateLimit: 2,
+    writesFiles: false,
+    outputContract: '只陪作者发散 2 个可能方向，不写入文件，不生成大纲。',
+    canonBoundary: '闲聊内容默认都是候选灵感，作者确认前不进入任何正典文件。',
+    toneGuide: '短、轻松、有画面，不像项目管理报告。',
+    reason: '保留低门槛入口，让作者不需要先理解全部命令。',
+    responseOptions: TODAY_RESPONSE_OPTIONS
   }
 ];
 

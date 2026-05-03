@@ -195,11 +195,14 @@ StorySpec 会尽量把“作者确认”和“AI 建议”分开：
 | `storyspec interview [story]` | 运行 CLI 创作访谈，保存澄清记录并输出 agent handoff prompt |
 | `storyspec clarify [story]` | `interview` 的 CLI 澄清入口，适合非 agent 环境 |
 | `storyspec creative:report [story]` | 查看作者确认、创作回声、待澄清、AI 建议和漂移风险 |
+| `storyspec clarification:rollback --story <story> [--question <id>]` | 把最近一次确认或指定问题退回候选，保留原答案和证据，不修改正文或正典文件 |
 | `storyspec preview specify [story]` | 生成规格预览，不直接写入正式规格 |
 | `storyspec preview plan [story]` | 生成创作计划预览，不直接写入 `creative-plan.md` |
 | `storyspec apply <preview-id>` | 默认 dry-run；加 `--yes` 后才应用无 blocking 风险的预览；计划草案可显式加 `--draft` |
 
 `storyspec next [story]` 会显示五种创作模式：`discover`、`co-create`、`plan`、`write`、`reflect`，并给出主角、伙伴、世界、舞台、能力、势力、冲突、场景、结尾/反转、分支/what-if 等入口。主角、伙伴、舞台、能力、势力和冲突已升级为可测试入口卡：每张卡包含开场问题、有趣选择、候选产物、成熟度影响、正典边界和自然下一步；`next` 会按当前成熟度和灵感文本推荐最适合的入口。入口输出默认是候选，不会绕过确认门禁。
+
+`storyspec next [story]` 也会展示“今日创作模式”：我想玩角色、我想写一幕、我想整理设定、我想比较分支、我只想随便聊聊。它们默认映射到 `storyspec interview <story> --focus <entry> --max-questions 2 --no-write`，只给少量候选和一句创作回声，不写入文件，不生成完整大纲。作者仍可以确认、改写、拒绝或稍后决定；核心要素不足时，`preview plan` 仍会被门禁阻止。
 
 `storyspec creative:report [story]` 和 `storyspec status` 会展示“创作回声”：当前风味、最有生命力的核心部件、还差的关键部件和下一轮创作回声。它只回顾已确认或部分确认的创作积累，不把未确认 AI 候选说成正典。
 

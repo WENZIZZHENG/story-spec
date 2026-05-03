@@ -5,7 +5,8 @@ import {
   createClarificationRecord,
   listClarificationRecords,
   renderClarificationMarkdown,
-  renderClarificationSummary
+  renderClarificationSummary,
+  rollbackLatestClarificationAnswer
 } from '../../src/application/manage-clarifications.js';
 import { MemoryFileSystem } from '../helpers/memory-file-system.js';
 
@@ -312,5 +313,98 @@ describe('manage clarifications', () => {
     expect(markdown).toContain('受损者：工坊学徒；无证民间术士');
     expect(markdown).toContain('第一碰撞场景：晏无越权修复民生法器，被要求提交许可。');
     expect(markdown).toContain('关系钩子：伙伴来自学院内部，担心他害自己背违纪风险。');
+  });
+
+  it('rolls back the latest confirmed answer into a candidate with source evidence', async () => {
+    const { projectRoot, fileSystem, storyPath } = await createProject();
+    await fileSystem.writeJson(path.join(storyPath, 'clarifications.json'), {
+      schemaVersion: '1.0',
+      story: '001-demo',
+      premise: '编程施法',
+      createdAt: '2026-05-03T12:00:00.000Z',
+      updatedAt: '2026-05-03T12:00:00.000Z',
+      questions: [
+        {
+          id: 'core.protagonist',
+          stage: 'specify',
+          topic: 'protagonist',
+          question: '主角是谁？',
+          whyItMatters: '影响主角成长路线。',
+          type: 'textarea',
+          required: true,
+          options: [],
+          exampleAnswers: [],
+          dependsOn: []
+        },
+        {
+          id: 'core.partner',
+          stage: 'specify',
+          topic: 'partner',
+          question: '核心伙伴是谁？',
+          whyItMatters: '影响慢热关系。',
+          type: 'textarea',
+          required: false,
+          options: [],
+          exampleAnswers: [],
+          dependsOn: []
+        }
+      ],
+      answers: [
+        {
+          questionId: 'core.protagonist',
+          answer: '晏无是工科马列青年。',
+          source: 'user-explicit',
+          confidence: 1,
+          confirmed: true,
+          createdAt: '2026-05-03T12:00:00.000Z',
+          updatedAt: '2026-05-03T12:10:00.000Z'
+        },
+        {
+          questionId: 'core.partner',
+          answer: '候选伙伴是一名学院符文学徒。',
+          source: 'user-explicit',
+          confidence: 1,
+          confirmed: true,
+          createdAt: '2026-05-03T12:00:00.000Z',
+          updatedAt: '2026-05-03T12:20:00.000Z'
+        }
+      ]
+    }, { spaces: 2 });
+
+    const result = await rollbackLatestClarificationAnswer({
+      projectRoot,
+      fileSystem,
+      story: '001-demo',
+      mode: 'candidate',
+      now: () => new Date('2026-05-03T12:30:00.000Z')
+    });
+
+    expect(result.rolledBack).toMatchObject({
+      questionId: 'core.partner',
+      previousConfirmed: true,
+      nextConfirmed: false,
+      evidencePath: 'clarifications.json#answers.core.partner'
+    });
+    expect(result.summary).toContain('退回候选');
+    await expect(fileSystem.readJson<any>(path.join(storyPath, 'clarifications.json')))
+      .resolves.toMatchObject({
+        updatedAt: '2026-05-03T12:30:00.000Z',
+        answers: expect.arrayContaining([
+          expect.objectContaining({
+            questionId: 'core.partner',
+            answer: '候选伙伴是一名学院符文学徒。',
+            source: 'ai-suggested',
+            confirmed: false,
+            updatedAt: '2026-05-03T12:30:00.000Z'
+          }),
+          expect.objectContaining({
+            questionId: 'core.protagonist',
+            source: 'user-explicit',
+            confirmed: true
+          })
+        ])
+      });
+    await expect(fileSystem.readFile(path.join(storyPath, 'clarifications.md')))
+      .resolves.toContain('AI 建议，待确认');
   });
 });

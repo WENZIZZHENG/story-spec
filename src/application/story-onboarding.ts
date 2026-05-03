@@ -31,11 +31,13 @@ import {
 import {
   CO_CREATION_ENTRYPOINTS,
   CO_CREATION_MODES,
+  TODAY_CREATION_MODES,
   type CoCreationEntryMaturityImpact,
   type CoCreationEntrypointDefinition,
   type StoryCoCreationEntrypointId,
   type StoryCreationModeId,
-  type StoryCreationModeStatus
+  type StoryCreationModeStatus,
+  type TodayCreationModeId
 } from '../domain/co-creation-workbench.js';
 import type { InterestingChoice } from '../domain/clarification.js';
 import {
@@ -118,6 +120,26 @@ export interface StoryCreationModeOption {
   reason: string;
 }
 
+export interface StoryTodayCreationMode {
+  id: TodayCreationModeId;
+  label: string;
+  command: string;
+  entrypointIds: StoryCoCreationEntrypointId[];
+  maxQuestions: number;
+  candidateLimit: number;
+  writesFiles: boolean;
+  outputContract: string;
+  canonBoundary: string;
+  toneGuide: string;
+  reason: string;
+  responseOptions: string[];
+}
+
+export interface StoryMinimumFunLoop {
+  steps: string[];
+  planGate: string;
+}
+
 export interface StoryNextResult {
   projectRoot: string;
   story: string;
@@ -127,6 +149,8 @@ export interface StoryNextResult {
   creativeGaps: string[];
   pendingQuestions: string[];
   creationModes: StoryCreationModeOption[];
+  todayCreationModes: StoryTodayCreationMode[];
+  minimumFunLoop: StoryMinimumFunLoop;
   coCreationEntrypoints: StoryCoCreationEntrypoint[];
   activeBranches: ActiveBranchSummary[];
   coreElements: StoryCoreElementAssessment[];
@@ -469,6 +493,33 @@ const buildCoCreationEntrypoints = (
   );
 };
 
+const buildTodayCreationModes = (story: string): StoryTodayCreationMode[] =>
+  TODAY_CREATION_MODES.map(mode => ({
+    id: mode.id,
+    label: mode.label,
+    command: `storyspec interview ${story} --focus ${mode.entrypointIds[0]} --max-questions ${mode.maxQuestions} --no-write`,
+    entrypointIds: [...mode.entrypointIds],
+    maxQuestions: mode.maxQuestions,
+    candidateLimit: mode.candidateLimit,
+    writesFiles: mode.writesFiles,
+    outputContract: mode.outputContract,
+    canonBoundary: mode.canonBoundary,
+    toneGuide: mode.toneGuide,
+    reason: mode.reason,
+    responseOptions: [...mode.responseOptions]
+  }));
+
+const buildMinimumFunLoop = (): StoryMinimumFunLoop => ({
+  steps: [
+    '选择一个今日创作模式',
+    '看 2 个有后果的候选',
+    '确认、改写、拒绝或稍后',
+    '得到一句创作回声',
+    '核心要素不足时阻止完整 plan'
+  ],
+  planGate: '核心要素不足时不生成完整 creative-plan，只给候选、回声和下一轮入口。'
+});
+
 const buildActions = (
   result: Omit<StoryNextResult, 'actions'>
 ): StoryNextAction[] => {
@@ -637,6 +688,8 @@ export const getStoryNext = async (
       ...creativeControl.cannotFinalize.filter(item => item.startsWith('AI 建议待确认'))
     ],
     creationModes: buildCreationModes(story.name, story.stage, coreElements),
+    todayCreationModes: buildTodayCreationModes(story.name),
+    minimumFunLoop: buildMinimumFunLoop(),
     coCreationEntrypoints: buildCoCreationEntrypoints(story.name, story.stage, coreElements, ideaText),
     activeBranches,
     coreElements,
@@ -676,6 +729,21 @@ export const renderStoryNext = (result: StoryNextResult): string => [
   '',
   '创作模式：',
   ...result.creationModes.map(item => `- ${item.label}（${item.id}，${item.status}）：${item.command}。${item.reason}`),
+  '',
+  '今日创作模式：',
+  ...result.todayCreationModes.map(item => [
+    `- ${item.label}（${item.id}）：${item.command}`,
+    `  - 入口：${item.entrypointIds.join(' / ')}`,
+    `  - 低负担：最多 ${item.maxQuestions} 个问题，${item.candidateLimit} 个候选，不写入文件。`,
+    `  - 输出边界：${item.outputContract}`,
+    `  - 正典边界：${item.canonBoundary}`,
+    `  - 回应方式：${item.responseOptions.join(' / ')}`,
+    `  - 语气：${item.toneGuide}`
+  ].join('\n')),
+  '',
+  '最小快乐闭环：',
+  ...result.minimumFunLoop.steps.map((step, index) => `- ${index + 1}. ${step}`),
+  `- Plan 门禁：${result.minimumFunLoop.planGate}`,
   '',
   '你想从哪里继续？',
   ...(result.coCreationEntrypoints.length > 0

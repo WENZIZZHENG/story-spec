@@ -70,6 +70,30 @@ export interface ListClarificationRecordsInput {
   story?: string;
 }
 
+export interface RollbackClarificationAnswerInput {
+  projectRoot: string;
+  fileSystem: ProjectFileSystem;
+  story?: string;
+  questionId?: string;
+  mode?: 'candidate';
+  now?: () => Date;
+}
+
+export interface RolledBackClarificationAnswer {
+  questionId: string;
+  answer: unknown;
+  previousConfirmed: boolean;
+  nextConfirmed: boolean;
+  previousSource: ClarificationAnswer['source'];
+  nextSource: ClarificationAnswer['source'];
+  evidencePath: string;
+}
+
+export interface RollbackClarificationAnswerResult extends CreatedClarificationRecordResult {
+  rolledBack: RolledBackClarificationAnswer;
+  summary: string;
+}
+
 export interface ClarificationSummaryInput {
   explicit: string[];
   pending: string[];
@@ -98,6 +122,40 @@ const normalizeAnswer = (
   createdAt: answer.createdAt ?? timestamp,
   updatedAt: answer.updatedAt ?? timestamp
 });
+
+const answerUpdatedTime = (answer: ClarificationAnswer): number => {
+  const time = Date.parse(answer.updatedAt);
+  return Number.isFinite(time) ? time : 0;
+};
+
+const findRollbackAnswerIndex = (
+  answers: readonly ClarificationAnswer[],
+  questionId: string | undefined
+): number => {
+  if (questionId) {
+    return answers.findIndex(answer =>
+      answer.questionId === questionId
+      && answer.confirmed
+      && answer.source !== 'ai-suggested'
+    );
+  }
+
+  let latestIndex = -1;
+  let latestTime = -1;
+  answers.forEach((answer, index) => {
+    if (!answer.confirmed || answer.source === 'ai-suggested') {
+      return;
+    }
+
+    const time = answerUpdatedTime(answer);
+    if (time >= latestTime) {
+      latestIndex = index;
+      latestTime = time;
+    }
+  });
+
+  return latestIndex;
+};
 
 const bulletList = (items: string[], fallback: string): string[] =>
   items.length > 0
@@ -327,6 +385,65 @@ export const listClarificationRecords = async (
   };
 };
 
+export const rollbackLatestClarificationAnswer = async (
+  input: RollbackClarificationAnswerInput
+): Promise<RollbackClarificationAnswerResult> => {
+  const story = await selectStoryProject(input.projectRoot, input.fileSystem, input.story);
+  const jsonPath = clarificationJsonPath(story.path);
+  if (!await input.fileSystem.pathExists(jsonPath)) {
+    throw new Error('CLARIFICATION_RECORD_NOT_FOUND');
+  }
+
+  const record = await input.fileSystem.readJson<ClarificationRecord>(jsonPath);
+  const answerIndex = findRollbackAnswerIndex(record.answers, input.questionId);
+  if (answerIndex === -1) {
+    throw new Error(input.questionId
+      ? `CONFIRMED_ANSWER_NOT_FOUND:${input.questionId}`
+      : 'CONFIRMED_ANSWER_NOT_FOUND');
+  }
+
+  const timestamp = (input.now ?? (() => new Date()))().toISOString();
+  const previous = record.answers[answerIndex];
+  const updatedAnswer: ClarificationAnswer = {
+    ...previous,
+    source: 'ai-suggested',
+    confirmed: false,
+    confidence: Math.min(previous.confidence, 0.8),
+    updatedAt: timestamp
+  };
+  const updatedRecord: ClarificationRecord = {
+    ...record,
+    updatedAt: timestamp,
+    answers: record.answers.map((answer, index) => index === answerIndex ? updatedAnswer : answer)
+  };
+  const markdownPath = clarificationMarkdownPath(story.path);
+  const markdown = renderClarificationMarkdown(updatedRecord);
+  const rolledBack: RolledBackClarificationAnswer = {
+    questionId: previous.questionId,
+    answer: previous.answer,
+    previousConfirmed: previous.confirmed,
+    nextConfirmed: updatedAnswer.confirmed,
+    previousSource: previous.source,
+    nextSource: updatedAnswer.source,
+    evidencePath: `clarifications.json#answers.${previous.questionId}`
+  };
+
+  await input.fileSystem.writeJson(jsonPath, updatedRecord, { spaces: 2 });
+  await input.fileSystem.writeFile(markdownPath, markdown);
+
+  return {
+    projectRoot: input.projectRoot,
+    story: story.name,
+    storyPath: story.path,
+    jsonPath,
+    markdownPath,
+    record: updatedRecord,
+    markdown,
+    rolledBack,
+    summary: `${previous.questionId} 已退回候选，保留原答案与来源证据，等待作者重新确认。`
+  };
+};
+
 export const renderClarificationRecordSummary = (result: CreatedClarificationRecordResult): string => [
   'StorySpec Clarifications',
   '',
@@ -335,5 +452,22 @@ export const renderClarificationRecordSummary = (result: CreatedClarificationRec
   `Markdown：${relativePath(result.projectRoot, result.markdownPath)}`,
   `问题数：${result.record.questions.length}`,
   `答案数：${result.record.answers.length}`,
+  ''
+].join('\n');
+
+export const renderClarificationRollbackSummary = (
+  result: RollbackClarificationAnswerResult
+): string => [
+  'StorySpec Clarification Rollback',
+  '',
+  `故事：${result.story}`,
+  `退回问题：${result.rolledBack.questionId}`,
+  `原状态：${result.rolledBack.previousSource} / confirmed=${result.rolledBack.previousConfirmed}`,
+  `新状态：${result.rolledBack.nextSource} / confirmed=${result.rolledBack.nextConfirmed}`,
+  `证据：${result.rolledBack.evidencePath}`,
+  `JSON：${relativePath(result.projectRoot, result.jsonPath)}`,
+  `Markdown：${relativePath(result.projectRoot, result.markdownPath)}`,
+  '',
+  result.summary,
   ''
 ].join('\n');
