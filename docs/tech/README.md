@@ -25,7 +25,7 @@
 - 🔌 想开发插件的开发者
 - 📚 想理解技术原理的高级用户
 
-### [Codex 适配优化记录](codex-optimization.md)
+### [Codex 适配优化记录](archive/completed-roadmaps/codex-optimization.md)
 
 记录 Codex 状态命令、`AGENTS.md` 模板、任务边界和世界观模板增强的设计取舍。
 
@@ -41,19 +41,19 @@
 
 统一索引已完成或已关闭的路线图、历史待办和 changeset 记录。
 
-### [命令输入澄清引导](command-onboarding.md)
+### [命令输入澄清引导](archive/completed-roadmaps/command-onboarding.md)
 
 记录 `argument-hint` / `arguments.hint` 如何在多 agent 命令产物中转化为用户可见的输入澄清引导。
 
-### [创作控制权体验优化路线图](creative-control-roadmap.md)
+### [创作控制权体验优化路线图](archive/completed-roadmaps/creative-control-roadmap.md)
 
-记录后续围绕澄清优先、示例分叉、写入前预览、来源追踪和创作状态可见性的详细开发待办。
+归档已完成的澄清优先、示例分叉、写入前预览、来源追踪、创作状态可见性和文档引导路线。
 
-### [AI 平台 Registry 重构记录](ai-platform-registry-refactor.md)
+### [AI 平台 Registry 重构记录](archive/decisions/ai-platform-registry-refactor.md)
 
 记录将 AI 平台目录、构建产物、显示名和命令前缀收敛为单一 typed registry 的架构取舍。
 
-### [全面重构待办](full-refactor-todo.md)
+### [全面重构待办](archive/full-refactor/full-refactor-todo.md)
 
 保留 full-refactor 已完成主路线的历史索引；新的活跃待办以 [待办统一入口](todo-index.md) 为准。
 
@@ -206,9 +206,9 @@ novel plugins add my-plugin
 
 ### 官方插件参考
 
-- [`authentic-voice`](../../templates/plugins/authentic-voice/) - 真实人声插件
-- [`translate`](../../templates/plugins/translate/) - 翻译插件
-- [`luyao-style`](../../templates/plugins/luyao-style/) - 路遥风格插件
+- [`authentic-voice`](../../plugins/authentic-voice/) - 真实人声插件
+- [`translate`](../../plugins/translate/) - 翻译插件
+- [`luyao-style`](../../plugins/luyao-style/) - 路遥风格插件
 
 ---
 

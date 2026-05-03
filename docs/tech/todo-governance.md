@@ -8,7 +8,8 @@ Active。本文定义 Novel Writer 后续开发待办、路线图、完成归档
 
 - 让“当前还要做什么”只有一个入口：[todo-index.md](todo-index.md)。
 - 让“过去做完了什么”只有一个归档入口：[todo-archive.md](todo-archive.md)。
-- 保留历史路线文件和 changeset 文件原位，避免破坏链接、验证脚本和审计线索。
+- 已完成路线文件统一移动到 `docs/tech/archive/`，由 [todo-archive.md](todo-archive.md) 作为归档索引。
+- changeset 文件保留在 `changes/`，只记录已经发生的变化。
 - 防止 `full-refactor-todo.md`、`*-roadmap.md`、`changes/*.md` 同时承担待办职责，造成状态混乱。
 
 ## 文档职责
@@ -18,9 +19,9 @@ Active。本文定义 Novel Writer 后续开发待办、路线图、完成归档
 | `docs/tech/todo-index.md` | 当前唯一活跃待办入口，只列 Planned / Active 路线和下一步顺序 | 是 |
 | `docs/tech/*-roadmap.md` | 某一专题的详细路线、批次、风险和验收 | 仅当被 `todo-index.md` 引用 |
 | `docs/tech/todo-archive.md` | 已完成路线、历史待办、changeset 的统一归档索引 | 否 |
-| `docs/tech/full-refactor-todo.md` | full-refactor 历史索引，保留 A/B/C 主路线完成状态 | 否 |
-| `docs/tech/full-refactor-completed.md` | full-refactor 完成批次的详细证据 | 否 |
-| `docs/tech/*-decision.md` / `*-refactor.md` | 架构决策或专题设计记录 | 否 |
+| `docs/tech/archive/full-refactor/*.md` | full-refactor 历史索引、路线文件和完成证据 | 否 |
+| `docs/tech/archive/completed-roadmaps/*.md` | 已完成专题路线和配套专题记录 | 否 |
+| `docs/tech/archive/decisions/*.md` | 已采纳架构决策或专题设计记录 | 否 |
 | `changes/YYYY-MM-DD-topic.md` | 用户可见行为、模板契约、生成产物或验证变化的 changeset | 否 |
 
 ## 状态词
@@ -59,7 +60,8 @@ Active。本文定义 Novel Writer 后续开发待办、路线图、完成归档
 2. 在 [todo-archive.md](todo-archive.md) 添加或更新归档条目。
 3. 从 [todo-index.md](todo-index.md) 的“当前待办”移除已完成路线，或标记为“已完成，详见归档”。
 4. 如果涉及 CLI 行为、模板契约、生成产物或项目结构变化，新增或更新 `changes/YYYY-MM-DD-topic.md`。
-5. 文档-only 收尾至少运行 `git diff --check`。
+5. 将完成路线移动到 `docs/tech/archive/completed-roadmaps/`，full-refactor 历史移动到 `docs/tech/archive/full-refactor/`，已采纳决策移动到 `docs/tech/archive/decisions/`。
+6. 文档-only 收尾至少运行 `git diff --check`。
 
 归档条目至少包含：
 
@@ -85,6 +87,6 @@ Active。本文定义 Novel Writer 后续开发待办、路线图、完成归档
 
 - [ ] `todo-index.md` 只包含未完成的 Planned / Active 项。
 - [ ] 已完成路线能在 `todo-archive.md` 找到统一归档条目。
-- [ ] `full-refactor-todo.md` 没有新增活跃任务。
+- [ ] 已完成路线位于 `docs/tech/archive/` 对应目录，不散落在 `docs/tech/` 根目录。
 - [ ] `changes/*.md` 只描述已发生变化。
 - [ ] `git diff --check` 通过。
