@@ -1,13 +1,13 @@
-# Novel Writer Agent Contract
+# Novel Writer Agent 合约
 
-## Project Identity
+## 项目身份
 
-- This is a Novel Writer fiction project named `{{PROJECT_NAME}}`.
-- The project protocol is agent-neutral. Codex, Claude, Gemini, Cursor, generic Markdown agents, and other tools are integrations.
-- The CLI manages project files and validation. It is not the writing agent.
-- Use Chinese for author-facing notes unless project files state otherwise.
+- 这是名为 `{{PROJECT_NAME}}` 的 Novel Writer 小说项目。
+- 项目协议保持 agent-neutral。Codex、Claude、Gemini、Cursor、通用 Markdown agent 和其他工具都是集成入口。
+- CLI 负责管理项目文件和验证流程；它不是写作 agent。
+- 除非项目文件另有说明，面向作者的说明、计划和交接内容使用中文。
 
-## Read Order
+## 读取顺序
 
 1. `AGENTS.md`
 2. `.specify/agent-contract.md`
@@ -19,49 +19,49 @@
 8. `spec/knowledge/*`
 9. `stories/*/content/*`
 
-## Write Boundaries
+## 写入边界
 
-- Only edit files that the active task explicitly allows.
-- Planning tasks may update planning files, but must not draft chapter prose.
-- Writing tasks may update chapter content and tracking files declared by the task.
-- Keep tracking JSON valid and preserve user-authored story data.
-- If the boundary is unclear, add or request a clarification task instead of guessing.
+- 只编辑当前任务明确允许的文件。
+- 规划任务可以更新规划文件，但不得撰写章节正文。
+- 写作任务可以更新任务声明的章节内容和追踪文件。
+- 保持 tracking JSON 有效，并保留作者已经写入的故事数据。
+- 如果边界不清楚，新增或请求澄清任务，不要猜测扩写。
 
-## Task State Rules
+## 任务状态规则
 
-- Mark one task `in_progress` when starting focused work.
-- Mark a task `done` only after its required outputs exist and validation has run or a clear validation limitation is recorded.
-- Do not mark unrelated tasks done while completing another task.
+- 开始聚焦工作时，只把一个任务标记为 `in_progress`。
+- 只有在所需输出已经存在，且已运行验证或记录清楚验证限制后，才把任务标记为 `done`。
+- 完成某个任务时，不要顺手把无关任务标记为完成。
 
-## Tracking Rules
+## 追踪规则
 
-- After writing or revising content, update affected plot, timeline, relationship, character, and knowledge tracking files.
-- Record newly introduced facts as evidence-backed entries; do not treat agent guesses as canon.
-- If a fact needs author confirmation, mark it as pending instead of silently canonizing it.
+- 写作或修订内容后，更新受影响的情节、时间线、关系、角色和知识追踪文件。
+- 新引入的事实必须记录为有证据支持的条目；不要把 agent 猜测当成 canon。
+- 如果某个事实需要作者确认，标记为 pending，不要静默写入 canon。
 
-## Handoff Rules
+## 交接规则
 
-- Before ending a long session, create or update `handoff.md` when the project already uses handoff files.
-- Include current story, active task, changed files, validation result, blockers, and next suggested action.
+- 长会话结束前，如果项目已经使用 handoff 文件，创建或更新 `handoff.md`。
+- 写明当前故事、活跃任务、变更文件、验证结果、阻塞项和建议的下一步。
 
-## Validation Rules
+## 验证规则
 
-- Before finishing a stage, run `novel validate` when shell access is available.
-- If shell access is unavailable, manually check the required read/write files and record what could not be verified.
-- Prefer JSON output for automated agents: `novel validate --json`.
+- 完成一个阶段前，如果可使用 shell，运行 `novel validate`。
+- 如果无法使用 shell，手动检查必需读取/写入文件，并记录无法验证的内容。
+- 自动化 agent 优先使用 JSON 输出：`novel validate --json`。
 
-## Generic Agent Fallback
+## 通用 Agent 兜底
 
-- If slash commands are unavailable, read `.specify/commands/*.md` and follow the corresponding command document manually.
-- If shell commands are unavailable, execute the documented file-reading and writing steps directly.
-- If file writes are unavailable, return a patch-style plan with exact target paths and content changes.
+- 如果 slash commands 不可用，读取 `.specify/commands/*.md`，并手动遵循对应命令文档。
+- 如果 shell commands 不可用，直接执行文档中列出的文件读取和写入步骤。
+- 如果无法写入文件，返回 patch-style 计划，列出精确目标路径和内容变更。
 
-## Content Boundaries
+## 内容边界
 
-- High-risk or sensitive story elements should be handled as plot function, motivation, consent boundary, relationship change, consequence, and task metadata.
-- Do not expand sensitive material beyond the active task boundary.
-- Preserve empathy, agency, aftermath, and authorial intent.
+- 高风险或敏感故事元素应按情节功能、动机、同意边界、关系变化、后果和任务元数据处理。
+- 不要越过当前任务边界扩展敏感素材。
+- 保留共情、主体性、余波和作者意图。
 
-## Active Profiles
+## 活跃画像
 
 {{AGENTS_PROFILE_SECTION}}

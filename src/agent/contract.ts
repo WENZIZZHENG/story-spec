@@ -1,28 +1,28 @@
 import path from 'node:path';
 import type { ProjectFileSystem } from '../application/project-ports.js';
 
-const DEFAULT_PROJECT_NAME = 'Novel Writer Project';
+const DEFAULT_PROJECT_NAME = 'Novel Writer 项目';
 
 const AGENTS_PROFILE_SECTIONS: Record<string, string[]> = {
   adult: [
-    'Adult material may be tracked in planning files as plot function, consent boundary, motivation, relationship change, and consequence.',
-    'Do not flatten intimate or violent material into spectacle; preserve empathy, agency, aftermath, and authorial intent.'
+    '成人向素材只能在规划文件中作为情节功能、同意边界、动机、关系变化和后果追踪。',
+    '不要把亲密或暴力内容扁平化为猎奇场面；保留共情、主体性、余波和作者意图。'
   ],
   'slow-burn': [
-    'Prefer gradual emotional escalation and delayed payoff; do not rush attraction, trust, reconciliation, or betrayal.',
-    'When a scene feels quiet, protect subtext, hesitation, and accumulated detail instead of forcing a fast turn.'
+    '优先使用渐进的情感升温和延迟回报；不要仓促推进吸引、信任、和解或背叛。',
+    '当场景安静时，保护潜台词、犹疑和累积细节，不要强行制造快速转折。'
   ],
   adventure: [
-    'Keep exploration, discovery, danger, and external stakes visible in plans and tasks.',
-    'Balance emotional beats with concrete movement through places, factions, artifacts, and obstacles.'
+    '在计划和任务中保持探索、发现、危险和外部利害关系可见。',
+    '用地点、派系、物件和障碍中的具体行动平衡情感节拍。'
   ],
   romance: [
-    'Track relationship state changes explicitly: trust, desire, conflict, vulnerability, distance, and repair.',
-    'Respect each character as a full person with motives outside the romance line.'
+    '显式追踪关系状态变化：信任、欲望、冲突、脆弱、距离和修复。',
+    '把每个角色都当作完整的人处理，保留其爱情线之外的动机。'
   ],
   'multi-thread': [
-    'Maintain separate plot threads with clear active chapters, intersections, dependencies, and payoff timing.',
-    'Before writing, check whether the task advances the intended thread or accidentally steals another thread\'s reveal.'
+    '维护彼此区分的情节线，并明确活跃章节、交汇点、依赖关系和回收时机。',
+    '写作前检查任务是否推进了目标情节线，避免无意抢走另一条线的揭示。'
   ]
 };
 
@@ -69,18 +69,18 @@ const normalizeAgentsProfiles = (profiles?: string): string[] => {
 export const renderAgentsProfileSection = (profiles?: string): string => {
   const selectedProfiles = normalizeAgentsProfiles(profiles);
   if (selectedProfiles.length === 0) {
-    return '- Default profile: follow the project constitution and task metadata.';
+    return '- 默认画像：遵循项目宪章和任务元数据。';
   }
 
   const lines: string[] = [];
   for (const profile of selectedProfiles) {
     const section = AGENTS_PROFILE_SECTIONS[profile];
     if (!section) {
-      lines.push(`- Custom profile \`${profile}\`: follow project-local notes in constitution, specification, tasks, and tracking files.`);
+      lines.push(`- 自定义画像 \`${profile}\`：遵循 constitution、specification、tasks 和 tracking 文件中的项目本地说明。`);
       continue;
     }
 
-    lines.push(`- Profile \`${profile}\`:`);
+    lines.push(`- 画像 \`${profile}\`：`);
     for (const rule of section) {
       lines.push(`  - ${rule}`);
     }

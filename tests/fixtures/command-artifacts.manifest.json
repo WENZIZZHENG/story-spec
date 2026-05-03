@@ -285,11 +285,11 @@
     },
     {
       "path": "auggie/.specify/templates/agent/agent-contract.md",
-      "sha256": "f4ba35ef8937a6c789ed96a8b25a7df1bb69757722cd4602b416f9e3b63aa0d9"
+      "sha256": "7ee3a6c29219db3f8bd104568199931b34c5e65424cff5dd46b8e130e7d41541"
     },
     {
       "path": "auggie/.specify/templates/AGENTS.codex.md",
-      "sha256": "a24fc0e1522818044206bec6210b97fa9fb4c10eb553401d4beeeba2f68c5b93"
+      "sha256": "d5d1e7fec65e9e39153270482a9755fe9602088df32627a054425322f99b21c7"
     },
     {
       "path": "auggie/.specify/templates/canon/contradictions.md",
@@ -803,11 +803,11 @@
     },
     {
       "path": "claude/.specify/templates/agent/agent-contract.md",
-      "sha256": "f4ba35ef8937a6c789ed96a8b25a7df1bb69757722cd4602b416f9e3b63aa0d9"
+      "sha256": "7ee3a6c29219db3f8bd104568199931b34c5e65424cff5dd46b8e130e7d41541"
     },
     {
       "path": "claude/.specify/templates/AGENTS.codex.md",
-      "sha256": "a24fc0e1522818044206bec6210b97fa9fb4c10eb553401d4beeeba2f68c5b93"
+      "sha256": "d5d1e7fec65e9e39153270482a9755fe9602088df32627a054425322f99b21c7"
     },
     {
       "path": "claude/.specify/templates/canon/contradictions.md",
@@ -1321,11 +1321,11 @@
     },
     {
       "path": "codebuddy/.specify/templates/agent/agent-contract.md",
-      "sha256": "f4ba35ef8937a6c789ed96a8b25a7df1bb69757722cd4602b416f9e3b63aa0d9"
+      "sha256": "7ee3a6c29219db3f8bd104568199931b34c5e65424cff5dd46b8e130e7d41541"
     },
     {
       "path": "codebuddy/.specify/templates/AGENTS.codex.md",
-      "sha256": "a24fc0e1522818044206bec6210b97fa9fb4c10eb553401d4beeeba2f68c5b93"
+      "sha256": "d5d1e7fec65e9e39153270482a9755fe9602088df32627a054425322f99b21c7"
     },
     {
       "path": "codebuddy/.specify/templates/canon/contradictions.md",
@@ -1839,11 +1839,11 @@
     },
     {
       "path": "codex/.specify/templates/agent/agent-contract.md",
-      "sha256": "f4ba35ef8937a6c789ed96a8b25a7df1bb69757722cd4602b416f9e3b63aa0d9"
+      "sha256": "7ee3a6c29219db3f8bd104568199931b34c5e65424cff5dd46b8e130e7d41541"
     },
     {
       "path": "codex/.specify/templates/AGENTS.codex.md",
-      "sha256": "a24fc0e1522818044206bec6210b97fa9fb4c10eb553401d4beeeba2f68c5b93"
+      "sha256": "d5d1e7fec65e9e39153270482a9755fe9602088df32627a054425322f99b21c7"
     },
     {
       "path": "codex/.specify/templates/canon/contradictions.md",
@@ -2357,11 +2357,11 @@
     },
     {
       "path": "continue-check/.specify/templates/agent/agent-contract.md",
-      "sha256": "f4ba35ef8937a6c789ed96a8b25a7df1bb69757722cd4602b416f9e3b63aa0d9"
+      "sha256": "7ee3a6c29219db3f8bd104568199931b34c5e65424cff5dd46b8e130e7d41541"
     },
     {
       "path": "continue-check/.specify/templates/AGENTS.codex.md",
-      "sha256": "a24fc0e1522818044206bec6210b97fa9fb4c10eb553401d4beeeba2f68c5b93"
+      "sha256": "d5d1e7fec65e9e39153270482a9755fe9602088df32627a054425322f99b21c7"
     },
     {
       "path": "continue-check/.specify/templates/canon/contradictions.md",
@@ -2875,11 +2875,11 @@
     },
     {
       "path": "copilot/.specify/templates/agent/agent-contract.md",
-      "sha256": "f4ba35ef8937a6c789ed96a8b25a7df1bb69757722cd4602b416f9e3b63aa0d9"
+      "sha256": "7ee3a6c29219db3f8bd104568199931b34c5e65424cff5dd46b8e130e7d41541"
     },
     {
       "path": "copilot/.specify/templates/AGENTS.codex.md",
-      "sha256": "a24fc0e1522818044206bec6210b97fa9fb4c10eb553401d4beeeba2f68c5b93"
+      "sha256": "d5d1e7fec65e9e39153270482a9755fe9602088df32627a054425322f99b21c7"
     },
     {
       "path": "copilot/.specify/templates/canon/contradictions.md",
@@ -3393,11 +3393,11 @@
     },
     {
       "path": "cursor/.specify/templates/agent/agent-contract.md",
-      "sha256": "f4ba35ef8937a6c789ed96a8b25a7df1bb69757722cd4602b416f9e3b63aa0d9"
+      "sha256": "7ee3a6c29219db3f8bd104568199931b34c5e65424cff5dd46b8e130e7d41541"
     },
     {
       "path": "cursor/.specify/templates/AGENTS.codex.md",
-      "sha256": "a24fc0e1522818044206bec6210b97fa9fb4c10eb553401d4beeeba2f68c5b93"
+      "sha256": "d5d1e7fec65e9e39153270482a9755fe9602088df32627a054425322f99b21c7"
     },
     {
       "path": "cursor/.specify/templates/canon/contradictions.md",
@@ -3911,11 +3911,11 @@
     },
     {
       "path": "gemini/.specify/templates/agent/agent-contract.md",
-      "sha256": "f4ba35ef8937a6c789ed96a8b25a7df1bb69757722cd4602b416f9e3b63aa0d9"
+      "sha256": "7ee3a6c29219db3f8bd104568199931b34c5e65424cff5dd46b8e130e7d41541"
     },
     {
       "path": "gemini/.specify/templates/AGENTS.codex.md",
-      "sha256": "a24fc0e1522818044206bec6210b97fa9fb4c10eb553401d4beeeba2f68c5b93"
+      "sha256": "d5d1e7fec65e9e39153270482a9755fe9602088df32627a054425322f99b21c7"
     },
     {
       "path": "gemini/.specify/templates/canon/contradictions.md",
@@ -4429,11 +4429,11 @@
     },
     {
       "path": "generic/.specify/templates/agent/agent-contract.md",
-      "sha256": "f4ba35ef8937a6c789ed96a8b25a7df1bb69757722cd4602b416f9e3b63aa0d9"
+      "sha256": "7ee3a6c29219db3f8bd104568199931b34c5e65424cff5dd46b8e130e7d41541"
     },
     {
       "path": "generic/.specify/templates/AGENTS.codex.md",
-      "sha256": "a24fc0e1522818044206bec6210b97fa9fb4c10eb553401d4beeeba2f68c5b93"
+      "sha256": "d5d1e7fec65e9e39153270482a9755fe9602088df32627a054425322f99b21c7"
     },
     {
       "path": "generic/.specify/templates/canon/contradictions.md",
@@ -4947,11 +4947,11 @@
     },
     {
       "path": "kilocode/.specify/templates/agent/agent-contract.md",
-      "sha256": "f4ba35ef8937a6c789ed96a8b25a7df1bb69757722cd4602b416f9e3b63aa0d9"
+      "sha256": "7ee3a6c29219db3f8bd104568199931b34c5e65424cff5dd46b8e130e7d41541"
     },
     {
       "path": "kilocode/.specify/templates/AGENTS.codex.md",
-      "sha256": "a24fc0e1522818044206bec6210b97fa9fb4c10eb553401d4beeeba2f68c5b93"
+      "sha256": "d5d1e7fec65e9e39153270482a9755fe9602088df32627a054425322f99b21c7"
     },
     {
       "path": "kilocode/.specify/templates/canon/contradictions.md",
@@ -5465,11 +5465,11 @@
     },
     {
       "path": "opencode/.specify/templates/agent/agent-contract.md",
-      "sha256": "f4ba35ef8937a6c789ed96a8b25a7df1bb69757722cd4602b416f9e3b63aa0d9"
+      "sha256": "7ee3a6c29219db3f8bd104568199931b34c5e65424cff5dd46b8e130e7d41541"
     },
     {
       "path": "opencode/.specify/templates/AGENTS.codex.md",
-      "sha256": "a24fc0e1522818044206bec6210b97fa9fb4c10eb553401d4beeeba2f68c5b93"
+      "sha256": "d5d1e7fec65e9e39153270482a9755fe9602088df32627a054425322f99b21c7"
     },
     {
       "path": "opencode/.specify/templates/canon/contradictions.md",
@@ -5983,11 +5983,11 @@
     },
     {
       "path": "q/.specify/templates/agent/agent-contract.md",
-      "sha256": "f4ba35ef8937a6c789ed96a8b25a7df1bb69757722cd4602b416f9e3b63aa0d9"
+      "sha256": "7ee3a6c29219db3f8bd104568199931b34c5e65424cff5dd46b8e130e7d41541"
     },
     {
       "path": "q/.specify/templates/AGENTS.codex.md",
-      "sha256": "a24fc0e1522818044206bec6210b97fa9fb4c10eb553401d4beeeba2f68c5b93"
+      "sha256": "d5d1e7fec65e9e39153270482a9755fe9602088df32627a054425322f99b21c7"
     },
     {
       "path": "q/.specify/templates/canon/contradictions.md",
@@ -6501,11 +6501,11 @@
     },
     {
       "path": "qwen/.specify/templates/agent/agent-contract.md",
-      "sha256": "f4ba35ef8937a6c789ed96a8b25a7df1bb69757722cd4602b416f9e3b63aa0d9"
+      "sha256": "7ee3a6c29219db3f8bd104568199931b34c5e65424cff5dd46b8e130e7d41541"
     },
     {
       "path": "qwen/.specify/templates/AGENTS.codex.md",
-      "sha256": "a24fc0e1522818044206bec6210b97fa9fb4c10eb553401d4beeeba2f68c5b93"
+      "sha256": "d5d1e7fec65e9e39153270482a9755fe9602088df32627a054425322f99b21c7"
     },
     {
       "path": "qwen/.specify/templates/canon/contradictions.md",
@@ -7019,11 +7019,11 @@
     },
     {
       "path": "roocode/.specify/templates/agent/agent-contract.md",
-      "sha256": "f4ba35ef8937a6c789ed96a8b25a7df1bb69757722cd4602b416f9e3b63aa0d9"
+      "sha256": "7ee3a6c29219db3f8bd104568199931b34c5e65424cff5dd46b8e130e7d41541"
     },
     {
       "path": "roocode/.specify/templates/AGENTS.codex.md",
-      "sha256": "a24fc0e1522818044206bec6210b97fa9fb4c10eb553401d4beeeba2f68c5b93"
+      "sha256": "d5d1e7fec65e9e39153270482a9755fe9602088df32627a054425322f99b21c7"
     },
     {
       "path": "roocode/.specify/templates/canon/contradictions.md",
@@ -7391,11 +7391,11 @@
     },
     {
       "path": "windsurf/.specify/templates/agent/agent-contract.md",
-      "sha256": "f4ba35ef8937a6c789ed96a8b25a7df1bb69757722cd4602b416f9e3b63aa0d9"
+      "sha256": "7ee3a6c29219db3f8bd104568199931b34c5e65424cff5dd46b8e130e7d41541"
     },
     {
       "path": "windsurf/.specify/templates/AGENTS.codex.md",
-      "sha256": "a24fc0e1522818044206bec6210b97fa9fb4c10eb553401d4beeeba2f68c5b93"
+      "sha256": "d5d1e7fec65e9e39153270482a9755fe9602088df32627a054425322f99b21c7"
     },
     {
       "path": "windsurf/.specify/templates/canon/contradictions.md",

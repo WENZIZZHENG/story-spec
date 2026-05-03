@@ -57,10 +57,10 @@ describe('CLI init smoke', () => {
       expect(await exists(path.join(projectPath, file))).toBe(true);
     }));
     expect(prompts.filter(file => file.endsWith('.md'))).toHaveLength(golden.codex.promptCount);
-    await expect(readFile(path.join(projectPath, 'AGENTS.md'), 'utf-8')).resolves.toContain('Profile `adult`');
-    await expect(readFile(path.join(projectPath, 'AGENTS.md'), 'utf-8')).resolves.toContain('Profile `slow-burn`');
-    await expect(readFile(path.join(projectPath, '.specify', 'agent-contract.md'), 'utf-8')).resolves.toContain('Profile `adult`');
-    await expect(readFile(path.join(projectPath, '.specify', 'agent-contract.md'), 'utf-8')).resolves.toContain('Novel Writer Agent Contract');
+    await expect(readFile(path.join(projectPath, 'AGENTS.md'), 'utf-8')).resolves.toContain('画像 `adult`');
+    await expect(readFile(path.join(projectPath, 'AGENTS.md'), 'utf-8')).resolves.toContain('画像 `slow-burn`');
+    await expect(readFile(path.join(projectPath, '.specify', 'agent-contract.md'), 'utf-8')).resolves.toContain('画像 `adult`');
+    await expect(readFile(path.join(projectPath, '.specify', 'agent-contract.md'), 'utf-8')).resolves.toContain('Novel Writer Agent 合约');
     expect(await exists(path.join(projectPath, 'spec', 'world', 'rules.yaml'))).toBe(true);
     expect(await exists(path.join(projectPath, 'spec', 'canon', 'facts.json'))).toBe(true);
     expect(await exists(path.join(projectPath, 'spec', 'graph', 'entities.json'))).toBe(true);

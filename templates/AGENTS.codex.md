@@ -1,37 +1,37 @@
-# Agent Instructions
+# Agent 指令
 
-## Project
-- Novel project: `{{PROJECT_NAME}}`.
-- Work from the project root and run `novel status` before planning or writing.
-- Use Chinese for author-facing notes unless the project files say otherwise.
+## 项目
+- 小说项目：`{{PROJECT_NAME}}`。
+- 从项目根目录工作；规划或写作前运行 `novel status`。
+- 除非项目文件另有说明，面向作者的说明、计划和交接内容使用中文。
 
-## Workflow
-| Stage | Codex prompt |
+## 工作流
+| 阶段 | Codex prompt |
 |-------|--------------|
-| Constitution | `/novel-constitution` |
-| Specification | `/novel-specify` |
-| Clarification | `/novel-clarify` |
-| Plan | `/novel-plan` |
-| Tasks | `/novel-tasks` |
-| Write | `/novel-write` |
-| Analyze | `/novel-analyze` |
+| 宪章 | `/novel-constitution` |
+| 规格 | `/novel-specify` |
+| 澄清 | `/novel-clarify` |
+| 计划 | `/novel-plan` |
+| 任务 | `/novel-tasks` |
+| 写作 | `/novel-write` |
+| 分析 | `/novel-analyze` |
 
-## Required Context
-- Read `.specify/memory/constitution.md` first.
-- Then read `stories/*/specification.md`, `stories/*/creative-plan.md`, and `stories/*/tasks.md`.
-- Use `spec/knowledge/` for world, character, location, and voice facts.
-- Use `spec/tracking/*.json` for continuity; keep JSON valid.
+## 必读上下文
+- 先读取 `.specify/memory/constitution.md`。
+- 再读取 `stories/*/specification.md`、`stories/*/creative-plan.md` 和 `stories/*/tasks.md`。
+- 用 `spec/knowledge/` 保存世界、角色、地点和声音事实。
+- 用 `spec/tracking/*.json` 维护连续性；保持 JSON 有效。
 
-## Boundaries
-- If the user asks for planning, only update planning files; do not draft chapter prose.
-- Sensitive or adult story elements are kept as plot function, motivation, relationship change, consequence, and boundary notes unless the active writing task says otherwise.
-- When a boundary is unclear, add a clarification task instead of expanding the scene.
+## 边界
+- 如果用户要求规划，只更新规划文件；不要撰写章节正文。
+- 除非活跃写作任务另有说明，敏感或成人向故事元素只保留为情节功能、动机、关系变化、后果和边界说明。
+- 边界不清楚时，新增澄清任务，不要直接扩写场景。
 
-## Profile
+## 画像
 {{AGENTS_PROFILE_SECTION}}
 
-## Files
-- Planning: `stories/*/specification.md`, `stories/*/creative-plan.md`, `stories/*/tasks.md`.
-- Drafts: `stories/*/content/`.
-- Tracking: `spec/tracking/`.
-- Knowledge: `spec/knowledge/`.
+## 文件
+- 规划：`stories/*/specification.md`、`stories/*/creative-plan.md`、`stories/*/tasks.md`。
+- 草稿：`stories/*/content/`。
+- 追踪：`spec/tracking/`。
+- 知识：`spec/knowledge/`。

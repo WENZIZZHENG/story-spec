@@ -94,7 +94,7 @@ describe('initProject', () => {
     await expect(exists(path.join(projectPath, '.codex', 'prompts', 'novel-write.md'))).resolves.toBe(true);
     await expect(exists(path.join(projectPath, 'AGENTS.md'))).resolves.toBe(true);
     await expect(readFile(path.join(projectPath, '.specify', 'agent-contract.md'), 'utf-8')).resolves.toContain('Contract smoke');
-    await expect(readFile(path.join(projectPath, 'AGENTS.md'), 'utf-8')).resolves.toContain('Default profile');
+    await expect(readFile(path.join(projectPath, 'AGENTS.md'), 'utf-8')).resolves.toContain('默认画像');
     await expect(exists(path.join(projectPath, 'spec', 'tracking', 'plot-tracker.json'))).resolves.toBe(true);
     await expect(exists(path.join(projectPath, 'spec', 'knowledge', 'world-setting.md'))).resolves.toBe(true);
     await expect(exists(path.join(projectPath, 'spec', 'world', 'rules.yaml'))).resolves.toBe(true);
@@ -125,13 +125,13 @@ describe('initProject', () => {
     });
 
     const agents = await readFile(path.join(cwd, 'profiled', 'AGENTS.md'), 'utf-8');
-    expect(agents).toContain('Profile `adult`');
-    expect(agents).toContain('consent boundary');
-    expect(agents).toContain('Profile `slow-burn`');
-    expect(agents).toContain('gradual emotional escalation');
-    expect(agents).toContain('Profile `adventure`');
-    expect(agents).toContain('external stakes');
-    await expect(readFile(path.join(cwd, 'profiled', '.specify', 'agent-contract.md'), 'utf-8')).resolves.toContain('Profile `adult`');
+    expect(agents).toContain('画像 `adult`');
+    expect(agents).toContain('同意边界');
+    expect(agents).toContain('画像 `slow-burn`');
+    expect(agents).toContain('渐进的情感升温');
+    expect(agents).toContain('画像 `adventure`');
+    expect(agents).toContain('外部利害关系');
+    await expect(readFile(path.join(cwd, 'profiled', '.specify', 'agent-contract.md'), 'utf-8')).resolves.toContain('画像 `adult`');
   });
 
   it('creates a generic agent project with Markdown commands', async () => {

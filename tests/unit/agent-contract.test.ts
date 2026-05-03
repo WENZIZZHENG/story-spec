@@ -19,12 +19,12 @@ describe('agent contract', () => {
     });
 
     expect(content).toContain('# 星河');
-    expect(content).toContain('Profile `romance`');
-    expect(content).toContain('Custom profile `custom`');
+    expect(content).toContain('画像 `romance`');
+    expect(content).toContain('自定义画像 `custom`');
   });
 
   it('uses the default profile when none is selected', () => {
-    expect(renderAgentsProfileSection()).toBe('- Default profile: follow the project constitution and task metadata.');
+    expect(renderAgentsProfileSection()).toBe('- 默认画像：遵循项目宪章和任务元数据。');
   });
 
   it('loads the project contract before falling back to the package template', async () => {
@@ -82,7 +82,7 @@ describe('agent contract', () => {
     });
 
     expect(content).toContain('# 星河');
-    expect(content).toContain('Profile `romance`');
+    expect(content).toContain('画像 `romance`');
     await expect(fs.readFile(getProjectAgentContractPath(projectRoot))).resolves.toBe(content);
     await expect(fs.readFile(path.join(projectRoot, 'AGENTS.md'))).resolves.toBe(content);
   });
@@ -141,7 +141,7 @@ describe('agent contract', () => {
       { relativePath: 'AGENTS.md', action: 'write' }
     ]);
     await expect(fs.readFile(getProjectAgentContractPath(projectRoot))).resolves.toContain('# 配置名');
-    await expect(fs.readFile(path.join(projectRoot, 'AGENTS.md'))).resolves.toContain('Profile `romance`');
+    await expect(fs.readFile(path.join(projectRoot, 'AGENTS.md'))).resolves.toContain('画像 `romance`');
   });
 
   it('reports planned writes without changing files in dry-run mode', async () => {

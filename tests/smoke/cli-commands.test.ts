@@ -66,7 +66,7 @@ describe('CLI command modules smoke', () => {
       '星河'
     ], { cwd: repoRoot });
 
-    expect(stdout).toContain('Novel Writer Agent Contract');
+    expect(stdout).toContain('Novel Writer Agent 合约');
     expect(stdout).toContain('星河');
     expect(stdout).toContain('.specify/agent-contract.md');
   });
