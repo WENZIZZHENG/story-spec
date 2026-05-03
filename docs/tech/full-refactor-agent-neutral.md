@@ -2,7 +2,7 @@
 
 ## 状态
 
-Active planning。本文是后续开发的路线图，只记录设计、任务顺序、验收口径和历史归档；当前阶段不立即进入代码实现。
+Completed。本文保存 Agent-neutral 重构路线的设计、批次顺序和验收口径。Batch A0-A2 已完成，后续新增 agent integration 或命令渲染能力应作为独立增强批次推进。
 
 上一次“全面重构”阶段 0-10 已完成，归档信息已移至 [full-refactor-archive.md](full-refactor-archive.md)。新的重构目标是把 Novel Writer 从“支持多 AI 平台的小说 prompt/CLI 工具”进一步升级为“任意 agent 都能接手的小说创作协议 + 平台适配器”。
 
@@ -430,6 +430,6 @@ risk:
 - [x] Batch A2a：脚本能力降级。覆盖原 A6-T001，详情见 [full-refactor-completed.md](full-refactor-completed.md)。
 - [x] Batch A2：Agent 能力与文档收口。覆盖原 A6-T002、A6-T003、A6-T004、A7-T001 至 A7-T005，以及 shared N007，详情见 [full-refactor-completed.md](full-refactor-completed.md)。
 
-## 待执行批次
+## 后续批次
 
-Agent-neutral 路线当前批次已完成。下一步按 [full-refactor-todo.md](full-refactor-todo.md) 进入 Worldbuilding Batch B0。
+Agent-neutral 路线当前主批次已完成。后续如实现 `agent:remove`、`commands:build`、CommandSpec YAML 全量迁移或 Continue checks，应作为新增增强批次推进，不回滚 A0-A2 完成状态。

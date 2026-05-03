@@ -2,7 +2,7 @@
 
 ## 状态
 
-Completed。本文承接 B 系列任务，专注 World Bible、Canon Ledger、Entity Graph、Scene Cards、揭示节奏、角色声音、Reviewer Loop 和类型 Preset。Batch B0-B3 已完成，后续进入 Workbench 路线。
+Completed。本文承接 B 系列任务，专注 World Bible、Canon Ledger、Entity Graph、Scene Cards、揭示节奏、角色声音、Reviewer Loop 和类型 Preset。Batch B0-B3 已完成，并已纳入 full-refactor 大阶段收尾验证。
 
 ## 写作与世界观参考项目
 
