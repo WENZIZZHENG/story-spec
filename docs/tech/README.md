@@ -217,18 +217,15 @@ storyspec plugins add my-plugin
 ### 用户文档
 - [安装指南](../installation.md) - 详细安装步骤
 - [快速开始](../quickstart.md) - 5 分钟快速入门
-- [工作流程](../workflow.md) - 完整创作流程
-- [命令详解](../commands.md) - 所有命令的详细说明
-- [最佳实践](../best-practices.md) - 实战经验和技巧
+- [工作流程](../workflow.md) - 当前创作流程
+- [命令语义速查](../commands.md) - 命令使用判断
+- [Agent 命令对照](../agent-commands.md) - 不同 agent 的斜杠命令格式
 
 ### 进阶文档
-- [实战指南](../writing/practical-guide.md) - 基于《重返1984》的 SDD 实践
-- [写作方法](../writing-methods.md) - 6 种经典写作方法
 - [升级指南](../upgrade-guide.md) - 版本升级说明
 
 ### 开发文档
 - [本地开发](../local-development.md) - 本地开发环境设置
-- [多平台支持](../gemini-command-guide.md) - Gemini CLI 开发指南
 - [插件开发提示](../plugin-dev-prompt.md) - 插件开发最佳实践
 
 ---

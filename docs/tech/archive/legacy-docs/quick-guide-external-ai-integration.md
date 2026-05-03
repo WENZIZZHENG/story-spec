@@ -93,10 +93,8 @@ A: 检查 improvement-log.md 查看是否成功整合
 A: 查看git历史，可以回滚相关文件
 
 ## 📚 详细文档
-- [完整提示词模板](../../ai-suggestion-prompt-template.md)
 - [Gemini 专用模板](./ai-suggestion-prompt-for-gemini.md)
-- [实例演示](../../suggestion-integration-examples.md)
-- [PRD 文档](../../PRD-external-suggestion-integration.md)
+- 原主目录中的外部 AI 建议模板、实例和 PRD 已随文档瘦身删除；本文仅作为历史流程记录保留。
 
 ---
 *版本：1.0 | 更新：2025-01-24*

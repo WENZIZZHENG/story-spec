@@ -438,7 +438,6 @@ npm run check:command-manifest
 - [Agent contract](docs/agent-contract.md)
 - [Agent 命令对照](docs/agent-commands.md)
 - [升级指南](docs/upgrade-guide.md)
-- [写作方法](docs/writing-methods.md)
 - [本地开发](docs/local-development.md)
 - [技术架构](docs/tech/architecture.md)
 
