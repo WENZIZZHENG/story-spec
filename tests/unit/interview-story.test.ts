@@ -357,6 +357,14 @@ describe('interviewStory', () => {
 
     expect(result.record.questions.map(question => question.id)).toContain('core.premise');
     expect(result.markdown).toContain('core.premise：故事最想保留什么？');
+    expect(result.decisionLog.deferredItems).toEqual([
+      expect.objectContaining({
+        questionId: 'core.premise',
+        answer: '稍后决定'
+      })
+    ]);
+    expect(result.handoffPrompt).toContain('未决项回流');
+    expect(result.handoffPrompt).toContain('core.premise：故事最想保留什么？');
   });
 
   it('can intentionally use examples as user-selected starter answers', async () => {

@@ -532,4 +532,87 @@ describe('creative report', () => {
     expect(rendered).toContain('还差的关键部件');
     expect(rendered).toContain('下一轮回声');
   });
+
+  it('shows deferred choices as a decision log and brings them back as creation work', async () => {
+    const projectRoot = path.join(os.tmpdir(), 'memory-novel-creative-report-deferred');
+    const fileSystem = new MemoryFileSystem(projectRoot);
+    const storyPath = path.join(projectRoot, 'stories', '编程施法');
+
+    await fileSystem.writeFile(path.join(storyPath, 'idea.md'), '# 编程施法');
+    await fileSystem.writeFile(path.join(storyPath, 'creative-plan.md'), '# plan');
+    await fileSystem.writeJson(path.join(storyPath, 'clarifications.json'), {
+      schemaVersion: '1.0',
+      story: '编程施法',
+      premise: '异界穿越、编程施法、慢热感情',
+      createdAt: '2026-05-03T00:00:00.000Z',
+      updatedAt: '2026-05-03T00:00:00.000Z',
+      questions: [
+        {
+          id: 'partner.core',
+          stage: 'specify',
+          topic: 'partner',
+          question: '核心伙伴是谁？',
+          whyItMatters: '影响关系张力。',
+          type: 'textarea',
+          required: true,
+          options: [],
+          exampleAnswers: [],
+          dependsOn: []
+        },
+        {
+          id: 'core.protagonist',
+          stage: 'specify',
+          topic: 'protagonist',
+          question: '主角是谁？',
+          whyItMatters: '影响视角。',
+          type: 'textarea',
+          required: true,
+          options: [],
+          exampleAnswers: [],
+          dependsOn: []
+        }
+      ],
+      answers: [
+        {
+          questionId: 'partner.core',
+          answer: '稍后决定',
+          source: 'user-explicit',
+          confidence: 1,
+          confirmed: true,
+          createdAt: '2026-05-03T00:00:00.000Z',
+          updatedAt: '2026-05-03T00:00:00.000Z'
+        },
+        {
+          questionId: 'core.protagonist',
+          answer: '晏无是工科马列青年。',
+          source: 'user-explicit',
+          confidence: 1,
+          confirmed: true,
+          createdAt: '2026-05-03T00:00:00.000Z',
+          updatedAt: '2026-05-03T00:00:00.000Z'
+        }
+      ]
+    }, { spaces: 2 });
+
+    const result = await createCreativeReport({
+      projectRoot,
+      fileSystem,
+      story: '编程施法'
+    });
+    const rendered = renderCreativeReport(result);
+
+    expect(result.decisionLog.deferredItems).toEqual([
+      expect.objectContaining({
+        questionId: 'partner.core',
+        answer: '稍后决定',
+        trigger: expect.stringContaining('进入 plan'),
+        resumeCommand: 'storyspec interview 编程施法 --focus partner'
+      })
+    ]);
+    expect(result.nextActions[0]).toBe('storyspec interview 编程施法 --focus partner');
+    expect(rendered).toContain('未决项回流与决策日志');
+    expect(rendered).toContain('partner.core：核心伙伴是谁？');
+    expect(rendered).toContain('当初选择：稍后决定');
+    expect(rendered).toContain('回流条件：进入 plan');
+  });
 });

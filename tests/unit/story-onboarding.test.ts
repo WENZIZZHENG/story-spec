@@ -417,4 +417,65 @@ describe('story onboarding', () => {
     expect(rendered).toContain('提前揭示身份：exploring');
     expect(rendered).toContain('storyspec branch:compare 提前揭示身份');
   });
+
+  it('returns deferred questions to the front of next navigation with decision-log context', async () => {
+    const { projectRoot, fileSystem } = await createProject();
+    const storyPath = path.join(projectRoot, 'stories', 'demo');
+    await fileSystem.writeFile(path.join(storyPath, 'idea.md'), '# demo');
+    await fileSystem.writeFile(path.join(storyPath, 'creative-plan.md'), '# plan');
+    await fileSystem.writeJson(path.join(storyPath, 'clarifications.json'), {
+      schemaVersion: '1.0',
+      story: 'demo',
+      premise: '异界穿越、编程施法、慢热感情',
+      createdAt: '2026-05-03T00:00:00.000Z',
+      updatedAt: '2026-05-03T00:00:00.000Z',
+      questions: [
+        {
+          id: 'partner.core',
+          stage: 'specify',
+          topic: 'partner',
+          question: '核心伙伴是谁？',
+          whyItMatters: '影响关系张力和第一卷行动压力。',
+          type: 'textarea',
+          required: true,
+          options: [],
+          exampleAnswers: [],
+          dependsOn: []
+        }
+      ],
+      answers: [
+        {
+          questionId: 'partner.core',
+          answer: '稍后决定',
+          source: 'user-explicit',
+          confidence: 1,
+          confirmed: true,
+          createdAt: '2026-05-03T00:00:00.000Z',
+          updatedAt: '2026-05-03T00:00:00.000Z'
+        }
+      ]
+    }, { spaces: 2 });
+
+    const result = await getStoryNext({
+      projectRoot,
+      fileSystem,
+      story: 'demo'
+    });
+    const rendered = renderStoryNext(result);
+
+    expect(result.decisionLog.deferredItems).toEqual([
+      expect.objectContaining({
+        questionId: 'partner.core',
+        topic: 'partner',
+        trigger: expect.stringContaining('进入 plan')
+      })
+    ]);
+    expect(result.actions[0]).toMatchObject({
+      command: 'storyspec interview demo --focus partner'
+    });
+    expect(rendered).toContain('未决项回流：');
+    expect(rendered).toContain('partner.core：核心伙伴是谁？');
+    expect(rendered).toContain('当初选择：稍后决定');
+    expect(rendered).toContain('回流条件：进入 plan');
+  });
 });

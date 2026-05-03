@@ -25,7 +25,7 @@ storyspec next
 | `storyspec story:new <name> --idea "..."` | 保存一句话灵感和原始创作意图 |
 | `storyspec next [story]` | 根据当前阶段展示创作模式和多入口共创导航 |
 | `storyspec interview [story]` | 在终端完成创作访谈，可用 `--focus` 从指定入口开始 |
-| `storyspec creative:report [story]` | 查看已确认、创作回声、待澄清、AI 候选和偏离风险 |
+| `storyspec creative:report [story]` | 查看已确认、创作回声、未决项回流、待澄清、AI 候选和偏离风险 |
 | `storyspec preview specify [story]` | 预览规格写入内容 |
 | `storyspec apply <preview-id> --yes` | 明确确认后写入 preview |
 
@@ -72,6 +72,16 @@ storyspec next
 | `storyspec status` | 在项目状态里回答“当前故事长成了什么”，不只显示文件是否存在 |
 
 创作回声是给作者看的成果摘要，不是宣传文案。它只引用已确认或部分确认的核心要素，同时保留缺口，避免把未确认候选说成已经完成。
+
+## 未决项回流
+
+| 命令 | 用途 |
+| --- | --- |
+| `storyspec next [story]` | 当历史问题回答为“稍后决定”等 deferred 状态时，优先显示回流命令和触发条件 |
+| `storyspec interview [story]` | 在 handoff prompt 中带上未决项，提醒 agent 继续追问而不是当作已确认 |
+| `storyspec creative:report [story]` | 以决策日志形式展示当初选择、原因、回流条件、继续命令和证据位置 |
+
+未决项回流不是强制打扰。它只把作者过去暂存的创作选择重新放到相关上下文前台，继续保持候选和确认边界。
 
 ## 终端维护命令
 

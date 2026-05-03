@@ -2,7 +2,7 @@
 
 ## 状态
 
-Active。本文承接总路线 F12-F15，聚焦多入口共创、分叉管理、创作回声和未决项回流。F12-F14 已完成，当前下一步是 F15 未决项回流与决策日志。
+Completed。本文承接总路线 F12-F15，聚焦多入口共创、分叉管理、创作回声和未决项回流。F12-F15 已完成，当前下一步转入 [体验验收路线图](story-co-creation-experience-roadmap.md) 的 F16 有趣选择质量标准。
 
 ## 共通上下文
 
@@ -23,7 +23,7 @@ Active。本文承接总路线 F12-F15，聚焦多入口共创、分叉管理、
 - F12：Completed。见本文 Batch F12。
 - F13：Completed。见本文 Batch F13。
 - F14：Completed。见本文 Batch F14。
-- F15：下一步。见本文 Batch F15。
+- F15：Completed。见本文 Batch F15。
 
 ## Batch F12：多入口共创与创作模式切换
 
@@ -244,6 +244,8 @@ Active。本文承接总路线 F12-F15，聚焦多入口共创、分叉管理、
 - 不把成果摘要做成营销文案；它仍是创作回声，不是宣传页。
 
 ## Batch F15：未决项回流与决策日志
+
+状态：Completed（2026-05-04）。已新增轻量决策日志摘要，从 `clarifications.json` 推导 deferred 未决项，并让 `next`、`creative:report`、`interview` handoff 和 `clarifications.md` 显示回流条件、继续命令和证据位置。
 
 类型：决策记录、回流、上下文恢复
 

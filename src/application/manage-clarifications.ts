@@ -7,12 +7,17 @@ import type {
   ClarificationQuestion
 } from '../domain/clarification.js';
 import {
-  hasResolvedClarificationAnswer
+  hasResolvedClarificationAnswer,
+  isDeferredClarificationAnswer
 } from '../domain/clarification-answer-utils.js';
 import {
   renderExampleBranchMarkdown,
   type ExampleBranch
 } from '../domain/example-branch.js';
+import {
+  renderDeferredDecisionItems,
+  summarizeDecisionLog
+} from './decision-log.js';
 
 export interface ClarificationRecord {
   schemaVersion: '1.0';
@@ -160,7 +165,13 @@ export const defaultClarificationNextSteps = (): ClarificationNextStep[] => [
 ];
 
 export const renderClarificationMarkdown = (record: ClarificationRecord): string => {
-  const confirmed = record.answers.filter(answer => answer.confirmed && answer.source !== 'ai-suggested');
+  const decisionLog = summarizeDecisionLog(record, record.story);
+  const deferredAnswerIds = new Set(decisionLog.deferredItems.map(item => item.questionId));
+  const confirmed = record.answers.filter(answer =>
+    answer.confirmed
+    && answer.source !== 'ai-suggested'
+    && !isDeferredClarificationAnswer(answer.answer)
+  );
   const aiSuggestions = record.answers.filter(answer => answer.source === 'ai-suggested' && !answer.confirmed);
   const pendingQuestions = record.questions.filter(question =>
     question.required && !record.answers.some(answer =>
@@ -199,6 +210,10 @@ export const renderClarificationMarkdown = (record: ClarificationRecord): string
       exampleBranches
     }).trimEnd(),
     '',
+    '## 未决项回流与决策日志',
+    '',
+    ...renderDeferredDecisionItems(decisionLog.deferredItems),
+    '',
     '## AI 建议，待确认',
     '',
     ...bulletList(
@@ -209,7 +224,9 @@ export const renderClarificationMarkdown = (record: ClarificationRecord): string
     '## 全部问题',
     '',
     ...bulletList(
-      record.questions.map(question => `${question.id}：${question.question}（${question.whyItMatters}）`),
+      record.questions.map(question =>
+        `${question.id}：${question.question}（${question.whyItMatters}${deferredAnswerIds.has(question.id) ? '；当前为稍后决定，需回流' : ''}）`
+      ),
       '暂无问题。'
     ),
     ''

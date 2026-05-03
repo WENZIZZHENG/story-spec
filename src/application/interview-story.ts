@@ -25,6 +25,11 @@ import {
   getCoCreationEntrypointDefinition,
   type StoryCoCreationEntrypointId
 } from '../domain/co-creation-workbench.js';
+import {
+  renderDeferredDecisionItems,
+  summarizeDecisionLog,
+  type DecisionLogSummary
+} from './decision-log.js';
 
 export type InterviewStoryErrorCode =
   | 'MISSING_PREMISE'
@@ -85,6 +90,7 @@ export interface InterviewStoryResult extends InterviewStoryState {
   markdown: string;
   handoffPrompt: string;
   authorProfile: AuthorProfileSummary;
+  decisionLog: DecisionLogSummary;
   written: boolean;
   updatedAnswerIds: string[];
   reusedAnswerIds: string[];
@@ -443,7 +449,7 @@ const buildAnswerUpdates = (
 };
 
 const renderInterviewHandoffPrompt = (
-  result: Pick<InterviewStoryResult, 'projectRoot' | 'jsonPath' | 'record' | 'authorProfile' | 'focus'>
+  result: Pick<InterviewStoryResult, 'projectRoot' | 'jsonPath' | 'record' | 'authorProfile' | 'focus' | 'decisionLog'>
 ): string => [
   `/storyspec-specify ${result.record.premise}`,
   '',
@@ -462,6 +468,13 @@ const renderInterviewHandoffPrompt = (
     : ['当前没有作者画像；首次使用只能做可跳过偏好采样，不能假装已有历史画像可回填。']),
   '只把 `confirmed: true` 且 `source: user-explicit/imported` 的答案视为用户已确认。',
   '`source: ai-suggested` 或 `confirmed: false` 的内容只能作为待确认建议。',
+  ...(result.decisionLog.deferredItems.length > 0
+    ? [
+      '',
+      '未决项回流：',
+      ...renderDeferredDecisionItems(result.decisionLog.deferredItems)
+    ]
+    : []),
   'required 未答问题必须继续输出为 `[需要澄清]`，不得写入正典或 specification。',
   '请先输出写入前预览，等待我确认后再落盘。'
 ].join('\n');
@@ -522,6 +535,7 @@ export const interviewStory = async (
     questions: mergeQuestions(existingRecord?.questions ?? [], roundQuestions),
     answers: [...answerMap.values()]
   };
+  const decisionLog = summarizeDecisionLog(record, state.story);
   const markdown = renderClarificationMarkdown(record);
   const resultBase = {
     ...state,
@@ -530,6 +544,7 @@ export const interviewStory = async (
     selection: prepared.selection,
     markdown,
     authorProfile: authorProfile.summary,
+    decisionLog,
     written: input.write ?? true,
     updatedAnswerIds,
     reusedAnswerIds
@@ -539,7 +554,8 @@ export const interviewStory = async (
     jsonPath: resultBase.jsonPath,
     record,
     authorProfile: resultBase.authorProfile,
-    focus: resultBase.focus
+    focus: resultBase.focus,
+    decisionLog: resultBase.decisionLog
   });
   const result: InterviewStoryResult = {
     ...resultBase,
@@ -565,6 +581,7 @@ export const renderInterviewSummary = (result: InterviewStoryResult): string => 
   `本轮新增/更新答案：${result.updatedAnswerIds.length}`,
   `复用旧答案：${result.reusedAnswerIds.length}`,
   `作者画像：${result.authorProfile.exists ? `${result.authorProfile.activeHints.length} 条可用提示` : '未建立，可选采样'}`,
+  `未决项回流：${result.decisionLog.deferredItems.length} 项`,
   `写入状态：${result.written ? '已写入' : '预览未写入'}`,
   '',
   '可复制给 Codex：',

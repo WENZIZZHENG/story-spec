@@ -36,6 +36,11 @@ import {
   type StoryCreationModeId,
   type StoryCreationModeStatus
 } from '../domain/co-creation-workbench.js';
+import {
+  renderDeferredDecisionItems,
+  summarizeDecisionLog,
+  type DecisionLogSummary
+} from './decision-log.js';
 
 export type StoryOnboardingErrorCode =
   | 'MISSING_STORY_NAME'
@@ -115,6 +120,7 @@ export interface StoryNextResult {
   coCreationEntrypoints: StoryCoCreationEntrypoint[];
   activeBranches: ActiveBranchSummary[];
   coreElements: StoryCoreElementAssessment[];
+  decisionLog: DecisionLogSummary;
   authorProfile: AuthorProfileSummary;
   actions: StoryNextAction[];
 }
@@ -327,6 +333,11 @@ const buildActions = (
   const actions: StoryNextAction[] = [];
   const planBlockingElements = getPlanBlockingCoreElements(result.coreElements);
   const activeBranch = result.activeBranches[0];
+  const deferredItem = result.decisionLog.deferredItems[0];
+
+  if (deferredItem && result.stage !== 'idea') {
+    actions.push(action(1, deferredItem.resumeCommand, `${deferredItem.question} 曾选择“${deferredItem.answer}”；${deferredItem.trigger}。`));
+  }
 
   if (result.stage === 'idea') {
     actions.push(action(1, `storyspec interview ${result.story}`, '先把一句话创意转成澄清记录，不急着生成完整设定。'));
@@ -447,6 +458,7 @@ export const getStoryNext = async (
       answers: record.answers
     })
     : [];
+  const decisionLog = summarizeDecisionLog(record, story.name, story.stage);
   const base = {
     projectRoot: input.projectRoot,
     story: story.name,
@@ -462,6 +474,7 @@ export const getStoryNext = async (
     coCreationEntrypoints: buildCoCreationEntrypoints(story.name, story.stage),
     activeBranches,
     coreElements,
+    decisionLog,
     authorProfile: authorProfile.summary
   };
 
@@ -516,6 +529,9 @@ export const renderStoryNext = (result: StoryNextResult): string => [
       `- ${branch.id}：${branch.status}。${branch.flavor} 下一步：${branch.compareCommand}`
     )
     : ['- 暂无。']),
+  '',
+  '未决项回流：',
+  ...renderDeferredDecisionItems(result.decisionLog.deferredItems),
   '',
   '作者画像：',
   ...renderAuthorProfileSamplingGuide(result.authorProfile),

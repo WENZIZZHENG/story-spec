@@ -31,6 +31,11 @@ import {
   summarizeCreationEcho,
   type CreationEchoSummary
 } from './creation-echo.js';
+import {
+  renderDeferredDecisionItems,
+  summarizeDecisionLog,
+  type DecisionLogSummary
+} from './decision-log.js';
 
 export interface CreativeReportInput {
   projectRoot: string;
@@ -73,6 +78,7 @@ export interface CreativeReportResult {
   coreElements: StoryCoreElementAssessment[];
   storySkeleton: CreativeReportStorySkeleton;
   creationEcho: CreationEchoSummary;
+  decisionLog: DecisionLogSummary;
   funPrompts: CreativeReportFunPrompt[];
   activeBranches: ActiveBranchSummary[];
   driftIssues: CreativeIntentDriftIssue[];
@@ -115,6 +121,7 @@ const buildNextActions = (
   const activeBranchAction = result.activeBranches.length > 0
     ? `比较 what-if：${result.activeBranches[0].compareCommand}`
     : undefined;
+  const deferredAction = result.decisionLog.deferredItems[0]?.resumeCommand;
 
   if (!result.hasClarifications) {
     actions.push(`storyspec interview ${result.story}`);
@@ -123,6 +130,10 @@ const buildNextActions = (
     }
     actions.push(`storyspec next ${result.story}`);
     return actions;
+  }
+
+  if (deferredAction) {
+    actions.push(deferredAction);
   }
 
   if (result.pendingQuestions.length > 0 || result.aiSuggestions.length > 0) {
@@ -294,6 +305,7 @@ export const createCreativeReport = async (
     : [];
   const storySkeleton = buildStorySkeleton(record, coreElements, confirmed);
   const creationEcho = summarizeCreationEcho(story.name, record?.premise, coreElements);
+  const decisionLog = summarizeDecisionLog(record, story.name, story.stage);
   const funPrompts = buildFunPrompts(story.name, coreElements);
   const base = {
     projectRoot: input.projectRoot,
@@ -307,6 +319,7 @@ export const createCreativeReport = async (
     coreElements,
     storySkeleton,
     creationEcho,
+    decisionLog,
     funPrompts,
     activeBranches,
     driftIssues: storyDriftIssues,
@@ -360,6 +373,9 @@ export const renderCreativeReport = (result: CreativeReportResult): string => [
     ? result.creationEcho.missingPieces.map(item => `  - ${item}`)
     : ['  - 暂无明显缺口。']),
   `- 下一轮回声：${result.creationEcho.nextEcho}`,
+  '',
+  '未决项回流与决策日志：',
+  ...renderDeferredDecisionItems(result.decisionLog.deferredItems),
   '',
   '仍可探索的乐趣点：',
   ...(result.funPrompts.length > 0

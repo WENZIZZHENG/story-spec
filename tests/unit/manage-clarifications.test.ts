@@ -170,4 +170,40 @@ describe('manage clarifications', () => {
     expect(markdown).toContain('## AI 建议，待确认');
     expect(markdown).toContain('threat.shape');
   });
+
+  it('renders deferred answers as a decision log instead of losing them in pending questions', () => {
+    const markdown = renderClarificationMarkdown({
+      schemaVersion: '1.0',
+      story: 'demo',
+      premise: '异界穿越',
+      createdAt: '2026-05-03T12:00:00.000Z',
+      updatedAt: '2026-05-03T12:00:00.000Z',
+      questions: [{
+        id: 'partner.core',
+        stage: 'specify',
+        topic: 'partner',
+        question: '核心伙伴是谁？',
+        whyItMatters: '影响关系张力。',
+        type: 'textarea',
+        required: true,
+        options: [],
+        exampleAnswers: [],
+        dependsOn: []
+      }],
+      answers: [{
+        questionId: 'partner.core',
+        answer: '稍后决定',
+        source: 'user-explicit',
+        confidence: 1,
+        confirmed: true,
+        createdAt: '2026-05-03T12:00:00.000Z',
+        updatedAt: '2026-05-03T12:00:00.000Z'
+      }]
+    });
+
+    expect(markdown).toContain('## 未决项回流与决策日志');
+    expect(markdown).toContain('partner.core：核心伙伴是谁？');
+    expect(markdown).toContain('当初选择：稍后决定');
+    expect(markdown).toContain('回流条件');
+  });
 });
