@@ -14,6 +14,7 @@ export type ClarificationAnswerSource =
 
 export type CreativeDecisionStatus = 'pending' | 'confirmed' | 'rejected';
 export type CreativeDecisionCanonImpact = 'none' | 'low' | 'medium' | 'high';
+export type ClarificationChoiceImpact = 'low' | 'high';
 
 export interface ClarificationOption {
   value: string;
@@ -28,6 +29,16 @@ export interface ClarificationExampleBranch {
   tradeoffs: string[];
   downstreamImpact: string;
   recommendedFor: string[];
+  interestingChoice?: InterestingChoice;
+}
+
+export interface InterestingChoice {
+  appeal: string;
+  cost: string;
+  relationshipImpact: string;
+  worldImpact: string;
+  futureHook: string;
+  confirmationBoundary: string;
 }
 
 export interface ClarificationDependency {
@@ -47,6 +58,7 @@ export interface ClarificationQuestion {
   options: ClarificationOption[];
   exampleAnswers: string[];
   exampleBranches?: ClarificationExampleBranch[];
+  choiceImpact?: ClarificationChoiceImpact;
   dependsOn: ClarificationDependency[];
 }
 

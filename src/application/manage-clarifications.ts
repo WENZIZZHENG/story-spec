@@ -104,6 +104,21 @@ const bulletList = (items: string[], fallback: string): string[] =>
     ? items.map(item => `- ${item}`)
     : [`- ${fallback}`];
 
+const renderInterestingChoice = (branch: ClarificationExampleBranch): string[] => {
+  if (!branch.interestingChoice) {
+    return [];
+  }
+
+  return [
+    `- 吸引力：${branch.interestingChoice.appeal}`,
+    `- 代价：${branch.interestingChoice.cost}`,
+    `- 关系影响：${branch.interestingChoice.relationshipImpact}`,
+    `- 世界影响：${branch.interestingChoice.worldImpact}`,
+    `- 后续钩子：${branch.interestingChoice.futureHook}`,
+    `- 确认边界：${branch.interestingChoice.confirmationBoundary}`
+  ];
+};
+
 const renderClarificationExampleBranches = (branches: ClarificationExampleBranch[]): string[] => [
   '## 示例分叉',
   '',
@@ -115,6 +130,7 @@ const renderClarificationExampleBranches = (branches: ClarificationExampleBranch
       `- 风味：${branch.flavor}`,
       `- 取舍：${branch.tradeoffs.length > 0 ? branch.tradeoffs.join('；') : '无'}`,
       `- 后续影响：${branch.downstreamImpact}`,
+      ...renderInterestingChoice(branch),
       `- 适合：${branch.recommendedFor.length > 0 ? branch.recommendedFor.join('；') : '未限定'}`,
       '- confirmed: false',
       ''

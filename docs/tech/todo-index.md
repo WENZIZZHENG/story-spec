@@ -8,7 +8,7 @@ Active。本文是 StorySpec 当前唯一的活跃待办入口。详细规则见
 
 | 路线 | 状态 | 优先级 | 当前下一步 |
 | --- | --- | --- | --- |
-| [故事共创访谈体验增强](story-co-creation-interview-roadmap.md) | Active | P0 | F0-F15 已完成；下一步从 F16 有趣选择质量标准开始，读取 [体验验收路线图](story-co-creation-experience-roadmap.md) |
+| [故事共创访谈体验增强](story-co-creation-interview-roadmap.md) | Active | P0 | F0-F16 已完成；下一步从 F17 六大核心入口卡模板开始，读取 [体验验收路线图](story-co-creation-experience-roadmap.md) |
 
 ### 故事共创访谈子路线
 

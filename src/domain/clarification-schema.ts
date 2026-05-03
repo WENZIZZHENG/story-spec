@@ -2,6 +2,7 @@ import yaml from 'js-yaml';
 import type {
   ClarificationAnswer,
   ClarificationAnswerSource,
+  ClarificationChoiceImpact,
   ClarificationDependency,
   ClarificationExampleBranch,
   ClarificationOption,
@@ -24,6 +25,7 @@ export type ClarificationIssueCode =
   | 'INVALID_CLARIFICATION_QUESTION_TYPE'
   | 'INVALID_CLARIFICATION_OPTION'
   | 'INVALID_CLARIFICATION_EXAMPLE_BRANCH'
+  | 'INCOMPLETE_INTERESTING_CHOICE'
   | 'INVALID_CLARIFICATION_DEPENDENCY'
   | 'INVALID_CLARIFICATION_ANSWER'
   | 'MISSING_CLARIFICATION_ANSWER_FIELD'
@@ -71,6 +73,17 @@ const ANSWER_SOURCES = new Set<ClarificationAnswerSource>([
   'imported',
   'default'
 ]);
+
+const CHOICE_IMPACTS = new Set<ClarificationChoiceImpact>(['low', 'high']);
+
+const INTERESTING_CHOICE_FIELDS = [
+  'appeal',
+  'cost',
+  'relationshipImpact',
+  'worldImpact',
+  'futureHook',
+  'confirmationBoundary'
+] as const;
 
 const isRecord = (value: unknown): value is Record<string, unknown> =>
   typeof value === 'object' && value !== null && !Array.isArray(value);
@@ -211,7 +224,8 @@ const parseDependsOn = (
 const parseExampleBranches = (
   value: unknown,
   basePath: string,
-  issues: ClarificationIssue[]
+  issues: ClarificationIssue[],
+  choiceImpact: ClarificationChoiceImpact
 ): ClarificationExampleBranch[] => {
   if (value === undefined) {
     return [];
@@ -235,6 +249,29 @@ const parseExampleBranches = (
     const downstreamImpact = readRequiredString(branch, 'downstreamImpact', branchPath, issues, 'INVALID_CLARIFICATION_EXAMPLE_BRANCH');
     const tradeoffs = toStringArray(branch.tradeoffs);
     const recommendedFor = toStringArray(branch.recommendedFor);
+    const interestingChoiceRecord = isRecord(branch.interestingChoice)
+      ? branch.interestingChoice
+      : {};
+    const interestingChoice = {
+      appeal: isNonEmptyString(interestingChoiceRecord.appeal)
+        ? interestingChoiceRecord.appeal.trim()
+        : flavor,
+      cost: isNonEmptyString(interestingChoiceRecord.cost)
+        ? interestingChoiceRecord.cost.trim()
+        : (tradeoffs[0] ?? ''),
+      relationshipImpact: isNonEmptyString(interestingChoiceRecord.relationshipImpact)
+        ? interestingChoiceRecord.relationshipImpact.trim()
+        : '',
+      worldImpact: isNonEmptyString(interestingChoiceRecord.worldImpact)
+        ? interestingChoiceRecord.worldImpact.trim()
+        : downstreamImpact,
+      futureHook: isNonEmptyString(interestingChoiceRecord.futureHook)
+        ? interestingChoiceRecord.futureHook.trim()
+        : '',
+      confirmationBoundary: isNonEmptyString(interestingChoiceRecord.confirmationBoundary)
+        ? interestingChoiceRecord.confirmationBoundary.trim()
+        : ''
+    };
 
     if (!label || !answer || !flavor || !downstreamImpact) {
       return [];
@@ -248,13 +285,26 @@ const parseExampleBranches = (
       ));
     }
 
+    if (choiceImpact === 'high') {
+      for (const field of INTERESTING_CHOICE_FIELDS) {
+        if (!interestingChoice[field]) {
+          issues.push(issue(
+            'INCOMPLETE_INTERESTING_CHOICE',
+            `${branchPath}.${field}`,
+            `高影响候选缺少 ${field}，无法展示完整选择后果`
+          ));
+        }
+      }
+    }
+
     return [{
       label,
       answer,
       flavor,
       tradeoffs,
       downstreamImpact,
-      recommendedFor
+      recommendedFor,
+      interestingChoice
     }];
   });
 };
@@ -296,6 +346,9 @@ export const parseClarificationQuestionSet = (
     const questionText = readRequiredString(candidate, 'question', basePath, issues, 'MISSING_CLARIFICATION_QUESTION_FIELD');
     const whyItMatters = readRequiredString(candidate, 'whyItMatters', basePath, issues, 'MISSING_CLARIFICATION_QUESTION_FIELD');
     const type = isNonEmptyString(candidate.type) ? candidate.type.trim() : '';
+    const choiceImpact = isNonEmptyString(candidate.choiceImpact) && CHOICE_IMPACTS.has(candidate.choiceImpact.trim() as ClarificationChoiceImpact)
+      ? candidate.choiceImpact.trim() as ClarificationChoiceImpact
+      : 'low';
     if (!QUESTION_TYPES.has(type as ClarificationQuestionType)) {
       issues.push(issue('INVALID_CLARIFICATION_QUESTION_TYPE', `${basePath}.type`, `不支持的澄清问题类型：${type || 'empty'}`));
     }
@@ -314,7 +367,8 @@ export const parseClarificationQuestionSet = (
       required: candidate.required === true,
       options: parseOptions(candidate.options, basePath, issues),
       exampleAnswers: toStringArray(candidate.exampleAnswers),
-      exampleBranches: parseExampleBranches(candidate.exampleBranches, basePath, issues),
+      exampleBranches: parseExampleBranches(candidate.exampleBranches, basePath, issues, choiceImpact),
+      choiceImpact,
       dependsOn: parseDependsOn(candidate.dependsOn, basePath, issues)
     });
   });

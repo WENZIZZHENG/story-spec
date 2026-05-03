@@ -106,6 +106,55 @@ describe('clarification domain schema', () => {
     })]);
   });
 
+  it('warns when high-impact choices lack the full interesting-choice dimensions', () => {
+    const result = parseClarificationQuestionSet(`questions:
+  - id: magic.rule-hardness
+    stage: specify
+    topic: magic-system
+    question: 编程施法更偏硬规则还是轻量隐喻？
+    whyItMatters: 影响能力爽点和世界规则。
+    type: single-choice
+    required: true
+    choiceImpact: high
+    exampleAnswers:
+      - 硬规则。
+      - 轻量隐喻。
+    exampleBranches:
+      - label: 轻量隐喻
+        answer: 编程施法偏轻量隐喻。
+        flavor: 轻松。
+        tradeoffs:
+          - 技术辨识度会弱一些。
+        downstreamImpact: 能力边界要靠失败代价呈现。
+`, 'high-impact.yaml');
+
+    expect(result.questions[0]).toEqual(expect.objectContaining({
+      choiceImpact: 'high',
+      exampleBranches: [
+        expect.objectContaining({
+          interestingChoice: expect.objectContaining({
+            appeal: '轻松。',
+            cost: '技术辨识度会弱一些。'
+          })
+        })
+      ]
+    }));
+    expect(result.issues).toEqual(expect.arrayContaining([
+      expect.objectContaining({
+        code: 'INCOMPLETE_INTERESTING_CHOICE',
+        path: 'high-impact.yaml#questions[0].exampleBranches[0].relationshipImpact'
+      }),
+      expect.objectContaining({
+        code: 'INCOMPLETE_INTERESTING_CHOICE',
+        path: 'high-impact.yaml#questions[0].exampleBranches[0].futureHook'
+      }),
+      expect.objectContaining({
+        code: 'INCOMPLETE_INTERESTING_CHOICE',
+        path: 'high-impact.yaml#questions[0].exampleBranches[0].confirmationBoundary'
+      })
+    ]));
+  });
+
   it('reports invalid question types and invalid confidence values', () => {
     const questionResult = parseClarificationQuestionSet(`questions:
   - id: bad.question

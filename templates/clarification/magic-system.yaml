@@ -16,6 +16,7 @@ questions:
     whyItMatters: 规则硬度决定读者会期待严谨解谜，还是期待轻松奇思妙想。
     type: single-choice
     required: true
+    choiceImpact: high
     options:
       - value: hard
         label: 硬规则
@@ -35,6 +36,13 @@ questions:
           - 技术辨识度会弱一些，需要靠角色行动和小事故保持新鲜。
           - 不适合频繁用术语解释胜负。
         downstreamImpact: 阅读承诺更接近轻松冒险；能力边界要靠失败代价和场景限制来呈现。
+        interestingChoice:
+          appeal: 轻松顺滑，读者能先享受主角用工程思维拆解事故的奇思妙想。
+          cost: 技术辨识度会弱一些，需要靠角色行动和小事故保持新鲜。
+          relationshipImpact: 伙伴更容易参与判断和纠偏，不会被大量术语挤出场景。
+          worldImpact: 能力边界要靠失败代价、材料限制和场景规则来呈现。
+          futureHook: 下一轮最该确认第一次失败代价是什么，以及谁会看见这次失败。
+          confirmationBoundary: 这是候选方向；确认后才写入 specification 的能力边界和 Scene Card。
         recommendedFor:
           - 轻松冒险优先
           - 不想写成硬科幻式法术说明
@@ -45,6 +53,13 @@ questions:
           - 需要维护少量核心规则，避免前后矛盾。
           - 可以兼顾爽点和节奏，但作者要决定哪些规则永远不细写。
         downstreamImpact: 能力边界更清楚，成长路线可以围绕“发现规则-复用规则-付出代价”推进。
+        interestingChoice:
+          appeal: 既有规则爽点，也能保留轻松冒险的速度。
+          cost: 作者需要维护少量核心规则，避免后续破局前后矛盾。
+          relationshipImpact: 伙伴可以负责本地魔法经验，主角负责抽象调试，形成互补。
+          worldImpact: 世界会出现可复用规则、资源限制和少量禁忌边界。
+          futureHook: 下一轮应决定第一卷只公开哪三条规则，以及哪条规则会反噬主角。
+          confirmationBoundary: 这是候选方向；确认后才写入 specification、creative-plan 和能力追踪。
         recommendedFor:
           - 想要规则感但仍重视故事节奏
           - 第一卷只展示有限规则
@@ -55,6 +70,13 @@ questions:
           - 解释负担明显增加，容易压过轻松冒险。
           - 每次破局都需要经得起回看。
         downstreamImpact: 阅读承诺转向规则推演；冲突设计要提前规划规则、漏洞和代价。
+        interestingChoice:
+          appeal: 推理感更强，读者能从规则中预判风险并享受聪明解法。
+          cost: 解释负担明显增加，轻松冒险节奏更容易被规则说明拖慢。
+          relationshipImpact: 伙伴需要拥有不可替代的本地规则知识，否则容易变成旁观者。
+          worldImpact: 世界必须承认法术语法、运行时、资源消耗和测试边界。
+          futureHook: 下一轮应先定义最小规则表，以及第一卷哪次破局会暴露漏洞代价。
+          confirmationBoundary: 这是候选方向；确认后才写入能力规则、冲突设计和计划门禁。
         recommendedFor:
           - 喜欢硬规则魔法
           - 愿意维护法术规则表

@@ -362,7 +362,7 @@
     },
     {
       "path": "auggie/.specify/templates/clarification/magic-system.yaml",
-      "sha256": "b16da6c363323c3e85a0398f217d1e0d8e4c0f8d0e6322dffa020f8da33732d0"
+      "sha256": "9f99ffaebd8cf60c4e36d5886a6081dcac918ca819c56609353820403a2561f2"
     },
     {
       "path": "auggie/.specify/templates/clarification/portal-fantasy.yaml",
@@ -949,7 +949,7 @@
     },
     {
       "path": "claude/.specify/templates/clarification/magic-system.yaml",
-      "sha256": "b16da6c363323c3e85a0398f217d1e0d8e4c0f8d0e6322dffa020f8da33732d0"
+      "sha256": "9f99ffaebd8cf60c4e36d5886a6081dcac918ca819c56609353820403a2561f2"
     },
     {
       "path": "claude/.specify/templates/clarification/portal-fantasy.yaml",
@@ -1536,7 +1536,7 @@
     },
     {
       "path": "codebuddy/.specify/templates/clarification/magic-system.yaml",
-      "sha256": "b16da6c363323c3e85a0398f217d1e0d8e4c0f8d0e6322dffa020f8da33732d0"
+      "sha256": "9f99ffaebd8cf60c4e36d5886a6081dcac918ca819c56609353820403a2561f2"
     },
     {
       "path": "codebuddy/.specify/templates/clarification/portal-fantasy.yaml",
@@ -2123,7 +2123,7 @@
     },
     {
       "path": "codex/.specify/templates/clarification/magic-system.yaml",
-      "sha256": "b16da6c363323c3e85a0398f217d1e0d8e4c0f8d0e6322dffa020f8da33732d0"
+      "sha256": "9f99ffaebd8cf60c4e36d5886a6081dcac918ca819c56609353820403a2561f2"
     },
     {
       "path": "codex/.specify/templates/clarification/portal-fantasy.yaml",
@@ -2710,7 +2710,7 @@
     },
     {
       "path": "continue-check/.specify/templates/clarification/magic-system.yaml",
-      "sha256": "b16da6c363323c3e85a0398f217d1e0d8e4c0f8d0e6322dffa020f8da33732d0"
+      "sha256": "9f99ffaebd8cf60c4e36d5886a6081dcac918ca819c56609353820403a2561f2"
     },
     {
       "path": "continue-check/.specify/templates/clarification/portal-fantasy.yaml",
@@ -3297,7 +3297,7 @@
     },
     {
       "path": "copilot/.specify/templates/clarification/magic-system.yaml",
-      "sha256": "b16da6c363323c3e85a0398f217d1e0d8e4c0f8d0e6322dffa020f8da33732d0"
+      "sha256": "9f99ffaebd8cf60c4e36d5886a6081dcac918ca819c56609353820403a2561f2"
     },
     {
       "path": "copilot/.specify/templates/clarification/portal-fantasy.yaml",
@@ -3884,7 +3884,7 @@
     },
     {
       "path": "cursor/.specify/templates/clarification/magic-system.yaml",
-      "sha256": "b16da6c363323c3e85a0398f217d1e0d8e4c0f8d0e6322dffa020f8da33732d0"
+      "sha256": "9f99ffaebd8cf60c4e36d5886a6081dcac918ca819c56609353820403a2561f2"
     },
     {
       "path": "cursor/.specify/templates/clarification/portal-fantasy.yaml",
@@ -4471,7 +4471,7 @@
     },
     {
       "path": "gemini/.specify/templates/clarification/magic-system.yaml",
-      "sha256": "b16da6c363323c3e85a0398f217d1e0d8e4c0f8d0e6322dffa020f8da33732d0"
+      "sha256": "9f99ffaebd8cf60c4e36d5886a6081dcac918ca819c56609353820403a2561f2"
     },
     {
       "path": "gemini/.specify/templates/clarification/portal-fantasy.yaml",
@@ -5058,7 +5058,7 @@
     },
     {
       "path": "generic/.specify/templates/clarification/magic-system.yaml",
-      "sha256": "b16da6c363323c3e85a0398f217d1e0d8e4c0f8d0e6322dffa020f8da33732d0"
+      "sha256": "9f99ffaebd8cf60c4e36d5886a6081dcac918ca819c56609353820403a2561f2"
     },
     {
       "path": "generic/.specify/templates/clarification/portal-fantasy.yaml",
@@ -5645,7 +5645,7 @@
     },
     {
       "path": "kilocode/.specify/templates/clarification/magic-system.yaml",
-      "sha256": "b16da6c363323c3e85a0398f217d1e0d8e4c0f8d0e6322dffa020f8da33732d0"
+      "sha256": "9f99ffaebd8cf60c4e36d5886a6081dcac918ca819c56609353820403a2561f2"
     },
     {
       "path": "kilocode/.specify/templates/clarification/portal-fantasy.yaml",
@@ -6232,7 +6232,7 @@
     },
     {
       "path": "opencode/.specify/templates/clarification/magic-system.yaml",
-      "sha256": "b16da6c363323c3e85a0398f217d1e0d8e4c0f8d0e6322dffa020f8da33732d0"
+      "sha256": "9f99ffaebd8cf60c4e36d5886a6081dcac918ca819c56609353820403a2561f2"
     },
     {
       "path": "opencode/.specify/templates/clarification/portal-fantasy.yaml",
@@ -6819,7 +6819,7 @@
     },
     {
       "path": "q/.specify/templates/clarification/magic-system.yaml",
-      "sha256": "b16da6c363323c3e85a0398f217d1e0d8e4c0f8d0e6322dffa020f8da33732d0"
+      "sha256": "9f99ffaebd8cf60c4e36d5886a6081dcac918ca819c56609353820403a2561f2"
     },
     {
       "path": "q/.specify/templates/clarification/portal-fantasy.yaml",
@@ -7406,7 +7406,7 @@
     },
     {
       "path": "qwen/.specify/templates/clarification/magic-system.yaml",
-      "sha256": "b16da6c363323c3e85a0398f217d1e0d8e4c0f8d0e6322dffa020f8da33732d0"
+      "sha256": "9f99ffaebd8cf60c4e36d5886a6081dcac918ca819c56609353820403a2561f2"
     },
     {
       "path": "qwen/.specify/templates/clarification/portal-fantasy.yaml",
@@ -7993,7 +7993,7 @@
     },
     {
       "path": "roocode/.specify/templates/clarification/magic-system.yaml",
-      "sha256": "b16da6c363323c3e85a0398f217d1e0d8e4c0f8d0e6322dffa020f8da33732d0"
+      "sha256": "9f99ffaebd8cf60c4e36d5886a6081dcac918ca819c56609353820403a2561f2"
     },
     {
       "path": "roocode/.specify/templates/clarification/portal-fantasy.yaml",
@@ -8425,7 +8425,7 @@
     },
     {
       "path": "windsurf/.specify/templates/clarification/magic-system.yaml",
-      "sha256": "b16da6c363323c3e85a0398f217d1e0d8e4c0f8d0e6322dffa020f8da33732d0"
+      "sha256": "9f99ffaebd8cf60c4e36d5886a6081dcac918ca819c56609353820403a2561f2"
     },
     {
       "path": "windsurf/.specify/templates/clarification/portal-fantasy.yaml",

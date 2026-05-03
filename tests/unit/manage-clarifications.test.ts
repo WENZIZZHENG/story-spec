@@ -206,4 +206,52 @@ describe('manage clarifications', () => {
     expect(markdown).toContain('当初选择：稍后决定');
     expect(markdown).toContain('回流条件');
   });
+
+  it('renders high-impact interesting choice dimensions in clarification markdown', () => {
+    const markdown = renderClarificationMarkdown({
+      schemaVersion: '1.0',
+      story: 'demo',
+      premise: '编程施法',
+      createdAt: '2026-05-03T12:00:00.000Z',
+      updatedAt: '2026-05-03T12:00:00.000Z',
+      questions: [{
+        id: 'magic.rule-hardness',
+        stage: 'specify',
+        topic: 'magic-system',
+        question: '编程施法更偏硬规则还是轻量隐喻？',
+        whyItMatters: '影响能力爽点和世界规则。',
+        type: 'single-choice',
+        required: true,
+        choiceImpact: 'high',
+        options: [],
+        exampleAnswers: ['轻量隐喻。', '硬规则。'],
+        exampleBranches: [{
+          label: '轻量隐喻',
+          answer: '编程施法偏轻量隐喻。',
+          flavor: '轻松。',
+          tradeoffs: ['技术辨识度会弱一些。'],
+          downstreamImpact: '能力边界要靠失败代价呈现。',
+          recommendedFor: ['轻松冒险'],
+          interestingChoice: {
+            appeal: '轻松顺滑。',
+            cost: '技术辨识度会弱一些。',
+            relationshipImpact: '伙伴更容易参与判断。',
+            worldImpact: '能力边界靠失败代价呈现。',
+            futureHook: '下一轮确认失败代价。',
+            confirmationBoundary: '候选，确认后才写入规格。'
+          }
+        }],
+        dependsOn: []
+      }],
+      answers: []
+    });
+
+    expect(markdown).toContain('## 示例分叉');
+    expect(markdown).toContain('吸引力：轻松顺滑。');
+    expect(markdown).toContain('代价：技术辨识度会弱一些。');
+    expect(markdown).toContain('关系影响：伙伴更容易参与判断。');
+    expect(markdown).toContain('世界影响：能力边界靠失败代价呈现。');
+    expect(markdown).toContain('后续钩子：下一轮确认失败代价。');
+    expect(markdown).toContain('确认边界：候选，确认后才写入规格。');
+  });
 });

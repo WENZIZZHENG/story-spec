@@ -25,16 +25,24 @@ describe('selectClarificationQuestions', () => {
     const result = await loadClarificationQuestionPacks();
     const magic = result.packs.find(pack => pack.id === 'magic-system');
     const ruleHardness = magic?.questions.find(question => question.id === 'magic.rule-hardness');
+    const metaphorBranch = ruleHardness?.exampleBranches?.find(branch => branch.label === '轻量隐喻');
 
-    expect(ruleHardness?.exampleBranches).toEqual([
-      expect.objectContaining({
-        label: '轻量隐喻',
-        answer: expect.stringContaining('轻量隐喻'),
-        flavor: expect.stringContaining('轻松'),
-        tradeoffs: expect.arrayContaining([expect.stringContaining('技术辨识度')]),
-        downstreamImpact: expect.stringContaining('阅读承诺'),
-        recommendedFor: expect.arrayContaining([expect.stringContaining('轻松冒险')])
-      }),
+    expect(ruleHardness?.choiceImpact).toBe('high');
+    expect(metaphorBranch).toEqual(expect.objectContaining({
+      label: '轻量隐喻',
+      answer: expect.stringContaining('轻量隐喻'),
+      flavor: expect.stringContaining('轻松'),
+      tradeoffs: expect.arrayContaining([expect.stringContaining('技术辨识度')]),
+      downstreamImpact: expect.stringContaining('阅读承诺'),
+      recommendedFor: expect.arrayContaining([expect.stringContaining('轻松冒险')])
+    }));
+    expect(metaphorBranch?.interestingChoice?.appeal).toContain('轻松');
+    expect(metaphorBranch?.interestingChoice?.cost).toContain('技术辨识度');
+    expect(metaphorBranch?.interestingChoice?.relationshipImpact).toContain('伙伴');
+    expect(metaphorBranch?.interestingChoice?.worldImpact).toContain('能力边界');
+    expect(metaphorBranch?.interestingChoice?.futureHook).toContain('失败代价');
+    expect(metaphorBranch?.interestingChoice?.confirmationBoundary).toContain('候选');
+    expect(ruleHardness?.exampleBranches).toEqual(expect.arrayContaining([
       expect.objectContaining({
         label: '中度规则',
         downstreamImpact: expect.stringContaining('能力边界')
@@ -43,7 +51,7 @@ describe('selectClarificationQuestions', () => {
         label: '硬规则',
         tradeoffs: expect.arrayContaining([expect.stringContaining('解释负担')])
       })
-    ]);
+    ]));
   });
 
   it('loads built-in example branch packs', async () => {
