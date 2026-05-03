@@ -6,7 +6,11 @@ Active。本文是 StorySpec 当前唯一的活跃待办入口。详细规则见
 
 ## 当前待办
 
-暂无活跃待办。已完成路线见 [todo-archive.md](todo-archive.md)；新增长期路线时，先按 [todo-governance.md](todo-governance.md) 建立专题 roadmap 并在本文登记。
+| 路线 | 状态 | 优先级 | 当前下一步 |
+| --- | --- | --- | --- |
+| [故事共创访谈体验增强](story-co-creation-interview-roadmap.md) | Planned | P0 | 从 F0 共创体验基线与回归样例开始，固化“少量输入不应过早生成完整 creative-plan”的真实使用场景 |
+
+已完成路线见 [todo-archive.md](todo-archive.md)；新增长期路线时，先按 [todo-governance.md](todo-governance.md) 建立专题 roadmap 并在本文登记。
 
 ## 暂不作为活跃待办
 
