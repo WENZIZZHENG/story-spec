@@ -102,6 +102,10 @@ describe('creative report', () => {
       })
     ]);
     expect(result.nextActions).toContain('storyspec review --panel continuity');
+    expect(result.storySkeleton.created).toEqual(expect.arrayContaining([
+      expect.stringContaining('阅读承诺')
+    ]));
+    expect(result.storySkeleton.created.join('\n')).not.toContain('旧文明运行时重启');
   });
 
   it('renders a core element panel for co-creating programming-casting', async () => {
@@ -241,5 +245,26 @@ describe('creative report', () => {
     expect(rendered).toContain('核心伙伴：缺失');
     expect(rendered).toContain('第一舞台：缺失');
     expect(rendered).toContain('势力与冲突：缺失');
+    expect(result.storySkeleton.summary).toContain('晏无');
+    expect(result.storySkeleton.summary).toContain('编程施法');
+    expect(result.storySkeleton.summary).toContain('第三次寂静');
+    expect(result.funPrompts).toEqual(expect.arrayContaining([
+      expect.objectContaining({
+        label: '核心伙伴',
+        prompt: expect.stringContaining('伙伴会怎样挑战主角'),
+        command: 'storyspec interview 编程施法'
+      }),
+      expect.objectContaining({
+        label: '第一舞台',
+        prompt: expect.stringContaining('压迫或诱惑')
+      }),
+      expect.objectContaining({
+        label: '势力与冲突',
+        prompt: expect.stringContaining('第一卷')
+      })
+    ]));
+    expect(result.nextActions).toContain('先确认核心伙伴：运行 storyspec interview 编程施法，或直接回答“伙伴会怎样挑战主角？”');
+    expect(rendered).toContain('你已经创建的小说骨架');
+    expect(rendered).toContain('仍可探索的乐趣点');
   });
 });

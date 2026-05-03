@@ -39,6 +39,18 @@ export interface CreativeReportQuestion {
   question: string;
 }
 
+export interface CreativeReportStorySkeleton {
+  summary: string;
+  created: string[];
+  pendingSoul: string[];
+}
+
+export interface CreativeReportFunPrompt {
+  label: string;
+  prompt: string;
+  command: string;
+}
+
 export interface CreativeReportResult {
   projectRoot: string;
   story: string;
@@ -48,6 +60,8 @@ export interface CreativeReportResult {
   pendingQuestions: CreativeReportQuestion[];
   aiSuggestions: CreativeReportAnswer[];
   coreElements: StoryCoreElementAssessment[];
+  storySkeleton: CreativeReportStorySkeleton;
+  funPrompts: CreativeReportFunPrompt[];
   driftIssues: CreativeIntentDriftIssue[];
   cannotFinalize: string[];
   nextActions: string[];
@@ -96,6 +110,10 @@ const buildNextActions = (
     actions.push(`storyspec interview ${result.story}`);
   }
 
+  actions.push(...result.funPrompts.slice(0, 2).map(item =>
+    `先确认${item.label}：运行 ${item.command}，或直接回答“${item.prompt}”`
+  ));
+
   if (result.driftIssues.length > 0) {
     actions.push('storyspec review --panel continuity');
   }
@@ -104,6 +122,91 @@ const buildNextActions = (
   actions.push('storyspec validate');
 
   return [...new Set(actions)].slice(0, 4);
+};
+
+const skeletonLabelByElementId = (id: StoryCoreElementAssessment['id']): string => {
+  switch (id) {
+    case 'protagonist':
+      return '主角/价值观';
+    case 'partner':
+      return '核心伙伴';
+    case 'stage':
+      return '世界问题';
+    case 'power':
+      return '能力风味';
+    case 'factionConflict':
+      return '势力冲突';
+    case 'longThreat':
+      return '长线威胁';
+    case 'genrePromise':
+      return '阅读承诺';
+    case 'growthRoute':
+      return '成功路线';
+    case 'voice':
+      return '作品声音';
+  }
+};
+
+const buildStorySkeleton = (
+  record: ClarificationRecord | undefined,
+  coreElements: StoryCoreElementAssessment[],
+  confirmed: CreativeReportAnswer[]
+): CreativeReportStorySkeleton => {
+  const created = coreElements
+    .filter(element => element.status === 'confirmed' || element.status === 'partial')
+    .map(element => `${skeletonLabelByElementId(element.id)}：${element.summary}`);
+  const pendingSoul = coreElements
+    .filter(element => element.status === 'missing' || element.status === 'partial' || element.status === 'deferred')
+    .slice(0, 5)
+    .map(element => `${element.label}：${element.nextPrompt ?? '仍待共创。'}`);
+  const confirmedText = confirmed.map(item => item.answer).join('；');
+  const summaryParts = [
+    record?.premise.trim(),
+    ...coreElements
+      .filter(element => element.status === 'confirmed' || element.status === 'partial')
+      .map(element => element.summary),
+    confirmedText
+  ]
+    .filter((item): item is string => Boolean(item && item.trim()))
+    .join('；');
+
+  return {
+    summary: summaryParts || '这部小说的灵魂仍待共创；目前只有项目框架或零散线索。',
+    created: created.length > 0 ? created : ['项目框架已建立，但小说灵魂仍待共创。'],
+    pendingSoul
+  };
+};
+
+const buildFunPrompts = (
+  story: string,
+  coreElements: StoryCoreElementAssessment[]
+): CreativeReportFunPrompt[] => {
+  const command = `storyspec interview ${story}`;
+  const promptsById: Partial<Record<StoryCoreElementAssessment['id'], string>> = {
+    partner: '伙伴会怎样挑战主角？',
+    stage: '第一舞台会怎样压迫或诱惑主角？',
+    power: '能力限制会制造什么爽点？',
+    longThreat: '第三次寂静第一卷只露出哪一角？',
+    growthRoute: '主角每一步成功要付出什么代价？',
+    voice: '这本书应避免变成哪种俗套作品？',
+    factionConflict: '第一卷的势力冲突为什么合理？'
+  };
+
+  return coreElements
+    .filter(element => element.status !== 'confirmed')
+    .flatMap(element => {
+      const prompt = promptsById[element.id];
+      if (!prompt) {
+        return [];
+      }
+
+      return [{
+        label: element.label,
+        prompt,
+        command
+      }];
+    })
+    .slice(0, 6);
 };
 
 export const createCreativeReport = async (
@@ -157,6 +260,8 @@ export const createCreativeReport = async (
       answers: record.answers
     })
     : [];
+  const storySkeleton = buildStorySkeleton(record, coreElements, confirmed);
+  const funPrompts = buildFunPrompts(story.name, coreElements);
   const base = {
     projectRoot: input.projectRoot,
     story: story.name,
@@ -166,6 +271,8 @@ export const createCreativeReport = async (
     pendingQuestions,
     aiSuggestions,
     coreElements,
+    storySkeleton,
+    funPrompts,
     driftIssues: storyDriftIssues,
     cannotFinalize: summary.cannotFinalize
   };
@@ -197,6 +304,15 @@ export const renderCreativeReport = (result: CreativeReportResult): string => [
   ...(result.aiSuggestions.length > 0
     ? result.aiSuggestions.map(item => `- ${item.questionId}：${item.answer}`)
     : ['- 暂无。']),
+  '',
+  '你已经创建的小说骨架：',
+  `- 摘要：${result.storySkeleton.summary}`,
+  ...result.storySkeleton.created.map(item => `- ${item}`),
+  '',
+  '仍可探索的乐趣点：',
+  ...(result.funPrompts.length > 0
+    ? result.funPrompts.map(item => `- ${item.label}：${item.prompt}（${item.command}）`)
+    : ['- 暂无明显乐趣缺口；可以进入预览或审稿。']),
   '',
   '核心要素面板：',
   ...(result.coreElements.length > 0
