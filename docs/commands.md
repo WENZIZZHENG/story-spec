@@ -98,8 +98,11 @@ storyspec next
 | --- | --- |
 | `storyspec next [story]` | 按成熟度和灵感文本推荐主角、伙伴、舞台、能力、势力、冲突等入口卡 |
 | `storyspec interview [story] --entry power` | 从指定入口卡启动一轮访谈；`--entry` 与 `--focus` 等价 |
+| `storyspec interview [story] --entry faction` | 围绕资源控制、合法性来源、获利者、受损者、第一碰撞场景和关系钩子设计势力 |
 
 六大核心入口卡会展示开场问题、有趣选择、候选产物、成熟度影响、正典边界和下一步推荐。它们不是强制流程，作者可以从任意入口开始，也可以跳过或改写候选。
+
+势力入口不是让作者填政治百科，而是把“学院/贵族/教会/工会为什么能挡住主角”落到行动压力。候选权力结构默认只留在澄清记录里；确认后才适合进入 World Bible、specification 或 conflict plan。
 
 ## 终端维护命令
 

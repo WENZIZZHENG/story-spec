@@ -355,6 +355,64 @@ describe('creative report', () => {
     ]));
   });
 
+  it('distinguishes a faction name from a usable power structure', async () => {
+    const projectRoot = path.join(os.tmpdir(), 'memory-novel-creative-report-faction-structure');
+    const fileSystem = new MemoryFileSystem(projectRoot);
+    const storyPath = path.join(projectRoot, 'stories', 'faction-demo');
+
+    await fileSystem.writeFile(path.join(storyPath, 'idea.md'), '# faction demo');
+    await fileSystem.writeJson(path.join(storyPath, 'clarifications.json'), {
+      schemaVersion: '1.0',
+      story: 'faction-demo',
+      premise: '异界穿越、学院势力。',
+      createdAt: '2026-05-03T00:00:00.000Z',
+      updatedAt: '2026-05-03T00:00:00.000Z',
+      questions: [
+        {
+          id: 'core.faction-conflict',
+          stage: 'specify',
+          topic: 'faction',
+          question: '第一卷的势力冲突是什么？',
+          whyItMatters: '需要权力结构。',
+          type: 'textarea',
+          required: true,
+          options: [],
+          exampleAnswers: [],
+          dependsOn: []
+        }
+      ],
+      answers: [
+        {
+          questionId: 'core.faction-conflict',
+          answer: '反派是皇家魔法学院。',
+          source: 'user-explicit',
+          confidence: 1,
+          confirmed: true,
+          createdAt: '2026-05-03T00:00:00.000Z',
+          updatedAt: '2026-05-03T00:00:00.000Z'
+        }
+      ]
+    }, { spaces: 2 });
+
+    const result = await createCreativeReport({
+      projectRoot,
+      fileSystem,
+      story: 'faction-demo'
+    });
+    const faction = result.coreElements.find(element => element.id === 'factionConflict');
+    const rendered = renderCreativeReport(result);
+
+    expect(faction).toEqual(expect.objectContaining({
+      status: 'partial',
+      qualityNotes: expect.arrayContaining([
+        expect.stringContaining('只有势力或反派名称')
+      ])
+    }));
+    expect(rendered).toContain('只有势力或反派名称');
+    expect(rendered).toContain('资源控制');
+    expect(rendered).toContain('合法性来源');
+  });
+
   it('shows active what-if branches as creative directions rather than hidden files', async () => {
     const projectRoot = path.join(os.tmpdir(), 'memory-novel-creative-report-branches');
     const fileSystem = new MemoryFileSystem(projectRoot);

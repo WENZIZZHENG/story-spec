@@ -322,7 +322,7 @@
     },
     {
       "path": "auggie/.specify/templates/clarification/core.yaml",
-      "sha256": "de093d3782d102c79a255ff84433b47a77523fcab4c17f45fdb391a88419d25d"
+      "sha256": "9b6bee56428f0990d2368e40a5b28e5ffbd7ae95ea5f7f86c738ac3cfd2626d0"
     },
     {
       "path": "auggie/.specify/templates/clarification/cozy-adventure.yaml",
@@ -909,7 +909,7 @@
     },
     {
       "path": "claude/.specify/templates/clarification/core.yaml",
-      "sha256": "de093d3782d102c79a255ff84433b47a77523fcab4c17f45fdb391a88419d25d"
+      "sha256": "9b6bee56428f0990d2368e40a5b28e5ffbd7ae95ea5f7f86c738ac3cfd2626d0"
     },
     {
       "path": "claude/.specify/templates/clarification/cozy-adventure.yaml",
@@ -1496,7 +1496,7 @@
     },
     {
       "path": "codebuddy/.specify/templates/clarification/core.yaml",
-      "sha256": "de093d3782d102c79a255ff84433b47a77523fcab4c17f45fdb391a88419d25d"
+      "sha256": "9b6bee56428f0990d2368e40a5b28e5ffbd7ae95ea5f7f86c738ac3cfd2626d0"
     },
     {
       "path": "codebuddy/.specify/templates/clarification/cozy-adventure.yaml",
@@ -2083,7 +2083,7 @@
     },
     {
       "path": "codex/.specify/templates/clarification/core.yaml",
-      "sha256": "de093d3782d102c79a255ff84433b47a77523fcab4c17f45fdb391a88419d25d"
+      "sha256": "9b6bee56428f0990d2368e40a5b28e5ffbd7ae95ea5f7f86c738ac3cfd2626d0"
     },
     {
       "path": "codex/.specify/templates/clarification/cozy-adventure.yaml",
@@ -2670,7 +2670,7 @@
     },
     {
       "path": "continue-check/.specify/templates/clarification/core.yaml",
-      "sha256": "de093d3782d102c79a255ff84433b47a77523fcab4c17f45fdb391a88419d25d"
+      "sha256": "9b6bee56428f0990d2368e40a5b28e5ffbd7ae95ea5f7f86c738ac3cfd2626d0"
     },
     {
       "path": "continue-check/.specify/templates/clarification/cozy-adventure.yaml",
@@ -3257,7 +3257,7 @@
     },
     {
       "path": "copilot/.specify/templates/clarification/core.yaml",
-      "sha256": "de093d3782d102c79a255ff84433b47a77523fcab4c17f45fdb391a88419d25d"
+      "sha256": "9b6bee56428f0990d2368e40a5b28e5ffbd7ae95ea5f7f86c738ac3cfd2626d0"
     },
     {
       "path": "copilot/.specify/templates/clarification/cozy-adventure.yaml",
@@ -3844,7 +3844,7 @@
     },
     {
       "path": "cursor/.specify/templates/clarification/core.yaml",
-      "sha256": "de093d3782d102c79a255ff84433b47a77523fcab4c17f45fdb391a88419d25d"
+      "sha256": "9b6bee56428f0990d2368e40a5b28e5ffbd7ae95ea5f7f86c738ac3cfd2626d0"
     },
     {
       "path": "cursor/.specify/templates/clarification/cozy-adventure.yaml",
@@ -4431,7 +4431,7 @@
     },
     {
       "path": "gemini/.specify/templates/clarification/core.yaml",
-      "sha256": "de093d3782d102c79a255ff84433b47a77523fcab4c17f45fdb391a88419d25d"
+      "sha256": "9b6bee56428f0990d2368e40a5b28e5ffbd7ae95ea5f7f86c738ac3cfd2626d0"
     },
     {
       "path": "gemini/.specify/templates/clarification/cozy-adventure.yaml",
@@ -5018,7 +5018,7 @@
     },
     {
       "path": "generic/.specify/templates/clarification/core.yaml",
-      "sha256": "de093d3782d102c79a255ff84433b47a77523fcab4c17f45fdb391a88419d25d"
+      "sha256": "9b6bee56428f0990d2368e40a5b28e5ffbd7ae95ea5f7f86c738ac3cfd2626d0"
     },
     {
       "path": "generic/.specify/templates/clarification/cozy-adventure.yaml",
@@ -5605,7 +5605,7 @@
     },
     {
       "path": "kilocode/.specify/templates/clarification/core.yaml",
-      "sha256": "de093d3782d102c79a255ff84433b47a77523fcab4c17f45fdb391a88419d25d"
+      "sha256": "9b6bee56428f0990d2368e40a5b28e5ffbd7ae95ea5f7f86c738ac3cfd2626d0"
     },
     {
       "path": "kilocode/.specify/templates/clarification/cozy-adventure.yaml",
@@ -6192,7 +6192,7 @@
     },
     {
       "path": "opencode/.specify/templates/clarification/core.yaml",
-      "sha256": "de093d3782d102c79a255ff84433b47a77523fcab4c17f45fdb391a88419d25d"
+      "sha256": "9b6bee56428f0990d2368e40a5b28e5ffbd7ae95ea5f7f86c738ac3cfd2626d0"
     },
     {
       "path": "opencode/.specify/templates/clarification/cozy-adventure.yaml",
@@ -6779,7 +6779,7 @@
     },
     {
       "path": "q/.specify/templates/clarification/core.yaml",
-      "sha256": "de093d3782d102c79a255ff84433b47a77523fcab4c17f45fdb391a88419d25d"
+      "sha256": "9b6bee56428f0990d2368e40a5b28e5ffbd7ae95ea5f7f86c738ac3cfd2626d0"
     },
     {
       "path": "q/.specify/templates/clarification/cozy-adventure.yaml",
@@ -7366,7 +7366,7 @@
     },
     {
       "path": "qwen/.specify/templates/clarification/core.yaml",
-      "sha256": "de093d3782d102c79a255ff84433b47a77523fcab4c17f45fdb391a88419d25d"
+      "sha256": "9b6bee56428f0990d2368e40a5b28e5ffbd7ae95ea5f7f86c738ac3cfd2626d0"
     },
     {
       "path": "qwen/.specify/templates/clarification/cozy-adventure.yaml",
@@ -7953,7 +7953,7 @@
     },
     {
       "path": "roocode/.specify/templates/clarification/core.yaml",
-      "sha256": "de093d3782d102c79a255ff84433b47a77523fcab4c17f45fdb391a88419d25d"
+      "sha256": "9b6bee56428f0990d2368e40a5b28e5ffbd7ae95ea5f7f86c738ac3cfd2626d0"
     },
     {
       "path": "roocode/.specify/templates/clarification/cozy-adventure.yaml",
@@ -8385,7 +8385,7 @@
     },
     {
       "path": "windsurf/.specify/templates/clarification/core.yaml",
-      "sha256": "de093d3782d102c79a255ff84433b47a77523fcab4c17f45fdb391a88419d25d"
+      "sha256": "9b6bee56428f0990d2368e40a5b28e5ffbd7ae95ea5f7f86c738ac3cfd2626d0"
     },
     {
       "path": "windsurf/.specify/templates/clarification/cozy-adventure.yaml",

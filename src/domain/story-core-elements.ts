@@ -181,6 +181,29 @@ const PARTNER_DEPTH_KEYWORDS = [
   '代价',
   '修复'
 ];
+const FACTION_STRUCTURE_KEYWORDS = [
+  '资源',
+  '合法性',
+  '知识',
+  '垄断',
+  '许可',
+  '考试',
+  '获利',
+  '受损',
+  '代价',
+  '普通人',
+  '公开叙事',
+  '内部裂缝',
+  '第一碰撞',
+  '越权',
+  '制度',
+  '规则',
+  '资格',
+  '审查',
+  '背锅',
+  '维稳',
+  '利益'
+];
 
 const statusText: Record<StoryCoreElementStatus, string> = {
   missing: '缺失',
@@ -283,6 +306,15 @@ const buildQualityNotes = (
     const text = normalize(signals.confirmedTexts.join(' '));
     if (!includesAny(text, PARTNER_DEPTH_KEYWORDS)) {
       return ['核心伙伴还偏功能位，缺少独立欲望、立场冲突或能挑战主角的张力。'];
+    }
+
+    return [];
+  }
+
+  if (definition.id === 'factionConflict' && signals.confirmedTexts.length > 0) {
+    const text = normalize(signals.confirmedTexts.join(' '));
+    if (!includesAny(text, FACTION_STRUCTURE_KEYWORDS)) {
+      return ['势力与冲突只有势力或反派名称，还缺少资源控制、合法性来源、获利者/受损者和第一碰撞场景。'];
     }
 
     return [];

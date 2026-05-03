@@ -155,6 +155,56 @@ describe('clarification domain schema', () => {
     ]));
   });
 
+  it('warns when a high-impact faction branch lacks power-structure fields', () => {
+    const result = parseClarificationQuestionSet(`questions:
+  - id: core.faction-conflict
+    stage: specify
+    topic: faction
+    question: 第一卷最先撞上的势力或冲突是什么？
+    whyItMatters: 势力需要有利益逻辑。
+    type: textarea
+    required: false
+    choiceImpact: high
+    exampleAnswers:
+      - 学院垄断咒文许可。
+      - 地方贵族压下魔法事故。
+    exampleBranches:
+      - label: 学院许可
+        answer: 学院垄断咒文许可。
+        flavor: 知识垄断。
+        tradeoffs:
+          - 需要写出学院合理性。
+        downstreamImpact: 成功路线围绕突破许可推进。
+        recommendedFor:
+          - 学院工坊
+        interestingChoice:
+          appeal: 知识垄断和规则学习同台出现。
+          cost: 容易偏制度讨论。
+          relationshipImpact: 伙伴可能来自学院内部。
+          worldImpact: 许可制度会影响普通施法者。
+          futureHook: 下一轮确认第一次越权救人。
+          confirmationBoundary: 候选，确认后才进入 World Bible。
+        powerStructure:
+          name: 艾尔学院
+          resourceControl: 咒文许可和考试资格
+`, 'faction.yaml');
+
+    expect(result.questions[0].exampleBranches?.[0].powerStructure).toEqual(expect.objectContaining({
+      name: '艾尔学院',
+      resourceControl: '咒文许可和考试资格'
+    }));
+    expect(result.issues).toEqual(expect.arrayContaining([
+      expect.objectContaining({
+        code: 'INCOMPLETE_FACTION_POWER_STRUCTURE',
+        path: 'faction.yaml#questions[0].exampleBranches[0].powerStructure.legitimacySource'
+      }),
+      expect.objectContaining({
+        code: 'INCOMPLETE_FACTION_POWER_STRUCTURE',
+        path: 'faction.yaml#questions[0].exampleBranches[0].powerStructure.firstCollisionScene'
+      })
+    ]));
+  });
+
   it('reports invalid question types and invalid confidence values', () => {
     const questionResult = parseClarificationQuestionSet(`questions:
   - id: bad.question

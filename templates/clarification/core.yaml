@@ -193,6 +193,7 @@ questions:
     whyItMatters: 冲突要有利益逻辑，才能让世界观像真实社会，而不是只有坏人阻拦。
     type: textarea
     required: false
+    choiceImpact: high
     exampleAnswers:
       - 学院垄断咒文许可，担心晏无的调试方法打破资格体系。
       - 地方贵族把魔法工具故障压下去，因为公开会影响税收和粮价。
@@ -208,6 +209,33 @@ questions:
         recommendedFor:
           - 学院工坊
           - 编程施法规则线
+        interestingChoice:
+          appeal: 知识垄断和规则学习同台出现，编程施法会立刻撞上制度边界。
+          cost: 容易偏制度讨论，需要用事故救援和小队行动保持冒险动感。
+          relationshipImpact: 伙伴若来自学院内部，会同时带来本地知识和违纪风险。
+          worldImpact: 许可、证书和专利会把魔法规则变成日常压迫，而不只是背景设定。
+          futureHook: 下一轮最该确认晏无第一次越权救人时，谁获利、谁背锅。
+          confirmationBoundary: 候选势力结构，确认后才写入 World Bible、specification 或 conflict plan。
+        powerStructure:
+          name: 艾尔学院许可体系
+          resourceControl: 咒文许可、考试资格、导师署名和专利归属。
+          legitimacySource: 学院声称只有认证施法者才能避免旧灾难重演。
+          beneficiaries:
+            - 学院导师
+            - 持证贵族学生
+            - 依赖证书收费的考试官
+          victims:
+            - 工坊学徒
+            - 无证民间术士
+            - 需要低阶法器维修的普通人
+          publicNarrative: 资格体系保护普通人免受危险施法伤害。
+          internalCracks:
+            - 年轻讲师知道许可制度正在压制修复效率
+            - 边境分院缺资源，被迫默许灰色维修
+          firstCollisionScene: 晏无越权修复民生法器后，被要求提交许可和导师担保。
+          relationshipHooks:
+            - 核心伙伴来自学院内部，担心主角让自己背上违纪风险
+            - 工坊学徒把主角当救命人，却害怕公开作证
       - label: 地方贵族
         answer: 地方贵族压下魔法工具故障，因为公开异常会引发粮价、税收和治安连锁反应。
         flavor: 世界压力更现实，主角每次修复都会碰到利益代价。
@@ -218,6 +246,33 @@ questions:
         recommendedFor:
           - 边境小城
           - 真实世界压力
+        interestingChoice:
+          appeal: 把文明危机压进粮价、税收和治安，世界压力会更贴近日常。
+          cost: 贵族不能只写成坏人，需要给出维稳逻辑和短期合理性。
+          relationshipImpact: 伙伴可能夹在家族责任、地方利益和对主角的信任之间。
+          worldImpact: 普通人的生活成本会成为第三次寂静最早的可见阴影。
+          futureHook: 下一轮最该确认主角第一次公开异常后，谁会立刻受损。
+          confirmationBoundary: 候选势力结构，确认后才写入 World Bible、specification 或 conflict plan。
+        powerStructure:
+          name: 边境贵族许可网
+          resourceControl: 土地税、粮仓、维修材料配给和治安队执法权。
+          legitimacySource: 贵族声称压下异常是为了避免恐慌、粮价暴涨和边境骚乱。
+          beneficiaries:
+            - 地方贵族
+            - 粮商
+            - 依赖治安预算的官吏
+          victims:
+            - 农户
+            - 工坊维修师
+            - 被迫继续使用故障法器的普通家庭
+          publicNarrative: 稳定比真相更重要，异常公开会伤害所有人。
+          internalCracks:
+            - 贵族旁支想公开问题换取改革筹码
+            - 治安队底层知道事故数量被篡改
+          firstCollisionScene: 晏无修好供水法器后发现事故记录被改写，贵族要求他签署保密文书。
+          relationshipHooks:
+            - 伙伴若是贵族旁支，会同时打开资源门和制造信任障碍
+            - 受害工坊希望主角公开真相，却承担不起粮价上涨
       - label: 禁忌守护者
         answer: 教会或守夜组织把异常日志称为禁忌污染，他们可能既在遮蔽真相，也在防止旧灾难重演。
         flavor: 道德灰度更高，文明威胁更有历史重量。
@@ -228,6 +283,33 @@ questions:
         recommendedFor:
           - 文明级威胁
           - 想写灰度势力
+        interestingChoice:
+          appeal: 守护者不是纯反派，禁忌背后可能真的有旧灾难经验。
+          cost: 悬疑和历史重量会增强，需要控制信息揭示，避免开局变沉。
+          relationshipImpact: 伙伴可能相信禁令，也可能因为亲历事故而动摇。
+          worldImpact: 禁忌制度能把第三次寂静和远古神族、高等精灵遗迹连起来。
+          futureHook: 下一轮最该确认第一条禁忌到底保护了谁，又牺牲了谁。
+          confirmationBoundary: 候选势力结构，确认后才写入 World Bible、specification 或 conflict plan。
+        powerStructure:
+          name: 禁忌守夜会
+          resourceControl: 禁书目录、遗迹进入许可、异常日志封存权和净化仪式解释权。
+          legitimacySource: 守夜会声称自己继承了第二次寂静后的防灾协议。
+          beneficiaries:
+            - 守夜会高层
+            - 依赖禁忌解释权的教会分支
+            - 不愿公开旧灾难责任的遗迹管理者
+          victims:
+            - 研究异常的民间术士
+            - 被误判为污染者的病患
+            - 需要真相自救的边境社区
+          publicNarrative: 禁忌不是遮丑，而是阻止普通人被旧文明污染吞没。
+          internalCracks:
+            - 年轻守夜人怀疑封存日志正在延误救援
+            - 老守夜人知道部分禁令来自政治妥协
+          firstCollisionScene: 晏无用调试日志定位异常源，却被守夜会要求交出全部运行记录。
+          relationshipHooks:
+            - 伙伴可能曾被守夜会救过，因此不愿立刻相信主角
+            - 被压制的术士网络愿意提供线索，但会要求主角共享禁忌知识
   - id: core.tone
     stage: specify
     topic: tone

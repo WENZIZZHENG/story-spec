@@ -119,6 +119,24 @@ const renderInterestingChoice = (branch: ClarificationExampleBranch): string[] =
   ];
 };
 
+const renderPowerStructure = (branch: ClarificationExampleBranch): string[] => {
+  if (!branch.powerStructure) {
+    return [];
+  }
+
+  return [
+    `- 权力结构：${branch.powerStructure.name}`,
+    `- 资源控制：${branch.powerStructure.resourceControl}`,
+    `- 合法性来源：${branch.powerStructure.legitimacySource}`,
+    `- 获利者：${branch.powerStructure.beneficiaries.join('；')}`,
+    `- 受损者：${branch.powerStructure.victims.join('；')}`,
+    `- 公开叙事：${branch.powerStructure.publicNarrative}`,
+    `- 内部裂缝：${branch.powerStructure.internalCracks.join('；')}`,
+    `- 第一碰撞场景：${branch.powerStructure.firstCollisionScene}`,
+    `- 关系钩子：${branch.powerStructure.relationshipHooks.join('；')}`
+  ];
+};
+
 const renderClarificationExampleBranches = (branches: ClarificationExampleBranch[]): string[] => [
   '## 示例分叉',
   '',
@@ -131,6 +149,7 @@ const renderClarificationExampleBranches = (branches: ClarificationExampleBranch
       `- 取舍：${branch.tradeoffs.length > 0 ? branch.tradeoffs.join('；') : '无'}`,
       `- 后续影响：${branch.downstreamImpact}`,
       ...renderInterestingChoice(branch),
+      ...renderPowerStructure(branch),
       `- 适合：${branch.recommendedFor.length > 0 ? branch.recommendedFor.join('；') : '未限定'}`,
       '- confirmed: false',
       ''

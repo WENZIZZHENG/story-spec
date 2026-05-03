@@ -30,6 +30,7 @@ export interface ClarificationExampleBranch {
   downstreamImpact: string;
   recommendedFor: string[];
   interestingChoice?: InterestingChoice;
+  powerStructure?: FactionPowerStructure;
 }
 
 export interface InterestingChoice {
@@ -39,6 +40,18 @@ export interface InterestingChoice {
   worldImpact: string;
   futureHook: string;
   confirmationBoundary: string;
+}
+
+export interface FactionPowerStructure {
+  name: string;
+  resourceControl: string;
+  legitimacySource: string;
+  beneficiaries: string[];
+  victims: string[];
+  publicNarrative: string;
+  internalCracks: string[];
+  firstCollisionScene: string;
+  relationshipHooks: string[];
 }
 
 export interface ClarificationDependency {

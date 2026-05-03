@@ -254,4 +254,63 @@ describe('manage clarifications', () => {
     expect(markdown).toContain('后续钩子：下一轮确认失败代价。');
     expect(markdown).toContain('确认边界：候选，确认后才写入规格。');
   });
+
+  it('renders faction power structures in clarification markdown', () => {
+    const markdown = renderClarificationMarkdown({
+      schemaVersion: '1.0',
+      story: 'demo',
+      premise: '编程施法',
+      createdAt: '2026-05-03T12:00:00.000Z',
+      updatedAt: '2026-05-03T12:00:00.000Z',
+      questions: [{
+        id: 'core.faction-conflict',
+        stage: 'specify',
+        topic: 'faction',
+        question: '第一卷最先撞上的势力或冲突是什么？',
+        whyItMatters: '势力需要有利益逻辑。',
+        type: 'textarea',
+        required: false,
+        choiceImpact: 'high',
+        options: [],
+        exampleAnswers: ['学院垄断许可。'],
+        exampleBranches: [{
+          label: '学院许可',
+          answer: '学院垄断咒文许可。',
+          flavor: '知识垄断和规则学习同台出现。',
+          tradeoffs: ['需要写出学院合理性。'],
+          downstreamImpact: '成功路线会围绕突破许可推进。',
+          recommendedFor: ['学院工坊'],
+          interestingChoice: {
+            appeal: '制度阻力清楚。',
+            cost: '容易偏制度讨论。',
+            relationshipImpact: '伙伴可能来自学院内部。',
+            worldImpact: '许可制度影响普通施法者。',
+            futureHook: '下一轮确认第一次越权救人。',
+            confirmationBoundary: '候选，确认后才进入 World Bible。'
+          },
+          powerStructure: {
+            name: '艾尔学院',
+            resourceControl: '咒文许可、考试资格和导师署名。',
+            legitimacySource: '维护施法安全和旧灾难禁令。',
+            beneficiaries: ['学院导师', '持证贵族'],
+            victims: ['工坊学徒', '无证民间术士'],
+            publicNarrative: '只有认证者才能保护普通人。',
+            internalCracks: ['年轻讲师同情工坊', '边境分院缺资源'],
+            firstCollisionScene: '晏无越权修复民生法器，被要求提交许可。',
+            relationshipHooks: ['伙伴来自学院内部，担心他害自己背违纪风险。']
+          }
+        }],
+        dependsOn: []
+      }],
+      answers: []
+    });
+
+    expect(markdown).toContain('权力结构：艾尔学院');
+    expect(markdown).toContain('资源控制：咒文许可、考试资格和导师署名。');
+    expect(markdown).toContain('合法性来源：维护施法安全和旧灾难禁令。');
+    expect(markdown).toContain('获利者：学院导师；持证贵族');
+    expect(markdown).toContain('受损者：工坊学徒；无证民间术士');
+    expect(markdown).toContain('第一碰撞场景：晏无越权修复民生法器，被要求提交许可。');
+    expect(markdown).toContain('关系钩子：伙伴来自学院内部，担心他害自己背违纪风险。');
+  });
 });

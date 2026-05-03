@@ -26,6 +26,7 @@ export type ClarificationIssueCode =
   | 'INVALID_CLARIFICATION_OPTION'
   | 'INVALID_CLARIFICATION_EXAMPLE_BRANCH'
   | 'INCOMPLETE_INTERESTING_CHOICE'
+  | 'INCOMPLETE_FACTION_POWER_STRUCTURE'
   | 'INVALID_CLARIFICATION_DEPENDENCY'
   | 'INVALID_CLARIFICATION_ANSWER'
   | 'MISSING_CLARIFICATION_ANSWER_FIELD'
@@ -83,6 +84,21 @@ const INTERESTING_CHOICE_FIELDS = [
   'worldImpact',
   'futureHook',
   'confirmationBoundary'
+] as const;
+
+const FACTION_POWER_STRUCTURE_STRING_FIELDS = [
+  'name',
+  'resourceControl',
+  'legitimacySource',
+  'publicNarrative',
+  'firstCollisionScene'
+] as const;
+
+const FACTION_POWER_STRUCTURE_ARRAY_FIELDS = [
+  'beneficiaries',
+  'victims',
+  'internalCracks',
+  'relationshipHooks'
 ] as const;
 
 const isRecord = (value: unknown): value is Record<string, unknown> =>
@@ -225,7 +241,8 @@ const parseExampleBranches = (
   value: unknown,
   basePath: string,
   issues: ClarificationIssue[],
-  choiceImpact: ClarificationChoiceImpact
+  choiceImpact: ClarificationChoiceImpact,
+  topic: string
 ): ClarificationExampleBranch[] => {
   if (value === undefined) {
     return [];
@@ -272,6 +289,22 @@ const parseExampleBranches = (
         ? interestingChoiceRecord.confirmationBoundary.trim()
         : ''
     };
+    const powerStructureRecord = isRecord(branch.powerStructure)
+      ? branch.powerStructure
+      : {};
+    const powerStructure = isRecord(branch.powerStructure)
+      ? {
+        name: isNonEmptyString(powerStructureRecord.name) ? powerStructureRecord.name.trim() : '',
+        resourceControl: isNonEmptyString(powerStructureRecord.resourceControl) ? powerStructureRecord.resourceControl.trim() : '',
+        legitimacySource: isNonEmptyString(powerStructureRecord.legitimacySource) ? powerStructureRecord.legitimacySource.trim() : '',
+        beneficiaries: toStringArray(powerStructureRecord.beneficiaries),
+        victims: toStringArray(powerStructureRecord.victims),
+        publicNarrative: isNonEmptyString(powerStructureRecord.publicNarrative) ? powerStructureRecord.publicNarrative.trim() : '',
+        internalCracks: toStringArray(powerStructureRecord.internalCracks),
+        firstCollisionScene: isNonEmptyString(powerStructureRecord.firstCollisionScene) ? powerStructureRecord.firstCollisionScene.trim() : '',
+        relationshipHooks: toStringArray(powerStructureRecord.relationshipHooks)
+      }
+      : undefined;
 
     if (!label || !answer || !flavor || !downstreamImpact) {
       return [];
@@ -295,6 +328,35 @@ const parseExampleBranches = (
           ));
         }
       }
+
+      if (topic === 'faction') {
+        if (!powerStructure) {
+          issues.push(issue(
+            'INCOMPLETE_FACTION_POWER_STRUCTURE',
+            `${branchPath}.powerStructure`,
+            '高影响势力候选需要 powerStructure，说明资源控制、合法性、获利者、受损者和第一碰撞场景'
+          ));
+        } else {
+          for (const field of FACTION_POWER_STRUCTURE_STRING_FIELDS) {
+            if (!powerStructure[field]) {
+              issues.push(issue(
+                'INCOMPLETE_FACTION_POWER_STRUCTURE',
+                `${branchPath}.powerStructure.${field}`,
+                `高影响势力候选缺少 powerStructure.${field}`
+              ));
+            }
+          }
+          for (const field of FACTION_POWER_STRUCTURE_ARRAY_FIELDS) {
+            if (powerStructure[field].length === 0) {
+              issues.push(issue(
+                'INCOMPLETE_FACTION_POWER_STRUCTURE',
+                `${branchPath}.powerStructure.${field}`,
+                `高影响势力候选缺少 powerStructure.${field}`
+              ));
+            }
+          }
+        }
+      }
     }
 
     return [{
@@ -304,7 +366,8 @@ const parseExampleBranches = (
       tradeoffs,
       downstreamImpact,
       recommendedFor,
-      interestingChoice
+      interestingChoice,
+      powerStructure
     }];
   });
 };
@@ -367,7 +430,7 @@ export const parseClarificationQuestionSet = (
       required: candidate.required === true,
       options: parseOptions(candidate.options, basePath, issues),
       exampleAnswers: toStringArray(candidate.exampleAnswers),
-      exampleBranches: parseExampleBranches(candidate.exampleBranches, basePath, issues, choiceImpact),
+      exampleBranches: parseExampleBranches(candidate.exampleBranches, basePath, issues, choiceImpact, topic),
       choiceImpact,
       dependsOn: parseDependsOn(candidate.dependsOn, basePath, issues)
     });

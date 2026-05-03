@@ -154,6 +154,25 @@ describe('selectClarificationQuestions', () => {
       'core.partner',
       'core.faction-conflict'
     ]));
+    const faction = selection.selectedQuestions.find(item => item.question.id === 'core.faction-conflict')?.question;
+    const branches = faction?.exampleBranches ?? [];
+
+    expect(faction?.choiceImpact).toBe('high');
+    expect(branches.length).toBeGreaterThanOrEqual(3);
+    expect(branches.every(branch =>
+      branch.powerStructure
+      && branch.powerStructure.resourceControl.length > 0
+      && branch.powerStructure.legitimacySource.length > 0
+      && branch.powerStructure.beneficiaries.length > 0
+      && branch.powerStructure.victims.length > 0
+      && branch.powerStructure.firstCollisionScene.length > 0
+      && branch.powerStructure.relationshipHooks.length > 0
+    )).toBe(true);
+    expect(branches.map(branch => branch.label)).toEqual(expect.arrayContaining([
+      '学院许可',
+      '地方贵族',
+      '禁忌守护者'
+    ]));
   });
 
   it('can return copyable examples without asking questions', async () => {
