@@ -8,7 +8,7 @@ Active。本文是 StorySpec 当前唯一的活跃待办入口。详细规则见
 
 | 路线 | 状态 | 优先级 | 当前下一步 |
 | --- | --- | --- | --- |
-| [故事共创访谈体验增强](story-co-creation-interview-roadmap.md) | Planned | P0 | 从 F0 共创体验基线与回归样例开始，同时落实 F16/F17/F19/F20 的有趣选择、入口卡、首轮脚本和体验验收 |
+| [故事共创访谈体验增强](story-co-creation-interview-roadmap.md) | Planned | P0 | 从 F0 共创体验基线与回归样例开始，同时落实 F16/F17/F19/F20/F21 的有趣选择、入口卡、首轮脚本、体验验收和低负担创作闭环 |
 
 ### 故事共创访谈子路线
 
@@ -19,7 +19,7 @@ Active。本文是 StorySpec 当前唯一的活跃待办入口。详细规则见
 | [基础门禁路线图](story-co-creation-foundation-roadmap.md) | F0-F6 | 共创基线、成熟度、示例分叉、访谈、plan 门禁、成果报告、文档迁移 |
 | [故事要素路线图](story-co-creation-story-elements-roadmap.md) | F7-F11 | 人物情感、世界压力、Scene Card、节奏配置、作者画像 |
 | [创作工作台路线图](story-co-creation-workbench-roadmap.md) | F12-F15 | 多入口共创、分支管理、创作回声、未决项回流 |
-| [体验验收路线图](story-co-creation-experience-roadmap.md) | F16-F20 | 有趣选择、入口卡、势力入口、首轮共创样例、创作乐趣验收 |
+| [体验验收路线图](story-co-creation-experience-roadmap.md) | F16-F21 | 有趣选择、入口卡、势力入口、首轮共创样例、创作乐趣验收、低负担创作体验 |
 
 已完成路线见 [todo-archive.md](todo-archive.md)；新增长期路线时，先按 [todo-governance.md](todo-governance.md) 建立专题 roadmap 并在本文登记。
 

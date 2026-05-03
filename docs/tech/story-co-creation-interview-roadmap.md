@@ -201,7 +201,7 @@ Planned。本路线用于修复真实使用中暴露出的创作体验问题：S
 | [基础门禁路线图](story-co-creation-foundation-roadmap.md) | F0-F6 | 共创基线、成熟度、示例分叉、访谈、plan 门禁、成果报告、文档迁移 |
 | [故事要素路线图](story-co-creation-story-elements-roadmap.md) | F7-F11 | 人物情感、世界压力、Scene Card、节奏配置、作者画像 |
 | [创作工作台路线图](story-co-creation-workbench-roadmap.md) | F12-F15 | 多入口共创、分支管理、创作回声、未决项回流 |
-| [体验验收路线图](story-co-creation-experience-roadmap.md) | F16-F20 | 有趣选择、入口卡、势力入口、首轮共创样例、创作乐趣验收 |
+| [体验验收路线图](story-co-creation-experience-roadmap.md) | F16-F21 | 有趣选择、入口卡、势力入口、首轮共创样例、创作乐趣验收、低负担创作体验 |
 
 ## 优先级视图
 
@@ -228,6 +228,7 @@ Planned。本路线用于修复真实使用中暴露出的创作体验问题：S
 | P1 | F18 | 势力入口与权力结构共创 | 将势力从冲突中拆出，单独支持资源、合法性、知识垄断和第一碰撞点设计 |
 | P0 | F19 | 首轮共创样例脚本 | 用《编程施法》固化首轮如何问、如何给候选、如何回声、如何推荐下一步 |
 | P0 | F20 | 创作乐趣体验验收 | 把“是否有创作乐趣”转成防回归验收，避免只实现功能而不好玩 |
+| P1 | F21 | 低负担创作模式与最小快乐闭环 | 增加今日创作模式、低负担模式、撤销回滚、交互语气和最小快乐闭环 |
 
 ## 批次详情索引
 
@@ -254,6 +255,7 @@ Planned。本路线用于修复真实使用中暴露出的创作体验问题：S
 | F18 势力入口与权力结构共创 | [体验验收路线图](story-co-creation-experience-roadmap.md#batch-f18势力入口与权力结构共创) |
 | F19 首轮共创样例脚本 | [体验验收路线图](story-co-creation-experience-roadmap.md#batch-f19首轮共创样例脚本) |
 | F20 创作乐趣体验验收 | [体验验收路线图](story-co-creation-experience-roadmap.md#batch-f20创作乐趣体验验收) |
+| F21 低负担创作模式与最小快乐闭环 | [体验验收路线图](story-co-creation-experience-roadmap.md#batch-f21低负担创作模式与最小快乐闭环) |
 
 ## 风险与缓解
 
