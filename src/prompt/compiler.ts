@@ -89,7 +89,7 @@ const escapeTomlString = (value: string): string => value.replace(/\\/g, '\\\\')
 
 const noShellScriptInstruction = '当前 agent 不支持 shell；不要执行 CLI/脚本，改为人工读取相关文件并记录无法自动验证的部分。';
 
-const renderEmptyArgumentOnboarding = (
+const renderInputClarificationOnboarding = (
   description: string | undefined,
   argumentHint: string | undefined,
   argFormat: string
@@ -100,28 +100,29 @@ const renderEmptyArgumentOnboarding = (
   }
 
   return [
-    '## 空参数引导',
+    '## 输入澄清引导',
     '',
     `本命令用途：${description ?? '执行 Novel Writer 命令'}。`,
     '',
-    `如果用户输入为空、只有空白，或仍是未替换的 \`${argFormat}\` 占位符：`,
+    `如果用户输入为空、只有空白、仍是未替换的 \`${argFormat}\` 占位符，或只是题材标签、风格词、偏好组合等不足以安全落盘的方向性描述：`,
     '- 不要立即创建、修改或删除文件。',
     `- 先提示用户补充 \`${normalizedHint}\`。`,
+    '- 先区分“用户已明确”“需要澄清”“AI 可以提出但不能替用户定稿的建议”。',
     '- 提供 2-3 个可直接复制的示例输入，示例要结合本命令用途，而不是只重复参数占位符。',
-    '- 同时提供“让我提问”的选项：用 3-5 个简短问题帮用户补齐信息。',
+    '- 同时提供“让我提问”的选项：用 3-8 个简短问题帮用户补齐关键创作决策。',
     '- 等用户补充有效输入后，再继续执行下面的步骤。',
     '',
     ''
   ].join('\n');
 };
 
-const prependEmptyArgumentOnboarding = (
+const prependInputClarificationOnboarding = (
   content: string,
   description: string | undefined,
   argumentHint: string | undefined,
   argFormat: string
 ): string => {
-  const onboarding = renderEmptyArgumentOnboarding(description, argumentHint, argFormat);
+  const onboarding = renderInputClarificationOnboarding(description, argumentHint, argFormat);
   if (!onboarding) {
     return content;
   }
@@ -203,7 +204,7 @@ const compileTemplateBody = (input: CompileCommandTemplateInput): {
     .replaceAll('{ARGS}', input.argFormat)
     .replaceAll('$ARGUMENTS', input.argFormat)
     .replaceAll('__AGENT__', input.agent));
-  const bodyWithOnboarding = prependEmptyArgumentOnboarding(
+  const bodyWithOnboarding = prependInputClarificationOnboarding(
     body,
     parsed.frontmatter.description,
     parsed.frontmatter.argumentHint,
@@ -243,7 +244,7 @@ const compileSpecBody = (input: CompileCommandSpecInput): {
     .replaceAll('{ARGS}', input.argFormat)
     .replaceAll('$ARGUMENTS', input.argFormat)
     .replaceAll('__AGENT__', input.agent)), input.runShell);
-  const promptBodyWithOnboarding = prependEmptyArgumentOnboarding(
+  const promptBodyWithOnboarding = prependInputClarificationOnboarding(
     promptBody,
     input.spec.description,
     input.spec.arguments?.hint,

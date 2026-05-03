@@ -57,8 +57,10 @@ describe('prompt compiler', () => {
     const result = compile('markdown-none');
 
     expect(result).not.toMatch(/^---/);
-    expect(result).toMatch(/^## 空参数引导/);
+    expect(result).toMatch(/^## 输入澄清引导/);
     expect(result).toContain('先提示用户补充 `[技术偏好]`');
+    expect(result).toContain('只是题材标签、风格词、偏好组合');
+    expect(result).toContain('先区分“用户已明确”“需要澄清”');
     expect(result).toContain('提供 2-3 个可直接复制的示例输入');
     expect(result).toContain('用户输入：$ARGUMENTS');
     expect(result).toContain('Agent: codex');
@@ -83,15 +85,16 @@ describe('prompt compiler', () => {
 
     expect(result).toContain('description = "生成创作计划"');
     expect(result).toContain('prompt = """');
-    expect(result).toContain('## 空参数引导');
+    expect(result).toContain('## 输入澄清引导');
     expect(result).toContain('先提示用户补充 `[技术偏好]`');
+    expect(result).toContain('3-8 个简短问题');
     expect(result).toContain('用户输入：{{args}}');
     expect(result).toContain('Agent: gemini');
     expect(result).toContain('运行 .specify/scripts/powershell/plan-story.ps1');
     expect(result.trimEnd()).toMatch(/"""$/);
   });
 
-  it('adds empty-argument onboarding for CommandSpec prompts', () => {
+  it('adds input clarification onboarding for CommandSpec prompts', () => {
     const result = compileCommandSpec({
       spec: commandSpec,
       promptBody: '用户输入：$ARGUMENTS\n开始写作。\n',
@@ -101,14 +104,16 @@ describe('prompt compiler', () => {
       outputFormat: 'markdown-none'
     });
 
-    expect(result).toMatch(/^## 空参数引导/);
+    expect(result).toMatch(/^## 输入澄清引导/);
     expect(result).toContain('本命令用途：基于任务清单执行章节写作。');
     expect(result).toContain('先提示用户补充 `[章节编号或任务ID]`');
+    expect(result).toContain('AI 可以提出但不能替用户定稿的建议');
     expect(result).toContain('用户输入：$ARGUMENTS');
   });
 
   it('compiles a real repository command template', async () => {
     const planTemplate = await readFile(path.join(repoRoot, 'templates', 'commands', 'plan.md'), 'utf-8');
+    const specifyTemplate = await readFile(path.join(repoRoot, 'templates', 'commands', 'specify.md'), 'utf-8');
 
     const codex = compileCommandTemplate({
       template: planTemplate,
@@ -124,12 +129,25 @@ describe('prompt compiler', () => {
       scriptVariant: 'ps',
       outputFormat: 'toml'
     });
+    const specify = compileCommandTemplate({
+      template: specifyTemplate,
+      agent: 'codex',
+      argFormat: '$ARGUMENTS',
+      scriptVariant: 'sh',
+      outputFormat: 'markdown-none'
+    });
 
     expect(codex).not.toMatch(/^---/);
+    expect(codex).toContain('## 输入澄清引导');
     expect(codex).toContain('.specify/scripts/bash/plan-story.sh');
     expect(codex).toContain('$ARGUMENTS');
     expect(gemini).toContain('description = "');
     expect(gemini).toContain('.specify/scripts/powershell/plan-story.ps1');
     expect(gemini).toContain('{{args}}');
+    expect(specify).toContain('#### 0.1 创作控制权保护');
+    expect(specify).toContain('不要创建或修改 `stories/*/specification.md`');
+    expect(specify).toContain('**用户已明确**');
+    expect(specify).toContain('**需要澄清**');
+    expect(specify).toContain('**可复制示例**');
   });
 });
