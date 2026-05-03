@@ -7,6 +7,14 @@ time: 故事开始
 sceneGoal: 建立主角当下目标
 conflict: 主角目标遭遇阻力
 outcome: 主角做出会推动下一幕的选择
+plotThread: 本场推进哪条主线/支线
+readerPromise: 本场建立、强化或兑现哪个读者承诺
+relationshipChange: 本场改变哪段关系，以及 trust/distance/conflict/vulnerability/repair 哪项变化
+emotionalBeat: 读者或 POV 角色从什么情绪转到什么情绪
+endingHook: 本场最后留下的下一幕期待
+successCriteria:
+  - 主角必须做出一个可见选择
+  - 读者必须看见世界规则带来的行动代价
 emotionalTurn: 从安稳转向不安
 entities:
   - entity.protagonist

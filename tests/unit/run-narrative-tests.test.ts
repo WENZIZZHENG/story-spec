@@ -44,7 +44,7 @@ describe('run narrative tests', () => {
       chapter: '001'
     });
 
-    expect(report.summary.warning).toBe(1);
+    expect(report.summary.warning).toBeGreaterThanOrEqual(4);
     expect(report.results).toEqual(expect.arrayContaining([
       expect.objectContaining({
         id: 'scene-scene-001-reveal',
@@ -52,11 +52,69 @@ describe('run narrative tests', () => {
         severity: 'warning',
         evidence: 'world.rule',
         suggestedAction: expect.stringContaining('reveals')
+      }),
+      expect.objectContaining({
+        id: 'scene-scene-001-intent',
+        status: 'warning',
+        severity: 'warning',
+        suggestedAction: expect.stringContaining('plotThread')
+      }),
+      expect.objectContaining({
+        id: 'scene-scene-001-hook',
+        status: 'warning',
+        severity: 'warning',
+        suggestedAction: expect.stringContaining('endingHook')
       })
     ]));
   });
 
-  it('falls back to chapter tasks when no scene card exists', async () => {
+  it('passes scene cards that declare plot, promise, relationship, world, emotion, and hook intent', async () => {
+    const { projectRoot, fileSystem, storyPath } = await createProject();
+    await fileSystem.writeFile(path.join(storyPath, 'scenes', 'scene-001.yaml'), `id: scene-001
+chapter: chapter-001
+order: 1
+pov: Hero
+location: Home
+time: Morning
+sceneGoal: 主角做出选择
+conflict: 外部麻烦逼近
+outcome: 主角接受任务
+plotThread: 主线推进
+readerPromise: 建立异变谜题
+relationshipChange: 主角和向导建立最低限度信任
+worldReveal:
+  factId: world.rule
+  actionImpact: 主角必须绕过许可制度
+  beneficiaries:
+    - 管理者
+  costs:
+    - 主角
+  violationConsequence: 被巡查者通缉
+emotionalBeat: 从戒备转向试探性信任
+endingHook: 寂静异象第一次逼近城市边缘
+successCriteria:
+  - 主角主动选择接受任务
+  - 读者看到许可制度的代价
+worldElements:
+  - world.rule
+reveals:
+  - world.rule 会限制主角行动并制造代价
+`);
+
+    const report = await runNarrativeTests({
+      projectRoot,
+      fileSystem,
+      chapter: '001'
+    });
+
+    expect(report.summary).toMatchObject({ pass: 1, warning: 0, fail: 0 });
+    expect(report.results[0]).toMatchObject({
+      id: 'scene-scene-001-basic-pass',
+      status: 'pass'
+    });
+  });
+
+  it('blocks chapter writing with a scene-card gate when no scene card exists', async () => {
     const projectRoot = path.join(os.tmpdir(), 'memory-novel-narrative-fallback');
     const fileSystem = new MemoryFileSystem(projectRoot);
     const storyPath = path.join(projectRoot, 'stories', '001-demo');
@@ -77,10 +135,11 @@ describe('run narrative tests', () => {
       chapter: '001'
     });
 
-    expect(report.summary.pass).toBe(1);
+    expect(report.summary.warning).toBe(1);
     expect(report.results[0]).toMatchObject({
-      id: 'task-T001-fallback-pass',
-      status: 'pass'
+      id: 'chapter-chapter-001-scene-card-missing',
+      status: 'warning'
     });
+    expect(report.results[0].suggestedAction).toContain('scene:init');
   });
 });

@@ -1,7 +1,11 @@
 import path from 'node:path';
 import type { ProjectFileSystem } from './project-ports.js';
 import { inspectCanon, inspectWorld } from './inspect-worldbuilding.js';
-import { inspectScenes, inspectStoryGraph } from './inspect-story-structure.js';
+import {
+  hasSceneWritingGateIntent,
+  inspectScenes,
+  inspectStoryGraph
+} from './inspect-story-structure.js';
 import { inspectVoice } from './inspect-voice.js';
 import type {
   ContextPack,
@@ -115,6 +119,22 @@ const normalizeChapter = (chapter?: string): string | undefined => {
   return /^\d+$/.test(trimmed) ? `chapter-${trimmed.padStart(3, '0')}` : trimmed;
 };
 
+const chapterFromPath = (value: string): string | undefined => {
+  const match = value.match(/chapter[-_]?(\d{1,4})/i);
+  return match ? `chapter-${match[1].padStart(3, '0')}` : undefined;
+};
+
+const chapterFromTask = (task?: WritingTask): string | undefined => {
+  if (!task) {
+    return undefined;
+  }
+
+  return [
+    ...task.outputs,
+    ...task.allowedWrites
+  ].map(chapterFromPath).find(Boolean);
+};
+
 const createPackId = (
   storyName: string,
   purpose: ContextPackPurpose,
@@ -162,7 +182,7 @@ export const generateContextPack = async (
   const tasksPath = requireTasksPath(story);
   const targetTask = findTargetTask(story.tasks, input.task);
   const purpose = input.purpose ?? 'write';
-  const targetChapter = normalizeChapter(input.chapter);
+  const targetChapter = normalizeChapter(input.chapter) ?? chapterFromTask(targetTask);
   const [world, canon, graph, scenes, voice] = await Promise.all([
     inspectWorld({ projectRoot, fileSystem: fs }),
     inspectCanon({ projectRoot, fileSystem: fs }),
@@ -196,6 +216,22 @@ export const generateContextPack = async (
     addMustRead(mustRead, relativePath(projectRoot, file), '结构化创作上下文', false);
   }
 
+  const sceneSourceById = new Map(scenes.sceneSources.map(source => [source.sceneId, source.path]));
+  const targetScenes = scenes.scenes.filter(scene =>
+    (!targetChapter || scene.chapter === targetChapter)
+    && (!input.scene || scene.id === input.scene)
+  );
+  if (purpose === 'write') {
+    for (const scene of targetScenes) {
+      addMustRead(
+        mustRead,
+        relativePath(projectRoot, sceneSourceById.get(scene.id) ?? path.join(story.path, 'scenes', `${scene.id}.yaml`)),
+        `Scene Card 写作门禁：${scene.id}`,
+        true
+      );
+    }
+  }
+
   if (targetTask) {
     for (const file of targetTask.requiredReads) {
       addMustRead(
@@ -213,6 +249,9 @@ export const generateContextPack = async (
   const constraints = unique([
     ...(targetTask?.planOnly ? ['当前任务是 PLAN-ONLY，不应直接写正文。'] : []),
     ...(targetTask && !targetTask.writeReady ? ['当前任务未标记 WRITE-READY，写正文前应补齐边界。'] : []),
+    ...(purpose === 'write' ? ['写正文前必须通过 Scene Card 门禁：plotThread、readerPromise、relationshipChange、worldReveal、emotionalBeat、endingHook、successCriteria 需要可读。'] : []),
+    ...(purpose === 'write' && targetScenes.length === 0 ? ['目标章节没有 Scene Card；先生成 Scene Card preview，不直接写正文。'] : []),
+    ...(purpose === 'write' && targetScenes.some(scene => !hasSceneWritingGateIntent(scene)) ? ['存在 Scene Card 缺少写作意图字段；先补卡再写正文。'] : []),
     ...creativeControl.cannotFinalize.map(item => `不得擅自定稿：${item}`),
     '只修改 ContextPack 中列出的 allowedWrites，除非用户明确扩大范围。',
     'WorldFact、CanonFact、Scene Card 与 VoiceFingerprint 的结构化事实优先于临场发挥。'
@@ -236,6 +275,8 @@ export const generateContextPack = async (
     constraints,
     validationChecklist: [
       '必须读取项都有明确 reason。',
+      ...(purpose === 'write' ? ['写正文前必须读取目标章节 Scene Card；没有 Scene Card 时先补卡预览，不直接写正文。'] : []),
+      ...(purpose === 'write' ? ['Scene Card 必须说明 plotThread、readerPromise、relationshipChange、worldReveal、emotionalBeat、endingHook 和 successCriteria。'] : []),
       '输出路径只落在 allowedWrites 中。',
       '正文写作后运行 narrative:test 或 review 产生结构化 findings。',
       '如写出新事实，生成待确认 CanonFact 或 propagation debt。'

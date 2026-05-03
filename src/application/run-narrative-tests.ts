@@ -1,6 +1,6 @@
 import path from 'node:path';
 import type { ProjectFileSystem } from './project-ports.js';
-import { inspectScenes } from './inspect-story-structure.js';
+import { hasSceneWritingGateIntent, inspectScenes } from './inspect-story-structure.js';
 import type { SceneCard } from '../domain/story-structure.js';
 import type { NarrativeTestResult } from '../domain/workbench.js';
 import type { WritingTask } from '../domain/story-artifact.js';
@@ -89,6 +89,50 @@ const testScene = (
     }));
   }
 
+  if (!scene.plotThread.trim() || !scene.readerPromise.trim() || scene.successCriteria.length === 0) {
+    issues.push(result({
+      id: `scene-${scene.id}-intent`,
+      severity: 'warning',
+      path: pathValue,
+      evidence: scene.id,
+      message: 'Scene Card 缺少情节线、读者承诺或成功标准，写作意图不够明确。',
+      suggestedAction: '补齐 plotThread、readerPromise、successCriteria，确认本场景推进什么、承诺什么、怎样算写到位。'
+    }));
+  }
+
+  if (!scene.relationshipChange.trim() && scene.entities.length > 1) {
+    issues.push(result({
+      id: `scene-${scene.id}-relationship`,
+      severity: 'warning',
+      path: pathValue,
+      evidence: scene.entities.join(', '),
+      message: '多角色场景缺少 relationshipChange，关系推进难以追踪。',
+      suggestedAction: '写正文前说明本场景改变哪段关系，以及 trust、distance、conflict、vulnerability 或 repair 哪项变化。'
+    }));
+  }
+
+  if (scene.worldElements.length > 0 && !scene.worldReveal.factId && !scene.worldReveal.actionImpact) {
+    issues.push(result({
+      id: `scene-${scene.id}-world-reveal`,
+      severity: 'warning',
+      path: pathValue,
+      evidence: scene.worldElements.join(', '),
+      message: '场景引用了世界观元素，但没有 worldReveal 行动后果。',
+      suggestedAction: '补齐 worldReveal.factId、actionImpact、beneficiaries、costs 和 violationConsequence，让设定通过选择和代价呈现。'
+    }));
+  }
+
+  if (!scene.emotionalBeat.trim() || !scene.endingHook.trim()) {
+    issues.push(result({
+      id: `scene-${scene.id}-hook`,
+      severity: 'warning',
+      path: pathValue,
+      evidence: scene.id,
+      message: 'Scene Card 缺少情绪节拍或结尾钩子。',
+      suggestedAction: '补齐 emotionalBeat 和 endingHook，写清读者本场应获得的情绪与下一场期待。'
+    }));
+  }
+
   if (scene.foreshadowing.planted.length > 0 && scene.foreshadowing.paidOff.length === 0) {
     issues.push(result({
       id: `scene-${scene.id}-promise`,
@@ -107,7 +151,9 @@ const testScene = (
       status: 'pass',
       path: pathValue,
       evidence: `${scene.sceneGoal} / ${scene.conflict} / ${scene.outcome}`,
-      message: 'Scene Card 的基础叙事闭环已具备。',
+      message: hasSceneWritingGateIntent(scene)
+        ? 'Scene Card 的写作前门禁已具备。'
+        : 'Scene Card 的基础叙事闭环已具备。',
       suggestedAction: '按该 Scene Card 起草或复核正文。'
     }));
   }
@@ -131,6 +177,17 @@ const taskFallbackResults = (
       path: toPosixPath(path.join(projectRoot, 'stories')),
       message: '没有找到可用于章节级 fallback 的任务。',
       suggestedAction: '补齐 tasks.md 的章节输出、验收标准和写作边界。'
+    })];
+  }
+
+  if (chapter) {
+    return [result({
+      id: `chapter-${chapter}-scene-card-missing`,
+      severity: 'warning',
+      path: toPosixPath(path.join(projectRoot, 'stories')),
+      evidence: chapter,
+      message: '目标章节没有 Scene Card，写正文前缺少场景意图门禁。',
+      suggestedAction: `先运行 storyspec scene:init <story> --id scene-${chapter.replace(/^chapter-/, '')}，或补写 Scene Card preview，再进入正文写作。`
     })];
   }
 

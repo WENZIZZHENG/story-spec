@@ -18,6 +18,7 @@ scripts:
    - 按 `mustRead` 顺序加载文件，并说明每个 reason。
    - 只修改 `allowedWrites` 中的路径。
    - 如果没有匹配 pack，可先运行 `storyspec context:pack --task <TID>` 生成。
+   - 写作用途 pack 必须包含目标 Scene Card；如果 constraints 提示缺卡或缺门禁字段，先补卡，不直接写正文。
 
 ### 查询协议（必读顺序）
 
@@ -76,6 +77,8 @@ scripts:
 - 如果任务来自 branch what-if，确认 `branch:promote --yes` 已显式确认；未确认时只写 `stories/*/branches/` 或任务草稿，不覆盖 main 正文。
 - 如果任务涉及对白计划，优先读取或生成待确认 `dialogue/*.yaml`，不得把未确认对白当 canon。
 - 如果任务涉及关系线，必须读取 `spec/tracking/relationships.json` 中对应 `relationshipArcs`；正文结束前说明 trust、distance、conflict、vulnerability、repair 或 turningPoints 哪一项发生变化，并准备 evidencePath 更新。
+- 写正文前必须存在目标章节或目标 scene 的 Scene Card；没有时先运行 `storyspec scene:init <story> --id <scene-id>` 或输出 Scene Card preview。
+- Scene Card 必须通过写作门禁：`plotThread`、`readerPromise`、`relationshipChange`、`worldReveal`、`emotionalBeat`、`endingHook`、`successCriteria` 都要可读。
 
 ### 2. 验证前置条件
 - 检查相关依赖任务是否完成
@@ -240,6 +243,7 @@ scripts:
 - 是否按照章节架构
 - 是否符合节奏设计
 - 是否达到字数要求
+- 是否严格执行 Scene Card 的 plotThread、readerPromise、relationshipChange、worldReveal、emotionalBeat、endingHook 和 successCriteria
 - 是否推进、反转或兑现了本章相关 promise，并能在 `promises.json` 中记录 evidence
 - 是否让高张力段落获得足够 payoff，避免只吊胃口不回报
 

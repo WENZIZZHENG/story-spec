@@ -17,9 +17,11 @@ scripts:
 ## 执行步骤
 
 1. 解析用户输入中的 story、task、chapter 或 scene。
-2. 可先运行 `{SCRIPT}` 了解当前故事状态；如目标已明确，可直接运行 `storyspec context:pack`，优先带上明确的 `--task` 或 `--chapter`。
+2. 可先运行 `{SCRIPT}` 了解当前故事状态；如目标已明确，可直接运行 `storyspec context:pack`，优先带上明确的 `--task`、`--chapter` 或 `--scene`。
 3. 检查生成结果：
    - 每个 `mustRead` 必须有 `reason`。
+   - 写作用途的 pack 必须把目标 Scene Card 作为 required mustRead；没有目标 Scene Card 时，constraints 必须提示先补卡预览。
+   - 目标 Scene Card 必须说明 `plotThread`、`readerPromise`、`relationshipChange`、`worldReveal`、`emotionalBeat`、`endingHook`、`successCriteria`。
    - `allowedWrites` 必须来自任务边界或用户明确授权。
    - pack 不修改正文，只写 `.specify/context-packs/`。
 4. 如已有 pack，运行 `storyspec context:validate <pack.json>` 检查是否过期、路径是否缺失。
@@ -29,4 +31,5 @@ scripts:
 
 - 不直接写正文。
 - 不把无关文件塞进 mustRead。
+- 不把缺少 Scene Card 的章节标成可直接写作；先让作者确认场景意图。
 - 如果任务未 `[WRITE-READY]`，在 constraints 中保留阻塞说明。

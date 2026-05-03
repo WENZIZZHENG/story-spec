@@ -188,6 +188,48 @@ const validateSceneOrdering = (
   return issues;
 };
 
+const hasWorldReveal = (scene: SceneCard): boolean =>
+  Boolean(
+    scene.worldReveal.factId
+    || scene.worldReveal.actionImpact
+    || scene.worldReveal.beneficiaries.length > 0
+    || scene.worldReveal.costs.length > 0
+    || scene.worldReveal.violationConsequence
+  );
+
+export const hasSceneWritingGateIntent = (scene: SceneCard): boolean =>
+  Boolean(scene.plotThread.trim())
+  && Boolean(scene.readerPromise.trim())
+  && Boolean(scene.relationshipChange.trim())
+  && hasWorldReveal(scene)
+  && Boolean(scene.emotionalBeat.trim())
+  && Boolean(scene.endingHook.trim())
+  && scene.successCriteria.length > 0;
+
+const validateSceneWritingGateIntent = (
+  sourcePath: string,
+  scene: SceneCard
+): StoryStructureIssue[] => {
+  const fields: Array<[string, boolean, string]> = [
+    ['plotThread', Boolean(scene.plotThread.trim()), 'Scene Card 缺少推进的情节线 plotThread'],
+    ['readerPromise', Boolean(scene.readerPromise.trim()), 'Scene Card 缺少建立或兑现的 readerPromise'],
+    ['relationshipChange', Boolean(scene.relationshipChange.trim()), 'Scene Card 缺少关系变化 relationshipChange'],
+    ['worldReveal', hasWorldReveal(scene), 'Scene Card 缺少世界观行动揭示 worldReveal'],
+    ['emotionalBeat', Boolean(scene.emotionalBeat.trim()), 'Scene Card 缺少读者情绪/人物情绪节拍 emotionalBeat'],
+    ['endingHook', Boolean(scene.endingHook.trim()), 'Scene Card 缺少结尾钩子 endingHook'],
+    ['successCriteria', scene.successCriteria.length > 0, 'Scene Card 缺少写作成功标准 successCriteria']
+  ];
+
+  return fields
+    .filter(([, ok]) => !ok)
+    .map(([field, , message]) => ({
+      severity: 'warning' as const,
+      code: 'MISSING_SCENE_INTENT' as const,
+      path: `${sourcePath}#${scene.id}.${field}`,
+      message
+    }));
+};
+
 export const inspectScenes = async (
   input: InspectStoryStructureInput
 ): Promise<SceneInspectionResult> => {
@@ -207,6 +249,7 @@ export const inspectScenes = async (
       sceneSources.push(...result.scenes.map(scene => ({ scene, file })));
       issues.push(...result.issues);
       issues.push(...result.scenes.flatMap(scene => validateSceneReferences(file, scene, entityIds)));
+      issues.push(...result.scenes.flatMap(scene => validateSceneWritingGateIntent(file, scene)));
     }
   }
 

@@ -82,7 +82,7 @@ scripts:
   - **Clarification Source**：`clarifications.json#core.premise`（只引用 confirmed user-explicit/imported；未确认项写成澄清任务）
   - **依赖**：无
   - **输出**：`content/volume1/chapter-001.md`
-  - **Scene Card**：`scenes/scene-001.yaml`（如本阶段启用 scene cards）
+  - **Scene Card**：`scenes/scene-001.yaml`（正文写作前必须存在；缺卡时先创建/预览 Scene Card）
   - **验收标准**：
     - [ ] 覆盖本章全部关键情节
     - [ ] 线索推进与计划一致
@@ -127,7 +127,7 @@ scripts:
 - **交汇点**：从specification.md 5.3节读取，标明本章是否为交汇点
 - **伏笔埋设/揭晓**：从specification.md 5.4节读取，标明本章涉及的伏笔操作
 - **必须读取/允许修改/禁止事项**：让 Codex 接手时知道上下文边界和文件写入边界
-- **Scene Card**：如章节已拆成场景，必须标注对应 `scenes/*.yaml`；没有 scene card 的旧章节可留空。
+- **Scene Card**：正文写作任务必须标注对应 `scenes/*.yaml`；没有 Scene Card 时任务只能保持 `[PLAN-ONLY]` 或先生成补卡任务。
 - **Promise / Tension**：从 `promises.json` 和 `tension-curve.json` 读取，标明本任务建立、推进、兑现或修复哪些读者承诺。
 - **Dialogue / Branch**：对白任务默认先写 `dialogue/*.yaml`；分支任务默认只写 `branches/`，promote 需显式确认。
 - **Relationship Change**：从 `spec/tracking/relationships.json` 读取；关系线任务必须说明 trust、distance、conflict、vulnerability、repair 或 turningPoints 至少一项如何变化，并记录 evidencePath。

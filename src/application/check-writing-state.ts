@@ -1,5 +1,9 @@
 import path from 'node:path';
 import type { ProjectFileSystem } from './project-ports.js';
+import {
+  hasSceneWritingGateIntent,
+  inspectScenes
+} from './inspect-story-structure.js';
 import { parseWritingTasksFromMarkdown } from '../domain/story-artifact.js';
 
 export interface WritingStateDocuments {
@@ -39,6 +43,15 @@ export interface WritingStateTracking {
   invalidFiles: string[];
 }
 
+export interface WritingStateSceneGate {
+  total: number;
+  ready: number;
+  missingIntent: number;
+  missingSceneCard: boolean;
+  issueCount: number;
+  sceneIds: string[];
+}
+
 export interface WritingStateStory {
   name: string;
   path: string;
@@ -51,6 +64,7 @@ export interface WritingStateResult {
   tasks: WritingStateTasks;
   content: WritingStateContent;
   tracking: WritingStateTracking;
+  sceneGate: WritingStateSceneGate;
   canWrite: boolean;
 }
 
@@ -267,6 +281,41 @@ const summarizeTracking = async (
   };
 };
 
+const emptySceneGate = (): WritingStateSceneGate => ({
+  total: 0,
+  ready: 0,
+  missingIntent: 0,
+  missingSceneCard: true,
+  issueCount: 0,
+  sceneIds: []
+});
+
+const summarizeSceneGate = async (
+  fs: ProjectFileSystem,
+  projectRoot: string,
+  story: WritingStateStory | null
+): Promise<WritingStateSceneGate> => {
+  if (!story) {
+    return emptySceneGate();
+  }
+
+  const scenes = await inspectScenes({
+    projectRoot,
+    fileSystem: fs,
+    story: story.name
+  });
+  const ready = scenes.scenes.filter(hasSceneWritingGateIntent).length;
+
+  return {
+    total: scenes.scenes.length,
+    ready,
+    missingIntent: scenes.scenes.length - ready,
+    missingSceneCard: scenes.scenes.length === 0,
+    issueCount: scenes.issues.length,
+    sceneIds: scenes.scenes.map(scene => scene.id)
+  };
+};
+
 export const checkWritingState = async (
   input: CheckWritingStateInput
 ): Promise<WritingStateResult> => {
@@ -275,12 +324,15 @@ export const checkWritingState = async (
   const tasks = await summarizeTasks(input.fileSystem, story);
   const content = await summarizeContent(input.fileSystem, story, input.wordRange);
   const tracking = await summarizeTracking(input.fileSystem, input.projectRoot);
+  const sceneGate = await summarizeSceneGate(input.fileSystem, input.projectRoot, story);
   const canWrite = Boolean(story)
     && documents.constitution
     && documents.specification
     && documents.creativePlan
     && documents.tasks
-    && tasks.total > 0;
+    && tasks.total > 0
+    && !sceneGate.missingSceneCard
+    && sceneGate.missingIntent === 0;
 
   return {
     projectRoot: input.projectRoot,
@@ -289,6 +341,7 @@ export const checkWritingState = async (
     tasks,
     content,
     tracking,
+    sceneGate,
     canWrite
   };
 };
@@ -320,11 +373,16 @@ export const renderWritingStateChecklist = (state: WritingStateResult): string =
     `- [${checkbox(state.content.chapterCount > 0)}] CHK008 已完成章节数（${state.content.chapterCount} 章）`,
     `- [${alertBox(state.content.badChapterCount === 0)}] CHK009 字数符合标准（${state.content.badChapterCount === 0 ? '全部符合' : `${state.content.badChapterCount} 章不符合`}）`,
     `- [${alertBox(state.tracking.invalid === 0)}] CHK010 tracking JSON 有效（${state.tracking.invalid} 个错误）`,
+    `- [${alertBox(!state.sceneGate.missingSceneCard && state.sceneGate.missingIntent === 0)}] CHK011 Scene Card 写作门禁（${state.sceneGate.ready}/${state.sceneGate.total} ready）`,
     '',
     '## 后续行动'
   ];
 
-  if (!state.canWrite) {
+  if (state.sceneGate.missingSceneCard) {
+    lines.push('', '- [ ] 先运行 storyspec scene:init 或补写 Scene Card preview，再进入正文写作');
+  } else if (state.sceneGate.missingIntent > 0) {
+    lines.push('', '- [ ] 补齐 Scene Card 的 plotThread、readerPromise、relationshipChange、worldReveal、emotionalBeat、endingHook 和 successCriteria');
+  } else if (!state.canWrite) {
     lines.push('', '- [ ] 补齐写作前置文档与任务清单');
   } else if (state.tasks.pending > 0 || state.tasks.inProgress > 0) {
     lines.push('', `- [ ] 下一任务：${state.tasks.nextTask ?? '继续进行中的任务'}`);

@@ -85,6 +85,22 @@ time: Morning
 sceneGoal: Leave home
 conflict: Family blocks him
 outcome: He leaves anyway
+plotThread: 主线推进
+readerPromise: 兑现主角出走的承诺
+relationshipChange: 主角和家人从对立转为暂时缓和
+worldReveal:
+  factId: world.example.rule
+  actionImpact: 主角必须绕开规则
+  beneficiaries:
+    - 权力方
+  costs:
+    - 主角
+  violationConsequence: 被执法者盯上
+emotionalBeat: 从压抑转向决意
+endingHook: 门外有人敲门
+successCriteria:
+  - 推进主角离家
+  - 留下下一幕钩子
 entities:
   - entity.hero
 `, 'stories/demo/scenes/scene-001.yaml');
@@ -93,7 +109,20 @@ entities:
     expect(result.scenes[0]).toMatchObject({
       id: 'scene-001',
       order: 1,
-      entities: ['entity.hero']
+      entities: ['entity.hero'],
+      plotThread: '主线推进',
+      readerPromise: '兑现主角出走的承诺',
+      relationshipChange: '主角和家人从对立转为暂时缓和',
+      emotionalBeat: '从压抑转向决意',
+      endingHook: '门外有人敲门',
+      successCriteria: ['推进主角离家', '留下下一幕钩子']
+    });
+    expect(result.scenes[0].worldReveal).toMatchObject({
+      factId: 'world.example.rule',
+      actionImpact: '主角必须绕开规则',
+      beneficiaries: ['权力方'],
+      costs: ['主角'],
+      violationConsequence: '被执法者盯上'
     });
     expect(result.issues).toEqual([]);
   });

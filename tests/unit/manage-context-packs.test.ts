@@ -90,6 +90,21 @@ time: Morning
 sceneGoal: Open story
 conflict: Trouble arrives
 outcome: Hero accepts
+plotThread: 主线推进
+readerPromise: 建立第一章谜题
+relationshipChange: 主角和向导建立最低限度信任
+worldReveal:
+  factId: world.rule
+  actionImpact: 主角必须绕过规则
+  beneficiaries:
+    - 管理者
+  costs:
+    - 主角
+  violationConsequence: 被追捕
+emotionalBeat: 从戒备转向决意
+endingHook: 门外出现异常声音
+successCriteria:
+  - 主角主动接受任务
 entities:
   - entity.hero
 draftPath: stories/001-demo/content/chapter-001.md
@@ -142,6 +157,11 @@ describe('manage context packs', () => {
       expect.objectContaining({
         path: 'spec/world/rules.yaml',
         required: false
+      }),
+      expect.objectContaining({
+        path: 'stories/001-demo/scenes/scene-001.yaml',
+        reason: expect.stringContaining('Scene Card 写作门禁'),
+        required: true
       })
     ]));
     expect(result.pack.allowedWrites).toEqual([
@@ -152,8 +172,12 @@ describe('manage context packs', () => {
     expect(result.pack.canonFacts).toEqual(['canon.fact']);
     expect(result.pack.sceneCards).toEqual(['scene-001']);
     expect(result.pack.voiceFingerprints).toEqual(['entity.hero']);
+    expect(result.pack.constraints).toContain('写正文前必须通过 Scene Card 门禁：plotThread、readerPromise、relationshipChange、worldReveal、emotionalBeat、endingHook、successCriteria 需要可读。');
     expect(result.pack.constraints).toContain('不得擅自定稿：未确认：感情线慢热边界是什么？');
     expect(result.pack.constraints).toContain('不得擅自定稿：AI 建议待确认：romance.boundary');
+    expect(result.pack.validationChecklist).toEqual(expect.arrayContaining([
+      expect.stringContaining('Scene Card')
+    ]));
     expect(result.markdown).toContain('## 必须读取');
     await expect(fileSystem.pathExists(result.outputJsonPath!)).resolves.toBe(true);
     await expect(fileSystem.pathExists(result.outputMarkdownPath!)).resolves.toBe(true);

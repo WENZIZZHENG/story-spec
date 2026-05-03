@@ -33,7 +33,7 @@
     },
     {
       "path": "auggie/.augment/commands/checklist.md",
-      "sha256": "1a59bfa616f943e933ed6db15fcf8f77f04ae4945d127c5357a60df17c3fc590",
+      "sha256": "5c20398584182a6b398ee090ee1144d9ab54c26a84d396286db9be7d257bb52a",
       "commandSource": {
         "command": "checklist",
         "kind": "legacy-template",
@@ -60,7 +60,7 @@
     },
     {
       "path": "auggie/.augment/commands/context-pack.md",
-      "sha256": "b6f9077928ecf551252fcee984f1cc1172734616ead94dfb6d53daded396de30",
+      "sha256": "22d10dfd14f42f0d60b89bb354cd71a814f3761c0d355ce829e5d2de879945d0",
       "commandSource": {
         "command": "context-pack",
         "kind": "legacy-template",
@@ -105,7 +105,7 @@
     },
     {
       "path": "auggie/.augment/commands/scene.md",
-      "sha256": "abbfb26b343819a7e599e21e0cdaa2858e82a2d9e79e17256cb76dfa12b4fd74",
+      "sha256": "bcd49c1db8f824a3491d3955dc1bfa281fcd7d39412498a1957883ecafbf177d",
       "commandSource": {
         "command": "scene",
         "kind": "legacy-template",
@@ -123,7 +123,7 @@
     },
     {
       "path": "auggie/.augment/commands/tasks.md",
-      "sha256": "178b70190269b6ec103bbfc7f564de30640f2ae34333e5787fab74808df18d0f",
+      "sha256": "3ad32ae009c7aae03e5058753a1fc2756ef31061a0bc6852530167c5f6ed5ee3",
       "commandSource": {
         "command": "tasks",
         "kind": "legacy-template",
@@ -159,7 +159,7 @@
     },
     {
       "path": "auggie/.augment/commands/write.md",
-      "sha256": "319da766eebd316737de5077e02cca57ec00a67d4470e57fdacc39dd65ea3eda",
+      "sha256": "9ebf9f0891ee266be3e80381e8c980cded4ce6dae56dfc083f35c5f1761eb811",
       "commandSource": {
         "command": "write",
         "kind": "command-spec",
@@ -270,6 +270,18 @@
     {
       "path": "auggie/.specify/scripts/postbuild.cjs",
       "sha256": "06255c106d3ee5a1a5c84afcc056a370589bc3bc8577d7e42a7934bfc7b9bede"
+    },
+    {
+      "path": "auggie/.specify/scripts/runtime/application/check-writing-state.js",
+      "sha256": "9099cc6efbe9c99552677ddefe653264bdfe406439a3a456c34f12333fc9b44b"
+    },
+    {
+      "path": "auggie/.specify/scripts/runtime/domain/story-artifact.js",
+      "sha256": "010032f357a3154a9e939db41baa9b47bf72d20a7b4d3c1dba65c25c2af2d603"
+    },
+    {
+      "path": "auggie/.specify/scripts/runtime/script-runtime.js",
+      "sha256": "d33ef7083e1a07e24cea32355c5c8671fe7ad6bc9df0036bb86da74964dd8534"
     },
     {
       "path": "auggie/.specify/templates/agent/agent-contract.md",
@@ -409,7 +421,7 @@
     },
     {
       "path": "auggie/.specify/templates/scenes/scene-001.yaml",
-      "sha256": "83d2773329809343215586332bf215b93e9e141bc63a1eec01c6d49f31d905a9"
+      "sha256": "c9bc69c242a41859ed9dd8ec032c47da8c646b44638508fee064c912c5c0272b"
     },
     {
       "path": "auggie/.specify/templates/story-template.md",
@@ -591,7 +603,7 @@
     },
     {
       "path": "claude/.claude/commands/storyspec.checklist.md",
-      "sha256": "6d724c58ba5f8505079dbcb20cc7fbddf024b4678808b691bdf1d72b618d129d",
+      "sha256": "956c9c6ffc9a480547b192d734b7300e45755f9046667d95b44779114af74c8d",
       "commandSource": {
         "command": "checklist",
         "kind": "legacy-template",
@@ -618,7 +630,7 @@
     },
     {
       "path": "claude/.claude/commands/storyspec.context-pack.md",
-      "sha256": "ca730261723bf10dbb86931ab07146ff8d911cba5cd27387c5c3366292287649",
+      "sha256": "3c6aff311b74e40cd161acd2f524e8f1f24e568a3a78bc3d8163109ad9bff64e",
       "commandSource": {
         "command": "context-pack",
         "kind": "legacy-template",
@@ -663,7 +675,7 @@
     },
     {
       "path": "claude/.claude/commands/storyspec.scene.md",
-      "sha256": "bda9c6fcb7e8762dd04fb56591994ecdc596b6f4e87930f50af611936ce3fd58",
+      "sha256": "1b34e90b510de5e899b6305219a7269c3491ad8a91efd2497cbafcb266fe7c21",
       "commandSource": {
         "command": "scene",
         "kind": "legacy-template",
@@ -681,7 +693,7 @@
     },
     {
       "path": "claude/.claude/commands/storyspec.tasks.md",
-      "sha256": "5fa03865082f4ee5c11fcfddc8e233ec25be17c95f513e8889fc4fffdff88c15",
+      "sha256": "8edfa74026474f59a8d9b23fdb489ac8aeb289a09fab7cd10b2e7d6c4c954250",
       "commandSource": {
         "command": "tasks",
         "kind": "legacy-template",
@@ -717,7 +729,7 @@
     },
     {
       "path": "claude/.claude/commands/storyspec.write.md",
-      "sha256": "3e8e250e26a4b76b32c1e8abb6bc9d977d2588578595acf5b18f2dda83e1930d",
+      "sha256": "f65be517794fd6a9f2aa2baedb8f3d3f1ae27338a8f14d1fbc5dc5e0f8181c6f",
       "commandSource": {
         "command": "write",
         "kind": "command-spec",
@@ -828,6 +840,18 @@
     {
       "path": "claude/.specify/scripts/postbuild.cjs",
       "sha256": "06255c106d3ee5a1a5c84afcc056a370589bc3bc8577d7e42a7934bfc7b9bede"
+    },
+    {
+      "path": "claude/.specify/scripts/runtime/application/check-writing-state.js",
+      "sha256": "9099cc6efbe9c99552677ddefe653264bdfe406439a3a456c34f12333fc9b44b"
+    },
+    {
+      "path": "claude/.specify/scripts/runtime/domain/story-artifact.js",
+      "sha256": "010032f357a3154a9e939db41baa9b47bf72d20a7b4d3c1dba65c25c2af2d603"
+    },
+    {
+      "path": "claude/.specify/scripts/runtime/script-runtime.js",
+      "sha256": "d33ef7083e1a07e24cea32355c5c8671fe7ad6bc9df0036bb86da74964dd8534"
     },
     {
       "path": "claude/.specify/templates/agent/agent-contract.md",
@@ -967,7 +991,7 @@
     },
     {
       "path": "claude/.specify/templates/scenes/scene-001.yaml",
-      "sha256": "83d2773329809343215586332bf215b93e9e141bc63a1eec01c6d49f31d905a9"
+      "sha256": "c9bc69c242a41859ed9dd8ec032c47da8c646b44638508fee064c912c5c0272b"
     },
     {
       "path": "claude/.specify/templates/story-template.md",
@@ -1149,7 +1173,7 @@
     },
     {
       "path": "codebuddy/.codebuddy/commands/checklist.md",
-      "sha256": "1a59bfa616f943e933ed6db15fcf8f77f04ae4945d127c5357a60df17c3fc590",
+      "sha256": "5c20398584182a6b398ee090ee1144d9ab54c26a84d396286db9be7d257bb52a",
       "commandSource": {
         "command": "checklist",
         "kind": "legacy-template",
@@ -1176,7 +1200,7 @@
     },
     {
       "path": "codebuddy/.codebuddy/commands/context-pack.md",
-      "sha256": "b6f9077928ecf551252fcee984f1cc1172734616ead94dfb6d53daded396de30",
+      "sha256": "22d10dfd14f42f0d60b89bb354cd71a814f3761c0d355ce829e5d2de879945d0",
       "commandSource": {
         "command": "context-pack",
         "kind": "legacy-template",
@@ -1221,7 +1245,7 @@
     },
     {
       "path": "codebuddy/.codebuddy/commands/scene.md",
-      "sha256": "abbfb26b343819a7e599e21e0cdaa2858e82a2d9e79e17256cb76dfa12b4fd74",
+      "sha256": "bcd49c1db8f824a3491d3955dc1bfa281fcd7d39412498a1957883ecafbf177d",
       "commandSource": {
         "command": "scene",
         "kind": "legacy-template",
@@ -1239,7 +1263,7 @@
     },
     {
       "path": "codebuddy/.codebuddy/commands/tasks.md",
-      "sha256": "178b70190269b6ec103bbfc7f564de30640f2ae34333e5787fab74808df18d0f",
+      "sha256": "3ad32ae009c7aae03e5058753a1fc2756ef31061a0bc6852530167c5f6ed5ee3",
       "commandSource": {
         "command": "tasks",
         "kind": "legacy-template",
@@ -1275,7 +1299,7 @@
     },
     {
       "path": "codebuddy/.codebuddy/commands/write.md",
-      "sha256": "319da766eebd316737de5077e02cca57ec00a67d4470e57fdacc39dd65ea3eda",
+      "sha256": "9ebf9f0891ee266be3e80381e8c980cded4ce6dae56dfc083f35c5f1761eb811",
       "commandSource": {
         "command": "write",
         "kind": "command-spec",
@@ -1386,6 +1410,18 @@
     {
       "path": "codebuddy/.specify/scripts/postbuild.cjs",
       "sha256": "06255c106d3ee5a1a5c84afcc056a370589bc3bc8577d7e42a7934bfc7b9bede"
+    },
+    {
+      "path": "codebuddy/.specify/scripts/runtime/application/check-writing-state.js",
+      "sha256": "9099cc6efbe9c99552677ddefe653264bdfe406439a3a456c34f12333fc9b44b"
+    },
+    {
+      "path": "codebuddy/.specify/scripts/runtime/domain/story-artifact.js",
+      "sha256": "010032f357a3154a9e939db41baa9b47bf72d20a7b4d3c1dba65c25c2af2d603"
+    },
+    {
+      "path": "codebuddy/.specify/scripts/runtime/script-runtime.js",
+      "sha256": "d33ef7083e1a07e24cea32355c5c8671fe7ad6bc9df0036bb86da74964dd8534"
     },
     {
       "path": "codebuddy/.specify/templates/agent/agent-contract.md",
@@ -1525,7 +1561,7 @@
     },
     {
       "path": "codebuddy/.specify/templates/scenes/scene-001.yaml",
-      "sha256": "83d2773329809343215586332bf215b93e9e141bc63a1eec01c6d49f31d905a9"
+      "sha256": "c9bc69c242a41859ed9dd8ec032c47da8c646b44638508fee064c912c5c0272b"
     },
     {
       "path": "codebuddy/.specify/templates/story-template.md",
@@ -1707,7 +1743,7 @@
     },
     {
       "path": "codex/.codex/prompts/storyspec-checklist.md",
-      "sha256": "1a59bfa616f943e933ed6db15fcf8f77f04ae4945d127c5357a60df17c3fc590",
+      "sha256": "5c20398584182a6b398ee090ee1144d9ab54c26a84d396286db9be7d257bb52a",
       "commandSource": {
         "command": "checklist",
         "kind": "legacy-template",
@@ -1734,7 +1770,7 @@
     },
     {
       "path": "codex/.codex/prompts/storyspec-context-pack.md",
-      "sha256": "b6f9077928ecf551252fcee984f1cc1172734616ead94dfb6d53daded396de30",
+      "sha256": "22d10dfd14f42f0d60b89bb354cd71a814f3761c0d355ce829e5d2de879945d0",
       "commandSource": {
         "command": "context-pack",
         "kind": "legacy-template",
@@ -1779,7 +1815,7 @@
     },
     {
       "path": "codex/.codex/prompts/storyspec-scene.md",
-      "sha256": "abbfb26b343819a7e599e21e0cdaa2858e82a2d9e79e17256cb76dfa12b4fd74",
+      "sha256": "bcd49c1db8f824a3491d3955dc1bfa281fcd7d39412498a1957883ecafbf177d",
       "commandSource": {
         "command": "scene",
         "kind": "legacy-template",
@@ -1797,7 +1833,7 @@
     },
     {
       "path": "codex/.codex/prompts/storyspec-tasks.md",
-      "sha256": "178b70190269b6ec103bbfc7f564de30640f2ae34333e5787fab74808df18d0f",
+      "sha256": "3ad32ae009c7aae03e5058753a1fc2756ef31061a0bc6852530167c5f6ed5ee3",
       "commandSource": {
         "command": "tasks",
         "kind": "legacy-template",
@@ -1833,7 +1869,7 @@
     },
     {
       "path": "codex/.codex/prompts/storyspec-write.md",
-      "sha256": "319da766eebd316737de5077e02cca57ec00a67d4470e57fdacc39dd65ea3eda",
+      "sha256": "9ebf9f0891ee266be3e80381e8c980cded4ce6dae56dfc083f35c5f1761eb811",
       "commandSource": {
         "command": "write",
         "kind": "command-spec",
@@ -1944,6 +1980,18 @@
     {
       "path": "codex/.specify/scripts/postbuild.cjs",
       "sha256": "06255c106d3ee5a1a5c84afcc056a370589bc3bc8577d7e42a7934bfc7b9bede"
+    },
+    {
+      "path": "codex/.specify/scripts/runtime/application/check-writing-state.js",
+      "sha256": "9099cc6efbe9c99552677ddefe653264bdfe406439a3a456c34f12333fc9b44b"
+    },
+    {
+      "path": "codex/.specify/scripts/runtime/domain/story-artifact.js",
+      "sha256": "010032f357a3154a9e939db41baa9b47bf72d20a7b4d3c1dba65c25c2af2d603"
+    },
+    {
+      "path": "codex/.specify/scripts/runtime/script-runtime.js",
+      "sha256": "d33ef7083e1a07e24cea32355c5c8671fe7ad6bc9df0036bb86da74964dd8534"
     },
     {
       "path": "codex/.specify/templates/agent/agent-contract.md",
@@ -2083,7 +2131,7 @@
     },
     {
       "path": "codex/.specify/templates/scenes/scene-001.yaml",
-      "sha256": "83d2773329809343215586332bf215b93e9e141bc63a1eec01c6d49f31d905a9"
+      "sha256": "c9bc69c242a41859ed9dd8ec032c47da8c646b44638508fee064c912c5c0272b"
     },
     {
       "path": "codex/.specify/templates/story-template.md",
@@ -2265,7 +2313,7 @@
     },
     {
       "path": "continue-check/.continue/prompts/checklist.md",
-      "sha256": "4267f7369e50a461f4b938b928d4a2058178ee84042653077e0d145cc76357f8",
+      "sha256": "42741432f7e3bb96ec519acb142c083e0a8c4494b6123b3423ce4c7069fb1e31",
       "commandSource": {
         "command": "checklist",
         "kind": "legacy-template",
@@ -2292,7 +2340,7 @@
     },
     {
       "path": "continue-check/.continue/prompts/context-pack.md",
-      "sha256": "fe1d82803565ae303e32ee418213ea90b8673ae954b0725cb3acd7438d8e0036",
+      "sha256": "8c5ca3642c94afe615fd87856673e3f796cc5a41864dd88708b363fc9955d93b",
       "commandSource": {
         "command": "context-pack",
         "kind": "legacy-template",
@@ -2337,7 +2385,7 @@
     },
     {
       "path": "continue-check/.continue/prompts/scene.md",
-      "sha256": "b8968643af4ac1d566cfbd5e5304752e9eb34d5f2e1854c63f3e83623f7e7b9a",
+      "sha256": "a32afa5fc77edf4a2d299f0dfa42af7db4aac3193454670e6c6e9525f963a4cd",
       "commandSource": {
         "command": "scene",
         "kind": "legacy-template",
@@ -2355,7 +2403,7 @@
     },
     {
       "path": "continue-check/.continue/prompts/tasks.md",
-      "sha256": "9b758b0d12c6d4c05b15b673aaf6ce6fb59a9fed14749d2a52a2541013093dcb",
+      "sha256": "db5276e67391797ba06055b2e4dd129bd5138dff551d7be6749fd1c4b4c50b17",
       "commandSource": {
         "command": "tasks",
         "kind": "legacy-template",
@@ -2391,7 +2439,7 @@
     },
     {
       "path": "continue-check/.continue/prompts/write.md",
-      "sha256": "e296f5c0e173dd0688e30807707e1fc9497b229f7034e466ebee233f4efa6f3c",
+      "sha256": "672468fe4ac154bfb9aeee8f202b2c3fe0d261886db5860d84b4dbb338ea798f",
       "commandSource": {
         "command": "write",
         "kind": "command-spec",
@@ -2502,6 +2550,18 @@
     {
       "path": "continue-check/.specify/scripts/postbuild.cjs",
       "sha256": "06255c106d3ee5a1a5c84afcc056a370589bc3bc8577d7e42a7934bfc7b9bede"
+    },
+    {
+      "path": "continue-check/.specify/scripts/runtime/application/check-writing-state.js",
+      "sha256": "9099cc6efbe9c99552677ddefe653264bdfe406439a3a456c34f12333fc9b44b"
+    },
+    {
+      "path": "continue-check/.specify/scripts/runtime/domain/story-artifact.js",
+      "sha256": "010032f357a3154a9e939db41baa9b47bf72d20a7b4d3c1dba65c25c2af2d603"
+    },
+    {
+      "path": "continue-check/.specify/scripts/runtime/script-runtime.js",
+      "sha256": "d33ef7083e1a07e24cea32355c5c8671fe7ad6bc9df0036bb86da74964dd8534"
     },
     {
       "path": "continue-check/.specify/templates/agent/agent-contract.md",
@@ -2641,7 +2701,7 @@
     },
     {
       "path": "continue-check/.specify/templates/scenes/scene-001.yaml",
-      "sha256": "83d2773329809343215586332bf215b93e9e141bc63a1eec01c6d49f31d905a9"
+      "sha256": "c9bc69c242a41859ed9dd8ec032c47da8c646b44638508fee064c912c5c0272b"
     },
     {
       "path": "continue-check/.specify/templates/story-template.md",
@@ -2823,7 +2883,7 @@
     },
     {
       "path": "copilot/.github/prompts/checklist.prompt.md",
-      "sha256": "1a59bfa616f943e933ed6db15fcf8f77f04ae4945d127c5357a60df17c3fc590",
+      "sha256": "5c20398584182a6b398ee090ee1144d9ab54c26a84d396286db9be7d257bb52a",
       "commandSource": {
         "command": "checklist",
         "kind": "legacy-template",
@@ -2850,7 +2910,7 @@
     },
     {
       "path": "copilot/.github/prompts/context-pack.prompt.md",
-      "sha256": "a4f91128ef949da96d2e05d09b4615c7a07a8b6aea293f7a7bb8b3aca9dd6399",
+      "sha256": "c7fd5201228a1760758f783c09a7f9ed189fd13c91cf82bba755634f001102ae",
       "commandSource": {
         "command": "context-pack",
         "kind": "legacy-template",
@@ -2895,7 +2955,7 @@
     },
     {
       "path": "copilot/.github/prompts/scene.prompt.md",
-      "sha256": "abbfb26b343819a7e599e21e0cdaa2858e82a2d9e79e17256cb76dfa12b4fd74",
+      "sha256": "bcd49c1db8f824a3491d3955dc1bfa281fcd7d39412498a1957883ecafbf177d",
       "commandSource": {
         "command": "scene",
         "kind": "legacy-template",
@@ -2913,7 +2973,7 @@
     },
     {
       "path": "copilot/.github/prompts/tasks.prompt.md",
-      "sha256": "cab58eeb000a755202f1f6e5b7def20f418107ac9b663a171944183ce327557a",
+      "sha256": "42a1d531f529ccd3ab27055f24dbb5dca11701886e380743b0845a0fb5b26a12",
       "commandSource": {
         "command": "tasks",
         "kind": "legacy-template",
@@ -2949,7 +3009,7 @@
     },
     {
       "path": "copilot/.github/prompts/write.prompt.md",
-      "sha256": "04ddf9773879fc27f186cad5dbb3891905aa4302c0e3014cb2f64f89d4eff3ff",
+      "sha256": "aa73f574a0581f7e78778afa0d9e178dedaae8e3a6d16231e60656e3980bb446",
       "commandSource": {
         "command": "write",
         "kind": "command-spec",
@@ -3060,6 +3120,18 @@
     {
       "path": "copilot/.specify/scripts/postbuild.cjs",
       "sha256": "06255c106d3ee5a1a5c84afcc056a370589bc3bc8577d7e42a7934bfc7b9bede"
+    },
+    {
+      "path": "copilot/.specify/scripts/runtime/application/check-writing-state.js",
+      "sha256": "9099cc6efbe9c99552677ddefe653264bdfe406439a3a456c34f12333fc9b44b"
+    },
+    {
+      "path": "copilot/.specify/scripts/runtime/domain/story-artifact.js",
+      "sha256": "010032f357a3154a9e939db41baa9b47bf72d20a7b4d3c1dba65c25c2af2d603"
+    },
+    {
+      "path": "copilot/.specify/scripts/runtime/script-runtime.js",
+      "sha256": "d33ef7083e1a07e24cea32355c5c8671fe7ad6bc9df0036bb86da74964dd8534"
     },
     {
       "path": "copilot/.specify/templates/agent/agent-contract.md",
@@ -3199,7 +3271,7 @@
     },
     {
       "path": "copilot/.specify/templates/scenes/scene-001.yaml",
-      "sha256": "83d2773329809343215586332bf215b93e9e141bc63a1eec01c6d49f31d905a9"
+      "sha256": "c9bc69c242a41859ed9dd8ec032c47da8c646b44638508fee064c912c5c0272b"
     },
     {
       "path": "copilot/.specify/templates/story-template.md",
@@ -3381,7 +3453,7 @@
     },
     {
       "path": "cursor/.cursor/commands/checklist.md",
-      "sha256": "1a59bfa616f943e933ed6db15fcf8f77f04ae4945d127c5357a60df17c3fc590",
+      "sha256": "5c20398584182a6b398ee090ee1144d9ab54c26a84d396286db9be7d257bb52a",
       "commandSource": {
         "command": "checklist",
         "kind": "legacy-template",
@@ -3408,7 +3480,7 @@
     },
     {
       "path": "cursor/.cursor/commands/context-pack.md",
-      "sha256": "b6f9077928ecf551252fcee984f1cc1172734616ead94dfb6d53daded396de30",
+      "sha256": "22d10dfd14f42f0d60b89bb354cd71a814f3761c0d355ce829e5d2de879945d0",
       "commandSource": {
         "command": "context-pack",
         "kind": "legacy-template",
@@ -3453,7 +3525,7 @@
     },
     {
       "path": "cursor/.cursor/commands/scene.md",
-      "sha256": "abbfb26b343819a7e599e21e0cdaa2858e82a2d9e79e17256cb76dfa12b4fd74",
+      "sha256": "bcd49c1db8f824a3491d3955dc1bfa281fcd7d39412498a1957883ecafbf177d",
       "commandSource": {
         "command": "scene",
         "kind": "legacy-template",
@@ -3471,7 +3543,7 @@
     },
     {
       "path": "cursor/.cursor/commands/tasks.md",
-      "sha256": "178b70190269b6ec103bbfc7f564de30640f2ae34333e5787fab74808df18d0f",
+      "sha256": "3ad32ae009c7aae03e5058753a1fc2756ef31061a0bc6852530167c5f6ed5ee3",
       "commandSource": {
         "command": "tasks",
         "kind": "legacy-template",
@@ -3507,7 +3579,7 @@
     },
     {
       "path": "cursor/.cursor/commands/write.md",
-      "sha256": "319da766eebd316737de5077e02cca57ec00a67d4470e57fdacc39dd65ea3eda",
+      "sha256": "9ebf9f0891ee266be3e80381e8c980cded4ce6dae56dfc083f35c5f1761eb811",
       "commandSource": {
         "command": "write",
         "kind": "command-spec",
@@ -3618,6 +3690,18 @@
     {
       "path": "cursor/.specify/scripts/postbuild.cjs",
       "sha256": "06255c106d3ee5a1a5c84afcc056a370589bc3bc8577d7e42a7934bfc7b9bede"
+    },
+    {
+      "path": "cursor/.specify/scripts/runtime/application/check-writing-state.js",
+      "sha256": "9099cc6efbe9c99552677ddefe653264bdfe406439a3a456c34f12333fc9b44b"
+    },
+    {
+      "path": "cursor/.specify/scripts/runtime/domain/story-artifact.js",
+      "sha256": "010032f357a3154a9e939db41baa9b47bf72d20a7b4d3c1dba65c25c2af2d603"
+    },
+    {
+      "path": "cursor/.specify/scripts/runtime/script-runtime.js",
+      "sha256": "d33ef7083e1a07e24cea32355c5c8671fe7ad6bc9df0036bb86da74964dd8534"
     },
     {
       "path": "cursor/.specify/templates/agent/agent-contract.md",
@@ -3757,7 +3841,7 @@
     },
     {
       "path": "cursor/.specify/templates/scenes/scene-001.yaml",
-      "sha256": "83d2773329809343215586332bf215b93e9e141bc63a1eec01c6d49f31d905a9"
+      "sha256": "c9bc69c242a41859ed9dd8ec032c47da8c646b44638508fee064c912c5c0272b"
     },
     {
       "path": "cursor/.specify/templates/story-template.md",
@@ -3939,7 +4023,7 @@
     },
     {
       "path": "gemini/.gemini/commands/storyspec/checklist.toml",
-      "sha256": "a979d42c67fcedd61eae2b49803990b5792991176e92a6aeebb60824326e8657",
+      "sha256": "64022853bcbcdc7664300fdcb70b4b98c0327321794d32d21e5aa94bf92953f0",
       "commandSource": {
         "command": "checklist",
         "kind": "legacy-template",
@@ -3966,7 +4050,7 @@
     },
     {
       "path": "gemini/.gemini/commands/storyspec/context-pack.toml",
-      "sha256": "6def44384bb3dd6d69bb9b7adcb80b546344d9cc253e460356ce97632b2abc4b",
+      "sha256": "4d1ca4ba92264fe00ea9fc43563567d13b69347ae1e223db6f308f90838c0b24",
       "commandSource": {
         "command": "context-pack",
         "kind": "legacy-template",
@@ -4011,7 +4095,7 @@
     },
     {
       "path": "gemini/.gemini/commands/storyspec/scene.toml",
-      "sha256": "5fee3f1e9995c4461e89ffd64de097786a0bb72195f87b4d812ba9a88b39011f",
+      "sha256": "3a4732b8b8226cbb6fb7c03c1a76870658a4e5e2bea5ef79c62e6cc3abb76ec5",
       "commandSource": {
         "command": "scene",
         "kind": "legacy-template",
@@ -4029,7 +4113,7 @@
     },
     {
       "path": "gemini/.gemini/commands/storyspec/tasks.toml",
-      "sha256": "3ed3730c97f136dafae7c1ae9d6598001f0eb7535f2c9d76a4c6900e7f889f74",
+      "sha256": "43176ae3ac9d166e7001176a05a5d4fbc31689ea3ad6e5ec5ac58b26fe0fe944",
       "commandSource": {
         "command": "tasks",
         "kind": "legacy-template",
@@ -4065,7 +4149,7 @@
     },
     {
       "path": "gemini/.gemini/commands/storyspec/write.toml",
-      "sha256": "56a2f7628b33855f2209d00246f29914b20c185a144d4e2b80c7655cf8c226bc",
+      "sha256": "91e1c51900666b29878d14d444b035f2ba0a36f3b21ccb37588265a6ec1aacd1",
       "commandSource": {
         "command": "write",
         "kind": "command-spec",
@@ -4176,6 +4260,18 @@
     {
       "path": "gemini/.specify/scripts/postbuild.cjs",
       "sha256": "06255c106d3ee5a1a5c84afcc056a370589bc3bc8577d7e42a7934bfc7b9bede"
+    },
+    {
+      "path": "gemini/.specify/scripts/runtime/application/check-writing-state.js",
+      "sha256": "9099cc6efbe9c99552677ddefe653264bdfe406439a3a456c34f12333fc9b44b"
+    },
+    {
+      "path": "gemini/.specify/scripts/runtime/domain/story-artifact.js",
+      "sha256": "010032f357a3154a9e939db41baa9b47bf72d20a7b4d3c1dba65c25c2af2d603"
+    },
+    {
+      "path": "gemini/.specify/scripts/runtime/script-runtime.js",
+      "sha256": "d33ef7083e1a07e24cea32355c5c8671fe7ad6bc9df0036bb86da74964dd8534"
     },
     {
       "path": "gemini/.specify/templates/agent/agent-contract.md",
@@ -4315,7 +4411,7 @@
     },
     {
       "path": "gemini/.specify/templates/scenes/scene-001.yaml",
-      "sha256": "83d2773329809343215586332bf215b93e9e141bc63a1eec01c6d49f31d905a9"
+      "sha256": "c9bc69c242a41859ed9dd8ec032c47da8c646b44638508fee064c912c5c0272b"
     },
     {
       "path": "gemini/.specify/templates/story-template.md",
@@ -4497,7 +4593,7 @@
     },
     {
       "path": "generic/.specify/commands/checklist.md",
-      "sha256": "a239d18a5a380b849af912d557d33cdcb27098e404500eea7f587cc3dc95fc48",
+      "sha256": "026af71536b3b4ca4173fd1dd406a2cf1f652d9422d2267fe4a8421338816c90",
       "commandSource": {
         "command": "checklist",
         "kind": "legacy-template",
@@ -4524,7 +4620,7 @@
     },
     {
       "path": "generic/.specify/commands/context-pack.md",
-      "sha256": "7d7e322c4b93575c1a4a31b844e2028ee1ddc2a629a7b27215f4ff8a69bde889",
+      "sha256": "ac1a51576f51d1bcc704346520284622667e3d96c53c276554783d35a0b0fab9",
       "commandSource": {
         "command": "context-pack",
         "kind": "legacy-template",
@@ -4569,7 +4665,7 @@
     },
     {
       "path": "generic/.specify/commands/scene.md",
-      "sha256": "f2031346c75e934aacefdf95c3675912f23b63d3dd685bc8d72d5023891af3cf",
+      "sha256": "4e68f37e37effbcdda91f3fb62dc18fecdea2172495ae3feeb3eca648eddd670",
       "commandSource": {
         "command": "scene",
         "kind": "legacy-template",
@@ -4587,7 +4683,7 @@
     },
     {
       "path": "generic/.specify/commands/tasks.md",
-      "sha256": "b34b3e5051f942b2a7be5dc66fed35a9bbb1c17c6321d27ab817d69b8c441dd4",
+      "sha256": "07331530c715bc6f63841ecc0a3978cce49ed189755f66b750f936265729d9df",
       "commandSource": {
         "command": "tasks",
         "kind": "legacy-template",
@@ -4623,7 +4719,7 @@
     },
     {
       "path": "generic/.specify/commands/write.md",
-      "sha256": "ae7f9c693415433e1e2257776a127d37b7e2cc5ee9cb88f6241626c34089cea3",
+      "sha256": "1595d4afdd4944cb6d2f87ca93d5915ac3bd5d2455091f1cf284591534bfe8f4",
       "commandSource": {
         "command": "write",
         "kind": "command-spec",
@@ -4734,6 +4830,18 @@
     {
       "path": "generic/.specify/scripts/postbuild.cjs",
       "sha256": "06255c106d3ee5a1a5c84afcc056a370589bc3bc8577d7e42a7934bfc7b9bede"
+    },
+    {
+      "path": "generic/.specify/scripts/runtime/application/check-writing-state.js",
+      "sha256": "9099cc6efbe9c99552677ddefe653264bdfe406439a3a456c34f12333fc9b44b"
+    },
+    {
+      "path": "generic/.specify/scripts/runtime/domain/story-artifact.js",
+      "sha256": "010032f357a3154a9e939db41baa9b47bf72d20a7b4d3c1dba65c25c2af2d603"
+    },
+    {
+      "path": "generic/.specify/scripts/runtime/script-runtime.js",
+      "sha256": "d33ef7083e1a07e24cea32355c5c8671fe7ad6bc9df0036bb86da74964dd8534"
     },
     {
       "path": "generic/.specify/templates/agent/agent-contract.md",
@@ -4873,7 +4981,7 @@
     },
     {
       "path": "generic/.specify/templates/scenes/scene-001.yaml",
-      "sha256": "83d2773329809343215586332bf215b93e9e141bc63a1eec01c6d49f31d905a9"
+      "sha256": "c9bc69c242a41859ed9dd8ec032c47da8c646b44638508fee064c912c5c0272b"
     },
     {
       "path": "generic/.specify/templates/story-template.md",
@@ -5055,7 +5163,7 @@
     },
     {
       "path": "kilocode/.kilocode/workflows/checklist.md",
-      "sha256": "cf908b98d494e13162463429c9f31069eef67e4f219e2809833bdb6bd05c489c",
+      "sha256": "816a78d34d7e2f13b31c119a5bbea101b9547597074b0bc33c19c568d0286038",
       "commandSource": {
         "command": "checklist",
         "kind": "legacy-template",
@@ -5082,7 +5190,7 @@
     },
     {
       "path": "kilocode/.kilocode/workflows/context-pack.md",
-      "sha256": "ee5d4cacc73daa395bd4725b8c987ea63088d38c86956a5c82dcf832ef13a4f9",
+      "sha256": "61cc37bebee631b55ba6f49bec36a0f3a1392ebb5777262d5e6231340ccdfeae",
       "commandSource": {
         "command": "context-pack",
         "kind": "legacy-template",
@@ -5127,7 +5235,7 @@
     },
     {
       "path": "kilocode/.kilocode/workflows/scene.md",
-      "sha256": "3ce4c043be86af5dfeceb538520bc2f0b9edc2ae37dd62029d10ecc6494a903c",
+      "sha256": "508d6d186fe3f52cc15ab0a12c6f8b68fcd7688a93ae70fc10efa28cdb562989",
       "commandSource": {
         "command": "scene",
         "kind": "legacy-template",
@@ -5145,7 +5253,7 @@
     },
     {
       "path": "kilocode/.kilocode/workflows/tasks.md",
-      "sha256": "15825f1711ef2190192ffed3f545f7ed3cc50fdefc5030bed5f0c24d94c56a6f",
+      "sha256": "5ddb5613b5d542378da419587de8eb54621196369952ef5f55467d8c78c66b70",
       "commandSource": {
         "command": "tasks",
         "kind": "legacy-template",
@@ -5181,7 +5289,7 @@
     },
     {
       "path": "kilocode/.kilocode/workflows/write.md",
-      "sha256": "3e8e250e26a4b76b32c1e8abb6bc9d977d2588578595acf5b18f2dda83e1930d",
+      "sha256": "f65be517794fd6a9f2aa2baedb8f3d3f1ae27338a8f14d1fbc5dc5e0f8181c6f",
       "commandSource": {
         "command": "write",
         "kind": "command-spec",
@@ -5292,6 +5400,18 @@
     {
       "path": "kilocode/.specify/scripts/postbuild.cjs",
       "sha256": "06255c106d3ee5a1a5c84afcc056a370589bc3bc8577d7e42a7934bfc7b9bede"
+    },
+    {
+      "path": "kilocode/.specify/scripts/runtime/application/check-writing-state.js",
+      "sha256": "9099cc6efbe9c99552677ddefe653264bdfe406439a3a456c34f12333fc9b44b"
+    },
+    {
+      "path": "kilocode/.specify/scripts/runtime/domain/story-artifact.js",
+      "sha256": "010032f357a3154a9e939db41baa9b47bf72d20a7b4d3c1dba65c25c2af2d603"
+    },
+    {
+      "path": "kilocode/.specify/scripts/runtime/script-runtime.js",
+      "sha256": "d33ef7083e1a07e24cea32355c5c8671fe7ad6bc9df0036bb86da74964dd8534"
     },
     {
       "path": "kilocode/.specify/templates/agent/agent-contract.md",
@@ -5431,7 +5551,7 @@
     },
     {
       "path": "kilocode/.specify/templates/scenes/scene-001.yaml",
-      "sha256": "83d2773329809343215586332bf215b93e9e141bc63a1eec01c6d49f31d905a9"
+      "sha256": "c9bc69c242a41859ed9dd8ec032c47da8c646b44638508fee064c912c5c0272b"
     },
     {
       "path": "kilocode/.specify/templates/story-template.md",
@@ -5613,7 +5733,7 @@
     },
     {
       "path": "opencode/.opencode/command/checklist.md",
-      "sha256": "cf908b98d494e13162463429c9f31069eef67e4f219e2809833bdb6bd05c489c",
+      "sha256": "816a78d34d7e2f13b31c119a5bbea101b9547597074b0bc33c19c568d0286038",
       "commandSource": {
         "command": "checklist",
         "kind": "legacy-template",
@@ -5640,7 +5760,7 @@
     },
     {
       "path": "opencode/.opencode/command/context-pack.md",
-      "sha256": "995c9a757c8ae05d66cc4945eee1fdf844bb3ae2fa12b496eb78573ee2d760b0",
+      "sha256": "21a76c6124d1a87f326b7222683f4955843896ea7e7a595bae8b864cd2228356",
       "commandSource": {
         "command": "context-pack",
         "kind": "legacy-template",
@@ -5685,7 +5805,7 @@
     },
     {
       "path": "opencode/.opencode/command/scene.md",
-      "sha256": "8f4b90860ab895f30d0c416666165397f5abea07a14f9ce44716f1ccbdd723e9",
+      "sha256": "27b859f80d637b4a92678d2021d5c088ee1e8c785cb5a834ce6442dbc849a244",
       "commandSource": {
         "command": "scene",
         "kind": "legacy-template",
@@ -5703,7 +5823,7 @@
     },
     {
       "path": "opencode/.opencode/command/tasks.md",
-      "sha256": "15825f1711ef2190192ffed3f545f7ed3cc50fdefc5030bed5f0c24d94c56a6f",
+      "sha256": "5ddb5613b5d542378da419587de8eb54621196369952ef5f55467d8c78c66b70",
       "commandSource": {
         "command": "tasks",
         "kind": "legacy-template",
@@ -5739,7 +5859,7 @@
     },
     {
       "path": "opencode/.opencode/command/write.md",
-      "sha256": "50822872592bee1c1ce77523cdf21f3da6bb594461fb76869eaf735eb0b6e52e",
+      "sha256": "913401dad35762202721691e84a9bf68a7311af617d0f89f75feca699108fb68",
       "commandSource": {
         "command": "write",
         "kind": "command-spec",
@@ -5850,6 +5970,18 @@
     {
       "path": "opencode/.specify/scripts/postbuild.cjs",
       "sha256": "06255c106d3ee5a1a5c84afcc056a370589bc3bc8577d7e42a7934bfc7b9bede"
+    },
+    {
+      "path": "opencode/.specify/scripts/runtime/application/check-writing-state.js",
+      "sha256": "9099cc6efbe9c99552677ddefe653264bdfe406439a3a456c34f12333fc9b44b"
+    },
+    {
+      "path": "opencode/.specify/scripts/runtime/domain/story-artifact.js",
+      "sha256": "010032f357a3154a9e939db41baa9b47bf72d20a7b4d3c1dba65c25c2af2d603"
+    },
+    {
+      "path": "opencode/.specify/scripts/runtime/script-runtime.js",
+      "sha256": "d33ef7083e1a07e24cea32355c5c8671fe7ad6bc9df0036bb86da74964dd8534"
     },
     {
       "path": "opencode/.specify/templates/agent/agent-contract.md",
@@ -5989,7 +6121,7 @@
     },
     {
       "path": "opencode/.specify/templates/scenes/scene-001.yaml",
-      "sha256": "83d2773329809343215586332bf215b93e9e141bc63a1eec01c6d49f31d905a9"
+      "sha256": "c9bc69c242a41859ed9dd8ec032c47da8c646b44638508fee064c912c5c0272b"
     },
     {
       "path": "opencode/.specify/templates/story-template.md",
@@ -6171,7 +6303,7 @@
     },
     {
       "path": "q/.amazonq/prompts/checklist.md",
-      "sha256": "1a59bfa616f943e933ed6db15fcf8f77f04ae4945d127c5357a60df17c3fc590",
+      "sha256": "5c20398584182a6b398ee090ee1144d9ab54c26a84d396286db9be7d257bb52a",
       "commandSource": {
         "command": "checklist",
         "kind": "legacy-template",
@@ -6198,7 +6330,7 @@
     },
     {
       "path": "q/.amazonq/prompts/context-pack.md",
-      "sha256": "a4f91128ef949da96d2e05d09b4615c7a07a8b6aea293f7a7bb8b3aca9dd6399",
+      "sha256": "c7fd5201228a1760758f783c09a7f9ed189fd13c91cf82bba755634f001102ae",
       "commandSource": {
         "command": "context-pack",
         "kind": "legacy-template",
@@ -6243,7 +6375,7 @@
     },
     {
       "path": "q/.amazonq/prompts/scene.md",
-      "sha256": "abbfb26b343819a7e599e21e0cdaa2858e82a2d9e79e17256cb76dfa12b4fd74",
+      "sha256": "bcd49c1db8f824a3491d3955dc1bfa281fcd7d39412498a1957883ecafbf177d",
       "commandSource": {
         "command": "scene",
         "kind": "legacy-template",
@@ -6261,7 +6393,7 @@
     },
     {
       "path": "q/.amazonq/prompts/tasks.md",
-      "sha256": "cab58eeb000a755202f1f6e5b7def20f418107ac9b663a171944183ce327557a",
+      "sha256": "42a1d531f529ccd3ab27055f24dbb5dca11701886e380743b0845a0fb5b26a12",
       "commandSource": {
         "command": "tasks",
         "kind": "legacy-template",
@@ -6297,7 +6429,7 @@
     },
     {
       "path": "q/.amazonq/prompts/write.md",
-      "sha256": "04ddf9773879fc27f186cad5dbb3891905aa4302c0e3014cb2f64f89d4eff3ff",
+      "sha256": "aa73f574a0581f7e78778afa0d9e178dedaae8e3a6d16231e60656e3980bb446",
       "commandSource": {
         "command": "write",
         "kind": "command-spec",
@@ -6408,6 +6540,18 @@
     {
       "path": "q/.specify/scripts/postbuild.cjs",
       "sha256": "06255c106d3ee5a1a5c84afcc056a370589bc3bc8577d7e42a7934bfc7b9bede"
+    },
+    {
+      "path": "q/.specify/scripts/runtime/application/check-writing-state.js",
+      "sha256": "9099cc6efbe9c99552677ddefe653264bdfe406439a3a456c34f12333fc9b44b"
+    },
+    {
+      "path": "q/.specify/scripts/runtime/domain/story-artifact.js",
+      "sha256": "010032f357a3154a9e939db41baa9b47bf72d20a7b4d3c1dba65c25c2af2d603"
+    },
+    {
+      "path": "q/.specify/scripts/runtime/script-runtime.js",
+      "sha256": "d33ef7083e1a07e24cea32355c5c8671fe7ad6bc9df0036bb86da74964dd8534"
     },
     {
       "path": "q/.specify/templates/agent/agent-contract.md",
@@ -6547,7 +6691,7 @@
     },
     {
       "path": "q/.specify/templates/scenes/scene-001.yaml",
-      "sha256": "83d2773329809343215586332bf215b93e9e141bc63a1eec01c6d49f31d905a9"
+      "sha256": "c9bc69c242a41859ed9dd8ec032c47da8c646b44638508fee064c912c5c0272b"
     },
     {
       "path": "q/.specify/templates/story-template.md",
@@ -6729,7 +6873,7 @@
     },
     {
       "path": "qwen/.qwen/commands/checklist.toml",
-      "sha256": "a979d42c67fcedd61eae2b49803990b5792991176e92a6aeebb60824326e8657",
+      "sha256": "64022853bcbcdc7664300fdcb70b4b98c0327321794d32d21e5aa94bf92953f0",
       "commandSource": {
         "command": "checklist",
         "kind": "legacy-template",
@@ -6756,7 +6900,7 @@
     },
     {
       "path": "qwen/.qwen/commands/context-pack.toml",
-      "sha256": "6def44384bb3dd6d69bb9b7adcb80b546344d9cc253e460356ce97632b2abc4b",
+      "sha256": "4d1ca4ba92264fe00ea9fc43563567d13b69347ae1e223db6f308f90838c0b24",
       "commandSource": {
         "command": "context-pack",
         "kind": "legacy-template",
@@ -6801,7 +6945,7 @@
     },
     {
       "path": "qwen/.qwen/commands/scene.toml",
-      "sha256": "5fee3f1e9995c4461e89ffd64de097786a0bb72195f87b4d812ba9a88b39011f",
+      "sha256": "3a4732b8b8226cbb6fb7c03c1a76870658a4e5e2bea5ef79c62e6cc3abb76ec5",
       "commandSource": {
         "command": "scene",
         "kind": "legacy-template",
@@ -6819,7 +6963,7 @@
     },
     {
       "path": "qwen/.qwen/commands/tasks.toml",
-      "sha256": "3ed3730c97f136dafae7c1ae9d6598001f0eb7535f2c9d76a4c6900e7f889f74",
+      "sha256": "43176ae3ac9d166e7001176a05a5d4fbc31689ea3ad6e5ec5ac58b26fe0fe944",
       "commandSource": {
         "command": "tasks",
         "kind": "legacy-template",
@@ -6855,7 +6999,7 @@
     },
     {
       "path": "qwen/.qwen/commands/write.toml",
-      "sha256": "56a2f7628b33855f2209d00246f29914b20c185a144d4e2b80c7655cf8c226bc",
+      "sha256": "91e1c51900666b29878d14d444b035f2ba0a36f3b21ccb37588265a6ec1aacd1",
       "commandSource": {
         "command": "write",
         "kind": "command-spec",
@@ -6966,6 +7110,18 @@
     {
       "path": "qwen/.specify/scripts/postbuild.cjs",
       "sha256": "06255c106d3ee5a1a5c84afcc056a370589bc3bc8577d7e42a7934bfc7b9bede"
+    },
+    {
+      "path": "qwen/.specify/scripts/runtime/application/check-writing-state.js",
+      "sha256": "9099cc6efbe9c99552677ddefe653264bdfe406439a3a456c34f12333fc9b44b"
+    },
+    {
+      "path": "qwen/.specify/scripts/runtime/domain/story-artifact.js",
+      "sha256": "010032f357a3154a9e939db41baa9b47bf72d20a7b4d3c1dba65c25c2af2d603"
+    },
+    {
+      "path": "qwen/.specify/scripts/runtime/script-runtime.js",
+      "sha256": "d33ef7083e1a07e24cea32355c5c8671fe7ad6bc9df0036bb86da74964dd8534"
     },
     {
       "path": "qwen/.specify/templates/agent/agent-contract.md",
@@ -7105,7 +7261,7 @@
     },
     {
       "path": "qwen/.specify/templates/scenes/scene-001.yaml",
-      "sha256": "83d2773329809343215586332bf215b93e9e141bc63a1eec01c6d49f31d905a9"
+      "sha256": "c9bc69c242a41859ed9dd8ec032c47da8c646b44638508fee064c912c5c0272b"
     },
     {
       "path": "qwen/.specify/templates/story-template.md",
@@ -7287,7 +7443,7 @@
     },
     {
       "path": "roocode/.roo/commands/checklist.md",
-      "sha256": "cf908b98d494e13162463429c9f31069eef67e4f219e2809833bdb6bd05c489c",
+      "sha256": "816a78d34d7e2f13b31c119a5bbea101b9547597074b0bc33c19c568d0286038",
       "commandSource": {
         "command": "checklist",
         "kind": "legacy-template",
@@ -7314,7 +7470,7 @@
     },
     {
       "path": "roocode/.roo/commands/context-pack.md",
-      "sha256": "ee5d4cacc73daa395bd4725b8c987ea63088d38c86956a5c82dcf832ef13a4f9",
+      "sha256": "61cc37bebee631b55ba6f49bec36a0f3a1392ebb5777262d5e6231340ccdfeae",
       "commandSource": {
         "command": "context-pack",
         "kind": "legacy-template",
@@ -7359,7 +7515,7 @@
     },
     {
       "path": "roocode/.roo/commands/scene.md",
-      "sha256": "3ce4c043be86af5dfeceb538520bc2f0b9edc2ae37dd62029d10ecc6494a903c",
+      "sha256": "508d6d186fe3f52cc15ab0a12c6f8b68fcd7688a93ae70fc10efa28cdb562989",
       "commandSource": {
         "command": "scene",
         "kind": "legacy-template",
@@ -7377,7 +7533,7 @@
     },
     {
       "path": "roocode/.roo/commands/tasks.md",
-      "sha256": "15825f1711ef2190192ffed3f545f7ed3cc50fdefc5030bed5f0c24d94c56a6f",
+      "sha256": "5ddb5613b5d542378da419587de8eb54621196369952ef5f55467d8c78c66b70",
       "commandSource": {
         "command": "tasks",
         "kind": "legacy-template",
@@ -7413,7 +7569,7 @@
     },
     {
       "path": "roocode/.roo/commands/write.md",
-      "sha256": "3e8e250e26a4b76b32c1e8abb6bc9d977d2588578595acf5b18f2dda83e1930d",
+      "sha256": "f65be517794fd6a9f2aa2baedb8f3d3f1ae27338a8f14d1fbc5dc5e0f8181c6f",
       "commandSource": {
         "command": "write",
         "kind": "command-spec",
@@ -7524,6 +7680,18 @@
     {
       "path": "roocode/.specify/scripts/postbuild.cjs",
       "sha256": "06255c106d3ee5a1a5c84afcc056a370589bc3bc8577d7e42a7934bfc7b9bede"
+    },
+    {
+      "path": "roocode/.specify/scripts/runtime/application/check-writing-state.js",
+      "sha256": "9099cc6efbe9c99552677ddefe653264bdfe406439a3a456c34f12333fc9b44b"
+    },
+    {
+      "path": "roocode/.specify/scripts/runtime/domain/story-artifact.js",
+      "sha256": "010032f357a3154a9e939db41baa9b47bf72d20a7b4d3c1dba65c25c2af2d603"
+    },
+    {
+      "path": "roocode/.specify/scripts/runtime/script-runtime.js",
+      "sha256": "d33ef7083e1a07e24cea32355c5c8671fe7ad6bc9df0036bb86da74964dd8534"
     },
     {
       "path": "roocode/.specify/templates/agent/agent-contract.md",
@@ -7663,7 +7831,7 @@
     },
     {
       "path": "roocode/.specify/templates/scenes/scene-001.yaml",
-      "sha256": "83d2773329809343215586332bf215b93e9e141bc63a1eec01c6d49f31d905a9"
+      "sha256": "c9bc69c242a41859ed9dd8ec032c47da8c646b44638508fee064c912c5c0272b"
     },
     {
       "path": "roocode/.specify/templates/story-template.md",
@@ -7938,6 +8106,18 @@
       "sha256": "06255c106d3ee5a1a5c84afcc056a370589bc3bc8577d7e42a7934bfc7b9bede"
     },
     {
+      "path": "windsurf/.specify/scripts/runtime/application/check-writing-state.js",
+      "sha256": "9099cc6efbe9c99552677ddefe653264bdfe406439a3a456c34f12333fc9b44b"
+    },
+    {
+      "path": "windsurf/.specify/scripts/runtime/domain/story-artifact.js",
+      "sha256": "010032f357a3154a9e939db41baa9b47bf72d20a7b4d3c1dba65c25c2af2d603"
+    },
+    {
+      "path": "windsurf/.specify/scripts/runtime/script-runtime.js",
+      "sha256": "d33ef7083e1a07e24cea32355c5c8671fe7ad6bc9df0036bb86da74964dd8534"
+    },
+    {
       "path": "windsurf/.specify/templates/agent/agent-contract.md",
       "sha256": "6d877ddb32e4577ec4b124de975d2c0d29981add23163e5a07bd3ae2b2dcb577"
     },
@@ -8075,7 +8255,7 @@
     },
     {
       "path": "windsurf/.specify/templates/scenes/scene-001.yaml",
-      "sha256": "83d2773329809343215586332bf215b93e9e141bc63a1eec01c6d49f31d905a9"
+      "sha256": "c9bc69c242a41859ed9dd8ec032c47da8c646b44638508fee064c912c5c0272b"
     },
     {
       "path": "windsurf/.specify/templates/story-template.md",
@@ -8173,7 +8353,7 @@
     },
     {
       "path": "windsurf/.windsurf/workflows/checklist.md",
-      "sha256": "cf908b98d494e13162463429c9f31069eef67e4f219e2809833bdb6bd05c489c",
+      "sha256": "816a78d34d7e2f13b31c119a5bbea101b9547597074b0bc33c19c568d0286038",
       "commandSource": {
         "command": "checklist",
         "kind": "legacy-template",
@@ -8200,7 +8380,7 @@
     },
     {
       "path": "windsurf/.windsurf/workflows/context-pack.md",
-      "sha256": "ee5d4cacc73daa395bd4725b8c987ea63088d38c86956a5c82dcf832ef13a4f9",
+      "sha256": "61cc37bebee631b55ba6f49bec36a0f3a1392ebb5777262d5e6231340ccdfeae",
       "commandSource": {
         "command": "context-pack",
         "kind": "legacy-template",
@@ -8245,7 +8425,7 @@
     },
     {
       "path": "windsurf/.windsurf/workflows/scene.md",
-      "sha256": "3ce4c043be86af5dfeceb538520bc2f0b9edc2ae37dd62029d10ecc6494a903c",
+      "sha256": "508d6d186fe3f52cc15ab0a12c6f8b68fcd7688a93ae70fc10efa28cdb562989",
       "commandSource": {
         "command": "scene",
         "kind": "legacy-template",
@@ -8263,7 +8443,7 @@
     },
     {
       "path": "windsurf/.windsurf/workflows/tasks.md",
-      "sha256": "15825f1711ef2190192ffed3f545f7ed3cc50fdefc5030bed5f0c24d94c56a6f",
+      "sha256": "5ddb5613b5d542378da419587de8eb54621196369952ef5f55467d8c78c66b70",
       "commandSource": {
         "command": "tasks",
         "kind": "legacy-template",
@@ -8299,7 +8479,7 @@
     },
     {
       "path": "windsurf/.windsurf/workflows/write.md",
-      "sha256": "3e8e250e26a4b76b32c1e8abb6bc9d977d2588578595acf5b18f2dda83e1930d",
+      "sha256": "f65be517794fd6a9f2aa2baedb8f3d3f1ae27338a8f14d1fbc5dc5e0f8181c6f",
       "commandSource": {
         "command": "write",
         "kind": "command-spec",

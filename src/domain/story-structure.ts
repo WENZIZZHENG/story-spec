@@ -37,6 +37,13 @@ export interface SceneCard {
   sceneGoal: string;
   conflict: string;
   outcome: string;
+  plotThread: string;
+  readerPromise: string;
+  relationshipChange: string;
+  worldReveal: SceneWorldReveal;
+  emotionalBeat: string;
+  endingHook: string;
+  successCriteria: string[];
   emotionalTurn: string;
   entities: string[];
   worldElements: string[];
@@ -51,6 +58,14 @@ export interface SceneCard {
   draftPath?: string;
 }
 
+export interface SceneWorldReveal {
+  factId: string;
+  actionImpact: string;
+  beneficiaries: string[];
+  costs: string[];
+  violationConsequence: string;
+}
+
 export interface StoryStructureIssue {
   severity: 'error' | 'warning' | 'info';
   code:
@@ -63,6 +78,7 @@ export interface StoryStructureIssue {
     | 'INVALID_SCENE_DOCUMENT'
     | 'INVALID_SCENE_CARD'
     | 'MISSING_SCENE_FIELD'
+    | 'MISSING_SCENE_INTENT'
     | 'DUPLICATE_SCENE_ORDER'
     | 'UNKNOWN_SCENE_ENTITY';
   path: string;
@@ -275,6 +291,26 @@ const readForeshadowing = (value: unknown): SceneCard['foreshadowing'] => {
   };
 };
 
+const readWorldReveal = (value: unknown): SceneWorldReveal => {
+  if (!isRecord(value)) {
+    return {
+      factId: '',
+      actionImpact: '',
+      beneficiaries: [],
+      costs: [],
+      violationConsequence: ''
+    };
+  }
+
+  return {
+    factId: isNonEmptyString(value.factId) ? value.factId.trim() : '',
+    actionImpact: isNonEmptyString(value.actionImpact) ? value.actionImpact.trim() : '',
+    beneficiaries: toStringArray(value.beneficiaries),
+    costs: toStringArray(value.costs),
+    violationConsequence: isNonEmptyString(value.violationConsequence) ? value.violationConsequence.trim() : ''
+  };
+};
+
 export const parseSceneCardDocument = (
   content: string,
   filePath: string
@@ -344,6 +380,13 @@ export const parseSceneCardDocument = (
       sceneGoal: String(candidate.sceneGoal).trim(),
       conflict: String(candidate.conflict).trim(),
       outcome: String(candidate.outcome).trim(),
+      plotThread: isNonEmptyString(candidate.plotThread) ? candidate.plotThread.trim() : '',
+      readerPromise: isNonEmptyString(candidate.readerPromise) ? candidate.readerPromise.trim() : '',
+      relationshipChange: isNonEmptyString(candidate.relationshipChange) ? candidate.relationshipChange.trim() : '',
+      worldReveal: readWorldReveal(candidate.worldReveal),
+      emotionalBeat: isNonEmptyString(candidate.emotionalBeat) ? candidate.emotionalBeat.trim() : '',
+      endingHook: isNonEmptyString(candidate.endingHook) ? candidate.endingHook.trim() : '',
+      successCriteria: toStringArray(candidate.successCriteria),
       emotionalTurn: isNonEmptyString(candidate.emotionalTurn) ? candidate.emotionalTurn.trim() : '',
       entities: toStringArray(candidate.entities),
       worldElements: toStringArray(candidate.worldElements),

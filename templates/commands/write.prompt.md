@@ -14,12 +14,14 @@
 - 如果任务标记为 `[PLAN-ONLY]`，停止正文写作，先提示补充规划或澄清。
 - 如果任务缺少必须读取、允许修改或验收标准，先补齐任务说明，不直接写正文。
 - 如果任务涉及高风险内容，只处理剧情功能、人物动机、同意边界、后果和任务标注，不扩写未授权内容。
+- 写正文前必须找到目标章节或目标 scene 的 Scene Card；没有 Scene Card 时先输出 Scene Card preview，不直接写正文。
+- Scene Card 必须具备 `plotThread`、`readerPromise`、`relationshipChange`、`worldReveal`、`emotionalBeat`、`endingHook`、`successCriteria`；缺任一项时先补卡并等待作者确认。
 
 ## 写作流程
 
 1. 将选中任务标记为 `in_progress`。
 2. 读取宪法、故事规格、创作计划、任务清单、tracking、World Bible、Canon Ledger、Entity Graph、Scene Cards、VoiceFingerprint 与知识库。
-3. 若目标章节存在 Scene Card，优先按 sceneGoal、conflict、outcome、entities、worldElements 和 canonFacts 写作；否则按任务清单写作。
+3. 先按 Scene Card 确认 sceneGoal、conflict、outcome、plotThread、readerPromise、relationshipChange、worldReveal、emotionalBeat、endingHook、successCriteria；未通过时停止正文写作。
 4. 明确本次章节的目标、冲突、人物变化、场景限制和字数要求。
 5. 写入 `stories/*/content/**` 中的目标章节文件。
 6. 更新相关 `spec/tracking/**`，至少覆盖角色状态、关系变化、剧情进度和时间线。
