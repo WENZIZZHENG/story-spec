@@ -1,5 +1,7 @@
 # 外部AI建议整合 - 快速指南
 
+> 归档说明：本文是早期外部 AI 建议整合流程记录。当前 agent 入口以 `../../agent-integrations.md` 和 `../../agent-commands.md` 为准。
+
 ## 🚀 三步完成建议整合
 
 ### 第1步：获取建议
@@ -91,10 +93,10 @@ A: 检查 improvement-log.md 查看是否成功整合
 A: 查看git历史，可以回滚相关文件
 
 ## 📚 详细文档
-- [完整提示词模板](./ai-suggestion-prompt-template.md)
-- [Gemini专用模板](./ai-suggestion-prompt-for-gemini.md)
-- [实例演示](./suggestion-integration-examples.md)
-- [PRD文档](./PRD-external-suggestion-integration.md)
+- [完整提示词模板](../../ai-suggestion-prompt-template.md)
+- [Gemini 专用模板](./ai-suggestion-prompt-for-gemini.md)
+- [实例演示](../../suggestion-integration-examples.md)
+- [PRD 文档](../../PRD-external-suggestion-integration.md)
 
 ---
 *版本：1.0 | 更新：2025-01-24*

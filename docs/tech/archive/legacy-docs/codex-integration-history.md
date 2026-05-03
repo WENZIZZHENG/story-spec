@@ -1,5 +1,7 @@
 # Codex CLI 支持说明与历史归档
 
+> 归档说明：本文保留 Codex 支持落地前后的历史背景。当前用户入口以 `docs/agent-integrations.md` 和 `docs/agent-commands.md` 为准。
+
 ## 当前状态
 
 StorySpec 已支持 Codex CLI。

@@ -214,13 +214,13 @@ storyspec init my-xianxia-novel --plugins wangyu-style
 
 - 《凡人修仙传》 - 忘语代表作
 - 《玄界之门》 - 忘语另一力作
-- [StorySpec 文档](https://github.com/wordflowlab/story-spec)
+- [StorySpec 文档](https://github.com/WENZIZZHENG/story-spec)
 
 ## 🤝 贡献指南
 
 欢迎提交改进建议和问题反馈：
 
-1. 在 [GitHub Issues](https://github.com/wordflowlab/story-spec/issues) 提交问题
+1. 在 [GitHub Issues](https://github.com/WENZIZZHENG/story-spec/issues) 提交问题
 2. 使用标签 `plugin:wangyu-style`
 3. 详细描述问题或建议
 

@@ -349,7 +349,7 @@ A: 当然可以！这是诊断和改进作品的好方法。
 ## 支持
 
 如遇问题或有建议，请提交 Issue：
-<https://github.com/wordflowlab/story-spec/issues>
+<https://github.com/WENZIZZHENG/story-spec/issues>
 
 ## 许可证
 

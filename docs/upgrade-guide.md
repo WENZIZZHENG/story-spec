@@ -188,7 +188,7 @@ storyspec upgrade -y --no-backup
   • 智能分析: /analyze 命令增强的质量验证
 
 📚 查看详细升级指南: docs/upgrade-guide.md
-   或访问: https://github.com/wordflowlab/story-spec/blob/main/docs/upgrade-guide.md
+   或访问: https://github.com/WENZIZZHENG/story-spec/blob/main/docs/upgrade-guide.md
 ```
 
 ---
@@ -970,8 +970,8 @@ v0.17.0 从"补偿丰富"转向"精准克制"，基于实测成功案例（0% AI
 
 ## 获取帮助
 
-- **GitHub Issues**: https://github.com/wordflowlab/story-spec/issues
-- **文档**: https://github.com/wordflowlab/story-spec#readme
+- **GitHub Issues**: https://github.com/WENZIZZHENG/story-spec/issues
+- **文档**: https://github.com/WENZIZZHENG/story-spec#readme
 - **CHANGELOG**: 查看 CHANGELOG.md 了解版本变化
 
 ---

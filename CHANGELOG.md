@@ -58,7 +58,7 @@
 - **技术实现**: 借鉴 [Spec-Kit](https://github.com/github/spec-kit) v0.0.11+ 的实现方案
 
 #### 📚 AI 平台命令对照文档
-- **新增文档**: `docs/ai-platform-commands.md` - 13 个 AI 平台的完整命令对照指南
+- **新增文档**: `docs/agent-commands.md` - 13 个 AI 平台的完整命令对照指南
   - 快速对照表：一目了然的命令格式差异
   - 命名空间规则：详细解释为什么使用不同前缀
   - 平台详细说明：Gemini、Claude、Codex 等的完整命令列表
@@ -68,7 +68,7 @@
 ### 📝 文档更新
 
 #### Codex CLI 支持说明
-- 更新 `docs/why-codex-not-supported.md`:
+- 更新 `docs/tech/archive/legacy-docs/codex-integration-history.md`:
   - 标题改为"StorySpec 的 Codex CLI 支持"
   - 添加"即将支持"改为"v0.19.0 已支持"
   - 保留历史原因作为设计决策记录
@@ -121,8 +121,8 @@
 
 ### 📖 相关文档
 
-- [AI 平台命令使用指南](docs/ai-platform-commands.md) ⭐ 必读
-- [Codex CLI 支持说明](docs/why-codex-not-supported.md)
+- [AI 平台命令使用指南](docs/agent-commands.md) ⭐ 必读
+- [Codex CLI 支持说明](docs/tech/archive/legacy-docs/codex-integration-history.md)
 - [Gemini 命令开发指南](docs/gemini-command-guide.md)
 
 ---
@@ -838,8 +838,8 @@ mv stories/your-story/story.md stories/your-story/specification.md
 ### 📚 新增文档
 - **PRD文档**：`docs/PRD-external-suggestion-integration.md` - 功能设计规范
 - **AI提示词模板**：`docs/ai-suggestion-prompt-template.md` - 标准化建议格式
-- **Gemini专用模板**：`docs/ai-suggestion-prompt-for-gemini.md` - 优化的提示词
-- **快速指南**：`docs/quick-guide-external-ai-integration.md` - 三步完成整合
+- **Gemini专用模板**：`docs/tech/archive/legacy-docs/ai-suggestion-prompt-for-gemini.md` - 优化的提示词
+- **快速指南**：`docs/tech/archive/legacy-docs/quick-guide-external-ai-integration.md` - 三步完成整合
 - **实例集**：`docs/suggestion-integration-examples.md` - 详细使用示例
 
 ### 🔧 技术改进

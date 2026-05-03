@@ -5,7 +5,7 @@
 ## 1. 克隆和分支管理
 
 ```bash
-git clone https://github.com/wordflowlab/story-spec.git
+git clone https://github.com/WENZIZZHENG/story-spec.git
 cd story-spec
 # 在功能分支上工作
 git checkout -b feature/your-feature
@@ -85,7 +85,7 @@ uvx --from . storyspec outline my-story --chapters 10
 git push origin feature/your-feature
 
 # 从分支运行
-uvx --from git+https://github.com/wordflowlab/story-spec.git@feature/your-feature storyspec write chapter-1
+uvx --from git+https://github.com/WENZIZZHENG/story-spec.git@feature/your-feature storyspec write chapter-1
 ```
 
 ### 5.3 绝对路径运行（从任何位置）
@@ -302,8 +302,8 @@ python -m memory_profiler src/novel_cli/__init__.py style my-book
 - 阅读[贡献指南](CONTRIBUTING.md)了解代码规范
 - 查看[架构文档](architecture.md)理解系统设计
 - 参考[API 文档](api.md)了解接口规范
-- 加入[开发者社区](https://github.com/wordflowlab/story-spec/discussions)
+- 加入[开发者社区](https://github.com/WENZIZZHENG/story-spec/discussions)
 
 ---
 
-💡 **提示**：开发过程中遇到问题？查看 [FAQ](faq.md) 或在 [Issues](https://github.com/wordflowlab/story-spec/issues) 中提问。
+💡 **提示**：开发过程中遇到问题？查看 [FAQ](faq.md) 或在 [Issues](https://github.com/WENZIZZHENG/story-spec/issues) 中提问。

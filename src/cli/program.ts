@@ -101,7 +101,7 @@ export function runProgram(argv: string[]): void {
     console.log('  /relations   - 追踪角色关系变化');
     console.log('  /track       - 综合追踪与智能分析');
     console.log('');
-    console.log(chalk.gray('更多信息: https://github.com/wordflowlab/story-spec'));
+    console.log(chalk.gray('更多信息: https://github.com/WENZIZZHENG/story-spec'));
   });
 
   // 解析命令行参数

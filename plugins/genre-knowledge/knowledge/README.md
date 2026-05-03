@@ -469,8 +469,8 @@ Glob: plugins/genre-knowledge/knowledge/fundamentals/*structure*.md
 ## 支持与反馈
 
 - 📖 插件文档: `plugins/genre-knowledge/README.md`
-- 🐛 问题反馈: https://github.com/wordflowlab/story-spec/issues
-- 💡 功能建议: https://github.com/wordflowlab/story-spec/discussions
+- 🐛 问题反馈: https://github.com/WENZIZZHENG/story-spec/issues
+- 💡 功能建议: https://github.com/WENZIZZHENG/story-spec/discussions
 
 ---
 

@@ -178,7 +178,7 @@ const displayUpgradeReport = (
   console.log('  • 多 agent 支持: 已更新目标 integration 的命令文件');
 
   console.log(chalk.gray('\n📚 查看详细升级指南: docs/upgrade-guide.md'));
-  console.log(chalk.gray('   或访问: https://github.com/wordflowlab/story-spec/blob/main/docs/upgrade-guide.md'));
+  console.log(chalk.gray('   或访问: https://github.com/WENZIZZHENG/story-spec/blob/main/docs/upgrade-guide.md'));
 };
 
 const displayUpgradeError = (error: unknown): void => {

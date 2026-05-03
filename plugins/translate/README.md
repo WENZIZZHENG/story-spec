@@ -182,7 +182,7 @@ A: 目前专注于中英翻译，其他语言在规划中。
 ## 支持
 
 如遇到问题，请提交 Issue：
-https://github.com/wordflowlab/story-spec/issues
+https://github.com/WENZIZZHENG/story-spec/issues
 
 ## 许可证
 

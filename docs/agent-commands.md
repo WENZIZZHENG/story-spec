@@ -1,10 +1,10 @@
-# AI 平台命令使用指南
+# Agent 命令使用指南
 
-本文档详细说明 StorySpec 在不同 AI 平台下的斜杠命令使用方法。
+本文档说明 StorySpec 在不同 agent 集成下的斜杠命令格式。旧文档中的“AI 平台”概念已收敛为 agent 集成；CLI 仍保留 `--ai` 兼容入口。
 
 ## 📋 快速对照表
 
-| AI 平台 | 命令格式 | 示例 | 命名空间 |
+| Agent | 命令格式 | 示例 | 命名空间 |
 |---------|---------|------|----------|
 | **Gemini CLI** | `/storyspec:命令名` | `/storyspec:write` | `storyspec:` |
 | **Claude Code** | `/storyspec.命令名` | `/storyspec.write` | `storyspec.` |
@@ -22,7 +22,7 @@
 
 ## 🎯 为什么使用命名空间？
 
-StorySpec 在部分 AI 平台使用命名空间（namespace）前缀，主要原因：
+StorySpec 在部分 agent 中使用命名空间（namespace）前缀，主要原因：
 
 1. **避免命令冲突**：防止与其他工具（如 spec-kit、OpenSpec 等）的命令重名
 2. **清晰的命令归属**：让用户明确知道这是 StorySpec 提供的命令
@@ -42,8 +42,8 @@ StorySpec 在部分 AI 平台使用命名空间（namespace）前缀，主要原
   - 原因：Codex prompts 不支持子目录，使用连字符前缀便于识别
   - 路径：`.codex/prompts/storyspec-write.md` → `/storyspec-write`
 
-- **其他平台**：无命名空间，直接使用命令名
-  - 原因：这些平台通常是独立项目环境，冲突风险较低
+- **其他 agent**：无命名空间，直接使用命令名
+  - 原因：这些 agent 通常在独立项目环境中使用，冲突风险较低
 
 ---
 
@@ -282,7 +282,7 @@ cd my-storyspec storyspec status
 
 ---
 
-## 💡 其他 AI 平台命令参考
+## 💡 其他 Agent 命令参考
 
 ### 命令格式
 ```bash
@@ -432,7 +432,7 @@ Cursor、Windsurf、Roo Code、GitHub Copilot、Qwen Code、OpenCode、Kilo Code
 **A**: 这是由各 AI 平台的技术限制决定的：
 - **Gemini**：子目录自动转换为冒号命名空间
 - **Claude**：不支持子目录，必须用文件名前缀
-- **其他平台**：大多支持独立命名空间或冲突风险较低
+- **其他 agent**：大多支持独立命名空间或冲突风险较低
 
 ### Q: 如何查看所有可用命令？
 
@@ -450,7 +450,7 @@ ls .gemini/commands/storyspec/
 ls .claude/commands/ | grep ^storyspec\\.
 ```
 
-**其他平台**：
+**其他 agent**：
 ```bash
 # 列出所有命令
 ls .cursor/commands/
@@ -469,14 +469,5 @@ ls .roo/commands/
 
 ---
 
-## 🆘 获取帮助
-
-如果遇到问题：
-
-1. 查看 [项目 Issues](https://github.com/wordflowlab/story-spec/issues)
-2. 参考 [完整文档](https://github.com/wordflowlab/story-spec/tree/main/docs)
-3. 提交新的 Issue 描述问题
-
----
 
 *最后更新：2025-10-25*

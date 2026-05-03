@@ -63,10 +63,10 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/wordflowlab/story-spec"
+    "url": "https://github.com/WENZIZZHENG/story-spec"
   },
-  "homepage": "https://github.com/wordflowlab/story-spec#readme",
+  "homepage": "https://github.com/WENZIZZHENG/story-spec#readme",
   "bugs": {
-    "url": "https://github.com/wordflowlab/story-spec/issues"
+    "url": "https://github.com/WENZIZZHENG/story-spec/issues"
   }
 }

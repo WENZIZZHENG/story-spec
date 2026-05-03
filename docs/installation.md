@@ -214,7 +214,7 @@ npm uninstall -g story-spec-cn
 ## 获取帮助
 
 - 📖 查看[快速入门指南](quickstart.md)
-- 💬 访问 [GitHub Issues](https://github.com/wordflowlab/story-spec/issues)
+- 💬 访问 [GitHub Issues](https://github.com/WENZIZZHENG/story-spec/issues)
 - 📧 联系支持：support@novelwriter.io
 
 ---

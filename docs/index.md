@@ -120,9 +120,9 @@
 
 ## 加入社区
 
-- 🐛 [报告问题](https://github.com/wordflowlab/story-spec/issues)
-- 💡 [功能建议](https://github.com/wordflowlab/story-spec/discussions)
-- 🤝 [贡献代码](https://github.com/wordflowlab/story-spec/pulls)
+- 🐛 [报告问题](https://github.com/WENZIZZHENG/story-spec/issues)
+- 💡 [功能建议](https://github.com/WENZIZZHENG/story-spec/discussions)
+- 🤝 [贡献代码](https://github.com/WENZIZZHENG/story-spec/pulls)
 
 ---
 

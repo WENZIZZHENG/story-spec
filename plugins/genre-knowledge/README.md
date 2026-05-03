@@ -403,7 +403,7 @@ storyspec run plugins/genre-knowledge/commands/extract-knowledge.md
 ## 支持
 
 如遇问题或有建议，请提交 Issue：
-https://github.com/wordflowlab/story-spec/issues
+https://github.com/WENZIZZHENG/story-spec/issues
 
 ---
 

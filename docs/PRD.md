@@ -785,16 +785,10 @@ class UpdateChecker {
 
 ### 12.2 相关链接
 
-- GitHub 仓库：https://github.com/wordflowlab/story-spec
+- GitHub 仓库：https://github.com/WENZIZZHENG/story-spec
 - NPM 包：https://www.npmjs.com/package/story-spec-cn
 - 文档站点：（待建设）
 - 社区论坛：（待建设）
-
-### 12.3 联系方式
-
-- 问题反馈：GitHub Issues
-- 功能建议：GitHub Discussions
-- 商务合作：（待定）
 
 ---
 

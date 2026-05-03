@@ -658,7 +658,7 @@ cd my-masterpiece
 
 - 💬 **微信群**：扫码加入作者交流群
 - 📺 **B站教程**：搜索"StorySpec教程"
-- 🐛 **问题反馈**：[GitHub Issues](https://github.com/wordflowlab/story-spec/issues)
+- 🐛 **问题反馈**：[GitHub Issues](https://github.com/WENZIZZHENG/story-spec/issues)
 - 📚 **案例分享**：[成功案例集](https://novelwriter.com/cases)
 
 ### 从今天开始，让创作更轻松

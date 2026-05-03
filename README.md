@@ -436,7 +436,7 @@ npm run check:command-manifest
 - [斜杠命令详解](docs/commands.md)
 - [Agent integrations](docs/agent-integrations.md)
 - [Agent contract](docs/agent-contract.md)
-- [AI 平台命令对照](docs/ai-platform-commands.md)
+- [Agent 命令对照](docs/agent-commands.md)
 - [升级指南](docs/upgrade-guide.md)
 - [写作方法](docs/writing-methods.md)
 - [本地开发](docs/local-development.md)

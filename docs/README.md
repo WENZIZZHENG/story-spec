@@ -176,7 +176,7 @@ cspell docs/*.md
 
 - [DocFX 文档](https://dotnet.github.io/docfx/)
 - [Markdown 指南](https://www.markdownguide.org/)
-- [StorySpec 主页](https://github.com/wordflowlab/story-spec)
+- [StorySpec 主页](https://github.com/WENZIZZHENG/story-spec)
 
 ---
 

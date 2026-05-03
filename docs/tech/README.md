@@ -88,7 +88,7 @@
 
 ```bash
 # 克隆仓库
-git clone https://github.com/wordflowlab/story-spec.git
+git clone https://github.com/WENZIZZHENG/story-spec.git
 cd story-spec
 
 # 安装依赖
@@ -292,7 +292,7 @@ npm run dev
 
 遇到问题？请在 GitHub 提交 Issue：
 
-**[https://github.com/wordflowlab/story-spec/issues](https://github.com/wordflowlab/story-spec/issues)**
+**[https://github.com/WENZIZZHENG/story-spec/issues](https://github.com/WENZIZZHENG/story-spec/issues)**
 
 **Issue 模板**：
 ```markdown
@@ -316,14 +316,6 @@ npm run dev
 - StorySpec: v0.16.3
 - AI 平台: Claude Code
 ```
-
----
-
-## 📞 联系方式
-
-- **GitHub**: [wordflowlab/story-spec](https://github.com/wordflowlab/story-spec)
-- **Issues**: [提交问题](https://github.com/wordflowlab/story-spec/issues)
-- **Discussions**: [讨论区](https://github.com/wordflowlab/story-spec/discussions)
 
 ---
 

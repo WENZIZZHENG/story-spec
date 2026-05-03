@@ -1,5 +1,7 @@
 # 给Gemini的小说分析提示词
 
+> 归档说明：本文是早期 Gemini 单点建议整合提示词。当前 Gemini 项目入口已精简为 `templates/GEMINI.md`，通用规则以 `AGENTS.md` 和 `.specify/agent-contract.md` 为准。
+
 ## 使用方法
 1. 复制下面的完整提示词
 2. 将[X]替换为实际章节数
