@@ -279,9 +279,6 @@ StorySpec 会尽量把“作者确认”和“AI 建议”分开：
 | `translate` | 中文小说英译和本地化润色 |
 | `book-analysis` | 小说拆解分析 |
 | `genre-knowledge` | 类型知识库和商业网文写作知识 |
-| `luyao-style` | 路遥风格创作辅助 |
-| `wangyu-style` | 忘语风格创作辅助 |
-| `shizhangyu-style` | 石章鱼风格创作辅助 |
 | `stardust-dreams` | 连接星尘织梦工具市场的高级 AI 创作模板 |
 
 ## 初始化选项

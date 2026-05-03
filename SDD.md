@@ -7,7 +7,6 @@ Stable Maintenance。本文档是 StorySpec 仓库的项目级维护契约，优
 ## 1. 适用范围
 
 - 适用于本仓库的代码、CLI、模板、脚本源、生成产物、测试、技术文档和项目结构维护。
-- `novel-sdd.md` 是产品方法论与创作理念文档，不是开发规范，不参与本仓库开发流程约束。
 - `docs/tech/todo-index.md` 是长期活跃待办入口；`docs/tech/todo-governance.md` 定义待办、路线图和归档规则。
 - `docs/tech/todo-archive.md` 与 `changes/*.md` 记录已完成路线和已发生变化，不作为活跃开发入口。
 

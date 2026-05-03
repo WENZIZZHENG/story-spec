@@ -16,7 +16,6 @@
 ## 项目维护
 
 - [升级指南](upgrade-guide.md)
-- [迁移指南](migration-guide.md)
 - [本地开发](local-development.md)
 - [技术文档](tech/README.md)
 

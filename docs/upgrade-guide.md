@@ -97,6 +97,5 @@ Gemini 使用 `/storyspec:命令名`，命令文件位于 `.gemini/commands/stor
 
 ## 相关文档
 
-- [迁移指南](migration-guide.md)
 - [Agent 命令对照](agent-commands.md)
 - [Agent integrations](agent-integrations.md)

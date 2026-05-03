@@ -14,7 +14,7 @@
 - [快速入门](quickstart.md)
 - [创作流程](workflow.md)
 - [创作控制权指南](creative-control.md)
-- [重构迁移指南](migration-guide.md)
+- [升级指南](upgrade-guide.md)
 
 ## 核心理念
 

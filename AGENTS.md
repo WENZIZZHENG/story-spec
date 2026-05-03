@@ -53,7 +53,7 @@
 
 - CLI 行为、模板契约、生成产物、项目结构或公共接口变化，新增 `changes/*.md`。
 - 长期路线才登记到 `docs/tech/todo-index.md`；完成后归档到 `docs/tech/todo-archive.md`。
-- 重要维护规则以 `SDD.md` 为准；`novel-sdd.md` 只作为产品理念背景，不作为开发规范。
+- 重要维护规则以 `SDD.md` 为准。
 - README 只写真实可用能力，不提前承诺未实现功能。
 
 ## 创作控制权

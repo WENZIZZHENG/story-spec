@@ -208,7 +208,8 @@ storyspec plugins add my-plugin
 
 - [`authentic-voice`](../../plugins/authentic-voice/) - 真实人声插件
 - [`translate`](../../plugins/translate/) - 翻译插件
-- [`luyao-style`](../../plugins/luyao-style/) - 路遥风格插件
+- [`genre-knowledge`](../../plugins/genre-knowledge/) - 类型知识库插件
+- [`book-analysis`](../../plugins/book-analysis/) - 小说拆解分析插件
 
 ---
 

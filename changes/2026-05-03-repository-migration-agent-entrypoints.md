@@ -10,7 +10,7 @@ scope: repository,agent-commands,templates,docs
 - 将 GitHub 仓库地址从 `https://github.com/wordflowlab` 迁移到 `https://github.com/WENZIZZHENG`。
 - 删除技术文档中的 GitHub / Issues / Discussions 联系方式区块。
 - 将 `docs/ai-platform-commands.md` 重命名为 `docs/agent-commands.md`，把主概念从 AI 平台命令收敛为 agent 命令。
-- 将过期的 Codex 支持说明、外部 AI 快速整合指南和 Gemini 单点提示词归档到 `docs/tech/archive/legacy-docs/`。
+- 将过期的 Codex 支持说明、外部 AI 快速整合指南和 Gemini 单点提示词移出当前文档入口。
 
 ## 模板契约
 

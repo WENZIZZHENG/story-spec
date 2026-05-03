@@ -516,10 +516,6 @@
       "sha256": "c704ff3f6801b5fbe2c7ed6ab8d6e42d9d10c0d867ac0cb39a92860828e0d9d1"
     },
     {
-      "path": "auggie/spec/presets/anti-ai-detection.md",
-      "sha256": "00bf97e5949d33a6d5bce083e8d210620206c6d6827efc0b67dbaccc0149fcfa"
-    },
-    {
       "path": "auggie/spec/presets/golden-opening.md",
       "sha256": "77843e024e293a6580f19aed0b3e41b36b2a7d3502b16c9402c1546b5d314371"
     },
@@ -593,7 +589,7 @@
     },
     {
       "path": "auggie/spec/README.md",
-      "sha256": "ea9be3363a86f24264bea93363dcf026e89d46719affe61ac19ffc1da3f302a4"
+      "sha256": "09a7af07dc5d2743da5e86c75340fe330274d687ea6f23e0e57e922e38358e45"
     },
     {
       "path": "claude/.claude/commands/storyspec.analyze.md",
@@ -1090,10 +1086,6 @@
       "sha256": "c704ff3f6801b5fbe2c7ed6ab8d6e42d9d10c0d867ac0cb39a92860828e0d9d1"
     },
     {
-      "path": "claude/spec/presets/anti-ai-detection.md",
-      "sha256": "00bf97e5949d33a6d5bce083e8d210620206c6d6827efc0b67dbaccc0149fcfa"
-    },
-    {
       "path": "claude/spec/presets/golden-opening.md",
       "sha256": "77843e024e293a6580f19aed0b3e41b36b2a7d3502b16c9402c1546b5d314371"
     },
@@ -1167,7 +1159,7 @@
     },
     {
       "path": "claude/spec/README.md",
-      "sha256": "ea9be3363a86f24264bea93363dcf026e89d46719affe61ac19ffc1da3f302a4"
+      "sha256": "09a7af07dc5d2743da5e86c75340fe330274d687ea6f23e0e57e922e38358e45"
     },
     {
       "path": "codebuddy/.codebuddy/commands/analyze.md",
@@ -1664,10 +1656,6 @@
       "sha256": "c704ff3f6801b5fbe2c7ed6ab8d6e42d9d10c0d867ac0cb39a92860828e0d9d1"
     },
     {
-      "path": "codebuddy/spec/presets/anti-ai-detection.md",
-      "sha256": "00bf97e5949d33a6d5bce083e8d210620206c6d6827efc0b67dbaccc0149fcfa"
-    },
-    {
       "path": "codebuddy/spec/presets/golden-opening.md",
       "sha256": "77843e024e293a6580f19aed0b3e41b36b2a7d3502b16c9402c1546b5d314371"
     },
@@ -1741,7 +1729,7 @@
     },
     {
       "path": "codebuddy/spec/README.md",
-      "sha256": "ea9be3363a86f24264bea93363dcf026e89d46719affe61ac19ffc1da3f302a4"
+      "sha256": "09a7af07dc5d2743da5e86c75340fe330274d687ea6f23e0e57e922e38358e45"
     },
     {
       "path": "codex/.codex/prompts/storyspec-analyze.md",
@@ -2238,10 +2226,6 @@
       "sha256": "c704ff3f6801b5fbe2c7ed6ab8d6e42d9d10c0d867ac0cb39a92860828e0d9d1"
     },
     {
-      "path": "codex/spec/presets/anti-ai-detection.md",
-      "sha256": "00bf97e5949d33a6d5bce083e8d210620206c6d6827efc0b67dbaccc0149fcfa"
-    },
-    {
       "path": "codex/spec/presets/golden-opening.md",
       "sha256": "77843e024e293a6580f19aed0b3e41b36b2a7d3502b16c9402c1546b5d314371"
     },
@@ -2315,7 +2299,7 @@
     },
     {
       "path": "codex/spec/README.md",
-      "sha256": "ea9be3363a86f24264bea93363dcf026e89d46719affe61ac19ffc1da3f302a4"
+      "sha256": "09a7af07dc5d2743da5e86c75340fe330274d687ea6f23e0e57e922e38358e45"
     },
     {
       "path": "continue-check/.continue/prompts/analyze.md",
@@ -2812,10 +2796,6 @@
       "sha256": "c704ff3f6801b5fbe2c7ed6ab8d6e42d9d10c0d867ac0cb39a92860828e0d9d1"
     },
     {
-      "path": "continue-check/spec/presets/anti-ai-detection.md",
-      "sha256": "00bf97e5949d33a6d5bce083e8d210620206c6d6827efc0b67dbaccc0149fcfa"
-    },
-    {
       "path": "continue-check/spec/presets/golden-opening.md",
       "sha256": "77843e024e293a6580f19aed0b3e41b36b2a7d3502b16c9402c1546b5d314371"
     },
@@ -2889,7 +2869,7 @@
     },
     {
       "path": "continue-check/spec/README.md",
-      "sha256": "ea9be3363a86f24264bea93363dcf026e89d46719affe61ac19ffc1da3f302a4"
+      "sha256": "09a7af07dc5d2743da5e86c75340fe330274d687ea6f23e0e57e922e38358e45"
     },
     {
       "path": "copilot/.github/prompts/analyze.prompt.md",
@@ -3386,10 +3366,6 @@
       "sha256": "c704ff3f6801b5fbe2c7ed6ab8d6e42d9d10c0d867ac0cb39a92860828e0d9d1"
     },
     {
-      "path": "copilot/spec/presets/anti-ai-detection.md",
-      "sha256": "00bf97e5949d33a6d5bce083e8d210620206c6d6827efc0b67dbaccc0149fcfa"
-    },
-    {
       "path": "copilot/spec/presets/golden-opening.md",
       "sha256": "77843e024e293a6580f19aed0b3e41b36b2a7d3502b16c9402c1546b5d314371"
     },
@@ -3463,7 +3439,7 @@
     },
     {
       "path": "copilot/spec/README.md",
-      "sha256": "ea9be3363a86f24264bea93363dcf026e89d46719affe61ac19ffc1da3f302a4"
+      "sha256": "09a7af07dc5d2743da5e86c75340fe330274d687ea6f23e0e57e922e38358e45"
     },
     {
       "path": "cursor/.cursor/commands/analyze.md",
@@ -3960,10 +3936,6 @@
       "sha256": "c704ff3f6801b5fbe2c7ed6ab8d6e42d9d10c0d867ac0cb39a92860828e0d9d1"
     },
     {
-      "path": "cursor/spec/presets/anti-ai-detection.md",
-      "sha256": "00bf97e5949d33a6d5bce083e8d210620206c6d6827efc0b67dbaccc0149fcfa"
-    },
-    {
       "path": "cursor/spec/presets/golden-opening.md",
       "sha256": "77843e024e293a6580f19aed0b3e41b36b2a7d3502b16c9402c1546b5d314371"
     },
@@ -4037,7 +4009,7 @@
     },
     {
       "path": "cursor/spec/README.md",
-      "sha256": "ea9be3363a86f24264bea93363dcf026e89d46719affe61ac19ffc1da3f302a4"
+      "sha256": "09a7af07dc5d2743da5e86c75340fe330274d687ea6f23e0e57e922e38358e45"
     },
     {
       "path": "gemini/.gemini/commands/storyspec/analyze.toml",
@@ -4534,10 +4506,6 @@
       "sha256": "c704ff3f6801b5fbe2c7ed6ab8d6e42d9d10c0d867ac0cb39a92860828e0d9d1"
     },
     {
-      "path": "gemini/spec/presets/anti-ai-detection.md",
-      "sha256": "00bf97e5949d33a6d5bce083e8d210620206c6d6827efc0b67dbaccc0149fcfa"
-    },
-    {
       "path": "gemini/spec/presets/golden-opening.md",
       "sha256": "77843e024e293a6580f19aed0b3e41b36b2a7d3502b16c9402c1546b5d314371"
     },
@@ -4611,7 +4579,7 @@
     },
     {
       "path": "gemini/spec/README.md",
-      "sha256": "ea9be3363a86f24264bea93363dcf026e89d46719affe61ac19ffc1da3f302a4"
+      "sha256": "09a7af07dc5d2743da5e86c75340fe330274d687ea6f23e0e57e922e38358e45"
     },
     {
       "path": "generic/.specify/commands/analyze.md",
@@ -5108,10 +5076,6 @@
       "sha256": "c704ff3f6801b5fbe2c7ed6ab8d6e42d9d10c0d867ac0cb39a92860828e0d9d1"
     },
     {
-      "path": "generic/spec/presets/anti-ai-detection.md",
-      "sha256": "00bf97e5949d33a6d5bce083e8d210620206c6d6827efc0b67dbaccc0149fcfa"
-    },
-    {
       "path": "generic/spec/presets/golden-opening.md",
       "sha256": "77843e024e293a6580f19aed0b3e41b36b2a7d3502b16c9402c1546b5d314371"
     },
@@ -5185,7 +5149,7 @@
     },
     {
       "path": "generic/spec/README.md",
-      "sha256": "ea9be3363a86f24264bea93363dcf026e89d46719affe61ac19ffc1da3f302a4"
+      "sha256": "09a7af07dc5d2743da5e86c75340fe330274d687ea6f23e0e57e922e38358e45"
     },
     {
       "path": "kilocode/.kilocode/workflows/analyze.md",
@@ -5682,10 +5646,6 @@
       "sha256": "c704ff3f6801b5fbe2c7ed6ab8d6e42d9d10c0d867ac0cb39a92860828e0d9d1"
     },
     {
-      "path": "kilocode/spec/presets/anti-ai-detection.md",
-      "sha256": "00bf97e5949d33a6d5bce083e8d210620206c6d6827efc0b67dbaccc0149fcfa"
-    },
-    {
       "path": "kilocode/spec/presets/golden-opening.md",
       "sha256": "77843e024e293a6580f19aed0b3e41b36b2a7d3502b16c9402c1546b5d314371"
     },
@@ -5759,7 +5719,7 @@
     },
     {
       "path": "kilocode/spec/README.md",
-      "sha256": "ea9be3363a86f24264bea93363dcf026e89d46719affe61ac19ffc1da3f302a4"
+      "sha256": "09a7af07dc5d2743da5e86c75340fe330274d687ea6f23e0e57e922e38358e45"
     },
     {
       "path": "opencode/.opencode/command/analyze.md",
@@ -6256,10 +6216,6 @@
       "sha256": "c704ff3f6801b5fbe2c7ed6ab8d6e42d9d10c0d867ac0cb39a92860828e0d9d1"
     },
     {
-      "path": "opencode/spec/presets/anti-ai-detection.md",
-      "sha256": "00bf97e5949d33a6d5bce083e8d210620206c6d6827efc0b67dbaccc0149fcfa"
-    },
-    {
       "path": "opencode/spec/presets/golden-opening.md",
       "sha256": "77843e024e293a6580f19aed0b3e41b36b2a7d3502b16c9402c1546b5d314371"
     },
@@ -6333,7 +6289,7 @@
     },
     {
       "path": "opencode/spec/README.md",
-      "sha256": "ea9be3363a86f24264bea93363dcf026e89d46719affe61ac19ffc1da3f302a4"
+      "sha256": "09a7af07dc5d2743da5e86c75340fe330274d687ea6f23e0e57e922e38358e45"
     },
     {
       "path": "q/.amazonq/prompts/analyze.md",
@@ -6830,10 +6786,6 @@
       "sha256": "c704ff3f6801b5fbe2c7ed6ab8d6e42d9d10c0d867ac0cb39a92860828e0d9d1"
     },
     {
-      "path": "q/spec/presets/anti-ai-detection.md",
-      "sha256": "00bf97e5949d33a6d5bce083e8d210620206c6d6827efc0b67dbaccc0149fcfa"
-    },
-    {
       "path": "q/spec/presets/golden-opening.md",
       "sha256": "77843e024e293a6580f19aed0b3e41b36b2a7d3502b16c9402c1546b5d314371"
     },
@@ -6907,7 +6859,7 @@
     },
     {
       "path": "q/spec/README.md",
-      "sha256": "ea9be3363a86f24264bea93363dcf026e89d46719affe61ac19ffc1da3f302a4"
+      "sha256": "09a7af07dc5d2743da5e86c75340fe330274d687ea6f23e0e57e922e38358e45"
     },
     {
       "path": "qwen/.qwen/commands/analyze.toml",
@@ -7404,10 +7356,6 @@
       "sha256": "c704ff3f6801b5fbe2c7ed6ab8d6e42d9d10c0d867ac0cb39a92860828e0d9d1"
     },
     {
-      "path": "qwen/spec/presets/anti-ai-detection.md",
-      "sha256": "00bf97e5949d33a6d5bce083e8d210620206c6d6827efc0b67dbaccc0149fcfa"
-    },
-    {
       "path": "qwen/spec/presets/golden-opening.md",
       "sha256": "77843e024e293a6580f19aed0b3e41b36b2a7d3502b16c9402c1546b5d314371"
     },
@@ -7481,7 +7429,7 @@
     },
     {
       "path": "qwen/spec/README.md",
-      "sha256": "ea9be3363a86f24264bea93363dcf026e89d46719affe61ac19ffc1da3f302a4"
+      "sha256": "09a7af07dc5d2743da5e86c75340fe330274d687ea6f23e0e57e922e38358e45"
     },
     {
       "path": "roocode/.roo/commands/analyze.md",
@@ -7978,10 +7926,6 @@
       "sha256": "c704ff3f6801b5fbe2c7ed6ab8d6e42d9d10c0d867ac0cb39a92860828e0d9d1"
     },
     {
-      "path": "roocode/spec/presets/anti-ai-detection.md",
-      "sha256": "00bf97e5949d33a6d5bce083e8d210620206c6d6827efc0b67dbaccc0149fcfa"
-    },
-    {
       "path": "roocode/spec/presets/golden-opening.md",
       "sha256": "77843e024e293a6580f19aed0b3e41b36b2a7d3502b16c9402c1546b5d314371"
     },
@@ -8055,7 +7999,7 @@
     },
     {
       "path": "roocode/spec/README.md",
-      "sha256": "ea9be3363a86f24264bea93363dcf026e89d46719affe61ac19ffc1da3f302a4"
+      "sha256": "09a7af07dc5d2743da5e86c75340fe330274d687ea6f23e0e57e922e38358e45"
     },
     {
       "path": "windsurf/.specify/experts/core/character.md",
@@ -8552,10 +8496,6 @@
       "sha256": "c704ff3f6801b5fbe2c7ed6ab8d6e42d9d10c0d867ac0cb39a92860828e0d9d1"
     },
     {
-      "path": "windsurf/spec/presets/anti-ai-detection.md",
-      "sha256": "00bf97e5949d33a6d5bce083e8d210620206c6d6827efc0b67dbaccc0149fcfa"
-    },
-    {
       "path": "windsurf/spec/presets/golden-opening.md",
       "sha256": "77843e024e293a6580f19aed0b3e41b36b2a7d3502b16c9402c1546b5d314371"
     },
@@ -8629,7 +8569,7 @@
     },
     {
       "path": "windsurf/spec/README.md",
-      "sha256": "ea9be3363a86f24264bea93363dcf026e89d46719affe61ac19ffc1da3f302a4"
+      "sha256": "09a7af07dc5d2743da5e86c75340fe330274d687ea6f23e0e57e922e38358e45"
     }
   ]
 }
