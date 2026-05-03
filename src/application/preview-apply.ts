@@ -12,6 +12,10 @@ import {
   getStoryStageNextQuestions
 } from '../domain/story-stage.js';
 import { hasResolvedClarificationAnswer } from '../domain/clarification-answer-utils.js';
+import {
+  evaluateStoryCoreElements,
+  getPlanBlockingCoreElements
+} from '../domain/story-core-elements.js';
 
 export type PreviewApplyErrorCode =
   | 'UNSUPPORTED_PREVIEW_KIND'
@@ -195,6 +199,18 @@ const buildRisks = (summary: Awaited<ReturnType<typeof summarizeCreativeControl>
     }))
 ];
 
+const buildCoreElementRisks = (record: ClarificationRecord): PreviewRisk[] =>
+  getPlanBlockingCoreElements(evaluateStoryCoreElements({
+    premise: record.premise,
+    questions: record.questions,
+    answers: record.answers
+  }))
+    .filter(element => element.status === 'deferred')
+    .map(element => ({
+      severity: 'blocking' as const,
+      message: `核心要素稍后决定：${element.label}。${element.nextPrompt ?? '请先回到共创访谈确认。'}`
+    }));
+
 export const createSpecifyPreview = async (
   input: CreateSpecifyPreviewInput
 ): Promise<CreateSpecifyPreviewResult> => {
@@ -223,7 +239,10 @@ export const createSpecifyPreview = async (
     ],
     summary: '根据用户已确认澄清答案生成 specification 预览；不会直接覆盖正式规格。',
     content,
-    risks: buildRisks(summary),
+    risks: [
+      ...buildRisks(summary),
+      ...buildCoreElementRisks(record)
+    ],
     createdAt: now.toISOString(),
     expiresAt: addDays(now, 7).toISOString()
   };

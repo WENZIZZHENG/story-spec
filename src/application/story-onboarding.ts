@@ -11,7 +11,14 @@ import {
   getStoryStageNextQuestions,
   type StoryMaturityStage
 } from '../domain/story-stage.js';
+import {
+  evaluateStoryCoreElements,
+  getPlanBlockingCoreElements,
+  summarizeCoreElementGaps,
+  type StoryCoreElementAssessment
+} from '../domain/story-core-elements.js';
 import { summarizeCreativeControl } from './creative-control-summary.js';
+import type { ClarificationRecord } from './manage-clarifications.js';
 
 export type StoryOnboardingErrorCode =
   | 'MISSING_STORY_NAME'
@@ -73,6 +80,7 @@ export interface StoryNextResult {
   creativeGaps: string[];
   pendingQuestions: string[];
   coCreationEntrypoints: StoryCoCreationEntrypoint[];
+  coreElements: StoryCoreElementAssessment[];
   actions: StoryNextAction[];
 }
 
@@ -211,11 +219,26 @@ const buildActions = (
   result: Omit<StoryNextResult, 'actions'>
 ): StoryNextAction[] => {
   const actions: StoryNextAction[] = [];
+  const planBlockingElements = getPlanBlockingCoreElements(result.coreElements);
 
   if (result.stage === 'idea') {
     actions.push(action(1, `storyspec interview ${result.story}`, '先把一句话创意转成澄清记录，不急着生成完整设定。'));
     actions.push(action(2, `storyspec creative:report ${result.story}`, '查看哪些内容仍不能被当作正典。'));
     actions.push(action(3, `storyspec preview specify ${result.story}`, '生成写入前规格预览，确认后再 apply。'));
+    return actions;
+  }
+
+  if (
+    planBlockingElements.length > 0
+    && (result.stage === 'specified' || result.stage === 'planned')
+  ) {
+    actions.push(action(
+      1,
+      `storyspec interview ${result.story}`,
+      `${summarizeCoreElementGaps(result.coreElements).join('；')}，先共创再进入完整计划。`
+    ));
+    actions.push(action(2, `storyspec creative:report ${result.story}`, '查看核心要素面板和仍不能进入正典的内容。'));
+    actions.push(action(3, `storyspec preview specify ${result.story}`, '仅生成写入前预览，处理缺口后再 apply。'));
     return actions;
   }
 
@@ -249,6 +272,22 @@ const buildActions = (
   ).slice(0, 4);
 };
 
+const readClarificationRecord = async (
+  fs: ProjectFileSystem,
+  storyPath: string
+): Promise<ClarificationRecord | undefined> => {
+  const recordPath = path.join(storyPath, 'clarifications.json');
+  if (!await fs.pathExists(recordPath)) {
+    return undefined;
+  }
+
+  try {
+    return await fs.readJson<ClarificationRecord>(recordPath);
+  } catch {
+    return undefined;
+  }
+};
+
 export const getStoryNext = async (
   input: GetStoryNextInput
 ): Promise<StoryNextResult> => {
@@ -265,6 +304,7 @@ export const getStoryNext = async (
   }
 
   const story = await selectStoryProject(input.projectRoot, input.fileSystem, input.story);
+  const record = await readClarificationRecord(input.fileSystem, story.path);
   const creativeControl = await summarizeCreativeControl({
     projectRoot: input.projectRoot,
     storyPath: story.path,
@@ -282,7 +322,14 @@ export const getStoryNext = async (
       ...creativeControl.pendingQuestions,
       ...creativeControl.cannotFinalize.filter(item => item.startsWith('AI 建议待确认'))
     ],
-    coCreationEntrypoints: buildCoCreationEntrypoints(story.name, story.stage)
+    coCreationEntrypoints: buildCoCreationEntrypoints(story.name, story.stage),
+    coreElements: record
+      ? evaluateStoryCoreElements({
+        premise: record.premise,
+        questions: record.questions,
+        answers: record.answers
+      })
+      : []
   };
 
   return {
@@ -316,6 +363,11 @@ export const renderStoryNext = (result: StoryNextResult): string => [
   ...(result.coCreationEntrypoints.length > 0
     ? result.coCreationEntrypoints.map(item => `- ${item.label}：${item.command}。${item.reason}`)
     : ['- 当前阶段暂无专门入口；请按建议动作继续。']),
+  '',
+  '核心要素：',
+  ...(result.coreElements.length > 0
+    ? result.coreElements.map(item => `- ${item.label}：${item.status}`)
+    : ['- 暂无结构化核心要素；请先运行 storyspec interview。']),
   '',
   '创作缺口：',
   ...(result.creativeGaps.length > 0 ? result.creativeGaps.map(item => `- ${item}`) : ['- 暂无明显缺口。']),

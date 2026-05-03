@@ -142,4 +142,98 @@ describe('story onboarding', () => {
     expect(result.pendingQuestions.join('\n')).toContain('AI 建议待确认');
     expect(result.actions[0].command).toBe('storyspec interview demo');
   });
+
+  it('prioritizes partner, stage, and conflict co-creation when core elements are immature', async () => {
+    const { projectRoot, fileSystem } = await createProject();
+    const storyPath = path.join(projectRoot, 'stories', 'demo');
+    await fileSystem.writeFile(path.join(storyPath, 'idea.md'), '# demo');
+    await fileSystem.writeFile(path.join(storyPath, 'clarifications.md'), '# demo clarifications');
+    await fileSystem.writeFile(path.join(storyPath, 'specification.md'), '# spec');
+    await fileSystem.writeJson(path.join(storyPath, 'clarifications.json'), {
+      schemaVersion: '1.0',
+      story: 'demo',
+      premise: '主角晏无是一名工科马列青年，穿越到剑与魔法世界；编程施法、文明级威胁。',
+      createdAt: '2026-05-03T00:00:00.000Z',
+      updatedAt: '2026-05-03T00:00:00.000Z',
+      questions: [
+        {
+          id: 'protagonist.identity',
+          stage: 'specify',
+          topic: 'protagonist',
+          question: '主角是谁？',
+          whyItMatters: '影响主角视角。',
+          type: 'textarea',
+          required: true,
+          options: [],
+          exampleAnswers: [],
+          dependsOn: []
+        },
+        {
+          id: 'partner.core',
+          stage: 'specify',
+          topic: 'partner',
+          question: '核心伙伴是谁？',
+          whyItMatters: '影响关系张力。',
+          type: 'textarea',
+          required: true,
+          options: [],
+          exampleAnswers: [],
+          dependsOn: []
+        },
+        {
+          id: 'stage.first',
+          stage: 'specify',
+          topic: 'stage',
+          question: '第一舞台在哪里？',
+          whyItMatters: '影响世界规则的第一眼呈现。',
+          type: 'textarea',
+          required: true,
+          options: [],
+          exampleAnswers: [],
+          dependsOn: []
+        },
+        {
+          id: 'faction.conflict',
+          stage: 'specify',
+          topic: 'faction',
+          question: '第一卷的势力冲突是什么？',
+          whyItMatters: '影响行动压力。',
+          type: 'textarea',
+          required: true,
+          options: [],
+          exampleAnswers: [],
+          dependsOn: []
+        }
+      ],
+      answers: [
+        {
+          questionId: 'protagonist.identity',
+          answer: '晏无是工科马列青年，穿越到剑与魔法世界。',
+          source: 'user-explicit',
+          confidence: 1,
+          confirmed: true,
+          createdAt: '2026-05-03T00:00:00.000Z',
+          updatedAt: '2026-05-03T00:00:00.000Z'
+        }
+      ]
+    }, { spaces: 2 });
+
+    const result = await getStoryNext({
+      projectRoot,
+      fileSystem,
+      story: 'demo'
+    });
+
+    expect(result.stage).toBe('specified');
+    expect(result.coreElements).toEqual(expect.arrayContaining([
+      expect.objectContaining({ id: 'partner', status: 'missing' }),
+      expect.objectContaining({ id: 'stage', status: 'missing' }),
+      expect.objectContaining({ id: 'factionConflict', status: 'missing' })
+    ]));
+    expect(result.actions[0]).toMatchObject({
+      command: 'storyspec interview demo'
+    });
+    expect(result.actions[0].reason).toContain('核心伙伴');
+    expect(result.actions.map(action => action.command)).not.toContain('继续运行平台对应 plan 命令');
+  });
 });

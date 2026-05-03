@@ -8,6 +8,11 @@ import {
 import {
   getStoryStageNextQuestions
 } from '../domain/story-stage.js';
+import {
+  evaluateStoryCoreElements,
+  getStoryCoreElementStatusText,
+  type StoryCoreElementAssessment
+} from '../domain/story-core-elements.js';
 import type { ProjectFileSystem } from './project-ports.js';
 import type { ClarificationRecord } from './manage-clarifications.js';
 import { summarizeCreativeControl } from './creative-control-summary.js';
@@ -42,6 +47,7 @@ export interface CreativeReportResult {
   confirmed: CreativeReportAnswer[];
   pendingQuestions: CreativeReportQuestion[];
   aiSuggestions: CreativeReportAnswer[];
+  coreElements: StoryCoreElementAssessment[];
   driftIssues: CreativeIntentDriftIssue[];
   cannotFinalize: string[];
   nextActions: string[];
@@ -144,6 +150,13 @@ export const createCreativeReport = async (
       questionId: question.id,
       question: question.question
     })) ?? [];
+  const coreElements = record
+    ? evaluateStoryCoreElements({
+      premise: record.premise,
+      questions: record.questions,
+      answers: record.answers
+    })
+    : [];
   const base = {
     projectRoot: input.projectRoot,
     story: story.name,
@@ -152,6 +165,7 @@ export const createCreativeReport = async (
     confirmed,
     pendingQuestions,
     aiSuggestions,
+    coreElements,
     driftIssues: storyDriftIssues,
     cannotFinalize: summary.cannotFinalize
   };
@@ -183,6 +197,14 @@ export const renderCreativeReport = (result: CreativeReportResult): string => [
   ...(result.aiSuggestions.length > 0
     ? result.aiSuggestions.map(item => `- ${item.questionId}：${item.answer}`)
     : ['- 暂无。']),
+  '',
+  '核心要素面板：',
+  ...(result.coreElements.length > 0
+    ? result.coreElements.map(item => [
+      `- ${item.label}：${getStoryCoreElementStatusText(item.status)}。${item.summary}`,
+      ...item.qualityNotes.map(note => `  - ${note}`)
+    ].join('\n'))
+    : ['- 暂无结构化核心要素；请先运行 storyspec interview。']),
   '',
   '可能偏离：',
   ...(result.driftIssues.length > 0

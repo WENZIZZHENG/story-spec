@@ -280,6 +280,97 @@ describe('validateProject', () => {
     ]));
   });
 
+  it('warns when core story elements are not mature before a creative plan exists', async () => {
+    const projectRoot = path.join(os.tmpdir(), 'memory-novel-core-elements-gate');
+    const packageRoot = path.join(os.tmpdir(), 'memory-novel-core-elements-gate-package');
+    const fileSystem = new MemoryFileSystem(projectRoot);
+    const storyPath = path.join(projectRoot, 'stories', 'demo');
+
+    await fileSystem.ensureDir(path.join(packageRoot, 'templates'));
+    await fileSystem.writeJson(path.join(projectRoot, '.specify', 'config.json'), {
+      name: 'core-elements-gate',
+      type: 'novel',
+      version: '1.0.0'
+    });
+    await fileSystem.writeFile(path.join(projectRoot, '.specify', 'agent-contract.md'), '# contract');
+    await fileSystem.writeFile(path.join(projectRoot, 'AGENTS.md'), '# agents');
+    await fileSystem.ensureDir(path.join(projectRoot, 'spec', 'tracking'));
+    await fileSystem.ensureDir(path.join(projectRoot, 'spec', 'world'));
+    await fileSystem.ensureDir(path.join(projectRoot, 'spec', 'canon'));
+    await fileSystem.ensureDir(path.join(projectRoot, 'spec', 'graph'));
+    await fileSystem.ensureDir(path.join(projectRoot, 'spec', 'voice'));
+    await fileSystem.writeFile(path.join(storyPath, 'idea.md'), '# demo');
+    await fileSystem.writeFile(path.join(storyPath, 'specification.md'), '# spec');
+    await fileSystem.writeFile(path.join(storyPath, 'creative-plan.md'), '# plan');
+    await fileSystem.writeJson(path.join(storyPath, 'clarifications.json'), {
+      schemaVersion: '1.0',
+      story: 'demo',
+      premise: '主角晏无是一名工科马列青年，穿越到剑与魔法世界。',
+      createdAt: '2026-05-03T00:00:00.000Z',
+      updatedAt: '2026-05-03T00:00:00.000Z',
+      questions: [
+        {
+          id: 'protagonist.identity',
+          stage: 'specify',
+          topic: 'protagonist',
+          question: '主角是谁？',
+          whyItMatters: '影响主角视角。',
+          type: 'textarea',
+          required: true,
+          options: [],
+          exampleAnswers: [],
+          dependsOn: []
+        },
+        {
+          id: 'stage.first',
+          stage: 'specify',
+          topic: 'stage',
+          question: '第一舞台在哪里？',
+          whyItMatters: '影响世界规则的第一眼呈现。',
+          type: 'textarea',
+          required: false,
+          options: [],
+          exampleAnswers: [],
+          dependsOn: []
+        }
+      ],
+      answers: [
+        {
+          questionId: 'protagonist.identity',
+          answer: '晏无是工科马列青年，穿越到剑与魔法世界。',
+          source: 'user-explicit',
+          confidence: 1,
+          confirmed: true,
+          createdAt: '2026-05-03T00:00:00.000Z',
+          updatedAt: '2026-05-03T00:00:00.000Z'
+        },
+        {
+          questionId: 'stage.first',
+          answer: '稍后决定',
+          source: 'user-explicit',
+          confidence: 1,
+          confirmed: true,
+          createdAt: '2026-05-03T00:00:00.000Z',
+          updatedAt: '2026-05-03T00:00:00.000Z'
+        }
+      ]
+    }, { spaces: 2 });
+
+    const result = await validateProject({
+      projectRoot,
+      packageRoot,
+      fileSystem
+    });
+
+    expect(result.issues).toEqual(expect.arrayContaining([
+      expect.objectContaining({
+        code: 'CORE_ELEMENT_NOT_READY_FOR_PLAN',
+        severity: 'warning',
+        message: expect.stringContaining('第一舞台')
+      })
+    ]));
+  });
+
   it('reports missing world, canon, graph, and voice directories as warnings for old projects', async () => {
     const projectRoot = path.join(os.tmpdir(), 'memory-novel-missing-world-canon');
     const packageRoot = path.join(os.tmpdir(), 'memory-novel-missing-world-canon-package');

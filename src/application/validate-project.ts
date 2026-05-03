@@ -44,6 +44,10 @@ import {
   type StoryMaturityStage
 } from '../domain/story-stage.js';
 import {
+  evaluateStoryCoreElements,
+  getPlanBlockingCoreElements
+} from '../domain/story-core-elements.js';
+import {
   detectCreativeIntentDrift,
   type CreativeIntentDriftIssue
 } from './detect-creative-intent-drift.js';
@@ -69,7 +73,8 @@ export type ProjectValidationIssueCode =
   | 'MISSING_TEMPLATE'
   | 'MISSING_AGENT_CONTRACT'
   | 'MISSING_AGENTS_FILE'
-  | 'MISSING_AGENT_COMMAND';
+  | 'MISSING_AGENT_COMMAND'
+  | 'CORE_ELEMENT_NOT_READY_FOR_PLAN';
 
 export interface ProjectValidationIssue {
   severity: ValidationSeverity;
@@ -429,6 +434,53 @@ const validateClarificationRecords = async (
   return issues;
 };
 
+const shouldCheckPlanCoreElements = (stage: StoryMaturityStage): boolean =>
+  stage === 'specified'
+  || stage === 'planned'
+  || stage === 'tasked'
+  || stage === 'drafting'
+  || stage === 'revising';
+
+const validateCoreElementsForPlan = async (
+  fs: ProjectFileSystem,
+  artifactScan: Awaited<ReturnType<typeof scanStoryArtifacts>>
+): Promise<ProjectValidationIssue[]> => {
+  const issues: ProjectValidationIssue[] = [];
+
+  for (const story of artifactScan.stories) {
+    if (!shouldCheckPlanCoreElements(story.stage)) {
+      continue;
+    }
+
+    const recordPath = path.join(story.path, 'clarifications.json');
+    if (!await fs.pathExists(recordPath)) {
+      continue;
+    }
+
+    try {
+      const record = await fs.readJson<ClarificationRecord>(recordPath);
+      const blockingElements = getPlanBlockingCoreElements(evaluateStoryCoreElements({
+        premise: record.premise,
+        questions: Array.isArray(record.questions) ? record.questions : [],
+        answers: Array.isArray(record.answers) ? record.answers : []
+      }));
+
+      for (const element of blockingElements.slice(0, 6)) {
+        issues.push(createIssue(
+          'CORE_ELEMENT_NOT_READY_FOR_PLAN',
+          `${recordPath}#coreElements.${element.id}`,
+          `核心要素“${element.label}”仍是${element.status}，不适合直接进入完整 creative-plan。${element.nextPrompt ?? '请继续共创确认。'}`,
+          'warning'
+        ));
+      }
+    } catch {
+      continue;
+    }
+  }
+
+  return issues;
+};
+
 const readProjectConfig = async (
   fs: ProjectFileSystem,
   projectRoot: string
@@ -539,6 +591,7 @@ export const validateProject = async (input: ValidateProjectInput): Promise<Proj
   const { projectRoot, fileSystem: fs } = input;
   const artifactScan = await scanStoryArtifacts({ projectRoot, fileSystem: fs });
   const clarificationIssues = await validateClarificationRecords(fs, artifactScan);
+  const coreElementIssues = await validateCoreElementsForPlan(fs, artifactScan);
   const driftResult = await detectCreativeIntentDrift({
     projectRoot,
     fileSystem: fs,
@@ -585,6 +638,7 @@ export const validateProject = async (input: ValidateProjectInput): Promise<Proj
     ...agentContractResult.issues,
     ...templateResult.issues,
     ...clarificationIssues,
+    ...coreElementIssues,
     ...driftResult.issues.map(issue => createIssue(
       issue.code,
       issue.path,
