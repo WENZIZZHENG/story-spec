@@ -3,139 +3,24 @@
 [![npm version](https://badge.fury.io/js/novel-writer-cn.svg)](https://www.npmjs.com/package/novel-writer-cn)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-Novel Writer 是一个面向中文小说创作的 agent-neutral 工作流工具。它不是单纯的灵感提示词集合，而是把“创作宪法、故事规格、创作计划、任务清单、章节正文、追踪数据、交接上下文”组织成一个可维护的小说项目。
+Novel Writer 是一个面向中文小说创作的 agent-neutral 工作流工具。它把小说创作拆成可维护的项目文件、CLI 检查命令和多 agent 可复用的写作提示入口，而不是只提供一组灵感提示词。
 
-安装后你会得到两类能力：
+当前版本的重点能力包括：
 
-- `novel` CLI：初始化/升级项目，检查环境，汇总项目状态，校验故事产物，导出任务看板，生成断点续写上下文包，管理插件。
-- Agent integrations：为 Generic Markdown、Claude Code、Gemini CLI、Codex CLI、Cursor、Windsurf、Roo Code、GitHub Copilot、Continue Check 等入口生成结构化写作命令或只读检查提示词。
+- 初始化和升级小说项目，生成统一目录、模板、追踪数据和 agent 命令入口。
+- 管理 World Bible、Canon Ledger、Entity Graph、Scene Card、VoiceFingerprint 等结构化创作资料。
+- 生成写作上下文包、草稿记录、叙事测试、对话计划、剧情分支、伏笔检查和张力曲线。
+- 离线管理资料来源、正文文风 lint、Markdown manuscript 编译和读者反馈分诊。
+- 为 Generic Markdown、Codex CLI、Claude Code、Gemini CLI、Cursor、Continue Check 等 15 个 agent integration 生成命令或提示文件。
 
 ## 适合谁用
 
-- 想用 AI 写长篇中文小说，但需要稳定维护角色、时间线、伏笔和任务边界。
-- 已经习惯在 AI 编程工具中用斜杠命令推进工作流，希望把类似 Spec Kit / SDD 的方法迁移到小说创作。
-- 需要多个 agent 共用同一套小说项目文件，而不是每个平台各写一份提示词。
-- 需要让另一个 agent 或下一次会话快速接手当前故事进度。
+- 想用 AI 写长篇中文小说，并且需要稳定维护角色、世界观、时间线、伏笔、正文和任务边界。
+- 希望多个 AI agent 共用同一套小说项目资料，而不是每个平台单独维护一份提示词。
+- 需要把下一次会话、另一个 agent 或人工协作者快速带入当前故事状态。
+- 希望把 Spec Kit / SDD 式的结构化流程迁移到小说创作中。
 
-## 核心功能
-
-### 项目脚手架
-
-`novel init` 会创建标准小说项目目录，并写入：
-
-- `.specify/config.json`：项目名称、写作方法、agent integrations 和版本信息。
-- `.specify/memory/`：创作宪法、个人声音等长期记忆。
-- `.specify/templates/`：故事、提纲、检查清单、知识库等模板。
-- `stories/`：每个故事的规格、计划、任务和正文。
-- `spec/tracking/`：角色状态、关系、时间线、情节追踪、校验规则等 JSON。
-- `spec/knowledge/`：世界观、角色档案、角色声音、地点资料等知识库。
-- `spec/world/`：World Bible 与结构化世界事实，记录剧情功能、约束和可见性。
-- `spec/canon/`：Canon Ledger、冲突记录和 propagation debt，记录已经生效的小说事实。
-- `spec/graph/`：Entity Graph 的实体、边、索引和 evidencePaths。
-- `spec/voice/`：VoiceFingerprint、叙述声音和角色对白样本。
-- `spec/style/`：可配置文风 lint 规则和项目 Style Guide。
-- `research/`：本地资料来源、自由 Markdown 笔记和 citation 关系。
-- `feedback/`：Beta reader / 编辑反馈和结构化反馈索引。
-- `spec/presets/`：当前启用的 Genre Preset 记录。
-- `stories/*/scenes/`：可选 Scene Cards，记录 POV、地点、时间、目标、冲突、结果和引用。
-- 对应 agent integration 的命令目录，例如 `.specify/commands/`、`.continue/prompts/`、`.codex/prompts/`、`.claude/commands/`、`.gemini/commands/`。
-
-### 七步写作流
-
-Novel Writer 的主流程来自规格驱动创作法：
-
-1. `/constitution`：建立创作宪法，定义不可违背的原则、风格和边界。
-2. `/specify`：生成故事规格，明确作品定位、核心冲突、角色、世界观、需求优先级和验收标准。
-3. `/clarify`：围绕规格中的模糊点做结构化澄清，记录关键决策。
-4. `/plan`：把“要写什么”转成章节结构、叙事方案、人物弧线、节奏和伏笔计划。
-5. `/tasks`：把创作计划拆成可执行任务，标注优先级、依赖、读写边界和验收标准。
-6. `/write`：按任务清单或 Scene Card 写章节，自动加载宪法、规格、计划、任务、追踪数据、World/Canon、Entity Graph、知识库和前文。
-7. `/analyze`：根据阶段自动执行框架一致性分析或内容质量分析，也支持 `--type` 和 `--focus` 指定分析模式。
-
-### 追踪与交接
-
-- `/track-init`：初始化追踪数据。
-- `/track`：汇总写作进度、情节、时间线、角色状态、伏笔和一致性问题。
-- `/timeline`：管理和验证故事时间线。
-- `/relations`：管理角色关系变化。
-- `/checklist`：生成或执行规格验证、内容扫描相关检查清单。
-- `novel status`：在终端汇总当前故事、下一任务、正文数量、tracking JSON、Git 状态和建议下一步。
-- `novel validate`：校验项目结构、故事产物、任务字段、tracking JSON、world/canon、模板和写作规则。
-- `novel world:check` / `novel canon:check`：检查 WorldFact 与 CanonFact 字段完整性。
-- `novel graph:check` / `novel scene:check`：检查 Entity Graph evidencePaths、entity 引用和 Scene Card 关键字段。
-- `novel voice:check` / `novel voice:sample <characterId>`：检查 VoiceFingerprint 必填字段和样本路径。
-- `novel review`：运行 reviewer loop，按世界观、角色声音、连续性、编辑和读者维度输出结构化 findings 与任务草稿。
-- `novel preset:list` / `novel preset:add <id>` / `novel preset:doctor`：查看、安装和检查 Genre Preset，例如玄幻修炼的世界观必填项、节奏模板和 reviewer 权重。
-- `novel context:pack`：生成 `.specify/context-packs/` 写作上下文包，每个 mustRead 都带 reason。
-- `novel draft:new` / `novel draft:list` / `novel draft:promote`：管理章节草稿、修订和发布；默认不覆盖正式正文。
-- `novel narrative:test`：运行第一版叙事测试，检查 Scene Card 闭环或 fallback 到章节任务验收。
-- `novel dialogue:extract` / `novel dialogue:plan` / `novel dialogue:check`：生成待确认 DialogueBeat YAML，并校验 speaker、intent、relationshipChange 与 VoiceFingerprint。
-- `novel branch:create` / `novel branch:compare` / `novel branch:promote`：在 `stories/*/branches/` 中安全探索 what-if，promote 需要显式确认且不静默覆盖主线。
-- `novel promise:list` / `novel promise:check` / `novel tension:chart`：管理读者承诺和张力曲线，输出 findings 与任务草稿。
-- `novel research:add` / `novel research:link` / `novel research:check`：离线管理资料来源、Markdown 笔记和 citation 结构。
-- `novel style:lint` / `novel style:explain`：按 `spec/style` 规则检查正文文风，规则可关闭或降级，不自动改正文。
-- `novel compile --format markdown`：把章节编译到 `build/manuscript.md`，输出字数、缺失章节 warning 和 frontmatter。
-- `novel feedback:import` / `novel feedback:triage` / `novel feedback:to-tasks`：导入读者反馈并生成待确认任务草稿，不直接改正文或 `tasks.md`。
-- `novel handoff`：生成 `handoff.md`，列出下一任务、必须读取、允许修改、风险边界和阻塞项。
-- `novel tasks:board`：把 `tasks.md` 转成 `task-board.json`，并生成 GitHub issue 草稿字段。
-
-### Agent integration 命令生成
-
-当前内置支持 15 个 agent integration，其中 `generic` 是通用 Markdown 命令入口，`continue-check` 是只读检查入口，其余 13 个是 legacy AI 平台兼容入口：
-
-| Agent ID | Agent integration | 命令目录 | 命令格式示例 |
-| --- | --- | --- | --- |
-| `generic` | Generic Markdown Agent | `.specify/commands` | `/write` |
-| `continue-check` | Continue Check | `.continue/prompts` | `/write` |
-| `claude` | Claude Code | `.claude/commands` | `/novel.write` |
-| `gemini` | Gemini CLI | `.gemini/commands` | `/novel:write` |
-| `codex` | Codex CLI | `.codex/prompts` | `/novel-write` |
-| `cursor` | Cursor | `.cursor/commands` | `/write` |
-| `windsurf` | Windsurf | `.windsurf/workflows` | `/write` |
-| `roocode` | Roo Code | `.roo/commands` | `/write` |
-| `copilot` | GitHub Copilot | `.github/prompts` | `/write` |
-| `qwen` | Qwen Code | `.qwen/commands` | `/write` |
-| `opencode` | OpenCode | `.opencode/command` | `/write` |
-| `kilocode` | Kilo Code | `.kilocode/workflows` | `/write` |
-| `auggie` | Auggie CLI | `.augment/commands` | `/write` |
-| `codebuddy` | CodeBuddy | `.codebuddy/commands` | `/write` |
-| `q` | Amazon Q Developer | `.amazonq/prompts` | `/write` |
-
-使用 `novel init --all-agents` 或 `novel upgrade --all-agents` 可以为所有 agent integration 生成或升级命令文件。旧 `--ai`、`--all` 仍处于兼容期，会映射到 legacy AI 平台并输出迁移提示。
-
-### 写作方法预设
-
-初始化时可以通过 `--method` 选择方法：
-
-- `three-act`：三幕结构。
-- `hero-journey`：英雄之旅。
-- `story-circle`：故事圈。
-- `seven-point`：七点结构。
-- `pixar`：皮克斯公式。
-- `snowflake`：雪花十步。
-
-终端中也可以运行 `novel info` 查看方法说明。
-
-### 插件系统
-
-`novel plugins:add <name>` 会把内置插件复制到项目，并把插件命令注入已配置的 AI 平台命令目录。支持 `--dry-run` 预览写入计划，支持 `--force` 覆盖冲突文件。
-
-当前仓库内置插件包括：
-
-| 插件 | 功能 |
-| --- | --- |
-| `authentic-voice` | 真实人声写作，提升生活质感和个体声音一致性 |
-| `translate` | 中文小说英译与本地化润色 |
-| `book-analysis` | 小说拆解分析 |
-| `genre-knowledge` | 类型知识库和商业网文写作知识 |
-| `luyao-style` | 路遥风格创作辅助 |
-| `wangyu-style` | 忘语风格创作辅助 |
-| `shizhangyu-style` | 石章鱼风格创作辅助 |
-| `stardust-dreams` | 连接星尘织梦工具市场的高级 AI 创作模板 |
-
-## 快速开始
-
-### 1. 安装
+## 安装
 
 ```bash
 npm install -g novel-writer-cn
@@ -143,260 +28,269 @@ npm install -g novel-writer-cn
 
 要求 Node.js `>=18.0.0`。
 
-### 2. 创建小说项目
+本仓库开发时可以使用 `npm` 脚本；仓库锁文件是 `bun.lock`，安装依赖时优先保留现有包管理方式。
 
-```bash
-novel init my-novel --agent generic
-cd my-novel
-```
-
-也可以直接选择具体平台，例如：
+## 快速开始
 
 ```bash
 novel init my-novel --agent codex
+cd my-novel
+novel status
+novel validate
 ```
 
-常用初始化方式：
+常见初始化方式：
 
 ```bash
 # 在当前目录初始化
-novel init --here --agent claude
+novel init --here --agent generic
 
-# 为所有 agent integration 生成命令
+# 生成所有 agent integration 的命令入口
 novel init my-novel --all-agents
 
 # 指定写作方法
-novel init my-novel --method snowflake --agent gemini
+novel init my-novel --method snowflake --agent claude
 
-# 初始化时预装插件
+# 初始化时安装插件
 novel init my-novel --plugins authentic-voice,genre-knowledge
 
-# 为 Codex 生成带写作边界画像的 AGENTS.md
+# 为 Codex 生成更具体的 AGENTS.md 写作边界
 novel init my-novel --agent codex --agents-profile adult,slow-burn,adventure
 
 # 跳过 Git 初始化
 novel init my-novel --no-git
 ```
 
-### 3. 检查项目状态
+## 两类入口
 
-```bash
-novel status
-novel validate
-```
+Novel Writer 有两类入口，需要分清：
 
-如果需要结构化输出：
+- 终端 CLI：在 shell 中运行 `novel status`、`novel validate`、`novel context:pack` 等命令。
+- Agent 写作入口：在对应 AI 工具中使用 `/specify`、`/plan`、`/write`、`/review` 等生成的提示文件。
 
-```bash
-novel status --json
-novel validate --json
-novel validate --severity error
-novel review --json
-novel review --panel worldbuilding,voice,editor
-novel preset:list
-novel preset:add xuanhuan-cultivation
-novel preset:doctor
-novel context:pack --task T001
-novel draft:new --chapter 001
-novel narrative:test --chapter 001
-novel dialogue:extract --scene scene-001 --chapter 001
-novel branch:create "女主提前识破身份" --changed-scenes scene-001
-novel promise:check
-novel tension:chart
-novel research:add "朝代制度笔记" --type personal-note --note "官制资料"
-novel style:lint 001-demo --chapter 001
-novel compile --story 001-demo --format markdown --with-frontmatter
-novel feedback:to-tasks
-```
+斜杠命令不是终端命令。终端里使用 `novel` CLI，AI 工具里使用对应 agent integration 的命令格式。
 
-### 4. 在 agent 中开始写作
+## 核心工作流
 
-按你选择的 agent integration 使用对应命令。通用 Markdown 入口使用：
+标准创作流程通常是：
 
 ```text
-/constitution
-/specify
-/clarify
-/plan
-/tasks
-/write
+/constitution -> /specify -> /clarify -> /plan -> /tasks -> /write -> /review
+```
+
+根据需要还可以加入：
+
+```text
+/scene
+/context-pack
+/checklist
+/track-init
+/track
+/timeline
+/relations
 /analyze
+/expert
 ```
 
-Codex CLI 对应：
+这些入口由 `templates/commands/` 生成到不同 agent 的命令目录中。不同 agent 的命令前缀不同，例如 Codex CLI 使用 `/novel-write`，Claude Code 使用 `/novel.write`，Gemini CLI 使用 `/novel:write`，Generic Markdown 使用 `/write`。
 
-```text
-/novel-constitution
-/novel-specify
-/novel-clarify
-/novel-plan
-/novel-tasks
-/novel-write
-/novel-analyze
-```
+## CLI 能力总览
 
-Claude Code 对应 `/novel.write`，Gemini CLI 对应 `/novel:write`，多数其他平台直接使用 `/write`。
-
-### 5. 交接或导出任务
-
-```bash
-# 生成最近故事的 handoff.md
-novel handoff
-
-# 指定故事并输出 JSON
-novel handoff stories/001-demo --json
-
-# 为只读 agent 生成检查式交接步骤
-novel handoff --target-agent continue-check
-
-# 把 tasks.md 转成任务看板 JSON
-novel tasks:board
-
-# 只输出 JSON，不写文件
-novel tasks:board 001-demo --json
-```
-
-## CLI 命令
+### 项目和 agent
 
 | 命令 | 作用 |
 | --- | --- |
 | `novel init [name]` | 初始化小说项目 |
-| `novel check` | 检查 Node.js、Git 和常见 AI CLI 是否可用 |
-| `novel agent:list` | 列出支持的 agent integration 和能力 |
-| `novel agent:add <id>` | 给现有项目添加 agent integration |
-| `novel agent:doctor` | 检查已安装 agent contract、命令和 manifest |
-| `novel contract:print` | 输出当前 agent contract |
-| `novel contract:sync` | 同步 `.specify/agent-contract.md` 和 `AGENTS.md` |
-| `novel status` | 汇总项目、故事、追踪数据、Git 状态和下一步 |
+| `novel upgrade` | 升级现有项目的命令、脚本、规范或模板 |
+| `novel check` | 检查 Node.js、Git 和常见 AI CLI |
+| `novel status` | 汇总项目、故事、tracking、Git 状态和下一步 |
 | `novel codex-status` | `status` 的兼容别名 |
 | `novel validate` | 校验项目结构、任务、tracking、world/canon、模板和写作规则 |
-| `novel world:list` | 列出 World Bible 中的结构化世界事实 |
-| `novel world:check` | 检查 WorldFact 是否缺少剧情功能、约束等关键字段 |
-| `novel canon:list` | 列出 Canon Ledger 中已确认或待确认的小说事实 |
-| `novel canon:check` | 检查 CanonFact 是否缺少摘要、证据等关键字段 |
+| `novel info` | 查看可用写作方法 |
+| `novel agent:list` | 列出支持的 agent integrations |
+| `novel agent:add <id>` | 给当前项目添加 agent integration |
+| `novel agent:doctor` | 检查已安装的 agent contract、命令和 manifest |
+| `novel contract:print` | 输出当前 agent contract |
+| `novel contract:sync` | 同步 `.specify/agent-contract.md` 和项目入口说明 |
+
+### 世界观、正典和结构
+
+| 命令 | 作用 |
+| --- | --- |
+| `novel world:list` | 列出 World Bible 中的 WorldFact |
+| `novel world:check` | 检查 WorldFact 的最小 schema |
+| `novel canon:list` | 列出 Canon Ledger 中的 CanonFact |
+| `novel canon:check` | 检查 CanonFact 的最小 schema |
 | `novel entity:list` | 列出 Entity Graph 中的实体 |
 | `novel graph:build` | 从显式 graph 文件生成 `spec/graph/indexes.json` |
 | `novel graph:check` | 检查 graph edge 证据和 entity 引用 |
-| `novel graph:impact <entityId>` | 查看 entity 关联 edge 和 evidencePaths |
-| `novel scene:init <story>` | 为故事创建 Scene Card 模板 |
+| `novel graph:impact <entityId>` | 查看指定 entity 的关联 edge 和 evidencePaths |
+| `novel scene:init <story>` | 为故事创建第一张 Scene Card 模板 |
 | `novel scene:list [story]` | 列出 Scene Cards |
 | `novel scene:check [story]` | 检查 Scene Card 关键字段和 entity 引用 |
 | `novel scene:compile [story]` | 按 scene order 输出章节草稿路径清单 |
 | `novel voice:list` | 列出 VoiceFingerprint |
 | `novel voice:check` | 检查 VoiceFingerprint 必填字段和样本路径 |
 | `novel voice:sample <characterId>` | 读取指定角色的声音样本 |
-| `novel review` | 运行 reviewer loop，输出 findings 和任务草稿 |
 | `novel preset:list` | 列出内置 Genre Preset |
 | `novel preset:add <id>` | 安装 Genre Preset 到当前项目 |
 | `novel preset:doctor` | 检查当前项目启用的 Genre Preset |
-| `novel context:pack [story]` | 生成写作上下文包 |
-| `novel context:validate <pack>` | 校验上下文包路径、reason 和过期状态 |
+
+当前内置 preset：
+
+- `xuanhuan-cultivation`：面向玄幻、修仙、升级流的世界观字段、节奏模板和审稿权重。
+
+### 写作工作台
+
+| 命令 | 作用 |
+| --- | --- |
+| `novel context:pack [story]` | 生成写作上下文包，明确 mustRead reason 和 allowedWrites |
+| `novel context:validate <pack>` | 校验 Context Pack 的路径、reason 和过期状态 |
 | `novel draft:new [story]` | 创建章节草稿，不覆盖正式正文 |
 | `novel draft:list [story]` | 列出章节草稿 |
-| `novel draft:promote <draftId>` | 预览或发布草稿到正式正文 |
-| `novel narrative:test [story]` | 运行叙事测试 |
+| `novel draft:promote <draftId>` | 预览或发布章节草稿到正式正文 |
+| `novel narrative:test [story]` | 运行叙事测试，检查场景闭环和章节级 fallback |
+| `novel dialogue:plan [story]` | 为场景创建待确认 DialogueBeat YAML |
+| `novel dialogue:check [story]` | 检查 DialogueBeat speaker、intent、关系变化和 VoiceFingerprint |
 | `novel dialogue:extract [story]` | 从场景生成待确认 DialogueBeat YAML，不写入 canon |
-| `novel dialogue:plan [story]` | 为场景创建对白计划 YAML |
-| `novel dialogue:check [story]` | 检查对白说话人、意图、关系变化和声音指纹 |
-| `novel branch:create <title>` | 创建剧情 what-if 分支，只写入 `branches/` |
-| `novel branch:list [story]` | 列出剧情分支 |
+| `novel branch:create <title>` | 创建剧情 what-if 分支，只写入 `stories/*/branches/` |
+| `novel branch:list [story]` | 列出剧情 what-if 分支 |
 | `novel branch:compare <branchId>` | 输出分支影响报告 |
-| `novel branch:promote <branchId>` | 预览或确认分支 promote 清单，不静默覆盖 main |
+| `novel branch:promote <branchId>` | 生成或确认分支 promote 清单，不静默覆盖 main |
 | `novel promise:list` | 列出读者承诺 |
 | `novel promise:check` | 检查长期未兑现、payoff 缺 evidence、重复建立不推进的 promise |
-| `novel tension:chart` | 输出张力曲线 Markdown/JSON |
-| `novel research:add <title>` | 添加离线资料来源或个人 Markdown 笔记 |
+| `novel tension:chart` | 输出张力曲线 Markdown 或 JSON |
+| `novel review` | 运行 reviewer loop，输出结构化 findings 和任务草稿 |
+| `novel handoff [story]` | 生成断点续写上下文包 |
+| `novel tasks:board [story]` | 把 `tasks.md` 导出为本地任务看板和 GitHub issue 草稿 |
+
+### 资料、文风、编译和反馈
+
+| 命令 | 作用 |
+| --- | --- |
+| `novel research:add <title>` | 添加本地 Research Source 或个人 Markdown 笔记 |
 | `novel research:list` | 列出 Research Vault 中的资料来源 |
 | `novel research:link <sourceId> <targetPath>` | 把资料来源关联到 world/canon/spec/story 目标 |
-| `novel research:check` | 校验 source 路径和 citation 指向 |
+| `novel research:check` | 检查 Research Source 与 citation 的本地引用关系 |
 | `novel style:lint [story]` | 按 `spec/style` 规则检查正文文风 |
-| `novel style:explain <ruleId>` | 查看 style rule 的 pattern、severity 和 suggestion |
-| `novel compile` | 编译 Markdown manuscript，只写 `build/` |
-| `novel feedback:import <path>` | 导入 beta reader / 编辑反馈 |
+| `novel style:explain <ruleId>` | 解释 style rule 的 pattern、severity 和 suggestion |
+| `novel compile` | 编译 Markdown manuscript，只写入 `build/` |
+| `novel feedback:import <path>` | 导入读者反馈到 `feedback/feedback.json` |
 | `novel feedback:list` | 列出结构化反馈 |
-| `novel feedback:triage <id>` | 更新反馈状态 |
-| `novel feedback:to-tasks` | 生成待确认任务草稿，不写入 `tasks.md` |
-| `novel handoff [story]` | 生成断点续写上下文包 |
-| `novel tasks:board [story]` | 从 `tasks.md` 导出本地任务看板和 GitHub issue 草稿 |
+| `novel feedback:triage <id>` | 更新反馈状态，不修改正文 |
+| `novel feedback:to-tasks` | 把 feedback 转为待确认任务草稿，不写入 `tasks.md` |
+
+### 插件
+
+| 命令 | 作用 |
+| --- | --- |
 | `novel plugins` | 显示插件帮助 |
 | `novel plugins:list` | 列出已安装插件 |
 | `novel plugins:add <name>` | 安装内置插件 |
 | `novel plugins:remove <name>` | 移除插件 |
-| `novel upgrade` | 升级现有项目的命令、脚本、规范、模板或记忆文件 |
-| `novel info` | 查看可用写作方法 |
 
-## 斜杠命令
+内置插件包括：
 
-| 通用命令 | 作用 | 主要产物或数据 |
+| 插件 | 作用 |
+| --- | --- |
+| `authentic-voice` | 真实人声写作辅助 |
+| `translate` | 中文小说英译和本地化润色 |
+| `book-analysis` | 小说拆解分析 |
+| `genre-knowledge` | 类型知识库和商业网文写作知识 |
+| `luyao-style` | 路遥风格创作辅助 |
+| `wangyu-style` | 忘语风格创作辅助 |
+| `shizhangyu-style` | 石章鱼风格创作辅助 |
+| `stardust-dreams` | 连接星尘织梦工具市场的高级 AI 创作模板 |
+
+## Agent integrations
+
+当前内置 15 个 agent integration：
+
+| ID | 名称 | 默认目录 |
 | --- | --- | --- |
-| `/constitution` | 创建或更新创作宪法 | `.specify/memory/constitution.md` |
-| `/specify` | 定义故事规格 | `stories/*/specification.md` |
-| `/clarify` | 澄清规格模糊点 | 规格补充和决策记录 |
-| `/plan` | 制定创作计划 | `stories/*/creative-plan.md` |
-| `/tasks` | 分解任务清单 | `stories/*/tasks.md` |
-| `/scene` | 规划、写作或复核 Scene Card | `stories/*/scenes/*.yaml` |
-| `/write` | 写章节正文 | `stories/*/content/` |
-| `/analyze` | 框架或内容分析 | `stories/*/analysis-report.md` |
-| `/review` | 多审稿人 findings 与任务草稿 | `spec/reports/**` |
-| `/context-pack` | 生成写作上下文包 | `.specify/context-packs/**` |
-| `/checklist` | 质量检查清单 | 检查清单或扫描结果 |
-| `/track-init` | 初始化追踪系统 | `spec/tracking/*.json` |
-| `/track` | 综合追踪进度和一致性 | 终端/会话报告 |
-| `/timeline` | 管理时间线 | `spec/tracking/timeline.json` |
-| `/relations` | 管理角色关系 | `spec/tracking/relationships.json` |
-| `/expert` | 专家模式入口 | `.specify/experts/core/` 和插件专家提示词 |
+| `generic` | Generic Markdown Agent | `.specify/commands` |
+| `continue-check` | Continue Check | `.continue/prompts` |
+| `claude` | Claude Code | `.claude/commands` |
+| `cursor` | Cursor | `.cursor/commands` |
+| `gemini` | Gemini CLI | `.gemini/commands` |
+| `windsurf` | Windsurf | `.windsurf/workflows` |
+| `roocode` | Roo Code | `.roo/commands` |
+| `copilot` | GitHub Copilot | `.github/prompts` |
+| `qwen` | Qwen Code | `.qwen/commands` |
+| `opencode` | OpenCode | `.opencode/command` |
+| `codex` | Codex CLI | `.codex/prompts` |
+| `kilocode` | Kilo Code | `.kilocode/workflows` |
+| `auggie` | Auggie CLI | `.augment/commands` |
+| `codebuddy` | CodeBuddy | `.codebuddy/commands` |
+| `q` | Amazon Q Developer | `.amazonq/prompts` |
 
-> 注意：斜杠命令在 AI 助手内部使用，不是在终端中执行。终端里使用的是 `novel` CLI。
+`continue-check` 是只读检查入口，会生成建议和补丁式说明，不会被提示直接写入正文或任务文件。`generic` 是通用 Markdown 入口，适合不在内置列表里的 agent 复用。
 
 ## 项目目录
 
+初始化后的项目大致如下：
+
 ```text
 my-novel/
-├── .specify/
-│   ├── config.json
-│   ├── context-packs/
-│   ├── memory/
-│   ├── scripts/
-│   └── templates/
-├── .specify/commands/     # generic agent 命令
-├── .continue/prompts/     # continue-check 只读检查提示词
-├── .codex/                # 取决于 --agent，可替换为 .claude/.gemini 等
-│   └── prompts/
-├── AGENTS.md              # agent 项目说明
-├── plugins/
-├── spec/
-│   ├── knowledge/
-│   ├── world/
-│   ├── canon/
-│   ├── graph/
-│   ├── voice/
-│   ├── style/
-│   ├── presets/
-│   └── tracking/
-├── research/
-│   ├── notes/
-│   ├── sources/
-│   └── citations.json
-├── feedback/
-│   └── feedback.json
-├── build/
-│   ├── manuscript.md
-│   ├── manuscript.frontmatter.json
-│   └── reports/
-└── stories/
-    └── 001-story/
-        ├── specification.md
-        ├── creative-plan.md
-        ├── tasks.md
-        ├── task-board.json
-        ├── handoff.md
-        ├── branches/
-        ├── dialogue/
-        ├── drafts/
-        ├── revisions/
-        ├── scenes/
-        └── content/
+|-- .specify/
+|   |-- config.json
+|   |-- agent-contract.md
+|   |-- commands/
+|   |-- context-packs/
+|   |-- memory/
+|   |-- presets/
+|   |-- scripts/
+|   `-- templates/
+|-- .continue/
+|   `-- prompts/
+|-- .codex/
+|   `-- prompts/
+|-- AGENTS.md
+|-- plugins/
+|-- spec/
+|   |-- canon/
+|   |-- graph/
+|   |-- knowledge/
+|   |-- presets/
+|   |-- style/
+|   |-- tracking/
+|   |-- voice/
+|   `-- world/
+|-- research/
+|   |-- notes/
+|   |-- sources/
+|   `-- citations.json
+|-- feedback/
+|   `-- feedback.json
+|-- build/
+|   |-- manuscript.md
+|   |-- manuscript.frontmatter.json
+|   `-- reports/
+`-- stories/
+    `-- 001-story/
+        |-- specification.md
+        |-- creative-plan.md
+        |-- tasks.md
+        |-- task-board.json
+        |-- handoff.md
+        |-- branches/
+        |-- content/
+        |-- dialogue/
+        |-- drafts/
+        |-- revisions/
+        `-- scenes/
 ```
+
+实际生成的 agent 目录取决于 `--agent`、`--all-agents` 和后续 `agent:add`。
+
+## 当前边界
+
+- `research:*` 默认离线管理本地资料和 citation，不抓取网络内容。
+- `style:lint` 只输出 findings 和建议，不自动改正文。
+- `feedback:to-tasks` 只生成待确认任务草稿，不直接写入 `tasks.md`。
+- `compile` 当前支持 Markdown manuscript，输出只写入 `build/`。
+- `draft:promote` 和 `branch:promote` 默认偏预览，需要显式确认才会发布或推进。
+- 斜杠写作入口由 agent 使用；终端 CLI 当前没有 `novel analyze` 这类同名终端命令。
 
 ## 升级现有项目
 
@@ -418,9 +312,7 @@ novel upgrade --dry-run
 novel upgrade --interactive
 ```
 
-默认升级命令、脚本和写作规范；模板、记忆文件、专家模式需要显式选择，避免覆盖用户项目内容。
-
-旧 `novel upgrade --ai <id>` 和 `novel upgrade --all` 仍可用，但建议新文档和新项目使用 `--agent` / `--all-agents`。
+新项目和新文档建议使用 `--agent` / `--all-agents`。旧 `--ai` / `--all` 仍处于兼容期，会映射到 legacy AI 平台并输出迁移提示。
 
 ## 本仓库开发
 
@@ -431,7 +323,7 @@ npm test
 npm run test:smoke
 ```
 
-生成各平台命令产物：
+生成各 agent 命令产物：
 
 ```bash
 npm run build:commands
@@ -441,6 +333,13 @@ npm run build:commands
 
 ```bash
 npm run verify
+```
+
+常用检查：
+
+```bash
+npm run check:changes
+npm run check:command-manifest
 ```
 
 ## 文档
