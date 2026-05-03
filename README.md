@@ -128,8 +128,8 @@ init -> story:new -> next -> interview/clarify -> creative:report -> preview spe
 | `storyspec init` | 创建小说项目、目录、模板和 agent 入口 |
 | `storyspec story:new` | 保存作者原始想法，建立故事工作区 |
 | `storyspec author-profile` | 可选维护作者画像；首次只做可跳过采样，后续才回填已确认偏好 |
-| `storyspec next` | 根据当前状态展示创作模式、“你想从哪里继续？”的多入口导航和未决项回流 |
-| `storyspec interview` / `storyspec clarify` | 访谈式澄清；可用 `--focus protagonist/partner/world/stage/power/faction/conflict/scene/ending/branch` 从某个共创入口开始，并带回历史“稍后决定” |
+| `storyspec next` | 根据当前状态展示创作模式、推荐入口卡、“你想从哪里继续？”的多入口导航和未决项回流 |
+| `storyspec interview` / `storyspec clarify` | 访谈式澄清；可用 `--focus` 或 `--entry protagonist/partner/world/stage/power/faction/conflict/scene/ending/branch` 从某个共创入口开始，并带回历史“稍后决定” |
 | `storyspec creative:report` | 查看作者已经创建的小说骨架、创作回声、未决项回流、待澄清问题和 AI 建议风险 |
 | `storyspec preview specify` | 生成规格写入预览 |
 | `storyspec apply` | 确认无 blocking 风险后写入正式规格 |
@@ -199,7 +199,7 @@ StorySpec 会尽量把“作者确认”和“AI 建议”分开：
 | `storyspec preview plan [story]` | 生成创作计划预览，不直接写入 `creative-plan.md` |
 | `storyspec apply <preview-id>` | 默认 dry-run；加 `--yes` 后才应用无 blocking 风险的预览；计划草案可显式加 `--draft` |
 
-`storyspec next [story]` 会显示五种创作模式：`discover`、`co-create`、`plan`、`write`、`reflect`，并给出主角、伙伴、世界、舞台、能力、势力、冲突、场景、结尾/反转、分支/what-if 等入口。每个入口都会说明适用场景、引导问题、候选产物、正典边界和自然下一步；入口输出默认是候选，不会绕过确认门禁。
+`storyspec next [story]` 会显示五种创作模式：`discover`、`co-create`、`plan`、`write`、`reflect`，并给出主角、伙伴、世界、舞台、能力、势力、冲突、场景、结尾/反转、分支/what-if 等入口。主角、伙伴、舞台、能力、势力和冲突已升级为可测试入口卡：每张卡包含开场问题、有趣选择、候选产物、成熟度影响、正典边界和自然下一步；`next` 会按当前成熟度和灵感文本推荐最适合的入口。入口输出默认是候选，不会绕过确认门禁。
 
 `storyspec creative:report [story]` 和 `storyspec status` 会展示“创作回声”：当前风味、最有生命力的核心部件、还差的关键部件和下一轮创作回声。它只回顾已确认或部分确认的创作积累，不把未确认 AI 候选说成正典。
 

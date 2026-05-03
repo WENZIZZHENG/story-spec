@@ -7,7 +7,7 @@
 ```text
 storyspec story:new
 storyspec next
-/clarify 或 storyspec interview --focus <entry>
+/clarify 或 storyspec interview --focus <entry> / --entry <entry>
 /constitution
 /specify
 /plan
@@ -23,8 +23,8 @@ storyspec next
 | 命令 | 用途 |
 | --- | --- |
 | `storyspec story:new <name> --idea "..."` | 保存一句话灵感和原始创作意图 |
-| `storyspec next [story]` | 根据当前阶段展示创作模式和多入口共创导航 |
-| `storyspec interview [story]` | 在终端完成创作访谈，可用 `--focus` 从指定入口开始 |
+| `storyspec next [story]` | 根据当前阶段展示创作模式、推荐入口卡和多入口共创导航 |
+| `storyspec interview [story]` | 在终端完成创作访谈，可用 `--focus` 或 `--entry` 从指定入口卡开始 |
 | `storyspec creative:report [story]` | 查看已确认、创作回声、未决项回流、待澄清、AI 候选和偏离风险 |
 | `storyspec preview specify [story]` | 预览规格写入内容 |
 | `storyspec apply <preview-id> --yes` | 明确确认后写入 preview |
@@ -92,6 +92,15 @@ storyspec next
 
 有趣选择不是给作者创意打分，而是防止系统把重要创作岔路做成普通选项列表。候选仍保持 `confirmed: false`，确认后才适合写入规格、计划或追踪文件。
 
+## 入口卡
+
+| 命令 | 用途 |
+| --- | --- |
+| `storyspec next [story]` | 按成熟度和灵感文本推荐主角、伙伴、舞台、能力、势力、冲突等入口卡 |
+| `storyspec interview [story] --entry power` | 从指定入口卡启动一轮访谈；`--entry` 与 `--focus` 等价 |
+
+六大核心入口卡会展示开场问题、有趣选择、候选产物、成熟度影响、正典边界和下一步推荐。它们不是强制流程，作者可以从任意入口开始，也可以跳过或改写候选。
+
 ## 终端维护命令
 
 | 命令 | 用途 |
@@ -114,7 +123,7 @@ storyspec <command> --help
 ## 常见判断
 
 - 只有一句题材：先 `storyspec story:new` 或 `/clarify`，不要直接 `/specify` 到完整设定。
-- 只想先玩一个局部：运行 `storyspec next [story]`，再复制某个入口命令，例如 `storyspec interview 编程施法 --focus scene`。
+- 只想先玩一个局部：运行 `storyspec next [story]`，再复制某个入口命令，例如 `storyspec interview 编程施法 --entry power`。
 - 规格还不稳定：用 `preview`，不要直接覆盖正式文件。
 - 想写正文：先确认 `specification.md`、`creative-plan.md`、`tasks.md`。
 - 想让另一个 agent 接手：先运行 `storyspec status` 和 `storyspec context:pack`。

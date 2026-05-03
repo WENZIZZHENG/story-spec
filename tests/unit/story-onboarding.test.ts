@@ -94,7 +94,7 @@ describe('story onboarding', () => {
 
     expect(result.stage).toBe('idea');
     expect(result.actions[0]).toMatchObject({
-      command: 'storyspec interview 法术编译纪元'
+      command: 'storyspec interview 法术编译纪元 --focus power'
     });
     expect(result.actions.map(action => action.command)).toContain('storyspec preview specify 法术编译纪元');
   });
@@ -131,9 +131,14 @@ describe('story onboarding', () => {
     ]));
     expect(result.coCreationEntrypoints[0]).toEqual(expect.objectContaining({
       command: expect.stringContaining('storyspec interview 编程施法'),
-      reason: expect.stringContaining('候选')
+      reason: expect.stringContaining('候选'),
+      recommended: true
     }));
-    expect(result.actions[0].command).toBe('storyspec interview 编程施法');
+    expect(result.coCreationEntrypoints.slice(0, 3).map(entry => entry.id)).toEqual(expect.arrayContaining([
+      'stage',
+      'power'
+    ]));
+    expect(result.actions[0].command).toMatch(/^storyspec interview 编程施法 --focus (stage|power|faction)$/);
     expect(result.actions.map(action => action.command)).not.toContain('继续运行平台对应 plan 命令');
   });
 
@@ -267,8 +272,18 @@ describe('story onboarding', () => {
       expect.objectContaining({ id: 'stage', status: 'missing' }),
       expect.objectContaining({ id: 'factionConflict', status: 'missing' })
     ]));
+    expect(result.coCreationEntrypoints.slice(0, 3).map(entry => entry.id)).toEqual([
+      'partner',
+      'stage',
+      'faction'
+    ]);
+    expect(result.coCreationEntrypoints[0]).toEqual(expect.objectContaining({
+      id: 'partner',
+      recommended: true,
+      recommendationReason: expect.stringContaining('核心伙伴')
+    }));
     expect(result.actions[0]).toMatchObject({
-      command: 'storyspec interview demo'
+      command: 'storyspec interview demo --focus partner'
     });
     expect(result.actions[0].reason).toContain('核心伙伴');
     expect(result.actions.map(action => action.command)).not.toContain('继续运行平台对应 plan 命令');
@@ -312,15 +327,20 @@ describe('story onboarding', () => {
     expect(result.coCreationEntrypoints.every(entry =>
       entry.command.includes('--focus')
       && entry.whenToUse.length > 0
-      && entry.guidingQuestion.length > 0
-      && entry.candidateArtifact.length > 0
+      && entry.openingQuestions.length > 0
+      && entry.interestingChoices.length > 0
+      && entry.candidateArtifacts.length > 0
       && entry.canonBoundary.includes('候选')
-      && entry.nextRecommendation.length > 0
+      && entry.nextRecommendations.length > 0
+      && entry.maturityImpact.length > 0
     )).toBe(true);
 
     const rendered = renderStoryNext(result);
 
     expect(rendered).toContain('你想从哪里继续？');
+    expect(rendered).toContain('推荐入口');
+    expect(rendered).toContain('开场问题');
+    expect(rendered).toContain('有趣选择');
     expect(rendered).toContain('候选产物');
     expect(rendered).toContain('正典边界');
     expect(rendered).toContain('storyspec interview 编程施法 --focus scene');

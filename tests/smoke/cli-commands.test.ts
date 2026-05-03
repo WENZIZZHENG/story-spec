@@ -881,7 +881,7 @@ reveals:
     const next = JSON.parse(nextResult.stdout);
 
     expect(next.stage).toBe('idea');
-    expect(next.actions[0].command).toBe('storyspec interview 法术编译纪元');
+    expect(next.actions[0].command).toBe('storyspec interview 法术编译纪元 --focus power');
 
     await execFileAsync('node', [
       cliPath,

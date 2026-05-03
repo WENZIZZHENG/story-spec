@@ -31,11 +31,13 @@ import {
 import {
   CO_CREATION_ENTRYPOINTS,
   CO_CREATION_MODES,
+  type CoCreationEntryMaturityImpact,
   type CoCreationEntrypointDefinition,
   type StoryCoCreationEntrypointId,
   type StoryCreationModeId,
   type StoryCreationModeStatus
 } from '../domain/co-creation-workbench.js';
+import type { InterestingChoice } from '../domain/clarification.js';
 import {
   renderDeferredDecisionItems,
   summarizeDecisionLog,
@@ -90,14 +92,22 @@ export interface StoryNextAction {
 export interface StoryCoCreationEntrypoint {
   id: StoryCoCreationEntrypointId;
   label: string;
+  title: string;
   mode: StoryCreationModeId;
   command: string;
   reason: string;
   whenToUse: string;
+  openingQuestions: string[];
   guidingQuestion: string;
+  interestingChoices: InterestingChoice[];
+  candidateArtifacts: string[];
   candidateArtifact: string;
   canonBoundary: string;
+  nextRecommendations: string[];
   nextRecommendation: string;
+  maturityImpact: CoCreationEntryMaturityImpact[];
+  recommended: boolean;
+  recommendationReason: string;
 }
 
 export interface StoryCreationModeOption {
@@ -292,23 +302,148 @@ const buildCreationModes = (
 
 const entrypointToResult = (
   story: string,
-  entrypoint: CoCreationEntrypointDefinition
+  entrypoint: CoCreationEntrypointDefinition,
+  recommendationReason = ''
 ): StoryCoCreationEntrypoint => ({
   id: entrypoint.id,
   label: entrypoint.label,
+  title: entrypoint.title,
   mode: entrypoint.mode,
   command: `storyspec interview ${story} --focus ${entrypoint.id}`,
   reason: entrypoint.reason,
   whenToUse: entrypoint.whenToUse,
+  openingQuestions: entrypoint.openingQuestions,
   guidingQuestion: entrypoint.guidingQuestion,
+  interestingChoices: entrypoint.interestingChoices,
+  candidateArtifacts: entrypoint.candidateArtifacts,
   candidateArtifact: entrypoint.candidateArtifact,
   canonBoundary: entrypoint.canonBoundary,
-  nextRecommendation: entrypoint.nextRecommendation
+  nextRecommendations: entrypoint.nextRecommendations,
+  nextRecommendation: entrypoint.nextRecommendation,
+  maturityImpact: entrypoint.maturityImpact,
+  recommended: recommendationReason.length > 0,
+  recommendationReason
 });
+
+type EntryRecommendation = {
+  entrypoint: CoCreationEntrypointDefinition;
+  score: number;
+  reason: string;
+};
+
+const ENTRYPOINT_TIE_BREAKER: Record<StoryCoCreationEntrypointId, number> = {
+  protagonist: 1,
+  partner: 2,
+  stage: 3,
+  power: 4,
+  faction: 5,
+  conflict: 6,
+  world: 7,
+  scene: 8,
+  ending: 9,
+  branch: 10
+};
+
+const statusScore: Record<StoryCoreElementAssessment['status'], number> = {
+  missing: 60,
+  suggested: 55,
+  deferred: 58,
+  partial: 50,
+  confirmed: 0
+};
+
+const normalizeIdeaText = (value: string): string => value.toLowerCase();
+
+const ideaTextScores = (
+  ideaText: string
+): Partial<Record<StoryCoCreationEntrypointId, EntryRecommendation>> => {
+  const text = normalizeIdeaText(ideaText);
+  const recommendations: Partial<Record<StoryCoCreationEntrypointId, EntryRecommendation>> = {};
+
+  const add = (id: StoryCoCreationEntrypointId, score: number, reason: string): void => {
+    const entrypoint = CO_CREATION_ENTRYPOINTS.find(entry => entry.id === id);
+    if (!entrypoint) {
+      return;
+    }
+    const current = recommendations[id];
+    if (!current || current.score < score) {
+      recommendations[id] = { entrypoint, score, reason };
+    }
+  };
+
+  if (/编程|施法|魔法|能力|金手指|系统|法术/.test(text)) {
+    add('power', 95, '创意里已经出现能力或金手指，适合先玩爽点、限制和失败代价。');
+  }
+  if (/异界|世界|剑与魔法|学院|边境|城市|舞台|开局|地点/.test(text)) {
+    add('stage', 85, '创意里已经出现世界或开局空间，适合先把第一舞台做成可写场景。');
+  }
+  if (/文明|威胁|寂静|异常|危机|灭世/.test(text)) {
+    add('conflict', 78, '创意里有长线威胁，适合先拆成第一卷能看见的小异常和阶段冲突。');
+  }
+  if (/贵族|学院|垄断|势力|工会|教会|商会|合法性|资源/.test(text)) {
+    add('faction', 76, '创意里有组织或资源结构，适合先确认谁垄断知识、资源或合法性。');
+  }
+  if (/伙伴|同伴|关系|感情|慢热|搭档|恋/.test(text)) {
+    add('partner', 68, '创意里有关系线或伙伴线，适合先找能挑战主角的人。');
+  }
+  if (/主角|晏无|穿越|价值观|工科|青年/.test(text)) {
+    add('protagonist', 45, '创意里已有主角轮廓，可继续补欲望、误判和成长代价。');
+  }
+
+  return recommendations;
+};
+
+const recommendEntrypoints = (
+  coreElements: readonly StoryCoreElementAssessment[],
+  ideaText: string
+): EntryRecommendation[] => {
+  const recommendations = new Map<StoryCoCreationEntrypointId, EntryRecommendation>();
+  const coreById = new Map(coreElements.map(element => [element.id, element]));
+
+  for (const entrypoint of CO_CREATION_ENTRYPOINTS) {
+    for (const impact of entrypoint.maturityImpact) {
+      const element = coreById.get(impact.coreElement);
+      if (!element || element.status === 'confirmed') {
+        continue;
+      }
+
+      const signalBoost = element.questionIds.length > 0
+        || element.suggestedAnswerIds.length > 0
+        || element.deferredAnswerIds.length > 0
+        ? 40
+        : 0;
+      const score = statusScore[element.status] + signalBoost - impact.priority * 5;
+      const reason = element.nextPrompt
+        ? `${element.nextPrompt}${impact.reason}`
+        : impact.reason;
+      const current = recommendations.get(entrypoint.id);
+
+      if (!current || current.score < score) {
+        recommendations.set(entrypoint.id, { entrypoint, score, reason });
+      }
+    }
+  }
+
+  for (const [id, recommendation] of Object.entries(ideaTextScores(ideaText))) {
+    const current = recommendations.get(id as StoryCoCreationEntrypointId);
+    if (!current || current.score < recommendation.score) {
+      recommendations.set(id as StoryCoCreationEntrypointId, recommendation);
+    }
+  }
+
+  return [...recommendations.values()]
+    .filter(recommendation => recommendation.score > 0)
+    .sort((left, right) =>
+      right.score - left.score
+      || ENTRYPOINT_TIE_BREAKER[left.entrypoint.id] - ENTRYPOINT_TIE_BREAKER[right.entrypoint.id]
+    );
+};
 
 const buildCoCreationEntrypoints = (
   story: string,
-  stage: StoryMaturityStage
+  stage: StoryMaturityStage,
+  coreElements: readonly StoryCoreElementAssessment[],
+  ideaText: string
 ): StoryCoCreationEntrypoint[] => {
   if (![
     'idea',
@@ -322,8 +457,15 @@ const buildCoCreationEntrypoints = (
     return [];
   }
 
-  return CO_CREATION_ENTRYPOINTS.map(entrypoint =>
-    entrypointToResult(story, entrypoint)
+  const recommendations = recommendEntrypoints(coreElements, ideaText);
+  const recommendationById = new Map(recommendations.map(item => [item.entrypoint.id, item]));
+  const ordered = [
+    ...recommendations.map(item => item.entrypoint),
+    ...CO_CREATION_ENTRYPOINTS.filter(entrypoint => !recommendationById.has(entrypoint.id))
+  ];
+
+  return ordered.map(entrypoint =>
+    entrypointToResult(story, entrypoint, recommendationById.get(entrypoint.id)?.reason)
   );
 };
 
@@ -334,13 +476,18 @@ const buildActions = (
   const planBlockingElements = getPlanBlockingCoreElements(result.coreElements);
   const activeBranch = result.activeBranches[0];
   const deferredItem = result.decisionLog.deferredItems[0];
+  const recommendedEntry = result.coCreationEntrypoints.find(entry => entry.recommended);
+  const interviewCommand = recommendedEntry?.command ?? `storyspec interview ${result.story}`;
+  const interviewReason = recommendedEntry
+    ? `推荐入口：${recommendedEntry.label}。${recommendedEntry.recommendationReason}`
+    : '先把一句话创意转成澄清记录，不急着生成完整设定。';
 
   if (deferredItem && result.stage !== 'idea') {
     actions.push(action(1, deferredItem.resumeCommand, `${deferredItem.question} 曾选择“${deferredItem.answer}”；${deferredItem.trigger}。`));
   }
 
   if (result.stage === 'idea') {
-    actions.push(action(1, `storyspec interview ${result.story}`, '先把一句话创意转成澄清记录，不急着生成完整设定。'));
+    actions.push(action(1, interviewCommand, interviewReason));
     actions.push(action(2, `storyspec creative:report ${result.story}`, '查看哪些内容仍不能被当作正典。'));
     actions.push(action(3, `storyspec preview specify ${result.story}`, '生成写入前规格预览，确认后再 apply。'));
     if (activeBranch) {
@@ -358,8 +505,10 @@ const buildActions = (
   ) {
     actions.push(action(
       1,
-      `storyspec interview ${result.story}`,
-      `${summarizeCoreElementGaps(result.coreElements).join('；')}，先共创再进入完整计划。`
+      interviewCommand,
+      recommendedEntry
+        ? `推荐入口：${recommendedEntry.label}。${recommendedEntry.recommendationReason}`
+        : `${summarizeCoreElementGaps(result.coreElements).join('；')}，先共创再进入完整计划。`
     ));
     actions.push(action(2, `storyspec creative:report ${result.story}`, '查看核心要素面板和仍不能进入正典的内容。'));
     actions.push(action(3, `storyspec preview specify ${result.story}`, '仅生成写入前预览，处理缺口后再 apply。'));
@@ -419,6 +568,22 @@ const readClarificationRecord = async (
   }
 };
 
+const readIdeaText = async (
+  fs: ProjectFileSystem,
+  storyPath: string
+): Promise<string> => {
+  const ideaPath = path.join(storyPath, 'idea.md');
+  if (!await fs.pathExists(ideaPath)) {
+    return '';
+  }
+
+  try {
+    return await fs.readFile(ideaPath);
+  } catch {
+    return '';
+  }
+};
+
 export const getStoryNext = async (
   input: GetStoryNextInput
 ): Promise<StoryNextResult> => {
@@ -436,6 +601,7 @@ export const getStoryNext = async (
 
   const story = await selectStoryProject(input.projectRoot, input.fileSystem, input.story);
   const record = await readClarificationRecord(input.fileSystem, story.path);
+  const ideaText = await readIdeaText(input.fileSystem, story.path);
   const authorProfile = await loadAuthorProfile({
     projectRoot: input.projectRoot,
     fileSystem: input.fileSystem
@@ -471,7 +637,7 @@ export const getStoryNext = async (
       ...creativeControl.cannotFinalize.filter(item => item.startsWith('AI 建议待确认'))
     ],
     creationModes: buildCreationModes(story.name, story.stage, coreElements),
-    coCreationEntrypoints: buildCoCreationEntrypoints(story.name, story.stage),
+    coCreationEntrypoints: buildCoCreationEntrypoints(story.name, story.stage, coreElements, ideaText),
     activeBranches,
     coreElements,
     decisionLog,
@@ -514,12 +680,14 @@ export const renderStoryNext = (result: StoryNextResult): string => [
   '你想从哪里继续？',
   ...(result.coCreationEntrypoints.length > 0
     ? result.coCreationEntrypoints.map(item => [
-      `- ${item.label}（${item.mode}）：${item.command}`,
+      `- ${item.label}（${item.mode}${item.recommended ? '，推荐入口' : ''}）：${item.command}`,
+      ...(item.recommended ? [`  - 推荐原因：${item.recommendationReason}`] : []),
       `  - 适用场景：${item.whenToUse}`,
-      `  - 引导问题：${item.guidingQuestion}`,
-      `  - 候选产物：${item.candidateArtifact}`,
+      `  - 开场问题：${item.openingQuestions.join(' / ')}`,
+      `  - 有趣选择：${item.interestingChoices.map(choice => `${choice.appeal} 代价：${choice.cost}`).join('；')}`,
+      `  - 候选产物：${item.candidateArtifacts.join('、')}`,
       `  - 正典边界：${item.canonBoundary}`,
-      `  - 下一步推荐：${item.nextRecommendation}`
+      `  - 下一步推荐：${item.nextRecommendations.join('；')}`
     ].join('\n'))
     : ['- 当前阶段暂无专门入口；请按建议动作继续。']),
   '',

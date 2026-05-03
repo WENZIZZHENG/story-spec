@@ -2,7 +2,7 @@
 
 ## 状态
 
-Active。本文承接总路线 F16-F21，聚焦有趣选择质量标准、六大核心入口卡、势力入口、首轮样例脚本、创作乐趣体验验收和低负担创作体验。F16 已完成，当前下一步是 F17 六大核心入口卡模板。
+Active。本文承接总路线 F16-F21，聚焦有趣选择质量标准、六大核心入口卡、势力入口、首轮样例脚本、创作乐趣体验验收和低负担创作体验。F16-F17 已完成，当前下一步是 F18 势力入口与权力结构共创。
 
 ## 共通上下文
 
@@ -21,7 +21,7 @@ Active。本文承接总路线 F16-F21，聚焦有趣选择质量标准、六大
 ## 执行顺序
 
 - F16：Completed。见本文 Batch F16。
-- F17：下一步。见本文 Batch F17。
+- F17：Completed。见本文 Batch F17。
 - F18：见本文 Batch F18。
 - F19：见本文 Batch F19。
 - F20：见本文 Batch F20。
@@ -102,6 +102,8 @@ Active。本文承接总路线 F16-F21，聚焦有趣选择质量标准、六大
 - 不把“有趣选择”做成自动评分作者创意；只检查系统给出的候选是否足够可用。
 
 ## Batch F17：六大核心入口卡模板
+
+状态：Completed（2026-05-04）。已把主角、伙伴、舞台、能力、势力、冲突升级为统一入口卡字段：`title`、`openingQuestions`、`interestingChoices`、`candidateArtifacts`、`canonBoundary`、`nextRecommendations`、`maturityImpact`；`storyspec next` 会按核心要素成熟度和灵感文本推荐具体入口并排序，`storyspec interview --entry <entry>` 可按入口启动访谈，`--focus` 继续兼容。
 
 类型：模板、导航、应用服务、测试
 

@@ -24,6 +24,7 @@ type InterviewCommandOptions = {
   useExamples?: boolean;
   maxQuestions?: string;
   focus?: string;
+  entry?: string;
   json?: boolean;
   write?: boolean;
 };
@@ -326,11 +327,12 @@ const runInterviewCommand = async (
   try {
     const projectRoot = await ensureProjectRoot();
     const maxQuestions = parsePositiveInteger(options.maxQuestions, 6);
-    const focus = normalizeCoCreationEntrypointId(options.focus);
-    if (options.focus && !focus) {
+    const rawFocus = options.entry ?? options.focus;
+    const focus = normalizeCoCreationEntrypointId(rawFocus);
+    if (rawFocus && !focus) {
       throw new InterviewStoryError(
         'INVALID_ANSWERS',
-        `未知共创入口：${options.focus}。可用入口：protagonist, partner, world, stage, power, faction, conflict, scene, ending, branch`
+        `未知共创入口：${rawFocus}。可用入口：protagonist, partner, world, stage, power, faction, conflict, scene, ending, branch`
       );
     }
     let premise = options.premise?.trim();
@@ -419,6 +421,7 @@ export const registerInterviewCommand = (program: Command): void => {
     .option('--premise <text>', '一句话创意或创作方向；非交互环境必填')
     .option('--answers <pairs>', '预填答案，格式：questionId=answer;questionId2=answer2')
     .option('--focus <entry>', '从指定共创入口开始：protagonist/partner/world/stage/power/faction/conflict/scene/ending/branch')
+    .option('--entry <entry>', '同 --focus，按入口卡开始一轮共创')
     .option('--use-examples', '把未回答问题填入第一个可复制示例，适合 smoke 或快速起步')
     .option('--max-questions <number>', '本轮最多提问数量', '6')
     .option('--no-write', '只预览，不写入 clarifications.json/md')

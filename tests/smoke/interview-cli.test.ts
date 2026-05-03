@@ -104,5 +104,26 @@ describe('interview CLI smoke', () => {
       })
     ]));
     expect(focused.handoffPrompt).toContain('当前访谈焦点：场景入口');
+
+    const entryResult = await execFileAsync('node', [
+      cliPath,
+      'interview',
+      'idea-demo',
+      '--entry',
+      'power',
+      '--max-questions',
+      '3',
+      '--json'
+    ], { cwd: projectPath });
+    const entry = JSON.parse(entryResult.stdout);
+
+    expect(entry.focus).toBe('power');
+    expect(entry.record.questions).toEqual(expect.arrayContaining([
+      expect.objectContaining({
+        id: 'focus.power',
+        topic: 'power'
+      })
+    ]));
+    expect(entry.handoffPrompt).toContain('当前访谈焦点：能力入口');
   });
 });
