@@ -42,7 +42,7 @@
     },
     {
       "path": "auggie/.augment/commands/clarify.md",
-      "sha256": "aacf0b89ab65b5c2c377e6f2a1662eafa27b1a10258da8273a2a1a9247bf7b86",
+      "sha256": "d1e27654c50d16de065193650cb1f0ea16c88b0ff35ed7da38c891f96277f80a",
       "commandSource": {
         "command": "clarify",
         "kind": "legacy-template",
@@ -308,6 +308,38 @@
       "sha256": "cb3f31ae0eba66bc155c1151d0e0704a34deaa9ea1f783f9af93609aed3bcb32"
     },
     {
+      "path": "auggie/.specify/templates/clarification/civilization-threat.yaml",
+      "sha256": "63a54e22a71e2f9d1f257984826cc930f3cb92a26fb4b3b948707bd3e256e14d"
+    },
+    {
+      "path": "auggie/.specify/templates/clarification/core.yaml",
+      "sha256": "1d114da7edb203dda5292fc1de7c8163cac2fa2eb1e932287137a6c403313026"
+    },
+    {
+      "path": "auggie/.specify/templates/clarification/cozy-adventure.yaml",
+      "sha256": "aba3282c099929f2f3c7f8ac1413666f1f9e8e161742e205c5611d61eec0fe52"
+    },
+    {
+      "path": "auggie/.specify/templates/clarification/kingdom-building-support.yaml",
+      "sha256": "ed1c46f07ac414e39724023caa56bc91e1376c2382cbc0ddb4dc442a8b8e8cb6"
+    },
+    {
+      "path": "auggie/.specify/templates/clarification/magic-system.yaml",
+      "sha256": "84a8587c1c7f18ebb6d95ae90c3c563802e874de49276829c3e475d75246b0a4"
+    },
+    {
+      "path": "auggie/.specify/templates/clarification/portal-fantasy.yaml",
+      "sha256": "26ba8206050d3ab5b5bc214f5d285d112a9cd3cce7272859847a088663a1a918"
+    },
+    {
+      "path": "auggie/.specify/templates/clarification/question-set.example.yaml",
+      "sha256": "73aa368800740359e80d57ece50261a24206f66c4e5fcd87229486b5a80178dd"
+    },
+    {
+      "path": "auggie/.specify/templates/clarification/slow-burn-romance.yaml",
+      "sha256": "3ee8bc5d29bac5501e354a985c7865ad1182eec8f8869616cc5cd2b20a755645"
+    },
+    {
       "path": "auggie/.specify/templates/feedback/feedback.json",
       "sha256": "4c6e8e443a53c2172f54ac75e79463c2480878b5c59f0b2b066c330b44664186"
     },
@@ -560,7 +592,7 @@
     },
     {
       "path": "claude/.claude/commands/novel.clarify.md",
-      "sha256": "d4b8c86cde08a7cdcf1bc19c105885d21c40482aff3d33eda802f147586f7080",
+      "sha256": "4bba0862943abd4d919529134808ac8b62acd5efd239da8218754991a2af19f9",
       "commandSource": {
         "command": "clarify",
         "kind": "legacy-template",
@@ -826,6 +858,38 @@
       "sha256": "cb3f31ae0eba66bc155c1151d0e0704a34deaa9ea1f783f9af93609aed3bcb32"
     },
     {
+      "path": "claude/.specify/templates/clarification/civilization-threat.yaml",
+      "sha256": "63a54e22a71e2f9d1f257984826cc930f3cb92a26fb4b3b948707bd3e256e14d"
+    },
+    {
+      "path": "claude/.specify/templates/clarification/core.yaml",
+      "sha256": "1d114da7edb203dda5292fc1de7c8163cac2fa2eb1e932287137a6c403313026"
+    },
+    {
+      "path": "claude/.specify/templates/clarification/cozy-adventure.yaml",
+      "sha256": "aba3282c099929f2f3c7f8ac1413666f1f9e8e161742e205c5611d61eec0fe52"
+    },
+    {
+      "path": "claude/.specify/templates/clarification/kingdom-building-support.yaml",
+      "sha256": "ed1c46f07ac414e39724023caa56bc91e1376c2382cbc0ddb4dc442a8b8e8cb6"
+    },
+    {
+      "path": "claude/.specify/templates/clarification/magic-system.yaml",
+      "sha256": "84a8587c1c7f18ebb6d95ae90c3c563802e874de49276829c3e475d75246b0a4"
+    },
+    {
+      "path": "claude/.specify/templates/clarification/portal-fantasy.yaml",
+      "sha256": "26ba8206050d3ab5b5bc214f5d285d112a9cd3cce7272859847a088663a1a918"
+    },
+    {
+      "path": "claude/.specify/templates/clarification/question-set.example.yaml",
+      "sha256": "73aa368800740359e80d57ece50261a24206f66c4e5fcd87229486b5a80178dd"
+    },
+    {
+      "path": "claude/.specify/templates/clarification/slow-burn-romance.yaml",
+      "sha256": "3ee8bc5d29bac5501e354a985c7865ad1182eec8f8869616cc5cd2b20a755645"
+    },
+    {
       "path": "claude/.specify/templates/feedback/feedback.json",
       "sha256": "4c6e8e443a53c2172f54ac75e79463c2480878b5c59f0b2b066c330b44664186"
     },
@@ -1078,7 +1142,7 @@
     },
     {
       "path": "codebuddy/.codebuddy/commands/clarify.md",
-      "sha256": "aacf0b89ab65b5c2c377e6f2a1662eafa27b1a10258da8273a2a1a9247bf7b86",
+      "sha256": "d1e27654c50d16de065193650cb1f0ea16c88b0ff35ed7da38c891f96277f80a",
       "commandSource": {
         "command": "clarify",
         "kind": "legacy-template",
@@ -1344,6 +1408,38 @@
       "sha256": "cb3f31ae0eba66bc155c1151d0e0704a34deaa9ea1f783f9af93609aed3bcb32"
     },
     {
+      "path": "codebuddy/.specify/templates/clarification/civilization-threat.yaml",
+      "sha256": "63a54e22a71e2f9d1f257984826cc930f3cb92a26fb4b3b948707bd3e256e14d"
+    },
+    {
+      "path": "codebuddy/.specify/templates/clarification/core.yaml",
+      "sha256": "1d114da7edb203dda5292fc1de7c8163cac2fa2eb1e932287137a6c403313026"
+    },
+    {
+      "path": "codebuddy/.specify/templates/clarification/cozy-adventure.yaml",
+      "sha256": "aba3282c099929f2f3c7f8ac1413666f1f9e8e161742e205c5611d61eec0fe52"
+    },
+    {
+      "path": "codebuddy/.specify/templates/clarification/kingdom-building-support.yaml",
+      "sha256": "ed1c46f07ac414e39724023caa56bc91e1376c2382cbc0ddb4dc442a8b8e8cb6"
+    },
+    {
+      "path": "codebuddy/.specify/templates/clarification/magic-system.yaml",
+      "sha256": "84a8587c1c7f18ebb6d95ae90c3c563802e874de49276829c3e475d75246b0a4"
+    },
+    {
+      "path": "codebuddy/.specify/templates/clarification/portal-fantasy.yaml",
+      "sha256": "26ba8206050d3ab5b5bc214f5d285d112a9cd3cce7272859847a088663a1a918"
+    },
+    {
+      "path": "codebuddy/.specify/templates/clarification/question-set.example.yaml",
+      "sha256": "73aa368800740359e80d57ece50261a24206f66c4e5fcd87229486b5a80178dd"
+    },
+    {
+      "path": "codebuddy/.specify/templates/clarification/slow-burn-romance.yaml",
+      "sha256": "3ee8bc5d29bac5501e354a985c7865ad1182eec8f8869616cc5cd2b20a755645"
+    },
+    {
       "path": "codebuddy/.specify/templates/feedback/feedback.json",
       "sha256": "4c6e8e443a53c2172f54ac75e79463c2480878b5c59f0b2b066c330b44664186"
     },
@@ -1596,7 +1692,7 @@
     },
     {
       "path": "codex/.codex/prompts/novel-clarify.md",
-      "sha256": "aacf0b89ab65b5c2c377e6f2a1662eafa27b1a10258da8273a2a1a9247bf7b86",
+      "sha256": "d1e27654c50d16de065193650cb1f0ea16c88b0ff35ed7da38c891f96277f80a",
       "commandSource": {
         "command": "clarify",
         "kind": "legacy-template",
@@ -1862,6 +1958,38 @@
       "sha256": "cb3f31ae0eba66bc155c1151d0e0704a34deaa9ea1f783f9af93609aed3bcb32"
     },
     {
+      "path": "codex/.specify/templates/clarification/civilization-threat.yaml",
+      "sha256": "63a54e22a71e2f9d1f257984826cc930f3cb92a26fb4b3b948707bd3e256e14d"
+    },
+    {
+      "path": "codex/.specify/templates/clarification/core.yaml",
+      "sha256": "1d114da7edb203dda5292fc1de7c8163cac2fa2eb1e932287137a6c403313026"
+    },
+    {
+      "path": "codex/.specify/templates/clarification/cozy-adventure.yaml",
+      "sha256": "aba3282c099929f2f3c7f8ac1413666f1f9e8e161742e205c5611d61eec0fe52"
+    },
+    {
+      "path": "codex/.specify/templates/clarification/kingdom-building-support.yaml",
+      "sha256": "ed1c46f07ac414e39724023caa56bc91e1376c2382cbc0ddb4dc442a8b8e8cb6"
+    },
+    {
+      "path": "codex/.specify/templates/clarification/magic-system.yaml",
+      "sha256": "84a8587c1c7f18ebb6d95ae90c3c563802e874de49276829c3e475d75246b0a4"
+    },
+    {
+      "path": "codex/.specify/templates/clarification/portal-fantasy.yaml",
+      "sha256": "26ba8206050d3ab5b5bc214f5d285d112a9cd3cce7272859847a088663a1a918"
+    },
+    {
+      "path": "codex/.specify/templates/clarification/question-set.example.yaml",
+      "sha256": "73aa368800740359e80d57ece50261a24206f66c4e5fcd87229486b5a80178dd"
+    },
+    {
+      "path": "codex/.specify/templates/clarification/slow-burn-romance.yaml",
+      "sha256": "3ee8bc5d29bac5501e354a985c7865ad1182eec8f8869616cc5cd2b20a755645"
+    },
+    {
       "path": "codex/.specify/templates/feedback/feedback.json",
       "sha256": "4c6e8e443a53c2172f54ac75e79463c2480878b5c59f0b2b066c330b44664186"
     },
@@ -2114,7 +2242,7 @@
     },
     {
       "path": "continue-check/.continue/prompts/clarify.md",
-      "sha256": "12b11ae0244b5a8bdc9db30d596528565a3acad575a9057b164f1f3ab885bea7",
+      "sha256": "845e2ccc2e7245b4b7982708581c36cc4d6473b2c3b55d68518747ffce69256d",
       "commandSource": {
         "command": "clarify",
         "kind": "legacy-template",
@@ -2380,6 +2508,38 @@
       "sha256": "cb3f31ae0eba66bc155c1151d0e0704a34deaa9ea1f783f9af93609aed3bcb32"
     },
     {
+      "path": "continue-check/.specify/templates/clarification/civilization-threat.yaml",
+      "sha256": "63a54e22a71e2f9d1f257984826cc930f3cb92a26fb4b3b948707bd3e256e14d"
+    },
+    {
+      "path": "continue-check/.specify/templates/clarification/core.yaml",
+      "sha256": "1d114da7edb203dda5292fc1de7c8163cac2fa2eb1e932287137a6c403313026"
+    },
+    {
+      "path": "continue-check/.specify/templates/clarification/cozy-adventure.yaml",
+      "sha256": "aba3282c099929f2f3c7f8ac1413666f1f9e8e161742e205c5611d61eec0fe52"
+    },
+    {
+      "path": "continue-check/.specify/templates/clarification/kingdom-building-support.yaml",
+      "sha256": "ed1c46f07ac414e39724023caa56bc91e1376c2382cbc0ddb4dc442a8b8e8cb6"
+    },
+    {
+      "path": "continue-check/.specify/templates/clarification/magic-system.yaml",
+      "sha256": "84a8587c1c7f18ebb6d95ae90c3c563802e874de49276829c3e475d75246b0a4"
+    },
+    {
+      "path": "continue-check/.specify/templates/clarification/portal-fantasy.yaml",
+      "sha256": "26ba8206050d3ab5b5bc214f5d285d112a9cd3cce7272859847a088663a1a918"
+    },
+    {
+      "path": "continue-check/.specify/templates/clarification/question-set.example.yaml",
+      "sha256": "73aa368800740359e80d57ece50261a24206f66c4e5fcd87229486b5a80178dd"
+    },
+    {
+      "path": "continue-check/.specify/templates/clarification/slow-burn-romance.yaml",
+      "sha256": "3ee8bc5d29bac5501e354a985c7865ad1182eec8f8869616cc5cd2b20a755645"
+    },
+    {
       "path": "continue-check/.specify/templates/feedback/feedback.json",
       "sha256": "4c6e8e443a53c2172f54ac75e79463c2480878b5c59f0b2b066c330b44664186"
     },
@@ -2632,7 +2792,7 @@
     },
     {
       "path": "copilot/.github/prompts/clarify.prompt.md",
-      "sha256": "7ebfbf28b7132a37ba6045f27f1ac0924208eaa85186b50c33a88d06d9c8ca95",
+      "sha256": "582a2314a444d49e51dfc7e13a5c7b88a1baee9c6af7fced747dc73a61d91b0f",
       "commandSource": {
         "command": "clarify",
         "kind": "legacy-template",
@@ -2898,6 +3058,38 @@
       "sha256": "cb3f31ae0eba66bc155c1151d0e0704a34deaa9ea1f783f9af93609aed3bcb32"
     },
     {
+      "path": "copilot/.specify/templates/clarification/civilization-threat.yaml",
+      "sha256": "63a54e22a71e2f9d1f257984826cc930f3cb92a26fb4b3b948707bd3e256e14d"
+    },
+    {
+      "path": "copilot/.specify/templates/clarification/core.yaml",
+      "sha256": "1d114da7edb203dda5292fc1de7c8163cac2fa2eb1e932287137a6c403313026"
+    },
+    {
+      "path": "copilot/.specify/templates/clarification/cozy-adventure.yaml",
+      "sha256": "aba3282c099929f2f3c7f8ac1413666f1f9e8e161742e205c5611d61eec0fe52"
+    },
+    {
+      "path": "copilot/.specify/templates/clarification/kingdom-building-support.yaml",
+      "sha256": "ed1c46f07ac414e39724023caa56bc91e1376c2382cbc0ddb4dc442a8b8e8cb6"
+    },
+    {
+      "path": "copilot/.specify/templates/clarification/magic-system.yaml",
+      "sha256": "84a8587c1c7f18ebb6d95ae90c3c563802e874de49276829c3e475d75246b0a4"
+    },
+    {
+      "path": "copilot/.specify/templates/clarification/portal-fantasy.yaml",
+      "sha256": "26ba8206050d3ab5b5bc214f5d285d112a9cd3cce7272859847a088663a1a918"
+    },
+    {
+      "path": "copilot/.specify/templates/clarification/question-set.example.yaml",
+      "sha256": "73aa368800740359e80d57ece50261a24206f66c4e5fcd87229486b5a80178dd"
+    },
+    {
+      "path": "copilot/.specify/templates/clarification/slow-burn-romance.yaml",
+      "sha256": "3ee8bc5d29bac5501e354a985c7865ad1182eec8f8869616cc5cd2b20a755645"
+    },
+    {
       "path": "copilot/.specify/templates/feedback/feedback.json",
       "sha256": "4c6e8e443a53c2172f54ac75e79463c2480878b5c59f0b2b066c330b44664186"
     },
@@ -3150,7 +3342,7 @@
     },
     {
       "path": "cursor/.cursor/commands/clarify.md",
-      "sha256": "aacf0b89ab65b5c2c377e6f2a1662eafa27b1a10258da8273a2a1a9247bf7b86",
+      "sha256": "d1e27654c50d16de065193650cb1f0ea16c88b0ff35ed7da38c891f96277f80a",
       "commandSource": {
         "command": "clarify",
         "kind": "legacy-template",
@@ -3416,6 +3608,38 @@
       "sha256": "cb3f31ae0eba66bc155c1151d0e0704a34deaa9ea1f783f9af93609aed3bcb32"
     },
     {
+      "path": "cursor/.specify/templates/clarification/civilization-threat.yaml",
+      "sha256": "63a54e22a71e2f9d1f257984826cc930f3cb92a26fb4b3b948707bd3e256e14d"
+    },
+    {
+      "path": "cursor/.specify/templates/clarification/core.yaml",
+      "sha256": "1d114da7edb203dda5292fc1de7c8163cac2fa2eb1e932287137a6c403313026"
+    },
+    {
+      "path": "cursor/.specify/templates/clarification/cozy-adventure.yaml",
+      "sha256": "aba3282c099929f2f3c7f8ac1413666f1f9e8e161742e205c5611d61eec0fe52"
+    },
+    {
+      "path": "cursor/.specify/templates/clarification/kingdom-building-support.yaml",
+      "sha256": "ed1c46f07ac414e39724023caa56bc91e1376c2382cbc0ddb4dc442a8b8e8cb6"
+    },
+    {
+      "path": "cursor/.specify/templates/clarification/magic-system.yaml",
+      "sha256": "84a8587c1c7f18ebb6d95ae90c3c563802e874de49276829c3e475d75246b0a4"
+    },
+    {
+      "path": "cursor/.specify/templates/clarification/portal-fantasy.yaml",
+      "sha256": "26ba8206050d3ab5b5bc214f5d285d112a9cd3cce7272859847a088663a1a918"
+    },
+    {
+      "path": "cursor/.specify/templates/clarification/question-set.example.yaml",
+      "sha256": "73aa368800740359e80d57ece50261a24206f66c4e5fcd87229486b5a80178dd"
+    },
+    {
+      "path": "cursor/.specify/templates/clarification/slow-burn-romance.yaml",
+      "sha256": "3ee8bc5d29bac5501e354a985c7865ad1182eec8f8869616cc5cd2b20a755645"
+    },
+    {
       "path": "cursor/.specify/templates/feedback/feedback.json",
       "sha256": "4c6e8e443a53c2172f54ac75e79463c2480878b5c59f0b2b066c330b44664186"
     },
@@ -3668,7 +3892,7 @@
     },
     {
       "path": "gemini/.gemini/commands/novel/clarify.toml",
-      "sha256": "7cf5dce45741b9798bf2da084d5946df1a61c6f09ba4c40eac9457be23b9eb64",
+      "sha256": "e013fd5ccfe7f5cf6859ca3dd0e20a6ee4f246488dd921ee30dd2b1ffba1a752",
       "commandSource": {
         "command": "clarify",
         "kind": "legacy-template",
@@ -3934,6 +4158,38 @@
       "sha256": "cb3f31ae0eba66bc155c1151d0e0704a34deaa9ea1f783f9af93609aed3bcb32"
     },
     {
+      "path": "gemini/.specify/templates/clarification/civilization-threat.yaml",
+      "sha256": "63a54e22a71e2f9d1f257984826cc930f3cb92a26fb4b3b948707bd3e256e14d"
+    },
+    {
+      "path": "gemini/.specify/templates/clarification/core.yaml",
+      "sha256": "1d114da7edb203dda5292fc1de7c8163cac2fa2eb1e932287137a6c403313026"
+    },
+    {
+      "path": "gemini/.specify/templates/clarification/cozy-adventure.yaml",
+      "sha256": "aba3282c099929f2f3c7f8ac1413666f1f9e8e161742e205c5611d61eec0fe52"
+    },
+    {
+      "path": "gemini/.specify/templates/clarification/kingdom-building-support.yaml",
+      "sha256": "ed1c46f07ac414e39724023caa56bc91e1376c2382cbc0ddb4dc442a8b8e8cb6"
+    },
+    {
+      "path": "gemini/.specify/templates/clarification/magic-system.yaml",
+      "sha256": "84a8587c1c7f18ebb6d95ae90c3c563802e874de49276829c3e475d75246b0a4"
+    },
+    {
+      "path": "gemini/.specify/templates/clarification/portal-fantasy.yaml",
+      "sha256": "26ba8206050d3ab5b5bc214f5d285d112a9cd3cce7272859847a088663a1a918"
+    },
+    {
+      "path": "gemini/.specify/templates/clarification/question-set.example.yaml",
+      "sha256": "73aa368800740359e80d57ece50261a24206f66c4e5fcd87229486b5a80178dd"
+    },
+    {
+      "path": "gemini/.specify/templates/clarification/slow-burn-romance.yaml",
+      "sha256": "3ee8bc5d29bac5501e354a985c7865ad1182eec8f8869616cc5cd2b20a755645"
+    },
+    {
       "path": "gemini/.specify/templates/feedback/feedback.json",
       "sha256": "4c6e8e443a53c2172f54ac75e79463c2480878b5c59f0b2b066c330b44664186"
     },
@@ -4186,7 +4442,7 @@
     },
     {
       "path": "generic/.specify/commands/clarify.md",
-      "sha256": "418bc3889a878b22fb74d31417ca0f01974521c3ff08d0090c53a808d708b87d",
+      "sha256": "05cfefd8d4246b890bf6eb5492f125fb71225237fce5db80de041d14c987cd79",
       "commandSource": {
         "command": "clarify",
         "kind": "legacy-template",
@@ -4452,6 +4708,38 @@
       "sha256": "cb3f31ae0eba66bc155c1151d0e0704a34deaa9ea1f783f9af93609aed3bcb32"
     },
     {
+      "path": "generic/.specify/templates/clarification/civilization-threat.yaml",
+      "sha256": "63a54e22a71e2f9d1f257984826cc930f3cb92a26fb4b3b948707bd3e256e14d"
+    },
+    {
+      "path": "generic/.specify/templates/clarification/core.yaml",
+      "sha256": "1d114da7edb203dda5292fc1de7c8163cac2fa2eb1e932287137a6c403313026"
+    },
+    {
+      "path": "generic/.specify/templates/clarification/cozy-adventure.yaml",
+      "sha256": "aba3282c099929f2f3c7f8ac1413666f1f9e8e161742e205c5611d61eec0fe52"
+    },
+    {
+      "path": "generic/.specify/templates/clarification/kingdom-building-support.yaml",
+      "sha256": "ed1c46f07ac414e39724023caa56bc91e1376c2382cbc0ddb4dc442a8b8e8cb6"
+    },
+    {
+      "path": "generic/.specify/templates/clarification/magic-system.yaml",
+      "sha256": "84a8587c1c7f18ebb6d95ae90c3c563802e874de49276829c3e475d75246b0a4"
+    },
+    {
+      "path": "generic/.specify/templates/clarification/portal-fantasy.yaml",
+      "sha256": "26ba8206050d3ab5b5bc214f5d285d112a9cd3cce7272859847a088663a1a918"
+    },
+    {
+      "path": "generic/.specify/templates/clarification/question-set.example.yaml",
+      "sha256": "73aa368800740359e80d57ece50261a24206f66c4e5fcd87229486b5a80178dd"
+    },
+    {
+      "path": "generic/.specify/templates/clarification/slow-burn-romance.yaml",
+      "sha256": "3ee8bc5d29bac5501e354a985c7865ad1182eec8f8869616cc5cd2b20a755645"
+    },
+    {
       "path": "generic/.specify/templates/feedback/feedback.json",
       "sha256": "4c6e8e443a53c2172f54ac75e79463c2480878b5c59f0b2b066c330b44664186"
     },
@@ -4704,7 +4992,7 @@
     },
     {
       "path": "kilocode/.kilocode/workflows/clarify.md",
-      "sha256": "d895f0b7d5677aecf8777fd98f3b3164e2196aa16173a61d59be6218ac7168a7",
+      "sha256": "7d9de4a02e5526291375d18a8c5a7706c3d115eae14e4271d474252faf037905",
       "commandSource": {
         "command": "clarify",
         "kind": "legacy-template",
@@ -4970,6 +5258,38 @@
       "sha256": "cb3f31ae0eba66bc155c1151d0e0704a34deaa9ea1f783f9af93609aed3bcb32"
     },
     {
+      "path": "kilocode/.specify/templates/clarification/civilization-threat.yaml",
+      "sha256": "63a54e22a71e2f9d1f257984826cc930f3cb92a26fb4b3b948707bd3e256e14d"
+    },
+    {
+      "path": "kilocode/.specify/templates/clarification/core.yaml",
+      "sha256": "1d114da7edb203dda5292fc1de7c8163cac2fa2eb1e932287137a6c403313026"
+    },
+    {
+      "path": "kilocode/.specify/templates/clarification/cozy-adventure.yaml",
+      "sha256": "aba3282c099929f2f3c7f8ac1413666f1f9e8e161742e205c5611d61eec0fe52"
+    },
+    {
+      "path": "kilocode/.specify/templates/clarification/kingdom-building-support.yaml",
+      "sha256": "ed1c46f07ac414e39724023caa56bc91e1376c2382cbc0ddb4dc442a8b8e8cb6"
+    },
+    {
+      "path": "kilocode/.specify/templates/clarification/magic-system.yaml",
+      "sha256": "84a8587c1c7f18ebb6d95ae90c3c563802e874de49276829c3e475d75246b0a4"
+    },
+    {
+      "path": "kilocode/.specify/templates/clarification/portal-fantasy.yaml",
+      "sha256": "26ba8206050d3ab5b5bc214f5d285d112a9cd3cce7272859847a088663a1a918"
+    },
+    {
+      "path": "kilocode/.specify/templates/clarification/question-set.example.yaml",
+      "sha256": "73aa368800740359e80d57ece50261a24206f66c4e5fcd87229486b5a80178dd"
+    },
+    {
+      "path": "kilocode/.specify/templates/clarification/slow-burn-romance.yaml",
+      "sha256": "3ee8bc5d29bac5501e354a985c7865ad1182eec8f8869616cc5cd2b20a755645"
+    },
+    {
       "path": "kilocode/.specify/templates/feedback/feedback.json",
       "sha256": "4c6e8e443a53c2172f54ac75e79463c2480878b5c59f0b2b066c330b44664186"
     },
@@ -5222,7 +5542,7 @@
     },
     {
       "path": "opencode/.opencode/command/clarify.md",
-      "sha256": "c66cf297c8e4cd5a1b59eec2f89ba671f7a7bd26ec196aef6d1b46ef8c761d65",
+      "sha256": "42832b70a7c1308f33c88f5255b39424984211a794ce175682991dac5d95c7fc",
       "commandSource": {
         "command": "clarify",
         "kind": "legacy-template",
@@ -5488,6 +5808,38 @@
       "sha256": "cb3f31ae0eba66bc155c1151d0e0704a34deaa9ea1f783f9af93609aed3bcb32"
     },
     {
+      "path": "opencode/.specify/templates/clarification/civilization-threat.yaml",
+      "sha256": "63a54e22a71e2f9d1f257984826cc930f3cb92a26fb4b3b948707bd3e256e14d"
+    },
+    {
+      "path": "opencode/.specify/templates/clarification/core.yaml",
+      "sha256": "1d114da7edb203dda5292fc1de7c8163cac2fa2eb1e932287137a6c403313026"
+    },
+    {
+      "path": "opencode/.specify/templates/clarification/cozy-adventure.yaml",
+      "sha256": "aba3282c099929f2f3c7f8ac1413666f1f9e8e161742e205c5611d61eec0fe52"
+    },
+    {
+      "path": "opencode/.specify/templates/clarification/kingdom-building-support.yaml",
+      "sha256": "ed1c46f07ac414e39724023caa56bc91e1376c2382cbc0ddb4dc442a8b8e8cb6"
+    },
+    {
+      "path": "opencode/.specify/templates/clarification/magic-system.yaml",
+      "sha256": "84a8587c1c7f18ebb6d95ae90c3c563802e874de49276829c3e475d75246b0a4"
+    },
+    {
+      "path": "opencode/.specify/templates/clarification/portal-fantasy.yaml",
+      "sha256": "26ba8206050d3ab5b5bc214f5d285d112a9cd3cce7272859847a088663a1a918"
+    },
+    {
+      "path": "opencode/.specify/templates/clarification/question-set.example.yaml",
+      "sha256": "73aa368800740359e80d57ece50261a24206f66c4e5fcd87229486b5a80178dd"
+    },
+    {
+      "path": "opencode/.specify/templates/clarification/slow-burn-romance.yaml",
+      "sha256": "3ee8bc5d29bac5501e354a985c7865ad1182eec8f8869616cc5cd2b20a755645"
+    },
+    {
       "path": "opencode/.specify/templates/feedback/feedback.json",
       "sha256": "4c6e8e443a53c2172f54ac75e79463c2480878b5c59f0b2b066c330b44664186"
     },
@@ -5740,7 +6092,7 @@
     },
     {
       "path": "q/.amazonq/prompts/clarify.md",
-      "sha256": "7ebfbf28b7132a37ba6045f27f1ac0924208eaa85186b50c33a88d06d9c8ca95",
+      "sha256": "582a2314a444d49e51dfc7e13a5c7b88a1baee9c6af7fced747dc73a61d91b0f",
       "commandSource": {
         "command": "clarify",
         "kind": "legacy-template",
@@ -6006,6 +6358,38 @@
       "sha256": "cb3f31ae0eba66bc155c1151d0e0704a34deaa9ea1f783f9af93609aed3bcb32"
     },
     {
+      "path": "q/.specify/templates/clarification/civilization-threat.yaml",
+      "sha256": "63a54e22a71e2f9d1f257984826cc930f3cb92a26fb4b3b948707bd3e256e14d"
+    },
+    {
+      "path": "q/.specify/templates/clarification/core.yaml",
+      "sha256": "1d114da7edb203dda5292fc1de7c8163cac2fa2eb1e932287137a6c403313026"
+    },
+    {
+      "path": "q/.specify/templates/clarification/cozy-adventure.yaml",
+      "sha256": "aba3282c099929f2f3c7f8ac1413666f1f9e8e161742e205c5611d61eec0fe52"
+    },
+    {
+      "path": "q/.specify/templates/clarification/kingdom-building-support.yaml",
+      "sha256": "ed1c46f07ac414e39724023caa56bc91e1376c2382cbc0ddb4dc442a8b8e8cb6"
+    },
+    {
+      "path": "q/.specify/templates/clarification/magic-system.yaml",
+      "sha256": "84a8587c1c7f18ebb6d95ae90c3c563802e874de49276829c3e475d75246b0a4"
+    },
+    {
+      "path": "q/.specify/templates/clarification/portal-fantasy.yaml",
+      "sha256": "26ba8206050d3ab5b5bc214f5d285d112a9cd3cce7272859847a088663a1a918"
+    },
+    {
+      "path": "q/.specify/templates/clarification/question-set.example.yaml",
+      "sha256": "73aa368800740359e80d57ece50261a24206f66c4e5fcd87229486b5a80178dd"
+    },
+    {
+      "path": "q/.specify/templates/clarification/slow-burn-romance.yaml",
+      "sha256": "3ee8bc5d29bac5501e354a985c7865ad1182eec8f8869616cc5cd2b20a755645"
+    },
+    {
       "path": "q/.specify/templates/feedback/feedback.json",
       "sha256": "4c6e8e443a53c2172f54ac75e79463c2480878b5c59f0b2b066c330b44664186"
     },
@@ -6258,7 +6642,7 @@
     },
     {
       "path": "qwen/.qwen/commands/clarify.toml",
-      "sha256": "7cf5dce45741b9798bf2da084d5946df1a61c6f09ba4c40eac9457be23b9eb64",
+      "sha256": "e013fd5ccfe7f5cf6859ca3dd0e20a6ee4f246488dd921ee30dd2b1ffba1a752",
       "commandSource": {
         "command": "clarify",
         "kind": "legacy-template",
@@ -6524,6 +6908,38 @@
       "sha256": "cb3f31ae0eba66bc155c1151d0e0704a34deaa9ea1f783f9af93609aed3bcb32"
     },
     {
+      "path": "qwen/.specify/templates/clarification/civilization-threat.yaml",
+      "sha256": "63a54e22a71e2f9d1f257984826cc930f3cb92a26fb4b3b948707bd3e256e14d"
+    },
+    {
+      "path": "qwen/.specify/templates/clarification/core.yaml",
+      "sha256": "1d114da7edb203dda5292fc1de7c8163cac2fa2eb1e932287137a6c403313026"
+    },
+    {
+      "path": "qwen/.specify/templates/clarification/cozy-adventure.yaml",
+      "sha256": "aba3282c099929f2f3c7f8ac1413666f1f9e8e161742e205c5611d61eec0fe52"
+    },
+    {
+      "path": "qwen/.specify/templates/clarification/kingdom-building-support.yaml",
+      "sha256": "ed1c46f07ac414e39724023caa56bc91e1376c2382cbc0ddb4dc442a8b8e8cb6"
+    },
+    {
+      "path": "qwen/.specify/templates/clarification/magic-system.yaml",
+      "sha256": "84a8587c1c7f18ebb6d95ae90c3c563802e874de49276829c3e475d75246b0a4"
+    },
+    {
+      "path": "qwen/.specify/templates/clarification/portal-fantasy.yaml",
+      "sha256": "26ba8206050d3ab5b5bc214f5d285d112a9cd3cce7272859847a088663a1a918"
+    },
+    {
+      "path": "qwen/.specify/templates/clarification/question-set.example.yaml",
+      "sha256": "73aa368800740359e80d57ece50261a24206f66c4e5fcd87229486b5a80178dd"
+    },
+    {
+      "path": "qwen/.specify/templates/clarification/slow-burn-romance.yaml",
+      "sha256": "3ee8bc5d29bac5501e354a985c7865ad1182eec8f8869616cc5cd2b20a755645"
+    },
+    {
       "path": "qwen/.specify/templates/feedback/feedback.json",
       "sha256": "4c6e8e443a53c2172f54ac75e79463c2480878b5c59f0b2b066c330b44664186"
     },
@@ -6776,7 +7192,7 @@
     },
     {
       "path": "roocode/.roo/commands/clarify.md",
-      "sha256": "d895f0b7d5677aecf8777fd98f3b3164e2196aa16173a61d59be6218ac7168a7",
+      "sha256": "7d9de4a02e5526291375d18a8c5a7706c3d115eae14e4271d474252faf037905",
       "commandSource": {
         "command": "clarify",
         "kind": "legacy-template",
@@ -7040,6 +7456,38 @@
     {
       "path": "roocode/.specify/templates/checklist-template.md",
       "sha256": "cb3f31ae0eba66bc155c1151d0e0704a34deaa9ea1f783f9af93609aed3bcb32"
+    },
+    {
+      "path": "roocode/.specify/templates/clarification/civilization-threat.yaml",
+      "sha256": "63a54e22a71e2f9d1f257984826cc930f3cb92a26fb4b3b948707bd3e256e14d"
+    },
+    {
+      "path": "roocode/.specify/templates/clarification/core.yaml",
+      "sha256": "1d114da7edb203dda5292fc1de7c8163cac2fa2eb1e932287137a6c403313026"
+    },
+    {
+      "path": "roocode/.specify/templates/clarification/cozy-adventure.yaml",
+      "sha256": "aba3282c099929f2f3c7f8ac1413666f1f9e8e161742e205c5611d61eec0fe52"
+    },
+    {
+      "path": "roocode/.specify/templates/clarification/kingdom-building-support.yaml",
+      "sha256": "ed1c46f07ac414e39724023caa56bc91e1376c2382cbc0ddb4dc442a8b8e8cb6"
+    },
+    {
+      "path": "roocode/.specify/templates/clarification/magic-system.yaml",
+      "sha256": "84a8587c1c7f18ebb6d95ae90c3c563802e874de49276829c3e475d75246b0a4"
+    },
+    {
+      "path": "roocode/.specify/templates/clarification/portal-fantasy.yaml",
+      "sha256": "26ba8206050d3ab5b5bc214f5d285d112a9cd3cce7272859847a088663a1a918"
+    },
+    {
+      "path": "roocode/.specify/templates/clarification/question-set.example.yaml",
+      "sha256": "73aa368800740359e80d57ece50261a24206f66c4e5fcd87229486b5a80178dd"
+    },
+    {
+      "path": "roocode/.specify/templates/clarification/slow-burn-romance.yaml",
+      "sha256": "3ee8bc5d29bac5501e354a985c7865ad1182eec8f8869616cc5cd2b20a755645"
     },
     {
       "path": "roocode/.specify/templates/feedback/feedback.json",
@@ -7414,6 +7862,38 @@
       "sha256": "cb3f31ae0eba66bc155c1151d0e0704a34deaa9ea1f783f9af93609aed3bcb32"
     },
     {
+      "path": "windsurf/.specify/templates/clarification/civilization-threat.yaml",
+      "sha256": "63a54e22a71e2f9d1f257984826cc930f3cb92a26fb4b3b948707bd3e256e14d"
+    },
+    {
+      "path": "windsurf/.specify/templates/clarification/core.yaml",
+      "sha256": "1d114da7edb203dda5292fc1de7c8163cac2fa2eb1e932287137a6c403313026"
+    },
+    {
+      "path": "windsurf/.specify/templates/clarification/cozy-adventure.yaml",
+      "sha256": "aba3282c099929f2f3c7f8ac1413666f1f9e8e161742e205c5611d61eec0fe52"
+    },
+    {
+      "path": "windsurf/.specify/templates/clarification/kingdom-building-support.yaml",
+      "sha256": "ed1c46f07ac414e39724023caa56bc91e1376c2382cbc0ddb4dc442a8b8e8cb6"
+    },
+    {
+      "path": "windsurf/.specify/templates/clarification/magic-system.yaml",
+      "sha256": "84a8587c1c7f18ebb6d95ae90c3c563802e874de49276829c3e475d75246b0a4"
+    },
+    {
+      "path": "windsurf/.specify/templates/clarification/portal-fantasy.yaml",
+      "sha256": "26ba8206050d3ab5b5bc214f5d285d112a9cd3cce7272859847a088663a1a918"
+    },
+    {
+      "path": "windsurf/.specify/templates/clarification/question-set.example.yaml",
+      "sha256": "73aa368800740359e80d57ece50261a24206f66c4e5fcd87229486b5a80178dd"
+    },
+    {
+      "path": "windsurf/.specify/templates/clarification/slow-burn-romance.yaml",
+      "sha256": "3ee8bc5d29bac5501e354a985c7865ad1182eec8f8869616cc5cd2b20a755645"
+    },
+    {
       "path": "windsurf/.specify/templates/feedback/feedback.json",
       "sha256": "4c6e8e443a53c2172f54ac75e79463c2480878b5c59f0b2b066c330b44664186"
     },
@@ -7578,7 +8058,7 @@
     },
     {
       "path": "windsurf/.windsurf/workflows/clarify.md",
-      "sha256": "d895f0b7d5677aecf8777fd98f3b3164e2196aa16173a61d59be6218ac7168a7",
+      "sha256": "7d9de4a02e5526291375d18a8c5a7706c3d115eae14e4271d474252faf037905",
       "commandSource": {
         "command": "clarify",
         "kind": "legacy-template",
