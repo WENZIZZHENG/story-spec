@@ -11,6 +11,10 @@ import { inspectScenes } from './inspect-story-structure.js';
 import type { ValidationSeverity } from '../validation/schema/index.js';
 import { checkPromises } from './manage-promises.js';
 import type { PromiseIssue } from '../domain/workbench.js';
+import {
+  detectCreativeIntentDrift,
+  type CreativeIntentDriftIssue
+} from './detect-creative-intent-drift.js';
 
 export type ReviewerId = 'worldbuilding' | 'voice' | 'continuity' | 'editor' | 'reader' | (string & {});
 
@@ -69,7 +73,13 @@ const relativePath = (projectRoot: string, filePath: string): string =>
     ? path.relative(projectRoot, filePath).split(path.sep).join('/')
     : filePath.split(path.sep).join('/');
 
-const classifyReviewer = (issue: ProjectValidationIssue | WritingRuleIssue | PromiseIssue): ReviewerId => {
+const classifyReviewer = (
+  issue: ProjectValidationIssue | WritingRuleIssue | PromiseIssue | CreativeIntentDriftIssue
+): ReviewerId => {
+  if (issue.code.includes('CREATIVE_INTENT_DRIFT')) {
+    return 'continuity';
+  }
+
   if (issue.code.includes('PROMISE') || issue.code.includes('TENSION')) {
     return 'reader';
   }
@@ -113,7 +123,9 @@ const classifyReviewer = (issue: ProjectValidationIssue | WritingRuleIssue | Pro
   return 'reader';
 };
 
-const suggestAction = (issue: ProjectValidationIssue | WritingRuleIssue | PromiseIssue): string => {
+const suggestAction = (
+  issue: ProjectValidationIssue | WritingRuleIssue | PromiseIssue | CreativeIntentDriftIssue
+): string => {
   if ('suggestedAction' in issue) {
     return issue.suggestedAction;
   }
@@ -139,7 +151,7 @@ const suggestAction = (issue: ProjectValidationIssue | WritingRuleIssue | Promis
 
 const toFinding = (
   projectRoot: string,
-  issue: ProjectValidationIssue | WritingRuleIssue | PromiseIssue
+  issue: ProjectValidationIssue | WritingRuleIssue | PromiseIssue | CreativeIntentDriftIssue
 ): ReviewFinding => ({
   reviewerId: classifyReviewer(issue),
   severity: issue.severity,
@@ -230,12 +242,18 @@ export const reviewProject = async (input: ReviewProjectInput): Promise<ReviewPr
     projectRoot: input.projectRoot,
     fileSystem: input.fileSystem
   });
+  const driftResult = await detectCreativeIntentDrift({
+    projectRoot: input.projectRoot,
+    fileSystem: input.fileSystem,
+    artifactScan
+  });
   const rawFindings = [
     ...validation.issues.map(issue => toFinding(input.projectRoot, issue)),
     ...quality.issues
       .filter(issue => !validation.issues.some(existing => existing.code === issue.code && existing.path === issue.path))
       .map(issue => toFinding(input.projectRoot, issue)),
-    ...promiseResult.issues.map(issue => toFinding(input.projectRoot, issue))
+    ...promiseResult.issues.map(issue => toFinding(input.projectRoot, issue)),
+    ...driftResult.issues.map(issue => toFinding(input.projectRoot, issue))
   ].filter(finding => panel.has(finding.reviewerId));
   const allFindings = rawFindings.filter(finding => belongsToChapter(finding, chapterPaths));
 

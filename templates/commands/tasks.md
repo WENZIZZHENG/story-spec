@@ -24,6 +24,7 @@ scripts:
 - 当前 Genre Preset（如果存在 `spec/presets/current-preset.json`，读取 `.specify/presets/<id>/preset.yaml` 和 `.specify/presets/<id>/commands/tasks.md`）
 - Promise / Tension 追踪：`spec/tracking/promises.json`、`spec/tracking/tension-curve.json`（如存在）
 - Branch / Dialogue 工作区：`stories/*/branches/*/impact.md`、`stories/*/dialogue/*.yaml`（如存在）
+- 创作澄清记录：`stories/*/clarifications.json`、`stories/*/clarifications.md`（如存在）
 
 ### 2. 生成任务列表
 
@@ -37,6 +38,7 @@ scripts:
 - 每个任务必须能在一次对话中独立执行、验证和交付。
 - 写作任务要写清“必须读取”“允许修改”“禁止事项”“验收标准”。
 - 涉及 promise、tension、branch 或 dialogue 的任务，要写清对应 ID、证据路径和是否允许修改正文。
+- 涉及澄清记录的任务，要写清来源答案 ID；未确认 AI 建议或 required 未答问题只能生成 `[PLAN-ONLY]` 澄清/复核任务，不能直接生成正文任务。
 - 如果用户只要求规划，任务只能产出计划和设定，不得要求生成正文。
 - 成人、暴力、权力关系等 18+ 节点可以保留为剧情节点，但任务中必须写成“剧情功能、关系变化、后果、边界备注”，不要在任务清单里展开正文。
 
@@ -75,6 +77,7 @@ scripts:
   - **章末钩子**：[悬念设置]
   - **Promise / Tension**：`promise.opening-hook` 推进/兑现；张力点 payoff 不低于计划要求
   - **Dialogue / Branch**：如涉及对白，先产出 `dialogue/*.yaml` 待确认；如来自 what-if，引用 `branches/*/impact.md`
+  - **Clarification Source**：`clarifications.json#core.premise`（只引用 confirmed user-explicit/imported；未确认项写成澄清任务）
   - **依赖**：无
   - **输出**：`content/volume1/chapter-001.md`
   - **Scene Card**：`scenes/scene-001.yaml`（如本阶段启用 scene cards）
@@ -124,6 +127,7 @@ scripts:
 - **Scene Card**：如章节已拆成场景，必须标注对应 `scenes/*.yaml`；没有 scene card 的旧章节可留空。
 - **Promise / Tension**：从 `promises.json` 和 `tension-curve.json` 读取，标明本任务建立、推进、兑现或修复哪些读者承诺。
 - **Dialogue / Branch**：对白任务默认先写 `dialogue/*.yaml`；分支任务默认只写 `branches/`，promote 需显式确认。
+- **Clarification Source**：任务进入正文写作前必须追溯到已确认澄清答案；若来源是 `ai-suggested` 或 `confirmed: false`，任务必须保持 `[PLAN-ONLY]`。
 - **验收标准**：用于写完后自检，也用于 `/analyze` 或人工复核
 
 #### 任务标记说明

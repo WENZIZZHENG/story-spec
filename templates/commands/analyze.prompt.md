@@ -58,12 +58,14 @@
 - `style`：检查文风、句式、用词和风格参考一致性。
 - `world-density`：按 chapter/scene 统计 WorldFact、CanonFact 与 Scene Card 承载密度，识别设定堆砌。
 - `reveal-pacing`：检查 reveals、foreshadowing、worldElements 和 canonFacts 是否形成清晰揭示节奏。
+- `creative-control`：检查 `clarifications.json` 中未确认 AI 建议、required 未答问题和用户明确边界是否被 specification、plan、tasks 或正文提前定稿。
 
 ## Reviewer Loop
 
 - 可运行 `novel review --json` 获取结构化 reviewer findings。
 - findings 必须保留 `path`、`severity`、`evidence`、`suggestedAction`。
 - reviewer loop 只生成建议和任务草稿，不直接覆盖正文。
+- 如果出现 `CREATIVE_INTENT_DRIFT_*`，分析报告必须单列“创作控制权”维度，要求先澄清或转任务草稿，不得自动改写正文。
 
 ## 写入边界
 

@@ -29,11 +29,55 @@ const createReviewFixture = async () => {
 `);
   await fileSystem.writeFile(path.join(storyPath, 'specification.md'), '# spec');
   await fileSystem.writeFile(path.join(storyPath, 'creative-plan.md'), '# plan');
+  await fileSystem.writeJson(path.join(storyPath, 'clarifications.json'), {
+    schemaVersion: '1.0',
+    story: 'demo',
+    premise: '异界穿越、编程施法、慢热感情、文明级威胁',
+    createdAt: '2026-05-03T08:00:00.000Z',
+    updatedAt: '2026-05-03T08:00:00.000Z',
+    questions: [
+      {
+        id: 'core.relationship-line',
+        stage: 'specify',
+        topic: 'relationship',
+        question: '慢热感情线在早期承担什么功能？',
+        whyItMatters: '避免过早定关系。',
+        type: 'textarea',
+        required: true,
+        options: [],
+        exampleAnswers: ['两人先是任务搭档。', '感情线承担文明差异冲突。'],
+        dependsOn: []
+      },
+      {
+        id: 'threat.shape',
+        stage: 'specify',
+        topic: 'threat',
+        question: '文明级威胁的真实形态是什么？',
+        whyItMatters: '威胁真相会影响长线结构。',
+        type: 'textarea',
+        required: false,
+        options: [],
+        exampleAnswers: ['旧文明运行时重启。', '群星边界的协议崩塌。'],
+        dependsOn: []
+      }
+    ],
+    answers: [
+      {
+        questionId: 'threat.shape',
+        answer: '旧文明运行时重启',
+        source: 'ai-suggested',
+        confidence: 0.62,
+        confirmed: false,
+        createdAt: '2026-05-03T08:00:00.000Z',
+        updatedAt: '2026-05-03T08:00:00.000Z'
+      }
+    ]
+  }, { spaces: 2 });
   await fileSystem.writeFile(path.join(storyPath, 'tasks.md'), `- [ ] [P0] **T001** - 起草第一章
   - **依赖**：无
   - **输出**：\`content/chapter-001.md\`
 `);
-  await fileSystem.writeFile(path.join(storyPath, 'content', 'chapter-001.md'), '短');
+  await fileSystem.writeFile(path.join(storyPath, 'content', 'chapter-001.md'), '短。他想立刻表白，但旧文明运行时重启的真相已经压到眼前。');
   await fileSystem.writeFile(path.join(storyPath, 'scenes', 'scene-001.yaml'), `id: scene-001
 chapter: chapter-001
 order: 1
@@ -113,5 +157,34 @@ describe('reviewProject', () => {
       'stories/demo/scenes/scene-001.yaml#scene-001.worldElements'
     ]));
     expect(result.findings.some(finding => finding.path.includes('chapter-002.md'))).toBe(false);
+  });
+
+  it('reports creative intent drift as continuity findings and task drafts', async () => {
+    const fixture = await createReviewFixture();
+
+    const result = await reviewProject({
+      ...fixture,
+      panel: ['continuity']
+    });
+
+    expect(result.findings).toEqual(expect.arrayContaining([
+      expect.objectContaining({
+        reviewerId: 'continuity',
+        code: 'CREATIVE_INTENT_DRIFT_UNCONFIRMED_AI_SUGGESTION',
+        evidence: expect.stringContaining('旧文明运行时重启'),
+        suggestedAction: expect.stringContaining('不要自动重写正文')
+      }),
+      expect.objectContaining({
+        reviewerId: 'continuity',
+        code: 'CREATIVE_INTENT_DRIFT_PENDING_TOPIC',
+        evidence: expect.stringContaining('表白')
+      })
+    ]));
+    expect(result.taskDrafts).toEqual(expect.arrayContaining([
+      expect.objectContaining({
+        task_title: expect.stringContaining('CREATIVE_INTENT_DRIFT'),
+        sourceFinding: expect.stringContaining('continuity:CREATIVE_INTENT_DRIFT')
+      })
+    ]));
   });
 });
