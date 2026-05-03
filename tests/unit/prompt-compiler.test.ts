@@ -186,6 +186,9 @@ describe('prompt compiler', () => {
     expect(specify).toContain('**用户已明确**');
     expect(specify).toContain('**需要澄清**');
     expect(specify).toContain('**可复制示例**');
+    expect(specify).toContain('### 5.5 来源标记与正典防污染');
+    expect(specify).toContain('source.aiSuggested: true');
+    expect(specify).toContain('source.confirmedByUser: false');
     expect(clarify).toContain('### 创作控制权保护');
     expect(clarify).toContain('stories/<story>/clarifications.json');
     expect(clarify).toContain('不要修改 `stories/*/specification.md`');

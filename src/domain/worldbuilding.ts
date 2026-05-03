@@ -3,6 +3,12 @@ import yaml from 'js-yaml';
 export type WorldFactStatus = 'draft' | 'confirmed' | 'deprecated';
 export type CanonFactStatus = 'draft' | 'confirmed' | 'deprecated';
 
+export interface CreativeFactSource {
+  confirmedByUser: boolean;
+  aiSuggested: boolean;
+  needsClarification: string[];
+}
+
 export interface WorldFact {
   id: string;
   title: string;
@@ -12,6 +18,7 @@ export interface WorldFact {
   constraints: string[];
   sourcePaths: string[];
   status: WorldFactStatus;
+  source: CreativeFactSource;
 }
 
 export interface CanonEvidence {
@@ -26,6 +33,7 @@ export interface CanonFact {
   evidence: CanonEvidence[];
   affectedEntities: string[];
   status: CanonFactStatus;
+  source: CreativeFactSource;
 }
 
 export interface WorldbuildingIssue {
@@ -34,9 +42,14 @@ export interface WorldbuildingIssue {
     | 'INVALID_WORLD_DOCUMENT'
     | 'INVALID_WORLD_FACT'
     | 'MISSING_WORLD_FACT_FIELD'
+    | 'MISSING_WORLD_FACT_SOURCE_PATH'
+    | 'MISSING_WORLD_FACT_CONFIRMATION'
+    | 'UNCONFIRMED_AI_WORLD_FACT'
     | 'INVALID_CANON_DOCUMENT'
     | 'INVALID_CANON_FACT'
-    | 'MISSING_CANON_FACT_FIELD';
+    | 'MISSING_CANON_FACT_FIELD'
+    | 'MISSING_CANON_FACT_CONFIRMATION'
+    | 'UNCONFIRMED_AI_CANON_FACT';
   path: string;
   message: string;
 }
@@ -61,6 +74,8 @@ const toStringArray = (value: unknown): string[] =>
   Array.isArray(value)
     ? value.filter(isNonEmptyString).map(item => item.trim())
     : [];
+
+const readBoolean = (value: unknown): boolean => value === true;
 
 const issue = (
   code: WorldbuildingIssue['code'],
@@ -99,6 +114,32 @@ const readCanonFacts = (document: unknown): unknown[] => {
 };
 
 const parseYamlOrJson = (content: string): unknown => yaml.load(content);
+
+const parseFactSource = (value: unknown): CreativeFactSource => {
+  if (!isRecord(value)) {
+    return {
+      confirmedByUser: false,
+      aiSuggested: false,
+      needsClarification: []
+    };
+  }
+
+  return {
+    confirmedByUser: readBoolean(value.confirmedByUser),
+    aiSuggested: readBoolean(value.aiSuggested),
+    needsClarification: toStringArray(value.needsClarification)
+  };
+};
+
+const factNeedsConfirmationWarning = (
+  status: WorldFactStatus | CanonFactStatus,
+  source: CreativeFactSource
+): boolean => status === 'confirmed' && source.aiSuggested && !source.confirmedByUser;
+
+const confirmedFactMissingSourceState = (
+  status: WorldFactStatus | CanonFactStatus,
+  source: CreativeFactSource
+): boolean => status === 'confirmed' && !source.confirmedByUser && !source.aiSuggested;
 
 export const parseWorldDocument = (
   content: string,
@@ -151,6 +192,30 @@ export const parseWorldDocument = (
       return;
     }
 
+    const status = isNonEmptyString(candidate.status) ? candidate.status.trim() as WorldFactStatus : 'draft';
+    const source = parseFactSource(candidate.source);
+    if (status === 'confirmed' && toStringArray(candidate.sourcePaths).length === 0) {
+      issues.push(issue(
+        'MISSING_WORLD_FACT_SOURCE_PATH',
+        `${basePath}.sourcePaths`,
+        'confirmed WorldFact 必须声明 sourcePaths，指向用户确认记录、规格、正文或知识文件'
+      ));
+    }
+    if (confirmedFactMissingSourceState(status, source)) {
+      issues.push(issue(
+        'MISSING_WORLD_FACT_CONFIRMATION',
+        `${basePath}.source`,
+        'confirmed WorldFact 必须声明来源确认状态：confirmedByUser 或 aiSuggested'
+      ));
+    }
+    if (factNeedsConfirmationWarning(status, source)) {
+      issues.push(issue(
+        'UNCONFIRMED_AI_WORLD_FACT',
+        `${basePath}.source`,
+        'WorldFact 标记为 confirmed，但来源仍是未确认的 AI 建议；请先让用户确认或降级为 draft/pending'
+      ));
+    }
+
     worldFacts.push({
       id: String(candidate.id).trim(),
       title: String(candidate.title).trim(),
@@ -159,7 +224,8 @@ export const parseWorldDocument = (
       storyFunction: String(candidate.storyFunction).trim(),
       constraints,
       sourcePaths: toStringArray(candidate.sourcePaths),
-      status: isNonEmptyString(candidate.status) ? candidate.status.trim() as WorldFactStatus : 'draft'
+      status,
+      source
     });
   });
 
@@ -236,13 +302,31 @@ export const parseCanonDocument = (
       return;
     }
 
+    const status = isNonEmptyString(candidate.status) ? candidate.status.trim() as CanonFactStatus : 'draft';
+    const source = parseFactSource(candidate.source);
+    if (confirmedFactMissingSourceState(status, source)) {
+      issues.push(issue(
+        'MISSING_CANON_FACT_CONFIRMATION',
+        `${basePath}.source`,
+        'confirmed CanonFact 必须声明来源确认状态：confirmedByUser 或 aiSuggested'
+      ));
+    }
+    if (factNeedsConfirmationWarning(status, source)) {
+      issues.push(issue(
+        'UNCONFIRMED_AI_CANON_FACT',
+        `${basePath}.source`,
+        'CanonFact 标记为 confirmed，但来源仍是未确认的 AI 建议；请先让用户确认或降级为 draft/pending'
+      ));
+    }
+
     canonFacts.push({
       id: String(candidate.id).trim(),
       summary: String(candidate.summary).trim(),
       type: isNonEmptyString(candidate.type) ? candidate.type.trim() : 'fact',
       evidence,
       affectedEntities: toStringArray(candidate.affectedEntities),
-      status: isNonEmptyString(candidate.status) ? candidate.status.trim() as CanonFactStatus : 'draft'
+      status,
+      source
     });
   });
 

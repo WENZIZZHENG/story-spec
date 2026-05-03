@@ -41,4 +41,46 @@ describe('inspectWorldbuilding', () => {
     expect(canon.issues).toEqual([]);
     expect(renderCanonInspection(canon)).toContain('canon.fact');
   });
+
+  it('renders source warnings for unconfirmed AI suggestions', async () => {
+    const projectRoot = path.join(os.tmpdir(), 'memory-novel-worldbuilding-source');
+    const fileSystem = new MemoryFileSystem(projectRoot);
+
+    await fileSystem.writeFile(path.join(projectRoot, 'spec', 'world', 'rules.yaml'), `worldFacts:
+  - id: world.ai-rule
+    title: AI Rule
+    summary: AI suggested rule
+    storyFunction: It changes conflict
+    constraints:
+      - Must hold
+    status: confirmed
+    source:
+      aiSuggested: true
+      confirmedByUser: false
+`);
+    await fileSystem.writeFile(path.join(projectRoot, 'spec', 'canon', 'facts.json'), JSON.stringify({
+      canonFacts: [{
+        id: 'canon.ai-fact',
+        summary: 'AI fact',
+        evidence: ['stories/demo/content/chapter-001.md'],
+        status: 'confirmed',
+        source: {
+          aiSuggested: true,
+          confirmedByUser: false
+        }
+      }]
+    }));
+
+    const world = await inspectWorld({ projectRoot, fileSystem });
+    const canon = await inspectCanon({ projectRoot, fileSystem });
+
+    expect(world.issues).toEqual(expect.arrayContaining([
+      expect.objectContaining({ code: 'UNCONFIRMED_AI_WORLD_FACT' })
+    ]));
+    expect(canon.issues).toEqual(expect.arrayContaining([
+      expect.objectContaining({ code: 'UNCONFIRMED_AI_CANON_FACT' })
+    ]));
+    expect(renderWorldInspection(world)).toContain('UNCONFIRMED_AI_WORLD_FACT');
+    expect(renderCanonInspection(canon)).toContain('UNCONFIRMED_AI_CANON_FACT');
+  });
 });

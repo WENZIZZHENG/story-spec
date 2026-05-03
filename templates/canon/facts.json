@@ -11,6 +11,11 @@
         }
       ],
       "affectedEntities": [],
+      "source": {
+        "confirmedByUser": false,
+        "aiSuggested": false,
+        "needsClarification": []
+      },
       "status": "draft"
     }
   ]

@@ -635,6 +635,25 @@ else:
 
 **Level 1-3 不需要标记澄清点**，因为它们本身就是渐进式澄清的过程
 
+### 5.5 来源标记与正典防污染
+
+当规格、世界观或后续计划需要记录来源时，必须区分以下三类内容：
+
+- `confirmedByUser`：用户明确输入、用户选择示例后确认，或已有正文证据支持。
+- `aiSuggested`：AI 为了帮助用户思考而提出的建议、默认值或推断。
+- `needsClarification`：仍需要用户确认的问题，尤其是会影响主角、关系线、威胁形态、世界规则或 canon 的内容。
+
+写入规则：
+
+- AI 建议可以出现在 preview 或 draft 区域，但不得静默写成 confirmed。
+- 如果某条 WorldFact / CanonFact 来自 AI 建议，必须写成：
+  - `source.aiSuggested: true`
+  - `source.confirmedByUser: false`
+  - `source.needsClarification` 至少包含一个待确认问题
+  - `status: draft`
+- 只有用户确认或已有正文证据时，才能把对应事实改为 `confirmed`。
+- 未确认事实不要进入 `canonFacts` 的 confirmed 状态；可以先留在 draft、pending 或 propagation debt。
+
 ### 6. 版本管理
 
 **渐进式版本号规则**：

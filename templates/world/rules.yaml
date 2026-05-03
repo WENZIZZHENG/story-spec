@@ -8,4 +8,8 @@ worldFacts:
       - 写作时必须遵守的限制。
     sourcePaths:
       - spec/knowledge/world-setting.md
+    source:
+      confirmedByUser: false
+      aiSuggested: false
+      needsClarification: []
     status: draft

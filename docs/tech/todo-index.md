@@ -8,7 +8,7 @@ Active。本文是 Novel Writer 当前唯一的活跃待办入口。详细规则
 
 | 优先级 | 路线 | 状态 | 范围 | 下一步 |
 | --- | --- | --- | --- | --- |
-| P1 | [creative-control-roadmap.md](creative-control-roadmap.md) | Active | 澄清优先、示例分叉、写入前预览、来源追踪、创作状态可见 | D0-D4 已完成；继续从 D5 来源追踪与 Canon 防污染推进 |
+| P1 | [creative-control-roadmap.md](creative-control-roadmap.md) | Active | 澄清优先、示例分叉、写入前预览、来源追踪、创作状态可见 | D0-D5 已完成；继续从 D6 示例分叉生成器推进 |
 
 ## 暂不作为活跃待办
 

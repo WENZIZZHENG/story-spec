@@ -114,7 +114,7 @@
     },
     {
       "path": "auggie/.augment/commands/specify.md",
-      "sha256": "b1ce49cc53ce960b78534f35d2efe5a8157f113dc45a7c0c247111867093d42f",
+      "sha256": "874203cba034136c31beb3c9edda61897c172e8b69873df48521ebea734c4d1b",
       "commandSource": {
         "command": "specify",
         "kind": "legacy-template",
@@ -297,7 +297,7 @@
     },
     {
       "path": "auggie/.specify/templates/canon/facts.json",
-      "sha256": "10bb3d031f0241e05f99c014a10c0bcde61605a40e3d231c5e47641667218f1d"
+      "sha256": "32412ec4686054a4f3262e7912639d67459009767a8a78bbb1273321ea678b70"
     },
     {
       "path": "auggie/.specify/templates/canon/propagation-debt.json",
@@ -473,11 +473,11 @@
     },
     {
       "path": "auggie/.specify/templates/world/rules.yaml",
-      "sha256": "f3488f9a248a54bfb6a65ae2e570575f65836d2b4938a27c7a3df073f15db69f"
+      "sha256": "730602ca137a2e7692f211f85df054a991e55dc3be84d86673a47e9c1194fbc4"
     },
     {
       "path": "auggie/.specify/templates/world/world-bible.md",
-      "sha256": "4c440963c59dfbabdf99d8eed0c2c81c262f4fc206b0ef769f7480304b2e912e"
+      "sha256": "41007b834030be127262cdbaeebb6a32c00307fdc44fe80a8464fdb22954e59d"
     },
     {
       "path": "auggie/.specify/templates/writing-constitution-template.md",
@@ -664,7 +664,7 @@
     },
     {
       "path": "claude/.claude/commands/novel.specify.md",
-      "sha256": "16ef09a0684e99af2d75f532e377a6268d76d63e168c633bbe2784204337346a",
+      "sha256": "3940d86e83ec192030d2e8a471345d9a36caca6ed103746e6f78660efb9d1157",
       "commandSource": {
         "command": "specify",
         "kind": "legacy-template",
@@ -847,7 +847,7 @@
     },
     {
       "path": "claude/.specify/templates/canon/facts.json",
-      "sha256": "10bb3d031f0241e05f99c014a10c0bcde61605a40e3d231c5e47641667218f1d"
+      "sha256": "32412ec4686054a4f3262e7912639d67459009767a8a78bbb1273321ea678b70"
     },
     {
       "path": "claude/.specify/templates/canon/propagation-debt.json",
@@ -1023,11 +1023,11 @@
     },
     {
       "path": "claude/.specify/templates/world/rules.yaml",
-      "sha256": "f3488f9a248a54bfb6a65ae2e570575f65836d2b4938a27c7a3df073f15db69f"
+      "sha256": "730602ca137a2e7692f211f85df054a991e55dc3be84d86673a47e9c1194fbc4"
     },
     {
       "path": "claude/.specify/templates/world/world-bible.md",
-      "sha256": "4c440963c59dfbabdf99d8eed0c2c81c262f4fc206b0ef769f7480304b2e912e"
+      "sha256": "41007b834030be127262cdbaeebb6a32c00307fdc44fe80a8464fdb22954e59d"
     },
     {
       "path": "claude/.specify/templates/writing-constitution-template.md",
@@ -1214,7 +1214,7 @@
     },
     {
       "path": "codebuddy/.codebuddy/commands/specify.md",
-      "sha256": "b1ce49cc53ce960b78534f35d2efe5a8157f113dc45a7c0c247111867093d42f",
+      "sha256": "874203cba034136c31beb3c9edda61897c172e8b69873df48521ebea734c4d1b",
       "commandSource": {
         "command": "specify",
         "kind": "legacy-template",
@@ -1397,7 +1397,7 @@
     },
     {
       "path": "codebuddy/.specify/templates/canon/facts.json",
-      "sha256": "10bb3d031f0241e05f99c014a10c0bcde61605a40e3d231c5e47641667218f1d"
+      "sha256": "32412ec4686054a4f3262e7912639d67459009767a8a78bbb1273321ea678b70"
     },
     {
       "path": "codebuddy/.specify/templates/canon/propagation-debt.json",
@@ -1573,11 +1573,11 @@
     },
     {
       "path": "codebuddy/.specify/templates/world/rules.yaml",
-      "sha256": "f3488f9a248a54bfb6a65ae2e570575f65836d2b4938a27c7a3df073f15db69f"
+      "sha256": "730602ca137a2e7692f211f85df054a991e55dc3be84d86673a47e9c1194fbc4"
     },
     {
       "path": "codebuddy/.specify/templates/world/world-bible.md",
-      "sha256": "4c440963c59dfbabdf99d8eed0c2c81c262f4fc206b0ef769f7480304b2e912e"
+      "sha256": "41007b834030be127262cdbaeebb6a32c00307fdc44fe80a8464fdb22954e59d"
     },
     {
       "path": "codebuddy/.specify/templates/writing-constitution-template.md",
@@ -1764,7 +1764,7 @@
     },
     {
       "path": "codex/.codex/prompts/novel-specify.md",
-      "sha256": "b1ce49cc53ce960b78534f35d2efe5a8157f113dc45a7c0c247111867093d42f",
+      "sha256": "874203cba034136c31beb3c9edda61897c172e8b69873df48521ebea734c4d1b",
       "commandSource": {
         "command": "specify",
         "kind": "legacy-template",
@@ -1947,7 +1947,7 @@
     },
     {
       "path": "codex/.specify/templates/canon/facts.json",
-      "sha256": "10bb3d031f0241e05f99c014a10c0bcde61605a40e3d231c5e47641667218f1d"
+      "sha256": "32412ec4686054a4f3262e7912639d67459009767a8a78bbb1273321ea678b70"
     },
     {
       "path": "codex/.specify/templates/canon/propagation-debt.json",
@@ -2123,11 +2123,11 @@
     },
     {
       "path": "codex/.specify/templates/world/rules.yaml",
-      "sha256": "f3488f9a248a54bfb6a65ae2e570575f65836d2b4938a27c7a3df073f15db69f"
+      "sha256": "730602ca137a2e7692f211f85df054a991e55dc3be84d86673a47e9c1194fbc4"
     },
     {
       "path": "codex/.specify/templates/world/world-bible.md",
-      "sha256": "4c440963c59dfbabdf99d8eed0c2c81c262f4fc206b0ef769f7480304b2e912e"
+      "sha256": "41007b834030be127262cdbaeebb6a32c00307fdc44fe80a8464fdb22954e59d"
     },
     {
       "path": "codex/.specify/templates/writing-constitution-template.md",
@@ -2314,7 +2314,7 @@
     },
     {
       "path": "continue-check/.continue/prompts/specify.md",
-      "sha256": "8246496019b35184482bcf4e2c777d3ccf241e4a3acdd6e9360d93aa5add0c6e",
+      "sha256": "9806983df9ce98b67cc86d6c3dd7b59307ef1a1e536f17f87d45541a4564468d",
       "commandSource": {
         "command": "specify",
         "kind": "legacy-template",
@@ -2497,7 +2497,7 @@
     },
     {
       "path": "continue-check/.specify/templates/canon/facts.json",
-      "sha256": "10bb3d031f0241e05f99c014a10c0bcde61605a40e3d231c5e47641667218f1d"
+      "sha256": "32412ec4686054a4f3262e7912639d67459009767a8a78bbb1273321ea678b70"
     },
     {
       "path": "continue-check/.specify/templates/canon/propagation-debt.json",
@@ -2673,11 +2673,11 @@
     },
     {
       "path": "continue-check/.specify/templates/world/rules.yaml",
-      "sha256": "f3488f9a248a54bfb6a65ae2e570575f65836d2b4938a27c7a3df073f15db69f"
+      "sha256": "730602ca137a2e7692f211f85df054a991e55dc3be84d86673a47e9c1194fbc4"
     },
     {
       "path": "continue-check/.specify/templates/world/world-bible.md",
-      "sha256": "4c440963c59dfbabdf99d8eed0c2c81c262f4fc206b0ef769f7480304b2e912e"
+      "sha256": "41007b834030be127262cdbaeebb6a32c00307fdc44fe80a8464fdb22954e59d"
     },
     {
       "path": "continue-check/.specify/templates/writing-constitution-template.md",
@@ -2864,7 +2864,7 @@
     },
     {
       "path": "copilot/.github/prompts/specify.prompt.md",
-      "sha256": "b9a977977473bbccc32e73a7928adeee6d259705cd2740ae053f65d931960627",
+      "sha256": "e739dbb4585a9ee805c038fe639c9b99cb8ccbfc7d452d86779daa41c6793ca8",
       "commandSource": {
         "command": "specify",
         "kind": "legacy-template",
@@ -3047,7 +3047,7 @@
     },
     {
       "path": "copilot/.specify/templates/canon/facts.json",
-      "sha256": "10bb3d031f0241e05f99c014a10c0bcde61605a40e3d231c5e47641667218f1d"
+      "sha256": "32412ec4686054a4f3262e7912639d67459009767a8a78bbb1273321ea678b70"
     },
     {
       "path": "copilot/.specify/templates/canon/propagation-debt.json",
@@ -3223,11 +3223,11 @@
     },
     {
       "path": "copilot/.specify/templates/world/rules.yaml",
-      "sha256": "f3488f9a248a54bfb6a65ae2e570575f65836d2b4938a27c7a3df073f15db69f"
+      "sha256": "730602ca137a2e7692f211f85df054a991e55dc3be84d86673a47e9c1194fbc4"
     },
     {
       "path": "copilot/.specify/templates/world/world-bible.md",
-      "sha256": "4c440963c59dfbabdf99d8eed0c2c81c262f4fc206b0ef769f7480304b2e912e"
+      "sha256": "41007b834030be127262cdbaeebb6a32c00307fdc44fe80a8464fdb22954e59d"
     },
     {
       "path": "copilot/.specify/templates/writing-constitution-template.md",
@@ -3414,7 +3414,7 @@
     },
     {
       "path": "cursor/.cursor/commands/specify.md",
-      "sha256": "b1ce49cc53ce960b78534f35d2efe5a8157f113dc45a7c0c247111867093d42f",
+      "sha256": "874203cba034136c31beb3c9edda61897c172e8b69873df48521ebea734c4d1b",
       "commandSource": {
         "command": "specify",
         "kind": "legacy-template",
@@ -3597,7 +3597,7 @@
     },
     {
       "path": "cursor/.specify/templates/canon/facts.json",
-      "sha256": "10bb3d031f0241e05f99c014a10c0bcde61605a40e3d231c5e47641667218f1d"
+      "sha256": "32412ec4686054a4f3262e7912639d67459009767a8a78bbb1273321ea678b70"
     },
     {
       "path": "cursor/.specify/templates/canon/propagation-debt.json",
@@ -3773,11 +3773,11 @@
     },
     {
       "path": "cursor/.specify/templates/world/rules.yaml",
-      "sha256": "f3488f9a248a54bfb6a65ae2e570575f65836d2b4938a27c7a3df073f15db69f"
+      "sha256": "730602ca137a2e7692f211f85df054a991e55dc3be84d86673a47e9c1194fbc4"
     },
     {
       "path": "cursor/.specify/templates/world/world-bible.md",
-      "sha256": "4c440963c59dfbabdf99d8eed0c2c81c262f4fc206b0ef769f7480304b2e912e"
+      "sha256": "41007b834030be127262cdbaeebb6a32c00307fdc44fe80a8464fdb22954e59d"
     },
     {
       "path": "cursor/.specify/templates/writing-constitution-template.md",
@@ -3964,7 +3964,7 @@
     },
     {
       "path": "gemini/.gemini/commands/novel/specify.toml",
-      "sha256": "d5e6fdd9d0a64052b708b6989ef048ddc2421baceaa36692a30783ffa4f7366e",
+      "sha256": "f6018b18d97e16260d492423e4ac876b37abc29e533ace0c5c14c26fd54b52a2",
       "commandSource": {
         "command": "specify",
         "kind": "legacy-template",
@@ -4147,7 +4147,7 @@
     },
     {
       "path": "gemini/.specify/templates/canon/facts.json",
-      "sha256": "10bb3d031f0241e05f99c014a10c0bcde61605a40e3d231c5e47641667218f1d"
+      "sha256": "32412ec4686054a4f3262e7912639d67459009767a8a78bbb1273321ea678b70"
     },
     {
       "path": "gemini/.specify/templates/canon/propagation-debt.json",
@@ -4323,11 +4323,11 @@
     },
     {
       "path": "gemini/.specify/templates/world/rules.yaml",
-      "sha256": "f3488f9a248a54bfb6a65ae2e570575f65836d2b4938a27c7a3df073f15db69f"
+      "sha256": "730602ca137a2e7692f211f85df054a991e55dc3be84d86673a47e9c1194fbc4"
     },
     {
       "path": "gemini/.specify/templates/world/world-bible.md",
-      "sha256": "4c440963c59dfbabdf99d8eed0c2c81c262f4fc206b0ef769f7480304b2e912e"
+      "sha256": "41007b834030be127262cdbaeebb6a32c00307fdc44fe80a8464fdb22954e59d"
     },
     {
       "path": "gemini/.specify/templates/writing-constitution-template.md",
@@ -4514,7 +4514,7 @@
     },
     {
       "path": "generic/.specify/commands/specify.md",
-      "sha256": "c29455cc5cb2a58b401ea1d91b52f6fa43be7f1eb8e8b5e4e9370c471d6e1ba7",
+      "sha256": "c26eb99911c767d6ce1c00d04af57d8fdc86c9b41949838ce3661d7f16ae4849",
       "commandSource": {
         "command": "specify",
         "kind": "legacy-template",
@@ -4697,7 +4697,7 @@
     },
     {
       "path": "generic/.specify/templates/canon/facts.json",
-      "sha256": "10bb3d031f0241e05f99c014a10c0bcde61605a40e3d231c5e47641667218f1d"
+      "sha256": "32412ec4686054a4f3262e7912639d67459009767a8a78bbb1273321ea678b70"
     },
     {
       "path": "generic/.specify/templates/canon/propagation-debt.json",
@@ -4873,11 +4873,11 @@
     },
     {
       "path": "generic/.specify/templates/world/rules.yaml",
-      "sha256": "f3488f9a248a54bfb6a65ae2e570575f65836d2b4938a27c7a3df073f15db69f"
+      "sha256": "730602ca137a2e7692f211f85df054a991e55dc3be84d86673a47e9c1194fbc4"
     },
     {
       "path": "generic/.specify/templates/world/world-bible.md",
-      "sha256": "4c440963c59dfbabdf99d8eed0c2c81c262f4fc206b0ef769f7480304b2e912e"
+      "sha256": "41007b834030be127262cdbaeebb6a32c00307fdc44fe80a8464fdb22954e59d"
     },
     {
       "path": "generic/.specify/templates/writing-constitution-template.md",
@@ -5064,7 +5064,7 @@
     },
     {
       "path": "kilocode/.kilocode/workflows/specify.md",
-      "sha256": "a8ff96a6eb0db290a33e0ff4d6b3fa0c6d492e86dd6a8fe5c4b9268a65d8349c",
+      "sha256": "d6fde450e5c60d239d10b5cd5c8f8c68124827346dad2b7bcb9af17c8d2064c8",
       "commandSource": {
         "command": "specify",
         "kind": "legacy-template",
@@ -5247,7 +5247,7 @@
     },
     {
       "path": "kilocode/.specify/templates/canon/facts.json",
-      "sha256": "10bb3d031f0241e05f99c014a10c0bcde61605a40e3d231c5e47641667218f1d"
+      "sha256": "32412ec4686054a4f3262e7912639d67459009767a8a78bbb1273321ea678b70"
     },
     {
       "path": "kilocode/.specify/templates/canon/propagation-debt.json",
@@ -5423,11 +5423,11 @@
     },
     {
       "path": "kilocode/.specify/templates/world/rules.yaml",
-      "sha256": "f3488f9a248a54bfb6a65ae2e570575f65836d2b4938a27c7a3df073f15db69f"
+      "sha256": "730602ca137a2e7692f211f85df054a991e55dc3be84d86673a47e9c1194fbc4"
     },
     {
       "path": "kilocode/.specify/templates/world/world-bible.md",
-      "sha256": "4c440963c59dfbabdf99d8eed0c2c81c262f4fc206b0ef769f7480304b2e912e"
+      "sha256": "41007b834030be127262cdbaeebb6a32c00307fdc44fe80a8464fdb22954e59d"
     },
     {
       "path": "kilocode/.specify/templates/writing-constitution-template.md",
@@ -5614,7 +5614,7 @@
     },
     {
       "path": "opencode/.opencode/command/specify.md",
-      "sha256": "597f4d2cb626270a4207217e8429a2b745e7f3d90dc74feaf54b9a516123f1ba",
+      "sha256": "f3bdf6e7cd5ac6c74bdfb665803820748b91467936e1e83860d15f79a145318a",
       "commandSource": {
         "command": "specify",
         "kind": "legacy-template",
@@ -5797,7 +5797,7 @@
     },
     {
       "path": "opencode/.specify/templates/canon/facts.json",
-      "sha256": "10bb3d031f0241e05f99c014a10c0bcde61605a40e3d231c5e47641667218f1d"
+      "sha256": "32412ec4686054a4f3262e7912639d67459009767a8a78bbb1273321ea678b70"
     },
     {
       "path": "opencode/.specify/templates/canon/propagation-debt.json",
@@ -5973,11 +5973,11 @@
     },
     {
       "path": "opencode/.specify/templates/world/rules.yaml",
-      "sha256": "f3488f9a248a54bfb6a65ae2e570575f65836d2b4938a27c7a3df073f15db69f"
+      "sha256": "730602ca137a2e7692f211f85df054a991e55dc3be84d86673a47e9c1194fbc4"
     },
     {
       "path": "opencode/.specify/templates/world/world-bible.md",
-      "sha256": "4c440963c59dfbabdf99d8eed0c2c81c262f4fc206b0ef769f7480304b2e912e"
+      "sha256": "41007b834030be127262cdbaeebb6a32c00307fdc44fe80a8464fdb22954e59d"
     },
     {
       "path": "opencode/.specify/templates/writing-constitution-template.md",
@@ -6164,7 +6164,7 @@
     },
     {
       "path": "q/.amazonq/prompts/specify.md",
-      "sha256": "b9a977977473bbccc32e73a7928adeee6d259705cd2740ae053f65d931960627",
+      "sha256": "e739dbb4585a9ee805c038fe639c9b99cb8ccbfc7d452d86779daa41c6793ca8",
       "commandSource": {
         "command": "specify",
         "kind": "legacy-template",
@@ -6347,7 +6347,7 @@
     },
     {
       "path": "q/.specify/templates/canon/facts.json",
-      "sha256": "10bb3d031f0241e05f99c014a10c0bcde61605a40e3d231c5e47641667218f1d"
+      "sha256": "32412ec4686054a4f3262e7912639d67459009767a8a78bbb1273321ea678b70"
     },
     {
       "path": "q/.specify/templates/canon/propagation-debt.json",
@@ -6523,11 +6523,11 @@
     },
     {
       "path": "q/.specify/templates/world/rules.yaml",
-      "sha256": "f3488f9a248a54bfb6a65ae2e570575f65836d2b4938a27c7a3df073f15db69f"
+      "sha256": "730602ca137a2e7692f211f85df054a991e55dc3be84d86673a47e9c1194fbc4"
     },
     {
       "path": "q/.specify/templates/world/world-bible.md",
-      "sha256": "4c440963c59dfbabdf99d8eed0c2c81c262f4fc206b0ef769f7480304b2e912e"
+      "sha256": "41007b834030be127262cdbaeebb6a32c00307fdc44fe80a8464fdb22954e59d"
     },
     {
       "path": "q/.specify/templates/writing-constitution-template.md",
@@ -6714,7 +6714,7 @@
     },
     {
       "path": "qwen/.qwen/commands/specify.toml",
-      "sha256": "d5e6fdd9d0a64052b708b6989ef048ddc2421baceaa36692a30783ffa4f7366e",
+      "sha256": "f6018b18d97e16260d492423e4ac876b37abc29e533ace0c5c14c26fd54b52a2",
       "commandSource": {
         "command": "specify",
         "kind": "legacy-template",
@@ -6897,7 +6897,7 @@
     },
     {
       "path": "qwen/.specify/templates/canon/facts.json",
-      "sha256": "10bb3d031f0241e05f99c014a10c0bcde61605a40e3d231c5e47641667218f1d"
+      "sha256": "32412ec4686054a4f3262e7912639d67459009767a8a78bbb1273321ea678b70"
     },
     {
       "path": "qwen/.specify/templates/canon/propagation-debt.json",
@@ -7073,11 +7073,11 @@
     },
     {
       "path": "qwen/.specify/templates/world/rules.yaml",
-      "sha256": "f3488f9a248a54bfb6a65ae2e570575f65836d2b4938a27c7a3df073f15db69f"
+      "sha256": "730602ca137a2e7692f211f85df054a991e55dc3be84d86673a47e9c1194fbc4"
     },
     {
       "path": "qwen/.specify/templates/world/world-bible.md",
-      "sha256": "4c440963c59dfbabdf99d8eed0c2c81c262f4fc206b0ef769f7480304b2e912e"
+      "sha256": "41007b834030be127262cdbaeebb6a32c00307fdc44fe80a8464fdb22954e59d"
     },
     {
       "path": "qwen/.specify/templates/writing-constitution-template.md",
@@ -7264,7 +7264,7 @@
     },
     {
       "path": "roocode/.roo/commands/specify.md",
-      "sha256": "a8ff96a6eb0db290a33e0ff4d6b3fa0c6d492e86dd6a8fe5c4b9268a65d8349c",
+      "sha256": "d6fde450e5c60d239d10b5cd5c8f8c68124827346dad2b7bcb9af17c8d2064c8",
       "commandSource": {
         "command": "specify",
         "kind": "legacy-template",
@@ -7447,7 +7447,7 @@
     },
     {
       "path": "roocode/.specify/templates/canon/facts.json",
-      "sha256": "10bb3d031f0241e05f99c014a10c0bcde61605a40e3d231c5e47641667218f1d"
+      "sha256": "32412ec4686054a4f3262e7912639d67459009767a8a78bbb1273321ea678b70"
     },
     {
       "path": "roocode/.specify/templates/canon/propagation-debt.json",
@@ -7623,11 +7623,11 @@
     },
     {
       "path": "roocode/.specify/templates/world/rules.yaml",
-      "sha256": "f3488f9a248a54bfb6a65ae2e570575f65836d2b4938a27c7a3df073f15db69f"
+      "sha256": "730602ca137a2e7692f211f85df054a991e55dc3be84d86673a47e9c1194fbc4"
     },
     {
       "path": "roocode/.specify/templates/world/world-bible.md",
-      "sha256": "4c440963c59dfbabdf99d8eed0c2c81c262f4fc206b0ef769f7480304b2e912e"
+      "sha256": "41007b834030be127262cdbaeebb6a32c00307fdc44fe80a8464fdb22954e59d"
     },
     {
       "path": "roocode/.specify/templates/writing-constitution-template.md",
@@ -7851,7 +7851,7 @@
     },
     {
       "path": "windsurf/.specify/templates/canon/facts.json",
-      "sha256": "10bb3d031f0241e05f99c014a10c0bcde61605a40e3d231c5e47641667218f1d"
+      "sha256": "32412ec4686054a4f3262e7912639d67459009767a8a78bbb1273321ea678b70"
     },
     {
       "path": "windsurf/.specify/templates/canon/propagation-debt.json",
@@ -8027,11 +8027,11 @@
     },
     {
       "path": "windsurf/.specify/templates/world/rules.yaml",
-      "sha256": "f3488f9a248a54bfb6a65ae2e570575f65836d2b4938a27c7a3df073f15db69f"
+      "sha256": "730602ca137a2e7692f211f85df054a991e55dc3be84d86673a47e9c1194fbc4"
     },
     {
       "path": "windsurf/.specify/templates/world/world-bible.md",
-      "sha256": "4c440963c59dfbabdf99d8eed0c2c81c262f4fc206b0ef769f7480304b2e912e"
+      "sha256": "41007b834030be127262cdbaeebb6a32c00307fdc44fe80a8464fdb22954e59d"
     },
     {
       "path": "windsurf/.specify/templates/writing-constitution-template.md",
@@ -8130,7 +8130,7 @@
     },
     {
       "path": "windsurf/.windsurf/workflows/specify.md",
-      "sha256": "a8ff96a6eb0db290a33e0ff4d6b3fa0c6d492e86dd6a8fe5c4b9268a65d8349c",
+      "sha256": "d6fde450e5c60d239d10b5cd5c8f8c68124827346dad2b7bcb9af17c8d2064c8",
       "commandSource": {
         "command": "specify",
         "kind": "legacy-template",
