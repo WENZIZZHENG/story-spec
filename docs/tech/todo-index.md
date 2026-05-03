@@ -6,7 +6,9 @@ Active。本文是 Novel Writer 当前唯一的活跃待办入口。详细规则
 
 ## 当前待办
 
-暂无活跃待办。已完成路线见 [todo-archive.md](todo-archive.md)；新增长期路线时，先按 [todo-governance.md](todo-governance.md) 建立专题 roadmap 并在本文登记。
+| 优先级 | 路线 | 状态 | 范围 | 下一步 |
+| --- | --- | --- | --- | --- |
+| P0 | [新故事引导与创作导航路线图](story-onboarding-navigation-roadmap.md) | Planned | 新故事入口、下一步导航、澄清校验、创作控制权报告、访谈体验、CLI preview/apply | 等待确认后从 E0 `novel story:new` 开始 |
 
 ## 暂不作为活跃待办
 
