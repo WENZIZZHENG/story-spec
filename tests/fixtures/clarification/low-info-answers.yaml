@@ -1,0 +1,13 @@
+answers:
+  - questionId: story.tags
+    answer:
+      - 异界穿越
+      - 轻松冒险
+      - 编程施法
+      - 慢热感情
+      - 文明级威胁
+    source: user-explicit
+    confidence: 1
+    confirmed: true
+    createdAt: 2026-05-03T00:00:00.000Z
+    updatedAt: 2026-05-03T00:00:00.000Z

@@ -1,0 +1,15 @@
+answers:
+  - questionId: story.core-premise
+    answer: 编程施法是主角理解世界的工具，但故事先从轻松冒险和小问题修复开始。
+    source: user-explicit
+    confidence: 1
+    confirmed: true
+    createdAt: 2026-05-03T00:00:00.000Z
+    updatedAt: 2026-05-03T00:00:00.000Z
+  - questionId: protagonist.identity
+    answer: 主角是刚经历线上事故的后端程序员，穿越后把法术当运行时环境排查。
+    source: user-explicit
+    confidence: 1
+    confirmed: true
+    createdAt: 2026-05-03T00:00:00.000Z
+    updatedAt: 2026-05-03T00:00:00.000Z

@@ -1,0 +1,129 @@
+import { readFile } from 'node:fs/promises';
+import path from 'node:path';
+import { describe, expect, it } from 'vitest';
+import {
+  parseClarificationAnswerSet,
+  parseClarificationQuestionSet,
+  validateClarificationSession,
+  validateCreativeDecisions
+} from '../../src/domain/clarification-schema.js';
+
+const fixturePath = (name: string): string =>
+  path.join(process.cwd(), 'tests', 'fixtures', 'clarification', name);
+
+describe('clarification domain schema', () => {
+  it('parses structured clarification questions with dependsOn rules', async () => {
+    const content = await readFile(fixturePath('question-set.yaml'), 'utf-8');
+    const result = parseClarificationQuestionSet(content, 'question-set.yaml');
+
+    expect(result.issues).toEqual([]);
+    expect(result.questions).toEqual(expect.arrayContaining([
+      expect.objectContaining({
+        id: 'story.core-premise',
+        type: 'textarea',
+        required: true,
+        exampleAnswers: expect.arrayContaining([
+          '我想保留“编程施法”，但主角先是调试小法术，不马上拯救世界。'
+        ])
+      }),
+      expect.objectContaining({
+        id: 'magic.rule-hardness',
+        dependsOn: [{ questionId: 'story.core-premise', answerIncludes: '编程施法' }]
+      })
+    ]));
+  });
+
+  it('reports required clarification questions that do not have answers', async () => {
+    const questions = parseClarificationQuestionSet(
+      await readFile(fixturePath('question-set.yaml'), 'utf-8'),
+      'question-set.yaml'
+    ).questions;
+    const answers = parseClarificationAnswerSet(
+      await readFile(fixturePath('low-info-answers.yaml'), 'utf-8'),
+      'low-info-answers.yaml'
+    ).answers;
+
+    const issues = validateClarificationSession({ questions, answers });
+
+    expect(issues).toEqual(expect.arrayContaining([
+      expect.objectContaining({
+        code: 'MISSING_REQUIRED_CLARIFICATION_ANSWER',
+        path: 'questions[story.core-premise]'
+      }),
+      expect.objectContaining({
+        code: 'MISSING_REQUIRED_CLARIFICATION_ANSWER',
+        path: 'questions[protagonist.identity]'
+      })
+    ]));
+  });
+
+  it('accepts confirmed user answers as enough for required questions', async () => {
+    const questions = parseClarificationQuestionSet(
+      await readFile(fixturePath('question-set.yaml'), 'utf-8'),
+      'question-set.yaml'
+    ).questions;
+    const answers = parseClarificationAnswerSet(
+      await readFile(fixturePath('confirmed-answers.yaml'), 'utf-8'),
+      'confirmed-answers.yaml'
+    ).answers;
+
+    const issues = validateClarificationSession({ questions, answers });
+
+    expect(issues).not.toEqual(expect.arrayContaining([
+      expect.objectContaining({ code: 'MISSING_REQUIRED_CLARIFICATION_ANSWER' })
+    ]));
+  });
+
+  it('blocks creative decisions sourced only from unconfirmed AI suggestions', async () => {
+    const answers = parseClarificationAnswerSet(
+      await readFile(fixturePath('ai-suggested-answers.yaml'), 'utf-8'),
+      'ai-suggested-answers.yaml'
+    ).answers;
+
+    const issues = validateCreativeDecisions([
+      {
+        id: 'decision.threat-shape',
+        label: '文明级威胁形态',
+        value: '沉睡的旧世界运行时即将重启',
+        sourceAnswers: ['threat.shape'],
+        status: 'pending',
+        canonImpact: 'high'
+      }
+    ], answers);
+
+    expect(issues).toEqual([expect.objectContaining({
+      code: 'UNCONFIRMED_AI_SUGGESTION_AS_DECISION',
+      path: 'decisions[decision.threat-shape].sourceAnswers[threat.shape]'
+    })]);
+  });
+
+  it('reports invalid question types and invalid confidence values', () => {
+    const questionResult = parseClarificationQuestionSet(`questions:
+  - id: bad.question
+    stage: specify
+    topic: premise
+    question: Bad?
+    whyItMatters: test
+    type: dropdown
+    required: true
+`, 'bad-question.yaml');
+    const answerResult = parseClarificationAnswerSet(`answers:
+  - questionId: bad.question
+    answer: x
+    source: user-explicit
+    confidence: 2
+    confirmed: true
+    createdAt: 2026-05-03T00:00:00.000Z
+    updatedAt: 2026-05-03T00:00:00.000Z
+`, 'bad-answer.yaml');
+
+    expect(questionResult.issues).toEqual([expect.objectContaining({
+      code: 'INVALID_CLARIFICATION_QUESTION_TYPE',
+      path: 'bad-question.yaml#questions[0].type'
+    })]);
+    expect(answerResult.issues).toEqual([expect.objectContaining({
+      code: 'INVALID_CLARIFICATION_ANSWER_CONFIDENCE',
+      path: 'bad-answer.yaml#answers[0].confidence'
+    })]);
+  });
+});

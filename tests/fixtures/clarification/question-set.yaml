@@ -1,0 +1,43 @@
+questions:
+  - id: story.core-premise
+    stage: specify
+    topic: premise
+    question: 你最想保留的一句话核心创意是什么？
+    whyItMatters: 核心创意决定后续规格不能替作者定稿。
+    type: textarea
+    required: true
+    exampleAnswers:
+      - 我想保留“编程施法”，但主角先是调试小法术，不马上拯救世界。
+      - 穿越只是开端，重点是主角如何理解异界文明的运行逻辑。
+      - 轻松冒险是表层，文明级威胁要慢慢从日常异常里露出来。
+  - id: protagonist.identity
+    stage: specify
+    topic: protagonist
+    question: 主角最初是什么样的人？
+    whyItMatters: 主角身份会影响编程施法的表达方式和成长曲线。
+    type: text
+    required: true
+    exampleAnswers:
+      - 刚毕业的后端程序员，擅长排查线上事故。
+      - 自学编程的图书管理员，更习惯把法术当知识系统整理。
+      - 游戏脚本作者，直觉强但工程习惯很差。
+  - id: magic.rule-hardness
+    stage: specify
+    topic: magic-system
+    question: 编程施法更偏硬规则还是轻量隐喻？
+    whyItMatters: 规则硬度会影响冲突设计和读者预期。
+    type: single-choice
+    required: false
+    options:
+      - value: hard
+        label: 硬规则
+        description: 法术像可调试程序，有语法、运行时和错误类型。
+      - value: soft
+        label: 轻量隐喻
+        description: 编程只是理解魔法的比喻，不展开复杂技术细节。
+    exampleAnswers:
+      - hard
+      - soft
+    dependsOn:
+      - questionId: story.core-premise
+        answerIncludes: 编程施法

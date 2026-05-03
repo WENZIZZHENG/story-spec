@@ -1,0 +1,23 @@
+questions:
+  - id: story.core-premise
+    stage: specify
+    topic: premise
+    question: 你最想保留的一句话核心创意是什么？
+    whyItMatters: 这会决定后续规格中哪些内容必须由作者确认，哪些只能作为 AI 建议。
+    type: textarea
+    required: true
+    exampleAnswers:
+      - 我想保留“编程施法”，但先写小队冒险，不马上进入拯救世界。
+      - 穿越只是入口，重点是主角如何理解异界文明的运行逻辑。
+      - 文明级威胁要从日常异常慢慢露出，不要一开始定成大魔王。
+  - id: protagonist.identity
+    stage: specify
+    topic: protagonist
+    question: 主角最初是什么样的人？
+    whyItMatters: 主角身份会影响能力表达、问题解决方式和成长曲线。
+    type: text
+    required: true
+    exampleAnswers:
+      - 刚经历线上事故的后端程序员。
+      - 自学编程的图书管理员。
+      - 写游戏脚本的自由职业者。
