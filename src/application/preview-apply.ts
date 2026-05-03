@@ -14,7 +14,9 @@ import {
 import { hasResolvedClarificationAnswer } from '../domain/clarification-answer-utils.js';
 import {
   evaluateStoryCoreElements,
-  getPlanBlockingCoreElements
+  getPlanBlockingCoreElements,
+  getStoryCoreElementStatusText,
+  type StoryCoreElementAssessment
 } from '../domain/story-core-elements.js';
 
 export type PreviewApplyErrorCode =
@@ -42,7 +44,7 @@ export interface PreviewRisk {
 export interface PreviewRecord {
   schemaVersion: '1.0';
   id: string;
-  kind: 'specify';
+  kind: 'specify' | 'plan';
   story: string;
   storyPath: string;
   targetPath: string;
@@ -69,11 +71,16 @@ export interface CreateSpecifyPreviewResult {
   markdownPath: string;
 }
 
+export interface CreatePlanPreviewInput extends CreateSpecifyPreviewInput {}
+
+export interface CreatePlanPreviewResult extends CreateSpecifyPreviewResult {}
+
 export interface ApplyPreviewInput {
   projectRoot: string;
   fileSystem: ProjectFileSystem;
   previewId: string;
   yes?: boolean;
+  draft?: boolean;
   now?: () => Date;
 }
 
@@ -156,6 +163,60 @@ const renderSpecifyContent = (
   ].join('\n');
 };
 
+const renderPlanContent = (
+  story: string,
+  record: ClarificationRecord,
+  coreElements: StoryCoreElementAssessment[]
+): string => {
+  const confirmedElements = coreElements.filter(element => element.status === 'confirmed' || element.status === 'partial');
+  const blockingElements = getPlanBlockingCoreElements(coreElements);
+  const candidateBranches = record.questions
+    .flatMap(question => question.exampleBranches ?? [])
+    .slice(0, 6);
+
+  return [
+    `# ${story} 创作计划预览`,
+    '',
+    '## 来源',
+    '',
+    '- 来源：clarifications.json',
+    '- 本文件由 preview plan 生成；只有 apply 后才进入 creative-plan.md。',
+    '',
+    '## 用户已确认核心要素',
+    '',
+    ...(confirmedElements.length > 0
+      ? confirmedElements.map(element => `- ${element.label}：${getStoryCoreElementStatusText(element.status)}。${element.summary}`)
+      : ['- 暂无。']),
+    '',
+    '## [需要澄清] 核心缺口',
+    '',
+    ...(blockingElements.length > 0
+      ? blockingElements.map(element => `- [需要澄清] ${element.label}：${element.nextPrompt ?? '请继续共创确认。'}`)
+      : ['- 暂无。']),
+    '',
+    '## AI 候选分叉',
+    '',
+    ...(candidateBranches.length > 0
+      ? candidateBranches.map(branch => `- ${branch.label}：${branch.answer}（风味：${branch.flavor}；后续影响：${branch.downstreamImpact}；confirmed: false）`)
+      : ['- 暂无。']),
+    '',
+    '## 拟写入范围',
+    '',
+    '- 阅读承诺：根据已确认类型体验和核心创意生成，缺口保留为 [需要澄清]。',
+    '- 世界压力：只引用已确认舞台/势力/威胁；未确认内容保留候选标记。',
+    '- 人物情感：只引用已确认伙伴和关系线；缺口不伪装成正典。',
+    '- 成功路线：先写阶段性回报与代价占位，不直接生成完整章节安排。',
+    '- 冲突回报：只规划第一卷可见阻力和阶段胜利，不提前定死终局。',
+    '- 独特声音：未确认时保留 [需要澄清]，不替作者定文风。',
+    '',
+    '## 写作边界',
+    '',
+    '- 未确认候选角色、势力、章节安排不能伪装成已确认正典。',
+    '- 草案模式必须保留 [需要澄清] 和来源标记。',
+    ''
+  ].join('\n');
+};
+
 const renderPreviewReport = (
   record: PreviewRecord,
   projectRoot: string
@@ -211,6 +272,12 @@ const buildCoreElementRisks = (record: ClarificationRecord): PreviewRisk[] =>
       message: `核心要素稍后决定：${element.label}。${element.nextPrompt ?? '请先回到共创访谈确认。'}`
     }));
 
+const buildPlanRisks = (coreElements: StoryCoreElementAssessment[]): PreviewRisk[] =>
+  getPlanBlockingCoreElements(coreElements).map(element => ({
+    severity: 'blocking',
+    message: `核心要素未成熟：${element.label}（${getStoryCoreElementStatusText(element.status)}）。${element.nextPrompt ?? '请先回到共创访谈确认。'}`
+  }));
+
 export const createSpecifyPreview = async (
   input: CreateSpecifyPreviewInput
 ): Promise<CreateSpecifyPreviewResult> => {
@@ -243,6 +310,55 @@ export const createSpecifyPreview = async (
       ...buildRisks(summary),
       ...buildCoreElementRisks(record)
     ],
+    createdAt: now.toISOString(),
+    expiresAt: addDays(now, 7).toISOString()
+  };
+  const jsonPath = previewJsonPath(input.projectRoot, id);
+  const contentPath = previewContentPath(input.projectRoot, id);
+  const markdownPath = previewReportPath(input.projectRoot, id);
+
+  await input.fileSystem.ensureDir(previewRoot(input.projectRoot));
+  await input.fileSystem.writeJson(jsonPath, previewRecord, { spaces: 2 });
+  await input.fileSystem.writeFile(contentPath, content);
+  await input.fileSystem.writeFile(markdownPath, renderPreviewReport(previewRecord, input.projectRoot));
+
+  return {
+    record: previewRecord,
+    previewPath: jsonPath,
+    contentPath,
+    markdownPath
+  };
+};
+
+export const createPlanPreview = async (
+  input: CreatePlanPreviewInput
+): Promise<CreatePlanPreviewResult> => {
+  const story = await selectStoryProject(input.projectRoot, input.fileSystem, input.story);
+  const now = (input.now ?? (() => new Date()))();
+  const record = await readClarificationRecord(input.fileSystem, story.path);
+  const coreElements = evaluateStoryCoreElements({
+    premise: record.premise,
+    questions: record.questions,
+    answers: record.answers
+  });
+  const id = `plan-${slugifyPathPart(story.name)}-${now.toISOString().slice(0, 10).replace(/-/g, '')}-${String(now.getTime())}`;
+  const targetPath = path.join(story.path, 'creative-plan.md');
+  const content = renderPlanContent(story.name, record, coreElements);
+  const previewRecord: PreviewRecord = {
+    schemaVersion: '1.0',
+    id,
+    kind: 'plan',
+    story: story.name,
+    storyPath: story.path,
+    targetPath,
+    sourcePaths: [
+      path.join(story.path, 'idea.md'),
+      path.join(story.path, 'clarifications.json'),
+      path.join(story.path, 'specification.md')
+    ],
+    summary: '根据用户已确认核心要素生成 creative-plan 预览；核心缺口会保留为 [需要澄清]。',
+    content,
+    risks: buildPlanRisks(coreElements),
     createdAt: now.toISOString(),
     expiresAt: addDays(now, 7).toISOString()
   };
@@ -302,7 +418,9 @@ export const applyPreview = async (
     };
   }
 
-  const blockingRisks = record.risks.filter(risk => risk.severity === 'blocking');
+  const blockingRisks = input.draft && record.kind === 'plan'
+    ? []
+    : record.risks.filter(risk => risk.severity === 'blocking');
   if (blockingRisks.length > 0) {
     throw new PreviewApplyError(
       'PREVIEW_BLOCKED',
@@ -339,6 +457,20 @@ export const renderSpecifyPreview = (result: CreateSpecifyPreviewResult): string
   '',
   result.record.risks.length > 0
     ? '存在待确认风险，请先处理后再 apply。'
+    : `确认后运行：storyspec apply ${result.record.id} --yes`
+].join('\n');
+
+export const renderPlanPreview = (result: CreatePlanPreviewResult): string => [
+  'StorySpec 计划预览',
+  '',
+  `Preview：${result.record.id}`,
+  `故事：${result.record.story}`,
+  `目标：${result.record.targetPath}`,
+  `风险：${result.record.risks.length}`,
+  `报告：${result.markdownPath}`,
+  '',
+  result.record.risks.length > 0
+    ? '存在核心缺口；可继续访谈，或用 apply --yes --draft 写入保留缺口的草案。'
     : `确认后运行：storyspec apply ${result.record.id} --yes`
 ].join('\n');
 

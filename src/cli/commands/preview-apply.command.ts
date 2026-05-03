@@ -2,9 +2,11 @@ import type { Command } from '@commander-js/extra-typings';
 import chalk from 'chalk';
 import {
   applyPreview,
+  createPlanPreview,
   createSpecifyPreview,
   PreviewApplyError,
   renderApplyPreview,
+  renderPlanPreview,
   renderSpecifyPreview
 } from '../../application/preview-apply.js';
 import { StorySelectionError } from '../../application/workbench-utils.js';
@@ -54,10 +56,33 @@ export const registerPreviewApplyCommand = (program: Command): void => {
       }
     });
 
+  preview
+    .command('plan')
+    .argument('[story]', '故事目录名或路径，默认使用最近更新的 stories/*')
+    .option('--json', '输出 JSON，便于自动化读取')
+    .description('生成 creative-plan 写入前预览')
+    .action(async (story, options) => {
+      try {
+        const projectRoot = await ensureProjectRoot();
+        const result = await createPlanPreview({
+          projectRoot,
+          fileSystem: nodeFileSystem,
+          story
+        });
+
+        console.log(options.json
+          ? JSON.stringify(result, null, 2)
+          : renderPlanPreview(result));
+      } catch (error: any) {
+        handlePreviewError(error, '计划预览生成失败');
+      }
+    });
+
   program
     .command('apply')
     .argument('<previewId>', 'preview ID，例如 specify-demo-20260503-...')
     .option('--yes', '确认写入目标文件；不传时只预览')
+    .option('--draft', '仅对 plan preview 生效：允许写入保留 [需要澄清] 的草案')
     .option('--json', '输出 JSON，便于自动化读取')
     .description('应用已生成的 preview；默认不写入，必须 --yes 才会覆盖目标文件')
     .action(async (previewId, options) => {
@@ -67,7 +92,8 @@ export const registerPreviewApplyCommand = (program: Command): void => {
           projectRoot,
           fileSystem: nodeFileSystem,
           previewId,
-          yes: options.yes
+          yes: options.yes,
+          draft: options.draft
         });
 
         console.log(options.json
