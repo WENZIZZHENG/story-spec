@@ -1,0 +1,187 @@
+{
+  "story": "编程施法",
+  "originalInput": "小说名：编程施法；一句话灵感：主角晏无是一名工科马列青年，穿越到剑与魔法世界，并且获得编程施法金手指，展开一段冒险之旅；题材偏好：18+ 玄幻、异界穿越、轻松冒险、编程施法、慢热感情、文明级威胁。建设流和思想改造是支撑工具，不是纯种田文。文明级威胁是第三次寂静，编程施法偏轻量隐喻。",
+  "savedIdea": "主角晏无是一名工科马列青年，穿越到剑与魔法世界，并且获得编程施法金手指，展开一段轻松冒险；第三次寂静正在逼近，编程施法偏轻量隐喻。",
+  "flow": [
+    "保存灵感",
+    "推荐入口",
+    "给候选",
+    "用户选择/改写",
+    "创作回声",
+    "下一步推荐"
+  ],
+  "recommendedEntries": [
+    "power",
+    "stage",
+    "faction"
+  ],
+  "entries": [
+    {
+      "id": "power",
+      "prompt": "能力爽点来自哪里，明确不能做什么，第一次使用会解决什么又留下什么后果？",
+      "candidates": [
+        {
+          "label": "轻量隐喻调试",
+          "answer": "编程施法不展示完整代码语法，爽点来自晏无用工程思维拆解魔法事故、定位依赖和补丁思路。",
+          "interestingChoice": {
+            "appeal": "保留轻松冒险节奏，同时让编程施法有辨识度。",
+            "cost": "技术细节不会特别硬核，需要用失败代价和场景行动维持边界。",
+            "relationshipImpact": "伙伴能参与判断伦理和本地规则，而不是站在旁边看主角写代码。",
+            "worldImpact": "魔法世界会把调试行为误读成禁术、越权维修或绕过认证。",
+            "futureHook": "下一轮确认第一次失败污染了哪份法阵日志，以及谁因此承担风险。",
+            "confirmationBoundary": "候选能力表达，确认后才写入 specification 的能力边界。"
+          }
+        },
+        {
+          "label": "事故日志爽点",
+          "answer": "主角第一次高光不是战斗碾压，而是在民生法器事故中读出异常日志，发现故障像运行时错误。",
+          "interestingChoice": {
+            "appeal": "开局就能写成可行动场景，轻松、聪明、有一点悬疑。",
+            "cost": "高光偏解决问题而非战斗，需要用外部压力制造紧张感。",
+            "relationshipImpact": "伙伴会质疑他越权处理事故，关系从不信任开始。",
+            "worldImpact": "民生法器异常可以作为第三次寂静的小异常入口。",
+            "futureHook": "下一轮确认事故发生在学院维修库、边境公会还是港口工坊。",
+            "confirmationBoundary": "候选首个能力场景，确认后才进入 Scene Card 或章节任务。"
+          }
+        }
+      ]
+    },
+    {
+      "id": "stage",
+      "prompt": "故事第一眼在哪里发生，这个地方的秩序、禁令和代价是什么？",
+      "candidates": [
+        {
+          "label": "学院维修库",
+          "answer": "开局在学院维修库，低阶法器故障被当作普通事故，晏无一眼看出依赖链不对。",
+          "interestingChoice": {
+            "appeal": "学院、知识垄断和编程施法能第一章同台出现。",
+            "cost": "舞台较集中，早期广阔冒险感会弱一些。",
+            "relationshipImpact": "伙伴可以是学院内部人，既懂规则又怕主角越界。",
+            "worldImpact": "许可、维修资格和法器事故会直接展示世界秩序。",
+            "futureHook": "下一轮确认维修库事故背后是许可漏洞、贵族隐瞒还是第三次寂静前兆。",
+            "confirmationBoundary": "候选第一舞台，确认后才写入 World Bible 或 Scene Card。"
+          }
+        },
+        {
+          "label": "边境冒险者公会",
+          "answer": "开局在边境公会，委托墙出现无人发布的古代任务，主角先把它当成缓存或日志错误。",
+          "interestingChoice": {
+            "appeal": "冒险感更强，能保留旅行见闻和轻松单元剧节奏。",
+            "cost": "学院与知识垄断需要稍后进入，制度压力会延后。",
+            "relationshipImpact": "伙伴可以是本地向导或公会记录员，关系从互相试探开始。",
+            "worldImpact": "第三次寂静的小异常会以任务系统、旧日志和边境传闻浮现。",
+            "futureHook": "下一轮确认第一张异常委托指向哪个地方，以及谁想删除它。",
+            "confirmationBoundary": "候选第一舞台，确认后才写入 World Bible 或 Scene Card。"
+          }
+        }
+      ]
+    },
+    {
+      "id": "faction",
+      "prompt": "谁垄断知识、资源或合法性，主角第一次会碰到哪条不可见规则？",
+      "candidates": [
+        {
+          "label": "学院许可体系",
+          "answer": "学院垄断咒文许可，晏无的调试方法会削弱导师、证书和专利的权威。",
+          "interestingChoice": {
+            "appeal": "知识垄断和规则学习同台出现，冲突理性但压迫感清楚。",
+            "cost": "需要写出学院维护秩序的合理性，避免只有反派坏。",
+            "relationshipImpact": "伙伴若来自学院，会在帮助主角和守住身份之间摇摆。",
+            "worldImpact": "许可制度让编程施法不是外挂，而是对知识秩序的挑战。",
+            "futureHook": "下一轮确认晏无第一次越权救人时，谁获利、谁背锅。",
+            "confirmationBoundary": "候选势力结构，确认后才写入 World Bible、specification 或 conflict plan。"
+          },
+          "powerStructure": {
+            "name": "艾尔学院许可体系",
+            "resourceControl": "咒文许可、考试资格、导师署名和专利归属。",
+            "legitimacySource": "学院声称只有认证施法者才能避免旧灾难重演。",
+            "beneficiaries": [
+              "学院导师",
+              "持证贵族学生"
+            ],
+            "victims": [
+              "工坊学徒",
+              "无证民间术士"
+            ],
+            "publicNarrative": "资格体系保护普通人免受危险施法伤害。",
+            "internalCracks": [
+              "年轻讲师知道许可制度正在压制修复效率",
+              "边境分院缺资源，被迫默许灰色维修"
+            ],
+            "firstCollisionScene": "晏无越权修复民生法器后，被要求提交许可和导师担保。",
+            "relationshipHooks": [
+              "核心伙伴来自学院内部，担心主角让自己背上违纪风险"
+            ]
+          }
+        },
+        {
+          "label": "边境贵族许可网",
+          "answer": "地方贵族压下魔法工具故障，因为公开异常会引发粮价、税收和治安连锁反应。",
+          "interestingChoice": {
+            "appeal": "把文明危机压进粮价、税收和治安，世界压力更贴近日常。",
+            "cost": "贵族不能只写成坏人，需要给出维稳逻辑和短期合理性。",
+            "relationshipImpact": "伙伴可能夹在家族责任、地方利益和对主角的信任之间。",
+            "worldImpact": "普通人的生活成本会成为第三次寂静最早的可见阴影。",
+            "futureHook": "下一轮确认主角第一次公开异常后，谁会立刻受损。",
+            "confirmationBoundary": "候选势力结构，确认后才写入 World Bible、specification 或 conflict plan。"
+          },
+          "powerStructure": {
+            "name": "边境贵族许可网",
+            "resourceControl": "土地税、粮仓、维修材料配给和治安队执法权。",
+            "legitimacySource": "贵族声称压下异常是为了避免恐慌、粮价暴涨和边境骚乱。",
+            "beneficiaries": [
+              "地方贵族",
+              "粮商"
+            ],
+            "victims": [
+              "农户",
+              "工坊维修师"
+            ],
+            "publicNarrative": "稳定比真相更重要，异常公开会伤害所有人。",
+            "internalCracks": [
+              "贵族旁支想公开问题换取改革筹码",
+              "治安队底层知道事故数量被篡改"
+            ],
+            "firstCollisionScene": "晏无修好供水法器后发现事故记录被改写，贵族要求他签署保密文书。",
+            "relationshipHooks": [
+              "伙伴若是贵族旁支，会同时打开资源门和制造信任障碍"
+            ]
+          }
+        }
+      ]
+    }
+  ],
+  "userResponseExamples": [
+    {
+      "kind": "confirm",
+      "text": "能力入口先确认轻量隐喻调试，但不要写成完整代码体系。"
+    },
+    {
+      "kind": "rewrite",
+      "text": "舞台我想改成边境学院分院，既有学院规训，也有边境事故。"
+    },
+    {
+      "kind": "reject",
+      "text": "暂时不要教会线，禁忌守护者太沉，先保留学院和贵族。"
+    },
+    {
+      "kind": "defer",
+      "text": "核心伙伴稍后决定，先确认第一场事故。"
+    }
+  ],
+  "creationEcho": {
+    "created": "你已经创造出：晏无的工程脑、轻量隐喻的能力边界、第三次寂静的小异常入口，以及学院/贵族知识垄断的第一卷压力。",
+    "stillOpen": "还没定：核心伙伴是谁、第一舞台最终选学院维修库还是边境公会、第一次失败代价是什么。",
+    "next": "下一轮建议从 stage 或 partner 继续，把第一场事故和关系张力连起来。"
+  },
+  "nextRecommendations": [
+    "storyspec interview 编程施法 --entry stage",
+    "storyspec interview 编程施法 --entry partner",
+    "storyspec creative:report 编程施法"
+  ],
+  "forbidden": [
+    "首轮不能直接写完整 creative-plan.md 或分卷大纲。",
+    "首轮不能生成大量未确认角色和势力并写入正典。",
+    "候选不得伪装成作者已经确认的 specification、World Bible 或 Scene Card。"
+  ]
+}
