@@ -35,6 +35,11 @@ describe('CLI command modules smoke', () => {
     expect(help).toContain('contract:sync [options]');
     expect(help).toContain('interview [options] [story]');
     expect(help).toContain('clarify [options] [story]');
+    expect(help).toContain('story:new [options] <name>');
+    expect(help).toContain('next [options] [story]');
+    expect(help).toContain('creative:report [options] [story]');
+    expect(help).toContain('preview');
+    expect(help).toContain('apply [options] <previewId>');
     expect(help).toContain('plugins:add [options] <name>');
     expect(help).toContain('upgrade [options]');
     expect(help).toContain('status [options]');
@@ -802,6 +807,108 @@ describe('CLI command modules smoke', () => {
 
     expect(narrative.summary.pass).toBeGreaterThan(0);
     expect(narrative.results[0].suggestedAction).toEqual(expect.any(String));
+  });
+
+  it('runs story onboarding, creative report, preview, and apply as JSON', async () => {
+    const cwd = await makeTempDir();
+    await execFileAsync('node', [
+      cliPath,
+      'init',
+      'smoke',
+      '--agent',
+      'generic',
+      '--method',
+      'three-act',
+      '--no-git'
+    ], { cwd });
+
+    const projectPath = path.join(cwd, 'smoke');
+    const storyResult = await execFileAsync('node', [
+      cliPath,
+      'story:new',
+      '法术编译纪元',
+      '--idea',
+      '异界穿越、轻松冒险、编程施法',
+      '--json'
+    ], { cwd: projectPath });
+    const story = JSON.parse(storyResult.stdout);
+
+    expect(story.story).toBe('法术编译纪元');
+    await expect(readFile(path.join(projectPath, 'stories', '法术编译纪元', 'idea.md'), 'utf-8'))
+      .resolves.toContain('## 用户原文');
+
+    const nextResult = await execFileAsync('node', [
+      cliPath,
+      'next',
+      '法术编译纪元',
+      '--json'
+    ], { cwd: projectPath });
+    const next = JSON.parse(nextResult.stdout);
+
+    expect(next.stage).toBe('idea');
+    expect(next.actions[0].command).toBe('novel interview 法术编译纪元');
+
+    await execFileAsync('node', [
+      cliPath,
+      'interview',
+      '法术编译纪元',
+      '--premise',
+      '异界穿越、轻松冒险、编程施法',
+      '--answers',
+      'core.premise=编程施法只是工具，开局仍然是轻松冒险。;magic.rule-hardness=中间路线，关键战斗讲规则，日常冒险保持轻巧。',
+      '--max-questions',
+      '2',
+      '--json'
+    ], { cwd: projectPath });
+
+    const reportResult = await execFileAsync('node', [
+      cliPath,
+      'creative:report',
+      '法术编译纪元',
+      '--json'
+    ], { cwd: projectPath });
+    const report = JSON.parse(reportResult.stdout);
+
+    expect(report.confirmed).toEqual(expect.arrayContaining([
+      expect.objectContaining({ questionId: 'core.premise' })
+    ]));
+
+    const previewResult = await execFileAsync('node', [
+      cliPath,
+      'preview',
+      'specify',
+      '法术编译纪元',
+      '--json'
+    ], { cwd: projectPath });
+    const preview = JSON.parse(previewResult.stdout);
+
+    expect(preview.record.kind).toBe('specify');
+    expect(preview.record.risks).toEqual([]);
+
+    const dryRunResult = await execFileAsync('node', [
+      cliPath,
+      'apply',
+      preview.record.id,
+      '--json'
+    ], { cwd: projectPath });
+    const dryRun = JSON.parse(dryRunResult.stdout);
+
+    expect(dryRun.dryRun).toBe(true);
+    await expect(readFile(path.join(projectPath, 'stories', '法术编译纪元', 'specification.md'), 'utf-8'))
+      .rejects.toThrow();
+
+    const applyResult = await execFileAsync('node', [
+      cliPath,
+      'apply',
+      preview.record.id,
+      '--yes',
+      '--json'
+    ], { cwd: projectPath });
+    const applied = JSON.parse(applyResult.stdout);
+
+    expect(applied.applied).toBe(true);
+    await expect(readFile(path.join(projectPath, 'stories', '法术编译纪元', 'specification.md'), 'utf-8'))
+      .resolves.toContain('## 用户已确认');
   });
 
   it('runs dialogue, branch, promise, and tension commands as JSON', async () => {

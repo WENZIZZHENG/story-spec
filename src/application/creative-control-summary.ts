@@ -1,6 +1,10 @@
 import path from 'node:path';
 import type { ProjectFileSystem } from './project-ports.js';
 import type { ClarificationRecord } from './manage-clarifications.js';
+import {
+  hasClarificationAnswerContent,
+  hasResolvedClarificationAnswer
+} from '../domain/clarification-answer-utils.js';
 
 export interface CreativeControlSummary {
   hasClarifications: boolean;
@@ -22,23 +26,11 @@ export interface SummarizeCreativeControlInput {
   fallbackNextQuestions?: string[];
 }
 
-const hasAnswerContent = (answer: unknown): boolean => {
-  if (typeof answer === 'string') {
-    return answer.trim().length > 0;
-  }
-
-  if (Array.isArray(answer)) {
-    return answer.some(hasAnswerContent);
-  }
-
-  return typeof answer === 'number' || typeof answer === 'boolean';
-};
-
 const hasConfirmedAnswer = (record: ClarificationRecord, questionId: string): boolean =>
   record.answers.some(answer =>
     answer.questionId === questionId
     && answer.confirmed
-    && hasAnswerContent(answer.answer)
+    && hasResolvedClarificationAnswer(answer.answer)
   );
 
 const emptySummary = (
@@ -65,10 +57,10 @@ const summarizeRecord = (
   paths: Pick<CreativeControlSummary, 'recordPath' | 'markdownPath'>
 ): CreativeControlSummary => {
   const confirmedDecisions = record.answers.filter(answer =>
-    answer.confirmed && hasAnswerContent(answer.answer)
+    answer.confirmed && hasResolvedClarificationAnswer(answer.answer)
   ).length;
   const unconfirmedAiAnswers = record.answers.filter(answer =>
-    answer.source === 'ai-suggested' && !answer.confirmed && hasAnswerContent(answer.answer)
+    answer.source === 'ai-suggested' && !answer.confirmed && hasClarificationAnswerContent(answer.answer)
   );
   const pendingRequiredQuestions = record.questions.filter(question =>
     question.required && !hasConfirmedAnswer(record, question.id)

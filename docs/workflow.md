@@ -17,7 +17,8 @@
 
 ```mermaid
 graph TD
-    Z[idea - 一句话灵感] --> C[/clarify or novel interview - 创作访谈/]
+    Z[novel story:new - 一句话灵感] --> N[novel next - 下一步导航]
+    N --> C[/clarify or novel interview - 创作访谈/]
     A[/constitution - 创作宪法/] --> C
     C --> B[/specify preview - 故事规格预览/]
     C --> H[/checklist - 规格质量核查/]
@@ -73,22 +74,21 @@ cd 我的小说
 
 ```
 我的小说/
-├── templates/         # 命令模板（参考spec-kit）
-│   └── commands/      # 各种创作命令
-├── memory/            # 创作记忆（风格、设定）
-│   ├── constitution.md # 创作宪法
-│   └── style.md       # 风格规范
-├── specs/             # 生成的作品（参考spec-kit）
-│   └── 001-故事名/
-│       ├── spec.md    # 故事规格
-│       ├── plan.md    # 创作计划
-│       ├── tasks.md   # 任务列表
-│       ├── chapters/  # 章节内容
-│       ├── characters/# 角色设定
-│       └── worldbuilding/ # 世界观
-└── scripts/           # 辅助脚本
-    ├── bash/          # Bash 脚本
-    └── powershell/    # PowerShell 脚本
+├── .specify/                    # 项目配置、命令、模板和 preview
+│   ├── commands/                # Agent 可读取的命令文档
+│   ├── previews/                # CLI 写入前预览
+│   └── memory/                  # 创作宪法和长期记忆
+├── stories/
+│   └── 法术编译纪元/
+│       ├── idea.md              # 用户原始创意和待澄清问题
+│       ├── clarifications.json  # 结构化澄清记录
+│       ├── clarifications.md    # 面向用户审阅的澄清记录
+│       ├── specification.md     # 确认后写入的故事规格
+│       ├── creative-plan.md     # 创作计划
+│       ├── tasks.md             # 写作任务
+│       └── content/             # 正文章节
+├── spec/                        # world/canon/graph/voice/tracking 等共享资产
+└── AGENTS.md                    # Agent 写作边界
 ```
 
 ## 阶段二：创作规划

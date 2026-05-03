@@ -37,14 +37,16 @@ npm install -g novel-writer-cn
 ```bash
 novel init my-novel --agent codex
 cd my-novel
-mkdir -p stories/idea-demo
-printf "# 一句话灵感\n\n异界穿越、轻松冒险、编程施法、慢热感情、文明级威胁。建设流和思想改造只是支撑工具。\n" > stories/idea-demo/idea.md
-novel interview idea-demo --premise "异界穿越、轻松冒险、编程施法、慢热感情、文明级威胁" --max-questions 6
+novel story:new 法术编译纪元 --idea "异界穿越、轻松冒险、编程施法、慢热感情、文明级威胁。建设流和思想改造只是支撑工具。"
+novel next 法术编译纪元
+novel interview 法术编译纪元 --premise "异界穿越、轻松冒险、编程施法、慢热感情、文明级威胁" --max-questions 6
+novel creative:report 法术编译纪元
 novel status
 novel validate
 ```
 
 `novel interview` 会写入 `stories/<story>/clarifications.json` 和 `clarifications.md`，并输出一段可复制到 Codex/Claude/Gemini 的 `/novel-specify` 输入。它不会直接生成完整规格；未回答的 required 问题会继续保留为 `[需要澄清]`。
+需要写入正式规格时，先运行 `novel preview specify <story>`，确认无 blocking 风险后再 `novel apply <preview-id> --yes`。
 
 常见初始化方式：
 
@@ -82,7 +84,7 @@ Novel Writer 有两类入口，需要分清：
 推荐创作流程通常是：
 
 ```text
-idea -> interview/clarify -> /specify preview -> /plan -> /tasks -> /write -> /review
+story:new -> next -> interview/clarify -> preview specify -> apply -> /plan -> /tasks -> /write -> /review
 ```
 
 如果你已经在 agent 中，可以使用 `/clarify` 继续创作访谈；如果只想在终端里操作，用 `novel interview [story]` 或 `novel clarify [story]`。低信息量输入会优先进入澄清和预览，不会静默落盘成正典。

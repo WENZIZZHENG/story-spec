@@ -189,6 +189,97 @@ describe('validateProject', () => {
     expect(result.issues.map(issue => issue.code)).not.toContain('MISSING_TASKS');
   });
 
+  it('validates clarification records and flags unconfirmed suggestions used downstream', async () => {
+    const projectRoot = path.join(os.tmpdir(), 'memory-novel-clarification-gate');
+    const packageRoot = path.join(os.tmpdir(), 'memory-novel-clarification-gate-package');
+    const fileSystem = new MemoryFileSystem(projectRoot);
+    const storyPath = path.join(projectRoot, 'stories', 'demo');
+
+    await fileSystem.ensureDir(path.join(packageRoot, 'templates'));
+    await fileSystem.writeJson(path.join(projectRoot, '.specify', 'config.json'), {
+      name: 'clarification-gate',
+      type: 'novel',
+      version: '1.0.0'
+    });
+    await fileSystem.writeFile(path.join(projectRoot, '.specify', 'agent-contract.md'), '# contract');
+    await fileSystem.writeFile(path.join(projectRoot, 'AGENTS.md'), '# agents');
+    await fileSystem.ensureDir(path.join(projectRoot, 'spec', 'tracking'));
+    await fileSystem.ensureDir(path.join(projectRoot, 'spec', 'world'));
+    await fileSystem.ensureDir(path.join(projectRoot, 'spec', 'canon'));
+    await fileSystem.ensureDir(path.join(projectRoot, 'spec', 'graph'));
+    await fileSystem.ensureDir(path.join(projectRoot, 'spec', 'voice'));
+    await fileSystem.writeFile(path.join(storyPath, 'idea.md'), '# demo');
+    await fileSystem.writeJson(path.join(storyPath, 'clarifications.json'), {
+      schemaVersion: '1.0',
+      story: 'demo',
+      premise: '异界穿越',
+      createdAt: '2026-05-03T00:00:00.000Z',
+      updatedAt: '2026-05-03T00:00:00.000Z',
+      questions: [
+        {
+          id: 'core.premise',
+          stage: 'specify',
+          topic: 'premise',
+          question: '故事最想保留什么？',
+          whyItMatters: '决定创作核心。',
+          type: 'textarea',
+          required: true,
+          options: [],
+          exampleAnswers: ['轻松冒险。', '文明谜团。'],
+          dependsOn: []
+        },
+        {
+          id: 'threat.shape',
+          stage: 'specify',
+          topic: 'threat',
+          question: '文明级威胁是什么？',
+          whyItMatters: '影响长线结构。',
+          type: 'textarea',
+          required: false,
+          options: [],
+          exampleAnswers: ['旧文明运行时重启。', '群星协议崩塌。'],
+          dependsOn: []
+        }
+      ],
+      answers: [
+        {
+          questionId: 'core.premise',
+          answer: '稍后决定',
+          source: 'user-explicit',
+          confidence: 1,
+          confirmed: true,
+          createdAt: '2026-05-03T00:00:00.000Z',
+          updatedAt: '2026-05-03T00:00:00.000Z'
+        },
+        {
+          questionId: 'threat.shape',
+          answer: '旧文明运行时重启',
+          source: 'ai-suggested',
+          confidence: 0.6,
+          confirmed: false,
+          createdAt: '2026-05-03T00:00:00.000Z',
+          updatedAt: '2026-05-03T00:00:00.000Z'
+        }
+      ]
+    }, { spaces: 2 });
+    await fileSystem.writeFile(path.join(storyPath, 'specification.md'), '旧文明运行时重启');
+
+    const result = await validateProject({
+      projectRoot,
+      packageRoot,
+      fileSystem
+    });
+
+    expect(result.issues).toEqual(expect.arrayContaining([
+      expect.objectContaining({
+        code: 'MISSING_REQUIRED_CLARIFICATION_ANSWER'
+      }),
+      expect.objectContaining({
+        code: 'CREATIVE_INTENT_DRIFT_UNCONFIRMED_AI_SUGGESTION'
+      })
+    ]));
+  });
+
   it('reports missing world, canon, graph, and voice directories as warnings for old projects', async () => {
     const projectRoot = path.join(os.tmpdir(), 'memory-novel-missing-world-canon');
     const packageRoot = path.join(os.tmpdir(), 'memory-novel-missing-world-canon-package');

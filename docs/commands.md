@@ -20,6 +20,44 @@
 
 基于规格驱动开发（SDD）的系统化创作流程。
 
+## 终端创作导航命令
+
+这些命令在终端运行，用于保护早期创意空间，适合在 `/specify` 前使用。
+
+### `novel story:new <name>`
+
+创建 `stories/<story>/idea.md`，只记录用户原始创意、待澄清问题和下一步命令。
+
+```bash
+novel story:new 法术编译纪元 --idea "异界穿越、轻松冒险、编程施法、慢热感情、文明级威胁"
+```
+
+### `novel next [story]`
+
+根据当前故事阶段给出 2-4 个可复制下一步动作。
+
+```bash
+novel next 法术编译纪元
+```
+
+### `novel creative:report [story]`
+
+查看用户已确认、需要澄清、AI 建议待确认和可能偏离原意的内容。
+
+```bash
+novel creative:report 法术编译纪元
+```
+
+### `novel preview specify [story]` / `novel apply <preview-id>`
+
+生成 `specification.md` 写入前预览。`apply` 默认只预览，必须加 `--yes` 才会写入正式目标；存在 blocking 风险时会阻止写入。
+
+```bash
+novel preview specify 法术编译纪元
+novel apply specify-法术编译纪元-20260503-1234567890
+novel apply specify-法术编译纪元-20260503-1234567890 --yes
+```
+
 ### 1. `/constitution` - 创作宪法
 
 **用途**：定义最高层级的创作原则和价值观

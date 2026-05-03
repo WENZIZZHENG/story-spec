@@ -6,9 +6,7 @@ Active。本文是 Novel Writer 当前唯一的活跃待办入口。详细规则
 
 ## 当前待办
 
-| 优先级 | 路线 | 状态 | 范围 | 下一步 |
-| --- | --- | --- | --- | --- |
-| P0 | [新故事引导与创作导航路线图](story-onboarding-navigation-roadmap.md) | Planned | 新故事入口、下一步导航、澄清校验、创作控制权报告、访谈体验、CLI preview/apply | 等待确认后从 E0 `novel story:new` 开始 |
+暂无活跃待办。已完成路线见 [todo-archive.md](todo-archive.md)；新增长期路线时，先按 [todo-governance.md](todo-governance.md) 建立专题 roadmap 并在本文登记。
 
 ## 暂不作为活跃待办
 
@@ -16,6 +14,7 @@ Active。本文是 Novel Writer 当前唯一的活跃待办入口。详细规则
 | --- | --- | --- |
 | [archive/full-refactor/full-refactor-todo.md](archive/full-refactor/full-refactor-todo.md) | A/B/C 主路线已完成，当前仅保留历史索引 | [todo-archive.md](todo-archive.md#full-refactor-主路线) |
 | [archive/completed-roadmaps/creative-control-roadmap.md](archive/completed-roadmaps/creative-control-roadmap.md) | 创作控制权 D0-D10 已完成，当前无后续活跃批次 | [todo-archive.md](todo-archive.md#创作控制权体验优化) |
+| [archive/completed-roadmaps/story-onboarding-navigation-roadmap.md](archive/completed-roadmaps/story-onboarding-navigation-roadmap.md) | 新故事引导与创作导航 E0-E5 已完成，当前无后续活跃批次 | [todo-archive.md](todo-archive.md#新故事引导与创作导航) |
 | [archive/completed-roadmaps/worldbuilding-quality-roadmap.md](archive/completed-roadmaps/worldbuilding-quality-roadmap.md) | 第一版 Worldbuilding 能力已完成并被 full-refactor B0-B3 覆盖 | [todo-archive.md](todo-archive.md#worldbuilding-quality-roadmap) |
 | [archive/completed-roadmaps/command-onboarding.md](archive/completed-roadmaps/command-onboarding.md) | 输入澄清引导已实现，后续创作控制权增强已完成归档 | [todo-archive.md](todo-archive.md#命令输入澄清引导) |
 | `changes/*.md` | changeset 只记录已发生变化，不作为待办入口 | [todo-archive.md](todo-archive.md#changeset-记录) |

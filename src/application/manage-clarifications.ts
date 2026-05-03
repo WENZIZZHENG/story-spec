@@ -6,6 +6,9 @@ import type {
   ClarificationQuestion
 } from '../domain/clarification.js';
 import {
+  hasResolvedClarificationAnswer
+} from '../domain/clarification-answer-utils.js';
+import {
   renderExampleBranchMarkdown,
   type ExampleBranch
 } from '../domain/example-branch.js';
@@ -139,7 +142,11 @@ export const renderClarificationMarkdown = (record: ClarificationRecord): string
   const confirmed = record.answers.filter(answer => answer.confirmed && answer.source !== 'ai-suggested');
   const aiSuggestions = record.answers.filter(answer => answer.source === 'ai-suggested' && !answer.confirmed);
   const pendingQuestions = record.questions.filter(question =>
-    question.required && !record.answers.some(answer => answer.questionId === question.id && answer.confirmed)
+    question.required && !record.answers.some(answer =>
+      answer.questionId === question.id
+      && answer.confirmed
+      && hasResolvedClarificationAnswer(answer.answer)
+    )
   );
   const examples = record.questions.flatMap(question => question.exampleAnswers.slice(0, 2)).slice(0, 6);
   const exampleBranches = record.questions.slice(0, 3).map((question, index) => ({

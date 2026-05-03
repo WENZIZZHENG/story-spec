@@ -9,6 +9,12 @@ import {
   type ValidationSeverity
 } from '../validation/schema/index.js';
 import {
+  parseClarificationAnswerSet,
+  parseClarificationQuestionSet,
+  validateClarificationSession,
+  type ClarificationIssue
+} from '../domain/clarification-schema.js';
+import {
   createDefaultWritingRules,
   runWritingRules,
   type WritingRuleIssue
@@ -37,6 +43,11 @@ import {
   createEmptyStoryStageCounts,
   type StoryMaturityStage
 } from '../domain/story-stage.js';
+import {
+  detectCreativeIntentDrift,
+  type CreativeIntentDriftIssue
+} from './detect-creative-intent-drift.js';
+import type { ClarificationRecord } from './manage-clarifications.js';
 
 export type ProjectValidationIssueCode =
   | ValidationIssue['code']
@@ -46,6 +57,9 @@ export type ProjectValidationIssueCode =
   | StoryStructureIssue['code']
   | VoiceIssue['code']
   | PresetDoctorIssue['code']
+  | ClarificationIssue['code']
+  | CreativeIntentDriftIssue['code']
+  | 'MISSING_CLARIFICATION_RECORD'
   | 'MISSING_PROJECT_CONFIG'
   | 'MISSING_PROJECT_DIR'
   | 'MISSING_WORLD_DIR'
@@ -152,6 +166,13 @@ const toPresetProjectIssue = (issue: PresetDoctorIssue): ProjectValidationIssue 
   severity: issue.severity,
   code: issue.code,
   path: issue.path,
+  message: issue.message
+});
+
+const toClarificationProjectIssue = (storyPath: string, issue: ClarificationIssue): ProjectValidationIssue => ({
+  severity: issue.severity,
+  code: issue.code,
+  path: `${path.join(storyPath, 'clarifications.json')}#${issue.path}`,
   message: issue.message
 });
 
@@ -358,6 +379,56 @@ const validateTemplates = async (
   };
 };
 
+const validateClarificationRecords = async (
+  fs: ProjectFileSystem,
+  artifactScan: Awaited<ReturnType<typeof scanStoryArtifacts>>
+): Promise<ProjectValidationIssue[]> => {
+  const issues: ProjectValidationIssue[] = [];
+
+  for (const story of artifactScan.stories) {
+    const recordPath = path.join(story.path, 'clarifications.json');
+    const hasClarificationArtifact = story.artifacts.some(artifact =>
+      artifact.kind === 'clarifications' && artifact.exists
+    );
+
+    if (!hasClarificationArtifact) {
+      continue;
+    }
+
+    if (!await fs.pathExists(recordPath)) {
+      issues.push(createIssue(
+        'MISSING_CLARIFICATION_RECORD',
+        recordPath,
+        '存在澄清 Markdown，但缺少可验证的 clarifications.json；请运行 novel interview 生成结构化澄清记录。',
+        'warning'
+      ));
+      continue;
+    }
+
+    try {
+      const record = await fs.readJson<ClarificationRecord>(recordPath);
+      const questionIssues = parseClarificationQuestionSet(JSON.stringify(record), recordPath).issues;
+      const answerIssues = parseClarificationAnswerSet(JSON.stringify(record), recordPath).issues;
+      issues.push(...questionIssues.map(issue => toClarificationProjectIssue(story.path, issue)));
+      issues.push(...answerIssues.map(issue => toClarificationProjectIssue(story.path, issue)));
+      issues.push(...validateClarificationSession({
+        questions: Array.isArray(record.questions) ? record.questions : [],
+        answers: Array.isArray(record.answers) ? record.answers : []
+      }).map(issue => toClarificationProjectIssue(story.path, issue)));
+    } catch (error) {
+      const detail = error instanceof Error ? error.message : String(error);
+      issues.push(createIssue(
+        'INVALID_CLARIFICATION_DOCUMENT',
+        recordPath,
+        `clarifications.json 无法解析：${detail}`,
+        'error'
+      ));
+    }
+  }
+
+  return issues;
+};
+
 const readProjectConfig = async (
   fs: ProjectFileSystem,
   projectRoot: string
@@ -467,6 +538,12 @@ const validateAgentContract = async (
 export const validateProject = async (input: ValidateProjectInput): Promise<ProjectValidationResult> => {
   const { projectRoot, fileSystem: fs } = input;
   const artifactScan = await scanStoryArtifacts({ projectRoot, fileSystem: fs });
+  const clarificationIssues = await validateClarificationRecords(fs, artifactScan);
+  const driftResult = await detectCreativeIntentDrift({
+    projectRoot,
+    fileSystem: fs,
+    artifactScan
+  });
   const trackingResult = await validateTrackingFiles(fs, projectRoot);
   const worldResult = await validateWorldFiles(fs, projectRoot);
   const canonResult = await validateCanonFiles(fs, projectRoot);
@@ -506,7 +583,14 @@ export const validateProject = async (input: ValidateProjectInput): Promise<Proj
     ...taskIssues,
     ...writingRuleResult.issues.map(toProjectIssue),
     ...agentContractResult.issues,
-    ...templateResult.issues
+    ...templateResult.issues,
+    ...clarificationIssues,
+    ...driftResult.issues.map(issue => createIssue(
+      issue.code,
+      issue.path,
+      `${issue.message} 建议：${issue.suggestedAction}`,
+      issue.severity
+    ))
   ]);
   const issueCounts = countIssuesBySeverity(issues);
 

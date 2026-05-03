@@ -6,6 +6,10 @@ import {
   type ClarificationRecord
 } from './manage-clarifications.js';
 import {
+  clarificationAnswerToText,
+  hasResolvedClarificationAnswer
+} from '../domain/clarification-answer-utils.js';
+import {
   loadClarificationExampleBranches,
   loadClarificationQuestionPacks,
   selectClarificationQuestions,
@@ -149,6 +153,53 @@ const createUserAnswer = (
   updatedAt: timestamp
 });
 
+const answerMatchesDependency = (
+  answer: unknown,
+  dependency: ClarificationQuestion['dependsOn'][number]
+): boolean => {
+  const text = clarificationAnswerToText(answer);
+
+  if (dependency.answerIncludes && !text.includes(dependency.answerIncludes)) {
+    return false;
+  }
+
+  if (dependency.answerEquals && text.trim() !== dependency.answerEquals) {
+    return false;
+  }
+
+  return true;
+};
+
+const isQuestionAvailable = (
+  question: ClarificationQuestion,
+  existingAnswers: Map<string, ClarificationAnswer>
+): boolean => question.dependsOn.length === 0 || question.dependsOn.every(dependency => {
+  const answer = existingAnswers.get(dependency.questionId);
+  return Boolean(answer && answer.confirmed && answerMatchesDependency(answer.answer, dependency));
+});
+
+const filterQuestionsForCurrentRound = (
+  selected: ClarificationQuestion[],
+  existingRecord: ClarificationRecord | undefined
+): ClarificationQuestion[] => {
+  const existingAnswers = new Map<string, ClarificationAnswer>(
+    existingRecord?.answers.map(answer => [answer.questionId, answer]) ?? []
+  );
+
+  return selected.filter(question => {
+    const existingAnswer = existingAnswers.get(question.id);
+    if (
+      existingAnswer?.confirmed
+      && hasResolvedClarificationAnswer(existingAnswer.answer)
+      && existingAnswer.source !== 'ai-suggested'
+    ) {
+      return false;
+    }
+
+    return isQuestionAvailable(question, existingAnswers);
+  });
+};
+
 const readExistingRecord = async (
   fs: ProjectFileSystem,
   jsonPath: string
@@ -265,10 +316,11 @@ export const interviewStory = async (
     premise,
     maxQuestions: input.maxQuestions
   });
+  const roundQuestions = filterQuestionsForCurrentRound(prepared.questions, state.existingRecord);
   const timestamp = (input.now ?? (() => new Date()))().toISOString();
   const existingRecord = state.existingRecord;
   const answerUpdates = buildAnswerUpdates(
-    prepared.questions,
+    roundQuestions,
     input.answers ?? {},
     input.useExamples ?? false
   );
@@ -296,7 +348,7 @@ export const interviewStory = async (
     premise,
     createdAt: existingRecord?.createdAt ?? timestamp,
     updatedAt: timestamp,
-    questions: mergeQuestions(existingRecord?.questions ?? [], prepared.questions),
+    questions: mergeQuestions(existingRecord?.questions ?? [], roundQuestions),
     answers: [...answerMap.values()]
   };
   const markdown = renderClarificationMarkdown(record);

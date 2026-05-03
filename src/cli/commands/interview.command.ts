@@ -65,6 +65,21 @@ const answerPreview = (answer: unknown): string => {
   return Array.isArray(answer) ? answer.join('、') : String(answer);
 };
 
+const DEFERRED_CHOICES = [
+  {
+    name: '不知道',
+    value: '不知道'
+  },
+  {
+    name: '稍后决定',
+    value: '稍后决定'
+  },
+  {
+    name: '给我示例',
+    value: '给我示例'
+  }
+];
+
 const resolveExampleInput = (value: string, question: ClarificationQuestion): string | undefined => {
   const exampleMatch = value.match(/^example:(\d+)$/i);
   if (!exampleMatch) {
@@ -92,7 +107,7 @@ const renderQuestionMessage = (
     options ? chalk.dim(options) : '',
     chalk.dim(`旧答案：${answerPreview(existingAnswer)}`),
     chalk.dim(`可复制示例：\n${examples || '暂无示例。'}`),
-    chalk.dim('直接回车=保留/稍后；输入 example:1 可使用第 1 个示例。')
+    chalk.dim('直接回车=保留/稍后；可输入“不知道”“稍后决定”“给我示例”；输入 example:1 可使用第 1 个示例。')
   ].filter(Boolean).join('\n');
 };
 
@@ -110,6 +125,7 @@ const askListQuestion = async (
       name: `使用示例 ${index + 1}：${example}`,
       value: `example:${index + 1}`
     })),
+    ...DEFERRED_CHOICES,
     {
       name: `稍后回答 / 保留旧答案（${answerPreview(existingAnswer)}）`,
       value: skipValue
@@ -136,7 +152,7 @@ const askListQuestion = async (
     return answer.value.slice('option:'.length);
   }
 
-  return resolveExampleInput(answer.value, question);
+  return resolveExampleInput(answer.value, question) ?? answer.value;
 };
 
 const askCheckboxQuestion = async (
@@ -151,7 +167,8 @@ const askCheckboxQuestion = async (
     ...question.exampleAnswers.slice(0, 3).map((example, index) => ({
       name: `使用示例 ${index + 1}：${example}`,
       value: `example:${index + 1}`
-    }))
+    })),
+    ...DEFERRED_CHOICES
   ];
   const answer = await inquirer.prompt<{ values: string[] }>([
     {
@@ -170,7 +187,7 @@ const askCheckboxQuestion = async (
   const values = answer.values
     .map(value => value.startsWith('option:')
       ? value.slice('option:'.length)
-      : resolveExampleInput(value, question))
+      : resolveExampleInput(value, question) ?? value)
     .filter((value): value is string => typeof value === 'string' && value.trim().length > 0);
 
   return values.length > 0 ? values : undefined;

@@ -3,6 +3,10 @@ import type { ProjectFileSystem } from './project-ports.js';
 import type { ClarificationAnswer, ClarificationQuestion } from '../domain/clarification.js';
 import type { ClarificationRecord } from './manage-clarifications.js';
 import {
+  hasClarificationAnswerContent,
+  hasResolvedClarificationAnswer
+} from '../domain/clarification-answer-utils.js';
+import {
   scanStoryArtifacts,
   type ArtifactScanResult,
   type ScannedStoryProject
@@ -76,23 +80,11 @@ const STOP_TERMS = new Set([
 const isNonEmptyString = (value: unknown): value is string =>
   typeof value === 'string' && value.trim().length > 0;
 
-const hasAnswerContent = (answer: unknown): boolean => {
-  if (typeof answer === 'string') {
-    return answer.trim().length > 0;
-  }
-
-  if (Array.isArray(answer)) {
-    return answer.some(hasAnswerContent);
-  }
-
-  return typeof answer === 'number' || typeof answer === 'boolean';
-};
-
 const hasConfirmedAnswer = (record: ClarificationRecord, questionId: string): boolean =>
   record.answers.some(answer =>
     answer.questionId === questionId
     && answer.confirmed
-    && hasAnswerContent(answer.answer)
+    && hasResolvedClarificationAnswer(answer.answer)
   );
 
 const flattenAnswerText = (answer: unknown): string[] => {
@@ -246,7 +238,7 @@ const detectUnconfirmedSuggestionUse = (
   const issues: CreativeIntentDriftIssue[] = [];
 
   for (const answer of record.answers) {
-    if (answer.source !== 'ai-suggested' || answer.confirmed || !hasAnswerContent(answer.answer)) {
+    if (answer.source !== 'ai-suggested' || answer.confirmed || !hasClarificationAnswerContent(answer.answer)) {
       continue;
     }
 

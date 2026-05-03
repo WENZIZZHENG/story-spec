@@ -136,6 +136,54 @@ describe('interviewStory', () => {
     expect(result.record.questions.map(question => question.id)).toContain('core.protagonist');
   });
 
+  it('skips already confirmed answers and keeps deferred answers open', async () => {
+    const { projectRoot, fileSystem, storyPath } = await createProject();
+    await fileSystem.writeJson(path.join(storyPath, 'clarifications.json'), {
+      schemaVersion: '1.0',
+      story: 'idea-demo',
+      premise: '异界穿越、编程施法',
+      createdAt: '2026-05-03T08:00:00.000Z',
+      updatedAt: '2026-05-03T08:00:00.000Z',
+      questions: [
+        {
+          id: 'core.premise',
+          stage: 'specify',
+          topic: 'premise',
+          question: '故事最想保留什么？',
+          whyItMatters: '决定创作核心。',
+          type: 'textarea',
+          required: true,
+          options: [],
+          exampleAnswers: ['轻松冒险。', '文明谜团。'],
+          dependsOn: []
+        }
+      ],
+      answers: [
+        {
+          questionId: 'core.premise',
+          answer: '稍后决定',
+          source: 'user-explicit',
+          confidence: 1,
+          confirmed: true,
+          createdAt: '2026-05-03T08:00:00.000Z',
+          updatedAt: '2026-05-03T08:00:00.000Z'
+        }
+      ]
+    }, { spaces: 2 });
+
+    const result = await interviewStory({
+      projectRoot,
+      fileSystem,
+      story: 'idea-demo',
+      premise: '异界穿越、编程施法',
+      maxQuestions: 4,
+      now: () => new Date('2026-05-03T12:00:00.000Z')
+    });
+
+    expect(result.record.questions.map(question => question.id)).toContain('core.premise');
+    expect(result.markdown).toContain('core.premise：故事最想保留什么？');
+  });
+
   it('can intentionally use examples as user-selected starter answers', async () => {
     const { projectRoot, fileSystem } = await createProject();
 

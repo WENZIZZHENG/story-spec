@@ -8,6 +8,11 @@ import type {
   ClarificationQuestionType,
   CreativeDecision
 } from './clarification.js';
+import {
+  clarificationAnswerToText,
+  hasClarificationAnswerContent,
+  hasResolvedClarificationAnswer
+} from './clarification-answer-utils.js';
 
 export type ClarificationIssueSeverity = 'error' | 'warning' | 'info';
 
@@ -263,22 +268,6 @@ export const parseClarificationQuestionSet = (
   return { questions, issues };
 };
 
-const hasAnswerContent = (answer: unknown): boolean => {
-  if (isNonEmptyString(answer)) {
-    return true;
-  }
-
-  if (Array.isArray(answer)) {
-    return answer.some(hasAnswerContent);
-  }
-
-  if (typeof answer === 'number' || typeof answer === 'boolean') {
-    return true;
-  }
-
-  return false;
-};
-
 export const parseClarificationAnswerSet = (
   content: string,
   filePath: string
@@ -311,7 +300,7 @@ export const parseClarificationAnswerSet = (
     }
 
     const questionId = readRequiredString(candidate, 'questionId', basePath, issues, 'MISSING_CLARIFICATION_ANSWER_FIELD');
-    if (!hasAnswerContent(candidate.answer)) {
+    if (!hasClarificationAnswerContent(candidate.answer)) {
       issues.push(issue('MISSING_CLARIFICATION_ANSWER_FIELD', `${basePath}.answer`, 'ClarificationAnswer 缺少 answer'));
     }
 
@@ -334,7 +323,7 @@ export const parseClarificationAnswerSet = (
       issues.push(issue('MISSING_CLARIFICATION_ANSWER_FIELD', `${basePath}.updatedAt`, 'ClarificationAnswer 缺少 updatedAt'));
     }
 
-    if (!questionId || !hasAnswerContent(candidate.answer) || !ANSWER_SOURCES.has(source as ClarificationAnswerSource) || !Number.isFinite(confidence) || confidence < 0 || confidence > 1 || !createdAt || !updatedAt) {
+    if (!questionId || !hasClarificationAnswerContent(candidate.answer) || !ANSWER_SOURCES.has(source as ClarificationAnswerSource) || !Number.isFinite(confidence) || confidence < 0 || confidence > 1 || !createdAt || !updatedAt) {
       return;
     }
 
@@ -352,23 +341,11 @@ export const parseClarificationAnswerSet = (
   return { answers, issues };
 };
 
-const answerToSearchText = (answer: unknown): string => {
-  if (Array.isArray(answer)) {
-    return answer.map(answerToSearchText).join('\n');
-  }
-
-  if (answer === undefined || answer === null) {
-    return '';
-  }
-
-  return String(answer);
-};
-
 const findAnswer = (
   answers: ClarificationAnswer[],
   questionId: string
 ): ClarificationAnswer | undefined =>
-  answers.find(answer => answer.questionId === questionId && hasAnswerContent(answer.answer));
+  answers.find(answer => answer.questionId === questionId && hasResolvedClarificationAnswer(answer.answer));
 
 const isDependencySatisfied = (
   dependency: ClarificationDependency,
@@ -379,7 +356,7 @@ const isDependencySatisfied = (
     return false;
   }
 
-  const text = answerToSearchText(answer.answer);
+  const text = clarificationAnswerToText(answer.answer);
   if (dependency.answerIncludes && !text.includes(dependency.answerIncludes)) {
     return false;
   }

@@ -16,6 +16,9 @@ import { registerVoiceCommand } from './commands/voice.command.js';
 import { registerReviewCommand } from './commands/review.command.js';
 import { registerPresetCommand } from './commands/preset.command.js';
 import { registerWorkbenchCommand } from './commands/workbench.command.js';
+import { registerStoryOnboardingCommand } from './commands/story-onboarding.command.js';
+import { registerCreativeReportCommand } from './commands/creative-report.command.js';
+import { registerPreviewApplyCommand } from './commands/preview-apply.command.js';
 import chalk from 'chalk';
 import path from 'path';
 import { fileURLToPath } from 'url';
@@ -66,6 +69,9 @@ export function runProgram(argv: string[]): void {
   registerReviewCommand(program, { packageRoot });
   registerPresetCommand(program, { packageRoot });
   registerWorkbenchCommand(program);
+  registerStoryOnboardingCommand(program);
+  registerCreativeReportCommand(program);
+  registerPreviewApplyCommand(program);
   registerInfoCommand(program);
 
   program.on('--help', () => {
@@ -76,6 +82,8 @@ export function runProgram(argv: string[]): void {
     console.log('  $ novel init --here              # 在当前目录初始化');
     console.log('  $ novel check                    # 检查环境');
     console.log('  $ novel status                   # 查看项目接手状态');
+    console.log('  $ novel story:new 法术编译纪元 --idea "异界穿越、编程施法"');
+    console.log('  $ novel next 法术编译纪元        # 查看下一步创作导航');
     console.log('  $ novel validate                 # 校验项目结构和写作产物');
     console.log('  $ novel info                     # 查看写作方法');
     console.log('');
