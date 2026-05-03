@@ -21,6 +21,31 @@ describe('selectClarificationQuestions', () => {
     ]);
   });
 
+  it('loads question-level example branches with flavor, tradeoffs, and downstream impact', async () => {
+    const result = await loadClarificationQuestionPacks();
+    const magic = result.packs.find(pack => pack.id === 'magic-system');
+    const ruleHardness = magic?.questions.find(question => question.id === 'magic.rule-hardness');
+
+    expect(ruleHardness?.exampleBranches).toEqual([
+      expect.objectContaining({
+        label: '轻量隐喻',
+        answer: expect.stringContaining('轻量隐喻'),
+        flavor: expect.stringContaining('轻松'),
+        tradeoffs: expect.arrayContaining([expect.stringContaining('技术辨识度')]),
+        downstreamImpact: expect.stringContaining('阅读承诺'),
+        recommendedFor: expect.arrayContaining([expect.stringContaining('轻松冒险')])
+      }),
+      expect.objectContaining({
+        label: '中度规则',
+        downstreamImpact: expect.stringContaining('能力边界')
+      }),
+      expect.objectContaining({
+        label: '硬规则',
+        tradeoffs: expect.arrayContaining([expect.stringContaining('解释负担')])
+      })
+    ]);
+  });
+
   it('loads built-in example branch packs', async () => {
     const result = await loadClarificationExampleBranches();
 
@@ -69,6 +94,13 @@ describe('selectClarificationQuestions', () => {
       expect(item.question.whyItMatters.trim()).not.toBe('');
       expect(item.question.exampleAnswers.length).toBeGreaterThanOrEqual(2);
     }
+    expect(selection.selectedQuestions.some(item =>
+      (item.question.exampleBranches ?? []).some(branch =>
+        branch.flavor.trim().length > 0
+        && branch.downstreamImpact.trim().length > 0
+        && branch.tradeoffs.length > 0
+      )
+    )).toBe(true);
   });
 
   it('supports fewer questions for a gentle first round', async () => {

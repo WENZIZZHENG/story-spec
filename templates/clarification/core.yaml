@@ -19,6 +19,37 @@ questions:
       - 一个程序员穿越后把法术当运行时调试，但故事先从轻松小冒险开始。
       - 主角不急着称霸异界，而是逐步理解这个文明为什么会走向危机。
       - 建设和思想改造只是解决问题的工具，重点仍是冒险、关系和威胁揭示。
+    exampleBranches:
+      - label: 轻松冒险入口
+        answer: 编程施法是工具，第一卷先写小队冒险和异界日常异常。
+        flavor: 开局亲和、轻快，世界危机只露出细小裂缝。
+        tradeoffs:
+          - 文明级威胁揭示会慢一些。
+          - 需要让小冒险本身也有清楚回报。
+        downstreamImpact: 阅读承诺偏轻松冒险，成长路线从解决具体小问题开始。
+        recommendedFor:
+          - 慢热开局
+          - 想先体验世界乐趣
+      - label: 文明谜团入口
+        answer: 穿越和编程施法都指向第三次寂静，主角从局部异常追到文明真相。
+        flavor: 悬疑感更强，轻松感来自角色处理异常时的幽默和聪明。
+        tradeoffs:
+          - 大设定更早出现，需要控制解释密度。
+          - 冒险单元要持续留下线索。
+        downstreamImpact: 阅读承诺会更偏文明谜团；每卷需要设计阶段性揭示和回报。
+        recommendedFor:
+          - 喜欢长线伏笔
+          - 想让第三次寂静更早牵引主线
+      - label: 关系共创入口
+        answer: 核心创意是晏无用工程思维理解异界，同时被伙伴逼着理解人和制度。
+        flavor: 角色情感和价值碰撞更突出，能力爽点服务关系推进。
+        tradeoffs:
+          - 爽点不只来自变强，还来自互相改变。
+          - 需要尽早设计核心伙伴的立场和反驳能力。
+        downstreamImpact: 慢热感情和伙伴线会成为成长路线的一部分。
+        recommendedFor:
+          - 慢热感情
+          - 想让伙伴有真实功能
   - id: core.protagonist
     stage: specify
     topic: protagonist
@@ -30,6 +61,37 @@ questions:
       - 他擅长修 bug，但不擅长理解人，所以早期常把异界关系当系统问题处理。
       - 她理论强、行动慢，必须靠冒险伙伴把想法变成现场判断。
       - 他很会写脚本，却缺少工程纪律，魔法事故常由自己的捷径引发。
+    exampleBranches:
+      - label: 工程理性误判
+        answer: 晏无擅长把问题拆成流程，却常误以为人的立场也能像系统一样重构。
+        flavor: 幽默来自他认真但偏差的分析，成长来自学会尊重人的复杂性。
+        tradeoffs:
+          - 主角不会一开始就通吃社交和制度问题。
+          - 需要安排伙伴纠偏，避免主角显得冷漠。
+        downstreamImpact: 主角成长线会围绕“理解系统”到“理解人和组织”展开。
+        recommendedFor:
+          - 工科马列青年
+          - 慢热关系线
+      - label: 行动短板
+        answer: 晏无理论和复盘很强，但第一次进入危险现场会慢半拍。
+        flavor: 冒险感更强，伙伴能自然承担现场判断和保护功能。
+        tradeoffs:
+          - 前期爽点会更慢热。
+          - 需要给主角清楚的学习回报。
+        downstreamImpact: 核心伙伴更容易成为刚需，第一卷成长路线更扎实。
+        recommendedFor:
+          - 小队冒险
+          - 想避免主角开局无敌
+      - label: 快捷脚本后遗症
+        answer: 晏无喜欢写快速脚本救急，但异界魔法的副作用会把捷径变成麻烦。
+        flavor: 法术事故带喜剧感，也能制造有后果的小冲突。
+        tradeoffs:
+          - 需要控制事故重复感。
+          - 主角要逐步建立工程纪律。
+        downstreamImpact: 能力体系的失败代价会直接推动成长路线。
+        recommendedFor:
+          - 轻松冒险
+          - 编程施法事故喜剧
   - id: core.stage
     stage: specify
     topic: setting
@@ -51,6 +113,121 @@ questions:
       - 边境小城，问题看似很小，但每个异常都指向旧文明系统。
       - 学院工坊，主角先被当成奇怪学徒，慢慢暴露编程思路的价值。
       - 旅队路线，每站解决一个局部问题，同时积累世界真相。
+    exampleBranches:
+      - label: 边境小城
+        answer: 第一卷在边境小城，法术工具频繁小故障，贵族和学院都把它当成地方小事。
+        flavor: 生活感和冒险感强，大威胁从普通人的麻烦里露头。
+        tradeoffs:
+          - 舞台规模小，需要让地方利益结构足够鲜明。
+          - 主角影响力增长更慢但更可信。
+        downstreamImpact: 世界压力来自资源、税负、知识垄断和小异常的连锁后果。
+        recommendedFor:
+          - 轻松冒险
+          - 慢慢揭示第三次寂静
+      - label: 学院工坊
+        answer: 第一卷在学院工坊，知识被许可制度垄断，晏无的调试方法会触碰既得利益。
+        flavor: 规则学习、同伴关系和制度冲突更集中。
+        tradeoffs:
+          - 容易偏学院文，需要安排外部冒险打破封闭感。
+          - 知识垄断要有合理性，而不只是反派坏。
+        downstreamImpact: 势力冲突会围绕知识垄断、专利、资格审查展开。
+        recommendedFor:
+          - 编程施法学习线
+          - 想让学院和贵族早期登场
+      - label: 旅队路线
+        answer: 第一卷跟随旅队移动，每一站解决一个异常，也见到不同阶层如何承受旧规则。
+        flavor: 像旅行见闻，世界广度展开更快。
+        tradeoffs:
+          - 关系沉淀较难，需要固定小队核心。
+          - 单元冒险要有共同主线线索。
+        downstreamImpact: 文明威胁揭示会更碎片化，适合每站留下一个系统线索。
+        recommendedFor:
+          - 单元冒险
+          - 展示文明差异
+  - id: core.partner
+    stage: specify
+    topic: partner
+    question: 核心伙伴或早期关系线最重要的功能是什么？
+    whyItMatters: 伙伴不是奖励角色，而是挑战主角、补足现场判断或制造价值冲突的人。
+    type: textarea
+    required: false
+    exampleAnswers:
+      - 伙伴是被学院驱逐的符文学徒，懂本地规则，也敢质疑晏无的工程化傲慢。
+      - 伙伴是边境治安官，负责把主角的技术想法拖回普通人的生计和法律后果。
+      - 伙伴是贵族旁支，既能打开资源门，也会让主角看见制度内部的合理性。
+    exampleBranches:
+      - label: 符文学徒
+        answer: 核心伙伴是被学院驱逐的符文学徒，懂传统咒文，也被资格制度伤过。
+        flavor: 学习线和情感线都更近，互相质疑、互相翻译。
+        tradeoffs:
+          - 容易自然接入学院冲突。
+          - 需要避免伙伴只负责解释设定。
+        downstreamImpact: 能力体系和关系升温会绑定；伙伴能指出编程思路不理解本地语境的地方。
+        recommendedFor:
+          - 学院工坊
+          - 慢热感情
+      - label: 边境治安官
+        answer: 核心伙伴是边境治安官，关心普通人的安全，不允许晏无只看技术正确。
+        flavor: 冒险现场感强，价值冲突直接落到人命、秩序和责任。
+        tradeoffs:
+          - 感情升温更慢，但信任建立会更有重量。
+          - 需要让治安官有自己的判断和失败。
+        downstreamImpact: 世界压力会从普通人处境展开，成功路线更重视信任和公共后果。
+        recommendedFor:
+          - 边境小城
+          - 轻松中带真实压力
+      - label: 贵族旁支
+        answer: 核心伙伴来自没落贵族旁支，既享受制度保护，也知道知识垄断正在腐烂。
+        flavor: 阶层张力更强，关系线会夹在利益和理解之间。
+        tradeoffs:
+          - 势力冲突更复杂。
+          - 需要避免把贵族角色写成单纯赎罪工具。
+        downstreamImpact: 势力与冲突会更早进入主线，思想改造有具体关系承载。
+        recommendedFor:
+          - 贵族/学院冲突
+          - 想写制度内部视角
+  - id: core.faction-conflict
+    stage: specify
+    topic: faction
+    question: 第一卷最先撞上的势力或冲突是什么？
+    whyItMatters: 冲突要有利益逻辑，才能让世界观像真实社会，而不是只有坏人阻拦。
+    type: textarea
+    required: false
+    exampleAnswers:
+      - 学院垄断咒文许可，担心晏无的调试方法打破资格体系。
+      - 地方贵族把魔法工具故障压下去，因为公开会影响税收和粮价。
+      - 教会把异常日志称为禁忌污染，既保护群众，也遮蔽真相。
+    exampleBranches:
+      - label: 学院许可
+        answer: 学院垄断咒文许可，晏无的调试方法会削弱导师、证书和专利的权威。
+        flavor: 知识垄断和规则学习同台出现，冲突理性但压迫感清楚。
+        tradeoffs:
+          - 需要写出学院维护秩序的合理性。
+          - 容易偏制度讨论，要用具体冒险保持动感。
+        downstreamImpact: 成功路线会围绕“验证方法-争取信任-突破许可”推进。
+        recommendedFor:
+          - 学院工坊
+          - 编程施法规则线
+      - label: 地方贵族
+        answer: 地方贵族压下魔法工具故障，因为公开异常会引发粮价、税收和治安连锁反应。
+        flavor: 世界压力更现实，主角每次修复都会碰到利益代价。
+        tradeoffs:
+          - 贵族不只是反派，需要给出维稳逻辑。
+          - 轻松感要靠小队互动调和。
+        downstreamImpact: 第一舞台会更有真实利益结构，文明级威胁从民生异常露出。
+        recommendedFor:
+          - 边境小城
+          - 真实世界压力
+      - label: 禁忌守护者
+        answer: 教会或守夜组织把异常日志称为禁忌污染，他们可能既在遮蔽真相，也在防止旧灾难重演。
+        flavor: 道德灰度更高，文明威胁更有历史重量。
+        tradeoffs:
+          - 悬疑感增强，但信息揭示要更克制。
+          - 主角不能简单把禁忌全拆掉。
+        downstreamImpact: 第三次寂静的揭示会更像层层拆防火墙，思想改造会带来风险。
+        recommendedFor:
+          - 文明级威胁
+          - 想写灰度势力
   - id: core.tone
     stage: specify
     topic: tone

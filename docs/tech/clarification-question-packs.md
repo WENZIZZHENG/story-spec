@@ -28,6 +28,15 @@ questions:
     exampleAnswers:
       - 硬规则，读者能看懂 bug、补丁和法术失败原因。
       - 轻量隐喻，重点是主角用工程思维解决异界问题。
+    exampleBranches:
+      - label: 轻量隐喻
+        answer: 编程施法偏轻量隐喻，主角用工程思维理解魔法，不展开完整代码体系。
+        flavor: 轻松、顺滑，重点是奇思妙想和角色行动。
+        tradeoffs:
+          - 技术辨识度会弱一些。
+        downstreamImpact: 阅读承诺更接近轻松冒险，能力边界要靠失败代价呈现。
+        recommendedFor:
+          - 轻松冒险优先
 ```
 
 ## 必填规则
@@ -36,7 +45,8 @@ questions:
 - 每个问题必须符合 `ClarificationQuestion` schema。
 - 每个问题必须包含 `whyItMatters`，说明这个回答会影响什么创作选择。
 - 每个问题至少包含 2 个 `exampleAnswers`，推荐 3 个。
-- 示例必须分叉，不能只有一个“标准答案”。
+- 高影响问题推荐包含 2-3 个 `exampleBranches`，字段包括 `label`、`answer`、`flavor`、`tradeoffs`、`downstreamImpact`、`recommendedFor`。
+- 示例必须分叉，不能只有一个“标准答案”；分叉要说明风味、代价和后续影响。
 
 ## 选择器规则
 

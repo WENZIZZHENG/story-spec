@@ -3,6 +3,7 @@ import type { ProjectFileSystem } from './project-ports.js';
 import { relativePath, selectStoryProject } from './workbench-utils.js';
 import type {
   ClarificationAnswer,
+  ClarificationExampleBranch,
   ClarificationQuestion
 } from '../domain/clarification.js';
 import {
@@ -68,6 +69,7 @@ export interface ClarificationSummaryInput {
   explicit: string[];
   pending: string[];
   examples: string[];
+  questionExampleBranches?: ClarificationExampleBranch[];
   exampleBranches?: ExampleBranch[];
   nextSteps?: ClarificationNextStep[];
 }
@@ -97,6 +99,24 @@ const bulletList = (items: string[], fallback: string): string[] =>
     ? items.map(item => `- ${item}`)
     : [`- ${fallback}`];
 
+const renderClarificationExampleBranches = (branches: ClarificationExampleBranch[]): string[] => [
+  '## 示例分叉',
+  '',
+  ...(branches.length > 0
+    ? branches.flatMap(branch => [
+      `### ${branch.label}`,
+      '',
+      `- 示例回答：${branch.answer}`,
+      `- 风味：${branch.flavor}`,
+      `- 取舍：${branch.tradeoffs.length > 0 ? branch.tradeoffs.join('；') : '无'}`,
+      `- 后续影响：${branch.downstreamImpact}`,
+      `- 适合：${branch.recommendedFor.length > 0 ? branch.recommendedFor.join('；') : '未限定'}`,
+      '- confirmed: false',
+      ''
+    ])
+    : ['- 暂无问题级示例分叉。', ''])
+];
+
 export const renderClarificationSummary = (input: ClarificationSummaryInput): string => [
   '## 用户已明确',
   '',
@@ -110,6 +130,7 @@ export const renderClarificationSummary = (input: ClarificationSummaryInput): st
   '',
   ...bulletList(input.examples, '暂无示例；请先选择一个澄清问题包。'),
   '',
+  ...renderClarificationExampleBranches(input.questionExampleBranches ?? []),
   ...(input.exampleBranches?.length
     ? input.exampleBranches.flatMap(branch => renderExampleBranchMarkdown(branch).trimEnd().split('\n'))
     : ['- 示例分叉：暂无。']),
@@ -149,6 +170,9 @@ export const renderClarificationMarkdown = (record: ClarificationRecord): string
     )
   );
   const examples = record.questions.flatMap(question => question.exampleAnswers.slice(0, 2)).slice(0, 6);
+  const questionExampleBranches = record.questions
+    .flatMap(question => question.exampleBranches ?? [])
+    .slice(0, 6);
   const exampleBranches = record.questions.slice(0, 3).map((question, index) => ({
     label: index === 0 ? '作者主导：继续提问' : `示例分叉 ${index + 1}`,
     tone: index === 0 ? '保留创作空间' : '不同创作方向',
@@ -171,6 +195,7 @@ export const renderClarificationMarkdown = (record: ClarificationRecord): string
       explicit: confirmed.map(answer => `${answer.questionId}：${answerToMarkdown(answer.answer)}`),
       pending: pendingQuestions.map(question => `${question.id}：${question.question}`),
       examples,
+      questionExampleBranches,
       exampleBranches
     }).trimEnd(),
     '',

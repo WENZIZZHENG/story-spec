@@ -3,6 +3,7 @@ import type {
   ClarificationAnswer,
   ClarificationAnswerSource,
   ClarificationDependency,
+  ClarificationExampleBranch,
   ClarificationOption,
   ClarificationQuestion,
   ClarificationQuestionType,
@@ -22,6 +23,7 @@ export type ClarificationIssueCode =
   | 'MISSING_CLARIFICATION_QUESTION_FIELD'
   | 'INVALID_CLARIFICATION_QUESTION_TYPE'
   | 'INVALID_CLARIFICATION_OPTION'
+  | 'INVALID_CLARIFICATION_EXAMPLE_BRANCH'
   | 'INVALID_CLARIFICATION_DEPENDENCY'
   | 'INVALID_CLARIFICATION_ANSWER'
   | 'MISSING_CLARIFICATION_ANSWER_FIELD'
@@ -206,6 +208,57 @@ const parseDependsOn = (
   });
 };
 
+const parseExampleBranches = (
+  value: unknown,
+  basePath: string,
+  issues: ClarificationIssue[]
+): ClarificationExampleBranch[] => {
+  if (value === undefined) {
+    return [];
+  }
+
+  if (!Array.isArray(value)) {
+    issues.push(issue('INVALID_CLARIFICATION_EXAMPLE_BRANCH', `${basePath}.exampleBranches`, 'exampleBranches 必须是数组'));
+    return [];
+  }
+
+  return value.flatMap((branch, index) => {
+    const branchPath = `${basePath}.exampleBranches[${index}]`;
+    if (!isRecord(branch)) {
+      issues.push(issue('INVALID_CLARIFICATION_EXAMPLE_BRANCH', branchPath, 'ClarificationExampleBranch 必须是对象'));
+      return [];
+    }
+
+    const label = readRequiredString(branch, 'label', branchPath, issues, 'INVALID_CLARIFICATION_EXAMPLE_BRANCH');
+    const answer = readRequiredString(branch, 'answer', branchPath, issues, 'INVALID_CLARIFICATION_EXAMPLE_BRANCH');
+    const flavor = readRequiredString(branch, 'flavor', branchPath, issues, 'INVALID_CLARIFICATION_EXAMPLE_BRANCH');
+    const downstreamImpact = readRequiredString(branch, 'downstreamImpact', branchPath, issues, 'INVALID_CLARIFICATION_EXAMPLE_BRANCH');
+    const tradeoffs = toStringArray(branch.tradeoffs);
+    const recommendedFor = toStringArray(branch.recommendedFor);
+
+    if (!label || !answer || !flavor || !downstreamImpact) {
+      return [];
+    }
+
+    if (tradeoffs.length === 0) {
+      issues.push(issue(
+        'INVALID_CLARIFICATION_EXAMPLE_BRANCH',
+        `${branchPath}.tradeoffs`,
+        'exampleBranches.tradeoffs 至少需要 1 条取舍说明'
+      ));
+    }
+
+    return [{
+      label,
+      answer,
+      flavor,
+      tradeoffs,
+      downstreamImpact,
+      recommendedFor
+    }];
+  });
+};
+
 export const parseClarificationQuestionSet = (
   content: string,
   filePath: string
@@ -261,6 +314,7 @@ export const parseClarificationQuestionSet = (
       required: candidate.required === true,
       options: parseOptions(candidate.options, basePath, issues),
       exampleAnswers: toStringArray(candidate.exampleAnswers),
+      exampleBranches: parseExampleBranches(candidate.exampleBranches, basePath, issues),
       dependsOn: parseDependsOn(candidate.dependsOn, basePath, issues)
     });
   });

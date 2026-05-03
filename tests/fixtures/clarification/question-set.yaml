@@ -10,6 +10,15 @@ questions:
       - 我想保留“编程施法”，但主角先是调试小法术，不马上拯救世界。
       - 穿越只是开端，重点是主角如何理解异界文明的运行逻辑。
       - 轻松冒险是表层，文明级威胁要慢慢从日常异常里露出来。
+    exampleBranches:
+      - label: 轻松冒险
+        answer: 我想保留编程施法，但第一卷先从小冒险和关系磨合开始。
+        flavor: 轻快、有探索感，文明级威胁只露出一点影子。
+        tradeoffs:
+          - 开局更亲和，但大危机揭示会更慢。
+        downstreamImpact: 阅读承诺偏轻松，成长路线从解决小问题开始。
+        recommendedFor:
+          - 慢热开局
   - id: protagonist.identity
     stage: specify
     topic: protagonist

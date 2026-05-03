@@ -21,6 +21,15 @@ export interface ClarificationOption {
   description?: string;
 }
 
+export interface ClarificationExampleBranch {
+  label: string;
+  answer: string;
+  flavor: string;
+  tradeoffs: string[];
+  downstreamImpact: string;
+  recommendedFor: string[];
+}
+
 export interface ClarificationDependency {
   questionId: string;
   answerIncludes?: string;
@@ -37,6 +46,7 @@ export interface ClarificationQuestion {
   required: boolean;
   options: ClarificationOption[];
   exampleAnswers: string[];
+  exampleBranches?: ClarificationExampleBranch[];
   dependsOn: ClarificationDependency[];
 }
 

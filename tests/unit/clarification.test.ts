@@ -24,7 +24,16 @@ describe('clarification domain schema', () => {
         required: true,
         exampleAnswers: expect.arrayContaining([
           '我想保留“编程施法”，但主角先是调试小法术，不马上拯救世界。'
-        ])
+        ]),
+        exampleBranches: [
+          expect.objectContaining({
+            label: '轻松冒险',
+            answer: expect.stringContaining('小冒险'),
+            flavor: expect.stringContaining('轻快'),
+            downstreamImpact: expect.stringContaining('阅读承诺'),
+            recommendedFor: expect.arrayContaining(['慢热开局'])
+          })
+        ]
       }),
       expect.objectContaining({
         id: 'magic.rule-hardness',

@@ -34,6 +34,7 @@ describe('interviewStory', () => {
       'civilization-threat'
     ]));
     expect(prepared.questions[0].exampleAnswers.length).toBeGreaterThanOrEqual(2);
+    expect(prepared.questions.flatMap(question => question.exampleBranches ?? []).length).toBeGreaterThanOrEqual(3);
   });
 
   it('writes clarification records and a copyable handoff prompt without touching specification', async () => {
@@ -64,6 +65,8 @@ describe('interviewStory', () => {
     expect(result.handoffPrompt).toContain('/storyspec-specify');
     expect(result.handoffPrompt).toContain('clarifications.json');
     await expect(fileSystem.readFile(result.markdownPath)).resolves.toContain('## 需要澄清');
+    await expect(fileSystem.readFile(result.markdownPath)).resolves.toContain('## 示例分叉');
+    await expect(fileSystem.readFile(result.markdownPath)).resolves.toContain('后续影响');
     await expect(fileSystem.readJson(result.jsonPath)).resolves.toMatchObject({
       story: 'idea-demo',
       answers: expect.any(Array)
