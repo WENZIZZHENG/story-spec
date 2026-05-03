@@ -6,9 +6,7 @@ Active。本文是 Novel Writer 当前唯一的活跃待办入口。详细规则
 
 ## 当前待办
 
-| 优先级 | 路线 | 状态 | 范围 | 下一步 |
-| --- | --- | --- | --- | --- |
-| P1 | [creative-control-roadmap.md](creative-control-roadmap.md) | Active | 澄清优先、示例分叉、写入前预览、来源追踪、创作状态可见 | D0-D9 已完成；继续从 D10 文档、教程与用户引导推进 |
+暂无活跃待办。已完成路线见 [todo-archive.md](todo-archive.md)；新增长期路线时，先按 [todo-governance.md](todo-governance.md) 建立专题 roadmap 并在本文登记。
 
 ## 暂不作为活跃待办
 

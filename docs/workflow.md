@@ -17,9 +17,11 @@
 
 ```mermaid
 graph TD
-    A[/constitution - 创作宪法/] --> B[/specify - 故事规格/]
-    B --> C[/clarify - 澄清决策/]
+    Z[idea - 一句话灵感] --> C[/clarify or novel interview - 创作访谈/]
+    A[/constitution - 创作宪法/] --> C
+    C --> B[/specify preview - 故事规格预览/]
     C --> H[/checklist - 规格质量核查/]
+    B --> H
     H --> D[/plan - 创作计划/]
     D --> I[/checklist - 大纲质量核查/]
     I --> E[/tasks - 任务分解/]
@@ -28,6 +30,7 @@ graph TD
     J --> G[/analyze - 综合验证/]
     G --> F
 
+    style Z fill:#eef,stroke:#333,stroke-width:2px
     style A fill:#f9f,stroke:#333,stroke-width:2px
     style B fill:#bbf,stroke:#333,stroke-width:2px
     style C fill:#bfb,stroke:#333,stroke-width:2px
@@ -177,16 +180,34 @@ cd 我的小说
 
 ### 2.3 澄清关键决策（/clarify）
 
-AI会识别规格中的模糊点，通过5个问题澄清：
+用户只给一句话创意时，不建议直接让 AI 生成完整规格。先通过 `/clarify` 或 CLI 版 `novel interview` 保存澄清记录：
 
 ```text
-/clarify
-AI: 我发现了以下需要澄清的关键点：
-1. 主角的金手指是系统还是传承？
-2. 故事节奏是爽文快节奏还是慢热型？
-3. 感情线是单女主还是多女主？
-...
+novel interview idea-demo --premise "异界穿越、轻松冒险、编程施法、慢热感情、文明级威胁" --max-questions 6
 ```
+
+澄清记录会分成：
+
+- **用户已明确**：可进入后续规格的答案。
+- **需要澄清**：required 未答问题。
+- **可复制示例**：帮助你选择方向，但不是正典。
+- **AI 建议，待确认**：只能作为候选。
+
+三个可复制方向示例：
+
+```text
+我只确认题材组合，主角身份、感情对象和威胁真相先不要定死，请继续问我 5 个关键问题。
+```
+
+```text
+主角是后端程序员，把法术当运行时调试；第一卷先在边境小城解决小事故。
+```
+
+```text
+建设和思想改造只是解决冒险问题的工具，不把故事写成纯种田。
+```
+
+完成澄清后，再让 agent 执行 `/specify`，先看 preview，确认后再写入 `specification.md`。
 
 ### 2.4 规格质量检查（/checklist）
 
@@ -273,6 +294,8 @@ AI: 我发现了以下需要澄清的关键点：
 - **P2 常规**：正常推进章节
 - **P3 补充**：锦上添花的内容
 
+任务进入正文写作前，要能追溯到已确认澄清答案。若来源是未确认 AI 建议，或 required 问题仍未回答，任务应保持 `[PLAN-ONLY]`，先澄清或复核。
+
 ## 阶段三：内容创作
 
 ### 3.1 章节写作（/write）
@@ -337,6 +360,21 @@ AI: 我发现了以下需要澄清的关键点：
 Checklist 阶段性把控可在正式分析前就捕捉结构和设定上的偏差。
 
 ### 3.3 质量验证（/analyze）
+
+`/analyze` 和 `novel review` 都应检查创作控制权：
+
+- AI 是否把未确认建议写进了规格、计划、任务或正文。
+- 感情线是否跳过慢热边界。
+- 建设流是否变成纯种田，偏离用户边界。
+- 文明级威胁是否过早压垮轻松冒险基调。
+
+终端检查：
+
+```bash
+novel review --json
+```
+
+如果输出 `CREATIVE_INTENT_DRIFT_*` finding，先确认澄清记录或生成复核任务，不要自动重写正文。
 
 每5章进行一次综合验证：
 
