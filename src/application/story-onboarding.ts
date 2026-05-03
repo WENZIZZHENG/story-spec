@@ -24,6 +24,14 @@ import {
   renderAuthorProfileSamplingGuide
 } from './manage-author-profile.js';
 import type { AuthorProfileSummary } from '../domain/author-profile.js';
+import {
+  CO_CREATION_ENTRYPOINTS,
+  CO_CREATION_MODES,
+  type CoCreationEntrypointDefinition,
+  type StoryCoCreationEntrypointId,
+  type StoryCreationModeId,
+  type StoryCreationModeStatus
+} from '../domain/co-creation-workbench.js';
 
 export type StoryOnboardingErrorCode =
   | 'MISSING_STORY_NAME'
@@ -71,8 +79,22 @@ export interface StoryNextAction {
 }
 
 export interface StoryCoCreationEntrypoint {
-  id: 'protagonist' | 'partner' | 'stage' | 'power' | 'faction' | 'conflict';
+  id: StoryCoCreationEntrypointId;
   label: string;
+  mode: StoryCreationModeId;
+  command: string;
+  reason: string;
+  whenToUse: string;
+  guidingQuestion: string;
+  candidateArtifact: string;
+  canonBoundary: string;
+  nextRecommendation: string;
+}
+
+export interface StoryCreationModeOption {
+  id: StoryCreationModeId;
+  label: string;
+  status: StoryCreationModeStatus;
   command: string;
   reason: string;
 }
@@ -85,6 +107,7 @@ export interface StoryNextResult {
   issues: string[];
   creativeGaps: string[];
   pendingQuestions: string[];
+  creationModes: StoryCreationModeOption[];
   coCreationEntrypoints: StoryCoCreationEntrypoint[];
   coreElements: StoryCoreElementAssessment[];
   authorProfile: AuthorProfileSummary;
@@ -179,54 +202,118 @@ const action = (priority: number, command: string, reason: string): StoryNextAct
   reason
 });
 
+const commandForMode = (
+  story: string,
+  commandKind: typeof CO_CREATION_MODES[number]['commandKind']
+): string => {
+  switch (commandKind) {
+    case 'next':
+      return `storyspec next ${story}`;
+    case 'interview':
+      return `storyspec interview ${story}`;
+    case 'preview-plan':
+      return `storyspec preview plan ${story}`;
+    case 'context-pack':
+      return `storyspec context:pack ${story}`;
+    case 'creative-report':
+      return `storyspec creative:report ${story}`;
+  }
+};
+
+const resolveActiveCreationMode = (
+  stage: StoryMaturityStage,
+  coreElements: StoryCoreElementAssessment[]
+): StoryCreationModeId => {
+  const planBlockingElements = getPlanBlockingCoreElements(coreElements);
+
+  if (stage === 'idea') {
+    return 'discover';
+  }
+
+  if (
+    stage === 'interviewing'
+    || ((stage === 'specified' || stage === 'planned') && planBlockingElements.length > 0)
+  ) {
+    return 'co-create';
+  }
+
+  if (stage === 'specified' || stage === 'planned') {
+    return 'plan';
+  }
+
+  if (stage === 'tasked') {
+    return 'write';
+  }
+
+  return 'reflect';
+};
+
+const buildCreationModes = (
+  story: string,
+  stage: StoryMaturityStage,
+  coreElements: StoryCoreElementAssessment[]
+): StoryCreationModeOption[] => {
+  const activeMode = resolveActiveCreationMode(stage, coreElements);
+  const planBlockingElements = getPlanBlockingCoreElements(coreElements);
+
+  return CO_CREATION_MODES.map(mode => {
+    const isPlanLocked = mode.id === 'plan'
+      && (stage === 'idea' || stage === 'interviewing' || planBlockingElements.length > 0);
+    const isWriteLocked = mode.id === 'write'
+      && (stage === 'idea'
+        || stage === 'interviewing'
+        || stage === 'specified'
+        || stage === 'planned');
+
+    return {
+      id: mode.id,
+      label: mode.label,
+      status: mode.id === activeMode
+        ? 'active'
+        : isPlanLocked || isWriteLocked
+          ? 'locked'
+          : 'available',
+      command: commandForMode(story, mode.commandKind),
+      reason: mode.reason
+    };
+  });
+};
+
+const entrypointToResult = (
+  story: string,
+  entrypoint: CoCreationEntrypointDefinition
+): StoryCoCreationEntrypoint => ({
+  id: entrypoint.id,
+  label: entrypoint.label,
+  mode: entrypoint.mode,
+  command: `storyspec interview ${story} --focus ${entrypoint.id}`,
+  reason: entrypoint.reason,
+  whenToUse: entrypoint.whenToUse,
+  guidingQuestion: entrypoint.guidingQuestion,
+  candidateArtifact: entrypoint.candidateArtifact,
+  canonBoundary: entrypoint.canonBoundary,
+  nextRecommendation: entrypoint.nextRecommendation
+});
+
 const buildCoCreationEntrypoints = (
   story: string,
   stage: StoryMaturityStage
 ): StoryCoCreationEntrypoint[] => {
-  if (stage !== 'idea' && stage !== 'interviewing') {
+  if (![
+    'idea',
+    'interviewing',
+    'specified',
+    'planned',
+    'tasked',
+    'drafting',
+    'revising'
+  ].includes(stage)) {
     return [];
   }
 
-  const interviewCommand = `storyspec interview ${story}`;
-
-  return [
-    {
-      id: 'protagonist',
-      label: '主角入口',
-      command: interviewCommand,
-      reason: '先把主角欲望、误判和成长代价做成候选，不急着定稿。'
-    },
-    {
-      id: 'partner',
-      label: '伙伴入口',
-      command: interviewCommand,
-      reason: '探索谁能挑战主角、制造关系张力，并保持候选状态。'
-    },
-    {
-      id: 'stage',
-      label: '舞台入口',
-      command: interviewCommand,
-      reason: '把第一舞台、资源结构和普通人压力做成可比较候选。'
-    },
-    {
-      id: 'power',
-      label: '能力入口',
-      command: interviewCommand,
-      reason: '先确认能力爽点、限制和失败后果，再进入规格或计划。'
-    },
-    {
-      id: 'faction',
-      label: '势力入口',
-      command: interviewCommand,
-      reason: '探索谁垄断知识、资源或合法性，以及主角第一碰撞点。'
-    },
-    {
-      id: 'conflict',
-      label: '冲突入口',
-      command: interviewCommand,
-      reason: '比较第一卷阻力、阶段胜利、代价和更大危机入口。'
-    }
-  ];
+  return CO_CREATION_ENTRYPOINTS.map(entrypoint =>
+    entrypointToResult(story, entrypoint)
+  );
 };
 
 const buildActions = (
@@ -332,6 +419,13 @@ export const getStoryNext = async (
     fileSystem: input.fileSystem,
     fallbackNextQuestions: getStoryStageNextQuestions(story.stage)
   });
+  const coreElements = record
+    ? evaluateStoryCoreElements({
+      premise: record.premise,
+      questions: record.questions,
+      answers: record.answers
+    })
+    : [];
   const base = {
     projectRoot: input.projectRoot,
     story: story.name,
@@ -343,14 +437,9 @@ export const getStoryNext = async (
       ...creativeControl.pendingQuestions,
       ...creativeControl.cannotFinalize.filter(item => item.startsWith('AI 建议待确认'))
     ],
+    creationModes: buildCreationModes(story.name, story.stage, coreElements),
     coCreationEntrypoints: buildCoCreationEntrypoints(story.name, story.stage),
-    coreElements: record
-      ? evaluateStoryCoreElements({
-        premise: record.premise,
-        questions: record.questions,
-        answers: record.answers
-      })
-      : [],
+    coreElements,
     authorProfile: authorProfile.summary
   };
 
@@ -384,9 +473,19 @@ export const renderStoryNext = (result: StoryNextResult): string => [
   '建议动作：',
   ...result.actions.map(item => `- ${item.command}：${item.reason}`),
   '',
-  '共创入口：',
+  '创作模式：',
+  ...result.creationModes.map(item => `- ${item.label}（${item.id}，${item.status}）：${item.command}。${item.reason}`),
+  '',
+  '你想从哪里继续？',
   ...(result.coCreationEntrypoints.length > 0
-    ? result.coCreationEntrypoints.map(item => `- ${item.label}：${item.command}。${item.reason}`)
+    ? result.coCreationEntrypoints.map(item => [
+      `- ${item.label}（${item.mode}）：${item.command}`,
+      `  - 适用场景：${item.whenToUse}`,
+      `  - 引导问题：${item.guidingQuestion}`,
+      `  - 候选产物：${item.candidateArtifact}`,
+      `  - 正典边界：${item.canonBoundary}`,
+      `  - 下一步推荐：${item.nextRecommendation}`
+    ].join('\n'))
     : ['- 当前阶段暂无专门入口；请按建议动作继续。']),
   '',
   '作者画像：',

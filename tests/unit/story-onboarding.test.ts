@@ -4,7 +4,8 @@ import { describe, expect, it } from 'vitest';
 import programmingCastingFixture from '../fixtures/co-creation/programming-casting.json' with { type: 'json' };
 import {
   createStoryIdea,
-  getStoryNext
+  getStoryNext,
+  renderStoryNext
 } from '../../src/application/story-onboarding.js';
 import { MemoryFileSystem } from '../helpers/memory-file-system.js';
 
@@ -271,5 +272,113 @@ describe('story onboarding', () => {
     });
     expect(result.actions[0].reason).toContain('核心伙伴');
     expect(result.actions.map(action => action.command)).not.toContain('继续运行平台对应 plan 命令');
+  });
+
+  it('presents a multi-entry co-creation workbench instead of a linear-only next step', async () => {
+    const { projectRoot, fileSystem } = await createProject();
+    await createStoryIdea({
+      projectRoot,
+      fileSystem,
+      name: '编程施法',
+      idea: '工科马列青年穿越剑与魔法世界，用编程施法展开轻松冒险。'
+    });
+
+    const result = await getStoryNext({
+      projectRoot,
+      fileSystem,
+      story: '编程施法'
+    });
+
+    expect(result.creationModes.map(mode => mode.id)).toEqual([
+      'discover',
+      'co-create',
+      'plan',
+      'write',
+      'reflect'
+    ]);
+    expect(result.creationModes).toContainEqual(expect.objectContaining({
+      id: 'discover',
+      status: 'active'
+    }));
+    expect(result.coCreationEntrypoints.map(entry => entry.id)).toEqual(expect.arrayContaining([
+      'protagonist',
+      'partner',
+      'world',
+      'scene',
+      'power',
+      'ending',
+      'branch'
+    ]));
+    expect(result.coCreationEntrypoints.every(entry =>
+      entry.command.includes('--focus')
+      && entry.whenToUse.length > 0
+      && entry.guidingQuestion.length > 0
+      && entry.candidateArtifact.length > 0
+      && entry.canonBoundary.includes('候选')
+      && entry.nextRecommendation.length > 0
+    )).toBe(true);
+
+    const rendered = renderStoryNext(result);
+
+    expect(rendered).toContain('你想从哪里继续？');
+    expect(rendered).toContain('候选产物');
+    expect(rendered).toContain('正典边界');
+    expect(rendered).toContain('storyspec interview 编程施法 --focus scene');
+  });
+
+  it('keeps co-creation entrypoints available after specification when core elements are still immature', async () => {
+    const { projectRoot, fileSystem } = await createProject();
+    const storyPath = path.join(projectRoot, 'stories', 'demo');
+    await fileSystem.writeFile(path.join(storyPath, 'idea.md'), '# demo');
+    await fileSystem.writeFile(path.join(storyPath, 'clarifications.md'), '# demo clarifications');
+    await fileSystem.writeFile(path.join(storyPath, 'specification.md'), '# spec');
+    await fileSystem.writeJson(path.join(storyPath, 'clarifications.json'), {
+      schemaVersion: '1.0',
+      story: 'demo',
+      premise: '主角晏无是一名工科马列青年，穿越到剑与魔法世界；编程施法、文明级威胁。',
+      createdAt: '2026-05-03T00:00:00.000Z',
+      updatedAt: '2026-05-03T00:00:00.000Z',
+      questions: [{
+        id: 'protagonist.identity',
+        stage: 'specify',
+        topic: 'protagonist',
+        question: '主角是谁？',
+        whyItMatters: '影响主角视角。',
+        type: 'textarea',
+        required: true,
+        options: [],
+        exampleAnswers: [],
+        dependsOn: []
+      }],
+      answers: [{
+        questionId: 'protagonist.identity',
+        answer: '晏无是工科马列青年，穿越到剑与魔法世界。',
+        source: 'user-explicit',
+        confidence: 1,
+        confirmed: true,
+        createdAt: '2026-05-03T00:00:00.000Z',
+        updatedAt: '2026-05-03T00:00:00.000Z'
+      }]
+    }, { spaces: 2 });
+
+    const result = await getStoryNext({
+      projectRoot,
+      fileSystem,
+      story: 'demo'
+    });
+
+    expect(result.stage).toBe('specified');
+    expect(result.creationModes).toContainEqual(expect.objectContaining({
+      id: 'co-create',
+      status: 'active'
+    }));
+    expect(result.coCreationEntrypoints.map(entry => entry.id)).toEqual(expect.arrayContaining([
+      'partner',
+      'world',
+      'conflict',
+      'scene'
+    ]));
+    expect(result.coCreationEntrypoints.find(entry => entry.id === 'partner')?.command)
+      .toBe('storyspec interview demo --focus partner');
   });
 });

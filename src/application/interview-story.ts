@@ -21,6 +21,10 @@ import {
 } from './workbench-utils.js';
 import { loadAuthorProfile } from './manage-author-profile.js';
 import type { AuthorProfileSummary } from '../domain/author-profile.js';
+import {
+  getCoCreationEntrypointDefinition,
+  type StoryCoCreationEntrypointId
+} from '../domain/co-creation-workbench.js';
 
 export type InterviewStoryErrorCode =
   | 'MISSING_PREMISE'
@@ -55,6 +59,7 @@ export interface InterviewStoryState {
 export interface PrepareInterviewQuestionsInput {
   premise: string;
   maxQuestions?: number;
+  focus?: StoryCoCreationEntrypointId;
 }
 
 export interface PrepareInterviewQuestionsResult {
@@ -68,11 +73,13 @@ export interface InterviewStoryInput extends InterviewStoryStateInput {
   answers?: Record<string, unknown>;
   useExamples?: boolean;
   maxQuestions?: number;
+  focus?: StoryCoCreationEntrypointId;
   write?: boolean;
   now?: () => Date;
 }
 
 export interface InterviewStoryResult extends InterviewStoryState {
+  focus?: StoryCoCreationEntrypointId;
   record: ClarificationRecord;
   selection: ClarificationSelectionResult;
   markdown: string;
@@ -223,6 +230,28 @@ const createFollowUpQuestion = (
   dependsOn: []
 });
 
+const createFocusedEntrypointQuestion = (
+  focus: StoryCoCreationEntrypointId | undefined
+): ClarificationQuestion[] => {
+  if (!focus) {
+    return [];
+  }
+
+  const entrypoint = getCoCreationEntrypointDefinition(focus);
+
+  return [createFollowUpQuestion(
+    `focus.${entrypoint.id}`,
+    entrypoint.focusTopic,
+    entrypoint.guidingQuestion,
+    [
+      entrypoint.reason,
+      `候选产物：${entrypoint.candidateArtifact}`,
+      `正典边界：${entrypoint.canonBoundary}`
+    ].join(' '),
+    entrypoint.exampleAnswers
+  )];
+};
+
 const answerTextIncludes = (answer: ClarificationAnswer, pattern: RegExp): boolean =>
   answer.confirmed
   && hasResolvedClarificationAnswer(answer.answer)
@@ -368,7 +397,10 @@ export const prepareInterviewQuestions = async (
   return {
     premise,
     selection,
-    questions
+    questions: [
+      ...createFocusedEntrypointQuestion(input.focus),
+      ...questions
+    ]
   };
 };
 
@@ -411,11 +443,17 @@ const buildAnswerUpdates = (
 };
 
 const renderInterviewHandoffPrompt = (
-  result: Pick<InterviewStoryResult, 'projectRoot' | 'jsonPath' | 'record' | 'authorProfile'>
+  result: Pick<InterviewStoryResult, 'projectRoot' | 'jsonPath' | 'record' | 'authorProfile' | 'focus'>
 ): string => [
   `/storyspec-specify ${result.record.premise}`,
   '',
   `请先读取 \`${relativePath(result.projectRoot, result.jsonPath)}\`，并按澄清记录继续创作。`,
+  ...(result.focus
+    ? [
+      `当前访谈焦点：${getCoCreationEntrypointDefinition(result.focus).label}`,
+      '焦点问题仍是候选，不得跳过用户确认写入正典。'
+    ]
+    : []),
   ...(result.authorProfile.exists
     ? [
       `可读取 \`${relativePath(result.projectRoot, result.authorProfile.path)}\` 作为作者长期偏好上下文。`,
@@ -439,11 +477,16 @@ export const interviewStory = async (
   });
   const prepared = await prepareInterviewQuestions({
     premise,
-    maxQuestions: input.maxQuestions
+    maxQuestions: input.maxQuestions,
+    focus: input.focus
   });
+  const availablePreparedQuestions = filterQuestionsForCurrentRound(prepared.questions, state.existingRecord);
+  const focusedQuestions = availablePreparedQuestions.filter(question => question.id.startsWith('focus.'));
+  const regularPreparedQuestions = availablePreparedQuestions.filter(question => !question.id.startsWith('focus.'));
   const roundQuestions = [
+    ...focusedQuestions,
     ...buildFollowUpQuestions(state.existingRecord),
-    ...filterQuestionsForCurrentRound(prepared.questions, state.existingRecord)
+    ...regularPreparedQuestions
   ].slice(0, input.maxQuestions ?? prepared.questions.length);
   const timestamp = (input.now ?? (() => new Date()))().toISOString();
   const existingRecord = state.existingRecord;
@@ -482,6 +525,7 @@ export const interviewStory = async (
   const markdown = renderClarificationMarkdown(record);
   const resultBase = {
     ...state,
+    focus: input.focus,
     record,
     selection: prepared.selection,
     markdown,
@@ -494,7 +538,8 @@ export const interviewStory = async (
     projectRoot: resultBase.projectRoot,
     jsonPath: resultBase.jsonPath,
     record,
-    authorProfile: resultBase.authorProfile
+    authorProfile: resultBase.authorProfile,
+    focus: resultBase.focus
   });
   const result: InterviewStoryResult = {
     ...resultBase,

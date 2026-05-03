@@ -49,7 +49,7 @@ storyspec author-profile --init --answers "genre=18+ 玄幻、异界穿越、轻
 storyspec story:new 法术编译纪元 --idea "异界穿越、轻松冒险、编程施法、慢热感情、文明级威胁。建设流和思想改造只是支撑工具。"
 storyspec next 法术编译纪元
 
-storyspec interview 法术编译纪元 --premise "异界穿越、轻松冒险、编程施法、慢热感情、文明级威胁" --max-questions 6
+storyspec interview 法术编译纪元 --focus protagonist --premise "异界穿越、轻松冒险、编程施法、慢热感情、文明级威胁" --max-questions 6
 storyspec creative:report 法术编译纪元
 
 storyspec preview specify 法术编译纪元
@@ -128,8 +128,8 @@ init -> story:new -> next -> interview/clarify -> creative:report -> preview spe
 | `storyspec init` | 创建小说项目、目录、模板和 agent 入口 |
 | `storyspec story:new` | 保存作者原始想法，建立故事工作区 |
 | `storyspec author-profile` | 可选维护作者画像；首次只做可跳过采样，后续才回填已确认偏好 |
-| `storyspec next` | 根据当前状态提示下一步该做什么 |
-| `storyspec interview` / `storyspec clarify` | 访谈式澄清，不把未确认内容写成正典 |
+| `storyspec next` | 根据当前状态展示创作模式和“你想从哪里继续？”的多入口导航 |
+| `storyspec interview` / `storyspec clarify` | 访谈式澄清；可用 `--focus protagonist/partner/world/stage/power/faction/conflict/scene/ending/branch` 从某个共创入口开始 |
 | `storyspec creative:report` | 查看作者已经创建的小说骨架、待澄清问题和 AI 建议风险 |
 | `storyspec preview specify` | 生成规格写入预览 |
 | `storyspec apply` | 确认无 blocking 风险后写入正式规格 |
@@ -198,6 +198,8 @@ StorySpec 会尽量把“作者确认”和“AI 建议”分开：
 | `storyspec preview specify [story]` | 生成规格预览，不直接写入正式规格 |
 | `storyspec preview plan [story]` | 生成创作计划预览，不直接写入 `creative-plan.md` |
 | `storyspec apply <preview-id>` | 默认 dry-run；加 `--yes` 后才应用无 blocking 风险的预览；计划草案可显式加 `--draft` |
+
+`storyspec next [story]` 会显示五种创作模式：`discover`、`co-create`、`plan`、`write`、`reflect`，并给出主角、伙伴、世界、舞台、能力、势力、冲突、场景、结尾/反转、分支/what-if 等入口。每个入口都会说明适用场景、引导问题、候选产物、正典边界和自然下一步；入口输出默认是候选，不会绕过确认门禁。
 
 ### 世界观、正典和结构
 

@@ -11,6 +11,9 @@ import {
 } from '../../application/interview-story.js';
 import { StorySelectionError } from '../../application/workbench-utils.js';
 import type { ClarificationQuestion } from '../../domain/clarification.js';
+import {
+  normalizeCoCreationEntrypointId
+} from '../../domain/co-creation-workbench.js';
 import { nodeFileSystem } from '../../infrastructure/node-file-system.js';
 import { isInteractive } from '../../utils/interactive.js';
 import { ensureProjectRoot } from '../../utils/project.js';
@@ -20,6 +23,7 @@ type InterviewCommandOptions = {
   answers?: string;
   useExamples?: boolean;
   maxQuestions?: string;
+  focus?: string;
   json?: boolean;
   write?: boolean;
 };
@@ -322,6 +326,13 @@ const runInterviewCommand = async (
   try {
     const projectRoot = await ensureProjectRoot();
     const maxQuestions = parsePositiveInteger(options.maxQuestions, 6);
+    const focus = normalizeCoCreationEntrypointId(options.focus);
+    if (options.focus && !focus) {
+      throw new InterviewStoryError(
+        'INVALID_ANSWERS',
+        `未知共创入口：${options.focus}。可用入口：protagonist, partner, world, stage, power, faction, conflict, scene, ending, branch`
+      );
+    }
     let premise = options.premise?.trim();
     let answers = normalizeInterviewAnswers(parseAnswerPairs(options.answers));
 
@@ -332,7 +343,7 @@ const runInterviewCommand = async (
         story
       });
       premise = await askPremise(premise, state.existingRecord?.premise);
-      const prepared = await prepareInterviewQuestions({ premise, maxQuestions });
+      const prepared = await prepareInterviewQuestions({ premise, maxQuestions, focus });
       const existingAnswers = new Map<string, unknown>(
         state.existingRecord?.answers.map(answer => [answer.questionId, answer.answer]) ?? []
       );
@@ -365,6 +376,7 @@ const runInterviewCommand = async (
       answers,
       useExamples: options.useExamples,
       maxQuestions,
+      focus,
       write: options.write !== false
     });
 
@@ -376,6 +388,7 @@ const runInterviewCommand = async (
         written: result.written,
         updatedAnswerIds: result.updatedAnswerIds,
         reusedAnswerIds: result.reusedAnswerIds,
+        focus: result.focus,
         handoffPrompt: result.handoffPrompt,
         record: result.record
       }, null, 2));
@@ -405,6 +418,7 @@ export const registerInterviewCommand = (program: Command): void => {
     .argument('[story]', '故事目录名或路径，默认使用最近更新的 stories/*')
     .option('--premise <text>', '一句话创意或创作方向；非交互环境必填')
     .option('--answers <pairs>', '预填答案，格式：questionId=answer;questionId2=answer2')
+    .option('--focus <entry>', '从指定共创入口开始：protagonist/partner/world/stage/power/faction/conflict/scene/ending/branch')
     .option('--use-examples', '把未回答问题填入第一个可复制示例，适合 smoke 或快速起步')
     .option('--max-questions <number>', '本轮最多提问数量', '6')
     .option('--no-write', '只预览，不写入 clarifications.json/md')

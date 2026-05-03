@@ -30,16 +30,16 @@ storyspec story:new 法术编译纪元 --idea "异界穿越、轻松冒险、编
 storyspec next 法术编译纪元
 ```
 
-`storyspec next` 会告诉你当前更适合继续澄清、生成规格预览，还是进入后续计划。
+`storyspec next` 会告诉你当前更适合继续澄清、生成规格预览，还是进入后续计划；早期还会显示“你想从哪里继续？”的入口卡，例如主角、伙伴、世界、能力、场景、结尾/反转和分支。
 
 ### 步骤 5：完成创作访谈
 
 ```bash
-storyspec interview 法术编译纪元 --premise "异界穿越、轻松冒险、编程施法、慢热感情、文明级威胁" --max-questions 6
+storyspec interview 法术编译纪元 --focus protagonist --premise "异界穿越、轻松冒险、编程施法、慢热感情、文明级威胁" --max-questions 6
 storyspec creative:report 法术编译纪元
 ```
 
-你可以回答“稍后决定”“不知道”或选择示例。它们会被记录下来，但不会被当成已经定稿的正典设定。
+你也可以把 `--focus protagonist` 换成 `--focus scene`、`--focus partner`、`--focus world` 等入口，先玩一个角色、一幕戏或一个世界压力点。你可以回答“稍后决定”“不知道”或选择示例；它们会被记录下来，但不会被当成已经定稿的正典设定。
 
 ### 步骤 6：生成规格预览
 

@@ -12,6 +12,8 @@ scripts:
 焦点区域（可选）：$ARGUMENTS
 ---
 
+可用共创入口：主角、伙伴、世界/舞台、能力、势力、冲突、场景、结尾/反转、分支/what-if。若用户指定焦点，只围绕该入口推进本轮访谈，并把输出保持为候选；不要因为选了某个入口就补完整本书。
+
 ## 目标
 
 检测并减少故事大纲中的歧义或缺失的决策点，通过创作访谈收集澄清信息，并将结果记录为 `stories/<story>/clarifications.md` 和 `stories/<story>/clarifications.json`。
@@ -287,3 +289,14 @@ A. 18-25岁  B. 26-35岁  C. 36-45岁
 - **系列规划**：是否为系列作品会影响整体架构和决策
 
 优先级上下文：{ARGS}
+
+如果用户只想先玩一个入口，可以建议终端命令：
+
+```bash
+storyspec next <story>
+storyspec interview <story> --focus protagonist
+storyspec interview <story> --focus scene
+storyspec interview <story> --focus branch
+```
+
+`--focus` 只改变本轮访谈的切入点，不会绕过用户确认，也不会自动写入 specification、World Bible、Scene Card、tracking 或 tasks。

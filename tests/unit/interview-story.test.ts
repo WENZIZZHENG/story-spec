@@ -287,6 +287,30 @@ describe('interviewStory', () => {
     expect(result.markdown).toContain('信任、距离、冲突、脆弱和修复');
   });
 
+  it('adds a focused entry question when the author starts from a scene', async () => {
+    const { projectRoot, fileSystem } = await createProject();
+
+    const result = await interviewStory({
+      projectRoot,
+      fileSystem,
+      story: 'idea-demo',
+      premise: '主角晏无穿越到剑与魔法世界，靠编程施法解决第一场魔法事故。',
+      focus: 'scene',
+      maxQuestions: 4,
+      now: () => new Date('2026-05-03T12:00:00.000Z')
+    });
+
+    expect(result.record.questions[0]).toMatchObject({
+      id: 'focus.scene',
+      topic: 'scene',
+      required: false
+    });
+    expect(result.record.questions[0].question).toContain('这一幕开头发生什么');
+    expect(result.markdown).toContain('候选 Scene Card');
+    expect(result.handoffPrompt).toContain('当前访谈焦点：场景入口');
+    expect(result.handoffPrompt).toContain('焦点问题仍是候选，不得跳过用户确认写入正典');
+  });
+
   it('skips already confirmed answers and keeps deferred answers open', async () => {
     const { projectRoot, fileSystem, storyPath } = await createProject();
     await fileSystem.writeJson(path.join(storyPath, 'clarifications.json'), {

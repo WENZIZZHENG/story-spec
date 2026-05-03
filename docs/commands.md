@@ -7,7 +7,7 @@
 ```text
 storyspec story:new
 storyspec next
-/clarify 或 storyspec interview
+/clarify 或 storyspec interview --focus <entry>
 /constitution
 /specify
 /plan
@@ -23,8 +23,8 @@ storyspec next
 | 命令 | 用途 |
 | --- | --- |
 | `storyspec story:new <name> --idea "..."` | 保存一句话灵感和原始创作意图 |
-| `storyspec next [story]` | 根据当前阶段给出下一步动作 |
-| `storyspec interview [story]` | 在终端完成创作访谈 |
+| `storyspec next [story]` | 根据当前阶段展示创作模式和多入口共创导航 |
+| `storyspec interview [story]` | 在终端完成创作访谈，可用 `--focus` 从指定入口开始 |
 | `storyspec creative:report [story]` | 查看已确认、待澄清、AI 候选和偏离风险 |
 | `storyspec preview specify [story]` | 预览规格写入内容 |
 | `storyspec apply <preview-id> --yes` | 明确确认后写入 preview |
@@ -76,6 +76,7 @@ storyspec <command> --help
 ## 常见判断
 
 - 只有一句题材：先 `storyspec story:new` 或 `/clarify`，不要直接 `/specify` 到完整设定。
+- 只想先玩一个局部：运行 `storyspec next [story]`，再复制某个入口命令，例如 `storyspec interview 编程施法 --focus scene`。
 - 规格还不稳定：用 `preview`，不要直接覆盖正式文件。
 - 想写正文：先确认 `specification.md`、`creative-plan.md`、`tasks.md`。
 - 想让另一个 agent 接手：先运行 `storyspec status` 和 `storyspec context:pack`。

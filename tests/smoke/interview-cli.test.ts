@@ -83,5 +83,26 @@ describe('interview CLI smoke', () => {
         confirmed: true
       })
     ]));
+
+    const focusedResult = await execFileAsync('node', [
+      cliPath,
+      'interview',
+      'idea-demo',
+      '--focus',
+      'scene',
+      '--max-questions',
+      '3',
+      '--json'
+    ], { cwd: projectPath });
+    const focused = JSON.parse(focusedResult.stdout);
+
+    expect(focused.focus).toBe('scene');
+    expect(focused.record.questions).toEqual(expect.arrayContaining([
+      expect.objectContaining({
+        id: 'focus.scene',
+        topic: 'scene'
+      })
+    ]));
+    expect(focused.handoffPrompt).toContain('当前访谈焦点：场景入口');
   });
 });
