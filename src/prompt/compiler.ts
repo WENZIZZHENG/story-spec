@@ -135,6 +135,58 @@ const prependInputClarificationOnboarding = (
   return `${frontmatterMatch[0]}${onboarding}${content.slice(frontmatterMatch[0].length)}`;
 };
 
+const writePreviewGateDescriptions = [
+  '创建或更新小说创作宪法',
+  '定义故事规格',
+  '基于故事规格制定技术实现方案',
+  '将创作计划分解为可执行的任务清单'
+] as const;
+
+const shouldInjectWritePreviewGate = (description: string | undefined): boolean => {
+  if (!description) {
+    return false;
+  }
+
+  return writePreviewGateDescriptions.some(target => description.includes(target));
+};
+
+const renderWritePreviewGate = (description: string | undefined): string => [
+  '## 写入前预览门禁',
+  '',
+  `本命令属于高影响写入命令（${description ?? 'Novel Writer 写入命令'}）。写入前必须执行 preview/confirm/apply 三段流程。`,
+  '',
+  '- `preview`：默认阶段，只输出预览，不写文件。预览必须包含：拟写入文件路径、用户明确输入、AI 建议内容、未决 `[需要澄清]`、可能影响到的后续文件。',
+  '- `confirm`：只有用户明确回复“确认写入”“应用预览”或 `apply`，并且关键 `[需要澄清]` 已处理后，才进入写入阶段。',
+  '- `apply`：已有确认记录时，按预览内容写入；写入后说明实际修改路径和仍未解决的风险。',
+  '- 如果当前 agent 不支持交互或无法确认用户意图，默认只输出 preview，不写文件。',
+  '- 如果发现 `clarifications.json` 中存在未确认的 `ai-suggested` 答案，或 required 问题尚未确认，必须列入未决 `[需要澄清]`，不得静默写入正典。',
+  '',
+  ''
+].join('\n');
+
+const prependWritePreviewGate = (
+  content: string,
+  description: string | undefined
+): string => {
+  if (!shouldInjectWritePreviewGate(description) || content.includes('## 写入前预览门禁')) {
+    return content;
+  }
+
+  const gate = renderWritePreviewGate(description);
+  const frontmatterMatch = content.match(/^---\n[\s\S]*?\n---\n?/);
+  const frontmatter = frontmatterMatch?.[0] ?? '';
+  const body = frontmatterMatch ? content.slice(frontmatter.length) : content;
+
+  if (body.startsWith('## 输入澄清引导')) {
+    const nextHeadingIndex = body.indexOf('\n## ', '## 输入澄清引导'.length);
+    if (nextHeadingIndex >= 0) {
+      return `${frontmatter}${body.slice(0, nextHeadingIndex + 1)}${gate}${body.slice(nextHeadingIndex + 1)}`;
+    }
+  }
+
+  return `${frontmatter}${gate}${body}`;
+};
+
 const cleanNoShellPromptBody = (content: string, runShell?: boolean): string => {
   if (runShell !== false) {
     return content;
@@ -210,10 +262,14 @@ const compileTemplateBody = (input: CompileCommandTemplateInput): {
     parsed.frontmatter.argumentHint,
     input.argFormat
   );
+  const bodyWithGates = prependWritePreviewGate(
+    bodyWithOnboarding,
+    parsed.frontmatter.description
+  );
 
   return {
-    body: bodyWithOnboarding,
-    promptBody: extractPromptBody(bodyWithOnboarding),
+    body: bodyWithGates,
+    promptBody: extractPromptBody(bodyWithGates),
     description: parsed.frontmatter.description,
     argumentHint: parsed.frontmatter.argumentHint
   };
@@ -250,6 +306,10 @@ const compileSpecBody = (input: CompileCommandSpecInput): {
     input.spec.arguments?.hint,
     input.argFormat
   );
+  const promptBodyWithGates = prependWritePreviewGate(
+    promptBodyWithOnboarding,
+    input.spec.description
+  );
   const frontmatter = [
     '---',
     `description: ${input.spec.description}`,
@@ -259,8 +319,8 @@ const compileSpecBody = (input: CompileCommandSpecInput): {
   ].filter(line => line !== undefined).join('\n');
 
   return {
-    body: `${frontmatter}\n${promptBodyWithOnboarding}`,
-    promptBody: promptBodyWithOnboarding,
+    body: `${frontmatter}\n${promptBodyWithGates}`,
+    promptBody: promptBodyWithGates,
     description: input.spec.description,
     argumentHint: input.spec.arguments?.hint
   };

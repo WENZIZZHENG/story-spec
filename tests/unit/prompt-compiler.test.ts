@@ -112,10 +112,19 @@ describe('prompt compiler', () => {
   });
 
   it('compiles a real repository command template', async () => {
+    const constitutionTemplate = await readFile(path.join(repoRoot, 'templates', 'commands', 'constitution.md'), 'utf-8');
     const planTemplate = await readFile(path.join(repoRoot, 'templates', 'commands', 'plan.md'), 'utf-8');
     const specifyTemplate = await readFile(path.join(repoRoot, 'templates', 'commands', 'specify.md'), 'utf-8');
+    const tasksTemplate = await readFile(path.join(repoRoot, 'templates', 'commands', 'tasks.md'), 'utf-8');
     const clarifyTemplate = await readFile(path.join(repoRoot, 'templates', 'commands', 'clarify.md'), 'utf-8');
 
+    const constitution = compileCommandTemplate({
+      template: constitutionTemplate,
+      agent: 'codex',
+      argFormat: '$ARGUMENTS',
+      scriptVariant: 'sh',
+      outputFormat: 'markdown-none'
+    });
     const codex = compileCommandTemplate({
       template: planTemplate,
       agent: 'codex',
@@ -137,6 +146,13 @@ describe('prompt compiler', () => {
       scriptVariant: 'sh',
       outputFormat: 'markdown-none'
     });
+    const tasks = compileCommandTemplate({
+      template: tasksTemplate,
+      agent: 'codex',
+      argFormat: '$ARGUMENTS',
+      scriptVariant: 'sh',
+      outputFormat: 'markdown-none'
+    });
     const clarify = compileCommandTemplate({
       template: clarifyTemplate,
       agent: 'codex',
@@ -145,11 +161,24 @@ describe('prompt compiler', () => {
       outputFormat: 'markdown-none'
     });
 
+    for (const highImpactCommand of [constitution, codex, specify, tasks]) {
+      expect(highImpactCommand).toContain('## 写入前预览门禁');
+      expect(highImpactCommand).toContain('preview');
+      expect(highImpactCommand).toContain('confirm');
+      expect(highImpactCommand).toContain('apply');
+      expect(highImpactCommand).toContain('拟写入文件路径');
+      expect(highImpactCommand).toContain('用户明确输入');
+      expect(highImpactCommand).toContain('AI 建议内容');
+      expect(highImpactCommand).toContain('未决 `[需要澄清]`');
+      expect(highImpactCommand).toContain('可能影响到的后续文件');
+      expect(highImpactCommand).toContain('默认只输出 preview，不写文件');
+    }
     expect(codex).not.toMatch(/^---/);
-    expect(codex).toContain('## 输入澄清引导');
+    expect(codex).toMatch(/^## 输入澄清引导/);
     expect(codex).toContain('.specify/scripts/bash/plan-story.sh');
     expect(codex).toContain('$ARGUMENTS');
     expect(gemini).toContain('description = "');
+    expect(gemini).toContain('## 写入前预览门禁');
     expect(gemini).toContain('.specify/scripts/powershell/plan-story.ps1');
     expect(gemini).toContain('{{args}}');
     expect(specify).toContain('#### 0.1 创作控制权保护');
@@ -161,5 +190,6 @@ describe('prompt compiler', () => {
     expect(clarify).toContain('stories/<story>/clarifications.json');
     expect(clarify).toContain('不要修改 `stories/*/specification.md`');
     expect(clarify).toContain('ai-suggested');
+    expect(clarify).not.toContain('## 写入前预览门禁');
   });
 });
