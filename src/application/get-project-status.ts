@@ -10,6 +10,10 @@ import {
   getStoryStageNextQuestions,
   type StoryMaturityStage
 } from '../domain/story-stage.js';
+import {
+  summarizeCreativeControl,
+  type CreativeControlSummary
+} from './creative-control-summary.js';
 
 export interface StorySummary {
   name: string;
@@ -30,6 +34,7 @@ export interface StorySummary {
   contentChars: number;
   creativeGaps: string[];
   nextQuestions: string[];
+  creativeControl: CreativeControlSummary;
 }
 
 export interface TrackingSummary {
@@ -220,6 +225,14 @@ const buildStorySummary = async (fs: ProjectFileSystem, projectRoot: string): Pr
     /(?:chapter|第)\s*[-_0-9一二三四五六七八九十百千零〇]+/i.test(path.basename(file))
   ).length;
 
+  const nextQuestions = getStoryStageNextQuestions(stage);
+  const creativeControl = await summarizeCreativeControl({
+    projectRoot,
+    storyPath,
+    fileSystem: fs,
+    fallbackNextQuestions: nextQuestions
+  });
+
   return {
     name: path.basename(storyPath),
     path: storyPath,
@@ -238,7 +251,8 @@ const buildStorySummary = async (fs: ProjectFileSystem, projectRoot: string): Pr
     contentFiles: contentFiles.length,
     contentChars: await countContentChars(fs, contentFiles),
     creativeGaps: getStoryStageCreativeGaps(stage),
-    nextQuestions: getStoryStageNextQuestions(stage)
+    nextQuestions,
+    creativeControl
   };
 };
 
@@ -319,6 +333,8 @@ const buildNextActions = (status: Omit<ProjectStatus, 'nextActions'>): string[] 
     actions.push('在 AI 助手中使用 `/specify` 或平台对应命令创建第一个故事规格');
   } else if (status.story.stage === 'idea' || status.story.stage === 'interviewing') {
     actions.push('继续创作访谈：回答 3 个早期问题，或运行 `/clarify` 生成澄清记录');
+  } else if (status.story.creativeControl.pendingDecisions > 0) {
+    actions.push(`先确认 ${status.story.creativeControl.pendingDecisions} 个创作决策，再进入下一轮写入`);
   } else if (!status.story.hasSpecification) {
     actions.push('先补齐 `stories/*/specification.md`');
   } else if (!status.story.hasCreativePlan) {
@@ -405,6 +421,16 @@ export const renderProjectStatus = (status: ProjectStatus): string => {
     lines.push(`任务：${status.story.hasTasks ? status.story.tasksVersion : '缺失'}`);
     lines.push(`下一任务：${status.story.nextTask}`);
     lines.push(`正文：${status.story.contentFiles} 个 Markdown，约 ${status.story.contentChars} 字符`);
+    lines.push('创作空间：');
+    lines.push(`- 已确认决策：${status.story.creativeControl.confirmedDecisions}`);
+    lines.push(`- 待确认决策：${status.story.creativeControl.pendingDecisions}`);
+    lines.push(`- AI 建议未确认：${status.story.creativeControl.unconfirmedAiSuggestions}`);
+    if (status.story.creativeControl.cannotFinalize.length > 0) {
+      lines.push('- 不能擅自定稿：');
+      for (const item of status.story.creativeControl.cannotFinalize.slice(0, 3)) {
+        lines.push(`  - ${item}`);
+      }
+    }
     if (status.story.creativeGaps.length > 0) {
       lines.push('创作缺口：');
       for (const gap of status.story.creativeGaps) {

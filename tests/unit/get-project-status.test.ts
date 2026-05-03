@@ -39,6 +39,59 @@ const createProjectFixture = async () => {
   await mkdir(path.join(storyPath, 'content'), { recursive: true });
   await writeFile(path.join(storyPath, 'specification.md'), '- **版本**：v1');
   await writeFile(path.join(storyPath, 'creative-plan.md'), '版本: plan-v1');
+  await writeFile(path.join(storyPath, 'clarifications.json'), JSON.stringify({
+    schemaVersion: '1.0',
+    story: '001-demo',
+    premise: '异界穿越',
+    createdAt: '2026-05-03T00:00:00.000Z',
+    updatedAt: '2026-05-03T00:00:00.000Z',
+    questions: [
+      {
+        id: 'core.protagonist',
+        stage: 'specify',
+        topic: 'protagonist',
+        question: '主角是谁？',
+        whyItMatters: '决定开局视角。',
+        type: 'textarea',
+        required: true,
+        options: [],
+        exampleAnswers: [],
+        dependsOn: []
+      },
+      {
+        id: 'romance.boundary',
+        stage: 'specify',
+        topic: 'romance',
+        question: '感情线慢热边界是什么？',
+        whyItMatters: '避免过早定关系。',
+        type: 'textarea',
+        required: true,
+        options: [],
+        exampleAnswers: [],
+        dependsOn: []
+      }
+    ],
+    answers: [
+      {
+        questionId: 'core.protagonist',
+        answer: '后端程序员',
+        source: 'user-explicit',
+        confidence: 1,
+        confirmed: true,
+        createdAt: '2026-05-03T00:00:00.000Z',
+        updatedAt: '2026-05-03T00:00:00.000Z'
+      },
+      {
+        questionId: 'romance.boundary',
+        answer: '第一卷只到互相信任',
+        source: 'ai-suggested',
+        confidence: 0.6,
+        confirmed: false,
+        createdAt: '2026-05-03T00:00:00.000Z',
+        updatedAt: '2026-05-03T00:00:00.000Z'
+      }
+    ]
+  }, null, 2));
   await writeFile(path.join(storyPath, 'tasks.md'), `- [ ] [P0] **T001** - 起草第一章
   - **依赖**：无
   - **输出**：\`content/chapter-02.md\`
@@ -85,7 +138,12 @@ describe('getProjectStatus', () => {
         creativePlanVersion: 'plan-v1',
         nextTask: 'T001 - 起草第一章',
         chapterFiles: 1,
-        contentFiles: 1
+        contentFiles: 1,
+        creativeControl: {
+          confirmedDecisions: 1,
+          pendingDecisions: 1,
+          unconfirmedAiSuggestions: 1
+        }
       }
     });
     expect(status.tracking).toContainEqual({ file: 'plot.json', valid: true });
@@ -98,7 +156,9 @@ describe('getProjectStatus', () => {
       message: '任务 T001 的输出文件不存在: content/chapter-02.md',
       path: path.join(projectRoot, 'stories', '001-demo', 'content', 'chapter-02.md')
     });
-    expect(status.nextActions).toContain('下一步任务：T001 - 起草第一章');
+    expect(status.nextActions).toContain('先确认 1 个创作决策，再进入下一轮写入');
+    expect(status.story?.creativeControl.cannotFinalize).toContain('未确认：感情线慢热边界是什么？');
+    expect(status.story?.creativeControl.cannotFinalize).toContain('AI 建议待确认：romance.boundary');
   });
 
   it('renders the common status model for CLI output', async () => {
@@ -114,6 +174,8 @@ describe('getProjectStatus', () => {
     expect(output).toContain('Novel Writer 项目状态');
     expect(output).toContain('项目：status-demo');
     expect(output).toContain('当前故事：001-demo');
+    expect(output).toContain('创作空间：');
+    expect(output).toContain('AI 建议未确认：1');
     expect(output).toContain('追踪 JSON：存在错误');
     expect(output).toContain('阻塞原因：');
     expect(output).toContain('MISSING_TASK_OUTPUT');

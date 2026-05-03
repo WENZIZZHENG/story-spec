@@ -17,6 +17,38 @@ const createProject = async () => {
   await fileSystem.writeFile(path.join(projectRoot, '.specify', 'memory', 'constitution.md'), '# constitution');
   await fileSystem.writeFile(path.join(storyPath, 'specification.md'), '# spec');
   await fileSystem.writeFile(path.join(storyPath, 'creative-plan.md'), '# plan');
+  await fileSystem.writeJson(path.join(storyPath, 'clarifications.json'), {
+    schemaVersion: '1.0',
+    story: '001-demo',
+    premise: '异界穿越',
+    createdAt: '2026-05-03T00:00:00.000Z',
+    updatedAt: '2026-05-03T00:00:00.000Z',
+    questions: [
+      {
+        id: 'romance.boundary',
+        stage: 'specify',
+        topic: 'romance',
+        question: '感情线慢热边界是什么？',
+        whyItMatters: '避免过早定关系。',
+        type: 'textarea',
+        required: true,
+        options: [],
+        exampleAnswers: [],
+        dependsOn: []
+      }
+    ],
+    answers: [
+      {
+        questionId: 'romance.boundary',
+        answer: '第一卷只到互相信任',
+        source: 'ai-suggested',
+        confidence: 0.6,
+        confirmed: false,
+        createdAt: '2026-05-03T00:00:00.000Z',
+        updatedAt: '2026-05-03T00:00:00.000Z'
+      }
+    ]
+  }, { spaces: 2 });
   await fileSystem.writeFile(path.join(storyPath, 'content', 'chapter-000.md'), '# 前情\n\n已经写过的内容');
   await fileSystem.writeJson(path.join(projectRoot, 'spec', 'graph', 'entities.json'), {
     entities: [{
@@ -105,6 +137,10 @@ describe('generateHandoff', () => {
           'stories/001-demo/tasks.md'
         ],
         acceptanceCriteria: ['覆盖本章关键情节', '更新任务状态']
+      },
+      creativeControl: {
+        pendingDecisions: 1,
+        unconfirmedAiSuggestions: 1
       }
     });
     expect(result.context.mustReadFiles).toEqual([
@@ -112,6 +148,7 @@ describe('generateHandoff', () => {
       '.specify/memory/constitution.md',
       'stories/001-demo/specification.md',
       'stories/001-demo/creative-plan.md',
+      'stories/001-demo/clarifications.json',
       'stories/001-demo/tasks.md',
       'spec/graph/entities.json',
       'spec/graph/edges.json',
@@ -125,6 +162,9 @@ describe('generateHandoff', () => {
     });
     expect(result.context.allowedWriteFiles).toContain('spec/knowledge/relationships.md');
     expect(result.markdown).toContain('# Handoff');
+    expect(result.markdown).toContain('## 创作控制摘要');
+    expect(result.markdown).toContain('AI 建议待确认：romance.boundary');
+    expect(result.markdown).toContain('下一个 Agent 应先问');
     expect(result.markdown).toContain('## 结构上下文');
     expect(result.markdown).toContain('`T001` 起草第一章');
     expect(result.markdown).toContain('## 风险边界');

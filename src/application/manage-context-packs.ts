@@ -20,6 +20,8 @@ import {
   toPosixPath,
   unique
 } from './workbench-utils.js';
+import { summarizeCreativeControl } from './creative-control-summary.js';
+import { getStoryStageNextQuestions } from '../domain/story-stage.js';
 
 export interface GenerateContextPackInput {
   projectRoot: string;
@@ -168,12 +170,20 @@ export const generateContextPack = async (
     inspectScenes({ projectRoot, fileSystem: fs, story: story.name }),
     inspectVoice({ projectRoot, fileSystem: fs })
   ]);
+  const creativeControl = await summarizeCreativeControl({
+    projectRoot,
+    storyPath: story.path,
+    fileSystem: fs,
+    fallbackNextQuestions: getStoryStageNextQuestions(story.stage)
+  });
   const mustRead = new Map<string, ContextPackItem>();
 
   addMustRead(mustRead, 'AGENTS.md', '项目级 agent 工作边界');
   addMustRead(mustRead, '.specify/memory/constitution.md', '创作宪法与最高原则');
   addMustRead(mustRead, findStoryArtifactPath(story, 'specification') ? relativePath(projectRoot, findStoryArtifactPath(story, 'specification')!) : undefined, '故事规格');
   addMustRead(mustRead, findStoryArtifactPath(story, 'creative-plan') ? relativePath(projectRoot, findStoryArtifactPath(story, 'creative-plan')!) : undefined, '创作计划');
+  addMustRead(mustRead, creativeControl.recordPath ? relativePath(projectRoot, creativeControl.recordPath) : undefined, '澄清记录与创作控制摘要');
+  addMustRead(mustRead, creativeControl.markdownPath ? relativePath(projectRoot, creativeControl.markdownPath) : undefined, '面向作者审阅的澄清记录');
   addMustRead(mustRead, relativePath(projectRoot, tasksPath), '当前任务清单');
 
   for (const file of [
@@ -203,6 +213,7 @@ export const generateContextPack = async (
   const constraints = unique([
     ...(targetTask?.planOnly ? ['当前任务是 PLAN-ONLY，不应直接写正文。'] : []),
     ...(targetTask && !targetTask.writeReady ? ['当前任务未标记 WRITE-READY，写正文前应补齐边界。'] : []),
+    ...creativeControl.cannotFinalize.map(item => `不得擅自定稿：${item}`),
     '只修改 ContextPack 中列出的 allowedWrites，除非用户明确扩大范围。',
     'WorldFact、CanonFact、Scene Card 与 VoiceFingerprint 的结构化事实优先于临场发挥。'
   ]);

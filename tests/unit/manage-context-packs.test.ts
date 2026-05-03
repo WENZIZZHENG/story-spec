@@ -16,6 +16,38 @@ const createProject = async () => {
   await fileSystem.writeFile(path.join(projectRoot, '.specify', 'memory', 'constitution.md'), '# constitution');
   await fileSystem.writeFile(path.join(storyPath, 'specification.md'), '# spec');
   await fileSystem.writeFile(path.join(storyPath, 'creative-plan.md'), '# plan');
+  await fileSystem.writeJson(path.join(storyPath, 'clarifications.json'), {
+    schemaVersion: '1.0',
+    story: '001-demo',
+    premise: '异界穿越',
+    createdAt: '2026-05-03T00:00:00.000Z',
+    updatedAt: '2026-05-03T00:00:00.000Z',
+    questions: [
+      {
+        id: 'romance.boundary',
+        stage: 'specify',
+        topic: 'romance',
+        question: '感情线慢热边界是什么？',
+        whyItMatters: '避免过早定关系。',
+        type: 'textarea',
+        required: true,
+        options: [],
+        exampleAnswers: [],
+        dependsOn: []
+      }
+    ],
+    answers: [
+      {
+        questionId: 'romance.boundary',
+        answer: '第一卷只到互相信任',
+        source: 'ai-suggested',
+        confidence: 0.6,
+        confirmed: false,
+        createdAt: '2026-05-03T00:00:00.000Z',
+        updatedAt: '2026-05-03T00:00:00.000Z'
+      }
+    ]
+  }, { spaces: 2 });
   await fileSystem.writeFile(path.join(storyPath, 'content', 'chapter-000.md'), '# 前情\n\n主角已经出发。');
   await fileSystem.writeFile(path.join(projectRoot, 'spec', 'world', 'rules.yaml'), `worldFacts:
   - id: world.rule
@@ -104,6 +136,10 @@ describe('manage context packs', () => {
         reason: expect.stringContaining('故事规格')
       }),
       expect.objectContaining({
+        path: 'stories/001-demo/clarifications.json',
+        reason: expect.stringContaining('澄清记录')
+      }),
+      expect.objectContaining({
         path: 'spec/world/rules.yaml',
         required: false
       })
@@ -116,6 +152,8 @@ describe('manage context packs', () => {
     expect(result.pack.canonFacts).toEqual(['canon.fact']);
     expect(result.pack.sceneCards).toEqual(['scene-001']);
     expect(result.pack.voiceFingerprints).toEqual(['entity.hero']);
+    expect(result.pack.constraints).toContain('不得擅自定稿：未确认：感情线慢热边界是什么？');
+    expect(result.pack.constraints).toContain('不得擅自定稿：AI 建议待确认：romance.boundary');
     expect(result.markdown).toContain('## 必须读取');
     await expect(fileSystem.pathExists(result.outputJsonPath!)).resolves.toBe(true);
     await expect(fileSystem.pathExists(result.outputMarkdownPath!)).resolves.toBe(true);

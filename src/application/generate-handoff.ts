@@ -10,6 +10,11 @@ import { scanStoryArtifacts, type ArtifactIssue } from '../validation/artifact-s
 import type { StoryArtifact, WritingTask } from '../domain/story-artifact.js';
 import { inspectScenes, inspectStoryGraph } from './inspect-story-structure.js';
 import type { SceneCard } from '../domain/story-structure.js';
+import {
+  summarizeCreativeControl,
+  type CreativeControlSummary
+} from './creative-control-summary.js';
+import { getStoryStageNextQuestions } from '../domain/story-stage.js';
 
 export type HandoffGenerationErrorCode =
   | 'NO_STORIES'
@@ -68,6 +73,7 @@ export interface HandoffContext {
     sceneFiles: string[];
     graphFiles: string[];
   };
+  creativeControl: CreativeControlSummary;
   mustReadFiles: string[];
   allowedWriteFiles: string[];
   riskBoundaries: string[];
@@ -417,6 +423,12 @@ const buildContext = async (
   const creativePlanPath = artifactPath(story, 'creative-plan');
   const graph = await inspectStoryGraph({ projectRoot, fileSystem: fs });
   const scenes = await inspectScenes({ projectRoot, fileSystem: fs, story: story.name });
+  const creativeControl = await summarizeCreativeControl({
+    projectRoot,
+    storyPath: story.path,
+    fileSystem: fs,
+    fallbackNextQuestions: getStoryStageNextQuestions(story.stage)
+  });
   const relevantScenes = scenes.scenes.filter(scene => sceneMatchesTask(scene, nextHandoffTask));
   const baseMustRead = await Promise.all([
     path.join(projectRoot, 'AGENTS.md'),
@@ -426,6 +438,8 @@ const buildContext = async (
     ...baseMustRead,
     specificationPath ? toPosixPath(path.relative(projectRoot, specificationPath)) : '',
     creativePlanPath ? toPosixPath(path.relative(projectRoot, creativePlanPath)) : '',
+    creativeControl.recordPath ? toPosixPath(path.relative(projectRoot, creativeControl.recordPath)) : '',
+    creativeControl.markdownPath ? toPosixPath(path.relative(projectRoot, creativeControl.markdownPath)) : '',
     toPosixPath(path.relative(projectRoot, tasksPath)),
     ...graph.files.map(file => toPosixPath(path.relative(projectRoot, file))),
     ...scenes.files.map(file => toPosixPath(path.relative(projectRoot, file))),
@@ -460,6 +474,7 @@ const buildContext = async (
       sceneFiles: scenes.files.map(file => toPosixPath(path.relative(projectRoot, file))),
       graphFiles: graph.files.map(file => toPosixPath(path.relative(projectRoot, file)))
     },
+    creativeControl,
     mustReadFiles,
     allowedWriteFiles,
     riskBoundaries: buildRiskBoundaries(nextTask, blockers, targetAgent),
@@ -538,6 +553,20 @@ const renderStoryStructureSection = (context: HandoffContext): string[] => [
   checkList(context.storyStructure.graphFiles),
   '- Scene 文件：',
   checkList(context.storyStructure.sceneFiles)
+];
+
+const renderCreativeControlSection = (context: HandoffContext): string[] => [
+  '',
+  '## 创作控制摘要',
+  '',
+  `- 澄清记录：${context.creativeControl.hasClarifications ? '已发现' : '未发现'}`,
+  `- 已确认决策：${context.creativeControl.confirmedDecisions}`,
+  `- 待确认决策：${context.creativeControl.pendingDecisions}`,
+  `- AI 建议未确认：${context.creativeControl.unconfirmedAiSuggestions}`,
+  '- 不能擅自定稿：',
+  bulletList(context.creativeControl.cannotFinalize),
+  '- 下一个 Agent 应先问：',
+  bulletList(context.creativeControl.mustAskNext)
 ];
 
 const resolveTargetAgent = (targetAgent: string | undefined): HandoffContext['targetAgent'] => {
@@ -625,6 +654,7 @@ export const renderHandoffMarkdown = (context: HandoffContext): string => {
     `当前章节：${currentChapter}`,
     ...renderNextTask(context.nextTask),
     ...renderTargetAgentSection(context.targetAgent),
+    ...renderCreativeControlSection(context),
     ...renderStoryStructureSection(context),
     '',
     '## 必须读取',
