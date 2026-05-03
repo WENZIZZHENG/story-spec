@@ -57,9 +57,9 @@ export function registerPluginsCommand(program: Command, context: { packageRoot:
     .action(() => {
       // 显示插件子命令帮助
       console.log(chalk.cyan('\n📦 插件管理命令:\n'));
-      console.log('  novel plugins list              - 列出已安装的插件');
-      console.log('  novel plugins add <name>        - 安装插件');
-      console.log('  novel plugins remove <name>     - 移除插件');
+      console.log('  storyspec plugins list              - 列出已安装的插件');
+      console.log('  storyspec plugins add <name>        - 安装插件');
+      console.log('  storyspec plugins remove <name>     - 移除插件');
       console.log('\n' + chalk.gray('可用插件:'));
       console.log('  translate         - 中英文翻译插件');
       console.log('  authentic-voice   - 真实人声写作插件');
@@ -88,7 +88,7 @@ export function registerPluginsCommand(program: Command, context: { packageRoot:
 
         if (plugins.length === 0) {
           console.log(chalk.yellow('暂无插件'));
-          console.log(chalk.gray('\n使用 "novel plugins:add <name>" 安装插件'));
+          console.log(chalk.gray('\n使用 "storyspec plugins:add <name>" 安装插件'));
           console.log(chalk.gray('可用插件: translate, authentic-voice, book-analysis, genre-knowledge\n'));
           return;
         }
@@ -108,7 +108,7 @@ export function registerPluginsCommand(program: Command, context: { packageRoot:
         }
       } catch (error: any) {
         if (error.message === 'NOT_IN_PROJECT') {
-          console.log(chalk.red('\n❌ 当前目录不是 novel-writer 项目'));
+          console.log(chalk.red('\n❌ 当前目录不是 story-spec 项目'));
           console.log(chalk.gray('   请在项目根目录运行此命令\n'));
           process.exit(1);
         }
@@ -134,7 +134,7 @@ export function registerPluginsCommand(program: Command, context: { packageRoot:
           process.exit(1);
         }
 
-        console.log(chalk.cyan('\n📦 Novel Writer 插件安装\n'));
+        console.log(chalk.cyan('\n📦 StorySpec 插件安装\n'));
         console.log(chalk.gray(`项目版本: ${projectInfo.version}`));
         console.log(chalk.gray(`AI 配置: ${projectInfo.installedAI.join(', ') || '无'}\n`));
 
@@ -204,8 +204,8 @@ export function registerPluginsCommand(program: Command, context: { packageRoot:
         console.log('');
       } catch (error: any) {
         if (error.message === 'NOT_IN_PROJECT') {
-          console.log(chalk.red('\n❌ 当前目录不是 novel-writer 项目'));
-          console.log(chalk.gray('   请在项目根目录运行此命令，或使用 novel init 创建新项目\n'));
+          console.log(chalk.red('\n❌ 当前目录不是 story-spec 项目'));
+          console.log(chalk.gray('   请在项目根目录运行此命令，或使用 storyspec init 创建新项目\n'));
           process.exit(1);
         }
 
@@ -232,7 +232,7 @@ export function registerPluginsCommand(program: Command, context: { packageRoot:
 
         const pluginManager = new PluginManager(projectPath);
 
-        console.log(chalk.cyan('\n📦 Novel Writer 插件移除\n'));
+        console.log(chalk.cyan('\n📦 StorySpec 插件移除\n'));
         console.log(chalk.gray(`准备移除插件: ${name}`));
         console.log(chalk.gray(`AI 配置: ${projectInfo.installedAI.join(', ') || '无'}\n`));
 
@@ -241,7 +241,7 @@ export function registerPluginsCommand(program: Command, context: { packageRoot:
         spinner.succeed(chalk.green('插件移除成功！\n'));
       } catch (error: any) {
         if (error.message === 'NOT_IN_PROJECT') {
-          console.log(chalk.red('\n❌ 当前目录不是 novel-writer 项目'));
+          console.log(chalk.red('\n❌ 当前目录不是 story-spec 项目'));
           console.log(chalk.gray('   请在项目根目录运行此命令\n'));
           process.exit(1);
         }

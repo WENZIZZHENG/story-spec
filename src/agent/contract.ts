@@ -1,7 +1,7 @@
 import path from 'node:path';
 import type { ProjectFileSystem } from '../application/project-ports.js';
 
-const DEFAULT_PROJECT_NAME = 'Novel Writer 项目';
+const DEFAULT_PROJECT_NAME = 'StorySpec 项目';
 
 const AGENTS_PROFILE_SECTIONS: Record<string, string[]> = {
   adult: [

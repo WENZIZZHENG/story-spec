@@ -1,10 +1,10 @@
 # Gemini 命令开发指南
 
-本指南说明如何为 novel-writer 项目开发跨平台斜杠命令（Claude、Gemini、Cursor、Windsurf、Roo Code）。
+本指南说明如何为 story-spec 项目开发跨平台斜杠命令（Claude、Gemini、Cursor、Windsurf、Roo Code）。
 
 ## 架构概述（v0.15.0+）
 
-Novel Writer 使用**单一源 + 构建系统**架构：
+StorySpec 使用**单一源 + 构建系统**架构：
 
 ```
 templates/
@@ -17,10 +17,10 @@ scripts/build/
 └── generate-commands.sh       # 构建脚本（自动生成所有平台命令）
 
 dist/                          # 构建产物（发布到 npm）
-├── claude/.claude/commands/   # 带 novel.* 前缀
-│   ├── novel.analyze.md
-│   └── novel.specify.md
-├── gemini/.gemini/commands/novel/  # novel/ 子目录
+├── claude/.claude/commands/   # 带 storyspec.* 前缀
+│   ├── storyspec.analyze.md
+│   └── storyspec.specify.md
+├── gemini/.gemini/commands/storyspec/  # storyspec/ 子目录
 │   ├── analyze.toml
 │   └── specify.toml
 ├── cursor/.cursor/commands/   # 标准命名
@@ -32,7 +32,7 @@ dist/                          # 构建产物（发布到 npm）
 
 1. **单一源**：只维护 `templates/commands/` 中的 Markdown 文件
 2. **构建生成**：运行 `npm run build:commands` 自动生成所有平台命令
-3. **命名空间**：自动添加命名空间前缀（Claude: `novel.*`，Gemini: `novel/`）
+3. **命名空间**：自动添加命名空间前缀（Claude: `storyspec.*`，Gemini: `storyspec/`）
 4. **发布时构建**：`npm publish` 时自动构建，用户获得的是构建产物
 
 ## 开发新命令
@@ -71,8 +71,8 @@ npm run build:commands
 
 这个命令会自动：
 1. 读取 `templates/commands/` 中的所有命令
-2. 为 Claude 生成 `novel.*.md` 格式（带命名空间前缀）
-3. 为 Gemini 转换为 TOML 格式并放入 `novel/` 子目录
+2. 为 Claude 生成 `storyspec.*.md` 格式（带命名空间前缀）
+3. 为 Gemini 转换为 TOML 格式并放入 `storyspec/` 子目录
 4. 为其他平台生成标准格式
 5. 输出到 `dist/` 目录
 
@@ -83,8 +83,8 @@ npm run build:commands
 构建脚本 `scripts/build/generate-commands.sh` 会自动处理：
 
 #### 1. 命名空间添加
-- **Claude**: `analyze.md` → `novel.analyze.md`
-- **Gemini**: `analyze.md` → `novel/analyze.toml`（子目录）
+- **Claude**: `analyze.md` → `storyspec.analyze.md`
+- **Gemini**: `analyze.md` → `storyspec/analyze.toml`（子目录）
 - **其他平台**: `analyze.md`（无命名空间）
 
 #### 2. 格式转换（Markdown → TOML）
@@ -182,7 +182,7 @@ npm run build:commands
 
 构建后自动生成：
 
-**Claude 版本** (`dist/claude/.claude/commands/novel.example.md`):
+**Claude 版本** (`dist/claude/.claude/commands/storyspec.example.md`):
 ```markdown
 ---
 description: 示例命令 - 展示命令开发流程
@@ -195,7 +195,7 @@ model: claude-sonnet-4-5-20250929
 ...
 ```
 
-**Gemini 版本** (`dist/gemini/.gemini/commands/novel/example.toml`):
+**Gemini 版本** (`dist/gemini/.gemini/commands/storyspec/example.toml`):
 ```toml
 description = "示例命令 - 展示命令开发流程"
 
@@ -243,30 +243,30 @@ rm -rf dist/
 npm run build:commands
 
 # 检查构建产物
-ls dist/claude/.claude/commands/novel.*
-ls dist/gemini/.gemini/commands/novel/
+ls dist/claude/.claude/commands/storyspec.*
+ls dist/gemini/.gemini/commands/storyspec/
 ```
 
 ### 2. 初始化测试
 ```bash
 # 测试 Claude 安装
-novel init test-project --ai claude
-ls test-project/.claude/commands/novel.*
+storyspec init test-project --ai claude
+ls test-project/.claude/commands/storyspec.*
 
 # 测试 Gemini 安装
-novel init test-project-gemini --ai gemini
-ls test-project-gemini/.gemini/commands/novel/
+storyspec init test-project-gemini --ai gemini
+ls test-project-gemini/.gemini/commands/storyspec/
 
 # 测试所有平台
-novel init test-all --all
+storyspec init test-all --all
 ```
 
 ### 3. 升级测试
 ```bash
 # 在现有项目测试升级
 cd existing-project
-novel upgrade
-ls .claude/commands/novel.*
+storyspec upgrade
+ls .claude/commands/storyspec.*
 ```
 
 ## 最佳实践
@@ -288,10 +288,10 @@ ls .claude/commands/novel.*
 
 ### 命名空间原则
 1. **避免冲突**：命名空间确保与其他工具（如 spec-kit）不冲突
-2. **用户透明**：用户仍使用 `/specify` 而非 `/novel.specify`
+2. **用户透明**：用户仍使用 `/specify` 而非 `/storyspec.specify`
 3. **文件组织**：
-   - Claude: 使用 `novel.*` 前缀
-   - Gemini: 使用 `novel/` 子目录
+   - Claude: 使用 `storyspec.*` 前缀
+   - Gemini: 使用 `storyspec/` 子目录
    - 其他平台：标准命名（无命名空间）
 
 ## 构建系统维护
@@ -308,7 +308,7 @@ generate_commands() {
   local args_var=$3   # $ARGUMENTS or {{args}}
   local output_dir=$4
   local script=$5
-  local namespace=$6  # novel (for claude) or empty
+  local namespace=$6  # storyspec (for claude/codex) or empty
 }
 ```
 
@@ -339,17 +339,17 @@ ls dist/claude/.claude/commands/
 npm pack --dry-run | grep dist/
 
 # 检查安装后的文件
-npm list -g novel-writer-cn
-ls ~/.npm-global/lib/node_modules/novel-writer-cn/dist/
+npm list -g story-spec-cn
+ls ~/.npm-global/lib/node_modules/story-spec-cn/dist/
 ```
 
 ### 命名空间问题
 ```bash
-# Claude 文件必须有 novel.* 前缀
-ls .claude/commands/ | grep ^novel\\.
+# Claude 文件必须有 storyspec.* 前缀
+ls .claude/commands/ | grep ^storyspec\\.
 
-# Gemini 文件必须在 novel/ 子目录
-ls .gemini/commands/novel/
+# Gemini 文件必须在 storyspec/ 子目录
+ls .gemini/commands/storyspec/
 ```
 
 ## 版本兼容性
@@ -367,7 +367,7 @@ ls .gemini/commands/novel/
 ### 迁移建议
 旧项目升级到 v0.15.0+:
 ```bash
-novel upgrade  # 自动迁移到新架构
+storyspec upgrade  # 自动迁移到新架构
 ```
 
 ---

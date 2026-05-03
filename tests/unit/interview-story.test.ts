@@ -61,7 +61,7 @@ describe('interviewStory', () => {
       source: 'user-explicit',
       confirmed: true
     }));
-    expect(result.handoffPrompt).toContain('/novel-specify');
+    expect(result.handoffPrompt).toContain('/storyspec-specify');
     expect(result.handoffPrompt).toContain('clarifications.json');
     await expect(fileSystem.readFile(result.markdownPath)).resolves.toContain('## 需要澄清');
     await expect(fileSystem.readJson(result.jsonPath)).resolves.toMatchObject({

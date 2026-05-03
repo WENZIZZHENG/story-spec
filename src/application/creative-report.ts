@@ -81,21 +81,21 @@ const buildNextActions = (
   const actions: string[] = [];
 
   if (!result.hasClarifications) {
-    actions.push(`novel interview ${result.story}`);
-    actions.push(`novel next ${result.story}`);
+    actions.push(`storyspec interview ${result.story}`);
+    actions.push(`storyspec next ${result.story}`);
     return actions;
   }
 
   if (result.pendingQuestions.length > 0 || result.aiSuggestions.length > 0) {
-    actions.push(`novel interview ${result.story}`);
+    actions.push(`storyspec interview ${result.story}`);
   }
 
   if (result.driftIssues.length > 0) {
-    actions.push('novel review --panel continuity');
+    actions.push('storyspec review --panel continuity');
   }
 
-  actions.push(`novel preview specify ${result.story}`);
-  actions.push('novel validate');
+  actions.push(`storyspec preview specify ${result.story}`);
+  actions.push('storyspec validate');
 
   return [...new Set(actions)].slice(0, 4);
 };
@@ -163,7 +163,7 @@ export const createCreativeReport = async (
 };
 
 export const renderCreativeReport = (result: CreativeReportResult): string => [
-  'Novel Writer 创作控制权报告',
+  'StorySpec 创作控制权报告',
   '',
   `故事：${result.story}`,
   `路径：${relativePath(result.projectRoot, result.storyPath)}`,

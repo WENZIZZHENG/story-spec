@@ -96,8 +96,8 @@ describe('agent integration registry', () => {
   });
 
   it('formats commands and display names from agent integrations', () => {
-    expect(formatAgentCommand(getAgentIntegration('codex'), 'write')).toBe('/novel-write');
-    expect(formatAgentCommand(getAgentIntegration('claude'), 'write')).toBe('/novel.write');
+    expect(formatAgentCommand(getAgentIntegration('codex'), 'write')).toBe('/storyspec-write');
+    expect(formatAgentCommand(getAgentIntegration('claude'), 'write')).toBe('/storyspec.write');
     expect(formatAgentCommand(getAgentIntegration('generic'), 'write')).toBe('/write');
     expect(formatAgentCommand(getAgentIntegration('codex'), 'write', true)).toBe('/write');
 

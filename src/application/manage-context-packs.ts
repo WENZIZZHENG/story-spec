@@ -367,7 +367,7 @@ export const validateContextPack = async (
 };
 
 export const renderContextPackSummary = (result: GenerateContextPackResult): string => [
-  'Novel Writer Context Pack',
+  'StorySpec Context Pack',
   '',
   `ID：${result.pack.id}`,
   `故事：${result.pack.story}`,

@@ -16,7 +16,7 @@ const exists = async (targetPath: string) => {
 };
 
 const makeTempDir = async () => {
-  const dir = await mkdtemp(path.join(os.tmpdir(), 'novel-build-commands-'));
+  const dir = await mkdtemp(path.join(os.tmpdir(), 'storyspec-build-commands-'));
   tempDirs.push(dir);
   return dir;
 };
@@ -110,20 +110,20 @@ describe('buildCommandArtifacts', () => {
       { agent: 'gemini', script: 'sh', commandCount: 2 }
     ]);
 
-    const codexPrompt = await readFile(path.join(outDir, 'codex', '.codex', 'prompts', 'novel-plan.md'), 'utf-8');
+    const codexPrompt = await readFile(path.join(outDir, 'codex', '.codex', 'prompts', 'storyspec-plan.md'), 'utf-8');
     expect(codexPrompt).not.toMatch(/^---/);
     expect(codexPrompt).toContain('Agent: codex');
     expect(codexPrompt).toContain('.specify/scripts/bash/plan-story.sh');
-    const codexSpecPrompt = await readFile(path.join(outDir, 'codex', '.codex', 'prompts', 'novel-write.md'), 'utf-8');
+    const codexSpecPrompt = await readFile(path.join(outDir, 'codex', '.codex', 'prompts', 'storyspec-write.md'), 'utf-8');
     expect(codexSpecPrompt).not.toMatch(/^---/);
     expect(codexSpecPrompt).toContain('Agent: codex');
     expect(codexSpecPrompt).toContain('.specify/scripts/bash/check-writing-state.sh');
 
-    const geminiPrompt = await readFile(path.join(outDir, 'gemini', '.gemini', 'commands', 'novel', 'plan.toml'), 'utf-8');
+    const geminiPrompt = await readFile(path.join(outDir, 'gemini', '.gemini', 'commands', 'storyspec', 'plan.toml'), 'utf-8');
     expect(geminiPrompt).toContain('description = "Plan story"');
     expect(geminiPrompt).toContain('Input: {{args}}');
     expect(geminiPrompt).toContain('.specify/scripts/bash/plan-story.sh');
-    const geminiSpecPrompt = await readFile(path.join(outDir, 'gemini', '.gemini', 'commands', 'novel', 'write.toml'), 'utf-8');
+    const geminiSpecPrompt = await readFile(path.join(outDir, 'gemini', '.gemini', 'commands', 'storyspec', 'write.toml'), 'utf-8');
     expect(geminiSpecPrompt).toContain('description = "Write chapter from tasks"');
     expect(geminiSpecPrompt).toContain('Input: {{args}}');
     expect(geminiSpecPrompt).toContain('.specify/scripts/bash/check-writing-state.sh');

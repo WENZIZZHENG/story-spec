@@ -8,7 +8,7 @@
 
 ## 📖 插件简介
 
-石章鱼风格创作插件是 Novel Writer 的高级风格扩展，专门用于创作具有史诗感、高文学性、强情节张力的长篇小说。本插件最大特色是支持单次输出20000字以上的完整章节，完美复现石章鱼大师的宏大叙事、深邃权谋、鲜活人物的创作精髓。
+石章鱼风格创作插件是 StorySpec 的高级风格扩展，专门用于创作具有史诗感、高文学性、强情节张力的长篇小说。本插件最大特色是支持单次输出20000字以上的完整章节，完美复现石章鱼大师的宏大叙事、深邃权谋、鲜活人物的创作精髓。
 
 ### 核心特色
 
@@ -20,14 +20,14 @@
 
 ## 🚀 安装方法
 
-### 通过 Novel CLI 安装
+### 通过 StorySpec CLI 安装
 
 ```bash
 # 在现有项目中安装
-novel plugins add shizhangyu-style
+storyspec plugins add shizhangyu-style
 
 # 或在初始化新项目时包含
-novel init my-epic-novel --plugins shizhangyu-style
+storyspec init my-epic-novel --plugins shizhangyu-style
 ```
 
 ### 手动安装

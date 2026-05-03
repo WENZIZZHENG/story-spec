@@ -4,8 +4,8 @@ argument-hint: [--panel worldbuilding,voice,continuity,editor,reader] [--chapter
 allowed-tools: Read(.specify/agent-contract.md), Read(.specify/memory/constitution.md), Read(stories/**), Read(spec/world/*.yaml), Read(spec/canon/*.json), Read(spec/graph/*.json), Read(spec/voice/**), Write(spec/reports/**), Bash(novel:*), Bash(node:*), Bash(*)
 model: claude-sonnet-4-5-20250929
 scripts:
-  sh: novel review --json
-  ps: novel review --json
+  sh: storyspec review --json
+  ps: storyspec review --json
 ---
 
 运行小说项目审稿面板，只输出结构化发现和任务草稿，不直接改正文。
@@ -30,7 +30,7 @@ scripts:
 
 ## 执行步骤
 
-1. 运行 `novel review --json`，如用户指定 panel 或 chapter，同步传入参数。
+1. 运行 `storyspec review --json`，如用户指定 panel 或 chapter，同步传入参数。
 2. 按 reviewer 分组阅读 findings：worldbuilding、voice、continuity、editor、reader。
 3. 每条 finding 必须保留 `path`、`severity`、`evidence`、`suggestedAction`。
 4. 对 `CREATIVE_INTENT_DRIFT_*` finding，必须把它视为创作控制权问题：先让用户确认，不得自动改正文或把 AI 建议写成正典。

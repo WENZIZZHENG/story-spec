@@ -1,9 +1,9 @@
-# Novel Writer 产品需求文档 (PRD)
+# StorySpec 产品需求文档 (PRD)
 
 ## 1. 产品概述
 
 ### 1.1 产品名称
-**Novel Writer** - AI 驱动的中文小说创作工具
+**StorySpec** - AI 驱动的中文小说创作工具
 
 ### 1.2 产品定位
 参考 Spec-Kit 方法论的 AI 智能小说创作平台，采用规格驱动创作(Spec-Driven Writing)的理念，通过结构化的工作流程（风格设定→故事大纲→章节规划→任务分解→内容创作）来组织小说项目的创建和管理。专注于为中文内容创作者提供智能化的小说写作辅助能力，支持多种文体风格、角色管理、世界观构建等功能。
@@ -24,16 +24,16 @@
 
 ### 1.5 开发方法论
 
-Novel Writer 借鉴了 Spec-Kit 的结构化开发理念，建立了适合小说创作领域的工作流程：
+StorySpec 借鉴了 Spec-Kit 的结构化开发理念，建立了适合小说创作领域的工作流程：
 
 - **规格优先**：先定义创作风格和故事框架，再进行具体写作
 - **分阶段执行**：遵循 style → story → outline → chapters → write 的渐进式流程
 - **模板驱动**：使用标准化模板确保创作的一致性
 - **AI 增强**：每个阶段都有 AI 智能辅助，提升创作质量
 
-### 1.6 Novel Writer vs Spec-Kit
+### 1.6 StorySpec vs Spec-Kit
 
-| 方面 | Spec-Kit | Novel Writer |
+| 方面 | Spec-Kit | StorySpec |
 |------|----------|--------------|
 | 定位 | 通用软件开发方法论 | 小说创作专用工具 |
 | 核心理念 | Spec-Driven Development | 借鉴 SDD，应用于创作领域 |
@@ -46,7 +46,7 @@ Novel Writer 借鉴了 Spec-Kit 的结构化开发理念，建立了适合小说
 
 ### 2.0 工作流命令（参考 Spec-Kit 方法论）
 
-Novel Writer 提供两类命令：工作流命令和 CLI 工具命令。
+StorySpec 提供两类命令：工作流命令和 CLI 工具命令。
 
 #### 工作流命令
 这些命令参考 Spec-Kit 的方法论，用于组织和管理小说项目：
@@ -173,11 +173,11 @@ AI 辅助创作具体的章节内容，保持风格一致性。
 
 ### 2.6 CLI 工具命令
 
-#### novel init
+#### storyspec init
 初始化小说项目，创建项目结构：
 
 ```bash
-novel init [name] [options]
+storyspec init [name] [options]
   --here            # 在当前目录初始化
   --ai <type>       # 选择 AI 助手类型
   --all             # 为所有 AI 生成配置
@@ -190,11 +190,11 @@ novel init [name] [options]
 - 复制命令模板和脚本
 - 初始化 Git 仓库
 
-#### novel check
+#### storyspec check
 检查系统环境和配置：
 
 ```bash
-novel check
+storyspec check
 ```
 
 检查项目：
@@ -207,7 +207,7 @@ novel check
 
 ### 3.1 工作流架构
 
-Novel Writer 采用五阶段工作流（扩展自 Spec-Kit 的四阶段模型）：
+StorySpec 采用五阶段工作流（扩展自 Spec-Kit 的四阶段模型）：
 
 #### Phase 1: Style（风格设定）
 - **命令**：`/constitution`
@@ -285,7 +285,7 @@ graph LR
 
 ```bash
 novel-project/
-├── .specify/                 # Novel Writer 配置
+├── .specify/                 # StorySpec 配置
 │   ├── config.json          # 项目配置
 │   ├── spec.md              # 命令规范文档
 │   ├── memory/              # 创作记忆
@@ -323,13 +323,13 @@ novel-project/
 
 ### 4.1 案例概述："大明风华"历史小说
 
-创建一部以明朝为背景的历史小说，通过完整的 Novel Writer 工作流程展示产品功能。
+创建一部以明朝为背景的历史小说，通过完整的 StorySpec 工作流程展示产品功能。
 
 ### 4.2 创作流程演示
 
 #### Step 1: 项目初始化
 ```bash
-novel init damingfenghua --ai claude
+storyspec init damingfenghua --ai claude
 cd damingfenghua
 ```
 
@@ -619,8 +619,8 @@ class CompatibilityChecker {
 - [ ] `/write` 命令生成高质量章节内容
 
 #### CLI 测试
-- [ ] `novel init` 正确创建项目结构
-- [ ] `novel check` 准确检测环境状态
+- [ ] `storyspec init` 正确创建项目结构
+- [ ] `storyspec check` 准确检测环境状态
 - [ ] 多平台配置文件正确生成
 - [ ] Git 初始化和提交功能正常
 
@@ -693,7 +693,7 @@ class UpdateChecker {
     if (semver.lt(currentVersion, latestVersion)) {
       console.log(chalk.yellow(
         `新版本可用: ${latestVersion}\n` +
-        `运行 npm update -g novel-writer-cn 更新`
+        `运行 npm update -g story-spec-cn 更新`
       ));
     }
   }
@@ -777,7 +777,7 @@ class UpdateChecker {
 
 | 术语 | 说明 |
 |------|------|
-| Novel Writer | 本产品名称 |
+| StorySpec | 本产品名称 |
 | Spec-Kit | 参考的开发方法论框架 |
 | 工作流命令 | 在 AI 助手中使用的斜杠命令 |
 | CLI | 命令行界面工具 |
@@ -785,8 +785,8 @@ class UpdateChecker {
 
 ### 12.2 相关链接
 
-- GitHub 仓库：https://github.com/wordflowlab/novel-writer
-- NPM 包：https://www.npmjs.com/package/novel-writer-cn
+- GitHub 仓库：https://github.com/wordflowlab/story-spec
+- NPM 包：https://www.npmjs.com/package/story-spec-cn
 - 文档站点：（待建设）
 - 社区论坛：（待建设）
 
@@ -800,5 +800,5 @@ class UpdateChecker {
 
 **文档版本**: v1.0
 **更新日期**: 2025-09-20
-**作者**: Novel Writer Team
+**作者**: StorySpec Team
 **基于**: Spec-Kit 架构理念

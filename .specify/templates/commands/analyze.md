@@ -16,7 +16,7 @@ scripts:
 ### 1. 加载验证基准
 
 运行 `{SCRIPT}` 加载所有验证基准文档：
-- 宪法文件：`memory/novel-constitution.md`
+- 宪法文件：`memory/storyspec-constitution.md`
 - 规格文件：`stories/*/specification.md`
 - 计划文件：`stories/*/creative-plan.md`
 - 任务列表：`stories/*/tasks.md`

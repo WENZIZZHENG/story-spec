@@ -7,7 +7,7 @@
 
 ### 使用方式
 ```bash
-novel recommend [options]
+storyspec recommend [options]
 ```
 
 ### 参数说明
@@ -23,17 +23,17 @@ novel recommend [options]
 
 #### 1. 奇幻长篇推荐
 ```bash
-novel recommend --genre 奇幻 --length 200000 --complexity 复杂
+storyspec recommend --genre 奇幻 --length 200000 --complexity 复杂
 ```
 
 #### 2. 儿童短篇推荐
 ```bash
-novel recommend --genre 儿童 --length 30000 --audience 儿童 --experience 初级
+storyspec recommend --genre 儿童 --length 30000 --audience 儿童 --experience 初级
 ```
 
 #### 3. 悬疑小说推荐
 ```bash
-novel recommend --genre 悬疑 --focus 情节 --pace 快
+storyspec recommend --genre 悬疑 --focus 情节 --pace 快
 ```
 
 ### 输出结果
@@ -50,7 +50,7 @@ novel recommend --genre 悬疑 --focus 情节 --pace 快
 
 ### 使用方式
 ```bash
-novel convert <target> [options]
+storyspec convert <target> [options]
 ```
 
 ### 参数说明
@@ -63,17 +63,17 @@ novel convert <target> [options]
 
 #### 1. 查看转换方案（不实际转换）
 ```bash
-novel convert hero-journey --dry-run
+storyspec convert hero-journey --dry-run
 ```
 
 #### 2. 从三幕转换到七点结构
 ```bash
-novel convert seven-point --from three-act
+storyspec convert seven-point --from three-act
 ```
 
 #### 3. 生成详细转换报告
 ```bash
-novel convert story-circle --output conversion-report.md
+storyspec convert story-circle --output conversion-report.md
 ```
 
 ### 转换映射示例
@@ -99,24 +99,24 @@ novel convert story-circle --output conversion-report.md
 
 ### 使用方式
 ```bash
-novel hybrid <action> [options]
+storyspec hybrid <action> [options]
 ```
 
 ### 操作类型
 
 #### 1. 查看信息
 ```bash
-novel hybrid info
+storyspec hybrid info
 ```
 
 #### 2. 获取推荐
 ```bash
-novel hybrid recommend
+storyspec hybrid recommend
 ```
 
 #### 3. 创建混合结构
 ```bash
-novel hybrid create --primary <method> [options]
+storyspec hybrid create --primary <method> [options]
 ```
 
 ### 参数说明
@@ -132,19 +132,19 @@ novel hybrid create --primary <method> [options]
 
 #### 1. 史诗奇幻组合
 ```bash
-novel hybrid create --primary hero-journey --secondary story-circle --scope character-arc
+storyspec hybrid create --primary hero-journey --secondary story-circle --scope character-arc
 ```
 主线用英雄之旅，角色成长用故事圈。
 
 #### 2. 悬疑惊悚组合
 ```bash
-novel hybrid create --primary seven-point --secondary three-act --scope chapter
+storyspec hybrid create --primary seven-point --secondary three-act --scope chapter
 ```
 整体用七点结构，章节用三幕组织。
 
 #### 3. 多线叙事组合
 ```bash
-novel hybrid create --primary three-act --secondary story-circle --scope sub-plot --micro pixar
+storyspec hybrid create --primary three-act --secondary story-circle --scope sub-plot --micro pixar
 ```
 主线三幕，支线故事圈，场景用皮克斯公式。
 
@@ -167,7 +167,7 @@ novel hybrid create --primary three-act --secondary story-circle --scope sub-plo
 ## 💡 最佳实践
 
 ### 1. 开始新项目
-1. 先用 `novel recommend` 获取推荐
+1. 先用 `storyspec recommend` 获取推荐
 2. 考虑是否需要混合方法
 3. 使用推荐的方法初始化项目
 

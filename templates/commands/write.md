@@ -17,7 +17,7 @@ scripts:
 2. 如果存在匹配的 `.specify/context-packs/*.write-pack.json`，优先读取该 Context Pack：
    - 按 `mustRead` 顺序加载文件，并说明每个 reason。
    - 只修改 `allowedWrites` 中的路径。
-   - 如果没有匹配 pack，可先运行 `novel context:pack --task <TID>` 生成。
+   - 如果没有匹配 pack，可先运行 `storyspec context:pack --task <TID>` 生成。
 
 ### 查询协议（必读顺序）
 

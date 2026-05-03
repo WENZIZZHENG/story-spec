@@ -5,7 +5,7 @@
 ## 安装
 
 ```
-novel plugins add authentic-voice
+storyspec plugins add authentic-voice
 ```
 
 ## 准备个人语料

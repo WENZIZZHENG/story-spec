@@ -205,7 +205,7 @@ export const promoteDraft = async (input: PromoteDraftInput): Promise<PromoteDra
 };
 
 export const renderDraftCreateSummary = (result: CreateDraftResult): string => [
-  'Novel Writer Draft',
+  'StorySpec Draft',
   '',
   `Draft：${result.record.id}`,
   `状态：${result.record.status}`,
@@ -214,7 +214,7 @@ export const renderDraftCreateSummary = (result: CreateDraftResult): string => [
 ].join('\n');
 
 export const renderDraftList = (result: ListDraftsResult): string => [
-  'Novel Writer Drafts',
+  'StorySpec Drafts',
   '',
   `故事：${result.story}`,
   `Drafts：${result.records.length}`,

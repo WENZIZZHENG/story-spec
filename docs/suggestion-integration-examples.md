@@ -356,4 +356,4 @@ spec/tracking/pacing-tracker.json
 ---
 *文档版本：1.0*
 *最后更新：2025-01-24*
-*适用版本：Novel Writer v0.6.2+*
+*适用版本：StorySpec v0.6.2+*

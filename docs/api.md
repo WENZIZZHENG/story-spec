@@ -1,8 +1,8 @@
-# Novel Writer API 文档
+# StorySpec API 文档
 
 ## 概述
 
-Novel Writer 提供了一套完整的 API 用于 AI 驱动的小说创作。API 支持多种 AI 模型提供商，包括 OpenAI、Claude、Gemini 和国内的通义千问、文心一言等。
+StorySpec 提供了一套完整的 API 用于 AI 驱动的小说创作。API 支持多种 AI 模型提供商，包括 OpenAI、Claude、Gemini 和国内的通义千问、文心一言等。
 
 ## 认证
 
@@ -40,7 +40,7 @@ export QWEN_API_KEY="..."
 定义小说的整体风格和基调。
 
 ```bash
-novel style <project-name> [options]
+storyspec style <project-name> [options]
 ```
 
 **参数：**
@@ -52,12 +52,12 @@ novel style <project-name> [options]
 
 **示例：**
 ```bash
-novel style my-fantasy-novel --genre fantasy --tone serious --ai claude
+storyspec style my-fantasy-novel --genre fantasy --tone serious --ai claude
 ```
 
 **输出：**
 ```yaml
-# specs/001-my-fantasy-novel/constitution.yaml
+# specs/001-my-fantasy-storyspec/constitution.yaml
 genre: fantasy
 tone: serious
 narrative_voice: third-person omniscient
@@ -74,7 +74,7 @@ language_style: formal with archaic elements
 生成故事的核心梗概和主要情节点。
 
 ```bash
-novel story <project-name> [options]
+storyspec story <project-name> [options]
 ```
 
 **参数：**
@@ -85,12 +85,12 @@ novel story <project-name> [options]
 
 **示例：**
 ```bash
-novel story my-fantasy-novel --plot adventure --conflict person-vs-evil --setting "magical kingdom" --era medieval
+storyspec story my-fantasy-novel --plot adventure --conflict person-vs-evil --setting "magical kingdom" --era medieval
 ```
 
 **输出：**
 ```markdown
-# specs/001-my-fantasy-novel/specify.md
+# specs/001-my-fantasy-storyspec/specify.md
 
 ## 一句话梗概
 一个普通农家少年意外获得古老魔法，踏上拯救王国的冒险之旅。
@@ -111,7 +111,7 @@ novel story my-fantasy-novel --plot adventure --conflict person-vs-evil --settin
 生成详细的章节大纲。
 
 ```bash
-novel outline <project-name> [options]
+storyspec outline <project-name> [options]
 ```
 
 **参数：**
@@ -122,12 +122,12 @@ novel outline <project-name> [options]
 
 **示例：**
 ```bash
-novel outline my-fantasy-novel --chapters 25 --words-per-chapter 4000 --pov third-limited
+storyspec outline my-fantasy-novel --chapters 25 --words-per-chapter 4000 --pov third-limited
 ```
 
 **输出：**
 ```markdown
-# specs/001-my-fantasy-novel/plan.md
+# specs/001-my-fantasy-storyspec/plan.md
 
 ## 第一章：平静的清晨
 - 场景：小村庄的日常
@@ -149,7 +149,7 @@ novel outline my-fantasy-novel --chapters 25 --words-per-chapter 4000 --pov thir
 创建详细的人物设定。
 
 ```bash
-novel characters <project-name> [options]
+storyspec characters <project-name> [options]
 ```
 
 **参数：**
@@ -159,12 +159,12 @@ novel characters <project-name> [options]
 
 **示例：**
 ```bash
-novel characters my-fantasy-novel --main 3 --supporting 5 --depth detailed
+storyspec characters my-fantasy-novel --main 3 --supporting 5 --depth detailed
 ```
 
 **输出：**
 ```yaml
-# specs/001-my-fantasy-novel/characters.yaml
+# specs/001-my-fantasy-storyspec/characters.yaml
 main_characters:
   - name: 艾登·黎明之子
     age: 17
@@ -188,7 +188,7 @@ main_characters:
 生成具体的章节内容。
 
 ```bash
-novel write <project-name> <chapter> [options]
+storyspec write <project-name> <chapter> [options]
 ```
 
 **参数：**
@@ -199,7 +199,7 @@ novel write <project-name> <chapter> [options]
 
 **示例：**
 ```bash
-novel write my-fantasy-novel chapter-1 --words 4000 --style-check
+storyspec write my-fantasy-storyspec chapter-1 --words 4000 --style-check
 ```
 
 **输出：**
@@ -338,7 +338,7 @@ Content-Type: application/json
 ### WebSocket 实时生成
 
 ```javascript
-const ws = new WebSocket('wss://api.novel-writer.com/v1/stream');
+const ws = new WebSocket('wss://api.story-spec.com/v1/stream');
 
 ws.send(JSON.stringify({
   action: 'write',
@@ -429,11 +429,11 @@ ws.onmessage = (event) => {
 ### JavaScript/TypeScript
 
 ```bash
-npm install @novel-writer/sdk
+npm install @story-spec/sdk
 ```
 
 ```typescript
-import { NovelWriter } from '@novel-writer/sdk';
+import { NovelWriter } from '@story-spec/sdk';
 
 const writer = new NovelWriter({
   apiKey: process.env.NOVEL_WRITER_API_KEY,
@@ -454,7 +454,7 @@ async function createNovel() {
 ### Python
 
 ```bash
-pip install novel-writer-sdk
+pip install story-spec-sdk
 ```
 
 ```python
@@ -526,12 +526,12 @@ chapters = writer.batch_write(
 
 ## 相关资源
 
-- [API Playground](https://playground.novel-writer.com)
-- [SDK 文档](https://sdk-docs.novel-writer.com)
-- [示例项目](https://github.com/novel-writer/examples)
-- [社区论坛](https://community.novel-writer.com)
-- [状态页面](https://status.novel-writer.com)
+- [API Playground](https://playground.story-spec.com)
+- [SDK 文档](https://sdk-docs.story-spec.com)
+- [示例项目](https://github.com/story-spec/examples)
+- [社区论坛](https://community.story-spec.com)
+- [状态页面](https://status.story-spec.com)
 
 ---
 
-📚 **注意**：本 API 文档持续更新中。最新版本请访问 [在线文档](https://docs.novel-writer.com/api)。
+📚 **注意**：本 API 文档持续更新中。最新版本请访问 [在线文档](https://docs.story-spec.com/api)。

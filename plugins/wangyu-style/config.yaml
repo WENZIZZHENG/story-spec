@@ -2,7 +2,7 @@ name: wangyu-style
 version: 1.0.0
 description: 忘语风格创作插件 - 深度模拟《凡人修仙传》作者风格
 type: style
-author: Novel Writer Community
+author: StorySpec Community
 commands:
   - id: wangyu-style
     file: commands/wangyu-style.md

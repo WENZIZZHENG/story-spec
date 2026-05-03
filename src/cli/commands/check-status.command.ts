@@ -29,8 +29,8 @@ const runProjectStatusCommand = async (
     }
   } catch (error: any) {
     if (error.message === 'NOT_IN_PROJECT') {
-      console.log(chalk.red('\n❌ 当前目录不是 novel-writer 项目'));
-      console.log(chalk.gray('   请在项目根目录运行此命令，或使用 novel init 创建新项目\n'));
+      console.log(chalk.red('\n❌ 当前目录不是 story-spec 项目'));
+      console.log(chalk.gray('   请在项目根目录运行此命令，或使用 storyspec init 创建新项目\n'));
       process.exit(1);
     }
 
@@ -84,7 +84,7 @@ export function registerCheckStatusCommand(program: Command): void {
   program
     .command('status')
     .option('--json', '输出 JSON，便于自动化读取')
-    .description('汇总 Novel Writer 小说项目状态')
+    .description('汇总 StorySpec 小说项目状态')
     .action(async (options) => {
       await runProjectStatusCommand(options, '项目状态');
     });

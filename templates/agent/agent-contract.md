@@ -1,8 +1,8 @@
-# Novel Writer Agent 合约
+# StorySpec Agent 合约
 
 ## 项目身份
 
-- 这是名为 `{{PROJECT_NAME}}` 的 Novel Writer 小说项目。
+- 这是名为 `{{PROJECT_NAME}}` 的 StorySpec 小说项目。
 - 项目协议保持 agent-neutral。Codex、Claude、Gemini、Cursor、通用 Markdown agent 和其他工具都是集成入口。
 - CLI 负责管理项目文件和验证流程；它不是写作 agent。
 - 除非项目文件另有说明，面向作者的说明、计划和交接内容使用中文。
@@ -46,9 +46,9 @@
 
 ## 验证规则
 
-- 完成一个阶段前，如果可使用 shell，运行 `novel validate`。
+- 完成一个阶段前，如果可使用 shell，运行 `storyspec validate`。
 - 如果无法使用 shell，手动检查必需读取/写入文件，并记录无法验证的内容。
-- 自动化 agent 优先使用 JSON 输出：`novel validate --json`。
+- 自动化 agent 优先使用 JSON 输出：`storyspec validate --json`。
 
 ## 通用 Agent 兜底
 

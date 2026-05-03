@@ -496,7 +496,7 @@ validateRules: []
 
     const output = renderProjectValidation(result);
 
-    expect(output).toContain('Novel Writer 项目校验');
+    expect(output).toContain('StorySpec 项目校验');
     expect(output).toContain(`根目录：${projectRoot}`);
     expect(output).toContain('结果：失败');
     expect(output).toContain('world 文件：1');

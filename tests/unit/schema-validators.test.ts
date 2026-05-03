@@ -17,7 +17,7 @@ describe('schema validators', () => {
         commandsDir: 'prompts',
         displayName: 'Codex CLI',
         distDir: 'dist/codex',
-        commandPrefix: '/novel-'
+        commandPrefix: '/storyspec-'
       },
       {
         name: 'codex',

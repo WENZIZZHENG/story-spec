@@ -23,24 +23,24 @@ node --version  # 应显示 v18.0.0 或更高
 npm --version   # 应显示 npm 版本号
 ```
 
-### 2. 安装 Novel Writer
+### 2. 安装 StorySpec
 
 使用 npm 全局安装：
 
 ```bash
-npm install -g novel-writer-cn
+npm install -g story-spec-cn
 ```
 
 或使用 yarn：
 
 ```bash
-yarn global add novel-writer-cn
+yarn global add story-spec-cn
 ```
 
 或使用 pnpm：
 
 ```bash
-pnpm add -g novel-writer-cn
+pnpm add -g story-spec-cn
 ```
 
 ### 3. 验证安装
@@ -56,28 +56,28 @@ novel --help
 
 ```bash
 # 创建名为"我的小说"的项目
-novel init 我的小说
+storyspec init 我的小说
 
 # 指定 AI 助手类型
-novel init 我的小说 --ai claude
-novel init 我的小说 --ai cursor
-novel init 我的小说 --ai gemini
+storyspec init 我的小说 --ai claude
+storyspec init 我的小说 --ai cursor
+storyspec init 我的小说 --ai gemini
 ```
 
 ### 在现有目录初始化
 
 ```bash
 # 在当前目录初始化
-novel init --here
+storyspec init --here
 
 # 指定 AI 助手
-novel init --here --ai claude
+storyspec init --here --ai claude
 ```
 
 ### 不使用 Git（如果没有安装 Git）
 
 ```bash
-novel init 我的小说 --no-git
+storyspec init 我的小说 --no-git
 ```
 
 ## AI 助手配置
@@ -130,7 +130,7 @@ novel init 我的小说 --no-git
 运行环境检查命令：
 
 ```bash
-novel check
+storyspec check
 ```
 
 这会检查：
@@ -151,7 +151,7 @@ Set-ExecutionPolicy RemoteSigned -Scope CurrentUser
 **macOS/Linux**：
 ```bash
 # 使用 sudo 安装
-sudo npm install -g novel-writer-cn
+sudo npm install -g story-spec-cn
 ```
 
 ### Q: 提示 "command not found"
@@ -171,7 +171,7 @@ export PATH="$PATH:$(npm config get prefix)/bin"
 如果没有安装 Git 或不需要版本控制：
 
 ```bash
-novel init 我的小说 --no-git
+storyspec init 我的小说 --no-git
 ```
 
 ### Q: 中文目录名有问题
@@ -179,42 +179,42 @@ novel init 我的小说 --no-git
 在某些系统上，中文目录名可能导致问题。建议使用英文或拼音：
 
 ```bash
-novel init my-novel
+storyspec init my-novel
 # 或
-novel init wo-de-xiao-shuo
+storyspec init wo-de-xiao-shuo
 ```
 
 ### Q: AI 助手无法识别斜杠命令
 
 1. 确保项目已正确初始化
 2. 检查 `.specify/spec.md` 文件是否存在
-3. 在 AI 助手中明确说明你在使用 Novel Writer
+3. 在 AI 助手中明确说明你在使用 StorySpec
 4. 尝试复制命令内容手动输入
 
-## 升级 Novel Writer
+## 升级 StorySpec
 
 ```bash
 # 查看当前版本
 novel --version
 
 # 升级到最新版本
-npm update -g novel-writer-cn
+npm update -g story-spec-cn
 
 # 或重新安装
-npm uninstall -g novel-writer-cn
-npm install -g novel-writer-cn
+npm uninstall -g story-spec-cn
+npm install -g story-spec-cn
 ```
 
 ## 卸载
 
 ```bash
-npm uninstall -g novel-writer-cn
+npm uninstall -g story-spec-cn
 ```
 
 ## 获取帮助
 
 - 📖 查看[快速入门指南](quickstart.md)
-- 💬 访问 [GitHub Issues](https://github.com/wordflowlab/novel-writer/issues)
+- 💬 访问 [GitHub Issues](https://github.com/wordflowlab/story-spec/issues)
 - 📧 联系支持：support@novelwriter.io
 
 ---

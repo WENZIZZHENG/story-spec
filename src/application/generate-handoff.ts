@@ -629,7 +629,7 @@ const renderContinueSteps = (context: HandoffContext): string[] => {
 
   return [
     canRunShell
-      ? '1. 运行 `novel status` 确认项目状态。'
+      ? '1. 运行 `storyspec status` 确认项目状态。'
       : '1. 不执行 CLI/脚本；人工确认项目状态、任务边界和已知阻塞项。',
     '2. 按“必须读取”顺序加载上下文。',
     '3. 只围绕“下一任务”和“允许修改”推进。',
@@ -712,7 +712,7 @@ export const renderHandoffSummary = (result: GenerateHandoffResult): string => {
     ? `${context.nextTask.id} ${context.nextTask.title}`
     : '暂无未完成任务';
   const lines = [
-    'Novel Writer 断点续写上下文包',
+    'StorySpec 断点续写上下文包',
     '',
     `故事：${context.story.name}`,
     `当前章节：${context.currentChapter.path ?? '未找到'}`,

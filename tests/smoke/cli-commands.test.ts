@@ -73,7 +73,7 @@ describe('CLI command modules smoke', () => {
       '星河'
     ], { cwd: repoRoot });
 
-    expect(stdout).toContain('Novel Writer Agent 合约');
+    expect(stdout).toContain('StorySpec Agent 合约');
     expect(stdout).toContain('星河');
     expect(stdout).toContain('.specify/agent-contract.md');
   });
@@ -135,7 +135,7 @@ describe('CLI command modules smoke', () => {
     const { stdout } = await execFileAsync('node', [cliPath, 'plugins'], { cwd: repoRoot });
 
     expect(stdout).toContain('插件管理命令');
-    expect(stdout).toContain('novel plugins add <name>');
+    expect(stdout).toContain('storyspec plugins add <name>');
   });
 
   it('previews plugin installation without writing files', async () => {
@@ -165,7 +165,7 @@ describe('CLI command modules smoke', () => {
     expect(stdout).toContain('plugins/translate');
     expect(stdout).toContain('Agent integration 影响');
     expect(stdout).toContain('Codex CLI (codex)');
-    expect(stdout).toContain('.codex/prompts/novel-translate.md');
+    expect(stdout).toContain('.codex/prompts/storyspec-translate.md');
     expect(stdout).toContain('Generic Markdown Agent (generic)');
     expect(stdout).toContain('未安装，跳过');
     expect(stdout).toContain('冲突');
@@ -185,7 +185,7 @@ describe('CLI command modules smoke', () => {
     ], { cwd });
 
     const projectPath = path.join(cwd, 'smoke');
-    const commandPath = path.join(projectPath, '.codex', 'prompts', 'novel-translate.md');
+    const commandPath = path.join(projectPath, '.codex', 'prompts', 'storyspec-translate.md');
     await writeFile(commandPath, 'existing');
 
     await expect(execFileAsync('node', [
@@ -228,7 +228,7 @@ describe('CLI command modules smoke', () => {
       '--yes'
     ], { cwd: projectPath });
 
-    expect(stdout).toContain('Novel Writer 项目升级');
+    expect(stdout).toContain('StorySpec 项目升级');
     expect(stdout).toContain('预览模式');
     expect(stdout).toContain('更新命令文件');
   });
@@ -846,7 +846,7 @@ describe('CLI command modules smoke', () => {
     const next = JSON.parse(nextResult.stdout);
 
     expect(next.stage).toBe('idea');
-    expect(next.actions[0].command).toBe('novel interview 法术编译纪元');
+    expect(next.actions[0].command).toBe('storyspec interview 法术编译纪元');
 
     await execFileAsync('node', [
       cliPath,

@@ -1,13 +1,13 @@
-# Novel Writer 项目 SDD
+# StorySpec 项目 SDD
 
 ## 状态
 
-Active。本文档是 Novel Writer 仓库开发与重构的项目级 SDD，优先级高于全局 SDD 中与本项目冲突的规则。
+Active。本文档是 StorySpec 仓库开发与重构的项目级 SDD，优先级高于全局 SDD 中与本项目冲突的规则。
 
 ## 1. 适用范围
 
 - 适用于本仓库的代码、CLI、模板、生成产物、测试、技术文档和重构路线。
-- 当前阶段目标是全量重构 Novel Writer，而不是在旧架构上做保守增量。
+- 当前阶段目标是全量重构 StorySpec，而不是在旧架构上做保守增量。
 - `novel-sdd.md` 是产品方法论与创作理念文档，不是开发规范，不参与本仓库开发流程约束。
 - `docs/tech/todo-index.md` 是当前活跃待办入口；`docs/tech/todo-governance.md` 定义待办、路线图和归档规则。
 - `docs/tech/archive/full-refactor/full-refactor-*.md` 是已完成重构路线图与历史任务索引；新开发应先从统一待办入口找到当前路线，再按对应专题文件推进。

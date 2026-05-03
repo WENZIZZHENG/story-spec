@@ -1,8 +1,8 @@
-# Novel Writer 技术架构
+# StorySpec 技术架构
 
-本文档记录 Novel Writer 当前重构后的真实架构，面向后续维护者、插件作者和使用 Codex 接手项目的开发者。
+本文档记录 StorySpec 当前重构后的真实架构，面向后续维护者、插件作者和使用 Codex 接手项目的开发者。
 
-Novel Writer 是一个面向中文小说创作的 SDD 工具。它把“创作宪法、故事规格、创作计划、任务清单、章节正文、追踪数据、质量校验”视为一组可验证的工程产物，并通过多 AI 平台 slash command 把这些产物组织成可执行流程。
+StorySpec 是一个面向中文小说创作的 SDD 工具。它把“创作宪法、故事规格、创作计划、任务清单、章节正文、追踪数据、质量校验”视为一组可验证的工程产物，并通过多 AI 平台 slash command 把这些产物组织成可执行流程。
 
 ## 架构原则
 
@@ -53,7 +53,7 @@ flowchart TB
 
 ```mermaid
 sequenceDiagram
-  participant CLI as novel init
+  participant CLI as storyspec init
   participant App as initProject
   participant FS as ProjectFileSystem
   participant Artifacts as dist command artifacts
@@ -91,17 +91,17 @@ flowchart TB
   Project --> Schema["schema validators"]
   Project --> Rules["writing rules"]
   Graph --> Status["status 输出"]
-  Schema --> Validate["novel validate 输出"]
+  Schema --> Validate["storyspec validate 输出"]
   Rules --> Validate
 ```
 
-`status` 关注“能否接手继续写”，会汇总故事进度、追踪数据、AI 平台配置、Codex prompt、`AGENTS.md` 与 blocker；`codex-status` 保留为兼容别名。`novel validate` 关注“结构和产物是否合格”，会输出 error/warning/info，并支持 `--severity` 过滤。
+`status` 关注“能否接手继续写”，会汇总故事进度、追踪数据、AI 平台配置、Codex prompt、`AGENTS.md` 与 blocker；`codex-status` 保留为兼容别名。`storyspec validate` 关注“结构和产物是否合格”，会输出 error/warning/info，并支持 `--severity` 过滤。
 
 ### 插件扩展流
 
 ```mermaid
 sequenceDiagram
-  participant CLI as novel plugins add
+  participant CLI as storyspec plugins add
   participant Manager as PluginManager
   participant Manifest as PluginManifest
   participant Plan as InstallPlan

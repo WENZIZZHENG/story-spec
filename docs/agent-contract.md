@@ -1,6 +1,6 @@
 # Agent Contract
 
-Agent contract 是 Novel Writer 项目的通用协作协议。它让不同 agent 在同一套小说项目文件上工作时，知道应该读什么、能写什么、如何降级和如何交接。
+Agent contract 是 StorySpec 项目的通用协作协议。它让不同 agent 在同一套小说项目文件上工作时，知道应该读什么、能写什么、如何降级和如何交接。
 
 ## 文件位置
 
@@ -30,9 +30,9 @@ Renderer 会根据 integration 能力写入不同说明：
 
 | 能力 | 可用时 | 不可用时 |
 | --- | --- | --- |
-| `runShell` | 可以运行 `novel validate` 或 `.specify/scripts/**` | 不执行 CLI/脚本，改为人工检查并记录未验证项 |
+| `runShell` | 可以运行 `storyspec validate` 或 `.specify/scripts/**` | 不执行 CLI/脚本，改为人工检查并记录未验证项 |
 | `writeFiles` | 可以在允许范围内写文件 | 不创建、修改或删除文件，只输出目标路径和补丁式建议 |
-| `supportsSlashCommands` | 使用 `/write`、`/novel-write` 等命令 | 直接读取 Markdown 命令文件执行步骤 |
+| `supportsSlashCommands` | 使用 `/write`、`/storyspec-write` 等命令 | 直接读取 Markdown 命令文件执行步骤 |
 
 只读 agent 的典型输出应包含：
 
@@ -40,16 +40,16 @@ Renderer 会根据 integration 能力写入不同说明：
 目标路径：stories/001-demo/content/chapter-001.md
 建议变更：...
 补丁式说明：...
-无法验证：未执行 novel validate
+无法验证：未执行 storyspec validate
 ```
 
 ## Handoff 适配
 
-`novel handoff` 可以按目标 agent 能力生成继续步骤：
+`storyspec handoff` 可以按目标 agent 能力生成继续步骤：
 
 ```bash
-novel handoff --target-agent codex
-novel handoff --target-agent continue-check
+storyspec handoff --target-agent codex
+storyspec handoff --target-agent continue-check
 ```
 
 当目标是 `continue-check` 这类只读 agent 时，handoff 会要求它只做检查和补丁式建议，不直接写正文、tracking 或任务文件。
@@ -57,9 +57,9 @@ novel handoff --target-agent continue-check
 ## 同步
 
 ```bash
-novel contract:print
-novel contract:sync
-novel agent:doctor
+storyspec contract:print
+storyspec contract:sync
+storyspec agent:doctor
 ```
 
 `contract:sync` 会同步项目 contract；`agent:doctor` 会检查 contract、命令目录和 manifest 是否一致。

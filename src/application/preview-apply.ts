@@ -103,7 +103,7 @@ const readClarificationRecord = async (
   if (!await fs.pathExists(recordPath)) {
     throw new PreviewApplyError(
       'MISSING_CLARIFICATIONS',
-      '缺少 clarifications.json。请先运行 novel interview，再生成规格预览。'
+      '缺少 clarifications.json。请先运行 storyspec interview，再生成规格预览。'
     );
   }
 
@@ -156,7 +156,7 @@ const renderPreviewReport = (
   record: PreviewRecord,
   projectRoot: string
 ): string => [
-  '# Novel Writer Preview',
+  '# StorySpec Preview',
   '',
   `ID：${record.id}`,
   `类型：${record.kind}`,
@@ -177,8 +177,8 @@ const renderPreviewReport = (
   '',
   '## 应用命令',
   '',
-  `- 预览：novel apply ${record.id}`,
-  `- 确认写入：novel apply ${record.id} --yes`,
+  `- 预览：storyspec apply ${record.id}`,
+  `- 确认写入：storyspec apply ${record.id} --yes`,
   ''
 ].join('\n');
 
@@ -310,7 +310,7 @@ export const applyPreview = async (
 };
 
 export const renderSpecifyPreview = (result: CreateSpecifyPreviewResult): string => [
-  'Novel Writer 规格预览',
+  'StorySpec 规格预览',
   '',
   `Preview：${result.record.id}`,
   `故事：${result.record.story}`,
@@ -320,11 +320,11 @@ export const renderSpecifyPreview = (result: CreateSpecifyPreviewResult): string
   '',
   result.record.risks.length > 0
     ? '存在待确认风险，请先处理后再 apply。'
-    : `确认后运行：novel apply ${result.record.id} --yes`
+    : `确认后运行：storyspec apply ${result.record.id} --yes`
 ].join('\n');
 
 export const renderApplyPreview = (result: ApplyPreviewResult): string => [
-  'Novel Writer Preview Apply',
+  'StorySpec Preview Apply',
   '',
   `Preview：${result.record.id}`,
   `目标：${result.targetPath}`,

@@ -1,6 +1,6 @@
-# Novel Writer 技术文档
+# StorySpec 技术文档
 
-欢迎来到 Novel Writer 技术文档中心！这里提供了详细的架构设计、技术实现和开发指南。
+欢迎来到 StorySpec 技术文档中心！这里提供了详细的架构设计、技术实现和开发指南。
 
 ---
 
@@ -61,11 +61,11 @@
 
 ## 🖼️ 架构图
 
-![Novel Writer 架构图](images/novel-writer-architecture.svg)
+![StorySpec 架构图](images/story-spec-architecture.svg)
 
 **架构图说明**：
 
-该图展示了 Novel Writer 的完整工作流程：
+该图展示了 StorySpec 的完整工作流程：
 
 1. **角色层**（蓝色）- 作者、规划者、创作工程师、质量检查、文档编辑
 2. **AI 工具层**（红色）- 规划 AI、写作助手、验证追踪 AI、文档生成
@@ -88,8 +88,8 @@
 
 ```bash
 # 克隆仓库
-git clone https://github.com/wordflowlab/novel-writer.git
-cd novel-writer
+git clone https://github.com/wordflowlab/story-spec.git
+cd story-spec
 
 # 安装依赖
 npm install
@@ -107,7 +107,7 @@ npm run build:commands
 ### 项目结构
 
 ```
-novel-writer/
+story-spec/
 ├── src/                        # TypeScript 源代码
 │   ├── cli.ts                 # CLI 主入口
 │   ├── plugins/               # 插件管理器
@@ -201,7 +201,7 @@ description: 我的命令描述
 4. **构建和测试**
 ```bash
 npm run build:commands
-novel plugins add my-plugin
+storyspec plugins add my-plugin
 ```
 
 ### 官方插件参考
@@ -260,8 +260,8 @@ novel plugins add my-plugin
 
 1. **Fork 仓库**
 ```bash
-git clone https://github.com/YOUR_USERNAME/novel-writer.git
-cd novel-writer
+git clone https://github.com/YOUR_USERNAME/story-spec.git
+cd story-spec
 git checkout -b feature/my-feature
 ```
 
@@ -292,7 +292,7 @@ npm run dev
 
 遇到问题？请在 GitHub 提交 Issue：
 
-**[https://github.com/wordflowlab/novel-writer/issues](https://github.com/wordflowlab/novel-writer/issues)**
+**[https://github.com/wordflowlab/story-spec/issues](https://github.com/wordflowlab/story-spec/issues)**
 
 **Issue 模板**：
 ```markdown
@@ -300,8 +300,8 @@ npm run dev
 [清楚描述问题]
 
 ### 复现步骤
-1. 执行命令 `novel init my-novel`
-2. 运行 `novel check`
+1. 执行命令 `storyspec init my-novel`
+2. 运行 `storyspec check`
 3. 看到错误信息...
 
 ### 期望行为
@@ -313,7 +313,7 @@ npm run dev
 ### 环境信息
 - OS: macOS 14.0
 - Node.js: v20.10.0
-- Novel Writer: v0.16.3
+- StorySpec: v0.16.3
 - AI 平台: Claude Code
 ```
 
@@ -321,9 +321,9 @@ npm run dev
 
 ## 📞 联系方式
 
-- **GitHub**: [wordflowlab/novel-writer](https://github.com/wordflowlab/novel-writer)
-- **Issues**: [提交问题](https://github.com/wordflowlab/novel-writer/issues)
-- **Discussions**: [讨论区](https://github.com/wordflowlab/novel-writer/discussions)
+- **GitHub**: [wordflowlab/story-spec](https://github.com/wordflowlab/story-spec)
+- **Issues**: [提交问题](https://github.com/wordflowlab/story-spec/issues)
+- **Discussions**: [讨论区](https://github.com/wordflowlab/story-spec/discussions)
 
 ---
 
@@ -333,6 +333,6 @@ MIT License
 
 ---
 
-**Novel Writer** - 让 AI 成为你的创作伙伴！ ✨📚
+**StorySpec** - 让 AI 成为你的创作伙伴！ ✨📚
 
 *最后更新: 2025-10-12*

@@ -132,7 +132,7 @@ describe('PluginManager install plan', () => {
     const manager = new PluginManager(projectRoot);
 
     await mkdir(path.join(projectRoot, 'plugins', 'demo-plugin'), { recursive: true });
-    await writeFixtureFile(projectRoot, '.claude/commands/novel.demo-command.md', 'existing');
+    await writeFixtureFile(projectRoot, '.claude/commands/storyspec.demo-command.md', 'existing');
 
     const plan = await manager.planInstallPlugin('demo-plugin', sourcePath);
 
@@ -143,14 +143,14 @@ describe('PluginManager install plan', () => {
       conflict: operation.conflict
     }))).toEqual(expect.arrayContaining([
       { kind: 'copy-plugin', target: 'plugins/demo-plugin', conflict: true },
-      { kind: 'install-command', target: '.claude/commands/novel.demo-command.md', conflict: true },
+      { kind: 'install-command', target: '.claude/commands/storyspec.demo-command.md', conflict: true },
       { kind: 'install-command', target: '.cursor/commands/demo-command.md', conflict: false },
       { kind: 'install-gemini-command', target: '.gemini/commands/demo-command.toml', conflict: false },
       { kind: 'register-expert', target: 'experts/plugins/demo-plugin/demo-expert.md', conflict: false }
     ]));
     expect(plan.conflicts.map(conflict => path.relative(projectRoot, conflict.targetPath).replace(/\\/g, '/'))).toEqual([
       'plugins/demo-plugin',
-      '.claude/commands/novel.demo-command.md'
+      '.claude/commands/storyspec.demo-command.md'
     ]);
     expect(plan.agentImpacts.map(impact => ({
       agent: impact.agent,
@@ -162,13 +162,13 @@ describe('PluginManager install plan', () => {
         agent: 'claude',
         installed: true,
         statuses: ['conflict'],
-        targets: ['.claude/commands/novel.demo-command.md']
+        targets: ['.claude/commands/storyspec.demo-command.md']
       },
       {
         agent: 'codex',
         installed: false,
         statuses: ['skipped'],
-        targets: ['.codex/prompts/novel-demo-command.md']
+        targets: ['.codex/prompts/storyspec-demo-command.md']
       }
     ]));
   });
@@ -182,7 +182,7 @@ describe('PluginManager install plan', () => {
     await manager.applyInstallPlan(plan);
 
     await expect(exists(path.join(projectRoot, 'plugins', 'demo-plugin', 'config.yaml'))).resolves.toBe(true);
-    await expect(exists(path.join(projectRoot, '.claude', 'commands', 'novel.demo-command.md'))).resolves.toBe(true);
+    await expect(exists(path.join(projectRoot, '.claude', 'commands', 'storyspec.demo-command.md'))).resolves.toBe(true);
     await expect(exists(path.join(projectRoot, '.cursor', 'commands', 'demo-command.md'))).resolves.toBe(true);
     await expect(exists(path.join(projectRoot, '.gemini', 'commands', 'demo-command.toml'))).resolves.toBe(true);
     await expect(exists(path.join(projectRoot, 'experts', 'plugins', 'demo-plugin', 'demo-expert.md'))).resolves.toBe(true);
@@ -222,17 +222,17 @@ describe('PluginManager install plan', () => {
     const sourcePath = await createPluginSource();
     const manager = new PluginManager(projectRoot);
 
-    await writeFixtureFile(projectRoot, '.claude/commands/novel.demo-command.md', 'existing');
+    await writeFixtureFile(projectRoot, '.claude/commands/storyspec.demo-command.md', 'existing');
     const plan = await manager.planInstallPlugin('demo-plugin', sourcePath);
 
     await expect(manager.applyInstallPlan(plan)).rejects.toMatchObject({
       name: 'PluginInstallConflictError'
     });
-    await expect(readFile(path.join(projectRoot, '.claude/commands/novel.demo-command.md'), 'utf-8')).resolves.toBe('existing');
+    await expect(readFile(path.join(projectRoot, '.claude/commands/storyspec.demo-command.md'), 'utf-8')).resolves.toBe('existing');
 
     await manager.applyInstallPlan(plan, { force: true });
 
-    await expect(readFile(path.join(projectRoot, '.claude/commands/novel.demo-command.md'), 'utf-8')).resolves.toContain('Run demo');
+    await expect(readFile(path.join(projectRoot, '.claude/commands/storyspec.demo-command.md'), 'utf-8')).resolves.toContain('Run demo');
   });
 
   it('renders plugin CommandSpec commands through the agent renderers', async () => {
@@ -250,7 +250,7 @@ describe('PluginManager install plan', () => {
       target: path.relative(projectRoot, operation.targetPath).replace(/\\/g, '/'),
       generated: operation.generated
     }))).toEqual(expect.arrayContaining([
-      { kind: 'install-command', target: '.codex/prompts/novel-spec-command.md', generated: true },
+      { kind: 'install-command', target: '.codex/prompts/storyspec-spec-command.md', generated: true },
       { kind: 'install-gemini-command', target: '.gemini/commands/spec-command.toml', generated: true },
       { kind: 'install-command', target: '.specify/commands/spec-command.md', generated: true }
     ]));
@@ -262,14 +262,14 @@ describe('PluginManager install plan', () => {
         : undefined,
       status: impact.commandImpacts[0]?.status
     }))).toEqual(expect.arrayContaining([
-      { agent: 'codex', installed: true, target: '.codex/prompts/novel-spec-command.md', status: 'write' },
+      { agent: 'codex', installed: true, target: '.codex/prompts/storyspec-spec-command.md', status: 'write' },
       { agent: 'generic', installed: true, target: '.specify/commands/spec-command.md', status: 'write' },
       { agent: 'q', installed: false, target: '.amazonq/prompts/spec-command.md', status: 'skipped' }
     ]));
 
     await manager.applyInstallPlan(plan);
 
-    await expect(readFile(path.join(projectRoot, '.codex', 'prompts', 'novel-spec-command.md'), 'utf-8'))
+    await expect(readFile(path.join(projectRoot, '.codex', 'prompts', 'storyspec-spec-command.md'), 'utf-8'))
       .resolves.toContain('Agent: codex');
     await expect(readFile(path.join(projectRoot, '.gemini', 'commands', 'spec-command.toml'), 'utf-8'))
       .resolves.toContain('description = "Rendered from spec"');

@@ -1,10 +1,10 @@
-# Novel Writer 小说创作完整指南
+# StorySpec 小说创作完整指南
 
 > 🚀 从灵感到成品，让AI成为你的创作伙伴，而不是替代品
 
 ## 目录
 
-1. [为什么需要 Novel Writer？](#为什么需要-novel-writer)
+1. [为什么需要 StorySpec？](#为什么需要-story-spec)
 2. [核心理念：规格驱动创作](#核心理念规格驱动创作)
 3. [快速开始：30分钟写出第一章](#快速开始30分钟写出第一章)
 4. [完整创作流程](#完整创作流程)
@@ -15,7 +15,7 @@
 
 ---
 
-## 为什么需要 Novel Writer？
+## 为什么需要 StorySpec？
 
 ### 传统创作的5大痛点
 
@@ -89,14 +89,14 @@
 graph LR
     A[传统创作] -->|痛点| B[创作困境]
     C[AI辅助] -->|问题| B
-    B -->|Novel Writer| D[规格驱动创作]
+    B -->|StorySpec| D[规格驱动创作]
     D --> E[高质量作品]
 
     style D fill:#f9f,stroke:#333,stroke-width:4px
     style E fill:#9f9,stroke:#333,stroke-width:2px
 ```
 
-| 对比项 | 传统创作 | 普通AI辅助 | Novel Writer |
+| 对比项 | 传统创作 | 普通AI辅助 | StorySpec |
 |-------|---------|------------|--------------|
 | 灵感枯竭 | ❌ 靠自己硬想 | ⚠️ 随机生成 | ✅ 结构化引导 |
 | 情节管理 | ❌ 手工记录 | ❌ 无记忆 | ✅ 自动追踪 |
@@ -143,12 +143,11 @@ graph TD
 ### 第1步：安装（2分钟）
 
 ```bash
-# 安装 Novel Writer
-npm install -g novel-writer-cn
+# 安装 StorySpec
+npm install -g story-spec-cn
 
 # 创建你的小说项目
-novel init my-first-novel
-cd my-first-novel
+storyspec init my-first-storyspec cd my-first-novel
 ```
 
 ### 第2步：设定风格（3分钟）
@@ -233,7 +232,7 @@ AI会根据所有规格，生成第一章内容。
 
 ## 完整创作流程
 
-### 传统创作 vs Novel Writer 创作
+### 传统创作 vs StorySpec 创作
 
 ```mermaid
 sequenceDiagram
@@ -251,7 +250,7 @@ sequenceDiagram
     写作->>修改: 发现问题
     修改->>写作: 重写（循环）
 
-    Note over 作者,修改: Novel Writer 流程（高效）
+    Note over 作者,修改: StorySpec 流程（高效）
     作者->>灵感: 说出想法（5分钟）
     灵感->>大纲: AI自动完善
     大纲->>写作: AI规格生成
@@ -410,7 +409,7 @@ sequenceDiagram
 ##### Day 1：项目启动（30分钟）
 ```bash
 # 1. 初始化
-novel init sign-in-story
+storyspec init sign-in-story
 
 # 2. 设定风格
 /constitution 爽文，节奏快，打脸密集，主角无敌但不高调
@@ -551,11 +550,11 @@ graph TD
 
 ```bash
 # 项目1：玄幻爽文
-novel switch wuxia-story
+storyspec switch wuxia-story
 /write 第100章  # 自动加载玄幻风格
 
 # 项目2：都市言情
-novel switch love-story
+storyspec switch love-story
 /write 第50章  # 自动切换言情风格
 
 # 风格不会混淆！
@@ -629,7 +628,7 @@ graph LR
 
 ### Q6: 和其他AI写作工具有什么区别？
 
-| 特性 | ChatGPT写作 | 一般AI工具 | Novel Writer |
+| 特性 | ChatGPT写作 | 一般AI工具 | StorySpec |
 |-----|------------|-----------|--------------|
 | 记忆能力 | ❌ 无 | ⚠️ 有限 | ✅ 完整 |
 | 角色一致性 | ❌ 经常出错 | ⚠️ 偶尔出错 | ✅ 自动验证 |
@@ -645,10 +644,10 @@ graph LR
 
 ```bash
 # 1. 安装
-npm install -g novel-writer-cn
+npm install -g story-spec-cn
 
 # 2. 创建你的第一本小说
-novel init my-masterpiece
+storyspec init my-masterpiece
 
 # 3. 开始创作
 cd my-masterpiece
@@ -658,13 +657,13 @@ cd my-masterpiece
 ### 加入社区
 
 - 💬 **微信群**：扫码加入作者交流群
-- 📺 **B站教程**：搜索"Novel Writer教程"
-- 🐛 **问题反馈**：[GitHub Issues](https://github.com/wordflowlab/novel-writer/issues)
+- 📺 **B站教程**：搜索"StorySpec教程"
+- 🐛 **问题反馈**：[GitHub Issues](https://github.com/wordflowlab/story-spec/issues)
 - 📚 **案例分享**：[成功案例集](https://novelwriter.com/cases)
 
 ### 从今天开始，让创作更轻松
 
-记住：**Novel Writer 不是要取代你的创造力，而是要放大它。**
+记住：**StorySpec 不是要取代你的创造力，而是要放大它。**
 
 你负责创意和灵感，AI负责执行和细节。
 你是导演，AI是你的制作团队。

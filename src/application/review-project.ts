@@ -146,7 +146,7 @@ const suggestAction = (
     MISSING_TASK_OUTPUT: '补齐任务输出文件，或修正 tasks.md 中的输出路径'
   };
 
-  return actions[issue.code] ?? '根据 finding 修正文档或补充任务，并重新运行 novel validate';
+  return actions[issue.code] ?? '根据 finding 修正文档或补充任务，并重新运行 storyspec validate';
 };
 
 const toFinding = (
@@ -276,7 +276,7 @@ export const reviewProject = async (input: ReviewProjectInput): Promise<ReviewPr
 };
 
 export const renderReviewReport = (result: ReviewProjectResult): string => [
-  'Novel Writer 审稿面板',
+  'StorySpec 审稿面板',
   '',
   `根目录：${result.projectRoot}`,
   `Findings：${result.findings.length}`,

@@ -171,7 +171,7 @@ describe('getProjectStatus', () => {
 
     const output = renderProjectStatus(status);
 
-    expect(output).toContain('Novel Writer 项目状态');
+    expect(output).toContain('StorySpec 项目状态');
     expect(output).toContain('项目：status-demo');
     expect(output).toContain('当前故事：001-demo');
     expect(output).toContain('创作空间：');

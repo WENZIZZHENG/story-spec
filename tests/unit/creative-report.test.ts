@@ -98,6 +98,6 @@ describe('creative report', () => {
         code: 'CREATIVE_INTENT_DRIFT_UNCONFIRMED_AI_SUGGESTION'
       })
     ]);
-    expect(result.nextActions).toContain('novel review --panel continuity');
+    expect(result.nextActions).toContain('storyspec review --panel continuity');
   });
 });

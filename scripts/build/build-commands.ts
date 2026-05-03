@@ -75,7 +75,7 @@ const parseOptions = (args: string[]): BuildCommandsCliOptions => {
 try {
   const options = parseOptions(process.argv.slice(2));
 
-  console.log('Novel Writer 命令构建系统');
+  console.log('StorySpec 命令构建系统');
   console.log('================================');
   console.log('构建配置:');
   console.log(`  平台: ${options.agents.join(' ')}`);

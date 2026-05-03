@@ -32,7 +32,7 @@ export interface ValidationIssue {
   message: string;
 }
 
-const VALID_COMMAND_PREFIXES = new Set(['/', '/novel.', '/novel:', '/novel-']);
+const VALID_COMMAND_PREFIXES = new Set(['/', '/storyspec.', '/storyspec:', '/storyspec-']);
 const VALID_TASK_STATUSES = new Set<WritingTaskStatus>(['todo', 'done']);
 const VALID_TASK_PRIORITIES = new Set<WritingTaskPriority>(['P0', 'P1', 'P2', 'P3', 'PX']);
 

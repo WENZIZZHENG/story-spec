@@ -2,7 +2,7 @@
 
 ## 状态
 
-Active。本文是 Novel Writer 当前唯一的活跃待办入口。详细规则见 [todo-governance.md](todo-governance.md)，已完成事项见 [todo-archive.md](todo-archive.md)。
+Active。本文是 StorySpec 当前唯一的活跃待办入口。详细规则见 [todo-governance.md](todo-governance.md)，已完成事项见 [todo-archive.md](todo-archive.md)。
 
 ## 当前待办
 

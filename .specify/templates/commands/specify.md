@@ -25,7 +25,7 @@ $ARGUMENTS
 
 ### 2. 检查宪法合规性
 
-如果存在 `memory/novel-constitution.md`：
+如果存在 `memory/storyspec-constitution.md`：
 - 加载宪法原则
 - 确保规格符合宪法价值观
 - 在规格中引用相关原则

@@ -9,7 +9,7 @@ if [ ! -f "$RUNTIME" ]; then
 fi
 
 if [ ! -f "$RUNTIME" ]; then
-  echo "script-runtime.js not found. Run npm run build or novel upgrade first." >&2
+  echo "script-runtime.js not found. Run npm run build or storyspec upgrade first." >&2
   exit 1
 fi
 

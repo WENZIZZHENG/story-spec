@@ -18,6 +18,6 @@
 - `templates/commands/*.md` is the source for generated slash prompts.
 - `scripts/build-commands.cjs` locates bash and calls `scripts/build/generate-commands.sh`.
 - `scripts/postbuild.cjs` keeps CLI executable bits cross-platform after TypeScript build.
-- Codex prompts are pure Markdown in `.codex/prompts/novel-*.md`.
+- Codex prompts are pure Markdown in `.codex/prompts/storyspec-*.md`.
 - User project data lives in `stories/`, `spec/tracking/`, and `spec/knowledge/`; avoid overwriting it during upgrades.
 - For CLI behavior or template contract changes, update README/docs and add a short decision record under `docs/tech/`.

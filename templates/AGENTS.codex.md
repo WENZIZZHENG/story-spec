@@ -2,19 +2,19 @@
 
 ## 项目
 - 小说项目：`{{PROJECT_NAME}}`。
-- 从项目根目录工作；规划或写作前运行 `novel status`。
+- 从项目根目录工作；规划或写作前运行 `storyspec status`。
 - 除非项目文件另有说明，面向作者的说明、计划和交接内容使用中文。
 
 ## 工作流
 | 阶段 | Codex prompt |
 |-------|--------------|
-| 宪章 | `/novel-constitution` |
-| 规格 | `/novel-specify` |
-| 澄清 | `/novel-clarify` |
-| 计划 | `/novel-plan` |
-| 任务 | `/novel-tasks` |
-| 写作 | `/novel-write` |
-| 分析 | `/novel-analyze` |
+| 宪章 | `/storyspec-constitution` |
+| 规格 | `/storyspec-specify` |
+| 澄清 | `/storyspec-clarify` |
+| 计划 | `/storyspec-plan` |
+| 任务 | `/storyspec-tasks` |
+| 写作 | `/storyspec-write` |
+| 分析 | `/storyspec-analyze` |
 
 ## 必读上下文
 - 先读取 `.specify/memory/constitution.md`。

@@ -55,7 +55,7 @@ describe('interview CLI smoke', () => {
     expect(first.story).toBe('idea-demo');
     expect(first.record.answers.length).toBe(3);
     expect(first.updatedAnswerIds.length).toBe(3);
-    expect(first.handoffPrompt).toContain('/novel-specify');
+    expect(first.handoffPrompt).toContain('/storyspec-specify');
     await expect(readFile(path.join(storyPath, 'clarifications.json'), 'utf-8'))
       .resolves.toContain('user-explicit');
     await expect(readFile(path.join(storyPath, 'clarifications.md'), 'utf-8'))

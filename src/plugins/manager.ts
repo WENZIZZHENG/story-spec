@@ -447,7 +447,7 @@ export class PluginManager {
     })
     const cachePath = path.join(
       os.tmpdir(),
-      'novel-writer-plugin-rendered-commands',
+      'story-spec-plugin-rendered-commands',
       pluginName,
       path.basename(sourcePath),
       'rendered-commands',

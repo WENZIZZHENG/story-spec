@@ -19,7 +19,7 @@ $ARGUMENTS
 ### 1. 检查现有宪法
 
 运行 `{SCRIPT} check` 检查是否已存在宪法文件：
-- 如果存在 `memory/novel-constitution.md`，加载并准备更新
+- 如果存在 `memory/storyspec-constitution.md`，加载并准备更新
 - 如果不存在，准备创建新宪法
 
 ### 2. 收集创作原则
@@ -182,7 +182,7 @@ $ARGUMENTS
 
 ### 7. 输出和保存
 
-- 将宪法保存到 `memory/novel-constitution.md`
+- 将宪法保存到 `memory/storyspec-constitution.md`
 - 输出创建/更新成功消息
 - 提示下一步：`/specify` 定义故事规格
 

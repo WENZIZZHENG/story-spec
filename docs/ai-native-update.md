@@ -42,9 +42,9 @@
 ### 之前（命令行模式）
 ```bash
 # 用户需要记住命令和参数
-novel recommend --genre 奇幻 --length 200000 --complexity 复杂
-novel convert seven-point --from three-act
-novel hybrid create --primary hero-journey --secondary story-circle
+storyspec recommend --genre 奇幻 --length 200000 --complexity 复杂
+storyspec convert seven-point --from three-act
+storyspec hybrid create --primary hero-journey --secondary story-circle
 ```
 
 ### 现在（AI 原生交互）

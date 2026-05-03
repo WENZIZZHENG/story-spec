@@ -251,7 +251,7 @@ export const listClarificationRecords = async (
 };
 
 export const renderClarificationRecordSummary = (result: CreatedClarificationRecordResult): string => [
-  'Novel Writer Clarifications',
+  'StorySpec Clarifications',
   '',
   `故事：${result.story}`,
   `JSON：${relativePath(result.projectRoot, result.jsonPath)}`,

@@ -1,4 +1,4 @@
-# Novel Writer 文档
+# StorySpec 文档
 
 *让 AI 成为你的创作伙伴，用结构化工作流编写精彩故事。*
 
@@ -30,7 +30,7 @@
 
 | 阶段 | 重点 | 关键活动 |
 |------|------|---------|
-| **从零开始**（"白纸创作"） | 全新创作 | <ul><li>用 `novel story:new` 保存原始创意</li><li>通过 `novel next` / `novel interview` 逐步澄清</li><li>生成并确认规格预览</li><li>规划章节结构并生成可发布的作品</li></ul> |
+| **从零开始**（"白纸创作"） | 全新创作 | <ul><li>用 `storyspec story:new` 保存原始创意</li><li>通过 `storyspec next` / `storyspec interview` 逐步澄清</li><li>生成并确认规格预览</li><li>规划章节结构并生成可发布的作品</li></ul> |
 | **创意探索** | 多样化尝试 | <ul><li>探索不同的故事走向</li><li>尝试多种文风</li><li>实验不同的叙事技巧</li></ul> |
 | **迭代完善**（"润色修改"） | 持续改进 | <ul><li>逐章添加内容</li><li>完善角色设定</li><li>深化世界观</li></ul> |
 
@@ -79,7 +79,7 @@
    - 定义你的写作风格和准则
    - AI 会记住并遵循这些设定
 
-2. **创作访谈** (`novel interview` / `/clarify`)
+2. **创作访谈** (`storyspec interview` / `/clarify`)
    - 从一句话灵感开始收集澄清答案
    - 记录用户已明确、需要澄清和 AI 建议
 
@@ -101,7 +101,7 @@
 
 ## 与传统写作的区别
 
-| 传统写作 | Novel Writer |
+| 传统写作 | StorySpec |
 |----------|--------------|
 | 独自构思情节 | AI 帮助完善故事设定 |
 | 手动管理大纲 | 结构化的章节规划 |
@@ -113,17 +113,17 @@
 
 准备好让 AI 成为你的创作伙伴了吗？
 
-1. 📦 [安装 Novel Writer](installation.md)
+1. 📦 [安装 StorySpec](installation.md)
 2. 🚀 [5 分钟快速入门](quickstart.md)
 3. 📖 [深入了解创作流程](workflow.md)
 4. 🧭 [学习如何保留创作控制权](creative-control.md)
 
 ## 加入社区
 
-- 🐛 [报告问题](https://github.com/wordflowlab/novel-writer/issues)
-- 💡 [功能建议](https://github.com/wordflowlab/novel-writer/discussions)
-- 🤝 [贡献代码](https://github.com/wordflowlab/novel-writer/pulls)
+- 🐛 [报告问题](https://github.com/wordflowlab/story-spec/issues)
+- 💡 [功能建议](https://github.com/wordflowlab/story-spec/discussions)
+- 🤝 [贡献代码](https://github.com/wordflowlab/story-spec/pulls)
 
 ---
 
-**Novel Writer** - 基于 [Spec Kit](https://github.com/sublayerapp/spec-kit) 架构，专为中文小说创作者设计。
+**StorySpec** - 基于 [Spec Kit](https://github.com/sublayerapp/spec-kit) 架构，专为中文小说创作者设计。

@@ -85,7 +85,7 @@ const createCommandSourceIndex = async (): Promise<CommandSourceByOutputPath> =>
 };
 
 const createManifest = async (): Promise<ArtifactManifest> => {
-  const outDir = path.join(os.tmpdir(), `novel-command-artifacts-${Date.now()}`);
+  const outDir = path.join(os.tmpdir(), `storyspec-command-artifacts-${Date.now()}`);
 
   try {
     await buildCommandArtifacts({

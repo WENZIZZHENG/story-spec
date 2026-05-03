@@ -258,7 +258,7 @@ export const createUpgradeProjectPlan = async (
   const fs = input.fileSystem;
   const configPath = path.join(input.projectPath, '.specify', 'config.json');
   if (!await fs.pathExists(configPath)) {
-    throw new UpgradeProjectError('NOT_PROJECT', '当前目录不是 novel-writer 项目');
+    throw new UpgradeProjectError('NOT_PROJECT', '当前目录不是 story-spec 项目');
   }
 
   const config = await fs.readJson(configPath) as Record<string, unknown>;

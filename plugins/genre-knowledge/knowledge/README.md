@@ -1,6 +1,6 @@
 # 类型知识库目录
 
-本知识库为novel-writer的genre-knowledge插件提供类型化写作知识支持。所有知识文件采用扁平化组织和自然语言命名,方便AI通过Glob/Grep动态搜索。
+本知识库为story-spec的genre-knowledge插件提供类型化写作知识支持。所有知识文件采用扁平化组织和自然语言命名,方便AI通过Glob/Grep动态搜索。
 
 ---
 
@@ -450,7 +450,7 @@ Glob: plugins/genre-knowledge/knowledge/fundamentals/*structure*.md
   - `mystery.md` - 悬疑推理类型综合指导(353行)
   - `shuangwen.md` - 爽文类型综合指导(236行)
 
-**更新时间**: novel-writer v0.17.3
+**更新时间**: story-spec v0.17.3
 
 ### v1.0.0 (初版)
 
@@ -469,11 +469,11 @@ Glob: plugins/genre-knowledge/knowledge/fundamentals/*structure*.md
 ## 支持与反馈
 
 - 📖 插件文档: `plugins/genre-knowledge/README.md`
-- 🐛 问题反馈: https://github.com/wordflowlab/novel-writer/issues
-- 💡 功能建议: https://github.com/wordflowlab/novel-writer/discussions
+- 🐛 问题反馈: https://github.com/wordflowlab/story-spec/issues
+- 💡 功能建议: https://github.com/wordflowlab/story-spec/discussions
 
 ---
 
 **最后更新**: 2024年
-**维护者**: novel-writer团队
+**维护者**: story-spec团队
 **许可证**: MIT License

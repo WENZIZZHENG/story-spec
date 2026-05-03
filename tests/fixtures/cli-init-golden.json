@@ -8,17 +8,17 @@
       "trackingFiles": 7
     },
     "requiredStdout": [
-      "/novel-constitution",
-      "/novel-specify",
-      "/novel-tasks",
-      "/novel-write",
-      "/novel-analyze"
+      "/storyspec-constitution",
+      "/storyspec-specify",
+      "/storyspec-tasks",
+      "/storyspec-write",
+      "/storyspec-analyze"
     ],
     "requiredFiles": [
       "AGENTS.md",
       ".specify/agent-contract.md",
-      ".codex/prompts/novel-constitution.md",
-      ".codex/prompts/novel-write.md",
+      ".codex/prompts/storyspec-constitution.md",
+      ".codex/prompts/storyspec-write.md",
       ".specify/config.json",
       "spec/tracking/plot-tracker.json",
       "spec/tracking/promises.json",

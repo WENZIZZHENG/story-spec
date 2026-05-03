@@ -22,11 +22,11 @@
 ## 安装方法
 
 ```bash
-# 在 Novel Writer 项目根目录执行
-novel plugins add luyao-style
+# 在 StorySpec 项目根目录执行
+storyspec plugins add luyao-style
 
 # 或手动复制到插件目录
-cp -r luyao-style /path/to/novel/plugins/
+cp -r luyao-style /path/to/storyspec/plugins/
 ```
 
 ## 快速开始

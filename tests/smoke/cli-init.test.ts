@@ -60,7 +60,7 @@ describe('CLI init smoke', () => {
     await expect(readFile(path.join(projectPath, 'AGENTS.md'), 'utf-8')).resolves.toContain('画像 `adult`');
     await expect(readFile(path.join(projectPath, 'AGENTS.md'), 'utf-8')).resolves.toContain('画像 `slow-burn`');
     await expect(readFile(path.join(projectPath, '.specify', 'agent-contract.md'), 'utf-8')).resolves.toContain('画像 `adult`');
-    await expect(readFile(path.join(projectPath, '.specify', 'agent-contract.md'), 'utf-8')).resolves.toContain('Novel Writer Agent 合约');
+    await expect(readFile(path.join(projectPath, '.specify', 'agent-contract.md'), 'utf-8')).resolves.toContain('StorySpec Agent 合约');
     expect(await exists(path.join(projectPath, 'spec', 'world', 'rules.yaml'))).toBe(true);
     expect(await exists(path.join(projectPath, 'spec', 'canon', 'facts.json'))).toBe(true);
     expect(await exists(path.join(projectPath, 'spec', 'graph', 'entities.json'))).toBe(true);

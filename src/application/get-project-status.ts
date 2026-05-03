@@ -318,11 +318,11 @@ const buildNextActions = (status: Omit<ProjectStatus, 'nextActions'>): string[] 
   const actions: string[] = [];
 
   if (status.configuredAI.length === 0) {
-    actions.push('运行 `novel upgrade` 或重新执行 `novel init --ai <platform>` 补齐 AI 平台命令');
+    actions.push('运行 `storyspec upgrade` 或重新执行 `storyspec init --ai <platform>` 补齐 AI 平台命令');
   }
 
   if (!status.handoff.codexPrompts) {
-    actions.push('运行 `novel upgrade --ai codex` 或重新执行 `novel init --ai codex` 补齐 Codex prompts');
+    actions.push('运行 `storyspec upgrade --ai codex` 或重新执行 `storyspec init --ai codex` 补齐 Codex prompts');
   }
 
   if (!status.handoff.agentsFile) {
@@ -402,7 +402,7 @@ export const renderProjectStatus = (status: ProjectStatus): string => {
   const lines: string[] = [];
   const trackingOk = status.tracking.every(item => item.valid);
 
-  lines.push('Novel Writer 项目状态');
+  lines.push('StorySpec 项目状态');
   lines.push('');
   lines.push(`项目：${status.projectName}`);
   lines.push(`根目录：${status.projectRoot}`);

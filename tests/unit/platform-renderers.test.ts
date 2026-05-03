@@ -52,7 +52,7 @@ describe('platform renderers', () => {
   it('describes command output conventions for supported platforms', () => {
     expect(getPlatformRenderer('claude')).toMatchObject({
       platform: 'claude',
-      namespace: 'novel.',
+      namespace: 'storyspec.',
       extension: 'md',
       outputFormat: 'markdown-full',
       argFormat: '$ARGUMENTS'
@@ -66,7 +66,7 @@ describe('platform renderers', () => {
     });
     expect(getPlatformRenderer('codex')).toMatchObject({
       platform: 'codex',
-      namespace: 'novel-',
+      namespace: 'storyspec-',
       outputFormat: 'markdown-none'
     });
     expect(getPlatformRenderer('generic')).toMatchObject({
@@ -105,7 +105,7 @@ describe('platform renderers', () => {
       scriptVariant: 'sh'
     });
 
-    expect(codex.outputFile).toBe('novel-plan.md');
+    expect(codex.outputFile).toBe('storyspec-plan.md');
     expect(codex.content).not.toMatch(/^---/);
     expect(codex.content).toContain('Agent: codex');
     expect(codex.content).toContain('.specify/scripts/bash/plan-story.sh');
@@ -158,7 +158,7 @@ describe('platform renderers', () => {
       scriptVariant: 'sh'
     });
 
-    expect(codex.outputFile).toBe('novel-write.md');
+    expect(codex.outputFile).toBe('storyspec-write.md');
     expect(codex.content).not.toMatch(/^---/);
     expect(codex.content).toContain('Agent: codex');
     expect(codex.content).toContain('.specify/scripts/bash/check-writing-state.sh');

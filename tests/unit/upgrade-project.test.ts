@@ -217,7 +217,7 @@ describe('upgradeProject', () => {
     ]));
   });
 
-  it('rejects non novel-writer projects', async () => {
+  it('rejects non story-spec projects', async () => {
     const packageRoot = await createPackageRootFixture();
     const projectPath = await makeTempDir();
 

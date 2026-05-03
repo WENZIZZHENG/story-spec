@@ -32,7 +32,7 @@ const packageRoot = path.resolve(__dirname, '..', '..');
 function displayBanner(): void {
   const banner = `
 ╔═══════════════════════════════════════╗
-║     📚  Novel Writer  📝              ║
+║     📚  StorySpec  📝              ║
 ║     AI 驱动的中文小说创作工具        ║
 ╚═══════════════════════════════════════╝
 `;
@@ -48,8 +48,8 @@ export function runProgram(argv: string[]): void {
   }
 
   program
-    .name('novel')
-    .description(chalk.cyan('Novel Writer - AI 驱动的中文小说创作工具初始化'))
+    .name('storyspec')
+    .description(chalk.cyan('StorySpec - AI 驱动的中文小说创作工具初始化'))
     .version(getVersion(), '-v, --version', '显示版本号')
     .helpOption('-h, --help', '显示帮助信息');
 
@@ -78,14 +78,14 @@ export function runProgram(argv: string[]): void {
     console.log('');
     console.log(chalk.yellow('使用示例:'));
     console.log('');
-    console.log('  $ novel init my-story           # 创建新项目');
-    console.log('  $ novel init --here              # 在当前目录初始化');
-    console.log('  $ novel check                    # 检查环境');
-    console.log('  $ novel status                   # 查看项目接手状态');
-    console.log('  $ novel story:new 法术编译纪元 --idea "异界穿越、编程施法"');
-    console.log('  $ novel next 法术编译纪元        # 查看下一步创作导航');
-    console.log('  $ novel validate                 # 校验项目结构和写作产物');
-    console.log('  $ novel info                     # 查看写作方法');
+    console.log('  $ storyspec init my-story           # 创建新项目');
+    console.log('  $ storyspec init --here              # 在当前目录初始化');
+    console.log('  $ storyspec check                    # 检查环境');
+    console.log('  $ storyspec status                   # 查看项目接手状态');
+    console.log('  $ storyspec story:new 法术编译纪元 --idea "异界穿越、编程施法"');
+    console.log('  $ storyspec next 法术编译纪元        # 查看下一步创作导航');
+    console.log('  $ storyspec validate                 # 校验项目结构和写作产物');
+    console.log('  $ storyspec info                     # 查看写作方法');
     console.log('');
     console.log(chalk.cyan('核心创作命令:'));
     console.log('  /method      - 智能选择写作方法（推荐先执行）');
@@ -101,7 +101,7 @@ export function runProgram(argv: string[]): void {
     console.log('  /relations   - 追踪角色关系变化');
     console.log('  /track       - 综合追踪与智能分析');
     console.log('');
-    console.log(chalk.gray('更多信息: https://github.com/wordflowlab/novel-writer'));
+    console.log(chalk.gray('更多信息: https://github.com/wordflowlab/story-spec'));
   });
 
   // 解析命令行参数

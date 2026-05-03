@@ -41,8 +41,8 @@
 ### 1. 安装插件
 
 ```bash
-# 在 novel-writer 项目中
-novel plugins add stardust-dreams
+# 在 story-spec 项目中
+storyspec plugins add stardust-dreams
 ```
 
 ### 2. 登录认证

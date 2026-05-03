@@ -1,8 +1,8 @@
 {
-  "name": "novel-writer-cn",
+  "name": "story-spec-cn",
   "version": "0.20.0",
   "type": "module",
-  "description": "AI 驱动的中文小说创作工具 - 基于结构化工作流的智能写作助手",
+  "description": "保护作者创作控制权的中文长篇小说工作流工具",
   "keywords": [
     "novel",
     "writer",
@@ -13,11 +13,11 @@
     "创作",
     "写作"
   ],
-  "author": "Novel Writer Team",
+  "author": "StorySpec Team",
   "license": "MIT",
   "main": "dist/cli.js",
   "bin": {
-    "novel": "dist/cli.js"
+    "storyspec": "dist/cli.js"
   },
   "scripts": {
     "build": "tsc",
@@ -63,10 +63,10 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/wordflowlab/novel-writer"
+    "url": "https://github.com/wordflowlab/story-spec"
   },
-  "homepage": "https://github.com/wordflowlab/novel-writer#readme",
+  "homepage": "https://github.com/wordflowlab/story-spec#readme",
   "bugs": {
-    "url": "https://github.com/wordflowlab/novel-writer/issues"
+    "url": "https://github.com/wordflowlab/story-spec/issues"
   }
 }

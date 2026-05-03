@@ -137,7 +137,7 @@ const resolveProjectRoot = async (options: RuntimeOptions): Promise<string> => {
 
   const projectRoot = await findProjectRoot();
   if (!projectRoot) {
-    throw new Error('Not in a novel-writer project. Pass --project-root.');
+    throw new Error('Not in a story-spec project. Pass --project-root.');
   }
 
   return projectRoot;

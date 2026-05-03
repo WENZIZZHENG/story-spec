@@ -325,16 +325,16 @@ AI研究代理收集素材：流行元素、读者喜好、竞品分析，为规
 
 ## 开始使用
 
-### 安装Novel Writer
+### 安装StorySpec
 
 ```bash
-npm install -g novel-writer-cn
+npm install -g story-spec-cn
 ```
 
 ### 初始化项目
 
 ```bash
-novel init my-story
+storyspec init my-story
 cd my-story
 ```
 

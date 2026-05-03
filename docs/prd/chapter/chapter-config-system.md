@@ -5,7 +5,7 @@
 - **产品名称**: 章节配置系统 (Chapter Configuration System)
 - **版本**: v1.0.0
 - **创建日期**: 2025-10-14
-- **负责人**: Novel Writer Team
+- **负责人**: StorySpec Team
 - **状态**: 设计阶段
 
 ---
@@ -14,11 +14,11 @@
 
 ### 1.1 现状分析
 
-**novel-writer-cn 当前架构**：
+**story-spec-cn 当前架构**：
 
 ```
 全局规格系统（✅ 完善）：
-├── memory/novel-constitution.md      # 创作宪法
+├── memory/storyspec-constitution.md      # 创作宪法
 ├── stories/*/specification.md        # 故事规格
 ├── spec/tracking/
 │   ├── character-state.json         # 角色状态追踪
@@ -95,7 +95,7 @@ Web表单界面：
 
 **不是功能完整度差距，而是输入方式差距**：
 
-| 维度 | novel-writer-cn | 星月写作平台 | 差距 |
+| 维度 | story-spec-cn | 星月写作平台 | 差距 |
 |------|----------------|-------------|------|
 | 全局规格 | ✅ specification.md | ❌ 无 | 我们更强 |
 | 角色追踪 | ✅ character-state.json | ❌ 无 | 我们更强 |
@@ -158,7 +158,7 @@ Web表单界面：
 
 ```bash
 # 步骤1：CLI交互式创建配置
-$ novel chapter-config create 5 --interactive
+$ storyspec chapter-config create 5 --interactive
 
 ┌─ 📝 章节配置向导 ─────────────────────┐
 │ 章节号: 5                             │
@@ -262,7 +262,7 @@ AI自动执行:
 
 ```bash
 # 步骤1：查看可用预设
-$ novel preset list --category scene
+$ storyspec preset list --category scene
 
 📦 可用场景预设:
 
@@ -279,7 +279,7 @@ $ novel preset list --category scene
     风格：气氛营造、细节描写、留白艺术
 
 # 步骤2：使用预设创建配置
-$ novel chapter-config create 8 --preset action-intense
+$ storyspec chapter-config create 8 --preset action-intense
 
 ✅ 已应用预设: action-intense
 📝 请补充章节信息:
@@ -346,7 +346,7 @@ preset_used: action-intense
 
 ```bash
 # 步骤1：查看历史配置
-$ novel chapter-config list
+$ storyspec chapter-config list
 
 📋 已有章节配置:
 
@@ -355,7 +355,7 @@ $ novel chapter-config list
   第12章 深入探索  (悬念铺垫 - 地下室)
 
 # 步骤2：复用配置
-$ novel chapter-config copy 5 15
+$ storyspec chapter-config copy 5 15
 
 ✅ 已复制配置 第5章 → 第15章
 📝 请修改差异部分:
@@ -397,7 +397,7 @@ AI执行:
 
 可选提示:
 💡 检测到您使用自然语言配置，要创建结构化配置吗？
-   $ novel chapter-config create 20 --from-prompt
+   $ storyspec chapter-config create 20 --from-prompt
 ```
 
 **价值**：
@@ -497,48 +497,48 @@ plot_types:
 
 ```bash
 # ========== 章节配置管理 ==========
-novel chapter-config create <chapter>       # 创建章节配置
+storyspec chapter-config create <chapter>       # 创建章节配置
   --interactive                              # 交互式创建（推荐）
   --preset <preset-id>                       # 使用预设
   --from-prompt                              # 从自然语言生成
 
-novel chapter-config edit <chapter>         # 编辑章节配置
+storyspec chapter-config edit <chapter>         # 编辑章节配置
   --editor <editor>                          # 指定编辑器（默认vim）
 
-novel chapter-config list                   # 列出所有章节配置
+storyspec chapter-config list                   # 列出所有章节配置
   --format <table|json|yaml>                 # 输出格式
 
-novel chapter-config copy <from> <to>       # 复制配置
+storyspec chapter-config copy <from> <to>       # 复制配置
   --interactive                              # 交互式修改差异
 
-novel chapter-config delete <chapter>       # 删除配置
+storyspec chapter-config delete <chapter>       # 删除配置
 
-novel chapter-config validate <chapter>     # 验证配置文件
+storyspec chapter-config validate <chapter>     # 验证配置文件
 
 # ========== 预设管理 ==========
-novel preset list                           # 列出所有预设
+storyspec preset list                           # 列出所有预设
   --category <scene|style|chapter>           # 按类别筛选
 
-novel preset show <preset-id>               # 查看预设详情
+storyspec preset show <preset-id>               # 查看预设详情
 
-novel preset create <preset-id>             # 创建自定义预设
+storyspec preset create <preset-id>             # 创建自定义预设
   --interactive                              # 交互式创建
 
-novel preset import <file>                  # 导入社区预设
+storyspec preset import <file>                  # 导入社区预设
 
-novel preset export <preset-id>             # 导出预设
+storyspec preset export <preset-id>             # 导出预设
   --output <file>                            # 输出文件
 
 # ========== 配置模板管理 ==========
-novel chapter-template list                 # 列出章节配置模板
+storyspec chapter-template list                 # 列出章节配置模板
 
-novel chapter-template export <chapter>     # 导出为模板
+storyspec chapter-template export <chapter>     # 导出为模板
   --name <template-name>
 ```
 
 #### 4.2.2 命令详细设计
 
-**命令1: `novel chapter-config create`**
+**命令1: `storyspec chapter-config create`**
 
 ```typescript
 interface CreateOptions {
@@ -552,16 +552,16 @@ interface CreateOptions {
 }
 
 // 使用示例
-$ novel chapter-config create 5 --interactive
-$ novel chapter-config create 8 --preset action-intense
-$ novel chapter-config create 10 --characters protagonist,female-lead --scene office
+$ storyspec chapter-config create 5 --interactive
+$ storyspec chapter-config create 8 --preset action-intense
+$ storyspec chapter-config create 10 --characters protagonist,female-lead --scene office
 ```
 
-**命令2: `novel preset list`**
+**命令2: `storyspec preset list`**
 
 ```bash
 # 输出格式
-$ novel preset list --category scene
+$ storyspec preset list --category scene
 
 📦 场景预设 (6个):
 
@@ -597,7 +597,7 @@ model: claude-sonnet-4-5-20250929
    - 解析章节配置，提取结构化参数
 
 2. **加载全局上下文**（保持原有）
-   - `memory/novel-constitution.md`（创作宪法 - 最高原则）
+   - `memory/storyspec-constitution.md`（创作宪法 - 最高原则）
    - `memory/style-reference.md`（风格参考）
    - `stories/*/specification.md`（故事规格）
    - `stories/*/creative-plan.md`（创作计划）
@@ -717,7 +717,7 @@ model: claude-sonnet-4-5-20250929
 #### 4.4.1 预设文件结构
 
 ```
-~/.novel/presets/           # 用户目录下的预设库
+~/.storyspec/presets/           # 用户目录下的预设库
 ├── official/               # 官方预设
 │   ├── scenes/
 │   │   ├── action-intense.yaml
@@ -738,12 +738,12 @@ model: claude-sonnet-4-5-20250929
 #### 4.4.2 预设文件格式
 
 ```yaml
-# ~/.novel/presets/official/scenes/action-intense.yaml
+# ~/.storyspec/presets/official/scenes/action-intense.yaml
 id: action-intense
 name: 激烈动作场景
 description: 适合打斗、追逐等高强度动作描写
 category: scene
-author: Novel Writer Official
+author: StorySpec Official
 version: 1.0.0
 
 # 预设的默认配置
@@ -856,7 +856,7 @@ interface ValidationRules {
 #### 4.5.2 验证错误提示
 
 ```bash
-$ novel chapter-config validate 5
+$ storyspec chapter-config validate 5
 
 🔍 验证配置文件: chapter-5-config.yaml
 
@@ -901,7 +901,7 @@ stories/
 
 预设库:
 
-~/.novel/presets/                  # 🆕 全局预设目录
+~/.storyspec/presets/                  # 🆕 全局预设目录
 ├── official/                      # 官方预设
 │   ├── scenes/
 │   ├── styles/
@@ -909,7 +909,7 @@ stories/
 ├── user/                          # 用户自定义
 └── community/                     # 社区预设
 
-node_modules/novel-writer-cn/      # npm包内置
+node_modules/story-spec-cn/      # npm包内置
 └── presets/                       # 内置官方预设
     ├── action-intense.yaml
     ├── emotional-dialogue.yaml
@@ -969,7 +969,7 @@ graph TD
    ```
 
 3. 查询协议（最高优先级文档）
-   - `memory/novel-constitution.md`
+   - `memory/storyspec-constitution.md`
    - ...（保持原有）
 ```
 
@@ -1342,16 +1342,16 @@ export async function createConfigInteractive(
    stories/*/presets/*.yaml
 
 2. 用户自定义预设
-   ~/.novel/presets/user/*.yaml
+   ~/.storyspec/presets/user/*.yaml
 
 3. 社区预设
-   ~/.novel/presets/community/*.yaml
+   ~/.storyspec/presets/community/*.yaml
 
 4. 官方预设
-   ~/.novel/presets/official/*.yaml
+   ~/.storyspec/presets/official/*.yaml
 
 5. 内置预设
-   node_modules/novel-writer-cn/presets/*.yaml
+   node_modules/story-spec-cn/presets/*.yaml
 
 规则: 同名预设，优先级高的覆盖低的
 ```
@@ -1380,7 +1380,7 @@ export async function createConfigInteractive(
          ↓
 ┌────────── CLI同步 ────────────┐
 │                                │
-│  $ novel sync chapter 5        │
+│  $ storyspec sync chapter 5        │
 │                                │
 │  1. 调用 Dreams API            │
 │  2. 下载配置 YAML              │
@@ -1462,7 +1462,7 @@ Response: {
 }
 
 // CLI接收并保存
-$ novel sync chapter 5 --from-web abc123
+$ storyspec sync chapter 5 --from-web abc123
 
 ✅ 配置已同步到本地
 📁 stories/my-story/chapters/chapter-5-config.yaml
@@ -1479,7 +1479,7 @@ Response: {
 }
 
 // 2. CLI轮询或直接获取
-$ novel write 5 --web-session sess_xyz789
+$ storyspec write 5 --web-session sess_xyz789
 
 // 3. CLI调用API获取配置
 GET /api/sessions/sess_xyz789
@@ -1772,14 +1772,14 @@ Response: {
 
 | 版本 | 日期 | 变更内容 | 作者 |
 |------|------|---------|------|
-| v1.0.0 | 2025-10-14 | 初始版本，完整PRD | Novel Writer Team |
+| v1.0.0 | 2025-10-14 | 初始版本，完整PRD | StorySpec Team |
 
 ### 10.3 参考资料
 
 - [星月写作平台](https://example.com) - 竞品分析
 - [YAML规范](https://yaml.org/spec/1.2.2/) - 配置文件格式
 - [Inquirer.js](https://github.com/SBoudrias/Inquirer.js) - 交互式CLI库
-- [novel-writer-cn现有架构](../../README.md)
+- [story-spec-cn现有架构](../../README.md)
 
 ---
 

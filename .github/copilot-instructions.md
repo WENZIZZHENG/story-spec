@@ -5,7 +5,7 @@ This repository is an AI-first CLI tool and template collection for creating Chi
 - `src/cli.ts` — primary CLI entry (commands: `init`, `upgrade`, etc.). Look here for how projects are bootstrapped and how AI agent types map to filesystem layout.
 - `package.json` — build/dev scripts. `npm run build` compiles TypeScript; `npm run build:commands` generates per-agent command files from templates.
 - `dist/*` — build artifacts containing pre-generated agent command sets (copied into user projects by `init`).
-- `.specify/`, `spec/`, `stories/` — runtime project layout produced by `novel init`.
+- `.specify/`, `spec/`, `stories/` — runtime project layout produced by `storyspec init`.
 - `other/spec-kit/AGENTS.md` — long-form guidance and agent conventions; use it as authoritative reference when adding new agents.
 
 Keep instructions short and concrete: reference the exact file and function you changed and prefer small, self-contained edits.
@@ -13,7 +13,7 @@ Keep instructions short and concrete: reference the exact file and function you 
 ## High-level architecture notes
 
 - The CLI bootstraps a project by copying built artifacts from the package root (`dist/<agent>`) into the target project and creating `.specify/*` scaffolding (`src/cli.ts`, copy logic around `sourceMap`).
-- Agent configuration is agent-centric: directories like `.claude/commands`, `.gemini/commands`, `.cursor/commands` are created and populated during `novel init`.
+- Agent configuration is agent-centric: directories like `.claude/commands`, `.gemini/commands`, `.cursor/commands` are created and populated during `storyspec init`.
 - Agent metadata and behavioral decisions are centered in the Spec Kit patterns documented in `other/spec-kit/AGENTS.md`. When adding agents, prefer updating `AGENT_CONFIG` (in the spec-kit implementation) and the `scripts/*` update tooling.
 
 ## Common developer workflows (how to run / build / test)

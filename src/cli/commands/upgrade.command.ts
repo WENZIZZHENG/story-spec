@@ -178,14 +178,14 @@ const displayUpgradeReport = (
   console.log('  • 多 agent 支持: 已更新目标 integration 的命令文件');
 
   console.log(chalk.gray('\n📚 查看详细升级指南: docs/upgrade-guide.md'));
-  console.log(chalk.gray('   或访问: https://github.com/wordflowlab/novel-writer/blob/main/docs/upgrade-guide.md'));
+  console.log(chalk.gray('   或访问: https://github.com/wordflowlab/story-spec/blob/main/docs/upgrade-guide.md'));
 };
 
 const displayUpgradeError = (error: unknown): void => {
   if (error instanceof UpgradeProjectError) {
     if (error.code === 'NOT_PROJECT') {
-      console.log(chalk.red('✗ 当前目录不是 novel-writer 项目'));
-      console.log(chalk.gray('   请在项目根目录运行此命令，或使用 novel init 创建新项目'));
+      console.log(chalk.red('✗ 当前目录不是 story-spec 项目'));
+      console.log(chalk.gray('   请在项目根目录运行此命令，或使用 storyspec init 创建新项目'));
       return;
     }
 
@@ -247,7 +247,7 @@ export function registerUpgradeCommand(program: Command, context: { packageRoot:
           fileSystem: nodeFileSystem
         });
 
-        console.log(chalk.cyan('\n📦 Novel Writer 项目升级\n'));
+        console.log(chalk.cyan('\n📦 StorySpec 项目升级\n'));
         console.log(chalk.gray(`当前版本: ${plan.projectVersion}`));
         console.log(chalk.gray(`目标版本: ${plan.targetVersion}\n`));
         console.log(chalk.green('✓') + ' 检测到 AI 配置: ' + plan.installedAI.map(platform => platform.displayName).join(', '));

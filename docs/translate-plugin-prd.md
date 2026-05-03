@@ -1,12 +1,12 @@
-# Novel Writer 翻译插件 PRD
+# StorySpec 翻译插件 PRD
 
 ## 1. 产品概述
 
 ### 1.1 产品名称
-**Novel Writer Translate Plugin** - 中文小说英文出海翻译插件
+**StorySpec Translate Plugin** - 中文小说英文出海翻译插件
 
 ### 1.2 产品定位
-Novel Writer 的官方翻译插件，专为中文小说出海设计。充分利用 AI 环境（Claude Code、Cursor等）的语言能力，通过多步骤翻译流程和质量控制体系，帮助作者将中文作品翻译成地道的英文，适配 Medium、Reddit、Webnovel 等不同平台的语言风格。
+StorySpec 的官方翻译插件，专为中文小说出海设计。充分利用 AI 环境（Claude Code、Cursor等）的语言能力，通过多步骤翻译流程和质量控制体系，帮助作者将中文作品翻译成地道的英文，适配 Medium、Reddit、Webnovel 等不同平台的语言风格。
 
 ### 1.3 实现状态
 **已实现基础版本**，包括核心翻译命令、润色命令和翻译专家模式。
@@ -755,5 +755,5 @@ novel-project/
 
 **文档版本**: v1.0
 **创建日期**: 2025-09-22
-**作者**: Novel Writer Team
+**作者**: StorySpec Team
 **状态**: 待评审

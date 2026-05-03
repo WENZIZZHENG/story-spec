@@ -22,8 +22,8 @@ export const registerWorldbuildingCommand = (program: Command): void => {
         console.log(options.json ? JSON.stringify(result, null, 2) : renderWorldInspection(result));
       } catch (error: any) {
         if (error.message === 'NOT_IN_PROJECT') {
-          console.log(chalk.red('\n当前目录不是 novel-writer 项目'));
-          console.log(chalk.gray('请在项目根目录运行此命令，或使用 novel init 创建新项目\n'));
+          console.log(chalk.red('\n当前目录不是 story-spec 项目'));
+          console.log(chalk.gray('请在项目根目录运行此命令，或使用 storyspec init 创建新项目\n'));
           process.exit(1);
         }
 
@@ -47,8 +47,8 @@ export const registerWorldbuildingCommand = (program: Command): void => {
         }
       } catch (error: any) {
         if (error.message === 'NOT_IN_PROJECT') {
-          console.log(chalk.red('\n当前目录不是 novel-writer 项目'));
-          console.log(chalk.gray('请在项目根目录运行此命令，或使用 novel init 创建新项目\n'));
+          console.log(chalk.red('\n当前目录不是 story-spec 项目'));
+          console.log(chalk.gray('请在项目根目录运行此命令，或使用 storyspec init 创建新项目\n'));
           process.exit(1);
         }
 
@@ -69,8 +69,8 @@ export const registerWorldbuildingCommand = (program: Command): void => {
         console.log(options.json ? JSON.stringify(result, null, 2) : renderCanonInspection(result));
       } catch (error: any) {
         if (error.message === 'NOT_IN_PROJECT') {
-          console.log(chalk.red('\n当前目录不是 novel-writer 项目'));
-          console.log(chalk.gray('请在项目根目录运行此命令，或使用 novel init 创建新项目\n'));
+          console.log(chalk.red('\n当前目录不是 story-spec 项目'));
+          console.log(chalk.gray('请在项目根目录运行此命令，或使用 storyspec init 创建新项目\n'));
           process.exit(1);
         }
 
@@ -94,8 +94,8 @@ export const registerWorldbuildingCommand = (program: Command): void => {
         }
       } catch (error: any) {
         if (error.message === 'NOT_IN_PROJECT') {
-          console.log(chalk.red('\n当前目录不是 novel-writer 项目'));
-          console.log(chalk.gray('请在项目根目录运行此命令，或使用 novel init 创建新项目\n'));
+          console.log(chalk.red('\n当前目录不是 story-spec 项目'));
+          console.log(chalk.gray('请在项目根目录运行此命令，或使用 storyspec init 创建新项目\n'));
           process.exit(1);
         }
 

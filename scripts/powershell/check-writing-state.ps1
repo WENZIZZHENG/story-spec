@@ -8,7 +8,7 @@ if (-not $Runtime) {
 }
 
 if (-not $Runtime) {
-    Write-Error "script-runtime.js not found. Run npm run build or novel upgrade first."
+    Write-Error "script-runtime.js not found. Run npm run build or storyspec upgrade first."
     exit 1
 }
 

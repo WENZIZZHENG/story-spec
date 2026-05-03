@@ -6,10 +6,10 @@
 
 - 新增 `continue-check` agent integration，生成 `.continue/prompts/*.md` 只读检查提示词。
 - 命令 renderer 按 `writeFiles` 能力降级；只读 agent 不再被提示直接写正文、tracking 或任务文件。
-- `novel handoff` 新增 `--target-agent <id>`，可按目标 agent 的 `runShell` / `writeFiles` 能力生成继续步骤。
+- `storyspec handoff` 新增 `--target-agent <id>`，可按目标 agent 的 `runShell` / `writeFiles` 能力生成继续步骤。
 - 新项目初始化新增 `spec/world/` 与 `spec/canon/`，内置 World Bible、WorldFact、Canon facts 和 propagation debt 基础模板。
 - 新增 `world:list`、`world:check`、`canon:list`、`canon:check` CLI，用于查看和校验世界观与 Canon Ledger。
-- `novel validate --json` 增加 world/canon summary 与 issue 输出；旧项目缺少对应目录时只给 warning。
+- `storyspec validate --json` 增加 world/canon summary 与 issue 输出；旧项目缺少对应目录时只给 warning。
 - `/write` 命令会读取 world/canon 上下文，并提示生成待确认 canon fact 或 propagation debt。
 - 新项目初始化新增 `spec/graph/` Entity Graph 模板，记录 entities、edges、indexes 和 evidencePaths。
 - 新增 `entity:list`、`graph:build`、`graph:check`、`graph:impact`、`scene:init`、`scene:list`、`scene:check`、`scene:compile` CLI。
@@ -17,15 +17,15 @@
 - `handoff` 与 `tasks:board` 输出结构上下文和相关 scene/entity 信息。
 - 新项目初始化新增 `spec/voice/` VoiceFingerprint 模板、叙述声音说明和角色声音样本。
 - 新增 `voice:list`、`voice:check`、`voice:sample` CLI，用于查看角色声音指纹和样本。
-- `novel validate` 接入 VoiceFingerprint 校验，并新增世界观密度、揭示节奏、伏笔闭环 Scene Card 质量规则。
-- 新增 `novel review` reviewer loop，按 worldbuilding、voice、continuity、editor、reader 输出结构化 findings 与任务草稿。
+- `storyspec validate` 接入 VoiceFingerprint 校验，并新增世界观密度、揭示节奏、伏笔闭环 Scene Card 质量规则。
+- 新增 `storyspec review` reviewer loop，按 worldbuilding、voice、continuity、editor、reader 输出结构化 findings 与任务草稿。
 - `/analyze` 增加 `world-density` 与 `reveal-pacing` 专项；新增 `/review` 通用命令模板。
 - 新增 Genre Preset 包能力，内置 `xuanhuan-cultivation` 样板，包含 World Bible 必填字段、角色功能位、节奏模板、常见错误、reviewer 权重和 validate 规则。
-- 新增 `novel preset:list`、`novel preset:add <id>`、`novel preset:doctor`；`novel validate` 会按当前 preset 检查必填 WorldFact。
+- 新增 `storyspec preset:list`、`storyspec preset:add <id>`、`storyspec preset:doctor`；`storyspec validate` 会按当前 preset 检查必填 WorldFact。
 - `/specify`、`/plan`、`/tasks` 会读取当前 Genre Preset，用于增强规格、计划和任务生成。
-- 新增 `novel context:pack` 与 `context:validate`，生成 `.specify/context-packs/` 写作上下文包，并校验 mustRead reason、路径和过期状态。
-- 新增 `novel draft:new`、`draft:list`、`draft:promote`，引入章节草稿与发布索引，默认不覆盖正式正文。
-- 新增 `novel narrative:test` 和 `/context-pack` 命令模板，第一版叙事测试支持 Scene Card 闭环检查，并在没有 Scene Card 时 fallback 到章节任务验收。
+- 新增 `storyspec context:pack` 与 `context:validate`，生成 `.specify/context-packs/` 写作上下文包，并校验 mustRead reason、路径和过期状态。
+- 新增 `storyspec draft:new`、`draft:list`、`draft:promote`，引入章节草稿与发布索引，默认不覆盖正式正文。
+- 新增 `storyspec narrative:test` 和 `/context-pack` 命令模板，第一版叙事测试支持 Scene Card 闭环检查，并在没有 Scene Card 时 fallback 到章节任务验收。
 - 新增 `dialogue:extract`、`dialogue:plan`、`dialogue:check`，生成待确认 DialogueBeat YAML，并校验 speaker、intent、relationshipChange 与 VoiceFingerprint。
 - 新增 `branch:create`、`branch:list`、`branch:compare`、`branch:promote`，支持剧情 what-if 安全探索，默认只写 `stories/*/branches/`，promote 需要显式确认。
 - 新增 `promise:list`、`promise:check`、`tension:chart`，检查长期未兑现、payoff 缺 evidence、重复建立不推进的 promise，并输出任务草稿。
@@ -49,12 +49,12 @@
 
 #### 🎉 Codex CLI 支持
 - **新增平台**: 完整支持 OpenAI Codex CLI
-  - 命令格式: `/novel-命令名` (例如: `/novel-write`)
+  - 命令格式: `/storyspec-命令名` (例如: `/storyspec-write`)
   - 命令目录: `.codex/prompts/`
   - 使用 `novel-` 前缀避免命名冲突
   - 纯 Markdown 格式(无 YAML frontmatter)
   - 13 个核心命令全部支持
-- **安装方式**: `novel init my-novel --ai codex`
+- **安装方式**: `storyspec init my-novel --ai codex`
 - **技术实现**: 借鉴 [Spec-Kit](https://github.com/github/spec-kit) v0.0.11+ 的实现方案
 
 #### 📚 AI 平台命令对照文档
@@ -69,14 +69,14 @@
 
 #### Codex CLI 支持说明
 - 更新 `docs/why-codex-not-supported.md`:
-  - 标题改为"Novel Writer 的 Codex CLI 支持"
+  - 标题改为"StorySpec 的 Codex CLI 支持"
   - 添加"即将支持"改为"v0.19.0 已支持"
   - 保留历史原因作为设计决策记录
 
 #### README 更新
 - 核心特性中提及 Codex CLI
 - 初始化示例中添加 `--ai codex` 选项
-- 命令格式示例中添加 `/novel-constitution` (Codex 格式)
+- 命令格式示例中添加 `/storyspec-constitution` (Codex 格式)
 - 命名空间说明表格中添加 Codex CLI
 
 #### GEMINI.md 模板更新
@@ -99,9 +99,9 @@
 
 | 平台 | 命令格式 | 命名空间 |
 |------|---------|----------|
-| Claude Code | `/novel.命令名` | `novel.` |
-| Gemini CLI | `/novel:命令名` | `novel:` |
-| **Codex CLI** ⭐ | **`/novel-命令名`** | **`novel-`** |
+| Claude Code | `/storyspec.命令名` | `novel.` |
+| Gemini CLI | `/storyspec:命令名` | `novel:` |
+| **Codex CLI** ⭐ | **`/storyspec-命令名`** | **`novel-`** |
 | Cursor | `/命令名` | 无 |
 | Windsurf | `/命令名` | 无 |
 | Roo Code | `/命令名` | 无 |
@@ -117,7 +117,7 @@
 
 - 用户可以根据自己使用的 AI 平台，轻松查阅对应的命令格式
 - 详细的文档说明避免了命令不生效的困惑
-- Codex CLI 用户现在可以使用完整的 Novel Writer 功能
+- Codex CLI 用户现在可以使用完整的 StorySpec 功能
 
 ### 📖 相关文档
 
@@ -198,16 +198,16 @@
 
 #### 插件安装系统标准化
 - **问题**:genre-knowledge 插件使用手动安装方式,与其他插件不一致
-- **改进**:统一使用 `novel plugins:add` 命令安装
+- **改进**:统一使用 `storyspec plugins:add` 命令安装
   - 新增 `plugins/genre-knowledge/config.yaml` 配置文件
   - 插件元数据完整定义(name, version, description, type, dependencies)
   - 安装后显示详细的使用说明和步骤
 
 #### 文档更新
 - 更新 `plugins/genre-knowledge/README.md`:
-  - 修改安装方法为 `novel plugins:add genre-knowledge`
-  - 修改卸载方法为 `novel plugins:remove genre-knowledge`
-  - 添加验证安装的命令 `novel plugins:list`
+  - 修改安装方法为 `storyspec plugins:add genre-knowledge`
+  - 修改卸载方法为 `storyspec plugins:remove genre-knowledge`
+  - 添加验证安装的命令 `storyspec plugins:list`
   - 简化文档结构,突出安装流程
 
 #### CLI 增强
@@ -378,7 +378,7 @@
 
 ### ✨ 新增功能
 
-- **Roo Code 斜杠命令支持**：`novel init` 与 `novel upgrade` 现在支持生成 `.roo/commands` 目录，并自动输出 Roo Code 兼容的 Markdown 命令
+- **Roo Code 斜杠命令支持**：`storyspec init` 与 `storyspec upgrade` 现在支持生成 `.roo/commands` 目录，并自动输出 Roo Code 兼容的 Markdown 命令
 - **插件系统集成**：插件命令注入流程同步扩展至 Roo Code，确保安装的插件可在 Roo Code 中即时使用
 
 ### 📚 文档更新
@@ -399,7 +399,7 @@
 
 ### 🐛 问题修复
 
-- **CLI 帮助文本更新**：修复 `novel init` 初始化后显示的帮助文本
+- **CLI 帮助文本更新**：修复 `storyspec init` 初始化后显示的帮助文本
   - 更新核心命令列表为正确的七步方法论命令（constitution, specify, clarify, plan, tasks, write, analyze）
   - 移除已废弃的旧命令（method, style, story, outline, chapters）
   - 更新推荐流程为：`constitution → specify → clarify → plan → tasks → write → analyze`
@@ -693,7 +693,7 @@ mv stories/your-story/story.md stories/your-story/specification.md
   - 添加 `/plan` - 创作计划命令
   - 添加 `/tasks` - 任务分解命令
   - 添加 `/analyze` - 综合验证命令
-- **影响范围**：修复后 `novel init` 创建的新项目将包含所有命令模板
+- **影响范围**：修复后 `storyspec init` 创建的新项目将包含所有命令模板
 
 ## [0.10.1] - 2025-09-30
 
@@ -868,7 +868,7 @@ mv stories/your-story/story.md stories/your-story/specification.md
 ### 修复
 - **依赖问题**：修复 `js-yaml` 模块缺失导致的运行错误
   - 将 `js-yaml` 添加到 dependencies 中
-  - 解决了 `novel -h` 命令报错的问题
+  - 解决了 `storyspec -h` 命令报错的问题
 
 ## [0.6.0] - 2025-09-24
 
@@ -962,7 +962,7 @@ mv stories/your-story/story.md stories/your-story/specification.md
 
 ### 修复
 
-- 修复了 `novel init` 命令生成的 `.claude/commands/` 配置文件格式问题
+- 修复了 `storyspec init` 命令生成的 `.claude/commands/` 配置文件格式问题
 - 保留了命令文件中完整的 frontmatter 和 scripts 部分，确保 Claude 能正确识别和执行命令
 - 简化了 `generateMarkdownCommand` 函数，直接返回完整模板内容
 

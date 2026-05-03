@@ -1,6 +1,6 @@
-# Novel Writer Spec - AI 小说创作命令规范
+# StorySpec Spec - AI 小说创作命令规范
 
-本文件定义了 Novel Writer 支持的所有斜杠命令。
+本文件定义了 StorySpec 支持的所有斜杠命令。
 在 Claude Code、Cursor 或其他 AI 助手中使用这些命令进行小说创作。
 
 ## /chapters

@@ -1,4 +1,4 @@
-# Novel Writer 插件开发规范
+# StorySpec 插件开发规范
 
 ## 插件文件结构
 

@@ -20,7 +20,7 @@ export const registerValidateCommand = (
     .command('validate')
     .option('--json', '输出 JSON，便于自动化读取')
     .option('--severity <level>', '最小输出级别：error、warning、info', 'info')
-    .description('校验 novel-writer 项目结构、tracking、任务和模板')
+    .description('校验 story-spec 项目结构、tracking、任务和模板')
     .action(async (commandOptions) => {
       try {
         if (!isValidationSeverity(commandOptions.severity)) {
@@ -51,8 +51,8 @@ export const registerValidateCommand = (
         }
       } catch (error: any) {
         if (error.message === 'NOT_IN_PROJECT') {
-          console.log(chalk.red('\n当前目录不是 novel-writer 项目'));
-          console.log(chalk.gray('请在项目根目录运行此命令，或使用 novel init 创建新项目\n'));
+          console.log(chalk.red('\n当前目录不是 story-spec 项目'));
+          console.log(chalk.gray('请在项目根目录运行此命令，或使用 storyspec init 创建新项目\n'));
           process.exit(1);
         }
 

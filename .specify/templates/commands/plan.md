@@ -19,7 +19,7 @@ $ARGUMENTS
 ### 1. 加载前置文档
 
 运行 `{SCRIPT}` 检查并加载：
-- 宪法文件：`memory/novel-constitution.md`
+- 宪法文件：`memory/storyspec-constitution.md`
 - 规格文件：`stories/*/specification.md`
 - 澄清记录（如果已运行 `/clarify`）
 

@@ -8,7 +8,7 @@
 
 ## 📖 插件简介
 
-忘语风格创作插件是 Novel Writer 的风格扩展插件，专门用于创作具有忘语特色的仙侠玄幻小说。本插件深度还原了忘语的核心创作理念：冷静客观的叙述、严谨的修仙世界观、谨慎务实的人物塑造，以及环环相扣的悬念设计。
+忘语风格创作插件是 StorySpec 的风格扩展插件，专门用于创作具有忘语特色的仙侠玄幻小说。本插件深度还原了忘语的核心创作理念：冷静客观的叙述、严谨的修仙世界观、谨慎务实的人物塑造，以及环环相扣的悬念设计。
 
 ### 核心特色
 
@@ -20,14 +20,14 @@
 
 ## 🚀 安装方法
 
-### 通过 Novel CLI 安装
+### 通过 StorySpec CLI 安装
 
 ```bash
 # 在现有项目中安装
-novel plugins add wangyu-style
+storyspec plugins add wangyu-style
 
 # 或在初始化新项目时包含
-novel init my-xianxia-novel --plugins wangyu-style
+storyspec init my-xianxia-novel --plugins wangyu-style
 ```
 
 ### 手动安装
@@ -139,7 +139,7 @@ novel init my-xianxia-novel --plugins wangyu-style
 
 1. **项目初始化**
    ```
-   novel init my-novel --plugins wangyu-style
+   storyspec init my-novel --plugins wangyu-style
    /wangyu-style --intensity 8
    ```
 
@@ -214,13 +214,13 @@ novel init my-xianxia-novel --plugins wangyu-style
 
 - 《凡人修仙传》 - 忘语代表作
 - 《玄界之门》 - 忘语另一力作
-- [Novel Writer 文档](https://github.com/wordflowlab/novel-writer)
+- [StorySpec 文档](https://github.com/wordflowlab/story-spec)
 
 ## 🤝 贡献指南
 
 欢迎提交改进建议和问题反馈：
 
-1. 在 [GitHub Issues](https://github.com/wordflowlab/novel-writer/issues) 提交问题
+1. 在 [GitHub Issues](https://github.com/wordflowlab/story-spec/issues) 提交问题
 2. 使用标签 `plugin:wangyu-style`
 3. 详细描述问题或建议
 

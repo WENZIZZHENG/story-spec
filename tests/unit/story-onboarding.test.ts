@@ -56,9 +56,9 @@ describe('story onboarding', () => {
 
     expect(result.stage).toBe('idea');
     expect(result.actions[0]).toMatchObject({
-      command: 'novel interview 法术编译纪元'
+      command: 'storyspec interview 法术编译纪元'
     });
-    expect(result.actions.map(action => action.command)).toContain('novel preview specify 法术编译纪元');
+    expect(result.actions.map(action => action.command)).toContain('storyspec preview specify 法术编译纪元');
   });
 
   it('surfaces unconfirmed AI suggestions before moving downstream', async () => {
@@ -101,6 +101,6 @@ describe('story onboarding', () => {
     });
 
     expect(result.pendingQuestions.join('\n')).toContain('AI 建议待确认');
-    expect(result.actions[0].command).toBe('novel interview demo');
+    expect(result.actions[0].command).toBe('storyspec interview demo');
   });
 });

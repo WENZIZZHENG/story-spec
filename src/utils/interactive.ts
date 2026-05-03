@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * Interactive selection utilities for Novel Writer
+ * Interactive selection utilities for StorySpec
  * Provides arrow-key based selection interface similar to spec-kit
  */
 
@@ -14,7 +14,7 @@ import type { AIPlatformConfig, AIPlatformId } from './ai-platforms.js';
 export function displayProjectBanner(): void {
   console.log('');
   console.log(chalk.cyan.bold('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━'));
-  console.log(chalk.cyan.bold('  Novel Writer - AI 驱动的中文小说创作工具'));
+  console.log(chalk.cyan.bold('  StorySpec - AI 驱动的中文小说创作工具'));
   console.log(chalk.cyan.bold('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━'));
   console.log('');
 }

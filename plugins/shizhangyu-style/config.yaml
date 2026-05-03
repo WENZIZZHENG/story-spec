@@ -2,7 +2,7 @@ name: shizhangyu-style
 version: 1.0.0
 description: 石章鱼风格创作插件 - 宏大叙事与深邃权谋的史诗级创作
 type: style
-author: Novel Writer Community
+author: StorySpec Community
 commands:
   - id: shizhangyu-style
     file: commands/shizhangyu-style.md

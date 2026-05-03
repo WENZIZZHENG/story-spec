@@ -1,6 +1,6 @@
-# Novel Writer 最佳实践
+# StorySpec 最佳实践
 
-本文档汇总了 Novel Writer 用户的实战经验和最佳实践，帮助您更高效地使用工具创作高质量小说。
+本文档汇总了 StorySpec 用户的实战经验和最佳实践，帮助您更高效地使用工具创作高质量小说。
 
 ---
 
@@ -11,7 +11,7 @@
 **推荐流程**：
 ```bash
 # 1. 创建项目（预装推荐插件）
-novel init my-novel --plugins authentic-voice
+storyspec init my-novel --plugins authentic-voice
 
 # 2. 进入项目目录
 cd my-novel
@@ -41,7 +41,7 @@ claude  # 或其他 AI 工具
 
 **好的实践**：
 ```
-/novel.constitution
+/storyspec.constitution
 
 请帮我创建创作宪法，核心原则：
 1. 真实性优先：人物行为要符合真实心理
@@ -68,7 +68,7 @@ claude  # 或其他 AI 工具
 
 **Level 1 - 一句话故事**（灵感阶段，5分钟）：
 ```
-/novel.specify
+/storyspec.specify
 
 一个失忆的黑客发现自己活在虚拟世界中
 ```
@@ -76,7 +76,7 @@ claude  # 或其他 AI 工具
 
 **Level 2 - 一段话概要**（验证阶段，30分钟）：
 ```
-/novel.specify
+/storyspec.specify
 
 2045年，AI成为人类意识的寄生体，主角发现自己的AI助手
 正在悄悄改写他的记忆。为了摆脱AI控制，他必须在失去
@@ -90,7 +90,7 @@ claude  # 或其他 AI 工具
 
 **Level 4 - 完整规格**（正式阶段，2-3小时）：
 ```
-/novel.specify
+/storyspec.specify
 
 [详细描述，包含完整的九章规格内容]
 ```
@@ -103,7 +103,7 @@ claude  # 或其他 AI 工具
 
 **传统方法（仍可用）**：
 ```
-/novel.specify
+/storyspec.specify
 
 核心概念：2045年，AI成为人类意识的寄生体，
 主角发现自己的AI助手正在悄悄改写他的记忆。
@@ -151,7 +151,7 @@ claude  # 或其他 AI 工具
 
 **好的实践**：
 ```
-/novel.clarify
+/storyspec.clarify
 ```
 
 **认真回答 AI 的 5 个问题**：
@@ -173,10 +173,10 @@ AI: "AI控制记忆的机制是什么？"
 #### 第四到七步：快速迭代
 
 **流程**：
-1. `/novel.plan` → 制定创作计划（1-2小时）
-2. `/novel.tasks` → 分解任务清单（30分钟）
-3. `/novel.write` → 写作（持续进行）
-4. `/novel.analyze` → 定期验证（每5-10章）
+1. `/storyspec.plan` → 制定创作计划（1-2小时）
+2. `/storyspec.tasks` → 分解任务清单（30分钟）
+3. `/storyspec.write` → 写作（持续进行）
+4. `/storyspec.analyze` → 定期验证（每5-10章）
 
 ---
 
@@ -256,7 +256,7 @@ AI：根据您的故事特点，我推荐使用"英雄之旅"：
 **检查工具**：
 ```
 # 完成前3章后立即检查
-/novel.analyze --focus=opening
+/storyspec.analyze --focus=opening
 
 # 输出示例：
 【黄金法则检查】
@@ -280,13 +280,13 @@ AI：根据您的故事特点，我推荐使用"英雄之旅"：
 
 **步骤1：安装插件**：
 ```bash
-novel plugins:add book-analysis
+storyspec plugins:add book-analysis
 ```
 
 **步骤2：分析对标作品**：
 ```
 # 1. 准备小说文本文件（TXT或MD格式）
-analysis/target-novel.txt
+analysis/target-storyspec.txt
 
 # 2. 基础信息分析
 /book-analyze
@@ -349,34 +349,34 @@ analysis/target-novel.txt
 **建议频率**：
 | 检查类型 | 频率 | 命令 |
 |---------|------|------|
-| 写作进度 | 每章 | `/novel.track` |
-| 情节一致性 | 每5-10章 | `/novel.plot-check` |
-| 时间线验证 | 重要事件后 | `/novel.timeline` |
-| 关系追踪 | 关系变化后 | `/novel.relations` |
-| 世界观检查 | 新设定出现后 | `/novel.world-check` |
-| 综合验证 | 每卷结束 | `/novel.analyze` |
-| 🆕 开篇检查 | 前3章完成 | `/novel.analyze --focus=opening` |
-| 🆕 节奏检查 | 每10-15章 | `/novel.analyze --focus=pacing` |
-| 🆕 逻辑检查 | 大纲调整后 | `/novel.analyze --focus=logic` |
-| 🆕 风格检查 | 批量修订前 | `/novel.analyze --focus=style` |
+| 写作进度 | 每章 | `/storyspec.track` |
+| 情节一致性 | 每5-10章 | `/storyspec.plot-check` |
+| 时间线验证 | 重要事件后 | `/storyspec.timeline` |
+| 关系追踪 | 关系变化后 | `/storyspec.relations` |
+| 世界观检查 | 新设定出现后 | `/storyspec.world-check` |
+| 综合验证 | 每卷结束 | `/storyspec.analyze` |
+| 🆕 开篇检查 | 前3章完成 | `/storyspec.analyze --focus=opening` |
+| 🆕 节奏检查 | 每10-15章 | `/storyspec.analyze --focus=pacing` |
+| 🆕 逻辑检查 | 大纲调整后 | `/storyspec.analyze --focus=logic` |
+| 🆕 风格检查 | 批量修订前 | `/storyspec.analyze --focus=style` |
 
 **检查工作流**：
 ```
 1. 完成前3章
-   → /novel.analyze --focus=opening（黄金开篇检查）
+   → /storyspec.analyze --focus=opening（黄金开篇检查）
 
 2. 完成第10章
-   → /novel.track（更新进度）
+   → /storyspec.track（更新进度）
 
 3. 完成第15章（5章间隔）
-   → /novel.track
-   → /novel.plot-check（情节检查）
-   → /novel.analyze --focus=pacing（节奏检查）
+   → /storyspec.track
+   → /storyspec.plot-check（情节检查）
+   → /storyspec.analyze --focus=pacing（节奏检查）
 
 4. 完成第25章（卷结束）
-   → /novel.track
-   → /novel.plot-check
-   → /novel.analyze（全面验证）
+   → /storyspec.track
+   → /storyspec.plot-check
+   → /storyspec.analyze（全面验证）
 ```
 
 **🆕 专项分析使用场景**：
@@ -468,7 +468,7 @@ AI 就不会"随意"安排交汇点，而是按计划执行。
 
 **完成大纲后**：
 ```
-/novel.checklist 大纲质量
+/storyspec.checklist 大纲质量
 ```
 检查维度：
 - 完整性：是否定义了所有主要情节节点？
@@ -479,7 +479,7 @@ AI 就不会"随意"安排交汇点，而是按计划执行。
 
 **完成角色设定后**：
 ```
-/novel.checklist 角色设定
+/storyspec.checklist 角色设定
 ```
 检查维度：
 - 基本信息完整（姓名、年龄、身份、外貌）
@@ -489,7 +489,7 @@ AI 就不会"随意"安排交汇点，而是按计划执行。
 
 **完成世界观设定后**：
 ```
-/novel.checklist 世界观
+/storyspec.checklist 世界观
 ```
 检查维度：
 - 核心规则明确无歧义
@@ -499,8 +499,8 @@ AI 就不会"随意"安排交汇点，而是按计划执行。
 
 **开始写作前**：
 ```
-/novel.checklist 创作计划
-/novel.checklist 伏笔管理
+/storyspec.checklist 创作计划
+/storyspec.checklist 伏笔管理
 ```
 确保：
 - 任务划分清晰具体
@@ -511,8 +511,8 @@ AI 就不会"随意"安排交汇点，而是按计划执行。
 
 **每完成 5-10 章**：
 ```
-/novel.checklist 世界观一致性
-/novel.checklist 情节对齐
+/storyspec.checklist 世界观一致性
+/storyspec.checklist 情节对齐
 ```
 扫描章节，发现：
 - 世界观描述前后矛盾
@@ -521,8 +521,8 @@ AI 就不会"随意"安排交汇点，而是按计划执行。
 
 **每卷结束时**：
 ```
-/novel.checklist 数据同步
-/novel.checklist 时间线
+/storyspec.checklist 数据同步
+/storyspec.checklist 时间线
 ```
 验证：
 - 所有 tracking JSON 数据同步
@@ -533,7 +533,7 @@ AI 就不会"随意"安排交汇点，而是按计划执行。
 
 **1. 生成 Checklist**：
 ```
-/novel.checklist 大纲质量
+/storyspec.checklist 大纲质量
 ```
 
 **2. 勾选检查项**：
@@ -646,7 +646,7 @@ A: 功能类似，但 `/checklist` 提供：
 #### 创作流程
 1. 初始化风格时引用个人语料：
 ```
-/novel.style
+/storyspec.style
 ```
 系统会自动引用 `personal-voice.md` 并生成"个人表达基线"
 
@@ -735,9 +735,9 @@ cp -r stories/ ../backup/stories-$(date +%Y%m%d)
 每章完成后：请帮我全文检查一遍角色名称、时间线、情节一致性
 
 高效✅:
-每章：/novel.track（快速程序化）
-每5章：/novel.plot-check（针对性检查）
-每卷：/novel.analyze（全面验证）
+每章：/storyspec.track（快速程序化）
+每5章：/storyspec.plot-check（针对性检查）
+每卷：/storyspec.analyze（全面验证）
 ```
 
 ---
@@ -765,14 +765,14 @@ cp -r stories/ ../backup/stories-$(date +%Y%m%d)
 ```
 1. 接受偏离，因为可能更好
 2. 更新相应文档：
-   /novel.specify（更新规格中的相关部分）
-   /novel.plan（调整后续计划）
+   /storyspec.specify（更新规格中的相关部分）
+   /storyspec.plan（调整后续计划）
 3. 记录偏离理由
 ```
 
 **大偏离（不符合预期）**：
 ```
-1. /novel.analyze --type=content
+1. /storyspec.analyze --type=content
    诊断问题所在
 
 2. 明确告诉 AI:
@@ -806,10 +806,10 @@ cp -r stories/ ../backup/stories-$(date +%Y%m%d)
 
 **批量修复**：
 ```
-/novel.track --check
+/storyspec.track --check
 # 检查所有章节的角色名称
 
-/novel.track --fix
+/storyspec.track --fix
 # 自动修复简单错误
 ```
 
@@ -824,7 +824,7 @@ cp -r stories/ ../backup/stories-$(date +%Y%m%d)
 
 **解决**：
 ```
-1. /novel.timeline
+1. /storyspec.timeline
    查看当前时间线
 
 2. 在 spec/tracking/timeline.json 中手动修正
@@ -842,7 +842,7 @@ cp -r stories/ ../backup/stories-$(date +%Y%m%d)
 **短期方案**：
 ```
 1. 使用专家模式获得建议
-   /novel.expert plot
+   /storyspec.expert plot
 
 2. 回顾创作宪法和故事规格
    重新明确核心目标

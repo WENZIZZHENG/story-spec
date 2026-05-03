@@ -2,7 +2,7 @@
 name: 三幕结构
 nameEn: Three-Act Structure
 version: "1.0"
-author: Novel Writer Team
+author: StorySpec Team
 description: |
   经典的故事结构，将故事分为开端（Setup）、中间（Confrontation）和结局（Resolution）三个部分。
   这是最广泛使用的故事结构，适用于各种类型的小说。

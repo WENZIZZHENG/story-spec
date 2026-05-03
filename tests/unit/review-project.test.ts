@@ -138,7 +138,7 @@ describe('reviewProject', () => {
     ]));
 
     const report = renderReviewReport(result);
-    expect(report).toContain('Novel Writer 审稿面板');
+    expect(report).toContain('StorySpec 审稿面板');
     expect(report).toContain('世界观审稿人');
     expect(report).toContain('WORLD_DENSITY_HIGH');
   });

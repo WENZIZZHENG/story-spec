@@ -266,7 +266,7 @@
 
 ### ⚠️ 与其他规范的关系
 
-- 优先级低于`memory/novel-constitution.md`（创作宪法）
+- 优先级低于`memory/storyspec-constitution.md`（创作宪法）
 - 优先级低于用户明确指令
 - 可与类型专属知识（如`genres/shuangwen-*.md`）配合使用
 

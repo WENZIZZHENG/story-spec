@@ -2,7 +2,7 @@ name: luyao-style
 version: 1.0.0
 description: 路遥风格创作插件 - 现实主义文学与平凡世界的深情书写
 type: style
-author: Novel Writer Community
+author: StorySpec Community
 commands:
   - id: luyao-style
     file: commands/luyao-style.md

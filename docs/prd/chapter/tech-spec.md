@@ -869,9 +869,9 @@ export class PresetManager {
   }
 
   private getPresetSource(filePath: string): PresetSource {
-    if (filePath.includes('.novel/presets/official')) return 'official';
-    if (filePath.includes('.novel/presets/community')) return 'community';
-    if (filePath.includes('.novel/presets/user')) return 'user';
+    if (filePath.includes('.storyspec/presets/official')) return 'official';
+    if (filePath.includes('.storyspec/presets/community')) return 'community';
+    if (filePath.includes('.storyspec/presets/user')) return 'user';
     if (filePath.includes('stories')) return 'project';
     return 'builtin';
   }
@@ -1482,7 +1482,7 @@ scripts:
      - 特殊要求
 
 2. **先查（最高优先级）**：
-   - `memory/novel-constitution.md`（创作宪法 - 最高原则）
+   - `memory/storyspec-constitution.md`（创作宪法 - 最高原则）
    - `memory/style-reference.md`（风格参考 - 如果通过 `/book-internalize` 生成）
 
 3. **再查（规格和计划）**：
@@ -1844,24 +1844,24 @@ describe('ChapterConfigManager', () => {
 
 1. **新用户首次使用**:
    ```
-   1. 安装novel-writer-cn
-   2. novel init my-story
-   3. novel chapter-config create 1 --interactive
+   1. 安装story-spec-cn
+   2. storyspec init my-story
+   3. storyspec chapter-config create 1 --interactive
    4. 在AI编辑器执行 /write 第1章
    5. 验证生成的章节内容符合配置
    ```
 
 2. **使用预设快速创建**:
    ```
-   1. novel preset list
-   2. novel chapter-config create 5 --preset action-intense
+   1. storyspec preset list
+   2. storyspec chapter-config create 5 --preset action-intense
    3. /write 第5章
    4. 验证快节奏动作场景
    ```
 
 3. **配置复用**:
    ```
-   1. novel chapter-config copy 5 10
+   1. storyspec chapter-config copy 5 10
    2. 修改差异部分
    3. /write 第10章
    4. 验证保持了风格一致性
@@ -2077,7 +2077,7 @@ export class ErrorHandler {
       });
     } else if (error instanceof PresetNotFoundError) {
       console.error(chalk.red(`预设不存在: ${error.details.presetId}`));
-      console.log(chalk.gray('\n提示: 使用 novel preset list 查看可用预设'));
+      console.log(chalk.gray('\n提示: 使用 storyspec preset list 查看可用预设'));
     } else if (error instanceof ConfigError) {
       console.error(chalk.red(`配置错误: ${error.message}`));
       if (error.details) {

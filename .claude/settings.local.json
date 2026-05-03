@@ -13,7 +13,7 @@
       "Bash(npm pack:*)",
       "Bash(npm run build:*)",
       "Bash(cat:*)",
-      "Bash(/Users/coso/.bun/install/global/node_modules/novel-writer-cn/dist/cli.js --version)",
+      "Bash(/Users/coso/.bun/install/global/node_modules/story-spec-cn/dist/cli.js --version)",
       "Bash(node:*)",
       "Bash(npm uninstall:*)",
       "Read(//Users/coso/.nvm/versions/node/v22.20.0/bin/**)",
@@ -21,7 +21,7 @@
       "Bash(npm link:*)",
       "Read(//Users/coso/.nvm/versions/node/v22.20.0/lib/node_modules/**)",
       "Bash(npm unlink:*)",
-      "Bash(novel check:*)",
+      "Bash(storyspec check:*)",
       "Bash(npm view:*)",
       "mcp__playwright__browser_navigate"
     ],

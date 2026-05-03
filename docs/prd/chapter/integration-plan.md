@@ -4,7 +4,7 @@
 
 - **版本**: v1.0.0
 - **创建时间**: 2025-10-14
-- **作者**: Novel Writer Team
+- **作者**: StorySpec Team
 - **状态**: 规划阶段
 
 ## 目录
@@ -26,7 +26,7 @@
 
 ### 1.1 当前情况
 
-**novel-writer-cn CLI**:
+**story-spec-cn CLI**:
 - ✅ 完整的规范驱动系统（specification.md, constitution.md）
 - ✅ 角色、场景、剧情追踪系统
 - ✅ Slash Command写作流程（/write）
@@ -46,7 +46,7 @@
 | 功能 | 纯CLI方案 | Dreams集成方案 | 提升价值 |
 |------|-----------|----------------|----------|
 | 配置创建 | 命令行交互/手写YAML | Web表单可视化填写 | ⭐⭐⭐⭐⭐ |
-| 预设浏览 | `novel preset list` | 可视化卡片+预览 | ⭐⭐⭐⭐ |
+| 预设浏览 | `storyspec preset list` | 可视化卡片+预览 | ⭐⭐⭐⭐ |
 | 配置管理 | 本地文件系统 | 云端存储+版本控制 | ⭐⭐⭐⭐ |
 | 团队协作 | Git共享 | 云端实时同步 | ⭐⭐⭐ |
 | 移动端访问 | 不支持 | 响应式Web UI | ⭐⭐⭐ |
@@ -118,8 +118,8 @@ Web表单填写 → Session存储 → CLI拉取 → 本地prompt → AI执行
 
 现有CLI命令：
 ```bash
-novel intro --session {session-id}   # 从Dreams拉取数据
-novel write --session {session-id}    # 使用Dreams配置写作
+storyspec intro --session {session-id}   # 从Dreams拉取数据
+storyspec write --session {session-id}    # 使用Dreams配置写作
 ```
 
 ### 3.3 数据库架构
@@ -180,7 +180,7 @@ model Session {
                               │ Session ID / API Key
                               ▼
 ┌─────────────────────────────────────────────────────────────┐
-│               novel-writer-cn CLI                            │
+│               story-spec-cn CLI                            │
 │  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐      │
 │  │ chapter-config│  │ write.md     │  │  本地YAML    │      │
 │  │   commands    │  │  (slash cmd) │  │   存储       │      │
@@ -202,11 +202,11 @@ model Session {
 4. 创建Session，返回session-id给前端
    ↓
 5. 前端显示CLI命令提示：
-   novel chapter-config pull --session {session-id}
+   storyspec chapter-config pull --session {session-id}
    ↓
 6. 用户在CLI执行命令，拉取配置到本地
    ↓
-7. 本地保存为 .novel/chapters/chapter-X-config.yaml
+7. 本地保存为 .storyspec/chapters/chapter-X-config.yaml
    ↓
 8. 用户执行 /write，自动加载本地配置文件
 ```
@@ -215,12 +215,12 @@ model Session {
 
 ```
 1. 用户在CLI创建配置：
-   novel chapter-config create 5 --interactive
+   storyspec chapter-config create 5 --interactive
    ↓
 2. 本地保存 chapter-5-config.yaml
    ↓
 3. 用户执行推送命令：
-   novel chapter-config push 5
+   storyspec chapter-config push 5
    ↓
 4. CLI读取本地YAML，调用Dreams API
    ↓
@@ -236,14 +236,14 @@ model Session {
 | CLI本地文件 | chapter-X-config.yaml | 写作时直接读取 | 主存储 |
 | Dreams数据库 | ChapterConfig记录 | 云端备份、跨设备同步 | pull/push |
 | Dreams Session | 临时配置数据 | Web→CLI传递 | session-id |
-| CLI元数据 | .novel/meta/sync.json | 记录同步状态 | 本地维护 |
+| CLI元数据 | .storyspec/meta/sync.json | 记录同步状态 | 本地维护 |
 
 **同步元数据示例**：
 ```json
 {
   "chapters": {
     "5": {
-      "local_path": ".novel/chapters/chapter-5-config.yaml",
+      "local_path": ".storyspec/chapters/chapter-5-config.yaml",
       "remote_id": "cuid_abc123",
       "last_synced": "2025-10-14T10:30:00Z",
       "hash": "sha256_hash_value"
@@ -373,7 +373,7 @@ model Session {
 │ 激烈动作场景                                      【关闭×】 │
 ├────────────────────────────────────────────────────────────┤
 │ 版本: v1.0.0                                                │
-│ 作者: Novel Writer Official                                │
+│ 作者: StorySpec Official                                │
 │ 分类: 场景预设                                              │
 │                                                              │
 │ 📝 描述:                                                     │
@@ -762,7 +762,7 @@ export const chapterConfigRouter = router({
       return {
         configId: chapterConfig.id,
         sessionId: session.id,
-        cliCommand: `novel chapter-config pull --session ${session.id}`,
+        cliCommand: `storyspec chapter-config pull --session ${session.id}`,
       };
     }),
 
@@ -1267,7 +1267,7 @@ model Book {
 │  CLI命令     │
 └───────┬──────┘
         │
-        │ 3. novel chapter-config pull --session {id}
+        │ 3. storyspec chapter-config pull --session {id}
         ▼
 ┌──────────────┐
 │   CLI        │
@@ -1329,7 +1329,7 @@ model Book {
        │    - pull（拉取远程）│              │
        │    - merge（合并）   │              │
        │                      │              │
-       │ novel chapter-config │              │
+       │ storyspec chapter-config │              │
        │ push 5 --force       │              │
        ├─────────────────────▶│              │
        │                      │ 更新hash     │
@@ -1368,13 +1368,13 @@ function calculateConfigHash(config: ChapterConfig): string {
 
 1. **自动解决**: 时间戳优先
    ```bash
-   novel chapter-config sync --auto
+   storyspec chapter-config sync --auto
    # 自动选择最新的版本
    ```
 
 2. **手动解决**: 三向对比
    ```bash
-   novel chapter-config sync 5
+   storyspec chapter-config sync 5
    # 显示冲突详情：
    # Local:  modified 2025-10-14 15:30
    # Remote: modified 2025-10-14 16:00
@@ -1417,20 +1417,20 @@ function calculateConfigHash(config: ChapterConfig): string {
 
 ```bash
 # 拉取（Web → CLI）
-novel chapter-config pull --session {session-id}
-novel chapter-config pull 5 --remote  # 从云端拉取第5章配置
+storyspec chapter-config pull --session {session-id}
+storyspec chapter-config pull 5 --remote  # 从云端拉取第5章配置
 
 # 推送（CLI → Web）
-novel chapter-config push 5
-novel chapter-config push 5 --force   # 强制覆盖远程
+storyspec chapter-config push 5
+storyspec chapter-config push 5 --force   # 强制覆盖远程
 
 # 同步（双向智能同步）
-novel chapter-config sync              # 同步所有配置
-novel chapter-config sync 5            # 同步第5章
-novel chapter-config sync --auto       # 自动解决冲突
+storyspec chapter-config sync              # 同步所有配置
+storyspec chapter-config sync 5            # 同步第5章
+storyspec chapter-config sync --auto       # 自动解决冲突
 
 # 检查同步状态
-novel chapter-config status
+storyspec chapter-config status
 # 输出示例:
 # Chapter 5: ✓ Synced (last synced: 2025-10-14 10:30)
 # Chapter 8: ⚠ Conflict (local: 15:30, remote: 16:00)
@@ -1468,7 +1468,7 @@ export function registerChapterConfigCommands(program: Command) {
         const config = data.config;
 
         await manager.saveConfig(config);
-        console.log(`✓ 配置已保存到 .novel/chapters/chapter-${config.chapter}-config.yaml`);
+        console.log(`✓ 配置已保存到 .storyspec/chapters/chapter-${config.chapter}-config.yaml`);
       } else if (options.remote && chapter) {
         // 远程拉取模式
         const bookId = await manager.getCurrentBookId();
@@ -1651,7 +1651,7 @@ export function registerChapterConfigCommands(program: Command) {
    - `presetRouter`: list, get
 
 3. CLI命令开发
-   - `novel chapter-config pull --session`
+   - `storyspec chapter-config pull --session`
    - 本地YAML文件保存
 
 4. 测试
@@ -1720,9 +1720,9 @@ export function registerChapterConfigCommands(program: Command) {
    - 预设使用统计
 
 4. CLI预设支持
-   - `novel preset list`
-   - `novel preset get <id>`
-   - `novel chapter-config create --preset <id>`
+   - `storyspec preset list`
+   - `storyspec preset get <id>`
+   - `storyspec chapter-config create --preset <id>`
 
 **交付物**:
 - ✅ 10个官方预设
@@ -1739,7 +1739,7 @@ export function registerChapterConfigCommands(program: Command) {
 **任务**:
 1. Hash计算和元数据管理
    - 实现`calculateConfigHash()`
-   - 本地元数据文件 `.novel/meta/sync.json`
+   - 本地元数据文件 `.storyspec/meta/sync.json`
    - 同步状态追踪
 
 2. 推送API开发
@@ -1748,9 +1748,9 @@ export function registerChapterConfigCommands(program: Command) {
    - 冲突检测逻辑
 
 3. CLI同步命令
-   - `novel chapter-config push`
-   - `novel chapter-config sync`
-   - `novel chapter-config status`
+   - `storyspec chapter-config push`
+   - `storyspec chapter-config sync`
+   - `storyspec chapter-config status`
 
 4. 冲突解决UI
    - CLI交互式冲突解决
@@ -2015,7 +2015,7 @@ model Preset {
 - [章节配置系统PRD](./chapter-config-system.md)
 - [技术规范](./tech-spec.md)
 - [Dreams YAML表单系统](../../../other/dreams/docs/form-system-architecture.md)
-- [novel-writer-cn CLI架构](../../../README.md)
+- [story-spec-cn CLI架构](../../../README.md)
 
 ### A.2 技术栈文档
 

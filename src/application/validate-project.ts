@@ -399,7 +399,7 @@ const validateClarificationRecords = async (
       issues.push(createIssue(
         'MISSING_CLARIFICATION_RECORD',
         recordPath,
-        '存在澄清 Markdown，但缺少可验证的 clarifications.json；请运行 novel interview 生成结构化澄清记录。',
+        '存在澄清 Markdown，但缺少可验证的 clarifications.json；请运行 storyspec interview 生成结构化澄清记录。',
         'warning'
       ));
       continue;
@@ -495,7 +495,7 @@ const validateAgentContract = async (
     issues.push(createIssue(
       'MISSING_AGENT_CONTRACT',
       contractPath,
-      '缺少 .specify/agent-contract.md，请运行 novel contract:sync'
+      '缺少 .specify/agent-contract.md，请运行 storyspec contract:sync'
     ));
   }
 
@@ -503,7 +503,7 @@ const validateAgentContract = async (
     issues.push(createIssue(
       'MISSING_AGENTS_FILE',
       agentsPath,
-      '缺少 AGENTS.md，请运行 novel contract:sync'
+      '缺少 AGENTS.md，请运行 storyspec contract:sync'
     ));
   }
 
@@ -626,7 +626,7 @@ export const renderProjectValidation = (
 ): string => {
   const visibleIssues = filterIssuesBySeverity(result.issues, options.minSeverity ?? 'info');
   const lines = [
-    'Novel Writer 项目校验',
+    'StorySpec 项目校验',
     '',
     `根目录：${result.projectRoot}`,
     `结果：${result.valid ? '通过' : '失败'}`,

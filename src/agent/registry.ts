@@ -41,7 +41,7 @@ export type AgentIntegrationId = typeof AGENT_INTEGRATION_IDS[number];
 export type LegacyAIIntegrationId = typeof LEGACY_AI_INTEGRATION_IDS[number];
 export type AgentIntegrationKind = 'cli' | 'ide' | 'web' | 'generic' | 'ci' | 'mcp';
 export type AgentCommandSurface = 'slash-command' | 'skill' | 'markdown-command' | 'manual';
-export type AgentSlashPrefix = '/' | '/novel.' | '/novel:' | '/novel-';
+export type AgentSlashPrefix = '/' | '/storyspec.' | '/storyspec:' | '/storyspec-';
 export type RendererId = AgentIntegrationId | 'generic-markdown';
 
 export interface AgentInstallTarget {
@@ -154,7 +154,7 @@ export const AGENT_INTEGRATIONS = [
       distDir: 'dist/claude'
     }],
     renderer: 'claude',
-    slashPrefix: '/novel.',
+    slashPrefix: '/storyspec.',
     legacyAiId: 'claude'
   },
   {
@@ -184,7 +184,7 @@ export const AGENT_INTEGRATIONS = [
       distDir: 'dist/gemini'
     }],
     renderer: 'gemini',
-    slashPrefix: '/novel:',
+    slashPrefix: '/storyspec:',
     legacyAiId: 'gemini'
   },
   {
@@ -275,7 +275,7 @@ export const AGENT_INTEGRATIONS = [
       distDir: 'dist/codex'
     }],
     renderer: 'codex',
-    slashPrefix: '/novel-',
+    slashPrefix: '/storyspec-',
     legacyAiId: 'codex'
   },
   {

@@ -2,7 +2,7 @@ name: authentic-voice
 version: 1.0.0
 description: 真实人声写作插件——提升原创度、生活质感与个体声音一致性
 type: feature
-author: Novel Writer Community
+author: StorySpec Community
 commands:
   - id: authentic-voice
     file: commands/authentic-voice.md

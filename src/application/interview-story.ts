@@ -298,7 +298,7 @@ const buildAnswerUpdates = (
 const renderInterviewHandoffPrompt = (
   result: Pick<InterviewStoryResult, 'projectRoot' | 'jsonPath' | 'record'>
 ): string => [
-  `/novel-specify ${result.record.premise}`,
+  `/storyspec-specify ${result.record.premise}`,
   '',
   `请先读取 \`${relativePath(result.projectRoot, result.jsonPath)}\`，并按澄清记录继续创作。`,
   '只把 `confirmed: true` 且 `source: user-explicit/imported` 的答案视为用户已确认。',
@@ -380,7 +380,7 @@ export const interviewStory = async (
 };
 
 export const renderInterviewSummary = (result: InterviewStoryResult): string => [
-  'Novel Writer 创作访谈',
+  'StorySpec 创作访谈',
   '',
   `故事：${result.story}`,
   `JSON：${relativePath(result.projectRoot, result.jsonPath)}`,

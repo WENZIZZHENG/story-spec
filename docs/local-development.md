@@ -1,12 +1,12 @@
 # 本地开发指南
 
-本指南介绍如何在本地开发和测试 Novel Writer，无需发布版本或提交到主分支。
+本指南介绍如何在本地开发和测试 StorySpec，无需发布版本或提交到主分支。
 
 ## 1. 克隆和分支管理
 
 ```bash
-git clone https://github.com/wordflowlab/novel-writer.git
-cd novel-writer
+git clone https://github.com/wordflowlab/story-spec.git
+cd story-spec
 # 在功能分支上工作
 git checkout -b feature/your-feature
 ```
@@ -65,7 +65,7 @@ uv pip install -e .
 
 # 现在 'novel' 命令可用
 novel --help
-novel style my-book --genre scifi
+storyspec style my-book --genre scifi
 ```
 
 代码修改后无需重新安装（可编辑模式）。
@@ -75,7 +75,7 @@ novel style my-book --genre scifi
 ### 5.1 从本地路径运行
 
 ```bash
-uvx --from . novel outline my-story --chapters 10
+uvx --from . storyspec outline my-story --chapters 10
 ```
 
 ### 5.2 从特定分支运行（无需合并）
@@ -85,21 +85,21 @@ uvx --from . novel outline my-story --chapters 10
 git push origin feature/your-feature
 
 # 从分支运行
-uvx --from git+https://github.com/wordflowlab/novel-writer.git@feature/your-feature novel write chapter-1
+uvx --from git+https://github.com/wordflowlab/story-spec.git@feature/your-feature storyspec write chapter-1
 ```
 
 ### 5.3 绝对路径运行（从任何位置）
 
 ```bash
 # 使用绝对路径
-uvx --from /Users/yourname/dev/novel-writer novel --help
+uvx --from /Users/yourname/dev/story-spec novel --help
 
 # 设置环境变量便于使用
-export NOVEL_SRC=/Users/yourname/dev/novel-writer
-uvx --from "$NOVEL_SRC" novel style my-book
+export NOVEL_SRC=/Users/yourname/dev/story-spec
+uvx --from "$NOVEL_SRC" storyspec style my-book
 
 # 定义 shell 函数（可选）
-novel-dev() { uvx --from /Users/yourname/dev/novel-writer novel "$@"; }
+novel-dev() { uvx --from /Users/yourname/dev/story-spec novel "$@"; }
 novel-dev --help
 ```
 
@@ -161,7 +161,7 @@ ls dist/
 cd /tmp
 uv venv test-env
 source test-env/bin/activate
-pip install /path/to/novel-writer/dist/*.whl
+pip install /path/to/story-spec/dist/*.whl
 novel --help
 ```
 
@@ -171,10 +171,10 @@ novel --help
 
 ```bash
 # 创建临时目录
-mkdir -p /tmp/novel-test && cd /tmp/novel-test
+mkdir -p /tmp/storyspec-test && cd /tmp/storyspec-test
 
 # 测试初始化
-novel style test-novel --genre romance --ai gemini
+storyspec style test-novel --genre romance --ai gemini
 
 # 查看生成的结构
 tree -L 2
@@ -186,12 +186,12 @@ tree -L 2
 
 ```bash
 # 跳过 TLS 验证（仅用于本地测试）
-novel style my-book --skip-tls
+storyspec style my-book --skip-tls
 
 # 使用代理
 export HTTP_PROXY=http://localhost:8080
 export HTTPS_PROXY=http://localhost:8080
-novel write --api-endpoint http://localhost:8000
+storyspec write --api-endpoint http://localhost:8000
 ```
 
 ## 12. 快速迭代总结
@@ -199,9 +199,9 @@ novel write --api-endpoint http://localhost:8000
 | 操作 | 命令 |
 |------|------|
 | 直接运行 CLI | `python -m src.novel_cli --help` |
-| 可编辑安装 | `uv pip install -e .` 然后 `novel ...` |
-| 本地 uvx 运行（仓库根目录） | `uvx --from . novel ...` |
-| 本地 uvx 运行（绝对路径） | `uvx --from /path/to/novel-writer novel ...` |
+| 可编辑安装 | `uv pip install -e .` 然后 `storyspec ...` |
+| 本地 uvx 运行（仓库根目录） | `uvx --from . storyspec ...` |
+| 本地 uvx 运行（绝对路径） | `uvx --from /path/to/story-spec novel ...` |
 | Git 分支 uvx | `uvx --from git+URL@branch novel ...` |
 | 构建 wheel | `uv build` |
 | 运行测试 | `pytest` |
@@ -302,8 +302,8 @@ python -m memory_profiler src/novel_cli/__init__.py style my-book
 - 阅读[贡献指南](CONTRIBUTING.md)了解代码规范
 - 查看[架构文档](architecture.md)理解系统设计
 - 参考[API 文档](api.md)了解接口规范
-- 加入[开发者社区](https://github.com/wordflowlab/novel-writer/discussions)
+- 加入[开发者社区](https://github.com/wordflowlab/story-spec/discussions)
 
 ---
 
-💡 **提示**：开发过程中遇到问题？查看 [FAQ](faq.md) 或在 [Issues](https://github.com/wordflowlab/novel-writer/issues) 中提问。
+💡 **提示**：开发过程中遇到问题？查看 [FAQ](faq.md) 或在 [Issues](https://github.com/wordflowlab/story-spec/issues) 中提问。

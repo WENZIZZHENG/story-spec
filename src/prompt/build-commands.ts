@@ -57,7 +57,7 @@ const PLATFORM_COMMAND_DIRS: Record<BuildCommandAgent, string> = {
   generic: path.join('.specify', 'commands'),
   'continue-check': path.join('.continue', 'prompts'),
   claude: path.join('.claude', 'commands'),
-  gemini: path.join('.gemini', 'commands', 'novel'),
+  gemini: path.join('.gemini', 'commands', 'storyspec'),
   cursor: path.join('.cursor', 'commands'),
   windsurf: path.join('.windsurf', 'workflows'),
   roocode: path.join('.roo', 'commands'),

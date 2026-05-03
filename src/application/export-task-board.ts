@@ -389,7 +389,7 @@ export const exportTaskBoard = async (
 export const renderTaskBoardExportSummary = (result: ExportTaskBoardResult): string => {
   const { board } = result;
   const lines = [
-    'Novel Writer 任务看板',
+    'StorySpec 任务看板',
     '',
     `故事：${board.story.name}`,
     `任务：${board.summary.total}（待办 ${board.summary.todo} / 已完成 ${board.summary.done}）`,

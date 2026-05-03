@@ -1,22 +1,22 @@
 # Agent Integrations
 
-Novel Writer 的核心是小说项目协议、命令语义和 agent contract。Codex、Claude、Gemini、Continue 等只是 integration，不是产品核心。
+StorySpec 的核心是小说项目协议、命令语义和 agent contract。Codex、Claude、Gemini、Continue 等只是 integration，不是产品核心。
 
 ## 主路径
 
 新项目优先使用 `--agent`：
 
 ```bash
-novel init my-novel --agent generic
-novel init my-novel --agent codex
-novel init my-novel --all-agents
+storyspec init my-novel --agent generic
+storyspec init my-novel --agent codex
+storyspec init my-novel --all-agents
 ```
 
 旧 `--ai <id>` 和 `--all` 仍处于兼容期：
 
 ```bash
-novel init my-novel --ai codex
-novel upgrade --all
+storyspec init my-novel --ai codex
+storyspec upgrade --all
 ```
 
 兼容入口会映射到 legacy AI integration。新文档、新脚本和新自动化应使用 `--agent` / `--all-agents`。
@@ -62,7 +62,7 @@ novel upgrade --all
 使用下面命令查看当前版本的完整结构化列表：
 
 ```bash
-novel agent:list --json
+storyspec agent:list --json
 ```
 
 ## Continue Check
@@ -72,8 +72,8 @@ novel agent:list --json
 用法：
 
 ```bash
-novel init my-novel --agent continue-check
-novel handoff --target-agent continue-check
+storyspec init my-novel --agent continue-check
+storyspec handoff --target-agent continue-check
 ```
 
 `continue-check` 不应直接写正文、tracking 或任务文件。需要改动时，它应输出：
@@ -90,9 +90,9 @@ novel handoff --target-agent continue-check
 ## 检查与修复
 
 ```bash
-novel agent:doctor
-novel contract:print
-novel contract:sync
+storyspec agent:doctor
+storyspec contract:print
+storyspec contract:sync
 ```
 
 `agent:doctor` 会检查 contract、命令目录、manifest 和 renderer 版本；`contract:sync` 用于同步 `.specify/agent-contract.md` 和 `AGENTS.md`。

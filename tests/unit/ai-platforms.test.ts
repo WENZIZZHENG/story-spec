@@ -32,9 +32,9 @@ describe('AI platform registry', () => {
   });
 
   it('formats slash commands with platform-specific prefixes', () => {
-    expect(formatAICommand(getAIPlatform('claude'), 'write')).toBe('/novel.write');
-    expect(formatAICommand(getAIPlatform('gemini'), 'write')).toBe('/novel:write');
-    expect(formatAICommand(getAIPlatform('codex'), 'write')).toBe('/novel-write');
+    expect(formatAICommand(getAIPlatform('claude'), 'write')).toBe('/storyspec.write');
+    expect(formatAICommand(getAIPlatform('gemini'), 'write')).toBe('/storyspec:write');
+    expect(formatAICommand(getAIPlatform('codex'), 'write')).toBe('/storyspec-write');
     expect(formatAICommand(getAIPlatform('cursor'), 'write')).toBe('/write');
     expect(formatAICommand(getAIPlatform('codex'), 'write', true)).toBe('/write');
   });

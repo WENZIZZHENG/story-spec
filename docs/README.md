@@ -1,6 +1,6 @@
-# Novel Writer 文档
+# StorySpec 文档
 
-这个目录包含 Novel Writer 的文档源文件，使用 [DocFX](https://dotnet.github.io/docfx/) 构建。
+这个目录包含 StorySpec 的文档源文件，使用 [DocFX](https://dotnet.github.io/docfx/) 构建。
 
 ## 文档结构
 
@@ -76,7 +76,7 @@ docs/
 
 - 中英文之间加空格
 - 使用中文标点符号
-- 专有名词保持英文（如 Novel Writer、Git）
+- 专有名词保持英文（如 StorySpec、Git）
 - 代码和命令使用英文
 
 ### 文档组织
@@ -124,7 +124,7 @@ docs/
 1. 推送到 `main` 分支时触发
 2. 自动构建文档
 3. 部署到 `gh-pages` 分支
-4. 访问 https://wordflowlab.github.io/novel-writer/
+4. 访问 https://wordflowlab.github.io/story-spec/
 
 ## 贡献文档
 
@@ -176,7 +176,7 @@ cspell docs/*.md
 
 - [DocFX 文档](https://dotnet.github.io/docfx/)
 - [Markdown 指南](https://www.markdownguide.org/)
-- [Novel Writer 主页](https://github.com/wordflowlab/novel-writer)
+- [StorySpec 主页](https://github.com/wordflowlab/story-spec)
 
 ---
 

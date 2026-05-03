@@ -17,12 +17,12 @@ scripts:
 ## 执行步骤
 
 1. 解析用户输入中的 story、task、chapter 或 scene。
-2. 可先运行 `{SCRIPT}` 了解当前故事状态；如目标已明确，可直接运行 `novel context:pack`，优先带上明确的 `--task` 或 `--chapter`。
+2. 可先运行 `{SCRIPT}` 了解当前故事状态；如目标已明确，可直接运行 `storyspec context:pack`，优先带上明确的 `--task` 或 `--chapter`。
 3. 检查生成结果：
    - 每个 `mustRead` 必须有 `reason`。
    - `allowedWrites` 必须来自任务边界或用户明确授权。
    - pack 不修改正文，只写 `.specify/context-packs/`。
-4. 如已有 pack，运行 `novel context:validate <pack.json>` 检查是否过期、路径是否缺失。
+4. 如已有 pack，运行 `storyspec context:validate <pack.json>` 检查是否过期、路径是否缺失。
 5. 输出 pack 路径和下一步写作建议。
 
 ## 输出要求

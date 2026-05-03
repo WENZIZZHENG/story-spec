@@ -102,7 +102,7 @@ const renderInputClarificationOnboarding = (
   return [
     '## 输入澄清引导',
     '',
-    `本命令用途：${description ?? '执行 Novel Writer 命令'}。`,
+    `本命令用途：${description ?? '执行 StorySpec 命令'}。`,
     '',
     `如果用户输入为空、只有空白、仍是未替换的 \`${argFormat}\` 占位符，或只是题材标签、风格词、偏好组合等不足以安全落盘的方向性描述：`,
     '- 不要立即创建、修改或删除文件。',
@@ -153,7 +153,7 @@ const shouldInjectWritePreviewGate = (description: string | undefined): boolean 
 const renderWritePreviewGate = (description: string | undefined): string => [
   '## 写入前预览门禁',
   '',
-  `本命令属于高影响写入命令（${description ?? 'Novel Writer 写入命令'}）。写入前必须执行 preview/confirm/apply 三段流程。`,
+  `本命令属于高影响写入命令（${description ?? 'StorySpec 写入命令'}）。写入前必须执行 preview/confirm/apply 三段流程。`,
   '',
   '- `preview`：默认阶段，只输出预览，不写文件。预览必须包含：拟写入文件路径、用户明确输入、AI 建议内容、未决 `[需要澄清]`、可能影响到的后续文件。',
   '- `confirm`：只有用户明确回复“确认写入”“应用预览”或 `apply`，并且关键 `[需要澄清]` 已处理后，才进入写入阶段。',
@@ -359,12 +359,12 @@ export const compileCommandTemplate = (input: CompileCommandTemplateInput): stri
       ].filter(line => line !== undefined).join('\n');
     case 'markdown-generic':
       return [
-        `# ${compiled.description ?? 'Novel Writer command'}`,
+        `# ${compiled.description ?? 'StorySpec command'}`,
         '',
         compiled.argumentHint ? `参数提示：\`${compiled.argumentHint}\`` : undefined,
         '',
         '## 目的',
-        compiled.description ?? '执行 Novel Writer 命令。',
+        compiled.description ?? '执行 StorySpec 命令。',
         '',
         '## 前置条件',
         '- 阅读并遵守 `.specify/agent-contract.md`。',
@@ -390,7 +390,7 @@ export const compileCommandTemplate = (input: CompileCommandTemplateInput): stri
         ...outputLocationInstruction(input.writeFiles),
         '',
         '## 验证',
-        '- 如果可以执行 CLI，请在阶段完成前运行 `novel validate`。',
+        '- 如果可以执行 CLI，请在阶段完成前运行 `storyspec validate`。',
         '- 如果无法执行 shell，请人工检查必须读取、允许写入和输出文件是否满足命令要求。',
         '',
         '## 降级方案',
@@ -462,7 +462,7 @@ export const compileCommandSpec = (input: CompileCommandSpecInput): string => {
         ...outputLocationInstruction(input.writeFiles),
         '',
         '## 验证',
-        '- 如果可以执行 CLI，请在阶段完成前运行 `novel validate`。',
+        '- 如果可以执行 CLI，请在阶段完成前运行 `storyspec validate`。',
         '- 如果无法执行 shell，请人工检查必须读取、允许写入和输出文件是否满足命令要求。',
         '',
         '## 降级方案',

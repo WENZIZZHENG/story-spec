@@ -62,7 +62,7 @@
 
 ## Reviewer Loop
 
-- 可运行 `novel review --json` 获取结构化 reviewer findings。
+- 可运行 `storyspec review --json` 获取结构化 reviewer findings。
 - findings 必须保留 `path`、`severity`、`evidence`、`suggestedAction`。
 - reviewer loop 只生成建议和任务草稿，不直接覆盖正文。
 - 如果出现 `CREATIVE_INTENT_DRIFT_*`，分析报告必须单列“创作控制权”维度，要求先澄清或转任务草稿，不得自动改写正文。

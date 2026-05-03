@@ -56,7 +56,7 @@ const PLATFORM_RENDERERS: Record<AgentIntegrationId, PlatformRenderer> = {
   claude: {
     platform: 'claude',
     extension: 'md',
-    namespace: 'novel.',
+    namespace: 'storyspec.',
     argFormat: '$ARGUMENTS',
     outputFormat: 'markdown-full',
     runShell: true,
@@ -128,7 +128,7 @@ const PLATFORM_RENDERERS: Record<AgentIntegrationId, PlatformRenderer> = {
   codex: {
     platform: 'codex',
     extension: 'md',
-    namespace: 'novel-',
+    namespace: 'storyspec-',
     argFormat: '$ARGUMENTS',
     outputFormat: 'markdown-none',
     runShell: true,
