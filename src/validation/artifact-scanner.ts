@@ -7,6 +7,12 @@ import {
   type StoryProject,
   type WritingTask
 } from '../domain/story-artifact.js';
+import {
+  determineStoryMaturityStage,
+  getStoryStageMissingArtifacts,
+  type StageRequiredArtifact,
+  type StoryMaturityStage
+} from '../domain/story-stage.js';
 
 export type ArtifactIssueSeverity = 'error' | 'warning' | 'info';
 
@@ -30,6 +36,7 @@ export interface TrackingArtifact {
 }
 
 export interface ScannedStoryProject extends StoryProject {
+  stage: StoryMaturityStage;
   issues: ArtifactIssue[];
 }
 
@@ -108,13 +115,43 @@ const listMarkdownFiles = async (
 const createMissingIssue = (
   code: ArtifactIssue['code'],
   message: string,
-  filePath: string
+  filePath: string,
+  severity: ArtifactIssueSeverity = 'warning'
 ): ArtifactIssue => ({
-  severity: 'warning',
+  severity,
   code,
   message,
   path: filePath
 });
+
+const missingArtifactIssueConfig = (
+  artifact: StageRequiredArtifact,
+  storyPath: string
+): { code: ArtifactIssue['code']; message: string; path: string } => {
+  switch (artifact) {
+    case 'specification':
+      return {
+        code: 'MISSING_SPECIFICATION',
+        message: '缺少故事规格文件: specification.md',
+        path: path.join(storyPath, 'specification.md')
+      };
+    case 'creative-plan':
+      return {
+        code: 'MISSING_CREATIVE_PLAN',
+        message: '缺少创作计划文件: creative-plan.md',
+        path: path.join(storyPath, 'creative-plan.md')
+      };
+    case 'tasks':
+      return {
+        code: 'MISSING_TASKS',
+        message: '缺少任务清单文件: tasks.md',
+        path: path.join(storyPath, 'tasks.md')
+      };
+  }
+};
+
+const missingArtifactSeverity = (stage: StoryMaturityStage): ArtifactIssueSeverity =>
+  stage === 'specified' || stage === 'planned' ? 'info' : 'warning';
 
 const readTasks = async (
   fs: Pick<ProjectFileSystem, 'pathExists' | 'readFile'>,
@@ -140,10 +177,37 @@ const scanStory = async (
   const specificationPath = path.join(storyPath, 'specification.md');
   const creativePlanPath = path.join(storyPath, 'creative-plan.md');
   const tasksPath = path.join(storyPath, 'tasks.md');
+  const ideaPath = path.join(storyPath, 'idea.md');
+  const clarificationsPath = path.join(storyPath, 'clarifications.md');
+  const clarificationsJsonPath = path.join(storyPath, 'clarifications.json');
+  const candidatesPath = path.join(storyPath, 'candidates.md');
   const contentDir = path.join(storyPath, 'content');
   const tasks = await readTasks(fs, storyPath, tasksPath);
   const contentFiles = await listMarkdownFiles(fs, contentDir);
+  const hasIdea = await fs.pathExists(ideaPath);
+  const hasClarifications = await fs.pathExists(clarificationsPath)
+    || await fs.pathExists(clarificationsJsonPath);
+  const hasCandidates = await fs.pathExists(candidatesPath);
+  const hasSpecification = await fs.pathExists(specificationPath);
+  const hasCreativePlan = await fs.pathExists(creativePlanPath);
+  const hasTasks = await fs.pathExists(tasksPath);
+  const stage = determineStoryMaturityStage({
+    hasIdea,
+    hasClarifications,
+    hasCandidates,
+    hasSpecification,
+    hasCreativePlan,
+    hasTasks,
+    contentFiles: contentFiles.length
+  });
   const artifacts: StoryArtifact[] = [
+    await artifactExists(fs, 'idea', ideaPath),
+    {
+      kind: 'clarifications',
+      path: await fs.pathExists(clarificationsPath) ? clarificationsPath : clarificationsJsonPath,
+      exists: hasClarifications
+    },
+    await artifactExists(fs, 'candidates', candidatesPath),
     await artifactExists(fs, 'specification', specificationPath),
     await artifactExists(fs, 'creative-plan', creativePlanPath),
     await artifactExists(fs, 'tasks', tasksPath),
@@ -155,16 +219,19 @@ const scanStory = async (
   ];
   const issues: ArtifactIssue[] = [];
 
-  if (!await fs.pathExists(specificationPath)) {
-    issues.push(createMissingIssue('MISSING_SPECIFICATION', '缺少故事规格文件: specification.md', specificationPath));
-  }
-
-  if (!await fs.pathExists(creativePlanPath)) {
-    issues.push(createMissingIssue('MISSING_CREATIVE_PLAN', '缺少创作计划文件: creative-plan.md', creativePlanPath));
-  }
-
-  if (!await fs.pathExists(tasksPath)) {
-    issues.push(createMissingIssue('MISSING_TASKS', '缺少任务清单文件: tasks.md', tasksPath));
+  for (const missingArtifact of getStoryStageMissingArtifacts({
+    stage,
+    hasSpecification,
+    hasCreativePlan,
+    hasTasks
+  })) {
+    const config = missingArtifactIssueConfig(missingArtifact, storyPath);
+    issues.push(createMissingIssue(
+      config.code,
+      config.message,
+      config.path,
+      missingArtifactSeverity(stage)
+    ));
   }
 
   for (const task of tasks) {
@@ -183,6 +250,7 @@ const scanStory = async (
   return {
     name: storyName,
     path: storyPath,
+    stage,
     artifacts,
     tasks,
     issues

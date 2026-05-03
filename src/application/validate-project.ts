@@ -33,6 +33,10 @@ import {
   sortIssuesBySeverity
 } from '../validation/severity.js';
 import { getCommandOutputFileNamesFromEntries } from '../prompt/command-source.js';
+import {
+  createEmptyStoryStageCounts,
+  type StoryMaturityStage
+} from '../domain/story-stage.js';
 
 export type ProjectValidationIssueCode =
   | ValidationIssue['code']
@@ -72,6 +76,7 @@ export interface ProjectValidationSummary {
   graphEdges: number;
   scenes: number;
   voiceFingerprints: number;
+  storyStages: Record<StoryMaturityStage, number>;
   activePreset?: string;
 }
 
@@ -520,6 +525,10 @@ export const validateProject = async (input: ValidateProjectInput): Promise<Proj
       graphEdges: storyStructureResult.graphEdges,
       scenes: storyStructureResult.scenes,
       voiceFingerprints: voiceResult.voiceFingerprints,
+      storyStages: artifactScan.stories.reduce((counts, story) => {
+        counts[story.stage] += 1;
+        return counts;
+      }, createEmptyStoryStageCounts()),
       activePreset: presetResult.activePreset?.id
     },
     issueCounts,
@@ -538,6 +547,10 @@ export const renderProjectValidation = (
     `根目录：${result.projectRoot}`,
     `结果：${result.valid ? '通过' : '失败'}`,
     `故事：${result.summary.stories}`,
+    `故事阶段：${Object.entries(result.summary.storyStages)
+      .filter(([, count]) => count > 0)
+      .map(([stage, count]) => `${stage}=${count}`)
+      .join(', ') || '无'}`,
     `任务：${result.summary.tasks}`,
     `tracking JSON：${result.summary.trackingFiles}`,
     `world 文件：${result.summary.worldFiles}`,

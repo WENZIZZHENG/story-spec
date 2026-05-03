@@ -38,13 +38,15 @@ describe('scanStoryArtifacts', () => {
     await writeFixtureFile(projectRoot, 'stories/ready/content/volume1/chapter-001.md', '# chapter 1');
 
     await writeFixtureFile(projectRoot, 'stories/missing/specification.md', '# spec only');
+    await writeFixtureFile(projectRoot, 'stories/idea/idea.md', '# 初始灵感');
+    await writeFixtureFile(projectRoot, 'stories/interviewing/clarifications.md', '# 澄清记录');
 
     await writeFixtureFile(projectRoot, 'spec/tracking/plot-tracker.json', '{"items": []}');
     await writeFixtureFile(projectRoot, 'spec/tracking/broken.json', '{bad json');
 
     const result = await scanStoryArtifacts({ projectRoot });
 
-    expect(result.stories.map(story => story.name)).toEqual(['missing', 'ready']);
+    expect(result.stories.map(story => story.name)).toEqual(['idea', 'interviewing', 'missing', 'ready']);
     const ready = result.stories.find(story => story.name === 'ready');
     expect(ready?.tasks.map(task => [task.id, task.status, task.outputs])).toEqual([
       ['T001', 'todo', ['content/volume1/chapter-001.md']],
@@ -62,10 +64,20 @@ describe('scanStoryArtifacts', () => {
     });
 
     const missing = result.stories.find(story => story.name === 'missing');
-    expect(missing?.issues.map(issue => issue.code)).toEqual([
-      'MISSING_CREATIVE_PLAN',
-      'MISSING_TASKS'
+    expect(missing?.stage).toBe('specified');
+    expect(missing?.issues.map(issue => [issue.code, issue.severity])).toEqual([
+      ['MISSING_CREATIVE_PLAN', 'info']
     ]);
+
+    const idea = result.stories.find(story => story.name === 'idea');
+    expect(idea?.stage).toBe('idea');
+    expect(idea?.issues.map(issue => issue.code)).not.toContain('MISSING_SPECIFICATION');
+    expect(idea?.issues.map(issue => issue.code)).not.toContain('MISSING_CREATIVE_PLAN');
+    expect(idea?.issues.map(issue => issue.code)).not.toContain('MISSING_TASKS');
+
+    const interviewing = result.stories.find(story => story.name === 'interviewing');
+    expect(interviewing?.stage).toBe('interviewing');
+    expect(interviewing?.issues.map(issue => issue.code)).toEqual([]);
 
     expect(result.tracking.map(item => [item.file, item.valid])).toEqual([
       ['broken.json', false],

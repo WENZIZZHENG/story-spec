@@ -4,10 +4,20 @@ import type { ArtifactIssue } from '../validation/artifact-scanner.js';
 import { scanStoryArtifacts } from '../validation/artifact-scanner.js';
 import { createArtifactGraph } from '../validation/artifact-graph.js';
 import type { GitAdapter, ProjectFileSystem } from './project-ports.js';
+import {
+  determineStoryMaturityStage,
+  getStoryStageCreativeGaps,
+  getStoryStageNextQuestions,
+  type StoryMaturityStage
+} from '../domain/story-stage.js';
 
 export interface StorySummary {
   name: string;
   path: string;
+  stage: StoryMaturityStage;
+  hasIdea: boolean;
+  hasClarifications: boolean;
+  hasCandidates: boolean;
   hasSpecification: boolean;
   hasCreativePlan: boolean;
   hasTasks: boolean;
@@ -18,6 +28,8 @@ export interface StorySummary {
   chapterFiles: number;
   contentFiles: number;
   contentChars: number;
+  creativeGaps: string[];
+  nextQuestions: string[];
 }
 
 export interface TrackingSummary {
@@ -182,8 +194,28 @@ const buildStorySummary = async (fs: ProjectFileSystem, projectRoot: string): Pr
   const specificationPath = path.join(storyPath, 'specification.md');
   const creativePlanPath = path.join(storyPath, 'creative-plan.md');
   const tasksPath = path.join(storyPath, 'tasks.md');
+  const ideaPath = path.join(storyPath, 'idea.md');
+  const clarificationsPath = path.join(storyPath, 'clarifications.md');
+  const clarificationsJsonPath = path.join(storyPath, 'clarifications.json');
+  const candidatesPath = path.join(storyPath, 'candidates.md');
   const contentDir = path.join(storyPath, 'content');
   const contentFiles = await listMarkdownFiles(fs, contentDir);
+  const hasIdea = await fs.pathExists(ideaPath);
+  const hasClarifications = await fs.pathExists(clarificationsPath)
+    || await fs.pathExists(clarificationsJsonPath);
+  const hasCandidates = await fs.pathExists(candidatesPath);
+  const hasSpecification = await fs.pathExists(specificationPath);
+  const hasCreativePlan = await fs.pathExists(creativePlanPath);
+  const hasTasks = await fs.pathExists(tasksPath);
+  const stage = determineStoryMaturityStage({
+    hasIdea,
+    hasClarifications,
+    hasCandidates,
+    hasSpecification,
+    hasCreativePlan,
+    hasTasks,
+    contentFiles: contentFiles.length
+  });
   const chapterFiles = contentFiles.filter(file =>
     /(?:chapter|第)\s*[-_0-9一二三四五六七八九十百千零〇]+/i.test(path.basename(file))
   ).length;
@@ -191,16 +223,22 @@ const buildStorySummary = async (fs: ProjectFileSystem, projectRoot: string): Pr
   return {
     name: path.basename(storyPath),
     path: storyPath,
-    hasSpecification: await fs.pathExists(specificationPath),
-    hasCreativePlan: await fs.pathExists(creativePlanPath),
-    hasTasks: await fs.pathExists(tasksPath),
+    stage,
+    hasIdea,
+    hasClarifications,
+    hasCandidates,
+    hasSpecification,
+    hasCreativePlan,
+    hasTasks,
     specificationVersion: await readMarkdownVersion(fs, specificationPath),
     creativePlanVersion: await readMarkdownVersion(fs, creativePlanPath),
     tasksVersion: await readMarkdownVersion(fs, tasksPath),
     nextTask: await findNextTask(fs, tasksPath),
     chapterFiles,
     contentFiles: contentFiles.length,
-    contentChars: await countContentChars(fs, contentFiles)
+    contentChars: await countContentChars(fs, contentFiles),
+    creativeGaps: getStoryStageCreativeGaps(stage),
+    nextQuestions: getStoryStageNextQuestions(stage)
   };
 };
 
@@ -279,6 +317,8 @@ const buildNextActions = (status: Omit<ProjectStatus, 'nextActions'>): string[] 
 
   if (!status.story) {
     actions.push('在 AI 助手中使用 `/specify` 或平台对应命令创建第一个故事规格');
+  } else if (status.story.stage === 'idea' || status.story.stage === 'interviewing') {
+    actions.push('继续创作访谈：回答 3 个早期问题，或运行 `/clarify` 生成澄清记录');
   } else if (!status.story.hasSpecification) {
     actions.push('先补齐 `stories/*/specification.md`');
   } else if (!status.story.hasCreativePlan) {
@@ -359,11 +399,24 @@ export const renderProjectStatus = (status: ProjectStatus): string => {
 
   if (status.story) {
     lines.push(`当前故事：${status.story.name}`);
+    lines.push(`创作阶段：${status.story.stage}`);
     lines.push(`规格：${status.story.hasSpecification ? status.story.specificationVersion : '缺失'}`);
     lines.push(`计划：${status.story.hasCreativePlan ? status.story.creativePlanVersion : '缺失'}`);
     lines.push(`任务：${status.story.hasTasks ? status.story.tasksVersion : '缺失'}`);
     lines.push(`下一任务：${status.story.nextTask}`);
     lines.push(`正文：${status.story.contentFiles} 个 Markdown，约 ${status.story.contentChars} 字符`);
+    if (status.story.creativeGaps.length > 0) {
+      lines.push('创作缺口：');
+      for (const gap of status.story.creativeGaps) {
+        lines.push(`- ${gap}`);
+      }
+    }
+    if (status.story.nextQuestions.length > 0) {
+      lines.push('下一步问题：');
+      for (const question of status.story.nextQuestions.slice(0, 3)) {
+        lines.push(`- ${question}`);
+      }
+    }
   } else {
     lines.push('当前故事：未发现 stories/* 目录');
   }

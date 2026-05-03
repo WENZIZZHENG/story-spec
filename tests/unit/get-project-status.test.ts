@@ -152,4 +152,45 @@ describe('getProjectStatus', () => {
     });
     expect(status.nextActions).toContain('补充 `AGENTS.md`，让 Codex 明确只读/规划/写作边界');
   });
+
+  it('treats idea-only stories as valid early creative states', async () => {
+    const projectRoot = path.join(os.tmpdir(), 'memory-novel-idea-status');
+    const fileSystem = new MemoryFileSystem(projectRoot);
+    const storyPath = path.join(projectRoot, 'stories', 'idea-demo');
+
+    await fileSystem.ensureDir(path.join(projectRoot, '.specify'));
+    await fileSystem.writeJson(path.join(projectRoot, '.specify', 'config.json'), {
+      name: 'idea-status',
+      version: '1.0.0'
+    });
+    await fileSystem.writeFile(path.join(storyPath, 'idea.md'), '# 一句话灵感');
+
+    const status = await getProjectStatus({
+      projectRoot,
+      fileSystem,
+      git: {
+        init: async () => undefined,
+        addAll: async () => undefined,
+        commit: async () => undefined,
+        statusShort: async () => []
+      }
+    });
+
+    expect(status.story).toMatchObject({
+      name: 'idea-demo',
+      stage: 'idea',
+      hasIdea: true,
+      hasSpecification: false,
+      hasCreativePlan: false,
+      hasTasks: false
+    });
+    expect(status.story?.creativeGaps).toContain('主角身份、初始舞台和第一卷冲突仍未确认');
+    expect(status.nextActions).toContain('继续创作访谈：回答 3 个早期问题，或运行 `/clarify` 生成澄清记录');
+    expect(status.nextActions).not.toContain('先补齐 `stories/*/specification.md`');
+
+    const output = renderProjectStatus(status);
+    expect(output).toContain('创作阶段：idea');
+    expect(output).toContain('创作缺口：');
+    expect(output).toContain('主角身份、初始舞台和第一卷冲突仍未确认');
+  });
 });

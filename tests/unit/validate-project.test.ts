@@ -157,6 +157,38 @@ describe('validateProject', () => {
     ]));
   });
 
+  it('does not warn for missing spec, plan, or tasks in the idea stage', async () => {
+    const projectRoot = path.join(os.tmpdir(), 'memory-novel-idea-stage');
+    const packageRoot = path.join(os.tmpdir(), 'memory-novel-idea-stage-package');
+    const fileSystem = new MemoryFileSystem(projectRoot);
+
+    await fileSystem.ensureDir(path.join(packageRoot, 'templates'));
+    await fileSystem.writeJson(path.join(projectRoot, '.specify', 'config.json'), {
+      name: 'idea-stage',
+      type: 'novel',
+      version: '1.0.0'
+    });
+    await fileSystem.writeFile(path.join(projectRoot, '.specify', 'agent-contract.md'), '# contract');
+    await fileSystem.writeFile(path.join(projectRoot, 'AGENTS.md'), '# agents');
+    await fileSystem.ensureDir(path.join(projectRoot, 'spec', 'tracking'));
+    await fileSystem.ensureDir(path.join(projectRoot, 'spec', 'world'));
+    await fileSystem.ensureDir(path.join(projectRoot, 'spec', 'canon'));
+    await fileSystem.ensureDir(path.join(projectRoot, 'spec', 'graph'));
+    await fileSystem.ensureDir(path.join(projectRoot, 'spec', 'voice'));
+    await fileSystem.writeFile(path.join(projectRoot, 'stories', 'idea-demo', 'idea.md'), '# 灵感');
+
+    const result = await validateProject({
+      projectRoot,
+      packageRoot,
+      fileSystem
+    });
+
+    expect(result.summary.storyStages.idea).toBe(1);
+    expect(result.issues.map(issue => issue.code)).not.toContain('MISSING_SPECIFICATION');
+    expect(result.issues.map(issue => issue.code)).not.toContain('MISSING_CREATIVE_PLAN');
+    expect(result.issues.map(issue => issue.code)).not.toContain('MISSING_TASKS');
+  });
+
   it('reports missing world, canon, graph, and voice directories as warnings for old projects', async () => {
     const projectRoot = path.join(os.tmpdir(), 'memory-novel-missing-world-canon');
     const packageRoot = path.join(os.tmpdir(), 'memory-novel-missing-world-canon-package');

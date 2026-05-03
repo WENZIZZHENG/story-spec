@@ -1,4 +1,9 @@
+import type { StoryMaturityStage } from './story-stage.js';
+
 export type StoryArtifactKind =
+  | 'idea'
+  | 'clarifications'
+  | 'candidates'
   | 'specification'
   | 'creative-plan'
   | 'tasks'
@@ -18,6 +23,7 @@ export interface StoryArtifact {
 export interface StoryProject {
   name: string;
   path: string;
+  stage?: StoryMaturityStage;
   artifacts: StoryArtifact[];
   tasks: WritingTask[];
 }
