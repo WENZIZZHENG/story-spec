@@ -25,7 +25,7 @@ storyspec next
 | `storyspec story:new <name> --idea "..."` | 保存一句话灵感和原始创作意图 |
 | `storyspec next [story]` | 根据当前阶段展示创作模式和多入口共创导航 |
 | `storyspec interview [story]` | 在终端完成创作访谈，可用 `--focus` 从指定入口开始 |
-| `storyspec creative:report [story]` | 查看已确认、待澄清、AI 候选和偏离风险 |
+| `storyspec creative:report [story]` | 查看已确认、创作回声、待澄清、AI 候选和偏离风险 |
 | `storyspec preview specify [story]` | 预览规格写入内容 |
 | `storyspec apply <preview-id> --yes` | 明确确认后写入 preview |
 
@@ -64,11 +64,20 @@ storyspec next
 
 `storyspec next` 和 `storyspec creative:report` 会提示活跃 exploring 分支，方便你先比较“这条路会长成什么小说”，再决定继续探索、promote 或放弃。
 
+## 创作回声
+
+| 命令 | 用途 |
+| --- | --- |
+| `storyspec creative:report [story]` | 显示当前风味、最有生命力的核心部件、关键缺口和下一轮创作回声 |
+| `storyspec status` | 在项目状态里回答“当前故事长成了什么”，不只显示文件是否存在 |
+
+创作回声是给作者看的成果摘要，不是宣传文案。它只引用已确认或部分确认的核心要素，同时保留缺口，避免把未确认候选说成已经完成。
+
 ## 终端维护命令
 
 | 命令 | 用途 |
 | --- | --- |
-| `storyspec status` | 查看项目是否可继续写 |
+| `storyspec status` | 查看项目是否可继续写，并回顾当前故事长成了什么 |
 | `storyspec validate` | 校验项目结构、tracking、任务和模板 |
 | `storyspec agent:list` | 查看支持的 agent integration |
 | `storyspec agent:add <id>` | 给项目添加 agent integration |

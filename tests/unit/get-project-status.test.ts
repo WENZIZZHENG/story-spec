@@ -255,4 +255,108 @@ describe('getProjectStatus', () => {
     expect(output).toContain('创作缺口：');
     expect(output).toContain('主角欲望、核心伙伴、第一舞台和第一卷冲突仍未确认');
   });
+
+  it('shows what the current story has grown into instead of only file state', async () => {
+    const projectRoot = path.join(os.tmpdir(), 'memory-novel-status-echo');
+    const fileSystem = new MemoryFileSystem(projectRoot);
+    const storyPath = path.join(projectRoot, 'stories', '编程施法');
+
+    await fileSystem.ensureDir(path.join(projectRoot, '.specify'));
+    await fileSystem.writeJson(path.join(projectRoot, '.specify', 'config.json'), {
+      name: 'status-echo',
+      version: '1.0.0'
+    });
+    await fileSystem.writeFile(path.join(storyPath, 'idea.md'), '# 编程施法');
+    await fileSystem.writeJson(path.join(storyPath, 'clarifications.json'), {
+      schemaVersion: '1.0',
+      story: '编程施法',
+      premise: '主角晏无穿越到剑与魔法世界，用编程施法处理第三次寂静前兆。',
+      createdAt: '2026-05-03T00:00:00.000Z',
+      updatedAt: '2026-05-03T00:00:00.000Z',
+      questions: [
+        {
+          id: 'core.protagonist',
+          stage: 'specify',
+          topic: 'protagonist',
+          question: '主角是谁？',
+          whyItMatters: '影响主角视角。',
+          type: 'textarea',
+          required: true,
+          options: [],
+          exampleAnswers: [],
+          dependsOn: []
+        },
+        {
+          id: 'magic.rule-hardness',
+          stage: 'specify',
+          topic: 'magic-system',
+          question: '编程施法边界是什么？',
+          whyItMatters: '影响能力边界。',
+          type: 'textarea',
+          required: true,
+          options: [],
+          exampleAnswers: [],
+          dependsOn: []
+        },
+        {
+          id: 'partner.core',
+          stage: 'specify',
+          topic: 'partner',
+          question: '核心伙伴是谁？',
+          whyItMatters: '影响关系张力。',
+          type: 'textarea',
+          required: true,
+          options: [],
+          exampleAnswers: [],
+          dependsOn: []
+        }
+      ],
+      answers: [
+        {
+          questionId: 'core.protagonist',
+          answer: '晏无是工科马列青年，穿越后会用工程思维处理法术事故。',
+          source: 'user-explicit',
+          confidence: 1,
+          confirmed: true,
+          createdAt: '2026-05-03T00:00:00.000Z',
+          updatedAt: '2026-05-03T00:00:00.000Z'
+        },
+        {
+          questionId: 'magic.rule-hardness',
+          answer: '编程施法偏轻量隐喻，不能凭空创造资源。',
+          source: 'user-explicit',
+          confidence: 1,
+          confirmed: true,
+          createdAt: '2026-05-03T00:00:00.000Z',
+          updatedAt: '2026-05-03T00:00:00.000Z'
+        }
+      ]
+    }, { spaces: 2 });
+
+    const status = await getProjectStatus({
+      projectRoot,
+      fileSystem,
+      git: {
+        init: async () => undefined,
+        addAll: async () => undefined,
+        commit: async () => undefined,
+        statusShort: async () => []
+      }
+    });
+    const output = renderProjectStatus(status);
+
+    expect(status.story?.creationEcho).toMatchObject({
+      flavor: expect.stringContaining('编程施法'),
+      strongestParts: expect.arrayContaining([
+        expect.stringContaining('能力风味')
+      ]),
+      missingPieces: expect.arrayContaining([
+        expect.stringContaining('核心伙伴')
+      ])
+    });
+    expect(output).toContain('当前故事长成了什么：');
+    expect(output).toContain('当前风味：');
+    expect(output).toContain('最有生命力：');
+    expect(output).toContain('还差的关键部件：');
+  });
 });

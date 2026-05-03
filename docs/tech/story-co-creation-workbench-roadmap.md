@@ -2,7 +2,7 @@
 
 ## 状态
 
-Active。本文承接总路线 F12-F15，聚焦多入口共创、分叉管理、创作回声和未决项回流。F12-F13 已完成，当前下一步是 F14 创作回声与成果摘要。
+Active。本文承接总路线 F12-F15，聚焦多入口共创、分叉管理、创作回声和未决项回流。F12-F14 已完成，当前下一步是 F15 未决项回流与决策日志。
 
 ## 共通上下文
 
@@ -22,8 +22,8 @@ Active。本文承接总路线 F12-F15，聚焦多入口共创、分叉管理、
 
 - F12：Completed。见本文 Batch F12。
 - F13：Completed。见本文 Batch F13。
-- F14：下一步。见本文 Batch F14。
-- F15：见本文 Batch F15。
+- F14：Completed。见本文 Batch F14。
+- F15：下一步。见本文 Batch F15。
 
 ## Batch F12：多入口共创与创作模式切换
 
@@ -187,6 +187,8 @@ Active。本文承接总路线 F12-F15，聚焦多入口共创、分叉管理、
 
 ## Batch F14：创作回声与成果摘要
 
+状态：Completed（2026-05-04）。已实现 `creative:report` 的“创作回声”区块，并让 `status` 显示“当前故事长成了什么”；回声只引用已确认或部分确认的核心要素，同时保留关键缺口。
+
 类型：报告、状态、反馈
 
 目标：让 StorySpec 更会说“你已经创造出了什么”。创作者需要的不只是缺口列表，还需要成果回声和情绪反馈。
@@ -214,6 +216,8 @@ Active。本文承接总路线 F12-F15，聚焦多入口共创、分叉管理、
 涉及文件/模块：
 
 - `src/application/creative-report.ts`
+- `src/application/creation-echo.ts`
+- `src/application/get-project-status.ts`
 - `src/application/story-onboarding.ts`
 - `src/cli/commands/*`
 - `templates/commands/clarify.md`

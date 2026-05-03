@@ -392,4 +392,144 @@ describe('creative report', () => {
     expect(rendered).toContain('会长成');
     expect(rendered).toContain('storyspec branch:compare 提前揭示身份');
   });
+
+  it('summarizes what the author has already created as a creative echo', async () => {
+    const projectRoot = path.join(os.tmpdir(), 'memory-novel-creative-report-echo');
+    const fileSystem = new MemoryFileSystem(projectRoot);
+    const storyPath = path.join(projectRoot, 'stories', '编程施法');
+
+    await fileSystem.writeFile(path.join(storyPath, 'idea.md'), '# 编程施法');
+    await fileSystem.writeJson(path.join(storyPath, 'clarifications.json'), {
+      schemaVersion: '1.0',
+      story: '编程施法',
+      premise: '主角晏无是一名工科马列青年，穿越到剑与魔法世界；编程施法、轻松冒险、慢热感情、文明级威胁。',
+      createdAt: '2026-05-03T00:00:00.000Z',
+      updatedAt: '2026-05-03T00:00:00.000Z',
+      questions: [
+        {
+          id: 'core.protagonist',
+          stage: 'specify',
+          topic: 'protagonist',
+          question: '主角是谁？',
+          whyItMatters: '影响主角视角。',
+          type: 'textarea',
+          required: true,
+          options: [],
+          exampleAnswers: [],
+          dependsOn: []
+        },
+        {
+          id: 'magic.rule-hardness',
+          stage: 'specify',
+          topic: 'magic-system',
+          question: '编程施法更偏硬规则，还是轻量隐喻？',
+          whyItMatters: '影响能力边界。',
+          type: 'textarea',
+          required: true,
+          options: [],
+          exampleAnswers: [],
+          dependsOn: []
+        },
+        {
+          id: 'stage.first',
+          stage: 'specify',
+          topic: 'stage',
+          question: '第一舞台在哪里？',
+          whyItMatters: '影响世界压力。',
+          type: 'textarea',
+          required: true,
+          options: [],
+          exampleAnswers: [],
+          dependsOn: []
+        },
+        {
+          id: 'partner.core',
+          stage: 'specify',
+          topic: 'partner',
+          question: '核心伙伴是谁？',
+          whyItMatters: '影响关系张力。',
+          type: 'textarea',
+          required: true,
+          options: [],
+          exampleAnswers: [],
+          dependsOn: []
+        },
+        {
+          id: 'threat.first-symptom',
+          stage: 'specify',
+          topic: 'threat',
+          question: '文明级威胁最早以什么小异常出现？',
+          whyItMatters: '影响长线揭示。',
+          type: 'textarea',
+          required: true,
+          options: [],
+          exampleAnswers: [],
+          dependsOn: []
+        }
+      ],
+      answers: [
+        {
+          questionId: 'core.protagonist',
+          answer: '晏无是工科马列青年，穿越后会用工程思维拆解法术事故。',
+          source: 'user-explicit',
+          confidence: 1,
+          confirmed: true,
+          createdAt: '2026-05-03T00:00:00.000Z',
+          updatedAt: '2026-05-03T00:00:00.000Z'
+        },
+        {
+          questionId: 'magic.rule-hardness',
+          answer: '编程施法偏轻量隐喻，爽点来自调试事故而不是硬规则推演。',
+          source: 'user-explicit',
+          confidence: 1,
+          confirmed: true,
+          createdAt: '2026-05-03T00:00:00.000Z',
+          updatedAt: '2026-05-03T00:00:00.000Z'
+        },
+        {
+          questionId: 'stage.first',
+          answer: '第一舞台是学院维修库，民生法器故障暴露知识垄断。',
+          source: 'user-explicit',
+          confidence: 1,
+          confirmed: true,
+          createdAt: '2026-05-03T00:00:00.000Z',
+          updatedAt: '2026-05-03T00:00:00.000Z'
+        },
+        {
+          questionId: 'threat.first-symptom',
+          answer: '第三次寂静先表现为旧日志梦游和民生法器失灵。',
+          source: 'user-explicit',
+          confidence: 1,
+          confirmed: true,
+          createdAt: '2026-05-03T00:00:00.000Z',
+          updatedAt: '2026-05-03T00:00:00.000Z'
+        }
+      ]
+    }, { spaces: 2 });
+
+    const result = await createCreativeReport({
+      projectRoot,
+      fileSystem,
+      story: '编程施法'
+    });
+    const rendered = renderCreativeReport(result);
+
+    expect(result.creationEcho).toMatchObject({
+      flavor: expect.stringContaining('编程施法'),
+      strongestParts: expect.arrayContaining([
+        expect.stringContaining('能力风味'),
+        expect.stringContaining('世界问题'),
+        expect.stringContaining('长线威胁')
+      ]),
+      missingPieces: expect.arrayContaining([
+        expect.stringContaining('核心伙伴')
+      ]),
+      nextEcho: expect.stringContaining('这次创作让')
+    });
+    expect(rendered).toContain('创作回声');
+    expect(rendered).toContain('当前风味');
+    expect(rendered).toContain('最有生命力');
+    expect(rendered).toContain('还差的关键部件');
+    expect(rendered).toContain('下一轮回声');
+  });
 });

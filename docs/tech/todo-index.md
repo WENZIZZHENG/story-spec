@@ -8,7 +8,7 @@ Active。本文是 StorySpec 当前唯一的活跃待办入口。详细规则见
 
 | 路线 | 状态 | 优先级 | 当前下一步 |
 | --- | --- | --- | --- |
-| [故事共创访谈体验增强](story-co-creation-interview-roadmap.md) | Active | P0 | F0-F13 已完成；下一步从 F14 创作回声与成果摘要开始，读取 [创作工作台路线图](story-co-creation-workbench-roadmap.md) |
+| [故事共创访谈体验增强](story-co-creation-interview-roadmap.md) | Active | P0 | F0-F14 已完成；下一步从 F15 未决项回流与决策日志开始，读取 [创作工作台路线图](story-co-creation-workbench-roadmap.md) |
 
 ### 故事共创访谈子路线
 

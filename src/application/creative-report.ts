@@ -27,6 +27,10 @@ import {
   summarizeActiveBranches,
   type ActiveBranchSummary
 } from './manage-branches.js';
+import {
+  summarizeCreationEcho,
+  type CreationEchoSummary
+} from './creation-echo.js';
 
 export interface CreativeReportInput {
   projectRoot: string;
@@ -68,6 +72,7 @@ export interface CreativeReportResult {
   aiSuggestions: CreativeReportAnswer[];
   coreElements: StoryCoreElementAssessment[];
   storySkeleton: CreativeReportStorySkeleton;
+  creationEcho: CreationEchoSummary;
   funPrompts: CreativeReportFunPrompt[];
   activeBranches: ActiveBranchSummary[];
   driftIssues: CreativeIntentDriftIssue[];
@@ -288,6 +293,7 @@ export const createCreativeReport = async (
     })
     : [];
   const storySkeleton = buildStorySkeleton(record, coreElements, confirmed);
+  const creationEcho = summarizeCreationEcho(story.name, record?.premise, coreElements);
   const funPrompts = buildFunPrompts(story.name, coreElements);
   const base = {
     projectRoot: input.projectRoot,
@@ -300,6 +306,7 @@ export const createCreativeReport = async (
     aiSuggestions,
     coreElements,
     storySkeleton,
+    creationEcho,
     funPrompts,
     activeBranches,
     driftIssues: storyDriftIssues,
@@ -343,6 +350,16 @@ export const renderCreativeReport = (result: CreativeReportResult): string => [
   '你已经创建的小说骨架：',
   `- 摘要：${result.storySkeleton.summary}`,
   ...result.storySkeleton.created.map(item => `- ${item}`),
+  '',
+  '创作回声：',
+  `- 当前风味：${result.creationEcho.flavor}`,
+  '- 最有生命力：',
+  ...result.creationEcho.strongestParts.map(item => `  - ${item}`),
+  '- 还差的关键部件：',
+  ...(result.creationEcho.missingPieces.length > 0
+    ? result.creationEcho.missingPieces.map(item => `  - ${item}`)
+    : ['  - 暂无明显缺口。']),
+  `- 下一轮回声：${result.creationEcho.nextEcho}`,
   '',
   '仍可探索的乐趣点：',
   ...(result.funPrompts.length > 0

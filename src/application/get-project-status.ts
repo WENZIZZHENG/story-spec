@@ -14,6 +14,14 @@ import {
   summarizeCreativeControl,
   type CreativeControlSummary
 } from './creative-control-summary.js';
+import type { ClarificationRecord } from './manage-clarifications.js';
+import {
+  evaluateStoryCoreElements
+} from '../domain/story-core-elements.js';
+import {
+  summarizeCreationEcho,
+  type CreationEchoSummary
+} from './creation-echo.js';
 
 export interface StorySummary {
   name: string;
@@ -35,6 +43,7 @@ export interface StorySummary {
   creativeGaps: string[];
   nextQuestions: string[];
   creativeControl: CreativeControlSummary;
+  creationEcho: CreationEchoSummary;
 }
 
 export interface TrackingSummary {
@@ -110,6 +119,21 @@ const readMarkdownVersion = async (fs: ProjectFileSystem, filePath: string): Pro
 
   const content = await fs.readFile(filePath);
   return extractVersion(content);
+};
+
+const readClarificationRecord = async (
+  fs: ProjectFileSystem,
+  filePath: string
+): Promise<ClarificationRecord | undefined> => {
+  if (!await fs.pathExists(filePath)) {
+    return undefined;
+  }
+
+  try {
+    return await fs.readJson<ClarificationRecord>(filePath);
+  } catch {
+    return undefined;
+  }
 };
 
 const normalizeTaskLine = (line: string): string => line
@@ -232,6 +256,14 @@ const buildStorySummary = async (fs: ProjectFileSystem, projectRoot: string): Pr
     fileSystem: fs,
     fallbackNextQuestions: nextQuestions
   });
+  const clarificationRecord = await readClarificationRecord(fs, clarificationsJsonPath);
+  const coreElements = clarificationRecord
+    ? evaluateStoryCoreElements({
+      premise: clarificationRecord.premise,
+      questions: clarificationRecord.questions,
+      answers: clarificationRecord.answers
+    })
+    : [];
 
   return {
     name: path.basename(storyPath),
@@ -252,7 +284,8 @@ const buildStorySummary = async (fs: ProjectFileSystem, projectRoot: string): Pr
     contentChars: await countContentChars(fs, contentFiles),
     creativeGaps: getStoryStageCreativeGaps(stage),
     nextQuestions,
-    creativeControl
+    creativeControl,
+    creationEcho: summarizeCreationEcho(path.basename(storyPath), clarificationRecord?.premise, coreElements)
   };
 };
 
@@ -421,6 +454,20 @@ export const renderProjectStatus = (status: ProjectStatus): string => {
     lines.push(`任务：${status.story.hasTasks ? status.story.tasksVersion : '缺失'}`);
     lines.push(`下一任务：${status.story.nextTask}`);
     lines.push(`正文：${status.story.contentFiles} 个 Markdown，约 ${status.story.contentChars} 字符`);
+    lines.push('当前故事长成了什么：');
+    lines.push(`- 当前风味：${status.story.creationEcho.flavor}`);
+    lines.push('- 最有生命力：');
+    for (const item of status.story.creationEcho.strongestParts.slice(0, 3)) {
+      lines.push(`  - ${item}`);
+    }
+    lines.push('- 还差的关键部件：');
+    if (status.story.creationEcho.missingPieces.length > 0) {
+      for (const item of status.story.creationEcho.missingPieces.slice(0, 3)) {
+        lines.push(`  - ${item}`);
+      }
+    } else {
+      lines.push('  - 暂无明显缺口。');
+    }
     lines.push('创作空间：');
     lines.push(`- 已确认决策：${status.story.creativeControl.confirmedDecisions}`);
     lines.push(`- 待确认决策：${status.story.creativeControl.pendingDecisions}`);
