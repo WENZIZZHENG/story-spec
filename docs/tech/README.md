@@ -29,9 +29,13 @@
 
 记录 Codex 状态命令、`AGENTS.md` 模板、任务边界和世界观模板增强的设计取舍。
 
-### [命令空参数引导](command-onboarding.md)
+### [命令输入澄清引导](command-onboarding.md)
 
-记录 `argument-hint` / `arguments.hint` 如何在多 agent 命令产物中转化为用户可见的空参数引导。
+记录 `argument-hint` / `arguments.hint` 如何在多 agent 命令产物中转化为用户可见的输入澄清引导。
+
+### [创作控制权体验优化路线图](creative-control-roadmap.md)
+
+记录后续围绕澄清优先、示例分叉、写入前预览、来源追踪和创作状态可见性的详细开发待办。
 
 ### [AI 平台 Registry 重构记录](ai-platform-registry-refactor.md)
 
