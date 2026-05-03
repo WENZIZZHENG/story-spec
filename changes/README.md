@@ -2,6 +2,8 @@
 
 本目录存放 changeset 风格的本地变更记录。每次改动 CLI 行为、模板契约、生成产物或项目结构时，都应新增一条 Markdown 记录，并随代码一起提交。
 
+changeset 只记录已经发生的变化，不作为活跃待办入口。活跃待办统一登记到 `docs/tech/todo-index.md`，已完成待办统一索引到 `docs/tech/todo-archive.md`。
+
 文件名建议使用 `YYYY-MM-DD-short-topic.md`。
 
 每条记录必须包含 frontmatter：

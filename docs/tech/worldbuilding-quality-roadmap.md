@@ -2,7 +2,7 @@
 
 ## 状态
 
-Active。本文记录 World Bible、Canon Ledger、Entity Graph、Scene Cards、VoiceFingerprint、Reviewer Loop 与 Genre Preset 的第一版边界。当前实现范围已经推进到 Batch B3：Genre Preset 包。
+Completed。本文记录 World Bible、Canon Ledger、Entity Graph、Scene Cards、VoiceFingerprint、Reviewer Loop 与 Genre Preset 的第一版边界。该范围已由 full-refactor Batch B0-B3 完成，并统一归档到 [todo-archive.md](todo-archive.md#worldbuilding-quality-roadmap)。
 
 ## 背景
 

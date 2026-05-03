@@ -29,6 +29,18 @@
 
 记录 Codex 状态命令、`AGENTS.md` 模板、任务边界和世界观模板增强的设计取舍。
 
+### [待办统一入口](todo-index.md)
+
+记录当前唯一活跃待办入口，避免已完成路线、changeset 和新路线混用。
+
+### [待办治理规则](todo-governance.md)
+
+定义待办、路线图、完成归档和 changeset 的职责边界与维护规则。
+
+### [待办统一归档](todo-archive.md)
+
+统一索引已完成或已关闭的路线图、历史待办和 changeset 记录。
+
 ### [命令输入澄清引导](command-onboarding.md)
 
 记录 `argument-hint` / `arguments.hint` 如何在多 agent 命令产物中转化为用户可见的输入澄清引导。
@@ -43,7 +55,7 @@
 
 ### [全面重构待办](full-refactor-todo.md)
 
-记录后续完全重构 Novel Writer 的阶段路线、任务清单、验证门槛和参考项目。
+保留 full-refactor 已完成主路线的历史索引；新的活跃待办以 [待办统一入口](todo-index.md) 为准。
 
 ---
 
