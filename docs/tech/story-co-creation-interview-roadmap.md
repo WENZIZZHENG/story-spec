@@ -135,6 +135,50 @@ Planned。本路线用于修复真实使用中暴露出的创作体验问题：S
 4. **作者创建的是小说，不是项目文件**：状态和报告要展示“你已经创造了什么”，而不只是“哪些文件存在”。
 5. **允许慢下来**：StorySpec 应提供“继续访谈 / 生成候选 / 暂存灵感 / 进入计划”的可见选择。
 
+## 参考项目与借鉴边界
+
+参考开源项目的目的不是把 StorySpec 做成另一个通用 IDE、流程引擎或知识库，而是借成熟项目降低开发不确定性，让每个共创能力有清楚的交互模式、数据边界、状态流转和测试方式。
+
+### 优先参考矩阵
+
+| StorySpec 能力 | 参考项目/资料 | 借鉴点 | 不照搬 | 落地方式 |
+| --- | --- | --- | --- | --- |
+| 规格、计划、任务的阶段化门禁 | [GitHub Spec Kit](https://github.com/github/spec-kit) / [speckit.org](https://speckit.org/) | `specify -> plan -> tasks` 的阶段拆分、preview/confirm/execute 思路、多 agent 命令产物 | 不照搬软件工程需求模板，不把小说创作压成需求评审 | 用于 F0/F1/F4/F6：明确 story idea、specification、creative-plan、tasks 的进入条件和阻塞原因 |
+| CLI 交互与问题呈现 | [Inquirer.js](https://github.com/SBoudrias/Inquirer.js) | list、checkbox、confirm、editor 等交互形态；少量问题逐步推进 | 不强依赖交互式终端；非交互 agent 场景仍要可读、可复制、可继续 | 用于 F2/F3/F11/F12：设计问题 schema、入口菜单、跳过/候选/确认操作 |
+| 表单 schema 与必填/可选控制 | [GitHub Issue Forms](https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/configuring-issue-templates-for-your-repository) | YAML schema、required、dropdown、checkbox、textarea、占位提示 | 不把创作访谈做成工单表单，不要求一次填完 | 用于 F1/F2/F3：让 clarification schema 更稳定，并保留创作语气 |
+| 初始化脚手架体验 | [Yeoman](https://github.com/yeoman/yo) / [generator](https://github.com/yeoman/generator) | 先提示、再生成；生成前收集最少必要信息；模板和用户输入分离 | 不做重型项目生成器，不在第一次使用时重度建档 | 用于 F0/F6/F11：首次偏好采样、story:new 初始化、模板写入边界 |
+| 分支叙事与选择后果 | [Twine](https://github.com/klembot/twinejs) | 节点、选择、分叉、路径可视化、作者可探索非线性故事 | 不新增 GUI，不把 StorySpec 变成互动小说引擎 | 用于 F2/F12/F13：branch compare、what-if 对照卡、选择后果说明 |
+| 叙事脚本和可运行路径 | [Ink](https://github.com/inkle/ink) | knot/stitch/choice 的叙事组织；选择会改变后续路径 | 不引入 Ink runtime，不把长篇正文写成脚本语言 | 用于 F9/F13：Scene Card、分支路径和伏笔回收的可检查结构 |
+| 对话节点与场景动作 | [Yarn Spinner](https://github.com/YarnSpinnerTool/YarnSpinner) | 对话节点、选项、命令、场景事件的结构化组织 | 不把小说写作降级为游戏对话树 | 用于 F7/F9/F13：关系场景、慢热互动、对话选择影响关系状态 |
+| 本地 Markdown 知识库 | [Foam](https://github.com/foambubble/foam)、[Dendron](https://github.com/dendronhq/dendron)、[Logseq](https://github.com/logseq/logseq) | 本地优先、双链、图谱、长期记忆、知识节点互链 | 不复制完整知识库产品，不增加沉重 UI 和同步系统 | 用于 F8/F11/F15：作者画像、WorldFact、决策日志、evidence path 和未决项回流 |
+| 小说项目组织 | [novelWriter](https://github.com/vkbo/novelWriter)、[Manuskript](https://github.com/olivierkes/manuskript) | 长篇项目树、角色/章节/大纲/元数据组织 | 不照搬桌面写作软件，不新增 GUI，不替代作者正文编辑器 | 用于 F5/F9/F14：故事结构状态、Scene Card、成果摘要和章节组织 |
+| 显式流程状态 | [XState](https://github.com/statelyai/xstate) | 状态机、事件驱动、显式状态转移、可测试流程 | 不引入复杂运行时，除非现有实现已经失控 | 用于 F1/F3/F4/F12/F15：把 discover/co-create/preview/apply/plan/write/reflect 变成可验证状态 |
+| 可追溯状态变化 | [Redux](https://github.com/reduxjs/redux) | action、reducer、可追溯状态更新、回放思路 | 不引入前端状态框架，不为简单数据增加样板代码 | 用于 F15：决策日志、用户确认、候选提升和回滚记录的设计参考 |
+
+### 分批借鉴策略
+
+1. **第一优先级：Inquirer.js、Twine、Foam、XState**
+   - Inquirer.js 解决“怎么问得轻、清楚、可跳过”。
+   - Twine 解决“怎么让作者看见分叉和后果”。
+   - Foam 解决“怎么把世界观、画像、决策长期留住但不压迫作者”。
+   - XState 解决“怎么让流程可控、可测试、不被 agent 随手跨阶段”。
+2. **第二优先级：Spec Kit、Issue Forms、Yeoman**
+   - Spec Kit 适合作为 preview/apply、spec/plan/tasks 边界的参考。
+   - Issue Forms 适合稳定问题 schema，但要避免表单感。
+   - Yeoman 适合初始化和模板生成前的最小提示设计。
+3. **第三优先级：Ink、Yarn Spinner、novelWriter、Manuskript、Redux**
+   - 这些项目主要作为叙事结构、场景组织、长篇项目管理和事件记录参考。
+   - 只有当现有数据结构不足时再吸收，不提前引入沉重抽象。
+
+### 参考项目使用规则
+
+- 每个批次实现前，应先写清“借鉴点、落地文件、验收方式、不照搬边界”。
+- 参考项目只能降低实现风险，不能替代 StorySpec 的产品目标。
+- 不把参考项目能力写进 README 的可用功能，除非对应 batch 已实现并验证。
+- 不引入大型运行时依赖，除非有明确收益、测试覆盖和迁移说明。
+- 对叙事工具的借鉴只学习结构和工作流，不复制具体内容、世界观或表达。
+- 每次新增外部参考导致 CLI 行为、模板契约或数据结构变化时，必须同步 tests、docs 和 changeset。
+
 ## 优先级视图
 
 | 优先级 | 批次 | 主题 | 说明 |
@@ -188,6 +232,17 @@ Planned。本路线用于修复真实使用中暴露出的创作体验问题：S
 - `tests/unit/story-onboarding.test.ts`
 - `src/application/story-onboarding.ts`
 - `src/application/interview-story.ts`
+
+参考项目/资料：
+
+- 参考项目：GitHub Spec Kit。
+  借鉴点：把 `specify`、`plan`、`tasks` 作为可测试阶段，而不是一条不可见的 agent 习惯。
+  不照搬：不使用软件需求文档口吻替代小说创作口吻。
+  落地方式：fixture 和测试要断言每个阶段的进入条件、阻塞原因和作者确认状态。
+- 参考项目：XState。
+  借鉴点：用显式状态转移描述 idea、interviewing、candidate、specified、planned。
+  不照搬：本批次不引入状态机运行时，只把状态转移写成测试夹具和验收快照。
+  落地方式：新增回归样例时同步覆盖“少量输入不能直接跨到完整 plan”的路径。
 
 验收标准：
 
@@ -250,6 +305,17 @@ Planned。本路线用于修复真实使用中暴露出的创作体验问题：S
 - `src/validation/rules/writing-rules.ts`
 - `tests/unit/*`
 
+参考项目/资料：
+
+- 参考项目：GitHub Issue Forms。
+  借鉴点：required、optional、dropdown、textarea 等 schema 约束能帮助问题包稳定演进。
+  不照搬：不把核心要素做成一次性表单；同一要素可以由多轮回答逐步成熟。
+  落地方式：将成熟度状态映射到 clarification schema 和 validate warning。
+- 参考项目：XState。
+  借鉴点：用状态和事件区分 `missing`、`suggested`、`partial`、`confirmed`、`deferred`。
+  不照搬：不让状态机术语暴露给作者。
+  落地方式：核心要素面板和 plan 门禁使用同一套状态计算，避免 CLI、agent prompt、validate 各说各话。
+
 验收标准：
 
 - 对“编程施法”样例，报告能明确显示：主角部分确认、能力方向确认、长线威胁确认；核心伙伴、第一舞台、势力冲突细节仍需共创。
@@ -308,6 +374,21 @@ Planned。本路线用于修复真实使用中暴露出的创作体验问题：S
 - `templates/commands/specify.md`
 - `docs/tech/clarification-question-packs.md`
 
+参考项目/资料：
+
+- 参考项目：Twine。
+  借鉴点：每个选择都应能看见后续路径和故事风味变化。
+  不照搬：不把示例分叉做成完整互动小说节点图。
+  落地方式：`exampleBranches` 必须包含 `flavor`、`tradeoffs`、`downstreamImpact`。
+- 参考项目：Inquirer.js。
+  借鉴点：选择、确认、跳过、自由编辑应作为同一轮问题的自然操作。
+  不照搬：不强制所有运行环境进入交互式 prompt。
+  落地方式：CLI 输出和 agent prompt 都要能表达“复制示例 / 改写示例 / 拒绝示例 / 稍后决定”。
+- 参考项目：GitHub Issue Forms。
+  借鉴点：结构化字段和占位说明能降低问题包维护成本。
+  不照搬：不把分叉压成冷冰冰的表单字段。
+  落地方式：为 `exampleBranches` 增加 schema 校验和文档约束。
+
 验收标准：
 
 - “编程施法更偏硬规则还是轻量隐喻”输出至少三条分叉：轻量隐喻、中度规则、硬规则，并说明各自风味与风险。
@@ -363,6 +444,21 @@ Planned。本路线用于修复真实使用中暴露出的创作体验问题：S
 - `templates/commands/clarify.md`
 - `templates/commands/context-pack.md`
 
+参考项目/资料：
+
+- 参考项目：Inquirer.js。
+  借鉴点：每轮只问少量高价值问题，并提供 list/confirm/editor 等不同回答方式。
+  不照搬：不要求 TTY 环境；文本 handoff 也必须完整。
+  落地方式：访谈输出统一包含继续访谈、生成候选、预览规格、暂存等动作。
+- 参考项目：Yeoman。
+  借鉴点：先提示、再生成，生成前只收集当前阶段必要信息。
+  不照搬：不把 story:new 做成重型初始化向导。
+  落地方式：每个访谈阶段都有“足够进入下一步”的最小条件。
+- 参考项目：XState。
+  借鉴点：访谈阶段和模式切换应有明确状态转移。
+  不照搬：不把状态机复杂度提前推给作者。
+  落地方式：阶段选择器用同一套状态驱动 `next` 和 `creative:report`。
+
 验收标准：
 
 - 对“18+ 玄幻、异界穿越、轻松冒险、编程施法、慢热感情、文明级威胁”，前两轮访谈必须覆盖主角、舞台、能力边界、长线威胁；如果用户继续，覆盖伙伴和势力冲突。
@@ -413,6 +509,17 @@ Planned。本路线用于修复真实使用中暴露出的创作体验问题：S
 - `src/validation/rules/writing-rules.ts`
 - `tests/unit/preview-apply.test.ts`
 - `tests/unit/inspect-story-structure.test.ts`
+
+参考项目/资料：
+
+- 参考项目：GitHub Spec Kit。
+  借鉴点：specification、plan、tasks 的阶段边界和确认后执行。
+  不照搬：不把小说 plan 当作软件实现计划，不用工程任务替代创作选择。
+  落地方式：`preview plan` 和 `apply plan` 必须有清楚差异，并输出写入范围。
+- 参考项目：XState。
+  借鉴点：阻止从 `candidate` 或 `partial` 直接进入 `planned`。
+  不照搬：不新增复杂依赖作为第一步。
+  落地方式：以测试覆盖状态转移和 override 行为，确保 agent 不能绕过门禁。
 
 验收标准：
 
@@ -467,6 +574,17 @@ Planned。本路线用于修复真实使用中暴露出的创作体验问题：S
 - `templates/commands/clarify.md`
 - `README.md`
 
+参考项目/资料：
+
+- 参考项目：novelWriter、Manuskript。
+  借鉴点：长篇项目需要清楚呈现角色、章节、结构和进度，但应服务作者写作。
+  不照搬：不新增桌面式项目树，也不让报告变成文件清单。
+  落地方式：`creative:report` 输出“故事骨架”和“仍可探索的乐趣点”，而不是只列文件状态。
+- 参考项目：Foam。
+  借鉴点：用本地知识节点和链接感呈现作品正在生长。
+  不照搬：不引入完整双链 UI。
+  落地方式：成果摘要引用已确认的 story facts、relationships、WorldFact 和 decisions。
+
 验收标准：
 
 - 对样例故事，报告能自然回答“目前这是一部什么小说”。
@@ -501,6 +619,17 @@ Planned。本路线用于修复真实使用中暴露出的创作体验问题：S
 - `docs/tech/clarification-question-packs.md`
 - `templates/commands/*.md`
 - `changes/*.md`
+
+参考项目/资料：
+
+- 参考项目：GitHub Spec Kit。
+  借鉴点：把推荐流程、命令阶段和 agent 使用方式写清楚。
+  不照搬：不让 README 承诺未实现的未来能力。
+  落地方式：文档只描述已完成 batch 的真实行为，规划内容留在 `docs/tech/`。
+- 参考项目：Yeoman。
+  借鉴点：初始化说明要清楚告诉用户会生成什么、不会覆盖什么、下一步是什么。
+  不照搬：不把文档写成脚手架宣传页。
+  落地方式：README 快速开始突出“保存灵感 -> 共创访谈 -> 预览 -> 确认写入”。
 
 验收标准：
 
@@ -561,6 +690,17 @@ Planned。本路线用于修复真实使用中暴露出的创作体验问题：S
 - `templates/commands/tasks.md`
 - `templates/commands/write.md`
 
+参考项目/资料：
+
+- 参考项目：Yarn Spinner。
+  借鉴点：对话节点、选项和场景动作能帮助追踪关系变化。
+  不照搬：不把长篇人物关系写成游戏对话树。
+  落地方式：关系追踪只记录 trust、distance、conflict、vulnerability、repair、turningPoints 等写作证据。
+- 参考项目：Ink。
+  借鉴点：选择会改变后续路径，人物互动不只是台词内容。
+  不照搬：不引入脚本语法或 runtime。
+  落地方式：慢热关系场景要标注“本场选择/行动怎样改变关系状态”。
+
 验收标准：
 
 - 对包含慢热感情的故事，访谈至少追问关系起点、阻力、边界和第一次信任变化。
@@ -615,6 +755,17 @@ Planned。本路线用于修复真实使用中暴露出的创作体验问题：S
 - `src/validation/rules/writing-rules.ts`
 - `templates/scenes/scene-001.yaml`
 - `templates/commands/review.md`
+
+参考项目/资料：
+
+- 参考项目：Foam、Dendron、Logseq。
+  借鉴点：世界事实应像知识节点一样能互链、能追溯、能回到证据。
+  不照搬：不做完整知识图谱 UI，不要求作者维护复杂双链。
+  落地方式：WorldFact 增加 pressure、beneficiaries、costs、violationConsequence、sceneEvidencePaths，并能被 Scene Card 引用。
+- 参考项目：novelWriter、Manuskript。
+  借鉴点：长篇世界资料需要服务章节和场景，不只是百科条目。
+  不照搬：不新增独立世界观管理软件式界面。
+  落地方式：`world:check` 把主线相关设定映射到行动后果和场景压力。
 
 验收标准：
 
@@ -675,6 +826,17 @@ Planned。本路线用于修复真实使用中暴露出的创作体验问题：S
 - `src/cli/commands/story-structure.command.ts`
 - `tests/unit/inspect-story-structure.test.ts`
 
+参考项目/资料：
+
+- 参考项目：Ink。
+  借鉴点：场景节点应有进入条件、选择/行动、结果和后续路径。
+  不照搬：不把 Scene Card 改造成完整脚本语言。
+  落地方式：Scene Card 增加 plotThread、readerPromise、relationshipChange、worldReveal、emotionalBeat、endingHook、successCriteria。
+- 参考项目：Yarn Spinner。
+  借鉴点：对话、动作和命令可以结构化地表达“场景发生了什么变化”。
+  不照搬：不把正文写作变成游戏事件编排。
+  落地方式：`scene:check` 检查关系、信息、情绪、钩子是否至少有一项发生变化。
+
 验收标准：
 
 - 没有 Scene Card 的章节写作路径会优先提示创建/预览场景卡。
@@ -728,6 +890,17 @@ Planned。本路线用于修复真实使用中暴露出的创作体验问题：S
 - `src/application/*tension*`
 - `docs/tech/`
 - `README.md`
+
+参考项目/资料：
+
+- 参考项目：novelWriter、Manuskript。
+  借鉴点：章节、场景和大纲可以带结构化元数据，便于长期检查节奏。
+  不照搬：不做参考作品内容导入器，也不复制对标作品桥段。
+  落地方式：只允许用户手工提供抽象节奏参数，写入本地 rhythm config。
+- 参考资料：版权与原创边界。
+  借鉴点：参考作品只能抽象为节奏、结构和信息密度。
+  不照搬：不联网抓取或解析受版权保护文本。
+  落地方式：命令和文档必须提示“借鉴结构，不借鉴表达”。
 
 验收标准：
 
@@ -791,6 +964,17 @@ Planned。本路线用于修复真实使用中暴露出的创作体验问题：S
 - `src/application/interview-story.ts`
 - `src/application/story-context.ts`（如需新增）
 - `templates/commands/*`
+
+参考项目/资料：
+
+- 参考项目：Foam、Dendron、Logseq。
+  借鉴点：个人知识库的长期记忆、可修正条目和本地优先存储。
+  不照搬：不做通用个人知识管理，也不把作者画像变成不可见监控。
+  落地方式：AuthorProfile 条目必须有状态、来源、最近确认时间和关闭/忽略方式。
+- 参考项目：Inquirer.js、Yeoman。
+  借鉴点：首次使用只问最少必要问题，且允许跳过。
+  不照搬：不做重度 onboarding 问卷。
+  落地方式：首次偏好采样默认 2-4 个问题，结果为 `provisional`。
 
 验收标准：
 
@@ -875,6 +1059,21 @@ Planned。本路线用于修复真实使用中暴露出的创作体验问题：S
 - `templates/commands/*.md`
 - `docs/tech/`
 
+参考项目/资料：
+
+- 参考项目：Inquirer.js。
+  借鉴点：入口菜单、单选/多选、跳过、自由输入和确认操作。
+  不照搬：不要求所有用户都在交互式终端里完成创作。
+  落地方式：`next` 以“你想从哪里继续？”展示入口，同时输出可复制命令。
+- 参考项目：Twine。
+  借鉴点：作者可以从任意节点进入，并看见选择通向哪里。
+  不照搬：不把 StorySpec 变成节点编辑器。
+  落地方式：每个入口都输出候选产物、正典边界和自然下一步。
+- 参考项目：XState。
+  借鉴点：discover、co-create、plan、write、reflect 的模式切换应可验证。
+  不照搬：不把模式系统做成复杂工作流配置。
+  落地方式：状态切换必须保留上下文，并阻止候选内容绕过确认。
+
 验收标准：
 
 - 作者可以从任意一个入口开始，而不是必须先填完整故事表。
@@ -925,6 +1124,17 @@ Planned。本路线用于修复真实使用中暴露出的创作体验问题：S
 - `templates/commands/*`
 - `spec/tracking/*`（若需分支层追踪）
 
+参考项目/资料：
+
+- 参考项目：Twine。
+  借鉴点：分叉和路径对作者应是可感知、可回退、可比较的。
+  不照搬：不新增图形节点编辑器，不追求无限分支树。
+  落地方式：branch compare 输出小说风味、读者承诺、代价收益、关系偏移和世界压力显露节奏。
+- 参考项目：Ink。
+  借鉴点：分支不仅是文件差异，还会改变后续叙事路径。
+  不照搬：不引入脚本 runtime。
+  落地方式：重要 what-if 必须说明会影响哪些 promise、tension、relationship 或 WorldFact。
+
 验收标准：
 
 - 同一故事的两个分支能清楚说明“会长成什么不同的小说”。
@@ -967,6 +1177,17 @@ Planned。本路线用于修复真实使用中暴露出的创作体验问题：S
 - `src/application/story-onboarding.ts`
 - `src/cli/commands/*`
 - `templates/commands/clarify.md`
+
+参考项目/资料：
+
+- 参考项目：novelWriter、Manuskript。
+  借鉴点：创作软件应让作者知道项目里有哪些角色、章节、线索和进度。
+  不照搬：不把报告做成项目管理仪表盘。
+  落地方式：成果摘要优先描述故事生命力、已确认选择和下一轮乐趣点。
+- 参考项目：Foam。
+  借鉴点：通过链接和回顾让作者看到自己积累出的世界。
+  不照搬：不增加沉重图谱。
+  落地方式：报告可以引用已确认节点，但必须清楚标注候选和缺口。
 
 验收标准：
 
@@ -1015,6 +1236,17 @@ Planned。本路线用于修复真实使用中暴露出的创作体验问题：S
 - `src/application/story-onboarding.ts`
 - `src/application/creative-report.ts`
 - `src/validation/rules/writing-rules.ts`
+
+参考项目/资料：
+
+- 参考项目：Redux。
+  借鉴点：用轻量 action/event 记录“谁在什么时候确认、拒绝、延后或提升了什么候选”。
+  不照搬：不引入 Redux 作为依赖，也不把创作状态前端化。
+  落地方式：决策日志使用简单 JSON/Markdown 结构，支持回看、回流和人工编辑。
+- 参考项目：Foam、Dendron、Logseq。
+  借鉴点：未决项和决策理由应能从后续上下文自然链接回来。
+  不照搬：不要求作者维护双链笔记系统。
+  落地方式：deferred 问题绑定 topic、触发条件和 evidence path，进入相关场景/计划时回流。
 
 验收标准：
 
