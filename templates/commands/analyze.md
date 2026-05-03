@@ -383,12 +383,13 @@ scripts:
 ```markdown
 ## 节奏专项分析报告
 
-### 节奏参数（如有rhythm-config.json）
-**读取 `spec/presets/rhythm-config.json`（如果存在）**：
+### 节奏参数（如有 `spec/tracking/rhythm-config.json`）
+**读取 `spec/tracking/rhythm-config.json`（如果存在）**：
 - 目标章节字数：[X]字
-- 目标小高潮间隔：[X]章
-- 目标大高潮间隔：[X]章
-- 目标节奏风格：[快/适中/慢]
+- 目标钩子频率：[X]章
+- 目标回报间隔：[X]章
+- 目标信息揭示密度：[X]/章
+- 安全边界：只借鉴结构，不借鉴表达、人物、桥段或专有设定
 
 ### 冲突分布统计
 | 章节 | 冲突次数 | 冲突类型 | 冲突强度 | 符合预期？ |
@@ -410,7 +411,7 @@ scripts:
 | ... | ... | ... | ... |
 
 **平均爽点间隔**：[X]章
-**建议间隔**：[Y]章（基于rhythm-config或类型标准）
+**建议间隔**：[Y]章（基于 `spec/tracking/rhythm-config.json` 或类型标准）
 
 ### 高潮分布
 - **小高潮**：第[X]、[Y]、[Z]章
@@ -851,7 +852,7 @@ AI：执行开篇专项分析...
 用户：/analyze --focus=pacing
 AI：执行节奏专项分析...
 
-【节奏参数】（自动读取 rhythm-config.json）
+【节奏参数】（自动读取 `spec/tracking/rhythm-config.json`）
 目标爽点间隔：5章
 实际平均间隔：7章 ⚠️ 偏长
 
@@ -986,13 +987,13 @@ AI：执行风格专项分析...
 
 **专项分析自动读取的文件**：
 - `spec/presets/golden-opening.md` → opening分析
-- `spec/presets/rhythm-config.json` → pacing分析
+- `spec/tracking/rhythm-config.json` → pacing分析
 - `memory/style-reference.md` → style分析
 - `stories/*/specification.md` → 所有分析的基准
 
 **优势**：
 - 无需手动指定参考文件
-- 自动应用对标作品标准
+- 自动应用作者手工维护的抽象节奏标准
 - 保持分析标准一致性
 
 ---

@@ -51,9 +51,11 @@ import {
 import {
   chartTension,
   checkPromises,
+  initRhythmConfig,
   listPromises,
   renderPromiseCheck,
   renderPromiseList,
+  renderRhythmInit,
   renderTensionChart
 } from '../../application/manage-promises.js';
 import {
@@ -529,6 +531,36 @@ export const registerWorkbenchCommand = (program: Command): void => {
           : renderBranchPromote(result));
       } catch (error: any) {
         handleWorkbenchError(error, 'Branch promote 失败');
+      }
+    });
+
+  program
+    .command('rhythm:init')
+    .option('--average-chapter-length <number>', '抽象平均章节字数', value => Number(value), 3000)
+    .option('--hook-frequency <number>', '每多少章至少出现一次钩子/高张力点', value => Number(value), 3)
+    .option('--payoff-interval <number>', '每多少章至少出现一次阶段回报', value => Number(value), 6)
+    .option('--info-reveal-density <number>', '每章目标信息揭示密度', value => Number(value), 2)
+    .option('--no-write', '只预览 rhythm-config，不写入文件')
+    .option('--json', '输出 JSON，便于自动化读取')
+    .description('初始化本地抽象 rhythm-config；只记录节奏参数，不导入参考作品正文')
+    .action(async (commandOptions) => {
+      try {
+        const projectRoot = await ensureProjectRoot();
+        const result = await initRhythmConfig({
+          projectRoot,
+          fileSystem: nodeFileSystem,
+          averageChapterLength: commandOptions.averageChapterLength,
+          hookFrequency: commandOptions.hookFrequency,
+          payoffInterval: commandOptions.payoffInterval,
+          infoRevealDensity: commandOptions.infoRevealDensity,
+          noWrite: !commandOptions.write
+        });
+
+        console.log(commandOptions.json
+          ? JSON.stringify(result, null, 2)
+          : renderRhythmInit(result));
+      } catch (error: any) {
+        handleWorkbenchError(error, 'Rhythm Config 初始化失败');
       }
     });
 

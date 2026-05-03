@@ -7,6 +7,17 @@ worldFacts:
     constraints:
       - 每个境界必须有清晰代价、门槛和失败风险。
       - 突破不能只靠口号，必须有资源、悟性或事件触发。
+    pressure: 境界体系把成长变成资格、资源和时间成本的竞争，谁能先突破就能先拿到更多话语权。
+    beneficiaries:
+      - 宗门高层
+      - 掌握资源分配的人
+    costs:
+      - 低阶修士
+      - 没有门路的人
+    violationConsequence: 违规强冲境界会伤经脉、损根基，甚至被宗门判定为危险对象。
+    sceneEvidencePaths:
+      - spec/presets/current-preset.json
+      - stories/demo/scenes/scene-001.yaml
     sourcePaths:
       - spec/presets/current-preset.json
     status: draft
@@ -18,6 +29,17 @@ worldFacts:
     constraints:
       - 灵力使用必须有消耗。
       - 高阶规则不能在无铺垫时解决低阶冲突。
+    pressure: 灵力不是免费资源，修炼、战斗和维持法器都会反过来消耗角色积累。
+    beneficiaries:
+      - 有储备和渠道的大势力
+      - 会算账的修士
+    costs:
+      - 依赖蛮力硬冲的人
+      - 没有资源补给的散修
+    violationConsequence: 乱用灵力会走火入魔，严重时会被废掉修为。
+    sceneEvidencePaths:
+      - spec/presets/current-preset.json
+      - stories/demo/scenes/scene-001.yaml
     sourcePaths:
       - spec/presets/current-preset.json
     status: draft
@@ -29,6 +51,17 @@ worldFacts:
     constraints:
       - 势力资源、规矩和惩罚必须可追踪。
       - 主角获得庇护或敌意时必须有明确原因。
+    pressure: 势力秩序决定谁能接任务、拿资源、进内门，以及谁会被排挤或惩戒。
+    beneficiaries:
+      - 宗门掌权者
+      - 拿到资格的人
+    costs:
+      - 被排除的边缘弟子
+      - 不懂规则的外来者
+    violationConsequence: 违反势力秩序会被停发资源、驱逐，甚至公开惩戒。
+    sceneEvidencePaths:
+      - spec/presets/current-preset.json
+      - stories/demo/scenes/scene-001.yaml
     sourcePaths:
       - spec/presets/current-preset.json
     status: draft

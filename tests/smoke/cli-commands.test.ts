@@ -741,19 +741,53 @@ describe('CLI command modules smoke', () => {
     const projectPath = path.join(cwd, 'smoke');
     const storyPath = path.join(projectPath, 'stories', '001-demo');
     await mkdir(storyPath, { recursive: true });
+    await mkdir(path.join(storyPath, 'scenes'), { recursive: true });
     await writeFile(path.join(storyPath, 'specification.md'), '# spec');
     await writeFile(path.join(storyPath, 'creative-plan.md'), '# plan');
     await writeFile(path.join(storyPath, 'tasks.md'), `# tasks
 
 - [ ] [P0] [WRITE-READY] **T001** - 起草第一章
   - **必须读取**：
-    - \`specification.md\`
+    - \`scenes/scene-001.yaml\`
   - **允许修改**：
     - \`content/chapter-001.md\`
     - \`tasks.md\`
   - **输出**：\`content/chapter-001.md\`
   - **验收标准**：
     - [ ] 主角主动做选择
+    - [ ] 场景体现世界规则带来的行动代价
+`);
+    await writeFile(path.join(storyPath, 'scenes', 'scene-001.yaml'), `id: scene-001
+chapter: chapter-001
+order: 1
+pov: 主角
+location: 起始地点
+time: 故事开始
+sceneGoal: 主角决定处理第一处异常
+conflict: 地方规则阻止他直接动手
+outcome: 主角选择先争取一个临时许可
+plotThread: 第一章主线转折
+readerPromise: 读者看到主角开始主动处理异常
+relationshipChange: 主角和潜在伙伴从互相试探转向有限合作
+worldReveal:
+  factId: world.example.rule
+  actionImpact: 规则迫使主角改变解决问题的顺序
+  beneficiaries:
+    - 地方管理者
+  costs:
+    - 主角
+  violationConsequence: 违规会失去后续调查资格
+emotionalBeat: 从困惑转向主动
+endingHook: 临时许可背后出现更大的异常
+successCriteria:
+  - 主角必须做出可见选择
+  - 读者必须看见规则代价
+entities:
+  - entity.protagonist
+worldElements:
+  - world.example.rule
+reveals:
+  - world.example.rule 会改变主角行动
 `);
 
     const packResult = await execFileAsync('node', [
@@ -855,7 +889,7 @@ describe('CLI command modules smoke', () => {
       '--premise',
       '异界穿越、轻松冒险、编程施法',
       '--answers',
-      'core.premise=编程施法只是工具，开局仍然是轻松冒险。;magic.rule-hardness=中间路线，关键战斗讲规则，日常冒险保持轻巧。',
+      'core.premise=编程施法只是工具，开局仍然是轻松冒险。;core.protagonist=主角开局的盲区是把人的立场也当成可直接重构的系统，目标是先学会理解人和组织再改造规则。;magic.rule-hardness=中间路线，关键战斗讲规则，日常冒险保持轻巧。',
       '--max-questions',
       '2',
       '--json'
@@ -959,6 +993,26 @@ describe('CLI command modules smoke', () => {
         payoff: 1
       }]
     }));
+
+    const rhythmResult = await execFileAsync('node', [
+      cliPath,
+      'rhythm:init',
+      '--average-chapter-length',
+      '3200',
+      '--hook-frequency',
+      '3',
+      '--payoff-interval',
+      '6',
+      '--info-reveal-density',
+      '2',
+      '--json'
+    ], { cwd: projectPath });
+    const rhythm = JSON.parse(rhythmResult.stdout);
+
+    expect(rhythm.config.sourceMode).toBe('manual-abstract');
+    expect(rhythm.config.safetyBoundary).toContain('不复制参考作品表达');
+    await expect(readFile(path.join(projectPath, 'spec', 'tracking', 'rhythm-config.json'), 'utf-8'))
+      .resolves.toContain('"manual-abstract"');
 
     const dialogueResult = await execFileAsync('node', [
       cliPath,

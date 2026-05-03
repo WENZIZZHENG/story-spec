@@ -33,6 +33,32 @@ const createProjectFixture = async () => {
   await writeFixtureFile(projectRoot, 'stories/demo/tasks.md', `- [ ] [P0] **T001** - 第一章
   - **输出**：\`content/chapter-001.md\`
 `);
+  await writeFixtureFile(projectRoot, 'stories/demo/scenes/scene-001.yaml', `id: scene-001
+chapter: chapter-001
+order: 1
+pov: 主角
+location: 起始地点
+time: 故事开始
+sceneGoal: 主角处理第一处异常
+conflict: 地方规则阻止他直接动手
+outcome: 主角选择先争取临时许可
+plotThread: 第一章主线转折
+readerPromise: 读者看到主角主动应对异常
+relationshipChange: 主角和潜在伙伴从试探转向有限合作
+worldReveal:
+  factId: world.example.rule
+  actionImpact: 规则迫使主角改变解决问题的顺序
+  beneficiaries:
+    - 地方管理者
+  costs:
+    - 主角
+  violationConsequence: 违规会失去后续调查资格
+emotionalBeat: 从困惑转向主动
+endingHook: 临时许可背后出现更大的异常
+successCriteria:
+  - 主角必须做出可见选择
+  - 读者必须看见规则代价
+`);
   await writeFixtureFile(projectRoot, 'stories/demo/content/chapter-001.md', '正文正文');
   await writeFixtureFile(projectRoot, 'spec/tracking/plot.json', '{"ok":true}');
 

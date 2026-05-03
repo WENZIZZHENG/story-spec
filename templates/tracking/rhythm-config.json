@@ -1,0 +1,34 @@
+{
+  "schemaVersion": "1.0",
+  "sourceMode": "manual-abstract",
+  "safetyBoundary": "只记录节奏、结构和密度，不复制参考作品表达、角色、桥段或专有设定。",
+  "averageChapterLength": {
+    "min": 2400,
+    "target": 3000,
+    "max": 3600
+  },
+  "hookFrequency": {
+    "everyChapters": 3
+  },
+  "payoffInterval": {
+    "everyChapters": 6
+  },
+  "dialogueActionDescriptionRatio": {
+    "dialogue": 40,
+    "action": 40,
+    "description": 20
+  },
+  "tensionPattern": [
+    "hook",
+    "build",
+    "payoff"
+  ],
+  "infoRevealDensity": {
+    "targetPerChapter": 2
+  },
+  "notes": [
+    "本配置只来自作者手工输入的抽象节奏参数。",
+    "不要粘贴、保存或解析参考作品原文。",
+    "只借鉴章节长度、钩子频率、回报间隔、信息密度和情绪曲线。"
+  ]
+}

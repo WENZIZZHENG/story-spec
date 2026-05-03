@@ -23,7 +23,7 @@ scripts:
 - 规格文件：`stories/*/specification.md`
 - 澄清记录（如果已运行 `/clarify`）
 - 当前 Genre Preset（如果存在 `spec/presets/current-preset.json`，读取 `.specify/presets/<id>/preset.yaml` 和 `.specify/presets/<id>/commands/plan.md`）
-- Promise / Tension 追踪（如果存在 `spec/tracking/promises.json`、`spec/tracking/tension-curve.json`，用于安排读者承诺、兑现节点和张力曲线）
+- Promise / Tension / Rhythm 追踪（如果存在 `spec/tracking/promises.json`、`spec/tracking/tension-curve.json`、`spec/tracking/rhythm-config.json`，用于安排读者承诺、兑现节点、张力曲线和抽象节奏参数）
 - Branch 影响报告（如果存在 `stories/*/branches/*/impact.md`，只作为 what-if 参考，不直接改 main）
 
 <!-- PLUGIN_HOOK: genre-knowledge-plan -->
@@ -54,19 +54,20 @@ test -f spec/presets/golden-opening.md && echo "found" || echo "not-found"
 
 - ⚠️ **如果不存在**：继续正常规划（不影响流程）
 
-**🆕 条件加载：节奏配置**：
+**🆕 条件加载：抽象节奏配置**：
 
-如果用户使用了 `/book-internalize` 命令分析对标作品：
+如果用户运行过 `storyspec rhythm:init` 或手工维护了本地抽象节奏配置：
 
 ```bash
 # 检查是否存在节奏配置文件
-test -f spec/presets/rhythm-config.json && echo "found" || echo "not-found"
+test -f spec/tracking/rhythm-config.json && echo "found" || echo "not-found"
 ```
 
-- ✅ **如果存在**：读取 `spec/presets/rhythm-config.json`
-  - 应用对标作品的节奏模式（章节字数、爽点间隔等）
-  - 应用内容比例建议（对话/动作/描写/心理）
+- ✅ **如果存在**：读取 `spec/tracking/rhythm-config.json`
+  - 只应用抽象节奏模式（章节字数、钩子频率、回报间隔、信息密度、情绪曲线）
+  - 应用内容比例建议（对话/动作/描写）
   - 在"2.2 章节架构设计"中引用这些数据
+- ⛔ **禁止**：不要要求用户粘贴参考作品原文，不生成对标作品的角色、桥段、专有设定或表达。
 
 - ⚠️ **如果不存在**：使用默认节奏规划
 
@@ -108,12 +109,13 @@ test -f spec/presets/rhythm-config.json && echo "found" || echo "not-found"
 - 章节长度：[基于节奏配置或默认2000-3000字/章]
 - 分卷安排：[如适用]
 
-**🆕 节奏参数（如有rhythm-config.json）**：
+**🆕 节奏参数（如有 `spec/tracking/rhythm-config.json`）**：
 - 平均章节字数：[从配置读取，如3200字]
-- 小高潮间隔：[从配置读取，如5章]
-- 大高潮间隔：[从配置读取，如30章]
-- 节奏风格：[快/适中/慢]
-- 内容比例：对话[X]% / 动作[X]% / 描写[X]% / 心理[X]%
+- 钩子频率：[从配置读取，如每3章]
+- 回报间隔：[从配置读取，如每6章]
+- 信息揭示密度：[从配置读取，如每章2个新信息点]
+- 内容比例：对话[X]% / 动作[X]% / 描写[X]%
+- 安全边界：借鉴结构，不借鉴表达、人物、桥段或专有设定
 
 ### 🌟 黄金开篇规划（如果包含第1-3章）
 
@@ -204,8 +206,8 @@ test -f spec/presets/rhythm-config.json && echo "found" || echo "not-found"
 - [ ] 是否把 `spec/tracking/tension-curve.json` 中的低张力区段改造成冲突、信息收益或阶段回报？
 
 **与节奏配置的关系**：
-- 如果存在 `rhythm-config.json`，参考其中的"爽点间隔"参数
-- 对标作品的情绪节奏可作为参考，但需根据自己的故事调整
+- 如果存在 `spec/tracking/rhythm-config.json`，参考其中的钩子频率、回报间隔、信息密度和张力模式
+- 参考作品只能被作者手工抽象成节奏参数；计划中不能复用参考作品的具体人物、桥段、设定或表达
 - 不同类型有不同的情绪节奏（爽文：高频爽点；悬疑：高频悬念；虐文：后期高爽）
 
 ### 结构映射
@@ -395,19 +397,20 @@ test -f spec/presets/rhythm-config.json && echo "found" || echo "not-found"
 
 ### 🎵 节奏配置的应用
 
-**如果使用了 `/book-internalize`**：
-- 系统会自动读取 `spec/presets/rhythm-config.json`
-- 应用对标作品的节奏参数（章节字数、爽点间隔等）
-- 应用内容比例（对话/动作/描写/心理）
+**如果使用了 `storyspec rhythm:init` 或手工配置 `spec/tracking/rhythm-config.json`**：
+- 系统会读取 `spec/tracking/rhythm-config.json`
+- 应用抽象节奏参数（章节字数、钩子频率、回报间隔、信息密度）
+- 应用内容比例（对话/动作/描写）
+- 不读取参考作品正文，不复用参考作品的人物、桥段、专有设定或表达
 
 **参数优先级**：
 1. **用户即时指令**（最高）
-2. **rhythm-config.json**（对标作品节奏）
+2. **rhythm-config.json**（本地抽象节奏）
 3. **类型知识库**（类型通用节奏）
 4. **默认值**（2000-3000字/章）
 
 **建议**：
-- 对标作品的节奏参数仅供参考
+- 抽象节奏参数仅供参考
 - 根据自己的创作习惯适度调整
 - 不要生搬硬套，保持灵活性
 

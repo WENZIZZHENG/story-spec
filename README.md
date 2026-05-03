@@ -225,6 +225,7 @@ StorySpec 会尽量把“作者确认”和“AI 建议”分开：
 | `storyspec dialogue:plan` / `storyspec dialogue:check` / `storyspec dialogue:extract` | 管理对话节拍 |
 | `storyspec branch:create` / `storyspec branch:list` / `storyspec branch:compare` / `storyspec branch:promote` | 管理剧情 what-if 分支 |
 | `storyspec promise:list` / `storyspec promise:check` | 检查读者承诺和 payoff |
+| `storyspec rhythm:init` | 初始化本地抽象节奏配置，只记录结构参数，不导入参考作品正文 |
 | `storyspec tension:chart` | 输出张力曲线 Markdown 或 JSON |
 | `storyspec review` | 运行 reviewer loop，输出结构化 findings 和任务草稿 |
 | `storyspec handoff [story]` | 生成断点续写上下文包 |

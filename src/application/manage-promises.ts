@@ -2,6 +2,7 @@ import path from 'node:path';
 import type { ProjectFileSystem } from './project-ports.js';
 import type {
   PromiseIssue,
+  RhythmConfig,
   StoryPromise,
   StoryPromiseStatus,
   StoryPromiseType,
@@ -52,9 +53,26 @@ export interface PromiseListResult {
 export interface TensionChartResult {
   projectRoot: string;
   tensionPath: string;
+  rhythmConfigPath: string;
+  rhythmConfig?: RhythmConfig;
   points: TensionPoint[];
   issues: PromiseIssue[];
   markdown: string;
+}
+
+export interface InitRhythmConfigInput extends PromiseInput {
+  averageChapterLength?: number;
+  hookFrequency?: number;
+  payoffInterval?: number;
+  infoRevealDensity?: number;
+  noWrite?: boolean;
+}
+
+export interface InitRhythmConfigResult {
+  projectRoot: string;
+  outputPath: string;
+  config: RhythmConfig;
+  written: boolean;
 }
 
 const VALID_PROMISE_TYPES: StoryPromiseType[] = [
@@ -80,6 +98,9 @@ const promisesPath = (projectRoot: string): string =>
 const tensionPath = (projectRoot: string): string =>
   path.join(projectRoot, 'spec', 'tracking', 'tension-curve.json');
 
+const rhythmConfigPath = (projectRoot: string): string =>
+  path.join(projectRoot, 'spec', 'tracking', 'rhythm-config.json');
+
 const isRecord = (value: unknown): value is Record<string, unknown> =>
   typeof value === 'object' && value !== null && !Array.isArray(value);
 
@@ -102,6 +123,11 @@ const readNumber = (value: unknown, fallback = 0): number => {
   }
 
   return fallback;
+};
+
+const readPositiveNumber = (value: unknown, fallback: number): number => {
+  const number = readNumber(value, fallback);
+  return number > 0 ? number : fallback;
 };
 
 const issue = (
@@ -272,6 +298,136 @@ const parseTension = (content: string, filePath: string): {
   return {
     points: points.sort((left, right) => chapterNumber(left.chapter) - chapterNumber(right.chapter)),
     issues
+  };
+};
+
+const createDefaultRhythmConfig = (
+  input: InitRhythmConfigInput
+): RhythmConfig => {
+  const target = readPositiveNumber(input.averageChapterLength, 3000);
+  const spread = Math.max(400, Math.round((target * 0.2) / 100) * 100);
+
+  return {
+    schemaVersion: '1.0',
+    sourceMode: 'manual-abstract',
+    safetyBoundary: '只记录节奏、结构和密度，不复制参考作品表达、角色、桥段或专有设定。',
+    averageChapterLength: {
+      min: target - spread,
+      target,
+      max: target + spread
+    },
+    hookFrequency: {
+      everyChapters: readPositiveNumber(input.hookFrequency, 3)
+    },
+    payoffInterval: {
+      everyChapters: readPositiveNumber(input.payoffInterval, 6)
+    },
+    dialogueActionDescriptionRatio: {
+      dialogue: 40,
+      action: 40,
+      description: 20
+    },
+    tensionPattern: ['hook', 'build', 'payoff'],
+    infoRevealDensity: {
+      targetPerChapter: readPositiveNumber(input.infoRevealDensity, 2)
+    },
+    notes: [
+      '本配置只来自作者手工输入的抽象节奏参数。',
+      '不要粘贴、保存或解析参考作品原文。',
+      '只借鉴章节长度、钩子频率、回报间隔、信息密度和情绪曲线。'
+    ]
+  };
+};
+
+const parseRhythmConfig = (content: string, filePath: string): {
+  config?: RhythmConfig;
+  issues: PromiseIssue[];
+} => {
+  const parsed = parseJsonDocument(content, filePath, 'INVALID_RHYTHM_CONFIG');
+  if (!parsed.document) {
+    return { issues: parsed.issues };
+  }
+
+  if (!isRecord(parsed.document)) {
+    return {
+      issues: [issue(
+        'INVALID_RHYTHM_CONFIG',
+        filePath,
+        'rhythm-config.json 顶层必须是对象',
+        '运行 rhythm:init 生成本地抽象节奏配置',
+        'error'
+      )]
+    };
+  }
+
+  const document = parsed.document;
+  if (document.sourceMode !== 'manual-abstract') {
+    return {
+      issues: [issue(
+        'INVALID_RHYTHM_CONFIG',
+        filePath,
+        'rhythm-config 只支持 manual-abstract，不能保存或解析参考作品原文',
+        '改为只填写抽象节奏参数，例如章节长度、钩子频率和信息密度',
+        'error',
+        String(document.sourceMode ?? 'missing')
+      )]
+    };
+  }
+
+  const average = isRecord(document.averageChapterLength) ? document.averageChapterLength : {};
+  const hook = isRecord(document.hookFrequency) ? document.hookFrequency : {};
+  const payoff = isRecord(document.payoffInterval) ? document.payoffInterval : {};
+  const ratio = isRecord(document.dialogueActionDescriptionRatio) ? document.dialogueActionDescriptionRatio : {};
+  const density = isRecord(document.infoRevealDensity) ? document.infoRevealDensity : {};
+
+  return {
+    config: {
+      schemaVersion: '1.0',
+      sourceMode: 'manual-abstract',
+      safetyBoundary: isNonEmptyString(document.safetyBoundary)
+        ? document.safetyBoundary.trim()
+        : '只记录节奏、结构和密度，不复制参考作品表达、角色、桥段或专有设定。',
+      averageChapterLength: {
+        min: readPositiveNumber(average.min, 2400),
+        target: readPositiveNumber(average.target, 3000),
+        max: readPositiveNumber(average.max, 3600)
+      },
+      hookFrequency: {
+        everyChapters: readPositiveNumber(hook.everyChapters, 3)
+      },
+      payoffInterval: {
+        everyChapters: readPositiveNumber(payoff.everyChapters, 6)
+      },
+      dialogueActionDescriptionRatio: {
+        dialogue: readNumber(ratio.dialogue, 40),
+        action: readNumber(ratio.action, 40),
+        description: readNumber(ratio.description, 20)
+      },
+      tensionPattern: toStringArray(document.tensionPattern),
+      infoRevealDensity: {
+        targetPerChapter: readPositiveNumber(density.targetPerChapter, 2)
+      },
+      notes: toStringArray(document.notes)
+    },
+    issues: []
+  };
+};
+
+const readRhythmConfig = async (input: PromiseInput): Promise<{
+  rhythmConfigPath: string;
+  config?: RhythmConfig;
+  issues: PromiseIssue[];
+}> => {
+  const filePath = rhythmConfigPath(input.projectRoot);
+  if (!await input.fileSystem.pathExists(filePath)) {
+    return { rhythmConfigPath: filePath, issues: [] };
+  }
+
+  const parsed = parseRhythmConfig(await input.fileSystem.readFile(filePath), filePath);
+  return {
+    rhythmConfigPath: filePath,
+    config: parsed.config,
+    issues: parsed.issues
   };
 };
 
@@ -447,6 +603,67 @@ const checkTensionIssues = (
   return issues;
 };
 
+const highTensionOrHook = (point: TensionPoint): boolean =>
+  point.tension >= 7 || point.emotionalCharge >= 7;
+
+const hasPayoff = (point: TensionPoint): boolean =>
+  point.payoff >= 4;
+
+const checkRhythmIssues = (
+  points: readonly TensionPoint[],
+  rhythmConfig: RhythmConfig | undefined,
+  filePath: string
+): PromiseIssue[] => {
+  if (!rhythmConfig || points.length === 0) {
+    return [];
+  }
+
+  const issues: PromiseIssue[] = [];
+  const hookInterval = rhythmConfig.hookFrequency.everyChapters;
+  const payoffInterval = rhythmConfig.payoffInterval.everyChapters;
+  const infoTarget = rhythmConfig.infoRevealDensity.targetPerChapter;
+
+  const hookWindowWithoutHook = points.length >= hookInterval
+    && points.slice(-hookInterval).every(point => !highTensionOrHook(point));
+  if (hookWindowWithoutHook) {
+    issues.push(issue(
+      'RHYTHM_HOOK_INTERVAL_GAP',
+      filePath,
+      `最近 ${hookInterval} 个张力点缺少高强度钩子`,
+      '根据 rhythm-config 安排一次冲突升级、强悬念、反转或情绪峰值',
+      'warning',
+      `hookFrequency=${hookInterval}`
+    ));
+  }
+
+  const payoffWindowWithoutPayoff = points.length >= payoffInterval
+    && points.slice(-payoffInterval).every(point => !hasPayoff(point));
+  if (payoffWindowWithoutPayoff) {
+    issues.push(issue(
+      'RHYTHM_PAYOFF_INTERVAL_GAP',
+      filePath,
+      `最近 ${payoffInterval} 个张力点缺少阶段回报`,
+      '安排小胜利、信息收益、关系推进或阶段兑现，避免只积累期待',
+      'warning',
+      `payoffInterval=${payoffInterval}`
+    ));
+  }
+
+  const averageInfoGain = points.reduce((total, point) => total + point.informationGain, 0) / points.length;
+  if (averageInfoGain < infoTarget) {
+    issues.push(issue(
+      'RHYTHM_INFO_REVEAL_DENSITY_GAP',
+      filePath,
+      `平均信息揭示密度偏低：${averageInfoGain.toFixed(1)}/${infoTarget}`,
+      '增加读者可见的新信息、线索推进或世界规则行动后果，不要复述旧信息',
+      'info',
+      `infoRevealDensity=${infoTarget}`
+    ));
+  }
+
+  return issues;
+};
+
 const summarizePromises = (promises: readonly StoryPromise[]): PromiseCheckResult['summary'] => ({
   open: promises.filter(promise => promise.status === 'open').length,
   reinforced: promises.filter(promise => promise.status === 'reinforced').length,
@@ -502,7 +719,18 @@ export const listPromises = async (input: PromiseInput): Promise<PromiseListResu
   };
 };
 
-const renderTensionMarkdown = (points: readonly TensionPoint[]): string => [
+const renderTensionMarkdown = (
+  points: readonly TensionPoint[],
+  rhythmConfig?: RhythmConfig
+): string => [
+  ...(rhythmConfig
+    ? [
+      `Rhythm Config：${rhythmConfig.sourceMode}`,
+      `章节长度：${rhythmConfig.averageChapterLength.min}-${rhythmConfig.averageChapterLength.max}（target ${rhythmConfig.averageChapterLength.target}）`,
+      `钩子频率：每 ${rhythmConfig.hookFrequency.everyChapters} 章；回报间隔：每 ${rhythmConfig.payoffInterval.everyChapters} 章；信息密度：${rhythmConfig.infoRevealDensity.targetPerChapter}/章`,
+      ''
+    ]
+    : []),
   '| Chapter | Scene | Tension | Emotion | Info | Payoff |',
   '| --- | --- | ---: | ---: | ---: | ---: |',
   ...(points.length > 0
@@ -513,18 +741,45 @@ const renderTensionMarkdown = (points: readonly TensionPoint[]): string => [
 ].join('\n');
 
 export const chartTension = async (input: PromiseInput): Promise<TensionChartResult> => {
-  const result = await readTension(input);
+  const [result, rhythm] = await Promise.all([
+    readTension(input),
+    readRhythmConfig(input)
+  ]);
   const issues = [
     ...result.issues,
-    ...checkTensionIssues(result.points, result.tensionPath)
+    ...rhythm.issues,
+    ...checkTensionIssues(result.points, result.tensionPath),
+    ...checkRhythmIssues(result.points, rhythm.config, rhythm.rhythmConfigPath)
   ];
 
   return {
     projectRoot: input.projectRoot,
     tensionPath: result.tensionPath,
+    rhythmConfigPath: rhythm.rhythmConfigPath,
+    rhythmConfig: rhythm.config,
     points: result.points,
     issues,
-    markdown: renderTensionMarkdown(result.points)
+    markdown: renderTensionMarkdown(result.points, rhythm.config)
+  };
+};
+
+export const initRhythmConfig = async (
+  input: InitRhythmConfigInput
+): Promise<InitRhythmConfigResult> => {
+  const outputPath = rhythmConfigPath(input.projectRoot);
+  const config = createDefaultRhythmConfig(input);
+  const written = input.noWrite !== true;
+
+  if (written) {
+    await input.fileSystem.ensureDir(path.dirname(outputPath));
+    await input.fileSystem.writeJson(outputPath, config, { spaces: 2 });
+  }
+
+  return {
+    projectRoot: input.projectRoot,
+    outputPath,
+    config,
+    written
   };
 };
 
@@ -568,6 +823,18 @@ export const renderTensionChart = (result: TensionChartResult): string => [
   ...(result.issues.length > 0
     ? result.issues.map(item => `- [${item.severity}] ${item.code}: ${toPosixPath(item.path)} - ${item.message}`)
     : [])
+].join('\n').trimEnd();
+
+export const renderRhythmInit = (result: InitRhythmConfigResult): string => [
+  'Rhythm Config 初始化',
+  '',
+  `模式：${result.config.sourceMode}`,
+  `输出：${toPosixPath(result.outputPath)}`,
+  `写入：${result.written ? '是' : '否'}`,
+  `章节长度：${result.config.averageChapterLength.min}-${result.config.averageChapterLength.max}（target ${result.config.averageChapterLength.target}）`,
+  `钩子频率：每 ${result.config.hookFrequency.everyChapters} 章`,
+  `回报间隔：每 ${result.config.payoffInterval.everyChapters} 章`,
+  `安全边界：${result.config.safetyBoundary}`
 ].join('\n').trimEnd();
 
 export const collectPromiseIds = (promises: readonly StoryPromise[]): string[] =>

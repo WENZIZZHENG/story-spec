@@ -23,7 +23,11 @@ export type PromiseIssueCode =
   | 'INVALID_TENSION_DOCUMENT'
   | 'INVALID_TENSION_POINT'
   | 'TENSION_PAYOFF_GAP'
-  | 'TENSION_LONG_FLATLINE';
+  | 'TENSION_LONG_FLATLINE'
+  | 'INVALID_RHYTHM_CONFIG'
+  | 'RHYTHM_HOOK_INTERVAL_GAP'
+  | 'RHYTHM_PAYOFF_INTERVAL_GAP'
+  | 'RHYTHM_INFO_REVEAL_DENSITY_GAP';
 export type ResearchSourceType = 'book' | 'article' | 'web' | 'video' | 'interview' | 'personal-note';
 export type ResearchIssueCode =
   | 'INVALID_RESEARCH_DOCUMENT'
@@ -156,6 +160,33 @@ export interface TensionPoint {
   emotionalCharge: number;
   informationGain: number;
   payoff: number;
+}
+
+export interface RhythmConfig {
+  schemaVersion: '1.0';
+  sourceMode: 'manual-abstract';
+  safetyBoundary: string;
+  averageChapterLength: {
+    min: number;
+    target: number;
+    max: number;
+  };
+  hookFrequency: {
+    everyChapters: number;
+  };
+  payoffInterval: {
+    everyChapters: number;
+  };
+  dialogueActionDescriptionRatio: {
+    dialogue: number;
+    action: number;
+    description: number;
+  };
+  tensionPattern: string[];
+  infoRevealDensity: {
+    targetPerChapter: number;
+  };
+  notes: string[];
 }
 
 export interface PromiseIssue {

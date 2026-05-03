@@ -3,8 +3,10 @@ import path from 'node:path';
 import { describe, expect, it } from 'vitest';
 import {
   chartTension,
+  initRhythmConfig,
   checkPromises,
-  listPromises
+  listPromises,
+  renderRhythmInit
 } from '../../src/application/manage-promises.js';
 import { MemoryFileSystem } from '../helpers/memory-file-system.js';
 
@@ -125,5 +127,64 @@ describe('manage promises', () => {
     expect(chart.issues).toEqual(expect.arrayContaining([
       expect.objectContaining({ code: 'TENSION_PAYOFF_GAP' })
     ]));
+  });
+
+  it('initializes a manual abstract rhythm config without reference text fields', async () => {
+    const fixture = await createProject();
+
+    const result = await initRhythmConfig({
+      ...fixture,
+      averageChapterLength: 3200,
+      hookFrequency: 3,
+      payoffInterval: 6,
+      infoRevealDensity: 2,
+      noWrite: false
+    });
+
+    expect(result.outputPath).toBe(path.join(fixture.projectRoot, 'spec', 'tracking', 'rhythm-config.json'));
+    expect(result.config).toMatchObject({
+      schemaVersion: '1.0',
+      sourceMode: 'manual-abstract',
+      averageChapterLength: { min: 2600, target: 3200, max: 3800 },
+      hookFrequency: { everyChapters: 3 },
+      payoffInterval: { everyChapters: 6 },
+      infoRevealDensity: { targetPerChapter: 2 }
+    });
+    expect(JSON.stringify(result.config)).not.toContain('referenceText');
+    await expect(fixture.fileSystem.pathExists(result.outputPath)).resolves.toBe(true);
+    expect(renderRhythmInit(result)).toContain('manual-abstract');
+  });
+
+  it('uses rhythm config to report hook, payoff, and info reveal gaps', async () => {
+    const fixture = await createProject();
+    await fixture.fileSystem.writeJson(path.join(fixture.projectRoot, 'spec', 'tracking', 'rhythm-config.json'), {
+      schemaVersion: '1.0',
+      sourceMode: 'manual-abstract',
+      safetyBoundary: '只记录节奏、结构和密度，不复制参考作品表达、角色、桥段或专有设定。',
+      averageChapterLength: { min: 2600, target: 3200, max: 3800 },
+      hookFrequency: { everyChapters: 2 },
+      payoffInterval: { everyChapters: 2 },
+      dialogueActionDescriptionRatio: { dialogue: 40, action: 40, description: 20 },
+      tensionPattern: ['hook', 'build', 'payoff'],
+      infoRevealDensity: { targetPerChapter: 3 },
+      notes: []
+    });
+    await fixture.fileSystem.writeJson(path.join(fixture.projectRoot, 'spec', 'tracking', 'tension-curve.json'), {
+      tensionPoints: [
+        { chapter: 'chapter-001', tension: 2, emotionalCharge: 2, informationGain: 1, payoff: 1 },
+        { chapter: 'chapter-002', tension: 3, emotionalCharge: 2, informationGain: 1, payoff: 1 },
+        { chapter: 'chapter-003', tension: 3, emotionalCharge: 2, informationGain: 1, payoff: 1 }
+      ]
+    });
+
+    const chart = await chartTension(fixture);
+
+    expect(chart.rhythmConfig?.sourceMode).toBe('manual-abstract');
+    expect(chart.issues).toEqual(expect.arrayContaining([
+      expect.objectContaining({ code: 'RHYTHM_HOOK_INTERVAL_GAP' }),
+      expect.objectContaining({ code: 'RHYTHM_PAYOFF_INTERVAL_GAP' }),
+      expect.objectContaining({ code: 'RHYTHM_INFO_REVEAL_DENSITY_GAP' })
+    ]));
+    expect(chart.markdown).toContain('Rhythm Config：manual-abstract');
   });
 });
