@@ -200,6 +200,101 @@ const filterQuestionsForCurrentRound = (
   });
 };
 
+const createFollowUpQuestion = (
+  id: string,
+  topic: string,
+  question: string,
+  whyItMatters: string,
+  exampleAnswers: string[]
+): ClarificationQuestion => ({
+  id,
+  stage: 'specify',
+  topic,
+  question,
+  whyItMatters,
+  type: 'textarea',
+  required: false,
+  options: [],
+  exampleAnswers,
+  exampleBranches: [],
+  dependsOn: []
+});
+
+const answerTextIncludes = (answer: ClarificationAnswer, pattern: RegExp): boolean =>
+  answer.confirmed
+  && hasResolvedClarificationAnswer(answer.answer)
+  && pattern.test(clarificationAnswerToText(answer.answer));
+
+const buildFollowUpQuestions = (
+  record: ClarificationRecord | undefined
+): ClarificationQuestion[] => {
+  if (!record) {
+    return [];
+  }
+
+  const existingQuestionIds = new Set(record.questions.map(question => question.id));
+  const answersById = new Map(record.answers.map(answer => [answer.questionId, answer]));
+  const followUps: ClarificationQuestion[] = [];
+  const magicAnswer = answersById.get('magic.rule-hardness');
+  if (
+    magicAnswer
+    && answerTextIncludes(magicAnswer, /轻量隐喻|metaphor|soft/i)
+    && !existingQuestionIds.has('followup.magic.light-metaphor-boundary')
+  ) {
+    followUps.push(createFollowUpQuestion(
+      'followup.magic.light-metaphor-boundary',
+      'magic-system',
+      '选择轻量隐喻后，能力爽点来自哪里？主角的能力明确不能做什么？',
+      '轻量隐喻需要靠场景限制、失败代价和角色选择保持边界。',
+      [
+        '爽点来自把复杂魔法问题拆成可验证步骤，但不能凭空创造资源。',
+        '爽点来自调试事故后的聪明补救，但不能越过本地魔法材料和伦理限制。'
+      ]
+    ));
+  }
+
+  const threatAnswer = answersById.get('threat.first-symptom');
+  if (
+    threatAnswer
+    && answerTextIncludes(threatAnswer, /文明|威胁|寂静|异常|旧日志|第三次/)
+    && !existingQuestionIds.has('followup.threat.first-volume-corner')
+  ) {
+    followUps.push(createFollowUpQuestion(
+      'followup.threat.first-volume-corner',
+      'threat',
+      '第一卷只看到第三次寂静的哪一角？角色会如何误判它？',
+      '文明级威胁需要先给局部回报，避免开局就压垮轻松冒险。',
+      [
+        '第一卷只看到旧日志和民生法器故障，角色先误判成地方贵族隐瞒事故。',
+        '第一卷只看到遗迹防护脚本自启，角色先以为是古代遗迹单点异常。'
+      ]
+    ));
+  }
+
+  const romanceAnswer = record.answers.find(answer =>
+    answer.questionId.includes('romance')
+    || answer.questionId.includes('relationship')
+  );
+  if (
+    romanceAnswer
+    && answerTextIncludes(romanceAnswer, /慢热|搭档|信任|关系|感情/)
+    && !existingQuestionIds.has('followup.romance.starting-tension')
+  ) {
+    followUps.push(createFollowUpQuestion(
+      'followup.romance.starting-tension',
+      'relationship',
+      '慢热关系开局的张力和边界是什么？哪件事会让双方开始信任？',
+      '慢热感情需要有功能和阻力，不能只作为奖励关系。',
+      [
+        '双方先因任务合作互不服气，第一次信任来自共同承担一次法术事故后果。',
+        '对方能指出晏无忽略的人情和制度代价，但不会立刻站到主角一边。'
+      ]
+    ));
+  }
+
+  return followUps;
+};
+
 const readExistingRecord = async (
   fs: ProjectFileSystem,
   jsonPath: string
@@ -316,7 +411,10 @@ export const interviewStory = async (
     premise,
     maxQuestions: input.maxQuestions
   });
-  const roundQuestions = filterQuestionsForCurrentRound(prepared.questions, state.existingRecord);
+  const roundQuestions = [
+    ...buildFollowUpQuestions(state.existingRecord),
+    ...filterQuestionsForCurrentRound(prepared.questions, state.existingRecord)
+  ].slice(0, input.maxQuestions ?? prepared.questions.length);
   const timestamp = (input.now ?? (() => new Date()))().toISOString();
   const existingRecord = state.existingRecord;
   const answerUpdates = buildAnswerUpdates(

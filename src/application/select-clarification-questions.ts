@@ -43,8 +43,28 @@ export interface SelectedExampleBranch {
   branch: ExampleBranch;
 }
 
+export type InterviewStageId =
+  | 'seed'
+  | 'core-cast'
+  | 'stage'
+  | 'power'
+  | 'conflict'
+  | 'promise'
+  | 'growth-route'
+  | 'voice';
+
+export type InterviewStageStatus = 'done' | 'active' | 'pending';
+
+export interface InterviewStagePlan {
+  id: InterviewStageId;
+  label: string;
+  goal: string;
+  status: InterviewStageStatus;
+  questionIds: string[];
+}
+
 export interface ClarificationNextAction {
-  id: 'more-questions' | 'examples-only' | 'answer-selected';
+  id: 'continue-interview' | 'generate-candidates' | 'preview-specify' | 'pause-draft';
   label: string;
   description: string;
 }
@@ -62,6 +82,7 @@ export interface ClarificationSelectionResult {
   selectedQuestions: SelectedClarificationQuestion[];
   exampleBranches: SelectedExampleBranch[];
   copyableExamples: string[];
+  interviewStages: InterviewStagePlan[];
   nextActions: ClarificationNextAction[];
   issues: ClarificationIssue[];
 }
@@ -284,11 +305,145 @@ const scorePack = (input: string, pack: ClarificationQuestionPack): number => {
 const questionWeight = (question: ClarificationQuestion): number =>
   question.required ? 2 : 1;
 
+const INTERVIEW_STAGE_DEFINITIONS: readonly Omit<InterviewStagePlan, 'status' | 'questionIds'>[] = [
+  {
+    id: 'seed',
+    label: '保留灵感',
+    goal: '保留作者原始一句话灵感，不替作者扩写定稿。'
+  },
+  {
+    id: 'core-cast',
+    label: '主角与伙伴',
+    goal: '确认主角、核心伙伴和关系张力。'
+  },
+  {
+    id: 'stage',
+    label: '第一舞台',
+    goal: '确认第一舞台、社会结构和普通人压力。'
+  },
+  {
+    id: 'power',
+    label: '能力体系',
+    goal: '确认能力用途、限制、代价和爽点来源。'
+  },
+  {
+    id: 'conflict',
+    label: '势力与冲突',
+    goal: '确认第一卷阻力、势力逻辑和阶段性胜利。'
+  },
+  {
+    id: 'promise',
+    label: '阅读承诺',
+    goal: '确认类型体验、前三章钩子和长线威胁露出节奏。'
+  },
+  {
+    id: 'growth-route',
+    label: '成功路线',
+    goal: '确认主角如何一步步获得资源、能力、信任和影响力。'
+  },
+  {
+    id: 'voice',
+    label: '独特声音',
+    goal: '确认叙述声音、价值判断和明确不想写成的样子。'
+  }
+];
+
+const STAGE_TOPIC_PRIORITY: Record<InterviewStageId, readonly string[]> = {
+  seed: ['premise'],
+  'core-cast': ['protagonist', 'partner', 'relationship'],
+  stage: ['setting', 'stage', 'world'],
+  power: ['magic-system', 'power', 'ability'],
+  conflict: ['faction', 'conflict'],
+  promise: ['threat', 'tone', 'romance', 'adventure', 'building'],
+  'growth-route': ['growth', 'success', 'route'],
+  voice: ['voice', 'style']
+};
+
+const CORE_FIRST_QUESTION_IDS = [
+  'core.protagonist',
+  'core.stage',
+  'magic.rule-hardness',
+  'threat.first-symptom',
+  'core.partner',
+  'core.faction-conflict'
+];
+
+const stageForQuestion = (question: ClarificationQuestion): InterviewStageId => {
+  for (const [stage, topics] of Object.entries(STAGE_TOPIC_PRIORITY) as [InterviewStageId, readonly string[]][]) {
+    if (topics.includes(question.topic) || topics.some(topic => question.id.includes(topic))) {
+      return stage;
+    }
+  }
+
+  return 'promise';
+};
+
+const buildInterviewStages = (
+  selected: SelectedClarificationQuestion[]
+): InterviewStagePlan[] => {
+  const selectedIdsByStage = new Map<InterviewStageId, string[]>(
+    INTERVIEW_STAGE_DEFINITIONS.map(stage => [stage.id, []])
+  );
+
+  for (const item of selected) {
+    selectedIdsByStage.get(stageForQuestion(item.question))?.push(item.question.id);
+  }
+
+  return INTERVIEW_STAGE_DEFINITIONS.map(definition => {
+    const questionIds = selectedIdsByStage.get(definition.id) ?? [];
+    return {
+      ...definition,
+      status: definition.id === 'seed'
+        ? 'done'
+        : (questionIds.length > 0 ? 'active' : 'pending'),
+      questionIds
+    };
+  });
+};
+
+const sortByInterviewPriority = (
+  selected: SelectedClarificationQuestion[]
+): SelectedClarificationQuestion[] => selected.sort((left, right) => {
+  const leftCoreIndex = CORE_FIRST_QUESTION_IDS.indexOf(left.question.id);
+  const rightCoreIndex = CORE_FIRST_QUESTION_IDS.indexOf(right.question.id);
+  if (leftCoreIndex !== -1 || rightCoreIndex !== -1) {
+    return (leftCoreIndex === -1 ? Number.MAX_SAFE_INTEGER : leftCoreIndex)
+      - (rightCoreIndex === -1 ? Number.MAX_SAFE_INTEGER : rightCoreIndex);
+  }
+
+  return questionWeight(right.question) - questionWeight(left.question)
+    || left.packId.localeCompare(right.packId)
+    || left.question.id.localeCompare(right.question.id);
+});
+
 const selectFromPacks = (
   packs: ClarificationQuestionPack[],
   maxQuestions: number
 ): SelectedClarificationQuestion[] => {
   const selected: SelectedClarificationQuestion[] = [];
+  const selectedIds = new Set<string>();
+  const allCandidates = packs.flatMap(pack =>
+    pack.questions.map(question => ({
+      packId: pack.id,
+      packName: pack.name,
+      question
+    }))
+  );
+
+  for (const questionId of CORE_FIRST_QUESTION_IDS) {
+    if (selected.length >= maxQuestions) {
+      break;
+    }
+
+    const candidate = allCandidates.find(item => item.question.id === questionId);
+    if (!candidate) {
+      continue;
+    }
+
+    selected.push(candidate);
+    selectedIds.add(candidate.question.id);
+  }
+
   const packQueue = packs.map(pack => ({ pack, index: 0 }));
 
   while (selected.length < maxQuestions && packQueue.some(item => item.index < item.pack.questions.length)) {
@@ -303,18 +458,20 @@ const selectFromPacks = (
         continue;
       }
 
+      if (selectedIds.has(question.id)) {
+        continue;
+      }
+
       selected.push({
         packId: item.pack.id,
         packName: item.pack.name,
         question
       });
+      selectedIds.add(question.id);
     }
   }
 
-  return selected.sort((left, right) =>
-    questionWeight(right.question) - questionWeight(left.question)
-    || left.packId.localeCompare(right.packId)
-  );
+  return sortByInterviewPriority(selected);
 };
 
 const buildExamples = (
@@ -378,19 +535,24 @@ const scoreExampleBranchPack = (input: string, pack: ExampleBranchPack): number 
 
 const defaultNextActions = (): ClarificationNextAction[] => [
   {
-    id: 'more-questions',
-    label: '更多问题',
-    description: '继续展开题材、关系和威胁细节。'
+    id: 'continue-interview',
+    label: '继续访谈',
+    description: '继续围绕当前最薄弱的故事骨架提问。'
   },
   {
-    id: 'examples-only',
-    label: '直接给示例',
-    description: '先给可复制答案分叉，不要求立即定稿。'
+    id: 'generate-candidates',
+    label: '生成候选',
+    description: '基于当前答案生成可改写候选，不直接定稿。'
   },
   {
-    id: 'answer-selected',
-    label: '回答这些问题',
-    description: '把当前问题作为下一轮创作访谈。'
+    id: 'preview-specify',
+    label: '预览规格',
+    description: '先看将写入的 specification 预览，再决定是否 apply。'
+  },
+  {
+    id: 'pause-draft',
+    label: '暂存',
+    description: '暂停后续小说编写，只保留当前澄清记录。'
   }
 ];
 
@@ -433,6 +595,7 @@ export const selectClarificationQuestions = (
       selectedQuestions: [],
       exampleBranches: buildExampleBranches(matchedExampleBranchPacks, options.maxExamples ?? 3),
       copyableExamples: buildExamples(matchedPacks, options.maxExamples ?? 6),
+      interviewStages: buildInterviewStages([]),
       nextActions: defaultNextActions(),
       issues: []
     };
@@ -446,6 +609,7 @@ export const selectClarificationQuestions = (
     selectedQuestions,
     exampleBranches: buildExampleBranches(matchedExampleBranchPacks, options.maxExamples ?? 3),
     copyableExamples: buildExamples(matchedPacks, options.maxExamples ?? 3),
+    interviewStages: buildInterviewStages(selectedQuestions),
     nextActions: defaultNextActions(),
     issues: []
   };

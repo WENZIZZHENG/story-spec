@@ -33,6 +33,9 @@ describe('interviewStory', () => {
       'slow-burn-romance',
       'civilization-threat'
     ]));
+    expect(prepared.selection.interviewStages.some(stage =>
+      stage.id === 'core-cast' && stage.status === 'active'
+    )).toBe(true);
     expect(prepared.questions[0].exampleAnswers.length).toBeGreaterThanOrEqual(2);
     expect(prepared.questions.flatMap(question => question.exampleBranches ?? []).length).toBeGreaterThanOrEqual(3);
   });
@@ -137,6 +140,79 @@ describe('interviewStory', () => {
       })
     ]));
     expect(result.record.questions.map(question => question.id)).toContain('core.protagonist');
+  });
+
+  it('adds focused follow-up questions after confirmed answers', async () => {
+    const { projectRoot, fileSystem, storyPath } = await createProject();
+    await fileSystem.writeJson(path.join(storyPath, 'clarifications.json'), {
+      schemaVersion: '1.0',
+      story: 'idea-demo',
+      premise: '异界穿越、编程施法、慢热感情、文明级威胁',
+      createdAt: '2026-05-03T08:00:00.000Z',
+      updatedAt: '2026-05-03T08:00:00.000Z',
+      questions: [
+        {
+          id: 'magic.rule-hardness',
+          stage: 'specify',
+          topic: 'magic-system',
+          question: '编程施法更偏硬规则，还是轻量隐喻？',
+          whyItMatters: '影响能力边界。',
+          type: 'single-choice',
+          required: true,
+          options: [],
+          exampleAnswers: ['轻量隐喻。', '硬规则。'],
+          dependsOn: []
+        },
+        {
+          id: 'threat.first-symptom',
+          stage: 'specify',
+          topic: 'threat',
+          question: '文明级威胁最早以什么小异常出现？',
+          whyItMatters: '影响长线揭示。',
+          type: 'textarea',
+          required: true,
+          options: [],
+          exampleAnswers: ['旧日志。', '民生故障。'],
+          dependsOn: []
+        }
+      ],
+      answers: [
+        {
+          questionId: 'magic.rule-hardness',
+          answer: '轻量隐喻',
+          source: 'user-explicit',
+          confidence: 1,
+          confirmed: true,
+          createdAt: '2026-05-03T08:00:00.000Z',
+          updatedAt: '2026-05-03T08:00:00.000Z'
+        },
+        {
+          questionId: 'threat.first-symptom',
+          answer: '第三次寂静先表现为旧日志梦游。',
+          source: 'user-explicit',
+          confidence: 1,
+          confirmed: true,
+          createdAt: '2026-05-03T08:00:00.000Z',
+          updatedAt: '2026-05-03T08:00:00.000Z'
+        }
+      ]
+    }, { spaces: 2 });
+
+    const result = await interviewStory({
+      projectRoot,
+      fileSystem,
+      story: 'idea-demo',
+      premise: '异界穿越、编程施法、慢热感情、文明级威胁',
+      maxQuestions: 6,
+      now: () => new Date('2026-05-03T12:00:00.000Z')
+    });
+
+    expect(result.record.questions.map(question => question.id)).toEqual(expect.arrayContaining([
+      'followup.magic.light-metaphor-boundary',
+      'followup.threat.first-volume-corner'
+    ]));
+    expect(result.markdown).toContain('能力爽点来自哪里');
+    expect(result.markdown).toContain('第一卷只看到第三次寂静的哪一角');
   });
 
   it('skips already confirmed answers and keeps deferred answers open', async () => {

@@ -82,13 +82,26 @@ describe('selectClarificationQuestions', () => {
       'cozy-adventure',
       'kingdom-building-support'
     ]));
-    expect(selection.selectedQuestions.map(item => item.packId)).toEqual(expect.arrayContaining([
-      'portal-fantasy',
+    expect(selection.selectedQuestions.slice(0, 4).map(item => item.question.topic)).toEqual([
+      'protagonist',
+      'setting',
       'magic-system',
-      'slow-burn-romance',
-      'civilization-threat',
-      'cozy-adventure',
-      'kingdom-building-support'
+      'threat'
+    ]);
+    expect(selection.interviewStages.map(stage => stage.id)).toEqual([
+      'seed',
+      'core-cast',
+      'stage',
+      'power',
+      'conflict',
+      'promise',
+      'growth-route',
+      'voice'
+    ]);
+    expect(selection.interviewStages.filter(stage => stage.status === 'active').map(stage => stage.id)).toEqual(expect.arrayContaining([
+      'core-cast',
+      'stage',
+      'power'
     ]));
     for (const item of selection.selectedQuestions) {
       expect(item.question.whyItMatters.trim()).not.toBe('');
@@ -114,10 +127,25 @@ describe('selectClarificationQuestions', () => {
     expect(selection.mode).toBe('fewer');
     expect(selection.selectedQuestions.length).toBeLessThanOrEqual(6);
     expect(selection.nextActions.map(action => action.id)).toEqual([
-      'more-questions',
-      'examples-only',
-      'answer-selected'
+      'continue-interview',
+      'generate-candidates',
+      'preview-specify',
+      'pause-draft'
     ]);
+  });
+
+  it('keeps partner and faction ready for the next round after the first core pass', async () => {
+    const { packs } = await loadClarificationQuestionPacks();
+    const selection = selectClarificationQuestions(
+      '18+ 玄幻、异界穿越、轻松冒险、编程施法、慢热感情、文明级威胁',
+      packs,
+      { mode: 'fewer', maxQuestions: 6 }
+    );
+
+    expect(selection.selectedQuestions.map(item => item.question.id)).toEqual(expect.arrayContaining([
+      'core.partner',
+      'core.faction-conflict'
+    ]));
   });
 
   it('can return copyable examples without asking questions', async () => {
