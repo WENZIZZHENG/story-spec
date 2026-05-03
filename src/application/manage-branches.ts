@@ -33,6 +33,21 @@ export interface BranchImpactTask {
   reason: string;
 }
 
+export interface BranchWhatIfCard {
+  flavor: string;
+  readerPromiseShift: string;
+  tradeoffs: string[];
+  relationshipShift: string;
+  worldPressureShift: string;
+}
+
+export interface BranchRouteMapNode {
+  label: string;
+  status: 'baseline' | StoryBranchStatus;
+  description: string;
+  nextCommand?: string;
+}
+
 export interface BranchCreateResult {
   story: string;
   branch: StoryBranch;
@@ -58,8 +73,21 @@ export interface BranchCompareResult {
   impactedTasks: BranchImpactTask[];
   impactedPromises: string[];
   impactedRelationships: string[];
+  whatIfCard: BranchWhatIfCard;
+  routeMap: BranchRouteMapNode[];
   report: string;
   impactPath: string;
+}
+
+export interface ActiveBranchSummary {
+  id: string;
+  title: string;
+  status: StoryBranchStatus;
+  premise: string;
+  impactSummary: string;
+  flavor: string;
+  compareCommand: string;
+  promoteCommand: string;
 }
 
 export interface PromoteBranchInput extends BranchInput {
@@ -322,6 +350,39 @@ const readPromisesForImpact = async (
   }
 };
 
+const readPromiseLabelsForImpact = async (
+  fs: ProjectFileSystem,
+  projectRoot: string,
+  branch: StoryBranch
+): Promise<string[]> => {
+  const promisesPath = path.join(projectRoot, 'spec', 'tracking', 'promises.json');
+  if (!await fs.pathExists(promisesPath)) {
+    return [];
+  }
+
+  try {
+    const document = await fs.readJson<{ promises?: Array<Record<string, unknown>> }>(promisesPath);
+    return (document.promises ?? [])
+      .filter(promise => {
+        const joined = [
+          promise.id,
+          promise.establishedAt,
+          promise.paidOffAt,
+          ...(Array.isArray(promise.reinforcedAt) ? promise.reinforcedAt : [])
+        ].map(String).join('\n');
+        return [...branch.changedScenes, ...branch.changedCanonFacts].some(id => joined.includes(id));
+      })
+      .map(promise => [
+        String(promise.id ?? '').trim(),
+        String(promise.promise ?? promise.readerExpectation ?? '').trim()
+      ].filter(Boolean).join('：'))
+      .filter(Boolean)
+      .sort();
+  } catch {
+    return [];
+  }
+};
+
 const readRelationshipsForImpact = async (
   fs: ProjectFileSystem,
   projectRoot: string,
@@ -345,6 +406,64 @@ const readRelationshipsForImpact = async (
   }
 };
 
+const describeBranchFlavor = (branch: StoryBranch): string => {
+  const premise = branch.premise.trim() || branch.title;
+  return `会长成“${branch.title}”方向：${premise}。它会把选择后果提前摆到台前，让主线风味从默认推进转向可比较的 what-if。`;
+};
+
+const buildReaderPromiseShift = (
+  impactedPromiseLabels: string[]
+): string => impactedPromiseLabels.length > 0
+  ? `读者承诺会偏移：${impactedPromiseLabels.join('、')} 的建立、误导或兑现节奏需要重新安排。`
+  : '暂未命中已登记 promise；需要人工判断这条分支是否改变读者期待、悬念或阶段回报。';
+
+const buildTradeoffs = (branch: StoryBranch): string[] => [
+  `收益：${branch.title} 可以更快展示选择后果，并让作者比较这条路线的爽点、张力或情绪回报。`,
+  `代价：${branch.changedScenes.length + branch.changedCanonFacts.length > 0
+    ? '受影响的 scene/canon 需要重排，可能牺牲原主线的铺垫、悬念或关系慢热。'
+    : '尚未声明影响范围，容易变成空想分支，promote 前必须补 evidence。'}`
+];
+
+const buildRelationshipShift = (
+  impactedRelationships: string[]
+): string => impactedRelationships.length > 0
+  ? `关系线会偏移：${impactedRelationships.join('、')} 需要重新判断信任、距离、冲突或修复节点。`
+  : '暂未命中关系 evidence；如果分支改变角色选择，仍需人工检查关系线是否提前或延后。';
+
+const buildWorldPressureShift = (
+  branch: StoryBranch
+): string => branch.changedScenes.length > 0 || branch.changedCanonFacts.length > 0
+  ? `世界压力会在 ${[...branch.changedScenes, ...branch.changedCanonFacts].join('、')} 更早或更明显显露，需要检查读者是否过早知道规则真相。`
+  : '尚未声明 changedScenes 或 changedCanonFacts，无法判断世界压力显露节奏。';
+
+const buildWhatIfCard = (
+  branch: StoryBranch,
+  impactedPromiseLabels: string[],
+  impactedRelationships: string[]
+): BranchWhatIfCard => ({
+  flavor: describeBranchFlavor(branch),
+  readerPromiseShift: buildReaderPromiseShift(impactedPromiseLabels),
+  tradeoffs: buildTradeoffs(branch),
+  relationshipShift: buildRelationshipShift(impactedRelationships),
+  worldPressureShift: buildWorldPressureShift(branch)
+});
+
+const buildRouteMap = (branch: StoryBranch): BranchRouteMapNode[] => [
+  {
+    label: '当前主线',
+    status: 'baseline',
+    description: `继续沿用 ${branch.base}，不接纳该 what-if。`
+  },
+  {
+    label: `what-if：${branch.title}`,
+    status: branch.status,
+    description: branch.premise || branch.impactSummary,
+    nextCommand: branch.status === 'exploring'
+      ? `storyspec branch:promote ${branch.id}`
+      : `storyspec branch:compare ${branch.id}`
+  }
+];
+
 const renderCompareReport = (result: Omit<BranchCompareResult, 'report'>): string => [
   '# Branch Impact Report',
   '',
@@ -352,6 +471,20 @@ const renderCompareReport = (result: Omit<BranchCompareResult, 'report'>): strin
   `Branch：${result.branch.id}`,
   `状态：${result.branch.status}`,
   `Base：${result.branch.base}`,
+  '',
+  '## What-if 对照卡',
+  '',
+  `- 会长成什么小说：${result.whatIfCard.flavor}`,
+  `- 读者承诺变化：${result.whatIfCard.readerPromiseShift}`,
+  `- 主要收益与代价：${result.whatIfCard.tradeoffs.join('；')}`,
+  `- 关系线偏移：${result.whatIfCard.relationshipShift}`,
+  `- 世界压力显露节奏：${result.whatIfCard.worldPressureShift}`,
+  '',
+  '## 路线图',
+  '',
+  ...result.routeMap.map(node =>
+    `- ${node.label}（${node.status}）：${node.description}${node.nextCommand ? `；下一步 ${node.nextCommand}` : ''}`
+  ),
   '',
   '## Changed Scenes',
   '',
@@ -390,7 +523,10 @@ export const compareBranch = async (
   const branch = input.candidate ?? await readBranch(input.fileSystem, story.path, input.branchId);
   const impactedTasks = collectImpactedTasks(branch, story.tasks.map(task => matchTaskImpact(branch, task)).filter(Boolean) as BranchImpactTask[]);
   const impactedPromises = await readPromisesForImpact(input.fileSystem, input.projectRoot, branch);
+  const impactedPromiseLabels = await readPromiseLabelsForImpact(input.fileSystem, input.projectRoot, branch);
   const impactedRelationships = await readRelationshipsForImpact(input.fileSystem, input.projectRoot, branch);
+  const whatIfCard = buildWhatIfCard(branch, impactedPromiseLabels, impactedRelationships);
+  const routeMap = buildRouteMap(branch);
   const baseResult = {
     story: story.name,
     branch,
@@ -400,6 +536,8 @@ export const compareBranch = async (
     impactedTasks,
     impactedPromises,
     impactedRelationships,
+    whatIfCard,
+    routeMap,
     impactPath: impactPath(story.path, branch.id)
   };
   const report = renderCompareReport(baseResult);
@@ -412,6 +550,25 @@ export const compareBranch = async (
     ...baseResult,
     report
   };
+};
+
+export const summarizeActiveBranches = async (
+  input: BranchInput
+): Promise<ActiveBranchSummary[]> => {
+  const result = await listBranches(input);
+
+  return result.branches
+    .filter(branch => branch.status === 'exploring')
+    .map(branch => ({
+      id: branch.id,
+      title: branch.title,
+      status: branch.status,
+      premise: branch.premise,
+      impactSummary: branch.impactSummary,
+      flavor: describeBranchFlavor(branch),
+      compareCommand: `storyspec branch:compare ${branch.id}`,
+      promoteCommand: `storyspec branch:promote ${branch.id}`
+    }));
 };
 
 const createPromotionChecklist = (branch: StoryBranch): string[] => [

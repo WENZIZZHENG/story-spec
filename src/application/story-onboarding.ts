@@ -25,6 +25,10 @@ import {
 } from './manage-author-profile.js';
 import type { AuthorProfileSummary } from '../domain/author-profile.js';
 import {
+  summarizeActiveBranches,
+  type ActiveBranchSummary
+} from './manage-branches.js';
+import {
   CO_CREATION_ENTRYPOINTS,
   CO_CREATION_MODES,
   type CoCreationEntrypointDefinition,
@@ -109,6 +113,7 @@ export interface StoryNextResult {
   pendingQuestions: string[];
   creationModes: StoryCreationModeOption[];
   coCreationEntrypoints: StoryCoCreationEntrypoint[];
+  activeBranches: ActiveBranchSummary[];
   coreElements: StoryCoreElementAssessment[];
   authorProfile: AuthorProfileSummary;
   actions: StoryNextAction[];
@@ -321,11 +326,15 @@ const buildActions = (
 ): StoryNextAction[] => {
   const actions: StoryNextAction[] = [];
   const planBlockingElements = getPlanBlockingCoreElements(result.coreElements);
+  const activeBranch = result.activeBranches[0];
 
   if (result.stage === 'idea') {
     actions.push(action(1, `storyspec interview ${result.story}`, '先把一句话创意转成澄清记录，不急着生成完整设定。'));
     actions.push(action(2, `storyspec creative:report ${result.story}`, '查看哪些内容仍不能被当作正典。'));
     actions.push(action(3, `storyspec preview specify ${result.story}`, '生成写入前规格预览，确认后再 apply。'));
+    if (activeBranch) {
+      actions.push(action(2, activeBranch.compareCommand, '比较活跃 what-if 会长成什么小说，再决定是否 promote 或继续探索。'));
+    }
     if (result.authorProfile.firstUse) {
       actions.push(action(4, 'storyspec author-profile --init', '首次使用暂无历史画像可回填，可做 2-4 个可跳过偏好采样。'));
     }
@@ -343,6 +352,9 @@ const buildActions = (
     ));
     actions.push(action(2, `storyspec creative:report ${result.story}`, '查看核心要素面板和仍不能进入正典的内容。'));
     actions.push(action(3, `storyspec preview specify ${result.story}`, '仅生成写入前预览，处理缺口后再 apply。'));
+    if (activeBranch) {
+      actions.push(action(2, activeBranch.compareCommand, '比较活跃 what-if 会长成什么小说，再决定是否 promote 或继续探索。'));
+    }
     return actions;
   }
 
@@ -368,6 +380,10 @@ const buildActions = (
 
   if (actions.length === 0) {
     actions.push(action(1, `storyspec interview ${result.story}`, '当前状态不完整，先回到澄清访谈。'));
+  }
+
+  if (activeBranch) {
+    actions.push(action(2, activeBranch.compareCommand, '比较活跃 what-if 会长成什么小说，再决定是否 promote 或继续探索。'));
   }
 
   return actions.sort((left, right) =>
@@ -413,6 +429,11 @@ export const getStoryNext = async (
     projectRoot: input.projectRoot,
     fileSystem: input.fileSystem
   });
+  const activeBranches = await summarizeActiveBranches({
+    projectRoot: input.projectRoot,
+    fileSystem: input.fileSystem,
+    story: story.name
+  });
   const creativeControl = await summarizeCreativeControl({
     projectRoot: input.projectRoot,
     storyPath: story.path,
@@ -439,6 +460,7 @@ export const getStoryNext = async (
     ],
     creationModes: buildCreationModes(story.name, story.stage, coreElements),
     coCreationEntrypoints: buildCoCreationEntrypoints(story.name, story.stage),
+    activeBranches,
     coreElements,
     authorProfile: authorProfile.summary
   };
@@ -487,6 +509,13 @@ export const renderStoryNext = (result: StoryNextResult): string => [
       `  - 下一步推荐：${item.nextRecommendation}`
     ].join('\n'))
     : ['- 当前阶段暂无专门入口；请按建议动作继续。']),
+  '',
+  '活跃 what-if 分支：',
+  ...(result.activeBranches.length > 0
+    ? result.activeBranches.map(branch =>
+      `- ${branch.id}：${branch.status}。${branch.flavor} 下一步：${branch.compareCommand}`
+    )
+    : ['- 暂无。']),
   '',
   '作者画像：',
   ...renderAuthorProfileSamplingGuide(result.authorProfile),

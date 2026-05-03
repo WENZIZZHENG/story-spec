@@ -230,7 +230,7 @@ StorySpec 会尽量把“作者确认”和“AI 建议”分开：
 | `storyspec draft:promote <draftId>` | 预览或发布章节草稿到正式正文 |
 | `storyspec narrative:test [story]` | 运行叙事测试，检查场景闭环和章节级 fallback |
 | `storyspec dialogue:plan` / `storyspec dialogue:check` / `storyspec dialogue:extract` | 管理对话节拍 |
-| `storyspec branch:create` / `storyspec branch:list` / `storyspec branch:compare` / `storyspec branch:promote` | 管理剧情 what-if 分支 |
+| `storyspec branch:create` / `storyspec branch:list` / `storyspec branch:compare` / `storyspec branch:promote` | 管理剧情 what-if 分支；compare 会输出小说风味、读者承诺变化、收益代价、关系线偏移和世界压力节奏 |
 | `storyspec promise:list` / `storyspec promise:check` | 检查读者承诺和 payoff |
 | `storyspec rhythm:init` | 初始化本地抽象节奏配置，只记录结构参数，不导入参考作品正文 |
 | `storyspec tension:chart` | 输出张力曲线 Markdown 或 JSON |

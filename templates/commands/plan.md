@@ -25,7 +25,7 @@ scripts:
 - 澄清记录（如果已运行 `/clarify`）
 - 当前 Genre Preset（如果存在 `spec/presets/current-preset.json`，读取 `.specify/presets/<id>/preset.yaml` 和 `.specify/presets/<id>/commands/plan.md`）
 - Promise / Tension / Rhythm 追踪（如果存在 `spec/tracking/promises.json`、`spec/tracking/tension-curve.json`、`spec/tracking/rhythm-config.json`，用于安排读者承诺、兑现节点、张力曲线和抽象节奏参数）
-- Branch 影响报告（如果存在 `stories/*/branches/*/impact.md`，只作为 what-if 参考，不直接改 main）
+- Branch 影响报告（如果存在 `stories/*/branches/*/impact.md`，只作为 what-if 参考，不直接改 main）。读取时重点比较：这条分支会长成什么小说、读者承诺如何变化、收益与代价、关系线偏移、世界压力显露节奏。
 
 <!-- PLUGIN_HOOK: genre-knowledge-plan -->
 <!-- 插件增强区：知识搜索
@@ -302,6 +302,12 @@ test -f spec/tracking/rhythm-config.json && echo "found" || echo "not-found"
 - 兑现证据：为计划兑现的 promise 标注章节/场景 evidence
 - 张力曲线：明确 tension、emotionalCharge、informationGain、payoff 的阶段变化
 - 风险提示：长期未兑现、重复建立但无推进、高张力低回报的章节必须生成修正任务
+
+### What-if 分支参考
+- 如果存在活跃 `stories/*/branches/*/impact.md`，先摘要每条分支的 What-if 对照卡。
+- 对每条分支说明：小说风味、读者承诺变化、主要收益与代价、关系线偏移、世界压力显露节奏。
+- 未经 `branch:promote --yes` 的分支只能作为候选参考，不得覆盖 main 计划、正文或 canon。
+- 如果计划选择吸收某条分支，必须生成后续人工迁移任务，而不是直接静默改写主线。
 ```
 
 #### 2.6 叙事技术选择

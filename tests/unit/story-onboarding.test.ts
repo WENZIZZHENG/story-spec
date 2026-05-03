@@ -381,4 +381,40 @@ describe('story onboarding', () => {
     expect(result.coCreationEntrypoints.find(entry => entry.id === 'partner')?.command)
       .toBe('storyspec interview demo --focus partner');
   });
+
+  it('surfaces active what-if branches in next navigation', async () => {
+    const { projectRoot, fileSystem } = await createProject();
+    const storyPath = path.join(projectRoot, 'stories', 'demo');
+    await fileSystem.writeFile(path.join(storyPath, 'idea.md'), '# demo');
+    await fileSystem.writeJson(path.join(storyPath, 'branches', '提前揭示身份', 'branch.json'), {
+      id: '提前揭示身份',
+      base: 'main',
+      title: '提前揭示身份',
+      premise: '主角提前暴露身份，换取学院临时信任。',
+      changedScenes: ['scene-001'],
+      changedCanonFacts: ['canon.identity'],
+      impactSummary: '分支将影响 1 个 scene、1 个 canon fact，promote 前必须人工确认影响清单。',
+      status: 'exploring',
+      createdAt: '2026-05-04T00:00:00.000Z'
+    }, { spaces: 2 });
+
+    const result = await getStoryNext({
+      projectRoot,
+      fileSystem,
+      story: 'demo'
+    });
+    const rendered = renderStoryNext(result);
+
+    expect(result.activeBranches).toEqual([
+      expect.objectContaining({
+        id: '提前揭示身份',
+        status: 'exploring',
+        compareCommand: 'storyspec branch:compare 提前揭示身份'
+      })
+    ]);
+    expect(result.actions.map(action => action.command)).toContain('storyspec branch:compare 提前揭示身份');
+    expect(rendered).toContain('活跃 what-if 分支');
+    expect(rendered).toContain('提前揭示身份：exploring');
+    expect(rendered).toContain('storyspec branch:compare 提前揭示身份');
+  });
 });

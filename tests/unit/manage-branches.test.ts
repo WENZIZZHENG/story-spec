@@ -116,4 +116,52 @@ describe('manage branches', () => {
     expect(promoted.branch.status).toBe('accepted');
     await expect(fileSystem.readFile(chapterPath)).resolves.toBe('main 正文');
   });
+
+  it('renders a what-if comparison card that explains the story direction and tradeoffs', async () => {
+    const { projectRoot, fileSystem } = await createProject();
+    const created = await createBranch({
+      projectRoot,
+      fileSystem,
+      story: '001-demo',
+      title: '提前揭示身份',
+      premise: '主角在第一场事故后立刻暴露穿越者和编程施法者身份，换取学院临时信任。',
+      changedScenes: ['scene-001'],
+      changedCanonFacts: ['canon.identity']
+    });
+
+    const compared = await compareBranch({
+      projectRoot,
+      fileSystem,
+      story: '001-demo',
+      branchId: created.branch.id
+    });
+
+    expect(compared.whatIfCard).toMatchObject({
+      flavor: expect.stringContaining('提前'),
+      readerPromiseShift: expect.stringContaining('身份谜题'),
+      tradeoffs: expect.arrayContaining([
+        expect.stringContaining('收益'),
+        expect.stringContaining('代价')
+      ]),
+      relationshipShift: expect.stringContaining('edge.hero-mentor'),
+      worldPressureShift: expect.stringContaining('scene-001')
+    });
+    expect(compared.routeMap).toEqual(expect.arrayContaining([
+      expect.objectContaining({
+        label: '当前主线',
+        status: 'baseline'
+      }),
+      expect.objectContaining({
+        label: 'what-if：提前揭示身份',
+        status: 'exploring',
+        nextCommand: `storyspec branch:promote ${created.branch.id}`
+      })
+    ]));
+    expect(compared.report).toContain('## What-if 对照卡');
+    expect(compared.report).toContain('会长成什么小说');
+    expect(compared.report).toContain('读者承诺变化');
+    expect(compared.report).toContain('关系线偏移');
+    expect(compared.report).toContain('世界压力显露节奏');
+    await expect(fileSystem.readFile(created.impactPath)).resolves.toContain('## What-if 对照卡');
+  });
 });

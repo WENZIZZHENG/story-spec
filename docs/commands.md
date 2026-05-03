@@ -54,6 +54,16 @@ storyspec next
 | `/track` / `/track-init` | 初始化或更新追踪数据 |
 | `/expert` | 进入专家辅助模式 |
 
+## What-if 分支
+
+| 命令 | 用途 |
+| --- | --- |
+| `storyspec branch:create <title>` | 创建一个剧情 what-if，只写入 `stories/*/branches/` |
+| `storyspec branch:compare <branchId>` | 输出 what-if 对照卡，比较小说风味、读者承诺变化、收益代价、关系线偏移和世界压力节奏 |
+| `storyspec branch:promote <branchId>` | 生成或确认 promote 清单；不会自动覆盖 main 正文或 canon |
+
+`storyspec next` 和 `storyspec creative:report` 会提示活跃 exploring 分支，方便你先比较“这条路会长成什么小说”，再决定继续探索、promote 或放弃。
+
 ## 终端维护命令
 
 | 命令 | 用途 |

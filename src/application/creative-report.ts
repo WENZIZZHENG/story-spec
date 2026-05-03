@@ -23,6 +23,10 @@ import {
 } from './workbench-utils.js';
 import { loadAuthorProfile } from './manage-author-profile.js';
 import type { AuthorProfileSummary } from '../domain/author-profile.js';
+import {
+  summarizeActiveBranches,
+  type ActiveBranchSummary
+} from './manage-branches.js';
 
 export interface CreativeReportInput {
   projectRoot: string;
@@ -65,6 +69,7 @@ export interface CreativeReportResult {
   coreElements: StoryCoreElementAssessment[];
   storySkeleton: CreativeReportStorySkeleton;
   funPrompts: CreativeReportFunPrompt[];
+  activeBranches: ActiveBranchSummary[];
   driftIssues: CreativeIntentDriftIssue[];
   cannotFinalize: string[];
   nextActions: string[];
@@ -102,9 +107,15 @@ const buildNextActions = (
   result: Omit<CreativeReportResult, 'nextActions'>
 ): string[] => {
   const actions: string[] = [];
+  const activeBranchAction = result.activeBranches.length > 0
+    ? `比较 what-if：${result.activeBranches[0].compareCommand}`
+    : undefined;
 
   if (!result.hasClarifications) {
     actions.push(`storyspec interview ${result.story}`);
+    if (activeBranchAction) {
+      actions.push(activeBranchAction);
+    }
     actions.push(`storyspec next ${result.story}`);
     return actions;
   }
@@ -116,6 +127,10 @@ const buildNextActions = (
   actions.push(...result.funPrompts.slice(0, 2).map(item =>
     `先确认${item.label}：运行 ${item.command}，或直接回答“${item.prompt}”`
   ));
+
+  if (result.activeBranches.length > 0) {
+    actions.push(activeBranchAction!);
+  }
 
   if (result.driftIssues.length > 0) {
     actions.push('storyspec review --panel continuity');
@@ -231,6 +246,11 @@ export const createCreativeReport = async (
     projectRoot: input.projectRoot,
     fileSystem: input.fileSystem
   });
+  const activeBranches = await summarizeActiveBranches({
+    projectRoot: input.projectRoot,
+    fileSystem: input.fileSystem,
+    story: story.name
+  });
   const storyDriftIssues = drift.issues.filter(issue => issue.story === story.name);
   const confirmed = record?.answers
     .filter(answer =>
@@ -281,6 +301,7 @@ export const createCreativeReport = async (
     coreElements,
     storySkeleton,
     funPrompts,
+    activeBranches,
     driftIssues: storyDriftIssues,
     cannotFinalize: summary.cannotFinalize
   };
@@ -327,6 +348,13 @@ export const renderCreativeReport = (result: CreativeReportResult): string => [
   ...(result.funPrompts.length > 0
     ? result.funPrompts.map(item => `- ${item.label}：${item.prompt}（${item.command}）`)
     : ['- 暂无明显乐趣缺口；可以进入预览或审稿。']),
+  '',
+  '活跃 what-if 分支：',
+  ...(result.activeBranches.length > 0
+    ? result.activeBranches.map(branch =>
+      `- ${branch.id}：会长成 ${branch.flavor}（${branch.compareCommand}）`
+    )
+    : ['- 暂无。']),
   '',
   '核心要素面板：',
   ...(result.coreElements.length > 0

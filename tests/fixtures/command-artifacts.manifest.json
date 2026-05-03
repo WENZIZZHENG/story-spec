@@ -87,7 +87,7 @@
     },
     {
       "path": "auggie/.augment/commands/plan.md",
-      "sha256": "7f5ef3bdcfee0d6cb81bf8ac7b2ef6736f7f819ffaaf3f04f49e8289e7b518bb",
+      "sha256": "48020e141a05724216ad1125056ff7541e77a304e420b945702e5fc9a72e7d0e",
       "commandSource": {
         "command": "plan",
         "kind": "legacy-template",
@@ -662,7 +662,7 @@
     },
     {
       "path": "claude/.claude/commands/storyspec.plan.md",
-      "sha256": "8996ac950b4fefd6a970aa8a39ef9771f85fecb9eeb07544b87be4e2c1e951a5",
+      "sha256": "373c82ab49c602edd9ba2276dc96a4a2cbf1e6c75c6bfd8726b9923a660f2d60",
       "commandSource": {
         "command": "plan",
         "kind": "legacy-template",
@@ -1237,7 +1237,7 @@
     },
     {
       "path": "codebuddy/.codebuddy/commands/plan.md",
-      "sha256": "7f5ef3bdcfee0d6cb81bf8ac7b2ef6736f7f819ffaaf3f04f49e8289e7b518bb",
+      "sha256": "48020e141a05724216ad1125056ff7541e77a304e420b945702e5fc9a72e7d0e",
       "commandSource": {
         "command": "plan",
         "kind": "legacy-template",
@@ -1812,7 +1812,7 @@
     },
     {
       "path": "codex/.codex/prompts/storyspec-plan.md",
-      "sha256": "7f5ef3bdcfee0d6cb81bf8ac7b2ef6736f7f819ffaaf3f04f49e8289e7b518bb",
+      "sha256": "48020e141a05724216ad1125056ff7541e77a304e420b945702e5fc9a72e7d0e",
       "commandSource": {
         "command": "plan",
         "kind": "legacy-template",
@@ -2387,7 +2387,7 @@
     },
     {
       "path": "continue-check/.continue/prompts/plan.md",
-      "sha256": "a1546316eee35d15fd6329d3988f449de5f611f7ddc0f772134aebd25ecbf2d1",
+      "sha256": "57189318b7b7b6e4f91c16c51db2ddaf17bfa463b7dcb576216bdb80191b02ce",
       "commandSource": {
         "command": "plan",
         "kind": "legacy-template",
@@ -2962,7 +2962,7 @@
     },
     {
       "path": "copilot/.github/prompts/plan.prompt.md",
-      "sha256": "7db2241d68c231ad97bb9d6c45373fa8fc8da191045abbc075efef00646b0dcc",
+      "sha256": "6c1086c33264929d0e4f0a4bad57b3d509b5a4e55de58b13576c8951ea6aeb2e",
       "commandSource": {
         "command": "plan",
         "kind": "legacy-template",
@@ -3537,7 +3537,7 @@
     },
     {
       "path": "cursor/.cursor/commands/plan.md",
-      "sha256": "7f5ef3bdcfee0d6cb81bf8ac7b2ef6736f7f819ffaaf3f04f49e8289e7b518bb",
+      "sha256": "48020e141a05724216ad1125056ff7541e77a304e420b945702e5fc9a72e7d0e",
       "commandSource": {
         "command": "plan",
         "kind": "legacy-template",
@@ -4112,7 +4112,7 @@
     },
     {
       "path": "gemini/.gemini/commands/storyspec/plan.toml",
-      "sha256": "7c1821a875a8b7fadd87e92bcf95dae98441d070739f400087f73eca25d1d67f",
+      "sha256": "1fbacc6c91da290fe86a7c0e5af224be72aa7379be3e43d456c59c7f0cc04f5a",
       "commandSource": {
         "command": "plan",
         "kind": "legacy-template",
@@ -4687,7 +4687,7 @@
     },
     {
       "path": "generic/.specify/commands/plan.md",
-      "sha256": "5960b93a54c82b3f07201bfb4bf5f25faa53f854005d913e95b7c72daaddda4b",
+      "sha256": "b2e3c2a242c4193fcc997c91b4bd5c2ed8bec9b6bd4f8585c452b5e055270d36",
       "commandSource": {
         "command": "plan",
         "kind": "legacy-template",
@@ -5262,7 +5262,7 @@
     },
     {
       "path": "kilocode/.kilocode/workflows/plan.md",
-      "sha256": "9cf33f599ba1fb810e13e87dc021c3a50f6551cd2ecfcc99193d2c320df9bdd0",
+      "sha256": "6ef724794b7454f803d5d4d954887ffee34f65f01b987ef7c6b4f773638b000e",
       "commandSource": {
         "command": "plan",
         "kind": "legacy-template",
@@ -5837,7 +5837,7 @@
     },
     {
       "path": "opencode/.opencode/command/plan.md",
-      "sha256": "68bffea1b8d02430ebeaacec254ffb5b76176ff639b523f1646015b2dfba43c4",
+      "sha256": "13a701e34a6912ab0000411b9ef4e3e862fc0e36be512f35a9fe981d61704ab9",
       "commandSource": {
         "command": "plan",
         "kind": "legacy-template",
@@ -6412,7 +6412,7 @@
     },
     {
       "path": "q/.amazonq/prompts/plan.md",
-      "sha256": "7db2241d68c231ad97bb9d6c45373fa8fc8da191045abbc075efef00646b0dcc",
+      "sha256": "6c1086c33264929d0e4f0a4bad57b3d509b5a4e55de58b13576c8951ea6aeb2e",
       "commandSource": {
         "command": "plan",
         "kind": "legacy-template",
@@ -6987,7 +6987,7 @@
     },
     {
       "path": "qwen/.qwen/commands/plan.toml",
-      "sha256": "7c1821a875a8b7fadd87e92bcf95dae98441d070739f400087f73eca25d1d67f",
+      "sha256": "1fbacc6c91da290fe86a7c0e5af224be72aa7379be3e43d456c59c7f0cc04f5a",
       "commandSource": {
         "command": "plan",
         "kind": "legacy-template",
@@ -7562,7 +7562,7 @@
     },
     {
       "path": "roocode/.roo/commands/plan.md",
-      "sha256": "9cf33f599ba1fb810e13e87dc021c3a50f6551cd2ecfcc99193d2c320df9bdd0",
+      "sha256": "6ef724794b7454f803d5d4d954887ffee34f65f01b987ef7c6b4f773638b000e",
       "commandSource": {
         "command": "plan",
         "kind": "legacy-template",
@@ -8473,7 +8473,7 @@
     },
     {
       "path": "windsurf/.windsurf/workflows/plan.md",
-      "sha256": "9cf33f599ba1fb810e13e87dc021c3a50f6551cd2ecfcc99193d2c320df9bdd0",
+      "sha256": "6ef724794b7454f803d5d4d954887ffee34f65f01b987ef7c6b4f773638b000e",
       "commandSource": {
         "command": "plan",
         "kind": "legacy-template",

@@ -354,4 +354,42 @@ describe('creative report', () => {
       })
     ]));
   });
+
+  it('shows active what-if branches as creative directions rather than hidden files', async () => {
+    const projectRoot = path.join(os.tmpdir(), 'memory-novel-creative-report-branches');
+    const fileSystem = new MemoryFileSystem(projectRoot);
+    const storyPath = path.join(projectRoot, 'stories', 'branch-demo');
+
+    await fileSystem.writeFile(path.join(storyPath, 'idea.md'), '# branch demo');
+    await fileSystem.writeJson(path.join(storyPath, 'branches', '提前揭示身份', 'branch.json'), {
+      id: '提前揭示身份',
+      base: 'main',
+      title: '提前揭示身份',
+      premise: '主角在第一场事故后立刻暴露穿越者和编程施法者身份，换取学院临时信任。',
+      changedScenes: ['scene-001'],
+      changedCanonFacts: ['canon.identity'],
+      impactSummary: '分支将影响 1 个 scene、1 个 canon fact，promote 前必须人工确认影响清单。',
+      status: 'exploring',
+      createdAt: '2026-05-04T00:00:00.000Z'
+    }, { spaces: 2 });
+
+    const result = await createCreativeReport({
+      projectRoot,
+      fileSystem,
+      story: 'branch-demo'
+    });
+    const rendered = renderCreativeReport(result);
+
+    expect(result.activeBranches).toEqual([
+      expect.objectContaining({
+        id: '提前揭示身份',
+        flavor: expect.stringContaining('提前'),
+        compareCommand: 'storyspec branch:compare 提前揭示身份'
+      })
+    ]);
+    expect(result.nextActions).toContain('比较 what-if：storyspec branch:compare 提前揭示身份');
+    expect(rendered).toContain('活跃 what-if 分支');
+    expect(rendered).toContain('会长成');
+    expect(rendered).toContain('storyspec branch:compare 提前揭示身份');
+  });
 });

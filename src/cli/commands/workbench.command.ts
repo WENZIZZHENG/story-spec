@@ -489,7 +489,7 @@ export const registerWorkbenchCommand = (program: Command): void => {
     .argument('<branchId>', '分支 ID')
     .option('--story <story>', '故事目录名或路径，默认使用最近更新的 stories/*')
     .option('--json', '输出 JSON，便于自动化读取')
-    .description('输出分支对 scene、canon、promise、relationship 的影响报告')
+    .description('输出分支 what-if 对照卡和 scene/canon/promise/relationship 影响报告')
     .action(async (branchId, commandOptions) => {
       try {
         const projectRoot = await ensureProjectRoot();
