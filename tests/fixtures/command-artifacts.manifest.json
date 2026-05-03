@@ -23,7 +23,7 @@
   "files": [
     {
       "path": "auggie/.augment/commands/analyze.md",
-      "sha256": "afe5dfaf28409b7f20303618cff95ec7bfc34b7c97d396569c3b2291043f921f",
+      "sha256": "d5db88a67d7b1b4b0206c26eca2d4c8289d4c7eb7bb3603c5cd22aa5047fd2ac",
       "commandSource": {
         "command": "analyze",
         "kind": "command-spec",
@@ -42,7 +42,7 @@
     },
     {
       "path": "auggie/.augment/commands/clarify.md",
-      "sha256": "d1e27654c50d16de065193650cb1f0ea16c88b0ff35ed7da38c891f96277f80a",
+      "sha256": "839b93ad039b76508e227e204dd7e435aafbde1bac544a2eed2bec0afc42ec39",
       "commandSource": {
         "command": "clarify",
         "kind": "legacy-template",
@@ -51,7 +51,7 @@
     },
     {
       "path": "auggie/.augment/commands/constitution.md",
-      "sha256": "4718db23cd21caa6ea8d99a1d6da260ad728c80b729e9c26c1b429d80bcc9c48",
+      "sha256": "0837cbcdbfd496d85c0d3eb1bc06364e649b6cfb403c9881aea75bbc6b62c742",
       "commandSource": {
         "command": "constitution",
         "kind": "legacy-template",
@@ -60,7 +60,7 @@
     },
     {
       "path": "auggie/.augment/commands/context-pack.md",
-      "sha256": "e7fb9d7c2ca9391a02166e2ce4a56c04e7dc850bec87affe996b473b6c898caf",
+      "sha256": "47b354148583acbeb6dce50c1226827f6e419239e068ad0626427f029251b9a0",
       "commandSource": {
         "command": "context-pack",
         "kind": "legacy-template",
@@ -69,7 +69,7 @@
     },
     {
       "path": "auggie/.augment/commands/expert.md",
-      "sha256": "0eef712510dc00b5aa5376719cbdf4348adfb6cc417025558c9115829d24909b",
+      "sha256": "2cf01d5fecce2b61b3a353fa534b9b2310c00eb1845d59464f2e061a4ce16daf",
       "commandSource": {
         "command": "expert",
         "kind": "legacy-template",
@@ -78,7 +78,7 @@
     },
     {
       "path": "auggie/.augment/commands/plan.md",
-      "sha256": "59cbc48ed4958b9b21b64a859826254f90f90a72e4091e87515b1f396abf519d",
+      "sha256": "1378792766827f3a27f43b525d5d66174e80aaf5dfed694980fa082fe8b976a1",
       "commandSource": {
         "command": "plan",
         "kind": "legacy-template",
@@ -87,7 +87,7 @@
     },
     {
       "path": "auggie/.augment/commands/relations.md",
-      "sha256": "00968c6e7173bd13b0496abf3c397fceb57e886f7bd2452f04945372d83b2376",
+      "sha256": "b3e1e88dd60735c3b0036f2ada0c4d9b20dcf7c089556e5890ff0b3c9e0f22d1",
       "commandSource": {
         "command": "relations",
         "kind": "legacy-template",
@@ -96,7 +96,7 @@
     },
     {
       "path": "auggie/.augment/commands/review.md",
-      "sha256": "ac0d1d5b24f892dedd4c6488a726966d8d3e046f89720e2561a8a962f740bfbf",
+      "sha256": "a84ab9d85f16570242c2f0b0287dae22dfd94d4ca1ccbe32b437ae6756f2ea49",
       "commandSource": {
         "command": "review",
         "kind": "legacy-template",
@@ -105,7 +105,7 @@
     },
     {
       "path": "auggie/.augment/commands/scene.md",
-      "sha256": "038f174f4b961906f263569edb1c82c3814f119a37e34bd771674ee2f0102f81",
+      "sha256": "abbfb26b343819a7e599e21e0cdaa2858e82a2d9e79e17256cb76dfa12b4fd74",
       "commandSource": {
         "command": "scene",
         "kind": "legacy-template",
@@ -114,7 +114,7 @@
     },
     {
       "path": "auggie/.augment/commands/specify.md",
-      "sha256": "874203cba034136c31beb3c9edda61897c172e8b69873df48521ebea734c4d1b",
+      "sha256": "b96d7f33095c92d74362b81ae13766c56c812bde620c50972392790c95e5e929",
       "commandSource": {
         "command": "specify",
         "kind": "legacy-template",
@@ -132,7 +132,7 @@
     },
     {
       "path": "auggie/.augment/commands/timeline.md",
-      "sha256": "025d94d18f0a8c7324d446ca870d67d5f38b5c412d487b9377f3f80c324b3fcb",
+      "sha256": "20700080a1de8945761a8022bf97c2417faa9b9f8a0be3444e7aaa43cc4a05a6",
       "commandSource": {
         "command": "timeline",
         "kind": "legacy-template",
@@ -150,7 +150,7 @@
     },
     {
       "path": "auggie/.augment/commands/track.md",
-      "sha256": "82b20dccb77f6938421b42dda97bec9e1cf5ba32a63f9f595046f619c2333852",
+      "sha256": "86295046a9cfff2b5926e1d6151887db0566961a6628832006e1e46f8f4a73e5",
       "commandSource": {
         "command": "track",
         "kind": "legacy-template",
@@ -159,7 +159,7 @@
     },
     {
       "path": "auggie/.augment/commands/write.md",
-      "sha256": "c3e0286832732dfb609b9011c5642f05b3bd9ebd2af2de873bc6506452a484e4",
+      "sha256": "319da766eebd316737de5077e02cca57ec00a67d4470e57fdacc39dd65ea3eda",
       "commandSource": {
         "command": "write",
         "kind": "command-spec",
@@ -272,18 +272,6 @@
       "sha256": "06255c106d3ee5a1a5c84afcc056a370589bc3bc8577d7e42a7934bfc7b9bede"
     },
     {
-      "path": "auggie/.specify/scripts/runtime/application/check-writing-state.js",
-      "sha256": "3d966a5256cefed94cc1cb9bde8a55c4ddac6d4efb146d4a0dbc6192b02dedb8"
-    },
-    {
-      "path": "auggie/.specify/scripts/runtime/domain/story-artifact.js",
-      "sha256": "010032f357a3154a9e939db41baa9b47bf72d20a7b4d3c1dba65c25c2af2d603"
-    },
-    {
-      "path": "auggie/.specify/scripts/runtime/script-runtime.js",
-      "sha256": "6ddcafa9fca67371f159c0feb8df4d0eda5cda0e80d45bcb11713f43db99ba6c"
-    },
-    {
       "path": "auggie/.specify/templates/agent/agent-contract.md",
       "sha256": "7ee3a6c29219db3f8bd104568199931b34c5e65424cff5dd46b8e130e7d41541"
     },
@@ -318,6 +306,34 @@
     {
       "path": "auggie/.specify/templates/clarification/cozy-adventure.yaml",
       "sha256": "aba3282c099929f2f3c7f8ac1413666f1f9e8e161742e205c5611d61eec0fe52"
+    },
+    {
+      "path": "auggie/.specify/templates/clarification/examples/civilization-threat.yaml",
+      "sha256": "dd4a73a7e307734e94882629438d7015fc7606574bc4f1f64caed2aa04c88237"
+    },
+    {
+      "path": "auggie/.specify/templates/clarification/examples/core.yaml",
+      "sha256": "22038ad0d9f240a86235359d4925bbaca2ffab414ef5515bafba44786f7f9825"
+    },
+    {
+      "path": "auggie/.specify/templates/clarification/examples/cozy-adventure.yaml",
+      "sha256": "ac14fd9b83789d42b5a04e097e07e2668484cc57042685ba75cce1f50ec841f6"
+    },
+    {
+      "path": "auggie/.specify/templates/clarification/examples/kingdom-building-support.yaml",
+      "sha256": "b24ed9edf434847dd0f121cef51a89b4f227dde1d6615f2cae2a379995683497"
+    },
+    {
+      "path": "auggie/.specify/templates/clarification/examples/magic-system.yaml",
+      "sha256": "e4a88d36b513419a753b08d584f64e63afe9688e2b1b48eefcbcd54bbd56716f"
+    },
+    {
+      "path": "auggie/.specify/templates/clarification/examples/portal-fantasy.yaml",
+      "sha256": "f861fff4ffcf7c431a20d661fd6b9bd0f5283d4f369f95ea00d4fe18a1b61ef4"
+    },
+    {
+      "path": "auggie/.specify/templates/clarification/examples/slow-burn-romance.yaml",
+      "sha256": "ec07909e39ef980fd1fb5278e638548f55459c8c12661cc25773c695a4d29aa6"
     },
     {
       "path": "auggie/.specify/templates/clarification/kingdom-building-support.yaml",
@@ -573,7 +589,7 @@
     },
     {
       "path": "claude/.claude/commands/novel.analyze.md",
-      "sha256": "1d914a0b2bd4a8a784a5a0b939d977f792a1958a198d642724e6cf3cbf8dbe08",
+      "sha256": "62ed23bf18f81065cb0272a5664428f9ab06506ec0b1a879cbfd9c0453b42b86",
       "commandSource": {
         "command": "analyze",
         "kind": "command-spec",
@@ -592,7 +608,7 @@
     },
     {
       "path": "claude/.claude/commands/novel.clarify.md",
-      "sha256": "4bba0862943abd4d919529134808ac8b62acd5efd239da8218754991a2af19f9",
+      "sha256": "768a7ba5d6e57a2852737325e9df57cd49a95cf5da95c3da508e00584bd910ca",
       "commandSource": {
         "command": "clarify",
         "kind": "legacy-template",
@@ -601,7 +617,7 @@
     },
     {
       "path": "claude/.claude/commands/novel.constitution.md",
-      "sha256": "4c3318b9cd49ac5a9ce56ff0b2b4b5a2d862d2966ed039b63e1b5d78b68b45b5",
+      "sha256": "6f658eb4f19cd771493e6ced2d50adb5d6fd2bb84463140afef1a1d821807596",
       "commandSource": {
         "command": "constitution",
         "kind": "legacy-template",
@@ -610,7 +626,7 @@
     },
     {
       "path": "claude/.claude/commands/novel.context-pack.md",
-      "sha256": "9cf248b72a7f43f88973eb8375ec8fe60dd6760ed3390627601a8d0197461a47",
+      "sha256": "d9fd7b68dfd0e4f9f0d4f251f0ee6c2bf2b3553dfd92c929322503b90d58cad7",
       "commandSource": {
         "command": "context-pack",
         "kind": "legacy-template",
@@ -619,7 +635,7 @@
     },
     {
       "path": "claude/.claude/commands/novel.expert.md",
-      "sha256": "4a1db0acdb076d9e710059f25993df0d95ecdcd01550976b0e13c2847f5ba556",
+      "sha256": "e20b3a8ea738a050899f55f9ec67443d7308063ae55412783e52f5dbc44b96bd",
       "commandSource": {
         "command": "expert",
         "kind": "legacy-template",
@@ -628,7 +644,7 @@
     },
     {
       "path": "claude/.claude/commands/novel.plan.md",
-      "sha256": "76caefcf21d08afe83f4d8a956322b1e18397e62c0fa5a4ed84b4431b2d0360d",
+      "sha256": "0bc6f7d2af70ccc397150eefa29e76fd6f2e9a634bd5e342d19524c5e78fcdc8",
       "commandSource": {
         "command": "plan",
         "kind": "legacy-template",
@@ -637,7 +653,7 @@
     },
     {
       "path": "claude/.claude/commands/novel.relations.md",
-      "sha256": "908e490e029b3222276784ca7fdcfe26b86a333f2b4c705015d02d560469afb1",
+      "sha256": "e753c1d2ec5ffdc1162b68b82c1a615feac085739433f3b9acfd0f99e5121dd6",
       "commandSource": {
         "command": "relations",
         "kind": "legacy-template",
@@ -646,7 +662,7 @@
     },
     {
       "path": "claude/.claude/commands/novel.review.md",
-      "sha256": "4b10c647dec3910cccf4bca77dc15e46b43bfa9583224d887cd29fa026a060db",
+      "sha256": "8f65ffacdd4dadcac0cfce554ee28706a04ec3739ee5e5bdb78f24c51576a150",
       "commandSource": {
         "command": "review",
         "kind": "legacy-template",
@@ -655,7 +671,7 @@
     },
     {
       "path": "claude/.claude/commands/novel.scene.md",
-      "sha256": "cf19ab400120091ce7b3f4010284335ca1179b574e3f7f9bd866770e916cfe06",
+      "sha256": "bda9c6fcb7e8762dd04fb56591994ecdc596b6f4e87930f50af611936ce3fd58",
       "commandSource": {
         "command": "scene",
         "kind": "legacy-template",
@@ -664,7 +680,7 @@
     },
     {
       "path": "claude/.claude/commands/novel.specify.md",
-      "sha256": "3940d86e83ec192030d2e8a471345d9a36caca6ed103746e6f78660efb9d1157",
+      "sha256": "e2ffe80a494aeb2aab55175f98f089fb119ef7569d66fa468b1aea2149ef0cb6",
       "commandSource": {
         "command": "specify",
         "kind": "legacy-template",
@@ -682,7 +698,7 @@
     },
     {
       "path": "claude/.claude/commands/novel.timeline.md",
-      "sha256": "f74aad02f8461e9f212f1e5c143ebb0543a4f7be67f13cb095ef57d57180dc9a",
+      "sha256": "ea4a876c02e65939418db721648e5ee845889fd7a9b40d1cff144632147d6537",
       "commandSource": {
         "command": "timeline",
         "kind": "legacy-template",
@@ -700,7 +716,7 @@
     },
     {
       "path": "claude/.claude/commands/novel.track.md",
-      "sha256": "626dc83f32b3f44e20be183531d12eae2b05806bb4dcc6688d7f5c199f1089da",
+      "sha256": "f33ddcdb2c0891b9041cb3e87451c93d9d4edab54dcb62d9b4a2a27abea96ce3",
       "commandSource": {
         "command": "track",
         "kind": "legacy-template",
@@ -709,7 +725,7 @@
     },
     {
       "path": "claude/.claude/commands/novel.write.md",
-      "sha256": "88831de5bb2ff8042e8ec0f4c5bf082d59633135f17bcae7bcfd8edde1cf4092",
+      "sha256": "3e8e250e26a4b76b32c1e8abb6bc9d977d2588578595acf5b18f2dda83e1930d",
       "commandSource": {
         "command": "write",
         "kind": "command-spec",
@@ -822,18 +838,6 @@
       "sha256": "06255c106d3ee5a1a5c84afcc056a370589bc3bc8577d7e42a7934bfc7b9bede"
     },
     {
-      "path": "claude/.specify/scripts/runtime/application/check-writing-state.js",
-      "sha256": "3d966a5256cefed94cc1cb9bde8a55c4ddac6d4efb146d4a0dbc6192b02dedb8"
-    },
-    {
-      "path": "claude/.specify/scripts/runtime/domain/story-artifact.js",
-      "sha256": "010032f357a3154a9e939db41baa9b47bf72d20a7b4d3c1dba65c25c2af2d603"
-    },
-    {
-      "path": "claude/.specify/scripts/runtime/script-runtime.js",
-      "sha256": "6ddcafa9fca67371f159c0feb8df4d0eda5cda0e80d45bcb11713f43db99ba6c"
-    },
-    {
       "path": "claude/.specify/templates/agent/agent-contract.md",
       "sha256": "7ee3a6c29219db3f8bd104568199931b34c5e65424cff5dd46b8e130e7d41541"
     },
@@ -868,6 +872,34 @@
     {
       "path": "claude/.specify/templates/clarification/cozy-adventure.yaml",
       "sha256": "aba3282c099929f2f3c7f8ac1413666f1f9e8e161742e205c5611d61eec0fe52"
+    },
+    {
+      "path": "claude/.specify/templates/clarification/examples/civilization-threat.yaml",
+      "sha256": "dd4a73a7e307734e94882629438d7015fc7606574bc4f1f64caed2aa04c88237"
+    },
+    {
+      "path": "claude/.specify/templates/clarification/examples/core.yaml",
+      "sha256": "22038ad0d9f240a86235359d4925bbaca2ffab414ef5515bafba44786f7f9825"
+    },
+    {
+      "path": "claude/.specify/templates/clarification/examples/cozy-adventure.yaml",
+      "sha256": "ac14fd9b83789d42b5a04e097e07e2668484cc57042685ba75cce1f50ec841f6"
+    },
+    {
+      "path": "claude/.specify/templates/clarification/examples/kingdom-building-support.yaml",
+      "sha256": "b24ed9edf434847dd0f121cef51a89b4f227dde1d6615f2cae2a379995683497"
+    },
+    {
+      "path": "claude/.specify/templates/clarification/examples/magic-system.yaml",
+      "sha256": "e4a88d36b513419a753b08d584f64e63afe9688e2b1b48eefcbcd54bbd56716f"
+    },
+    {
+      "path": "claude/.specify/templates/clarification/examples/portal-fantasy.yaml",
+      "sha256": "f861fff4ffcf7c431a20d661fd6b9bd0f5283d4f369f95ea00d4fe18a1b61ef4"
+    },
+    {
+      "path": "claude/.specify/templates/clarification/examples/slow-burn-romance.yaml",
+      "sha256": "ec07909e39ef980fd1fb5278e638548f55459c8c12661cc25773c695a4d29aa6"
     },
     {
       "path": "claude/.specify/templates/clarification/kingdom-building-support.yaml",
@@ -1123,7 +1155,7 @@
     },
     {
       "path": "codebuddy/.codebuddy/commands/analyze.md",
-      "sha256": "afe5dfaf28409b7f20303618cff95ec7bfc34b7c97d396569c3b2291043f921f",
+      "sha256": "d5db88a67d7b1b4b0206c26eca2d4c8289d4c7eb7bb3603c5cd22aa5047fd2ac",
       "commandSource": {
         "command": "analyze",
         "kind": "command-spec",
@@ -1142,7 +1174,7 @@
     },
     {
       "path": "codebuddy/.codebuddy/commands/clarify.md",
-      "sha256": "d1e27654c50d16de065193650cb1f0ea16c88b0ff35ed7da38c891f96277f80a",
+      "sha256": "839b93ad039b76508e227e204dd7e435aafbde1bac544a2eed2bec0afc42ec39",
       "commandSource": {
         "command": "clarify",
         "kind": "legacy-template",
@@ -1151,7 +1183,7 @@
     },
     {
       "path": "codebuddy/.codebuddy/commands/constitution.md",
-      "sha256": "4718db23cd21caa6ea8d99a1d6da260ad728c80b729e9c26c1b429d80bcc9c48",
+      "sha256": "0837cbcdbfd496d85c0d3eb1bc06364e649b6cfb403c9881aea75bbc6b62c742",
       "commandSource": {
         "command": "constitution",
         "kind": "legacy-template",
@@ -1160,7 +1192,7 @@
     },
     {
       "path": "codebuddy/.codebuddy/commands/context-pack.md",
-      "sha256": "e7fb9d7c2ca9391a02166e2ce4a56c04e7dc850bec87affe996b473b6c898caf",
+      "sha256": "47b354148583acbeb6dce50c1226827f6e419239e068ad0626427f029251b9a0",
       "commandSource": {
         "command": "context-pack",
         "kind": "legacy-template",
@@ -1169,7 +1201,7 @@
     },
     {
       "path": "codebuddy/.codebuddy/commands/expert.md",
-      "sha256": "0eef712510dc00b5aa5376719cbdf4348adfb6cc417025558c9115829d24909b",
+      "sha256": "2cf01d5fecce2b61b3a353fa534b9b2310c00eb1845d59464f2e061a4ce16daf",
       "commandSource": {
         "command": "expert",
         "kind": "legacy-template",
@@ -1178,7 +1210,7 @@
     },
     {
       "path": "codebuddy/.codebuddy/commands/plan.md",
-      "sha256": "59cbc48ed4958b9b21b64a859826254f90f90a72e4091e87515b1f396abf519d",
+      "sha256": "1378792766827f3a27f43b525d5d66174e80aaf5dfed694980fa082fe8b976a1",
       "commandSource": {
         "command": "plan",
         "kind": "legacy-template",
@@ -1187,7 +1219,7 @@
     },
     {
       "path": "codebuddy/.codebuddy/commands/relations.md",
-      "sha256": "00968c6e7173bd13b0496abf3c397fceb57e886f7bd2452f04945372d83b2376",
+      "sha256": "b3e1e88dd60735c3b0036f2ada0c4d9b20dcf7c089556e5890ff0b3c9e0f22d1",
       "commandSource": {
         "command": "relations",
         "kind": "legacy-template",
@@ -1196,7 +1228,7 @@
     },
     {
       "path": "codebuddy/.codebuddy/commands/review.md",
-      "sha256": "ac0d1d5b24f892dedd4c6488a726966d8d3e046f89720e2561a8a962f740bfbf",
+      "sha256": "a84ab9d85f16570242c2f0b0287dae22dfd94d4ca1ccbe32b437ae6756f2ea49",
       "commandSource": {
         "command": "review",
         "kind": "legacy-template",
@@ -1205,7 +1237,7 @@
     },
     {
       "path": "codebuddy/.codebuddy/commands/scene.md",
-      "sha256": "038f174f4b961906f263569edb1c82c3814f119a37e34bd771674ee2f0102f81",
+      "sha256": "abbfb26b343819a7e599e21e0cdaa2858e82a2d9e79e17256cb76dfa12b4fd74",
       "commandSource": {
         "command": "scene",
         "kind": "legacy-template",
@@ -1214,7 +1246,7 @@
     },
     {
       "path": "codebuddy/.codebuddy/commands/specify.md",
-      "sha256": "874203cba034136c31beb3c9edda61897c172e8b69873df48521ebea734c4d1b",
+      "sha256": "b96d7f33095c92d74362b81ae13766c56c812bde620c50972392790c95e5e929",
       "commandSource": {
         "command": "specify",
         "kind": "legacy-template",
@@ -1232,7 +1264,7 @@
     },
     {
       "path": "codebuddy/.codebuddy/commands/timeline.md",
-      "sha256": "025d94d18f0a8c7324d446ca870d67d5f38b5c412d487b9377f3f80c324b3fcb",
+      "sha256": "20700080a1de8945761a8022bf97c2417faa9b9f8a0be3444e7aaa43cc4a05a6",
       "commandSource": {
         "command": "timeline",
         "kind": "legacy-template",
@@ -1250,7 +1282,7 @@
     },
     {
       "path": "codebuddy/.codebuddy/commands/track.md",
-      "sha256": "82b20dccb77f6938421b42dda97bec9e1cf5ba32a63f9f595046f619c2333852",
+      "sha256": "86295046a9cfff2b5926e1d6151887db0566961a6628832006e1e46f8f4a73e5",
       "commandSource": {
         "command": "track",
         "kind": "legacy-template",
@@ -1259,7 +1291,7 @@
     },
     {
       "path": "codebuddy/.codebuddy/commands/write.md",
-      "sha256": "c3e0286832732dfb609b9011c5642f05b3bd9ebd2af2de873bc6506452a484e4",
+      "sha256": "319da766eebd316737de5077e02cca57ec00a67d4470e57fdacc39dd65ea3eda",
       "commandSource": {
         "command": "write",
         "kind": "command-spec",
@@ -1372,18 +1404,6 @@
       "sha256": "06255c106d3ee5a1a5c84afcc056a370589bc3bc8577d7e42a7934bfc7b9bede"
     },
     {
-      "path": "codebuddy/.specify/scripts/runtime/application/check-writing-state.js",
-      "sha256": "3d966a5256cefed94cc1cb9bde8a55c4ddac6d4efb146d4a0dbc6192b02dedb8"
-    },
-    {
-      "path": "codebuddy/.specify/scripts/runtime/domain/story-artifact.js",
-      "sha256": "010032f357a3154a9e939db41baa9b47bf72d20a7b4d3c1dba65c25c2af2d603"
-    },
-    {
-      "path": "codebuddy/.specify/scripts/runtime/script-runtime.js",
-      "sha256": "6ddcafa9fca67371f159c0feb8df4d0eda5cda0e80d45bcb11713f43db99ba6c"
-    },
-    {
       "path": "codebuddy/.specify/templates/agent/agent-contract.md",
       "sha256": "7ee3a6c29219db3f8bd104568199931b34c5e65424cff5dd46b8e130e7d41541"
     },
@@ -1418,6 +1438,34 @@
     {
       "path": "codebuddy/.specify/templates/clarification/cozy-adventure.yaml",
       "sha256": "aba3282c099929f2f3c7f8ac1413666f1f9e8e161742e205c5611d61eec0fe52"
+    },
+    {
+      "path": "codebuddy/.specify/templates/clarification/examples/civilization-threat.yaml",
+      "sha256": "dd4a73a7e307734e94882629438d7015fc7606574bc4f1f64caed2aa04c88237"
+    },
+    {
+      "path": "codebuddy/.specify/templates/clarification/examples/core.yaml",
+      "sha256": "22038ad0d9f240a86235359d4925bbaca2ffab414ef5515bafba44786f7f9825"
+    },
+    {
+      "path": "codebuddy/.specify/templates/clarification/examples/cozy-adventure.yaml",
+      "sha256": "ac14fd9b83789d42b5a04e097e07e2668484cc57042685ba75cce1f50ec841f6"
+    },
+    {
+      "path": "codebuddy/.specify/templates/clarification/examples/kingdom-building-support.yaml",
+      "sha256": "b24ed9edf434847dd0f121cef51a89b4f227dde1d6615f2cae2a379995683497"
+    },
+    {
+      "path": "codebuddy/.specify/templates/clarification/examples/magic-system.yaml",
+      "sha256": "e4a88d36b513419a753b08d584f64e63afe9688e2b1b48eefcbcd54bbd56716f"
+    },
+    {
+      "path": "codebuddy/.specify/templates/clarification/examples/portal-fantasy.yaml",
+      "sha256": "f861fff4ffcf7c431a20d661fd6b9bd0f5283d4f369f95ea00d4fe18a1b61ef4"
+    },
+    {
+      "path": "codebuddy/.specify/templates/clarification/examples/slow-burn-romance.yaml",
+      "sha256": "ec07909e39ef980fd1fb5278e638548f55459c8c12661cc25773c695a4d29aa6"
     },
     {
       "path": "codebuddy/.specify/templates/clarification/kingdom-building-support.yaml",
@@ -1673,7 +1721,7 @@
     },
     {
       "path": "codex/.codex/prompts/novel-analyze.md",
-      "sha256": "afe5dfaf28409b7f20303618cff95ec7bfc34b7c97d396569c3b2291043f921f",
+      "sha256": "d5db88a67d7b1b4b0206c26eca2d4c8289d4c7eb7bb3603c5cd22aa5047fd2ac",
       "commandSource": {
         "command": "analyze",
         "kind": "command-spec",
@@ -1692,7 +1740,7 @@
     },
     {
       "path": "codex/.codex/prompts/novel-clarify.md",
-      "sha256": "d1e27654c50d16de065193650cb1f0ea16c88b0ff35ed7da38c891f96277f80a",
+      "sha256": "839b93ad039b76508e227e204dd7e435aafbde1bac544a2eed2bec0afc42ec39",
       "commandSource": {
         "command": "clarify",
         "kind": "legacy-template",
@@ -1701,7 +1749,7 @@
     },
     {
       "path": "codex/.codex/prompts/novel-constitution.md",
-      "sha256": "4718db23cd21caa6ea8d99a1d6da260ad728c80b729e9c26c1b429d80bcc9c48",
+      "sha256": "0837cbcdbfd496d85c0d3eb1bc06364e649b6cfb403c9881aea75bbc6b62c742",
       "commandSource": {
         "command": "constitution",
         "kind": "legacy-template",
@@ -1710,7 +1758,7 @@
     },
     {
       "path": "codex/.codex/prompts/novel-context-pack.md",
-      "sha256": "e7fb9d7c2ca9391a02166e2ce4a56c04e7dc850bec87affe996b473b6c898caf",
+      "sha256": "47b354148583acbeb6dce50c1226827f6e419239e068ad0626427f029251b9a0",
       "commandSource": {
         "command": "context-pack",
         "kind": "legacy-template",
@@ -1719,7 +1767,7 @@
     },
     {
       "path": "codex/.codex/prompts/novel-expert.md",
-      "sha256": "0eef712510dc00b5aa5376719cbdf4348adfb6cc417025558c9115829d24909b",
+      "sha256": "2cf01d5fecce2b61b3a353fa534b9b2310c00eb1845d59464f2e061a4ce16daf",
       "commandSource": {
         "command": "expert",
         "kind": "legacy-template",
@@ -1728,7 +1776,7 @@
     },
     {
       "path": "codex/.codex/prompts/novel-plan.md",
-      "sha256": "59cbc48ed4958b9b21b64a859826254f90f90a72e4091e87515b1f396abf519d",
+      "sha256": "1378792766827f3a27f43b525d5d66174e80aaf5dfed694980fa082fe8b976a1",
       "commandSource": {
         "command": "plan",
         "kind": "legacy-template",
@@ -1737,7 +1785,7 @@
     },
     {
       "path": "codex/.codex/prompts/novel-relations.md",
-      "sha256": "00968c6e7173bd13b0496abf3c397fceb57e886f7bd2452f04945372d83b2376",
+      "sha256": "b3e1e88dd60735c3b0036f2ada0c4d9b20dcf7c089556e5890ff0b3c9e0f22d1",
       "commandSource": {
         "command": "relations",
         "kind": "legacy-template",
@@ -1746,7 +1794,7 @@
     },
     {
       "path": "codex/.codex/prompts/novel-review.md",
-      "sha256": "ac0d1d5b24f892dedd4c6488a726966d8d3e046f89720e2561a8a962f740bfbf",
+      "sha256": "a84ab9d85f16570242c2f0b0287dae22dfd94d4ca1ccbe32b437ae6756f2ea49",
       "commandSource": {
         "command": "review",
         "kind": "legacy-template",
@@ -1755,7 +1803,7 @@
     },
     {
       "path": "codex/.codex/prompts/novel-scene.md",
-      "sha256": "038f174f4b961906f263569edb1c82c3814f119a37e34bd771674ee2f0102f81",
+      "sha256": "abbfb26b343819a7e599e21e0cdaa2858e82a2d9e79e17256cb76dfa12b4fd74",
       "commandSource": {
         "command": "scene",
         "kind": "legacy-template",
@@ -1764,7 +1812,7 @@
     },
     {
       "path": "codex/.codex/prompts/novel-specify.md",
-      "sha256": "874203cba034136c31beb3c9edda61897c172e8b69873df48521ebea734c4d1b",
+      "sha256": "b96d7f33095c92d74362b81ae13766c56c812bde620c50972392790c95e5e929",
       "commandSource": {
         "command": "specify",
         "kind": "legacy-template",
@@ -1782,7 +1830,7 @@
     },
     {
       "path": "codex/.codex/prompts/novel-timeline.md",
-      "sha256": "025d94d18f0a8c7324d446ca870d67d5f38b5c412d487b9377f3f80c324b3fcb",
+      "sha256": "20700080a1de8945761a8022bf97c2417faa9b9f8a0be3444e7aaa43cc4a05a6",
       "commandSource": {
         "command": "timeline",
         "kind": "legacy-template",
@@ -1800,7 +1848,7 @@
     },
     {
       "path": "codex/.codex/prompts/novel-track.md",
-      "sha256": "82b20dccb77f6938421b42dda97bec9e1cf5ba32a63f9f595046f619c2333852",
+      "sha256": "86295046a9cfff2b5926e1d6151887db0566961a6628832006e1e46f8f4a73e5",
       "commandSource": {
         "command": "track",
         "kind": "legacy-template",
@@ -1809,7 +1857,7 @@
     },
     {
       "path": "codex/.codex/prompts/novel-write.md",
-      "sha256": "c3e0286832732dfb609b9011c5642f05b3bd9ebd2af2de873bc6506452a484e4",
+      "sha256": "319da766eebd316737de5077e02cca57ec00a67d4470e57fdacc39dd65ea3eda",
       "commandSource": {
         "command": "write",
         "kind": "command-spec",
@@ -1922,18 +1970,6 @@
       "sha256": "06255c106d3ee5a1a5c84afcc056a370589bc3bc8577d7e42a7934bfc7b9bede"
     },
     {
-      "path": "codex/.specify/scripts/runtime/application/check-writing-state.js",
-      "sha256": "3d966a5256cefed94cc1cb9bde8a55c4ddac6d4efb146d4a0dbc6192b02dedb8"
-    },
-    {
-      "path": "codex/.specify/scripts/runtime/domain/story-artifact.js",
-      "sha256": "010032f357a3154a9e939db41baa9b47bf72d20a7b4d3c1dba65c25c2af2d603"
-    },
-    {
-      "path": "codex/.specify/scripts/runtime/script-runtime.js",
-      "sha256": "6ddcafa9fca67371f159c0feb8df4d0eda5cda0e80d45bcb11713f43db99ba6c"
-    },
-    {
       "path": "codex/.specify/templates/agent/agent-contract.md",
       "sha256": "7ee3a6c29219db3f8bd104568199931b34c5e65424cff5dd46b8e130e7d41541"
     },
@@ -1968,6 +2004,34 @@
     {
       "path": "codex/.specify/templates/clarification/cozy-adventure.yaml",
       "sha256": "aba3282c099929f2f3c7f8ac1413666f1f9e8e161742e205c5611d61eec0fe52"
+    },
+    {
+      "path": "codex/.specify/templates/clarification/examples/civilization-threat.yaml",
+      "sha256": "dd4a73a7e307734e94882629438d7015fc7606574bc4f1f64caed2aa04c88237"
+    },
+    {
+      "path": "codex/.specify/templates/clarification/examples/core.yaml",
+      "sha256": "22038ad0d9f240a86235359d4925bbaca2ffab414ef5515bafba44786f7f9825"
+    },
+    {
+      "path": "codex/.specify/templates/clarification/examples/cozy-adventure.yaml",
+      "sha256": "ac14fd9b83789d42b5a04e097e07e2668484cc57042685ba75cce1f50ec841f6"
+    },
+    {
+      "path": "codex/.specify/templates/clarification/examples/kingdom-building-support.yaml",
+      "sha256": "b24ed9edf434847dd0f121cef51a89b4f227dde1d6615f2cae2a379995683497"
+    },
+    {
+      "path": "codex/.specify/templates/clarification/examples/magic-system.yaml",
+      "sha256": "e4a88d36b513419a753b08d584f64e63afe9688e2b1b48eefcbcd54bbd56716f"
+    },
+    {
+      "path": "codex/.specify/templates/clarification/examples/portal-fantasy.yaml",
+      "sha256": "f861fff4ffcf7c431a20d661fd6b9bd0f5283d4f369f95ea00d4fe18a1b61ef4"
+    },
+    {
+      "path": "codex/.specify/templates/clarification/examples/slow-burn-romance.yaml",
+      "sha256": "ec07909e39ef980fd1fb5278e638548f55459c8c12661cc25773c695a4d29aa6"
     },
     {
       "path": "codex/.specify/templates/clarification/kingdom-building-support.yaml",
@@ -2223,7 +2287,7 @@
     },
     {
       "path": "continue-check/.continue/prompts/analyze.md",
-      "sha256": "8e8f0de28a0e78448be1e180ceeeac7aa050ef8616aada0b49fd56983125312a",
+      "sha256": "a1d3d570d81615cac9c01d24192b241a704b30027d70b14bd263a9164a7fdd30",
       "commandSource": {
         "command": "analyze",
         "kind": "command-spec",
@@ -2242,7 +2306,7 @@
     },
     {
       "path": "continue-check/.continue/prompts/clarify.md",
-      "sha256": "845e2ccc2e7245b4b7982708581c36cc4d6473b2c3b55d68518747ffce69256d",
+      "sha256": "9fd6033419d107ecfc5423561198714f8ec52031609edf0f3d068a49d146de68",
       "commandSource": {
         "command": "clarify",
         "kind": "legacy-template",
@@ -2251,7 +2315,7 @@
     },
     {
       "path": "continue-check/.continue/prompts/constitution.md",
-      "sha256": "4fd52ec3cb41eecf2570ef7be4166e6748fa8400a1d9ce3f7d41be847a4a2a1a",
+      "sha256": "04146946ae2af49e22b5b35c20d3b5f610f1639df7e67e1a8836920731fc4930",
       "commandSource": {
         "command": "constitution",
         "kind": "legacy-template",
@@ -2260,7 +2324,7 @@
     },
     {
       "path": "continue-check/.continue/prompts/context-pack.md",
-      "sha256": "b3072e258fb0851595081feb6ee5e20c18cec04c4aea45dac5d22233c1e32422",
+      "sha256": "c5792bc7443ffb968dbd3635b8f11f1a4eb6794769df2f21be973e788f9a4a8d",
       "commandSource": {
         "command": "context-pack",
         "kind": "legacy-template",
@@ -2269,7 +2333,7 @@
     },
     {
       "path": "continue-check/.continue/prompts/expert.md",
-      "sha256": "360f55a6e8b213053f832987ff596d25d400f49a163faf35028c99daf945cdb1",
+      "sha256": "206017fbd925490753bb6865c02b83027efed8a2c039fc7bb76690d12a0252af",
       "commandSource": {
         "command": "expert",
         "kind": "legacy-template",
@@ -2278,7 +2342,7 @@
     },
     {
       "path": "continue-check/.continue/prompts/plan.md",
-      "sha256": "80fe9fc30630f6825cc2b3fb29217d5192059697dcf2e71574b0ab208e6e4a6f",
+      "sha256": "f7403bfef09d0ec0264734efa0a5ea517cc4214158e2d96135b2d7b3f4e1a5d7",
       "commandSource": {
         "command": "plan",
         "kind": "legacy-template",
@@ -2287,7 +2351,7 @@
     },
     {
       "path": "continue-check/.continue/prompts/relations.md",
-      "sha256": "3b3b6c0420b5772cd4731e8ba3c5424ddef57a7a7a9aac0284f82000d7b1befe",
+      "sha256": "9d076642a9c0e78c9c7d5f31a6dc63ea6de95b735b31958cca7f1de9d8ac9440",
       "commandSource": {
         "command": "relations",
         "kind": "legacy-template",
@@ -2296,7 +2360,7 @@
     },
     {
       "path": "continue-check/.continue/prompts/review.md",
-      "sha256": "5bd96348909d5e1952c4ebfbdfc076295e5aaf0ad6cc270493400f5c8fc3e9dd",
+      "sha256": "0599eaddc4677e7d9efc5a2cfef9e279bba389011c54146543b0a9ccc2414dd7",
       "commandSource": {
         "command": "review",
         "kind": "legacy-template",
@@ -2305,7 +2369,7 @@
     },
     {
       "path": "continue-check/.continue/prompts/scene.md",
-      "sha256": "c1034181474b5fbcd71f4a14d492587514060494044478e202b59152d825a993",
+      "sha256": "83d7406ba80b0da7b31fd7566108238209ba67f4f6f4364698bff0181c2a6cd5",
       "commandSource": {
         "command": "scene",
         "kind": "legacy-template",
@@ -2314,7 +2378,7 @@
     },
     {
       "path": "continue-check/.continue/prompts/specify.md",
-      "sha256": "9806983df9ce98b67cc86d6c3dd7b59307ef1a1e536f17f87d45541a4564468d",
+      "sha256": "518dd50868012f558e84260c71bfbfdb1f2e380e4a1df0ff917de451f95e25b4",
       "commandSource": {
         "command": "specify",
         "kind": "legacy-template",
@@ -2332,7 +2396,7 @@
     },
     {
       "path": "continue-check/.continue/prompts/timeline.md",
-      "sha256": "0386239764dad23d0c32be52db6307055abeb3ffd9e08e76f8e2c7ccc675dd74",
+      "sha256": "8ad19ef5fbf0eda48c3623b36d6138dd5c7d9fd2e82b2f87f99c43f612178d5a",
       "commandSource": {
         "command": "timeline",
         "kind": "legacy-template",
@@ -2350,7 +2414,7 @@
     },
     {
       "path": "continue-check/.continue/prompts/track.md",
-      "sha256": "48b990cd93265be6362b67b29565d44d17d0e6a257713c4aa5dc88b0651a2dfd",
+      "sha256": "b84837974707e2ada9212a735282dcf48786e085697ee9675fe66719fec75c1c",
       "commandSource": {
         "command": "track",
         "kind": "legacy-template",
@@ -2359,7 +2423,7 @@
     },
     {
       "path": "continue-check/.continue/prompts/write.md",
-      "sha256": "315401f9bc6b20474114fdc21dba0c7bc481b120daf5099b8e07fe344c34e97a",
+      "sha256": "b5a34a5c659e9e14b9e6feb643b8829ff0c5d333e7dee83698d68340f2705bd2",
       "commandSource": {
         "command": "write",
         "kind": "command-spec",
@@ -2472,18 +2536,6 @@
       "sha256": "06255c106d3ee5a1a5c84afcc056a370589bc3bc8577d7e42a7934bfc7b9bede"
     },
     {
-      "path": "continue-check/.specify/scripts/runtime/application/check-writing-state.js",
-      "sha256": "3d966a5256cefed94cc1cb9bde8a55c4ddac6d4efb146d4a0dbc6192b02dedb8"
-    },
-    {
-      "path": "continue-check/.specify/scripts/runtime/domain/story-artifact.js",
-      "sha256": "010032f357a3154a9e939db41baa9b47bf72d20a7b4d3c1dba65c25c2af2d603"
-    },
-    {
-      "path": "continue-check/.specify/scripts/runtime/script-runtime.js",
-      "sha256": "6ddcafa9fca67371f159c0feb8df4d0eda5cda0e80d45bcb11713f43db99ba6c"
-    },
-    {
       "path": "continue-check/.specify/templates/agent/agent-contract.md",
       "sha256": "7ee3a6c29219db3f8bd104568199931b34c5e65424cff5dd46b8e130e7d41541"
     },
@@ -2518,6 +2570,34 @@
     {
       "path": "continue-check/.specify/templates/clarification/cozy-adventure.yaml",
       "sha256": "aba3282c099929f2f3c7f8ac1413666f1f9e8e161742e205c5611d61eec0fe52"
+    },
+    {
+      "path": "continue-check/.specify/templates/clarification/examples/civilization-threat.yaml",
+      "sha256": "dd4a73a7e307734e94882629438d7015fc7606574bc4f1f64caed2aa04c88237"
+    },
+    {
+      "path": "continue-check/.specify/templates/clarification/examples/core.yaml",
+      "sha256": "22038ad0d9f240a86235359d4925bbaca2ffab414ef5515bafba44786f7f9825"
+    },
+    {
+      "path": "continue-check/.specify/templates/clarification/examples/cozy-adventure.yaml",
+      "sha256": "ac14fd9b83789d42b5a04e097e07e2668484cc57042685ba75cce1f50ec841f6"
+    },
+    {
+      "path": "continue-check/.specify/templates/clarification/examples/kingdom-building-support.yaml",
+      "sha256": "b24ed9edf434847dd0f121cef51a89b4f227dde1d6615f2cae2a379995683497"
+    },
+    {
+      "path": "continue-check/.specify/templates/clarification/examples/magic-system.yaml",
+      "sha256": "e4a88d36b513419a753b08d584f64e63afe9688e2b1b48eefcbcd54bbd56716f"
+    },
+    {
+      "path": "continue-check/.specify/templates/clarification/examples/portal-fantasy.yaml",
+      "sha256": "f861fff4ffcf7c431a20d661fd6b9bd0f5283d4f369f95ea00d4fe18a1b61ef4"
+    },
+    {
+      "path": "continue-check/.specify/templates/clarification/examples/slow-burn-romance.yaml",
+      "sha256": "ec07909e39ef980fd1fb5278e638548f55459c8c12661cc25773c695a4d29aa6"
     },
     {
       "path": "continue-check/.specify/templates/clarification/kingdom-building-support.yaml",
@@ -2773,7 +2853,7 @@
     },
     {
       "path": "copilot/.github/prompts/analyze.prompt.md",
-      "sha256": "a605d946e4bac2f5ac2e2f46968b6db4a04637123ea17834f134579f29b8b99d",
+      "sha256": "b3524f528c263d7e85b7e5113a0d8f72e2507e32385d80720469bd469af9c301",
       "commandSource": {
         "command": "analyze",
         "kind": "command-spec",
@@ -2792,7 +2872,7 @@
     },
     {
       "path": "copilot/.github/prompts/clarify.prompt.md",
-      "sha256": "582a2314a444d49e51dfc7e13a5c7b88a1baee9c6af7fced747dc73a61d91b0f",
+      "sha256": "5ece8817116aa929a0d44639264c1040b65ec55d7a622cda37bdf71ce8efe344",
       "commandSource": {
         "command": "clarify",
         "kind": "legacy-template",
@@ -2801,7 +2881,7 @@
     },
     {
       "path": "copilot/.github/prompts/constitution.prompt.md",
-      "sha256": "4718db23cd21caa6ea8d99a1d6da260ad728c80b729e9c26c1b429d80bcc9c48",
+      "sha256": "0837cbcdbfd496d85c0d3eb1bc06364e649b6cfb403c9881aea75bbc6b62c742",
       "commandSource": {
         "command": "constitution",
         "kind": "legacy-template",
@@ -2810,7 +2890,7 @@
     },
     {
       "path": "copilot/.github/prompts/context-pack.prompt.md",
-      "sha256": "04e796730cdace77da852e45dd44e8b45b589878d7a4f9fa1fe09ba639b524ef",
+      "sha256": "33defc83f1d2b3d3a8fb6815d649fd50089c56dad65a8ca9c6ccbbd813b54898",
       "commandSource": {
         "command": "context-pack",
         "kind": "legacy-template",
@@ -2819,7 +2899,7 @@
     },
     {
       "path": "copilot/.github/prompts/expert.prompt.md",
-      "sha256": "0eef712510dc00b5aa5376719cbdf4348adfb6cc417025558c9115829d24909b",
+      "sha256": "2cf01d5fecce2b61b3a353fa534b9b2310c00eb1845d59464f2e061a4ce16daf",
       "commandSource": {
         "command": "expert",
         "kind": "legacy-template",
@@ -2828,7 +2908,7 @@
     },
     {
       "path": "copilot/.github/prompts/plan.prompt.md",
-      "sha256": "9cb00385c00feb4d1eb9f4d32f9788ffa89543575056beaac8145f7efbe013d7",
+      "sha256": "398367bcf954bd9da549f2bedeba16990abbfbbf0aa06b488db761499e22a045",
       "commandSource": {
         "command": "plan",
         "kind": "legacy-template",
@@ -2837,7 +2917,7 @@
     },
     {
       "path": "copilot/.github/prompts/relations.prompt.md",
-      "sha256": "f4cc9e947b5b83413cb356b6b3305e05501776bdae03099ea99fbb4cc5bad257",
+      "sha256": "70535a0858b027b4fbae575582d11463ba5da9d27fe54f64c86d2361c4df7181",
       "commandSource": {
         "command": "relations",
         "kind": "legacy-template",
@@ -2846,7 +2926,7 @@
     },
     {
       "path": "copilot/.github/prompts/review.prompt.md",
-      "sha256": "ac0d1d5b24f892dedd4c6488a726966d8d3e046f89720e2561a8a962f740bfbf",
+      "sha256": "a84ab9d85f16570242c2f0b0287dae22dfd94d4ca1ccbe32b437ae6756f2ea49",
       "commandSource": {
         "command": "review",
         "kind": "legacy-template",
@@ -2855,7 +2935,7 @@
     },
     {
       "path": "copilot/.github/prompts/scene.prompt.md",
-      "sha256": "038f174f4b961906f263569edb1c82c3814f119a37e34bd771674ee2f0102f81",
+      "sha256": "abbfb26b343819a7e599e21e0cdaa2858e82a2d9e79e17256cb76dfa12b4fd74",
       "commandSource": {
         "command": "scene",
         "kind": "legacy-template",
@@ -2864,7 +2944,7 @@
     },
     {
       "path": "copilot/.github/prompts/specify.prompt.md",
-      "sha256": "e739dbb4585a9ee805c038fe639c9b99cb8ccbfc7d452d86779daa41c6793ca8",
+      "sha256": "5e96c4ab215b0b281d309d6bfca8aaf6a1576e01b8dd68b18642ff23d8e02ccc",
       "commandSource": {
         "command": "specify",
         "kind": "legacy-template",
@@ -2882,7 +2962,7 @@
     },
     {
       "path": "copilot/.github/prompts/timeline.prompt.md",
-      "sha256": "bb1a74f70902e9306db66bd9bacdf0f29ac95b7ead4a04e8f7fd6dd7e2a93d0c",
+      "sha256": "6954efb242c72f3dd493420e87d40a02fa48da25d685e3e8cd90804e4082d3f9",
       "commandSource": {
         "command": "timeline",
         "kind": "legacy-template",
@@ -2900,7 +2980,7 @@
     },
     {
       "path": "copilot/.github/prompts/track.prompt.md",
-      "sha256": "cf25879976a1ac7109f81c81a6ad7c622c8241bd1f4f94d379f0ff4ffa4a17f7",
+      "sha256": "2aefea402356f9de4fe46a9e4a5af804ad4c3678ffaf59c9de77a59ab19c7c65",
       "commandSource": {
         "command": "track",
         "kind": "legacy-template",
@@ -2909,7 +2989,7 @@
     },
     {
       "path": "copilot/.github/prompts/write.prompt.md",
-      "sha256": "f11524c28ca8b8c421f1e70df6b0c316c053188262800a211babc83ebd43d270",
+      "sha256": "04ddf9773879fc27f186cad5dbb3891905aa4302c0e3014cb2f64f89d4eff3ff",
       "commandSource": {
         "command": "write",
         "kind": "command-spec",
@@ -3022,18 +3102,6 @@
       "sha256": "06255c106d3ee5a1a5c84afcc056a370589bc3bc8577d7e42a7934bfc7b9bede"
     },
     {
-      "path": "copilot/.specify/scripts/runtime/application/check-writing-state.js",
-      "sha256": "3d966a5256cefed94cc1cb9bde8a55c4ddac6d4efb146d4a0dbc6192b02dedb8"
-    },
-    {
-      "path": "copilot/.specify/scripts/runtime/domain/story-artifact.js",
-      "sha256": "010032f357a3154a9e939db41baa9b47bf72d20a7b4d3c1dba65c25c2af2d603"
-    },
-    {
-      "path": "copilot/.specify/scripts/runtime/script-runtime.js",
-      "sha256": "6ddcafa9fca67371f159c0feb8df4d0eda5cda0e80d45bcb11713f43db99ba6c"
-    },
-    {
       "path": "copilot/.specify/templates/agent/agent-contract.md",
       "sha256": "7ee3a6c29219db3f8bd104568199931b34c5e65424cff5dd46b8e130e7d41541"
     },
@@ -3068,6 +3136,34 @@
     {
       "path": "copilot/.specify/templates/clarification/cozy-adventure.yaml",
       "sha256": "aba3282c099929f2f3c7f8ac1413666f1f9e8e161742e205c5611d61eec0fe52"
+    },
+    {
+      "path": "copilot/.specify/templates/clarification/examples/civilization-threat.yaml",
+      "sha256": "dd4a73a7e307734e94882629438d7015fc7606574bc4f1f64caed2aa04c88237"
+    },
+    {
+      "path": "copilot/.specify/templates/clarification/examples/core.yaml",
+      "sha256": "22038ad0d9f240a86235359d4925bbaca2ffab414ef5515bafba44786f7f9825"
+    },
+    {
+      "path": "copilot/.specify/templates/clarification/examples/cozy-adventure.yaml",
+      "sha256": "ac14fd9b83789d42b5a04e097e07e2668484cc57042685ba75cce1f50ec841f6"
+    },
+    {
+      "path": "copilot/.specify/templates/clarification/examples/kingdom-building-support.yaml",
+      "sha256": "b24ed9edf434847dd0f121cef51a89b4f227dde1d6615f2cae2a379995683497"
+    },
+    {
+      "path": "copilot/.specify/templates/clarification/examples/magic-system.yaml",
+      "sha256": "e4a88d36b513419a753b08d584f64e63afe9688e2b1b48eefcbcd54bbd56716f"
+    },
+    {
+      "path": "copilot/.specify/templates/clarification/examples/portal-fantasy.yaml",
+      "sha256": "f861fff4ffcf7c431a20d661fd6b9bd0f5283d4f369f95ea00d4fe18a1b61ef4"
+    },
+    {
+      "path": "copilot/.specify/templates/clarification/examples/slow-burn-romance.yaml",
+      "sha256": "ec07909e39ef980fd1fb5278e638548f55459c8c12661cc25773c695a4d29aa6"
     },
     {
       "path": "copilot/.specify/templates/clarification/kingdom-building-support.yaml",
@@ -3323,7 +3419,7 @@
     },
     {
       "path": "cursor/.cursor/commands/analyze.md",
-      "sha256": "afe5dfaf28409b7f20303618cff95ec7bfc34b7c97d396569c3b2291043f921f",
+      "sha256": "d5db88a67d7b1b4b0206c26eca2d4c8289d4c7eb7bb3603c5cd22aa5047fd2ac",
       "commandSource": {
         "command": "analyze",
         "kind": "command-spec",
@@ -3342,7 +3438,7 @@
     },
     {
       "path": "cursor/.cursor/commands/clarify.md",
-      "sha256": "d1e27654c50d16de065193650cb1f0ea16c88b0ff35ed7da38c891f96277f80a",
+      "sha256": "839b93ad039b76508e227e204dd7e435aafbde1bac544a2eed2bec0afc42ec39",
       "commandSource": {
         "command": "clarify",
         "kind": "legacy-template",
@@ -3351,7 +3447,7 @@
     },
     {
       "path": "cursor/.cursor/commands/constitution.md",
-      "sha256": "4718db23cd21caa6ea8d99a1d6da260ad728c80b729e9c26c1b429d80bcc9c48",
+      "sha256": "0837cbcdbfd496d85c0d3eb1bc06364e649b6cfb403c9881aea75bbc6b62c742",
       "commandSource": {
         "command": "constitution",
         "kind": "legacy-template",
@@ -3360,7 +3456,7 @@
     },
     {
       "path": "cursor/.cursor/commands/context-pack.md",
-      "sha256": "e7fb9d7c2ca9391a02166e2ce4a56c04e7dc850bec87affe996b473b6c898caf",
+      "sha256": "47b354148583acbeb6dce50c1226827f6e419239e068ad0626427f029251b9a0",
       "commandSource": {
         "command": "context-pack",
         "kind": "legacy-template",
@@ -3369,7 +3465,7 @@
     },
     {
       "path": "cursor/.cursor/commands/expert.md",
-      "sha256": "0eef712510dc00b5aa5376719cbdf4348adfb6cc417025558c9115829d24909b",
+      "sha256": "2cf01d5fecce2b61b3a353fa534b9b2310c00eb1845d59464f2e061a4ce16daf",
       "commandSource": {
         "command": "expert",
         "kind": "legacy-template",
@@ -3378,7 +3474,7 @@
     },
     {
       "path": "cursor/.cursor/commands/plan.md",
-      "sha256": "59cbc48ed4958b9b21b64a859826254f90f90a72e4091e87515b1f396abf519d",
+      "sha256": "1378792766827f3a27f43b525d5d66174e80aaf5dfed694980fa082fe8b976a1",
       "commandSource": {
         "command": "plan",
         "kind": "legacy-template",
@@ -3387,7 +3483,7 @@
     },
     {
       "path": "cursor/.cursor/commands/relations.md",
-      "sha256": "00968c6e7173bd13b0496abf3c397fceb57e886f7bd2452f04945372d83b2376",
+      "sha256": "b3e1e88dd60735c3b0036f2ada0c4d9b20dcf7c089556e5890ff0b3c9e0f22d1",
       "commandSource": {
         "command": "relations",
         "kind": "legacy-template",
@@ -3396,7 +3492,7 @@
     },
     {
       "path": "cursor/.cursor/commands/review.md",
-      "sha256": "ac0d1d5b24f892dedd4c6488a726966d8d3e046f89720e2561a8a962f740bfbf",
+      "sha256": "a84ab9d85f16570242c2f0b0287dae22dfd94d4ca1ccbe32b437ae6756f2ea49",
       "commandSource": {
         "command": "review",
         "kind": "legacy-template",
@@ -3405,7 +3501,7 @@
     },
     {
       "path": "cursor/.cursor/commands/scene.md",
-      "sha256": "038f174f4b961906f263569edb1c82c3814f119a37e34bd771674ee2f0102f81",
+      "sha256": "abbfb26b343819a7e599e21e0cdaa2858e82a2d9e79e17256cb76dfa12b4fd74",
       "commandSource": {
         "command": "scene",
         "kind": "legacy-template",
@@ -3414,7 +3510,7 @@
     },
     {
       "path": "cursor/.cursor/commands/specify.md",
-      "sha256": "874203cba034136c31beb3c9edda61897c172e8b69873df48521ebea734c4d1b",
+      "sha256": "b96d7f33095c92d74362b81ae13766c56c812bde620c50972392790c95e5e929",
       "commandSource": {
         "command": "specify",
         "kind": "legacy-template",
@@ -3432,7 +3528,7 @@
     },
     {
       "path": "cursor/.cursor/commands/timeline.md",
-      "sha256": "025d94d18f0a8c7324d446ca870d67d5f38b5c412d487b9377f3f80c324b3fcb",
+      "sha256": "20700080a1de8945761a8022bf97c2417faa9b9f8a0be3444e7aaa43cc4a05a6",
       "commandSource": {
         "command": "timeline",
         "kind": "legacy-template",
@@ -3450,7 +3546,7 @@
     },
     {
       "path": "cursor/.cursor/commands/track.md",
-      "sha256": "82b20dccb77f6938421b42dda97bec9e1cf5ba32a63f9f595046f619c2333852",
+      "sha256": "86295046a9cfff2b5926e1d6151887db0566961a6628832006e1e46f8f4a73e5",
       "commandSource": {
         "command": "track",
         "kind": "legacy-template",
@@ -3459,7 +3555,7 @@
     },
     {
       "path": "cursor/.cursor/commands/write.md",
-      "sha256": "c3e0286832732dfb609b9011c5642f05b3bd9ebd2af2de873bc6506452a484e4",
+      "sha256": "319da766eebd316737de5077e02cca57ec00a67d4470e57fdacc39dd65ea3eda",
       "commandSource": {
         "command": "write",
         "kind": "command-spec",
@@ -3572,18 +3668,6 @@
       "sha256": "06255c106d3ee5a1a5c84afcc056a370589bc3bc8577d7e42a7934bfc7b9bede"
     },
     {
-      "path": "cursor/.specify/scripts/runtime/application/check-writing-state.js",
-      "sha256": "3d966a5256cefed94cc1cb9bde8a55c4ddac6d4efb146d4a0dbc6192b02dedb8"
-    },
-    {
-      "path": "cursor/.specify/scripts/runtime/domain/story-artifact.js",
-      "sha256": "010032f357a3154a9e939db41baa9b47bf72d20a7b4d3c1dba65c25c2af2d603"
-    },
-    {
-      "path": "cursor/.specify/scripts/runtime/script-runtime.js",
-      "sha256": "6ddcafa9fca67371f159c0feb8df4d0eda5cda0e80d45bcb11713f43db99ba6c"
-    },
-    {
       "path": "cursor/.specify/templates/agent/agent-contract.md",
       "sha256": "7ee3a6c29219db3f8bd104568199931b34c5e65424cff5dd46b8e130e7d41541"
     },
@@ -3618,6 +3702,34 @@
     {
       "path": "cursor/.specify/templates/clarification/cozy-adventure.yaml",
       "sha256": "aba3282c099929f2f3c7f8ac1413666f1f9e8e161742e205c5611d61eec0fe52"
+    },
+    {
+      "path": "cursor/.specify/templates/clarification/examples/civilization-threat.yaml",
+      "sha256": "dd4a73a7e307734e94882629438d7015fc7606574bc4f1f64caed2aa04c88237"
+    },
+    {
+      "path": "cursor/.specify/templates/clarification/examples/core.yaml",
+      "sha256": "22038ad0d9f240a86235359d4925bbaca2ffab414ef5515bafba44786f7f9825"
+    },
+    {
+      "path": "cursor/.specify/templates/clarification/examples/cozy-adventure.yaml",
+      "sha256": "ac14fd9b83789d42b5a04e097e07e2668484cc57042685ba75cce1f50ec841f6"
+    },
+    {
+      "path": "cursor/.specify/templates/clarification/examples/kingdom-building-support.yaml",
+      "sha256": "b24ed9edf434847dd0f121cef51a89b4f227dde1d6615f2cae2a379995683497"
+    },
+    {
+      "path": "cursor/.specify/templates/clarification/examples/magic-system.yaml",
+      "sha256": "e4a88d36b513419a753b08d584f64e63afe9688e2b1b48eefcbcd54bbd56716f"
+    },
+    {
+      "path": "cursor/.specify/templates/clarification/examples/portal-fantasy.yaml",
+      "sha256": "f861fff4ffcf7c431a20d661fd6b9bd0f5283d4f369f95ea00d4fe18a1b61ef4"
+    },
+    {
+      "path": "cursor/.specify/templates/clarification/examples/slow-burn-romance.yaml",
+      "sha256": "ec07909e39ef980fd1fb5278e638548f55459c8c12661cc25773c695a4d29aa6"
     },
     {
       "path": "cursor/.specify/templates/clarification/kingdom-building-support.yaml",
@@ -3873,7 +3985,7 @@
     },
     {
       "path": "gemini/.gemini/commands/novel/analyze.toml",
-      "sha256": "7497e2d2102a08be275c335c4a5824184ca78f8c7549e653c654605cef04f60d",
+      "sha256": "13dbde012fa266dba48aaee01fbe2e9d3e0b27f40fc41aa1fecf4638bbec3966",
       "commandSource": {
         "command": "analyze",
         "kind": "command-spec",
@@ -3892,7 +4004,7 @@
     },
     {
       "path": "gemini/.gemini/commands/novel/clarify.toml",
-      "sha256": "e013fd5ccfe7f5cf6859ca3dd0e20a6ee4f246488dd921ee30dd2b1ffba1a752",
+      "sha256": "44d389b668a435ebbf50bb0220a18828152930d9f7fc92573bca304db00d1d13",
       "commandSource": {
         "command": "clarify",
         "kind": "legacy-template",
@@ -3901,7 +4013,7 @@
     },
     {
       "path": "gemini/.gemini/commands/novel/constitution.toml",
-      "sha256": "c6c960abd7f407c449cbd6ed0f08374f2de349b642652ce115802e8f13ce8607",
+      "sha256": "5c33e927da569de5b0bd4a4cab76c54c33b06ff6a4582ae018e7493798bc3f5c",
       "commandSource": {
         "command": "constitution",
         "kind": "legacy-template",
@@ -3910,7 +4022,7 @@
     },
     {
       "path": "gemini/.gemini/commands/novel/context-pack.toml",
-      "sha256": "431793b49c28570790f5ceb8dba0099a4f25dc3b228e68fa8bff4ef7f5ad20fb",
+      "sha256": "bdc952ffe042c01ccf1f26f3b1d1ec380504096593760c2e61ffa61fb11d3ba2",
       "commandSource": {
         "command": "context-pack",
         "kind": "legacy-template",
@@ -3919,7 +4031,7 @@
     },
     {
       "path": "gemini/.gemini/commands/novel/expert.toml",
-      "sha256": "98ed341268c72c287bd42da8c1f1503e868361c3b43a5f0ffe342af9f76186a9",
+      "sha256": "c8291303adfc1d6204e8b6219b6770873976806be4c3c2b9a80faec646bee5bb",
       "commandSource": {
         "command": "expert",
         "kind": "legacy-template",
@@ -3928,7 +4040,7 @@
     },
     {
       "path": "gemini/.gemini/commands/novel/plan.toml",
-      "sha256": "e78f7a58c7c2337027a8088c074c48ae41a9a2d55035beaf6d3ce397fb94ae75",
+      "sha256": "9c2933b2731c25d1074d38c1a9a94bdde355d0b5562abfd6f26b305a5e652c59",
       "commandSource": {
         "command": "plan",
         "kind": "legacy-template",
@@ -3937,7 +4049,7 @@
     },
     {
       "path": "gemini/.gemini/commands/novel/relations.toml",
-      "sha256": "95c096b3377fa7f415e6030b5808e730b6016bda58169ea2c2ddedbfd2f15c6e",
+      "sha256": "3548ee3f449d76c0ba263a45ac48d0466147c93527d8629d426a861669d7419f",
       "commandSource": {
         "command": "relations",
         "kind": "legacy-template",
@@ -3946,7 +4058,7 @@
     },
     {
       "path": "gemini/.gemini/commands/novel/review.toml",
-      "sha256": "3db597d557e9f70ebfceab9553e95a42bc4bc75bb6e603107dc3ec4d79e6b6f9",
+      "sha256": "bb10fa4299886dc4c53058c4a8df07f72b04c4858e9eb3eac31b0c88958c3119",
       "commandSource": {
         "command": "review",
         "kind": "legacy-template",
@@ -3955,7 +4067,7 @@
     },
     {
       "path": "gemini/.gemini/commands/novel/scene.toml",
-      "sha256": "15a032812da9a70211b3382524a8bbf7ccff28d28d82052c7a277b25ce012f3c",
+      "sha256": "5fee3f1e9995c4461e89ffd64de097786a0bb72195f87b4d812ba9a88b39011f",
       "commandSource": {
         "command": "scene",
         "kind": "legacy-template",
@@ -3964,7 +4076,7 @@
     },
     {
       "path": "gemini/.gemini/commands/novel/specify.toml",
-      "sha256": "f6018b18d97e16260d492423e4ac876b37abc29e533ace0c5c14c26fd54b52a2",
+      "sha256": "fdaf021f6a96ebcd502823430ad50b3e429141e916ec1b305af073c4216fcbf6",
       "commandSource": {
         "command": "specify",
         "kind": "legacy-template",
@@ -3982,7 +4094,7 @@
     },
     {
       "path": "gemini/.gemini/commands/novel/timeline.toml",
-      "sha256": "899de1635a4a95ceb71ab05cf6cef9dba9e8e8fc6e7de805ea15de23e0c96836",
+      "sha256": "126fd2ee4a11c799f261326c839f3784d28740ad37035a36ab9abe77ebc1b1c4",
       "commandSource": {
         "command": "timeline",
         "kind": "legacy-template",
@@ -4000,7 +4112,7 @@
     },
     {
       "path": "gemini/.gemini/commands/novel/track.toml",
-      "sha256": "1d217333a335c0907af438375937490a516e6226594911e25854768b41749ca4",
+      "sha256": "2bb569e56f0f11ed39d68d06b1e12bba53c84c2a59a7199bed135457559018b7",
       "commandSource": {
         "command": "track",
         "kind": "legacy-template",
@@ -4009,7 +4121,7 @@
     },
     {
       "path": "gemini/.gemini/commands/novel/write.toml",
-      "sha256": "586473c9a12cb94b50f730b6e2b473e3f8f2240a49ed15d94d0fccbe6213fb46",
+      "sha256": "56a2f7628b33855f2209d00246f29914b20c185a144d4e2b80c7655cf8c226bc",
       "commandSource": {
         "command": "write",
         "kind": "command-spec",
@@ -4122,18 +4234,6 @@
       "sha256": "06255c106d3ee5a1a5c84afcc056a370589bc3bc8577d7e42a7934bfc7b9bede"
     },
     {
-      "path": "gemini/.specify/scripts/runtime/application/check-writing-state.js",
-      "sha256": "3d966a5256cefed94cc1cb9bde8a55c4ddac6d4efb146d4a0dbc6192b02dedb8"
-    },
-    {
-      "path": "gemini/.specify/scripts/runtime/domain/story-artifact.js",
-      "sha256": "010032f357a3154a9e939db41baa9b47bf72d20a7b4d3c1dba65c25c2af2d603"
-    },
-    {
-      "path": "gemini/.specify/scripts/runtime/script-runtime.js",
-      "sha256": "6ddcafa9fca67371f159c0feb8df4d0eda5cda0e80d45bcb11713f43db99ba6c"
-    },
-    {
       "path": "gemini/.specify/templates/agent/agent-contract.md",
       "sha256": "7ee3a6c29219db3f8bd104568199931b34c5e65424cff5dd46b8e130e7d41541"
     },
@@ -4168,6 +4268,34 @@
     {
       "path": "gemini/.specify/templates/clarification/cozy-adventure.yaml",
       "sha256": "aba3282c099929f2f3c7f8ac1413666f1f9e8e161742e205c5611d61eec0fe52"
+    },
+    {
+      "path": "gemini/.specify/templates/clarification/examples/civilization-threat.yaml",
+      "sha256": "dd4a73a7e307734e94882629438d7015fc7606574bc4f1f64caed2aa04c88237"
+    },
+    {
+      "path": "gemini/.specify/templates/clarification/examples/core.yaml",
+      "sha256": "22038ad0d9f240a86235359d4925bbaca2ffab414ef5515bafba44786f7f9825"
+    },
+    {
+      "path": "gemini/.specify/templates/clarification/examples/cozy-adventure.yaml",
+      "sha256": "ac14fd9b83789d42b5a04e097e07e2668484cc57042685ba75cce1f50ec841f6"
+    },
+    {
+      "path": "gemini/.specify/templates/clarification/examples/kingdom-building-support.yaml",
+      "sha256": "b24ed9edf434847dd0f121cef51a89b4f227dde1d6615f2cae2a379995683497"
+    },
+    {
+      "path": "gemini/.specify/templates/clarification/examples/magic-system.yaml",
+      "sha256": "e4a88d36b513419a753b08d584f64e63afe9688e2b1b48eefcbcd54bbd56716f"
+    },
+    {
+      "path": "gemini/.specify/templates/clarification/examples/portal-fantasy.yaml",
+      "sha256": "f861fff4ffcf7c431a20d661fd6b9bd0f5283d4f369f95ea00d4fe18a1b61ef4"
+    },
+    {
+      "path": "gemini/.specify/templates/clarification/examples/slow-burn-romance.yaml",
+      "sha256": "ec07909e39ef980fd1fb5278e638548f55459c8c12661cc25773c695a4d29aa6"
     },
     {
       "path": "gemini/.specify/templates/clarification/kingdom-building-support.yaml",
@@ -4423,7 +4551,7 @@
     },
     {
       "path": "generic/.specify/commands/analyze.md",
-      "sha256": "e790987c50a49c05b03208e76169319755dfacc4d373b1a3e9af3e8366fce78f",
+      "sha256": "f1426f61bd4d660040c5dc48a2438835489beab8464f01b0dc65bf3b14283a99",
       "commandSource": {
         "command": "analyze",
         "kind": "command-spec",
@@ -4442,7 +4570,7 @@
     },
     {
       "path": "generic/.specify/commands/clarify.md",
-      "sha256": "05cfefd8d4246b890bf6eb5492f125fb71225237fce5db80de041d14c987cd79",
+      "sha256": "221dabb02e8ad6b270214ed5e8fa652f6b847c18c27676e63fba04d809abfe8d",
       "commandSource": {
         "command": "clarify",
         "kind": "legacy-template",
@@ -4451,7 +4579,7 @@
     },
     {
       "path": "generic/.specify/commands/constitution.md",
-      "sha256": "e0ac8d6d4f06baaad47004f7a8b08af54bd067b42073aac783a0c0cab6cb7f8d",
+      "sha256": "e7b2c448426a24c0cb8f094b344048763ce630e5d69165316649982b93c3f597",
       "commandSource": {
         "command": "constitution",
         "kind": "legacy-template",
@@ -4460,7 +4588,7 @@
     },
     {
       "path": "generic/.specify/commands/context-pack.md",
-      "sha256": "fa09129dc5cb909380503c7f56985f8a74e325dc8b9dd413101a3e0bd0f6ba17",
+      "sha256": "a3b1765c54666c4a2e89f6939a121103bad6d333fba0bb9f8a56d5b662250635",
       "commandSource": {
         "command": "context-pack",
         "kind": "legacy-template",
@@ -4469,7 +4597,7 @@
     },
     {
       "path": "generic/.specify/commands/expert.md",
-      "sha256": "90f89ebc158bfff3eacb5eff40e67f5d0920743ec33cc553c3cdf79e5b933496",
+      "sha256": "7f97c3aa0fd1f8ef66b3de028fe1c4aef246fdddb5becd4ddb80a60de855fc00",
       "commandSource": {
         "command": "expert",
         "kind": "legacy-template",
@@ -4478,7 +4606,7 @@
     },
     {
       "path": "generic/.specify/commands/plan.md",
-      "sha256": "32a2a3a068948e862272d7577356a999efb8da22a823aa0d67aabe9da4977506",
+      "sha256": "c604efe843f6b104581256dac60ca3f893ec89abb48a39b2bee6db8e013388cf",
       "commandSource": {
         "command": "plan",
         "kind": "legacy-template",
@@ -4487,7 +4615,7 @@
     },
     {
       "path": "generic/.specify/commands/relations.md",
-      "sha256": "ae1545cf3fe76c60e1db200ca32ba6a9dfce5e0296fd5867ef88f06c09ab63f0",
+      "sha256": "2a5e34abf6ebc6a51a89c395518b5844a09b1c85695c1f717c904c0a50555d43",
       "commandSource": {
         "command": "relations",
         "kind": "legacy-template",
@@ -4496,7 +4624,7 @@
     },
     {
       "path": "generic/.specify/commands/review.md",
-      "sha256": "765072873a0173669740e40e7daf9c32a211e8c9bdfaa64f74f2789fda27a933",
+      "sha256": "fc0dc9f67d1c5ce29e9491b3fa77e9b6df90d8227a8bfabe2793433aa4dd4af1",
       "commandSource": {
         "command": "review",
         "kind": "legacy-template",
@@ -4505,7 +4633,7 @@
     },
     {
       "path": "generic/.specify/commands/scene.md",
-      "sha256": "51701b6cfb2314df79313d3d5f1c339cc2e459447e6b92eb1aa2954f936ce1ae",
+      "sha256": "16665a1c0d98eba609f070ae02ecb0976e1537225c3c5e279c9b1352d0841274",
       "commandSource": {
         "command": "scene",
         "kind": "legacy-template",
@@ -4514,7 +4642,7 @@
     },
     {
       "path": "generic/.specify/commands/specify.md",
-      "sha256": "c26eb99911c767d6ce1c00d04af57d8fdc86c9b41949838ce3661d7f16ae4849",
+      "sha256": "29aafead0fa901384e7cb5ff4334532320343f40e4551be5abe7bafe1f3aefd1",
       "commandSource": {
         "command": "specify",
         "kind": "legacy-template",
@@ -4532,7 +4660,7 @@
     },
     {
       "path": "generic/.specify/commands/timeline.md",
-      "sha256": "7c88697614efe7ae4088362ff04ab8bc72b6f21e391442abd85b61dd410af815",
+      "sha256": "9b5ad103b02044df51c9830733ceff2f2559f868f69dc6c54da35f48a9395694",
       "commandSource": {
         "command": "timeline",
         "kind": "legacy-template",
@@ -4550,7 +4678,7 @@
     },
     {
       "path": "generic/.specify/commands/track.md",
-      "sha256": "222b0eaecbbd2b676541de753c5c925c47680dccd91a9b69186026961a7d4173",
+      "sha256": "18a2ac1b9453b1d1332f9d581490a6efb5c7deea911bbbe3df7977c64e0d6c73",
       "commandSource": {
         "command": "track",
         "kind": "legacy-template",
@@ -4559,7 +4687,7 @@
     },
     {
       "path": "generic/.specify/commands/write.md",
-      "sha256": "9065f2011d1871c6b16aba3c783dc2416fab37df66f9a5f3012c0b3396030fdf",
+      "sha256": "3b2f7c0181cc7c392a390e6a4784f3b8275255dc50d9f3753fa30114cb6827b4",
       "commandSource": {
         "command": "write",
         "kind": "command-spec",
@@ -4672,18 +4800,6 @@
       "sha256": "06255c106d3ee5a1a5c84afcc056a370589bc3bc8577d7e42a7934bfc7b9bede"
     },
     {
-      "path": "generic/.specify/scripts/runtime/application/check-writing-state.js",
-      "sha256": "3d966a5256cefed94cc1cb9bde8a55c4ddac6d4efb146d4a0dbc6192b02dedb8"
-    },
-    {
-      "path": "generic/.specify/scripts/runtime/domain/story-artifact.js",
-      "sha256": "010032f357a3154a9e939db41baa9b47bf72d20a7b4d3c1dba65c25c2af2d603"
-    },
-    {
-      "path": "generic/.specify/scripts/runtime/script-runtime.js",
-      "sha256": "6ddcafa9fca67371f159c0feb8df4d0eda5cda0e80d45bcb11713f43db99ba6c"
-    },
-    {
       "path": "generic/.specify/templates/agent/agent-contract.md",
       "sha256": "7ee3a6c29219db3f8bd104568199931b34c5e65424cff5dd46b8e130e7d41541"
     },
@@ -4718,6 +4834,34 @@
     {
       "path": "generic/.specify/templates/clarification/cozy-adventure.yaml",
       "sha256": "aba3282c099929f2f3c7f8ac1413666f1f9e8e161742e205c5611d61eec0fe52"
+    },
+    {
+      "path": "generic/.specify/templates/clarification/examples/civilization-threat.yaml",
+      "sha256": "dd4a73a7e307734e94882629438d7015fc7606574bc4f1f64caed2aa04c88237"
+    },
+    {
+      "path": "generic/.specify/templates/clarification/examples/core.yaml",
+      "sha256": "22038ad0d9f240a86235359d4925bbaca2ffab414ef5515bafba44786f7f9825"
+    },
+    {
+      "path": "generic/.specify/templates/clarification/examples/cozy-adventure.yaml",
+      "sha256": "ac14fd9b83789d42b5a04e097e07e2668484cc57042685ba75cce1f50ec841f6"
+    },
+    {
+      "path": "generic/.specify/templates/clarification/examples/kingdom-building-support.yaml",
+      "sha256": "b24ed9edf434847dd0f121cef51a89b4f227dde1d6615f2cae2a379995683497"
+    },
+    {
+      "path": "generic/.specify/templates/clarification/examples/magic-system.yaml",
+      "sha256": "e4a88d36b513419a753b08d584f64e63afe9688e2b1b48eefcbcd54bbd56716f"
+    },
+    {
+      "path": "generic/.specify/templates/clarification/examples/portal-fantasy.yaml",
+      "sha256": "f861fff4ffcf7c431a20d661fd6b9bd0f5283d4f369f95ea00d4fe18a1b61ef4"
+    },
+    {
+      "path": "generic/.specify/templates/clarification/examples/slow-burn-romance.yaml",
+      "sha256": "ec07909e39ef980fd1fb5278e638548f55459c8c12661cc25773c695a4d29aa6"
     },
     {
       "path": "generic/.specify/templates/clarification/kingdom-building-support.yaml",
@@ -4973,7 +5117,7 @@
     },
     {
       "path": "kilocode/.kilocode/workflows/analyze.md",
-      "sha256": "1d914a0b2bd4a8a784a5a0b939d977f792a1958a198d642724e6cf3cbf8dbe08",
+      "sha256": "62ed23bf18f81065cb0272a5664428f9ab06506ec0b1a879cbfd9c0453b42b86",
       "commandSource": {
         "command": "analyze",
         "kind": "command-spec",
@@ -4992,7 +5136,7 @@
     },
     {
       "path": "kilocode/.kilocode/workflows/clarify.md",
-      "sha256": "7d9de4a02e5526291375d18a8c5a7706c3d115eae14e4271d474252faf037905",
+      "sha256": "091c3dba22a9ead4590bac6b9f3ed60e8d0e1f52676db87d03e88dfd12331f72",
       "commandSource": {
         "command": "clarify",
         "kind": "legacy-template",
@@ -5001,7 +5145,7 @@
     },
     {
       "path": "kilocode/.kilocode/workflows/constitution.md",
-      "sha256": "58e28a96442653622b2adec1d91a110f0411ede4b658ee78183f30189a8da174",
+      "sha256": "d6d5926aa7ebccf2ccbad5cd39be9a2f218d5f7e106a16050d0a64b6f5609d66",
       "commandSource": {
         "command": "constitution",
         "kind": "legacy-template",
@@ -5010,7 +5154,7 @@
     },
     {
       "path": "kilocode/.kilocode/workflows/context-pack.md",
-      "sha256": "d161deedcd191baee8c91d827eb2b18053ab5b4f6ea14ad8375c7274eb120898",
+      "sha256": "0c2e8c369a80c4d3ba03ad41f94598deb0657506526fcb843692ee44386d241d",
       "commandSource": {
         "command": "context-pack",
         "kind": "legacy-template",
@@ -5019,7 +5163,7 @@
     },
     {
       "path": "kilocode/.kilocode/workflows/expert.md",
-      "sha256": "66089f08fefaec030cefea6392015b6e868c525514feac6833704b80c68d1b0b",
+      "sha256": "c19145731fac2b9fffead4628508ce5ba3a5020429b85aee5a62c937ec6a8316",
       "commandSource": {
         "command": "expert",
         "kind": "legacy-template",
@@ -5028,7 +5172,7 @@
     },
     {
       "path": "kilocode/.kilocode/workflows/plan.md",
-      "sha256": "e1ac8eb7025ffdcbe2c5162137d211ddf1f1ee1d2dd6c130dc93b12e8ca48be6",
+      "sha256": "366f4548c0e353175cd679bc7dc8c23e169ad66d48d2c08776df82d8a7cb13bd",
       "commandSource": {
         "command": "plan",
         "kind": "legacy-template",
@@ -5037,7 +5181,7 @@
     },
     {
       "path": "kilocode/.kilocode/workflows/relations.md",
-      "sha256": "c3f05bba571a536f339155ebf6ced61e78e23f9a9ae11dbe165add40748fa4d7",
+      "sha256": "c4095d9a51db19826c3e16d8a39ed62dab0aada1ec871c883bc685b57a951193",
       "commandSource": {
         "command": "relations",
         "kind": "legacy-template",
@@ -5046,7 +5190,7 @@
     },
     {
       "path": "kilocode/.kilocode/workflows/review.md",
-      "sha256": "76ccbe6d6f73a53ff4ea3388c408ca0eca9291212faa12d2b8c127d4e9d8ed08",
+      "sha256": "7e268be9d7fdabf9378bd9b218f4ad9d6329b8ae65b20c15eb394d15e2d3872d",
       "commandSource": {
         "command": "review",
         "kind": "legacy-template",
@@ -5055,7 +5199,7 @@
     },
     {
       "path": "kilocode/.kilocode/workflows/scene.md",
-      "sha256": "a2c97ccf1a6064e7760a3af8187a6675d4a678aba48b68971f12da5d259eec9c",
+      "sha256": "3ce4c043be86af5dfeceb538520bc2f0b9edc2ae37dd62029d10ecc6494a903c",
       "commandSource": {
         "command": "scene",
         "kind": "legacy-template",
@@ -5064,7 +5208,7 @@
     },
     {
       "path": "kilocode/.kilocode/workflows/specify.md",
-      "sha256": "d6fde450e5c60d239d10b5cd5c8f8c68124827346dad2b7bcb9af17c8d2064c8",
+      "sha256": "d31be41909151de1781c87706bcd88e597398314dd206334bdbd69af3b6cccc9",
       "commandSource": {
         "command": "specify",
         "kind": "legacy-template",
@@ -5082,7 +5226,7 @@
     },
     {
       "path": "kilocode/.kilocode/workflows/timeline.md",
-      "sha256": "28190b0aba54ac17376b7dd1437a91855d4389488b82f8c5af106ec04eb14177",
+      "sha256": "69199f9f1b4c8977e0636d5a9f2c55e9ca36a28d7332bc09f8f285ff2aca892d",
       "commandSource": {
         "command": "timeline",
         "kind": "legacy-template",
@@ -5100,7 +5244,7 @@
     },
     {
       "path": "kilocode/.kilocode/workflows/track.md",
-      "sha256": "25db506e992a4bbdb14aba34b34842d2b52da44eae49c4b5f8fd808b12437caa",
+      "sha256": "c8dd7ca4cf562c279e2e8706e4fcc458cdf7bcc7933210517bb72dd3b17c0b3b",
       "commandSource": {
         "command": "track",
         "kind": "legacy-template",
@@ -5109,7 +5253,7 @@
     },
     {
       "path": "kilocode/.kilocode/workflows/write.md",
-      "sha256": "88831de5bb2ff8042e8ec0f4c5bf082d59633135f17bcae7bcfd8edde1cf4092",
+      "sha256": "3e8e250e26a4b76b32c1e8abb6bc9d977d2588578595acf5b18f2dda83e1930d",
       "commandSource": {
         "command": "write",
         "kind": "command-spec",
@@ -5222,18 +5366,6 @@
       "sha256": "06255c106d3ee5a1a5c84afcc056a370589bc3bc8577d7e42a7934bfc7b9bede"
     },
     {
-      "path": "kilocode/.specify/scripts/runtime/application/check-writing-state.js",
-      "sha256": "3d966a5256cefed94cc1cb9bde8a55c4ddac6d4efb146d4a0dbc6192b02dedb8"
-    },
-    {
-      "path": "kilocode/.specify/scripts/runtime/domain/story-artifact.js",
-      "sha256": "010032f357a3154a9e939db41baa9b47bf72d20a7b4d3c1dba65c25c2af2d603"
-    },
-    {
-      "path": "kilocode/.specify/scripts/runtime/script-runtime.js",
-      "sha256": "6ddcafa9fca67371f159c0feb8df4d0eda5cda0e80d45bcb11713f43db99ba6c"
-    },
-    {
       "path": "kilocode/.specify/templates/agent/agent-contract.md",
       "sha256": "7ee3a6c29219db3f8bd104568199931b34c5e65424cff5dd46b8e130e7d41541"
     },
@@ -5268,6 +5400,34 @@
     {
       "path": "kilocode/.specify/templates/clarification/cozy-adventure.yaml",
       "sha256": "aba3282c099929f2f3c7f8ac1413666f1f9e8e161742e205c5611d61eec0fe52"
+    },
+    {
+      "path": "kilocode/.specify/templates/clarification/examples/civilization-threat.yaml",
+      "sha256": "dd4a73a7e307734e94882629438d7015fc7606574bc4f1f64caed2aa04c88237"
+    },
+    {
+      "path": "kilocode/.specify/templates/clarification/examples/core.yaml",
+      "sha256": "22038ad0d9f240a86235359d4925bbaca2ffab414ef5515bafba44786f7f9825"
+    },
+    {
+      "path": "kilocode/.specify/templates/clarification/examples/cozy-adventure.yaml",
+      "sha256": "ac14fd9b83789d42b5a04e097e07e2668484cc57042685ba75cce1f50ec841f6"
+    },
+    {
+      "path": "kilocode/.specify/templates/clarification/examples/kingdom-building-support.yaml",
+      "sha256": "b24ed9edf434847dd0f121cef51a89b4f227dde1d6615f2cae2a379995683497"
+    },
+    {
+      "path": "kilocode/.specify/templates/clarification/examples/magic-system.yaml",
+      "sha256": "e4a88d36b513419a753b08d584f64e63afe9688e2b1b48eefcbcd54bbd56716f"
+    },
+    {
+      "path": "kilocode/.specify/templates/clarification/examples/portal-fantasy.yaml",
+      "sha256": "f861fff4ffcf7c431a20d661fd6b9bd0f5283d4f369f95ea00d4fe18a1b61ef4"
+    },
+    {
+      "path": "kilocode/.specify/templates/clarification/examples/slow-burn-romance.yaml",
+      "sha256": "ec07909e39ef980fd1fb5278e638548f55459c8c12661cc25773c695a4d29aa6"
     },
     {
       "path": "kilocode/.specify/templates/clarification/kingdom-building-support.yaml",
@@ -5523,7 +5683,7 @@
     },
     {
       "path": "opencode/.opencode/command/analyze.md",
-      "sha256": "7cdaab60065d15fc20b5181c94813848b40fbc3e8c168b05fa5160086b52a420",
+      "sha256": "1b43d4a170563e794af063982775ed025d371bf13fdda4b6654340fc6108ee89",
       "commandSource": {
         "command": "analyze",
         "kind": "command-spec",
@@ -5542,7 +5702,7 @@
     },
     {
       "path": "opencode/.opencode/command/clarify.md",
-      "sha256": "42832b70a7c1308f33c88f5255b39424984211a794ce175682991dac5d95c7fc",
+      "sha256": "dfd667d6f99fa24cb51fa43794c89716cf7b945c9eb5989ec45a8f1dd242e6db",
       "commandSource": {
         "command": "clarify",
         "kind": "legacy-template",
@@ -5551,7 +5711,7 @@
     },
     {
       "path": "opencode/.opencode/command/constitution.md",
-      "sha256": "674c5ecda990cae7b6dd7ad5f7a6fae588097f5c12434b034082a26acb062f10",
+      "sha256": "7ab37a61a595068f1507d75cbb386fda7c57ef13be888b1762c7d3484186de93",
       "commandSource": {
         "command": "constitution",
         "kind": "legacy-template",
@@ -5560,7 +5720,7 @@
     },
     {
       "path": "opencode/.opencode/command/context-pack.md",
-      "sha256": "d0b1d59dd14b56b0b1d9f20ff4da211355ee2fbd32990463f9deecf78b68774b",
+      "sha256": "a3ac70daa0a23acbf85518c059c4e8d3b424250d852d1859d4c2a46cb785f78a",
       "commandSource": {
         "command": "context-pack",
         "kind": "legacy-template",
@@ -5569,7 +5729,7 @@
     },
     {
       "path": "opencode/.opencode/command/expert.md",
-      "sha256": "503f495c63441c6b3588ea8cea1a0cfef60dcb7a003b8cb0a29aa25d55053822",
+      "sha256": "51d29b8cc041700ace81d52df2d41afe1787888042d788b7e935a51a51122412",
       "commandSource": {
         "command": "expert",
         "kind": "legacy-template",
@@ -5578,7 +5738,7 @@
     },
     {
       "path": "opencode/.opencode/command/plan.md",
-      "sha256": "5c1395623d40235d5325f1c393c322fceec648027ab9b8890f1153fbe34e8947",
+      "sha256": "b8a9f01d1175aa65cf2950ad5ca296c202ef53d553466980061da938a262bb57",
       "commandSource": {
         "command": "plan",
         "kind": "legacy-template",
@@ -5587,7 +5747,7 @@
     },
     {
       "path": "opencode/.opencode/command/relations.md",
-      "sha256": "4df020f1f00feb9d22db2f963e9b6f845ba404c41b768c86d34d1e6c1ea251b4",
+      "sha256": "cee8066219dc43a4f195173fab7b76a81a769912d72b0671f07231bd5994f212",
       "commandSource": {
         "command": "relations",
         "kind": "legacy-template",
@@ -5596,7 +5756,7 @@
     },
     {
       "path": "opencode/.opencode/command/review.md",
-      "sha256": "49aa42fbf571f90712d7d6c1ac91f63ce67bcbe70a6cebe46b8a1d7e21980db4",
+      "sha256": "8d38ba10863d84538a63cc76ceeca249b13a9947f81ecb82145fb127c02b66cf",
       "commandSource": {
         "command": "review",
         "kind": "legacy-template",
@@ -5605,7 +5765,7 @@
     },
     {
       "path": "opencode/.opencode/command/scene.md",
-      "sha256": "be7c4d532c075f79893f98b82c7d339390258986ea446c7ac9acc091d3368662",
+      "sha256": "8f4b90860ab895f30d0c416666165397f5abea07a14f9ce44716f1ccbdd723e9",
       "commandSource": {
         "command": "scene",
         "kind": "legacy-template",
@@ -5614,7 +5774,7 @@
     },
     {
       "path": "opencode/.opencode/command/specify.md",
-      "sha256": "f3bdf6e7cd5ac6c74bdfb665803820748b91467936e1e83860d15f79a145318a",
+      "sha256": "aca1c0f5f936ddba6dd3035f0733127d25a2d8774f7dd1421b2d099a532efb6d",
       "commandSource": {
         "command": "specify",
         "kind": "legacy-template",
@@ -5632,7 +5792,7 @@
     },
     {
       "path": "opencode/.opencode/command/timeline.md",
-      "sha256": "d634787acc1571d9ba5bcfd0a9095a4ccb329cec9762d57ce4badda712a3dce2",
+      "sha256": "12922868614056a9e934d178051cc9b7d2e62cb610342b331bbe67efc85f9f75",
       "commandSource": {
         "command": "timeline",
         "kind": "legacy-template",
@@ -5650,7 +5810,7 @@
     },
     {
       "path": "opencode/.opencode/command/track.md",
-      "sha256": "3c052fd633e4f4be20da1b86c3270c19c2abfc64290ea49e165a7ff221beb176",
+      "sha256": "0f051b0eecf7b8f2aaf34361da04c788c4dd81515ce35636af773d36b19c96f5",
       "commandSource": {
         "command": "track",
         "kind": "legacy-template",
@@ -5659,7 +5819,7 @@
     },
     {
       "path": "opencode/.opencode/command/write.md",
-      "sha256": "5c9770543fd3d8629d231489828c5bee959181128abd7e2a3b002df36b6da0cf",
+      "sha256": "50822872592bee1c1ce77523cdf21f3da6bb594461fb76869eaf735eb0b6e52e",
       "commandSource": {
         "command": "write",
         "kind": "command-spec",
@@ -5772,18 +5932,6 @@
       "sha256": "06255c106d3ee5a1a5c84afcc056a370589bc3bc8577d7e42a7934bfc7b9bede"
     },
     {
-      "path": "opencode/.specify/scripts/runtime/application/check-writing-state.js",
-      "sha256": "3d966a5256cefed94cc1cb9bde8a55c4ddac6d4efb146d4a0dbc6192b02dedb8"
-    },
-    {
-      "path": "opencode/.specify/scripts/runtime/domain/story-artifact.js",
-      "sha256": "010032f357a3154a9e939db41baa9b47bf72d20a7b4d3c1dba65c25c2af2d603"
-    },
-    {
-      "path": "opencode/.specify/scripts/runtime/script-runtime.js",
-      "sha256": "6ddcafa9fca67371f159c0feb8df4d0eda5cda0e80d45bcb11713f43db99ba6c"
-    },
-    {
       "path": "opencode/.specify/templates/agent/agent-contract.md",
       "sha256": "7ee3a6c29219db3f8bd104568199931b34c5e65424cff5dd46b8e130e7d41541"
     },
@@ -5818,6 +5966,34 @@
     {
       "path": "opencode/.specify/templates/clarification/cozy-adventure.yaml",
       "sha256": "aba3282c099929f2f3c7f8ac1413666f1f9e8e161742e205c5611d61eec0fe52"
+    },
+    {
+      "path": "opencode/.specify/templates/clarification/examples/civilization-threat.yaml",
+      "sha256": "dd4a73a7e307734e94882629438d7015fc7606574bc4f1f64caed2aa04c88237"
+    },
+    {
+      "path": "opencode/.specify/templates/clarification/examples/core.yaml",
+      "sha256": "22038ad0d9f240a86235359d4925bbaca2ffab414ef5515bafba44786f7f9825"
+    },
+    {
+      "path": "opencode/.specify/templates/clarification/examples/cozy-adventure.yaml",
+      "sha256": "ac14fd9b83789d42b5a04e097e07e2668484cc57042685ba75cce1f50ec841f6"
+    },
+    {
+      "path": "opencode/.specify/templates/clarification/examples/kingdom-building-support.yaml",
+      "sha256": "b24ed9edf434847dd0f121cef51a89b4f227dde1d6615f2cae2a379995683497"
+    },
+    {
+      "path": "opencode/.specify/templates/clarification/examples/magic-system.yaml",
+      "sha256": "e4a88d36b513419a753b08d584f64e63afe9688e2b1b48eefcbcd54bbd56716f"
+    },
+    {
+      "path": "opencode/.specify/templates/clarification/examples/portal-fantasy.yaml",
+      "sha256": "f861fff4ffcf7c431a20d661fd6b9bd0f5283d4f369f95ea00d4fe18a1b61ef4"
+    },
+    {
+      "path": "opencode/.specify/templates/clarification/examples/slow-burn-romance.yaml",
+      "sha256": "ec07909e39ef980fd1fb5278e638548f55459c8c12661cc25773c695a4d29aa6"
     },
     {
       "path": "opencode/.specify/templates/clarification/kingdom-building-support.yaml",
@@ -6073,7 +6249,7 @@
     },
     {
       "path": "q/.amazonq/prompts/analyze.md",
-      "sha256": "a605d946e4bac2f5ac2e2f46968b6db4a04637123ea17834f134579f29b8b99d",
+      "sha256": "b3524f528c263d7e85b7e5113a0d8f72e2507e32385d80720469bd469af9c301",
       "commandSource": {
         "command": "analyze",
         "kind": "command-spec",
@@ -6092,7 +6268,7 @@
     },
     {
       "path": "q/.amazonq/prompts/clarify.md",
-      "sha256": "582a2314a444d49e51dfc7e13a5c7b88a1baee9c6af7fced747dc73a61d91b0f",
+      "sha256": "5ece8817116aa929a0d44639264c1040b65ec55d7a622cda37bdf71ce8efe344",
       "commandSource": {
         "command": "clarify",
         "kind": "legacy-template",
@@ -6101,7 +6277,7 @@
     },
     {
       "path": "q/.amazonq/prompts/constitution.md",
-      "sha256": "4718db23cd21caa6ea8d99a1d6da260ad728c80b729e9c26c1b429d80bcc9c48",
+      "sha256": "0837cbcdbfd496d85c0d3eb1bc06364e649b6cfb403c9881aea75bbc6b62c742",
       "commandSource": {
         "command": "constitution",
         "kind": "legacy-template",
@@ -6110,7 +6286,7 @@
     },
     {
       "path": "q/.amazonq/prompts/context-pack.md",
-      "sha256": "04e796730cdace77da852e45dd44e8b45b589878d7a4f9fa1fe09ba639b524ef",
+      "sha256": "33defc83f1d2b3d3a8fb6815d649fd50089c56dad65a8ca9c6ccbbd813b54898",
       "commandSource": {
         "command": "context-pack",
         "kind": "legacy-template",
@@ -6119,7 +6295,7 @@
     },
     {
       "path": "q/.amazonq/prompts/expert.md",
-      "sha256": "0eef712510dc00b5aa5376719cbdf4348adfb6cc417025558c9115829d24909b",
+      "sha256": "2cf01d5fecce2b61b3a353fa534b9b2310c00eb1845d59464f2e061a4ce16daf",
       "commandSource": {
         "command": "expert",
         "kind": "legacy-template",
@@ -6128,7 +6304,7 @@
     },
     {
       "path": "q/.amazonq/prompts/plan.md",
-      "sha256": "9cb00385c00feb4d1eb9f4d32f9788ffa89543575056beaac8145f7efbe013d7",
+      "sha256": "398367bcf954bd9da549f2bedeba16990abbfbbf0aa06b488db761499e22a045",
       "commandSource": {
         "command": "plan",
         "kind": "legacy-template",
@@ -6137,7 +6313,7 @@
     },
     {
       "path": "q/.amazonq/prompts/relations.md",
-      "sha256": "f4cc9e947b5b83413cb356b6b3305e05501776bdae03099ea99fbb4cc5bad257",
+      "sha256": "70535a0858b027b4fbae575582d11463ba5da9d27fe54f64c86d2361c4df7181",
       "commandSource": {
         "command": "relations",
         "kind": "legacy-template",
@@ -6146,7 +6322,7 @@
     },
     {
       "path": "q/.amazonq/prompts/review.md",
-      "sha256": "ac0d1d5b24f892dedd4c6488a726966d8d3e046f89720e2561a8a962f740bfbf",
+      "sha256": "a84ab9d85f16570242c2f0b0287dae22dfd94d4ca1ccbe32b437ae6756f2ea49",
       "commandSource": {
         "command": "review",
         "kind": "legacy-template",
@@ -6155,7 +6331,7 @@
     },
     {
       "path": "q/.amazonq/prompts/scene.md",
-      "sha256": "038f174f4b961906f263569edb1c82c3814f119a37e34bd771674ee2f0102f81",
+      "sha256": "abbfb26b343819a7e599e21e0cdaa2858e82a2d9e79e17256cb76dfa12b4fd74",
       "commandSource": {
         "command": "scene",
         "kind": "legacy-template",
@@ -6164,7 +6340,7 @@
     },
     {
       "path": "q/.amazonq/prompts/specify.md",
-      "sha256": "e739dbb4585a9ee805c038fe639c9b99cb8ccbfc7d452d86779daa41c6793ca8",
+      "sha256": "5e96c4ab215b0b281d309d6bfca8aaf6a1576e01b8dd68b18642ff23d8e02ccc",
       "commandSource": {
         "command": "specify",
         "kind": "legacy-template",
@@ -6182,7 +6358,7 @@
     },
     {
       "path": "q/.amazonq/prompts/timeline.md",
-      "sha256": "bb1a74f70902e9306db66bd9bacdf0f29ac95b7ead4a04e8f7fd6dd7e2a93d0c",
+      "sha256": "6954efb242c72f3dd493420e87d40a02fa48da25d685e3e8cd90804e4082d3f9",
       "commandSource": {
         "command": "timeline",
         "kind": "legacy-template",
@@ -6200,7 +6376,7 @@
     },
     {
       "path": "q/.amazonq/prompts/track.md",
-      "sha256": "cf25879976a1ac7109f81c81a6ad7c622c8241bd1f4f94d379f0ff4ffa4a17f7",
+      "sha256": "2aefea402356f9de4fe46a9e4a5af804ad4c3678ffaf59c9de77a59ab19c7c65",
       "commandSource": {
         "command": "track",
         "kind": "legacy-template",
@@ -6209,7 +6385,7 @@
     },
     {
       "path": "q/.amazonq/prompts/write.md",
-      "sha256": "f11524c28ca8b8c421f1e70df6b0c316c053188262800a211babc83ebd43d270",
+      "sha256": "04ddf9773879fc27f186cad5dbb3891905aa4302c0e3014cb2f64f89d4eff3ff",
       "commandSource": {
         "command": "write",
         "kind": "command-spec",
@@ -6322,18 +6498,6 @@
       "sha256": "06255c106d3ee5a1a5c84afcc056a370589bc3bc8577d7e42a7934bfc7b9bede"
     },
     {
-      "path": "q/.specify/scripts/runtime/application/check-writing-state.js",
-      "sha256": "3d966a5256cefed94cc1cb9bde8a55c4ddac6d4efb146d4a0dbc6192b02dedb8"
-    },
-    {
-      "path": "q/.specify/scripts/runtime/domain/story-artifact.js",
-      "sha256": "010032f357a3154a9e939db41baa9b47bf72d20a7b4d3c1dba65c25c2af2d603"
-    },
-    {
-      "path": "q/.specify/scripts/runtime/script-runtime.js",
-      "sha256": "6ddcafa9fca67371f159c0feb8df4d0eda5cda0e80d45bcb11713f43db99ba6c"
-    },
-    {
       "path": "q/.specify/templates/agent/agent-contract.md",
       "sha256": "7ee3a6c29219db3f8bd104568199931b34c5e65424cff5dd46b8e130e7d41541"
     },
@@ -6368,6 +6532,34 @@
     {
       "path": "q/.specify/templates/clarification/cozy-adventure.yaml",
       "sha256": "aba3282c099929f2f3c7f8ac1413666f1f9e8e161742e205c5611d61eec0fe52"
+    },
+    {
+      "path": "q/.specify/templates/clarification/examples/civilization-threat.yaml",
+      "sha256": "dd4a73a7e307734e94882629438d7015fc7606574bc4f1f64caed2aa04c88237"
+    },
+    {
+      "path": "q/.specify/templates/clarification/examples/core.yaml",
+      "sha256": "22038ad0d9f240a86235359d4925bbaca2ffab414ef5515bafba44786f7f9825"
+    },
+    {
+      "path": "q/.specify/templates/clarification/examples/cozy-adventure.yaml",
+      "sha256": "ac14fd9b83789d42b5a04e097e07e2668484cc57042685ba75cce1f50ec841f6"
+    },
+    {
+      "path": "q/.specify/templates/clarification/examples/kingdom-building-support.yaml",
+      "sha256": "b24ed9edf434847dd0f121cef51a89b4f227dde1d6615f2cae2a379995683497"
+    },
+    {
+      "path": "q/.specify/templates/clarification/examples/magic-system.yaml",
+      "sha256": "e4a88d36b513419a753b08d584f64e63afe9688e2b1b48eefcbcd54bbd56716f"
+    },
+    {
+      "path": "q/.specify/templates/clarification/examples/portal-fantasy.yaml",
+      "sha256": "f861fff4ffcf7c431a20d661fd6b9bd0f5283d4f369f95ea00d4fe18a1b61ef4"
+    },
+    {
+      "path": "q/.specify/templates/clarification/examples/slow-burn-romance.yaml",
+      "sha256": "ec07909e39ef980fd1fb5278e638548f55459c8c12661cc25773c695a4d29aa6"
     },
     {
       "path": "q/.specify/templates/clarification/kingdom-building-support.yaml",
@@ -6623,7 +6815,7 @@
     },
     {
       "path": "qwen/.qwen/commands/analyze.toml",
-      "sha256": "7497e2d2102a08be275c335c4a5824184ca78f8c7549e653c654605cef04f60d",
+      "sha256": "13dbde012fa266dba48aaee01fbe2e9d3e0b27f40fc41aa1fecf4638bbec3966",
       "commandSource": {
         "command": "analyze",
         "kind": "command-spec",
@@ -6642,7 +6834,7 @@
     },
     {
       "path": "qwen/.qwen/commands/clarify.toml",
-      "sha256": "e013fd5ccfe7f5cf6859ca3dd0e20a6ee4f246488dd921ee30dd2b1ffba1a752",
+      "sha256": "44d389b668a435ebbf50bb0220a18828152930d9f7fc92573bca304db00d1d13",
       "commandSource": {
         "command": "clarify",
         "kind": "legacy-template",
@@ -6651,7 +6843,7 @@
     },
     {
       "path": "qwen/.qwen/commands/constitution.toml",
-      "sha256": "c6c960abd7f407c449cbd6ed0f08374f2de349b642652ce115802e8f13ce8607",
+      "sha256": "5c33e927da569de5b0bd4a4cab76c54c33b06ff6a4582ae018e7493798bc3f5c",
       "commandSource": {
         "command": "constitution",
         "kind": "legacy-template",
@@ -6660,7 +6852,7 @@
     },
     {
       "path": "qwen/.qwen/commands/context-pack.toml",
-      "sha256": "431793b49c28570790f5ceb8dba0099a4f25dc3b228e68fa8bff4ef7f5ad20fb",
+      "sha256": "bdc952ffe042c01ccf1f26f3b1d1ec380504096593760c2e61ffa61fb11d3ba2",
       "commandSource": {
         "command": "context-pack",
         "kind": "legacy-template",
@@ -6669,7 +6861,7 @@
     },
     {
       "path": "qwen/.qwen/commands/expert.toml",
-      "sha256": "98ed341268c72c287bd42da8c1f1503e868361c3b43a5f0ffe342af9f76186a9",
+      "sha256": "c8291303adfc1d6204e8b6219b6770873976806be4c3c2b9a80faec646bee5bb",
       "commandSource": {
         "command": "expert",
         "kind": "legacy-template",
@@ -6678,7 +6870,7 @@
     },
     {
       "path": "qwen/.qwen/commands/plan.toml",
-      "sha256": "e78f7a58c7c2337027a8088c074c48ae41a9a2d55035beaf6d3ce397fb94ae75",
+      "sha256": "9c2933b2731c25d1074d38c1a9a94bdde355d0b5562abfd6f26b305a5e652c59",
       "commandSource": {
         "command": "plan",
         "kind": "legacy-template",
@@ -6687,7 +6879,7 @@
     },
     {
       "path": "qwen/.qwen/commands/relations.toml",
-      "sha256": "95c096b3377fa7f415e6030b5808e730b6016bda58169ea2c2ddedbfd2f15c6e",
+      "sha256": "3548ee3f449d76c0ba263a45ac48d0466147c93527d8629d426a861669d7419f",
       "commandSource": {
         "command": "relations",
         "kind": "legacy-template",
@@ -6696,7 +6888,7 @@
     },
     {
       "path": "qwen/.qwen/commands/review.toml",
-      "sha256": "3db597d557e9f70ebfceab9553e95a42bc4bc75bb6e603107dc3ec4d79e6b6f9",
+      "sha256": "bb10fa4299886dc4c53058c4a8df07f72b04c4858e9eb3eac31b0c88958c3119",
       "commandSource": {
         "command": "review",
         "kind": "legacy-template",
@@ -6705,7 +6897,7 @@
     },
     {
       "path": "qwen/.qwen/commands/scene.toml",
-      "sha256": "15a032812da9a70211b3382524a8bbf7ccff28d28d82052c7a277b25ce012f3c",
+      "sha256": "5fee3f1e9995c4461e89ffd64de097786a0bb72195f87b4d812ba9a88b39011f",
       "commandSource": {
         "command": "scene",
         "kind": "legacy-template",
@@ -6714,7 +6906,7 @@
     },
     {
       "path": "qwen/.qwen/commands/specify.toml",
-      "sha256": "f6018b18d97e16260d492423e4ac876b37abc29e533ace0c5c14c26fd54b52a2",
+      "sha256": "fdaf021f6a96ebcd502823430ad50b3e429141e916ec1b305af073c4216fcbf6",
       "commandSource": {
         "command": "specify",
         "kind": "legacy-template",
@@ -6732,7 +6924,7 @@
     },
     {
       "path": "qwen/.qwen/commands/timeline.toml",
-      "sha256": "899de1635a4a95ceb71ab05cf6cef9dba9e8e8fc6e7de805ea15de23e0c96836",
+      "sha256": "126fd2ee4a11c799f261326c839f3784d28740ad37035a36ab9abe77ebc1b1c4",
       "commandSource": {
         "command": "timeline",
         "kind": "legacy-template",
@@ -6750,7 +6942,7 @@
     },
     {
       "path": "qwen/.qwen/commands/track.toml",
-      "sha256": "1d217333a335c0907af438375937490a516e6226594911e25854768b41749ca4",
+      "sha256": "2bb569e56f0f11ed39d68d06b1e12bba53c84c2a59a7199bed135457559018b7",
       "commandSource": {
         "command": "track",
         "kind": "legacy-template",
@@ -6759,7 +6951,7 @@
     },
     {
       "path": "qwen/.qwen/commands/write.toml",
-      "sha256": "586473c9a12cb94b50f730b6e2b473e3f8f2240a49ed15d94d0fccbe6213fb46",
+      "sha256": "56a2f7628b33855f2209d00246f29914b20c185a144d4e2b80c7655cf8c226bc",
       "commandSource": {
         "command": "write",
         "kind": "command-spec",
@@ -6872,18 +7064,6 @@
       "sha256": "06255c106d3ee5a1a5c84afcc056a370589bc3bc8577d7e42a7934bfc7b9bede"
     },
     {
-      "path": "qwen/.specify/scripts/runtime/application/check-writing-state.js",
-      "sha256": "3d966a5256cefed94cc1cb9bde8a55c4ddac6d4efb146d4a0dbc6192b02dedb8"
-    },
-    {
-      "path": "qwen/.specify/scripts/runtime/domain/story-artifact.js",
-      "sha256": "010032f357a3154a9e939db41baa9b47bf72d20a7b4d3c1dba65c25c2af2d603"
-    },
-    {
-      "path": "qwen/.specify/scripts/runtime/script-runtime.js",
-      "sha256": "6ddcafa9fca67371f159c0feb8df4d0eda5cda0e80d45bcb11713f43db99ba6c"
-    },
-    {
       "path": "qwen/.specify/templates/agent/agent-contract.md",
       "sha256": "7ee3a6c29219db3f8bd104568199931b34c5e65424cff5dd46b8e130e7d41541"
     },
@@ -6918,6 +7098,34 @@
     {
       "path": "qwen/.specify/templates/clarification/cozy-adventure.yaml",
       "sha256": "aba3282c099929f2f3c7f8ac1413666f1f9e8e161742e205c5611d61eec0fe52"
+    },
+    {
+      "path": "qwen/.specify/templates/clarification/examples/civilization-threat.yaml",
+      "sha256": "dd4a73a7e307734e94882629438d7015fc7606574bc4f1f64caed2aa04c88237"
+    },
+    {
+      "path": "qwen/.specify/templates/clarification/examples/core.yaml",
+      "sha256": "22038ad0d9f240a86235359d4925bbaca2ffab414ef5515bafba44786f7f9825"
+    },
+    {
+      "path": "qwen/.specify/templates/clarification/examples/cozy-adventure.yaml",
+      "sha256": "ac14fd9b83789d42b5a04e097e07e2668484cc57042685ba75cce1f50ec841f6"
+    },
+    {
+      "path": "qwen/.specify/templates/clarification/examples/kingdom-building-support.yaml",
+      "sha256": "b24ed9edf434847dd0f121cef51a89b4f227dde1d6615f2cae2a379995683497"
+    },
+    {
+      "path": "qwen/.specify/templates/clarification/examples/magic-system.yaml",
+      "sha256": "e4a88d36b513419a753b08d584f64e63afe9688e2b1b48eefcbcd54bbd56716f"
+    },
+    {
+      "path": "qwen/.specify/templates/clarification/examples/portal-fantasy.yaml",
+      "sha256": "f861fff4ffcf7c431a20d661fd6b9bd0f5283d4f369f95ea00d4fe18a1b61ef4"
+    },
+    {
+      "path": "qwen/.specify/templates/clarification/examples/slow-burn-romance.yaml",
+      "sha256": "ec07909e39ef980fd1fb5278e638548f55459c8c12661cc25773c695a4d29aa6"
     },
     {
       "path": "qwen/.specify/templates/clarification/kingdom-building-support.yaml",
@@ -7173,7 +7381,7 @@
     },
     {
       "path": "roocode/.roo/commands/analyze.md",
-      "sha256": "1d914a0b2bd4a8a784a5a0b939d977f792a1958a198d642724e6cf3cbf8dbe08",
+      "sha256": "62ed23bf18f81065cb0272a5664428f9ab06506ec0b1a879cbfd9c0453b42b86",
       "commandSource": {
         "command": "analyze",
         "kind": "command-spec",
@@ -7192,7 +7400,7 @@
     },
     {
       "path": "roocode/.roo/commands/clarify.md",
-      "sha256": "7d9de4a02e5526291375d18a8c5a7706c3d115eae14e4271d474252faf037905",
+      "sha256": "091c3dba22a9ead4590bac6b9f3ed60e8d0e1f52676db87d03e88dfd12331f72",
       "commandSource": {
         "command": "clarify",
         "kind": "legacy-template",
@@ -7201,7 +7409,7 @@
     },
     {
       "path": "roocode/.roo/commands/constitution.md",
-      "sha256": "58e28a96442653622b2adec1d91a110f0411ede4b658ee78183f30189a8da174",
+      "sha256": "d6d5926aa7ebccf2ccbad5cd39be9a2f218d5f7e106a16050d0a64b6f5609d66",
       "commandSource": {
         "command": "constitution",
         "kind": "legacy-template",
@@ -7210,7 +7418,7 @@
     },
     {
       "path": "roocode/.roo/commands/context-pack.md",
-      "sha256": "d161deedcd191baee8c91d827eb2b18053ab5b4f6ea14ad8375c7274eb120898",
+      "sha256": "0c2e8c369a80c4d3ba03ad41f94598deb0657506526fcb843692ee44386d241d",
       "commandSource": {
         "command": "context-pack",
         "kind": "legacy-template",
@@ -7219,7 +7427,7 @@
     },
     {
       "path": "roocode/.roo/commands/expert.md",
-      "sha256": "66089f08fefaec030cefea6392015b6e868c525514feac6833704b80c68d1b0b",
+      "sha256": "c19145731fac2b9fffead4628508ce5ba3a5020429b85aee5a62c937ec6a8316",
       "commandSource": {
         "command": "expert",
         "kind": "legacy-template",
@@ -7228,7 +7436,7 @@
     },
     {
       "path": "roocode/.roo/commands/plan.md",
-      "sha256": "e1ac8eb7025ffdcbe2c5162137d211ddf1f1ee1d2dd6c130dc93b12e8ca48be6",
+      "sha256": "366f4548c0e353175cd679bc7dc8c23e169ad66d48d2c08776df82d8a7cb13bd",
       "commandSource": {
         "command": "plan",
         "kind": "legacy-template",
@@ -7237,7 +7445,7 @@
     },
     {
       "path": "roocode/.roo/commands/relations.md",
-      "sha256": "c3f05bba571a536f339155ebf6ced61e78e23f9a9ae11dbe165add40748fa4d7",
+      "sha256": "c4095d9a51db19826c3e16d8a39ed62dab0aada1ec871c883bc685b57a951193",
       "commandSource": {
         "command": "relations",
         "kind": "legacy-template",
@@ -7246,7 +7454,7 @@
     },
     {
       "path": "roocode/.roo/commands/review.md",
-      "sha256": "76ccbe6d6f73a53ff4ea3388c408ca0eca9291212faa12d2b8c127d4e9d8ed08",
+      "sha256": "7e268be9d7fdabf9378bd9b218f4ad9d6329b8ae65b20c15eb394d15e2d3872d",
       "commandSource": {
         "command": "review",
         "kind": "legacy-template",
@@ -7255,7 +7463,7 @@
     },
     {
       "path": "roocode/.roo/commands/scene.md",
-      "sha256": "a2c97ccf1a6064e7760a3af8187a6675d4a678aba48b68971f12da5d259eec9c",
+      "sha256": "3ce4c043be86af5dfeceb538520bc2f0b9edc2ae37dd62029d10ecc6494a903c",
       "commandSource": {
         "command": "scene",
         "kind": "legacy-template",
@@ -7264,7 +7472,7 @@
     },
     {
       "path": "roocode/.roo/commands/specify.md",
-      "sha256": "d6fde450e5c60d239d10b5cd5c8f8c68124827346dad2b7bcb9af17c8d2064c8",
+      "sha256": "d31be41909151de1781c87706bcd88e597398314dd206334bdbd69af3b6cccc9",
       "commandSource": {
         "command": "specify",
         "kind": "legacy-template",
@@ -7282,7 +7490,7 @@
     },
     {
       "path": "roocode/.roo/commands/timeline.md",
-      "sha256": "28190b0aba54ac17376b7dd1437a91855d4389488b82f8c5af106ec04eb14177",
+      "sha256": "69199f9f1b4c8977e0636d5a9f2c55e9ca36a28d7332bc09f8f285ff2aca892d",
       "commandSource": {
         "command": "timeline",
         "kind": "legacy-template",
@@ -7300,7 +7508,7 @@
     },
     {
       "path": "roocode/.roo/commands/track.md",
-      "sha256": "25db506e992a4bbdb14aba34b34842d2b52da44eae49c4b5f8fd808b12437caa",
+      "sha256": "c8dd7ca4cf562c279e2e8706e4fcc458cdf7bcc7933210517bb72dd3b17c0b3b",
       "commandSource": {
         "command": "track",
         "kind": "legacy-template",
@@ -7309,7 +7517,7 @@
     },
     {
       "path": "roocode/.roo/commands/write.md",
-      "sha256": "88831de5bb2ff8042e8ec0f4c5bf082d59633135f17bcae7bcfd8edde1cf4092",
+      "sha256": "3e8e250e26a4b76b32c1e8abb6bc9d977d2588578595acf5b18f2dda83e1930d",
       "commandSource": {
         "command": "write",
         "kind": "command-spec",
@@ -7422,18 +7630,6 @@
       "sha256": "06255c106d3ee5a1a5c84afcc056a370589bc3bc8577d7e42a7934bfc7b9bede"
     },
     {
-      "path": "roocode/.specify/scripts/runtime/application/check-writing-state.js",
-      "sha256": "3d966a5256cefed94cc1cb9bde8a55c4ddac6d4efb146d4a0dbc6192b02dedb8"
-    },
-    {
-      "path": "roocode/.specify/scripts/runtime/domain/story-artifact.js",
-      "sha256": "010032f357a3154a9e939db41baa9b47bf72d20a7b4d3c1dba65c25c2af2d603"
-    },
-    {
-      "path": "roocode/.specify/scripts/runtime/script-runtime.js",
-      "sha256": "6ddcafa9fca67371f159c0feb8df4d0eda5cda0e80d45bcb11713f43db99ba6c"
-    },
-    {
       "path": "roocode/.specify/templates/agent/agent-contract.md",
       "sha256": "7ee3a6c29219db3f8bd104568199931b34c5e65424cff5dd46b8e130e7d41541"
     },
@@ -7468,6 +7664,34 @@
     {
       "path": "roocode/.specify/templates/clarification/cozy-adventure.yaml",
       "sha256": "aba3282c099929f2f3c7f8ac1413666f1f9e8e161742e205c5611d61eec0fe52"
+    },
+    {
+      "path": "roocode/.specify/templates/clarification/examples/civilization-threat.yaml",
+      "sha256": "dd4a73a7e307734e94882629438d7015fc7606574bc4f1f64caed2aa04c88237"
+    },
+    {
+      "path": "roocode/.specify/templates/clarification/examples/core.yaml",
+      "sha256": "22038ad0d9f240a86235359d4925bbaca2ffab414ef5515bafba44786f7f9825"
+    },
+    {
+      "path": "roocode/.specify/templates/clarification/examples/cozy-adventure.yaml",
+      "sha256": "ac14fd9b83789d42b5a04e097e07e2668484cc57042685ba75cce1f50ec841f6"
+    },
+    {
+      "path": "roocode/.specify/templates/clarification/examples/kingdom-building-support.yaml",
+      "sha256": "b24ed9edf434847dd0f121cef51a89b4f227dde1d6615f2cae2a379995683497"
+    },
+    {
+      "path": "roocode/.specify/templates/clarification/examples/magic-system.yaml",
+      "sha256": "e4a88d36b513419a753b08d584f64e63afe9688e2b1b48eefcbcd54bbd56716f"
+    },
+    {
+      "path": "roocode/.specify/templates/clarification/examples/portal-fantasy.yaml",
+      "sha256": "f861fff4ffcf7c431a20d661fd6b9bd0f5283d4f369f95ea00d4fe18a1b61ef4"
+    },
+    {
+      "path": "roocode/.specify/templates/clarification/examples/slow-burn-romance.yaml",
+      "sha256": "ec07909e39ef980fd1fb5278e638548f55459c8c12661cc25773c695a4d29aa6"
     },
     {
       "path": "roocode/.specify/templates/clarification/kingdom-building-support.yaml",
@@ -7826,18 +8050,6 @@
       "sha256": "06255c106d3ee5a1a5c84afcc056a370589bc3bc8577d7e42a7934bfc7b9bede"
     },
     {
-      "path": "windsurf/.specify/scripts/runtime/application/check-writing-state.js",
-      "sha256": "3d966a5256cefed94cc1cb9bde8a55c4ddac6d4efb146d4a0dbc6192b02dedb8"
-    },
-    {
-      "path": "windsurf/.specify/scripts/runtime/domain/story-artifact.js",
-      "sha256": "010032f357a3154a9e939db41baa9b47bf72d20a7b4d3c1dba65c25c2af2d603"
-    },
-    {
-      "path": "windsurf/.specify/scripts/runtime/script-runtime.js",
-      "sha256": "6ddcafa9fca67371f159c0feb8df4d0eda5cda0e80d45bcb11713f43db99ba6c"
-    },
-    {
       "path": "windsurf/.specify/templates/agent/agent-contract.md",
       "sha256": "7ee3a6c29219db3f8bd104568199931b34c5e65424cff5dd46b8e130e7d41541"
     },
@@ -7872,6 +8084,34 @@
     {
       "path": "windsurf/.specify/templates/clarification/cozy-adventure.yaml",
       "sha256": "aba3282c099929f2f3c7f8ac1413666f1f9e8e161742e205c5611d61eec0fe52"
+    },
+    {
+      "path": "windsurf/.specify/templates/clarification/examples/civilization-threat.yaml",
+      "sha256": "dd4a73a7e307734e94882629438d7015fc7606574bc4f1f64caed2aa04c88237"
+    },
+    {
+      "path": "windsurf/.specify/templates/clarification/examples/core.yaml",
+      "sha256": "22038ad0d9f240a86235359d4925bbaca2ffab414ef5515bafba44786f7f9825"
+    },
+    {
+      "path": "windsurf/.specify/templates/clarification/examples/cozy-adventure.yaml",
+      "sha256": "ac14fd9b83789d42b5a04e097e07e2668484cc57042685ba75cce1f50ec841f6"
+    },
+    {
+      "path": "windsurf/.specify/templates/clarification/examples/kingdom-building-support.yaml",
+      "sha256": "b24ed9edf434847dd0f121cef51a89b4f227dde1d6615f2cae2a379995683497"
+    },
+    {
+      "path": "windsurf/.specify/templates/clarification/examples/magic-system.yaml",
+      "sha256": "e4a88d36b513419a753b08d584f64e63afe9688e2b1b48eefcbcd54bbd56716f"
+    },
+    {
+      "path": "windsurf/.specify/templates/clarification/examples/portal-fantasy.yaml",
+      "sha256": "f861fff4ffcf7c431a20d661fd6b9bd0f5283d4f369f95ea00d4fe18a1b61ef4"
+    },
+    {
+      "path": "windsurf/.specify/templates/clarification/examples/slow-burn-romance.yaml",
+      "sha256": "ec07909e39ef980fd1fb5278e638548f55459c8c12661cc25773c695a4d29aa6"
     },
     {
       "path": "windsurf/.specify/templates/clarification/kingdom-building-support.yaml",
@@ -8039,7 +8279,7 @@
     },
     {
       "path": "windsurf/.windsurf/workflows/analyze.md",
-      "sha256": "1d914a0b2bd4a8a784a5a0b939d977f792a1958a198d642724e6cf3cbf8dbe08",
+      "sha256": "62ed23bf18f81065cb0272a5664428f9ab06506ec0b1a879cbfd9c0453b42b86",
       "commandSource": {
         "command": "analyze",
         "kind": "command-spec",
@@ -8058,7 +8298,7 @@
     },
     {
       "path": "windsurf/.windsurf/workflows/clarify.md",
-      "sha256": "7d9de4a02e5526291375d18a8c5a7706c3d115eae14e4271d474252faf037905",
+      "sha256": "091c3dba22a9ead4590bac6b9f3ed60e8d0e1f52676db87d03e88dfd12331f72",
       "commandSource": {
         "command": "clarify",
         "kind": "legacy-template",
@@ -8067,7 +8307,7 @@
     },
     {
       "path": "windsurf/.windsurf/workflows/constitution.md",
-      "sha256": "58e28a96442653622b2adec1d91a110f0411ede4b658ee78183f30189a8da174",
+      "sha256": "d6d5926aa7ebccf2ccbad5cd39be9a2f218d5f7e106a16050d0a64b6f5609d66",
       "commandSource": {
         "command": "constitution",
         "kind": "legacy-template",
@@ -8076,7 +8316,7 @@
     },
     {
       "path": "windsurf/.windsurf/workflows/context-pack.md",
-      "sha256": "d161deedcd191baee8c91d827eb2b18053ab5b4f6ea14ad8375c7274eb120898",
+      "sha256": "0c2e8c369a80c4d3ba03ad41f94598deb0657506526fcb843692ee44386d241d",
       "commandSource": {
         "command": "context-pack",
         "kind": "legacy-template",
@@ -8085,7 +8325,7 @@
     },
     {
       "path": "windsurf/.windsurf/workflows/expert.md",
-      "sha256": "66089f08fefaec030cefea6392015b6e868c525514feac6833704b80c68d1b0b",
+      "sha256": "c19145731fac2b9fffead4628508ce5ba3a5020429b85aee5a62c937ec6a8316",
       "commandSource": {
         "command": "expert",
         "kind": "legacy-template",
@@ -8094,7 +8334,7 @@
     },
     {
       "path": "windsurf/.windsurf/workflows/plan.md",
-      "sha256": "e1ac8eb7025ffdcbe2c5162137d211ddf1f1ee1d2dd6c130dc93b12e8ca48be6",
+      "sha256": "366f4548c0e353175cd679bc7dc8c23e169ad66d48d2c08776df82d8a7cb13bd",
       "commandSource": {
         "command": "plan",
         "kind": "legacy-template",
@@ -8103,7 +8343,7 @@
     },
     {
       "path": "windsurf/.windsurf/workflows/relations.md",
-      "sha256": "c3f05bba571a536f339155ebf6ced61e78e23f9a9ae11dbe165add40748fa4d7",
+      "sha256": "c4095d9a51db19826c3e16d8a39ed62dab0aada1ec871c883bc685b57a951193",
       "commandSource": {
         "command": "relations",
         "kind": "legacy-template",
@@ -8112,7 +8352,7 @@
     },
     {
       "path": "windsurf/.windsurf/workflows/review.md",
-      "sha256": "76ccbe6d6f73a53ff4ea3388c408ca0eca9291212faa12d2b8c127d4e9d8ed08",
+      "sha256": "7e268be9d7fdabf9378bd9b218f4ad9d6329b8ae65b20c15eb394d15e2d3872d",
       "commandSource": {
         "command": "review",
         "kind": "legacy-template",
@@ -8121,7 +8361,7 @@
     },
     {
       "path": "windsurf/.windsurf/workflows/scene.md",
-      "sha256": "a2c97ccf1a6064e7760a3af8187a6675d4a678aba48b68971f12da5d259eec9c",
+      "sha256": "3ce4c043be86af5dfeceb538520bc2f0b9edc2ae37dd62029d10ecc6494a903c",
       "commandSource": {
         "command": "scene",
         "kind": "legacy-template",
@@ -8130,7 +8370,7 @@
     },
     {
       "path": "windsurf/.windsurf/workflows/specify.md",
-      "sha256": "d6fde450e5c60d239d10b5cd5c8f8c68124827346dad2b7bcb9af17c8d2064c8",
+      "sha256": "d31be41909151de1781c87706bcd88e597398314dd206334bdbd69af3b6cccc9",
       "commandSource": {
         "command": "specify",
         "kind": "legacy-template",
@@ -8148,7 +8388,7 @@
     },
     {
       "path": "windsurf/.windsurf/workflows/timeline.md",
-      "sha256": "28190b0aba54ac17376b7dd1437a91855d4389488b82f8c5af106ec04eb14177",
+      "sha256": "69199f9f1b4c8977e0636d5a9f2c55e9ca36a28d7332bc09f8f285ff2aca892d",
       "commandSource": {
         "command": "timeline",
         "kind": "legacy-template",
@@ -8166,7 +8406,7 @@
     },
     {
       "path": "windsurf/.windsurf/workflows/track.md",
-      "sha256": "25db506e992a4bbdb14aba34b34842d2b52da44eae49c4b5f8fd808b12437caa",
+      "sha256": "c8dd7ca4cf562c279e2e8706e4fcc458cdf7bcc7933210517bb72dd3b17c0b3b",
       "commandSource": {
         "command": "track",
         "kind": "legacy-template",
@@ -8175,7 +8415,7 @@
     },
     {
       "path": "windsurf/.windsurf/workflows/write.md",
-      "sha256": "88831de5bb2ff8042e8ec0f4c5bf082d59633135f17bcae7bcfd8edde1cf4092",
+      "sha256": "3e8e250e26a4b76b32c1e8abb6bc9d977d2588578595acf5b18f2dda83e1930d",
       "commandSource": {
         "command": "write",
         "kind": "command-spec",

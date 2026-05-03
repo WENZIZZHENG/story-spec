@@ -177,7 +177,10 @@ const copyTemplateSupportFiles = async (rootDir: string, specDir: string): Promi
       }
 
       const segments = relativePath.split(path.sep);
-      return !segments.some(segment => segment === 'commands' || segment.startsWith('commands-'));
+      return !segments.some(segment =>
+        segment === 'commands'
+        || segment.startsWith('commands-')
+      );
     }
   });
 };

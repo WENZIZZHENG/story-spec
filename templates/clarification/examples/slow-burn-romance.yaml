@@ -1,0 +1,45 @@
+id: slow-burn-romance
+name: 慢热感情示例分叉
+description: 处理慢热关系、信任建立和情感功能的示例分叉。
+keywords:
+  - 慢热
+  - 感情
+  - 关系
+  - 信任
+branches:
+  - label: 作者主导：继续提问
+    tone: 保留创作空间
+    assumptions:
+      - 先不决定关系对象是谁。
+      - 先把感情线的功能留给用户确认。
+    sampleAnswer: 我先不定关系对象，请继续问我 3 个关键问题。
+    tradeoffs:
+      - 不会替作者定稿，但前期需要多一轮问答。
+      - 适合还没想清关系线的阶段。
+  - label: 先搭档后感情
+    tone: 克制、稳步
+    assumptions:
+      - 两人先是任务伙伴。
+      - 信任来自一次次小问题处理。
+    sampleAnswer: 两人先做搭档，感情先放在信任和分工之后。
+    tradeoffs:
+      - 情感更耐看，但前期不会特别甜。
+      - 需要靠事件推进关系。
+  - label: 价值观拉扯版
+    tone: 文明差异驱动
+    assumptions:
+      - 感情线承担一部分文明冲突。
+      - 彼此都要被对方的选择影响。
+    sampleAnswer: 关系对象会和主角在制度、伦理和选择上不断碰撞。
+    tradeoffs:
+      - 主题更厚，但容易压住轻松感。
+      - 需要平衡对话和情节。
+  - label: 温和陪伴版
+    tone: 温暖、慢慢靠近
+    assumptions:
+      - 关系不急着表白。
+      - 重点是陪伴和相互理解。
+    sampleAnswer: 感情线先从一起解决问题、互相照应开始。
+    tradeoffs:
+      - 读起来舒服，但冲突张力较弱。
+      - 更适合长线慢热。

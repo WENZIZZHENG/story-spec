@@ -1,11 +1,17 @@
 import { readdir, readFile } from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import yaml from 'js-yaml';
 import {
   parseClarificationQuestionSet,
   type ClarificationIssue
 } from '../domain/clarification-schema.js';
 import type { ClarificationQuestion } from '../domain/clarification.js';
+import {
+  parseExampleBranchSet,
+  type ExampleBranch,
+  type ExampleBranchIssue
+} from '../domain/example-branch.js';
 
 export type ClarificationSelectionMode = 'default' | 'fewer' | 'examples-only';
 
@@ -17,10 +23,24 @@ export interface ClarificationQuestionPack {
   questions: ClarificationQuestion[];
 }
 
+export interface ExampleBranchPack {
+  id: string;
+  name: string;
+  description: string;
+  keywords: string[];
+  branches: ExampleBranch[];
+}
+
 export interface SelectedClarificationQuestion {
   packId: string;
   packName: string;
   question: ClarificationQuestion;
+}
+
+export interface SelectedExampleBranch {
+  packId: string;
+  packName: string;
+  branch: ExampleBranch;
 }
 
 export interface ClarificationNextAction {
@@ -33,12 +53,14 @@ export interface ClarificationSelectionOptions {
   mode?: ClarificationSelectionMode;
   maxQuestions?: number;
   maxExamples?: number;
+  exampleBranchPacks?: ExampleBranchPack[];
 }
 
 export interface ClarificationSelectionResult {
   mode: ClarificationSelectionMode;
   matchedPacks: string[];
   selectedQuestions: SelectedClarificationQuestion[];
+  exampleBranches: SelectedExampleBranch[];
   copyableExamples: string[];
   nextActions: ClarificationNextAction[];
   issues: ClarificationIssue[];
@@ -49,9 +71,15 @@ export interface LoadClarificationQuestionPacksResult {
   issues: ClarificationIssue[];
 }
 
+export interface LoadClarificationExampleBranchPacksResult {
+  packs: ExampleBranchPack[];
+  issues: ExampleBranchIssue[];
+}
+
 const dirname = path.dirname(fileURLToPath(import.meta.url));
 const packageRoot = path.resolve(dirname, '..', '..');
 const defaultClarificationTemplateDir = path.join(packageRoot, 'templates', 'clarification');
+const defaultClarificationExampleBranchDir = path.join(defaultClarificationTemplateDir, 'examples');
 
 const PACK_FILE_ORDER = [
   'core.yaml',
@@ -63,8 +91,21 @@ const PACK_FILE_ORDER = [
   'kingdom-building-support.yaml'
 ];
 
+const EXAMPLE_BRANCH_FILE_ORDER = [
+  'core.yaml',
+  'portal-fantasy.yaml',
+  'magic-system.yaml',
+  'slow-burn-romance.yaml',
+  'civilization-threat.yaml',
+  'cozy-adventure.yaml',
+  'kingdom-building-support.yaml'
+];
+
 const isNonEmptyString = (value: unknown): value is string =>
   typeof value === 'string' && value.trim().length > 0;
+
+const isRecord = (value: unknown): value is Record<string, unknown> =>
+  typeof value === 'object' && value !== null && !Array.isArray(value);
 
 const readPackHeader = (
   content: string,
@@ -110,6 +151,26 @@ const readKeywordBlock = (content: string): string[] => {
   }
 
   return keywords;
+};
+
+const parseExampleBranchPack = (
+  content: string,
+  filePath: string
+): ExampleBranchPack & { issues: ExampleBranchIssue[] } => {
+  const branchSet = parseExampleBranchSet(content, filePath);
+  const document = yaml.load(content);
+  const metadata = isRecord(document) ? document : {};
+
+  return {
+    id: isNonEmptyString(metadata.id) ? metadata.id.trim() : path.basename(filePath, path.extname(filePath)),
+    name: isNonEmptyString(metadata.name)
+      ? metadata.name.trim()
+      : (isNonEmptyString(metadata.id) ? metadata.id.trim() : path.basename(filePath, path.extname(filePath))),
+    description: isNonEmptyString(metadata.description) ? metadata.description.trim() : '',
+    keywords: readKeywordBlock(content),
+    branches: branchSet.branches,
+    issues: branchSet.issues
+  };
 };
 
 const parsePack = (content: string, filePath: string): ClarificationQuestionPack & { issues: ClarificationIssue[] } => {
@@ -162,6 +223,45 @@ export const loadClarificationQuestionPacks = async (
       description: pack.description,
       keywords: pack.keywords,
       questions: pack.questions
+    });
+    issues.push(...pack.issues);
+  }
+
+  return { packs, issues };
+};
+
+export const loadClarificationExampleBranches = async (
+  templateDir = defaultClarificationExampleBranchDir
+): Promise<LoadClarificationExampleBranchPacksResult> => {
+  let fileNames: string[];
+  try {
+    fileNames = (await readdir(templateDir))
+      .filter(file => file.endsWith('.yaml') || file.endsWith('.yml'))
+      .sort((left, right) => {
+        const leftIndex = EXAMPLE_BRANCH_FILE_ORDER.indexOf(left);
+        const rightIndex = EXAMPLE_BRANCH_FILE_ORDER.indexOf(right);
+        if (leftIndex !== -1 || rightIndex !== -1) {
+          return (leftIndex === -1 ? Number.MAX_SAFE_INTEGER : leftIndex)
+            - (rightIndex === -1 ? Number.MAX_SAFE_INTEGER : rightIndex);
+        }
+        return left.localeCompare(right);
+      });
+  } catch {
+    return { packs: [], issues: [] };
+  }
+
+  const packs: ExampleBranchPack[] = [];
+  const issues: ExampleBranchIssue[] = [];
+
+  for (const fileName of fileNames) {
+    const filePath = path.join(templateDir, fileName);
+    const pack = parseExampleBranchPack(await readFile(filePath, 'utf-8'), filePath);
+    packs.push({
+      id: pack.id,
+      name: pack.name,
+      description: pack.description,
+      keywords: pack.keywords,
+      branches: pack.branches
     });
     issues.push(...pack.issues);
   }
@@ -236,6 +336,46 @@ const buildExamples = (
   return examples;
 };
 
+const buildExampleBranches = (
+  packs: ExampleBranchPack[],
+  maxExamples: number
+): SelectedExampleBranch[] => {
+  const branches: SelectedExampleBranch[] = [];
+  const queue = packs.map(pack => ({ pack, index: 0 }));
+
+  while (branches.length < maxExamples && queue.some(item => item.index < item.pack.branches.length)) {
+    for (const item of queue) {
+      if (branches.length >= maxExamples) {
+        break;
+      }
+
+      const branch = item.pack.branches[item.index];
+      item.index += 1;
+      if (!branch) {
+        continue;
+      }
+
+      branches.push({
+        packId: item.pack.id,
+        packName: item.pack.name,
+        branch
+      });
+    }
+  }
+
+  return branches;
+};
+
+const scoreExampleBranchPack = (input: string, pack: ExampleBranchPack): number => {
+  if (pack.id === 'core') {
+    return 1;
+  }
+
+  return pack.keywords.reduce((score, keyword) =>
+    input.includes(keyword.toLowerCase()) ? score + 2 : score,
+  0);
+};
+
 const defaultNextActions = (): ClarificationNextAction[] => [
   {
     id: 'more-questions',
@@ -272,12 +412,26 @@ export const selectClarificationQuestions = (
 
   const matchedPacks = scoredPacks.map(item => item.pack);
   const maxQuestions = options.maxQuestions ?? (mode === 'fewer' ? 6 : 10);
+  const scoredExampleBranchPacks = options.exampleBranchPacks?.length
+    ? options.exampleBranchPacks
+      .map(pack => ({ pack, score: scoreExampleBranchPack(normalizedInput, pack) }))
+      .filter(item => item.score > 0)
+      .sort((left, right) =>
+        right.score - left.score
+        || EXAMPLE_BRANCH_FILE_ORDER.indexOf(`${left.pack.id}.yaml`) - EXAMPLE_BRANCH_FILE_ORDER.indexOf(`${right.pack.id}.yaml`)
+        || left.pack.id.localeCompare(right.pack.id)
+      )
+    : [];
+  const matchedExampleBranchPacks = scoredExampleBranchPacks.length > 0
+    ? scoredExampleBranchPacks.map(item => item.pack)
+    : (options.exampleBranchPacks ?? []);
 
   if (mode === 'examples-only') {
     return {
       mode,
       matchedPacks: matchedPacks.map(pack => pack.id),
       selectedQuestions: [],
+      exampleBranches: buildExampleBranches(matchedExampleBranchPacks, options.maxExamples ?? 3),
       copyableExamples: buildExamples(matchedPacks, options.maxExamples ?? 6),
       nextActions: defaultNextActions(),
       issues: []
@@ -290,6 +444,7 @@ export const selectClarificationQuestions = (
     mode,
     matchedPacks: matchedPacks.map(pack => pack.id),
     selectedQuestions,
+    exampleBranches: buildExampleBranches(matchedExampleBranchPacks, options.maxExamples ?? 3),
     copyableExamples: buildExamples(matchedPacks, options.maxExamples ?? 3),
     nextActions: defaultNextActions(),
     issues: []

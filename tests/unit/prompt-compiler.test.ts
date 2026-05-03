@@ -62,6 +62,7 @@ describe('prompt compiler', () => {
     expect(result).toContain('只是题材标签、风格词、偏好组合');
     expect(result).toContain('先区分“用户已明确”“需要澄清”');
     expect(result).toContain('提供 2-3 个可直接复制的示例输入');
+    expect(result).toContain('示例分叉');
     expect(result).toContain('用户输入：$ARGUMENTS');
     expect(result).toContain('Agent: codex');
     expect(result).toContain('运行 .specify/scripts/bash/plan-story.sh');
@@ -108,6 +109,7 @@ describe('prompt compiler', () => {
     expect(result).toContain('本命令用途：基于任务清单执行章节写作。');
     expect(result).toContain('先提示用户补充 `[章节编号或任务ID]`');
     expect(result).toContain('AI 可以提出但不能替用户定稿的建议');
+    expect(result).toContain('示例分叉');
     expect(result).toContain('用户输入：$ARGUMENTS');
   });
 
@@ -185,13 +187,15 @@ describe('prompt compiler', () => {
     expect(specify).toContain('不要创建或修改 `stories/*/specification.md`');
     expect(specify).toContain('**用户已明确**');
     expect(specify).toContain('**需要澄清**');
-    expect(specify).toContain('**可复制示例**');
+    expect(specify).toContain('**可复制示例分叉**');
+    expect(specify).toContain('作者主导/继续提问');
     expect(specify).toContain('### 5.5 来源标记与正典防污染');
     expect(specify).toContain('source.aiSuggested: true');
     expect(specify).toContain('source.confirmedByUser: false');
     expect(clarify).toContain('### 创作控制权保护');
     expect(clarify).toContain('stories/<story>/clarifications.json');
     expect(clarify).toContain('不要修改 `stories/*/specification.md`');
+    expect(clarify).toContain('可复制示例分叉');
     expect(clarify).toContain('ai-suggested');
     expect(clarify).not.toContain('## 写入前预览门禁');
   });

@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import {
+  loadClarificationExampleBranches,
   loadClarificationQuestionPacks,
   selectClarificationQuestions
 } from '../../src/application/select-clarification-questions.js';
@@ -18,6 +19,23 @@ describe('selectClarificationQuestions', () => {
       'portal-fantasy',
       'slow-burn-romance'
     ]);
+  });
+
+  it('loads built-in example branch packs', async () => {
+    const result = await loadClarificationExampleBranches();
+
+    expect(result.issues).toEqual([]);
+    expect(result.packs.map(pack => pack.id).sort()).toEqual([
+      'civilization-threat',
+      'core',
+      'cozy-adventure',
+      'kingdom-building-support',
+      'magic-system',
+      'portal-fantasy',
+      'slow-burn-romance'
+    ]);
+    expect(result.packs.every(pack => pack.branches.length >= 3)).toBe(true);
+    expect(result.packs.flatMap(pack => pack.branches).some(branch => branch.label.includes('作者主导'))).toBe(true);
   });
 
   it('selects multiple relevant packs for a mixed low-info premise', async () => {
@@ -72,15 +90,30 @@ describe('selectClarificationQuestions', () => {
 
   it('can return copyable examples without asking questions', async () => {
     const { packs } = await loadClarificationQuestionPacks();
+    const { packs: exampleBranchPacks } = await loadClarificationExampleBranches();
     const selection = selectClarificationQuestions(
       '异界穿越、轻松冒险、编程施法',
       packs,
-      { mode: 'examples-only', maxExamples: 3 }
+      { mode: 'examples-only', maxExamples: 3, exampleBranchPacks }
     );
 
     expect(selection.mode).toBe('examples-only');
     expect(selection.selectedQuestions).toEqual([]);
+    expect(selection.exampleBranches).toHaveLength(3);
+    expect(selection.exampleBranches[0].branch.label).toContain('作者主导');
     expect(selection.copyableExamples).toHaveLength(3);
     expect(selection.copyableExamples.every(example => example.trim().length > 0)).toBe(true);
+  });
+
+  it('returns stable different example branches for the same input', async () => {
+    const { packs } = await loadClarificationQuestionPacks();
+    const { packs: exampleBranchPacks } = await loadClarificationExampleBranches();
+    const input = '异界穿越、轻松冒险、编程施法、慢热感情、文明级威胁。建设流和思想改造是支撑工具，不是纯种田文。';
+
+    const first = selectClarificationQuestions(input, packs, { exampleBranchPacks, maxExamples: 3 });
+    const second = selectClarificationQuestions(input, packs, { exampleBranchPacks, maxExamples: 3 });
+
+    expect(first.exampleBranches.map(item => item.branch.label)).toEqual(second.exampleBranches.map(item => item.branch.label));
+    expect(new Set(first.exampleBranches.map(item => item.branch.tone)).size).toBeGreaterThanOrEqual(2);
   });
 });

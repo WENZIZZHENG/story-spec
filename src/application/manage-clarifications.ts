@@ -5,6 +5,10 @@ import type {
   ClarificationAnswer,
   ClarificationQuestion
 } from '../domain/clarification.js';
+import {
+  renderExampleBranchMarkdown,
+  type ExampleBranch
+} from '../domain/example-branch.js';
 
 export interface ClarificationRecord {
   schemaVersion: '1.0';
@@ -61,6 +65,7 @@ export interface ClarificationSummaryInput {
   explicit: string[];
   pending: string[];
   examples: string[];
+  exampleBranches?: ExampleBranch[];
   nextSteps?: ClarificationNextStep[];
 }
 
@@ -102,6 +107,10 @@ export const renderClarificationSummary = (input: ClarificationSummaryInput): st
   '',
   ...bulletList(input.examples, '暂无示例；请先选择一个澄清问题包。'),
   '',
+  ...(input.exampleBranches?.length
+    ? input.exampleBranches.flatMap(branch => renderExampleBranchMarkdown(branch).trimEnd().split('\n'))
+    : ['- 示例分叉：暂无。']),
+  '',
   '## 下一步建议',
   '',
   ...bulletList(
@@ -133,6 +142,13 @@ export const renderClarificationMarkdown = (record: ClarificationRecord): string
     question.required && !record.answers.some(answer => answer.questionId === question.id && answer.confirmed)
   );
   const examples = record.questions.flatMap(question => question.exampleAnswers.slice(0, 2)).slice(0, 6);
+  const exampleBranches = record.questions.slice(0, 3).map((question, index) => ({
+    label: index === 0 ? '作者主导：继续提问' : `示例分叉 ${index + 1}`,
+    tone: index === 0 ? '保留创作空间' : '不同创作方向',
+    assumptions: [question.question],
+    sampleAnswer: question.exampleAnswers[0] ?? '暂无示例。',
+    tradeoffs: [question.whyItMatters]
+  }));
 
   return [
     `# ${record.story} 澄清记录`,
@@ -147,7 +163,8 @@ export const renderClarificationMarkdown = (record: ClarificationRecord): string
     renderClarificationSummary({
       explicit: confirmed.map(answer => `${answer.questionId}：${answerToMarkdown(answer.answer)}`),
       pending: pendingQuestions.map(question => `${question.id}：${question.question}`),
-      examples
+      examples,
+      exampleBranches
     }).trimEnd(),
     '',
     '## AI 建议，待确认',

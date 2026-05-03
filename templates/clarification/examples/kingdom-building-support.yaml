@@ -1,0 +1,46 @@
+id: kingdom-building-support
+name: 建设流支撑示例分叉
+description: 处理建设流和思想改造作为支撑工具的示例分叉。
+keywords:
+  - 建设
+  - 统治
+  - 组织
+  - 改造
+  - 协作
+branches:
+  - label: 作者主导：继续提问
+    tone: 保留创作空间
+    assumptions:
+      - 先不决定建设线的篇幅。
+      - 先把建设当支撑工具，不替主线定稿。
+    sampleAnswer: 我先不定建设线比重，请继续问我 3 个关键问题。
+    tradeoffs:
+      - 可以防止故事过早偏成纯种田。
+      - 需要等后面再决定建设强度。
+  - label: 工具优先版
+    tone: 稳扎稳打
+    assumptions:
+      - 建设和改造只是解决问题的工具。
+      - 主线仍然是冒险与威胁揭示。
+    sampleAnswer: 建设流只做支撑，不要把故事写成纯种田。
+    tradeoffs:
+      - 主线更清晰，但建设内容不能太多。
+      - 要控制工具和目的的比例。
+  - label: 思想改造争议版
+    tone: 价值冲突
+    assumptions:
+      - 改造不是简单洗脑，而是理念碰撞。
+      - 要写出代价和争议。
+    sampleAnswer: 思想改造只作为文明转变的工具，而且要写出它的争议。
+    tradeoffs:
+      - 主题更复杂，但容易变沉重。
+      - 需要谨慎处理角色选择。
+  - label: 协作建设版
+    tone: 团队感
+    assumptions:
+      - 建设靠协作，而不是主角单刷。
+      - 新秩序来自不断磨合。
+    sampleAnswer: 主角通过协作带动局部建设，但重点仍是冒险和关系。
+    tradeoffs:
+      - 更有群像感，但推进速度会慢一些。
+      - 要平衡各线索篇幅。

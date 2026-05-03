@@ -116,6 +116,26 @@ describe('manage clarifications', () => {
     expect(markdown).toContain('生成 Level 1/2/3 规格');
   });
 
+  it('renders example branches in summary output', () => {
+    const markdown = renderClarificationSummary({
+      explicit: ['题材：异界穿越、编程施法'],
+      pending: ['主角身份'],
+      examples: ['主角是后端程序员。'],
+      exampleBranches: [
+        {
+          label: '作者主导：继续提问',
+          tone: '保留创作空间',
+          assumptions: ['先不决定主角身份。'],
+          sampleAnswer: '我先不定主角，请继续问我 3 个关键问题。',
+          tradeoffs: ['推进较慢，但不会让 AI 替作者定稿。']
+        }
+      ]
+    });
+
+    expect(markdown).toContain('### ExampleBranch：作者主导：继续提问');
+    expect(markdown).toContain('confirmed: false');
+  });
+
   it('renders markdown with unconfirmed AI suggestions separated from user answers', () => {
     const markdown = renderClarificationMarkdown({
       schemaVersion: '1.0',
