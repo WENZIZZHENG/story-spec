@@ -272,6 +272,18 @@
       "sha256": "06255c106d3ee5a1a5c84afcc056a370589bc3bc8577d7e42a7934bfc7b9bede"
     },
     {
+      "path": "auggie/.specify/scripts/runtime/application/check-writing-state.js",
+      "sha256": "3d966a5256cefed94cc1cb9bde8a55c4ddac6d4efb146d4a0dbc6192b02dedb8"
+    },
+    {
+      "path": "auggie/.specify/scripts/runtime/domain/story-artifact.js",
+      "sha256": "010032f357a3154a9e939db41baa9b47bf72d20a7b4d3c1dba65c25c2af2d603"
+    },
+    {
+      "path": "auggie/.specify/scripts/runtime/script-runtime.js",
+      "sha256": "6ddcafa9fca67371f159c0feb8df4d0eda5cda0e80d45bcb11713f43db99ba6c"
+    },
+    {
       "path": "auggie/.specify/templates/agent/agent-contract.md",
       "sha256": "7ee3a6c29219db3f8bd104568199931b34c5e65424cff5dd46b8e130e7d41541"
     },
@@ -836,6 +848,18 @@
     {
       "path": "claude/.specify/scripts/postbuild.cjs",
       "sha256": "06255c106d3ee5a1a5c84afcc056a370589bc3bc8577d7e42a7934bfc7b9bede"
+    },
+    {
+      "path": "claude/.specify/scripts/runtime/application/check-writing-state.js",
+      "sha256": "3d966a5256cefed94cc1cb9bde8a55c4ddac6d4efb146d4a0dbc6192b02dedb8"
+    },
+    {
+      "path": "claude/.specify/scripts/runtime/domain/story-artifact.js",
+      "sha256": "010032f357a3154a9e939db41baa9b47bf72d20a7b4d3c1dba65c25c2af2d603"
+    },
+    {
+      "path": "claude/.specify/scripts/runtime/script-runtime.js",
+      "sha256": "6ddcafa9fca67371f159c0feb8df4d0eda5cda0e80d45bcb11713f43db99ba6c"
     },
     {
       "path": "claude/.specify/templates/agent/agent-contract.md",
@@ -1404,6 +1428,18 @@
       "sha256": "06255c106d3ee5a1a5c84afcc056a370589bc3bc8577d7e42a7934bfc7b9bede"
     },
     {
+      "path": "codebuddy/.specify/scripts/runtime/application/check-writing-state.js",
+      "sha256": "3d966a5256cefed94cc1cb9bde8a55c4ddac6d4efb146d4a0dbc6192b02dedb8"
+    },
+    {
+      "path": "codebuddy/.specify/scripts/runtime/domain/story-artifact.js",
+      "sha256": "010032f357a3154a9e939db41baa9b47bf72d20a7b4d3c1dba65c25c2af2d603"
+    },
+    {
+      "path": "codebuddy/.specify/scripts/runtime/script-runtime.js",
+      "sha256": "6ddcafa9fca67371f159c0feb8df4d0eda5cda0e80d45bcb11713f43db99ba6c"
+    },
+    {
       "path": "codebuddy/.specify/templates/agent/agent-contract.md",
       "sha256": "7ee3a6c29219db3f8bd104568199931b34c5e65424cff5dd46b8e130e7d41541"
     },
@@ -1968,6 +2004,18 @@
     {
       "path": "codex/.specify/scripts/postbuild.cjs",
       "sha256": "06255c106d3ee5a1a5c84afcc056a370589bc3bc8577d7e42a7934bfc7b9bede"
+    },
+    {
+      "path": "codex/.specify/scripts/runtime/application/check-writing-state.js",
+      "sha256": "3d966a5256cefed94cc1cb9bde8a55c4ddac6d4efb146d4a0dbc6192b02dedb8"
+    },
+    {
+      "path": "codex/.specify/scripts/runtime/domain/story-artifact.js",
+      "sha256": "010032f357a3154a9e939db41baa9b47bf72d20a7b4d3c1dba65c25c2af2d603"
+    },
+    {
+      "path": "codex/.specify/scripts/runtime/script-runtime.js",
+      "sha256": "6ddcafa9fca67371f159c0feb8df4d0eda5cda0e80d45bcb11713f43db99ba6c"
     },
     {
       "path": "codex/.specify/templates/agent/agent-contract.md",
@@ -2536,6 +2584,18 @@
       "sha256": "06255c106d3ee5a1a5c84afcc056a370589bc3bc8577d7e42a7934bfc7b9bede"
     },
     {
+      "path": "continue-check/.specify/scripts/runtime/application/check-writing-state.js",
+      "sha256": "3d966a5256cefed94cc1cb9bde8a55c4ddac6d4efb146d4a0dbc6192b02dedb8"
+    },
+    {
+      "path": "continue-check/.specify/scripts/runtime/domain/story-artifact.js",
+      "sha256": "010032f357a3154a9e939db41baa9b47bf72d20a7b4d3c1dba65c25c2af2d603"
+    },
+    {
+      "path": "continue-check/.specify/scripts/runtime/script-runtime.js",
+      "sha256": "6ddcafa9fca67371f159c0feb8df4d0eda5cda0e80d45bcb11713f43db99ba6c"
+    },
+    {
       "path": "continue-check/.specify/templates/agent/agent-contract.md",
       "sha256": "7ee3a6c29219db3f8bd104568199931b34c5e65424cff5dd46b8e130e7d41541"
     },
@@ -3100,6 +3160,18 @@
     {
       "path": "copilot/.specify/scripts/postbuild.cjs",
       "sha256": "06255c106d3ee5a1a5c84afcc056a370589bc3bc8577d7e42a7934bfc7b9bede"
+    },
+    {
+      "path": "copilot/.specify/scripts/runtime/application/check-writing-state.js",
+      "sha256": "3d966a5256cefed94cc1cb9bde8a55c4ddac6d4efb146d4a0dbc6192b02dedb8"
+    },
+    {
+      "path": "copilot/.specify/scripts/runtime/domain/story-artifact.js",
+      "sha256": "010032f357a3154a9e939db41baa9b47bf72d20a7b4d3c1dba65c25c2af2d603"
+    },
+    {
+      "path": "copilot/.specify/scripts/runtime/script-runtime.js",
+      "sha256": "6ddcafa9fca67371f159c0feb8df4d0eda5cda0e80d45bcb11713f43db99ba6c"
     },
     {
       "path": "copilot/.specify/templates/agent/agent-contract.md",
@@ -3668,6 +3740,18 @@
       "sha256": "06255c106d3ee5a1a5c84afcc056a370589bc3bc8577d7e42a7934bfc7b9bede"
     },
     {
+      "path": "cursor/.specify/scripts/runtime/application/check-writing-state.js",
+      "sha256": "3d966a5256cefed94cc1cb9bde8a55c4ddac6d4efb146d4a0dbc6192b02dedb8"
+    },
+    {
+      "path": "cursor/.specify/scripts/runtime/domain/story-artifact.js",
+      "sha256": "010032f357a3154a9e939db41baa9b47bf72d20a7b4d3c1dba65c25c2af2d603"
+    },
+    {
+      "path": "cursor/.specify/scripts/runtime/script-runtime.js",
+      "sha256": "6ddcafa9fca67371f159c0feb8df4d0eda5cda0e80d45bcb11713f43db99ba6c"
+    },
+    {
       "path": "cursor/.specify/templates/agent/agent-contract.md",
       "sha256": "7ee3a6c29219db3f8bd104568199931b34c5e65424cff5dd46b8e130e7d41541"
     },
@@ -4232,6 +4316,18 @@
     {
       "path": "gemini/.specify/scripts/postbuild.cjs",
       "sha256": "06255c106d3ee5a1a5c84afcc056a370589bc3bc8577d7e42a7934bfc7b9bede"
+    },
+    {
+      "path": "gemini/.specify/scripts/runtime/application/check-writing-state.js",
+      "sha256": "3d966a5256cefed94cc1cb9bde8a55c4ddac6d4efb146d4a0dbc6192b02dedb8"
+    },
+    {
+      "path": "gemini/.specify/scripts/runtime/domain/story-artifact.js",
+      "sha256": "010032f357a3154a9e939db41baa9b47bf72d20a7b4d3c1dba65c25c2af2d603"
+    },
+    {
+      "path": "gemini/.specify/scripts/runtime/script-runtime.js",
+      "sha256": "6ddcafa9fca67371f159c0feb8df4d0eda5cda0e80d45bcb11713f43db99ba6c"
     },
     {
       "path": "gemini/.specify/templates/agent/agent-contract.md",
@@ -4800,6 +4896,18 @@
       "sha256": "06255c106d3ee5a1a5c84afcc056a370589bc3bc8577d7e42a7934bfc7b9bede"
     },
     {
+      "path": "generic/.specify/scripts/runtime/application/check-writing-state.js",
+      "sha256": "3d966a5256cefed94cc1cb9bde8a55c4ddac6d4efb146d4a0dbc6192b02dedb8"
+    },
+    {
+      "path": "generic/.specify/scripts/runtime/domain/story-artifact.js",
+      "sha256": "010032f357a3154a9e939db41baa9b47bf72d20a7b4d3c1dba65c25c2af2d603"
+    },
+    {
+      "path": "generic/.specify/scripts/runtime/script-runtime.js",
+      "sha256": "6ddcafa9fca67371f159c0feb8df4d0eda5cda0e80d45bcb11713f43db99ba6c"
+    },
+    {
       "path": "generic/.specify/templates/agent/agent-contract.md",
       "sha256": "7ee3a6c29219db3f8bd104568199931b34c5e65424cff5dd46b8e130e7d41541"
     },
@@ -5364,6 +5472,18 @@
     {
       "path": "kilocode/.specify/scripts/postbuild.cjs",
       "sha256": "06255c106d3ee5a1a5c84afcc056a370589bc3bc8577d7e42a7934bfc7b9bede"
+    },
+    {
+      "path": "kilocode/.specify/scripts/runtime/application/check-writing-state.js",
+      "sha256": "3d966a5256cefed94cc1cb9bde8a55c4ddac6d4efb146d4a0dbc6192b02dedb8"
+    },
+    {
+      "path": "kilocode/.specify/scripts/runtime/domain/story-artifact.js",
+      "sha256": "010032f357a3154a9e939db41baa9b47bf72d20a7b4d3c1dba65c25c2af2d603"
+    },
+    {
+      "path": "kilocode/.specify/scripts/runtime/script-runtime.js",
+      "sha256": "6ddcafa9fca67371f159c0feb8df4d0eda5cda0e80d45bcb11713f43db99ba6c"
     },
     {
       "path": "kilocode/.specify/templates/agent/agent-contract.md",
@@ -5932,6 +6052,18 @@
       "sha256": "06255c106d3ee5a1a5c84afcc056a370589bc3bc8577d7e42a7934bfc7b9bede"
     },
     {
+      "path": "opencode/.specify/scripts/runtime/application/check-writing-state.js",
+      "sha256": "3d966a5256cefed94cc1cb9bde8a55c4ddac6d4efb146d4a0dbc6192b02dedb8"
+    },
+    {
+      "path": "opencode/.specify/scripts/runtime/domain/story-artifact.js",
+      "sha256": "010032f357a3154a9e939db41baa9b47bf72d20a7b4d3c1dba65c25c2af2d603"
+    },
+    {
+      "path": "opencode/.specify/scripts/runtime/script-runtime.js",
+      "sha256": "6ddcafa9fca67371f159c0feb8df4d0eda5cda0e80d45bcb11713f43db99ba6c"
+    },
+    {
       "path": "opencode/.specify/templates/agent/agent-contract.md",
       "sha256": "7ee3a6c29219db3f8bd104568199931b34c5e65424cff5dd46b8e130e7d41541"
     },
@@ -6496,6 +6628,18 @@
     {
       "path": "q/.specify/scripts/postbuild.cjs",
       "sha256": "06255c106d3ee5a1a5c84afcc056a370589bc3bc8577d7e42a7934bfc7b9bede"
+    },
+    {
+      "path": "q/.specify/scripts/runtime/application/check-writing-state.js",
+      "sha256": "3d966a5256cefed94cc1cb9bde8a55c4ddac6d4efb146d4a0dbc6192b02dedb8"
+    },
+    {
+      "path": "q/.specify/scripts/runtime/domain/story-artifact.js",
+      "sha256": "010032f357a3154a9e939db41baa9b47bf72d20a7b4d3c1dba65c25c2af2d603"
+    },
+    {
+      "path": "q/.specify/scripts/runtime/script-runtime.js",
+      "sha256": "6ddcafa9fca67371f159c0feb8df4d0eda5cda0e80d45bcb11713f43db99ba6c"
     },
     {
       "path": "q/.specify/templates/agent/agent-contract.md",
@@ -7064,6 +7208,18 @@
       "sha256": "06255c106d3ee5a1a5c84afcc056a370589bc3bc8577d7e42a7934bfc7b9bede"
     },
     {
+      "path": "qwen/.specify/scripts/runtime/application/check-writing-state.js",
+      "sha256": "3d966a5256cefed94cc1cb9bde8a55c4ddac6d4efb146d4a0dbc6192b02dedb8"
+    },
+    {
+      "path": "qwen/.specify/scripts/runtime/domain/story-artifact.js",
+      "sha256": "010032f357a3154a9e939db41baa9b47bf72d20a7b4d3c1dba65c25c2af2d603"
+    },
+    {
+      "path": "qwen/.specify/scripts/runtime/script-runtime.js",
+      "sha256": "6ddcafa9fca67371f159c0feb8df4d0eda5cda0e80d45bcb11713f43db99ba6c"
+    },
+    {
       "path": "qwen/.specify/templates/agent/agent-contract.md",
       "sha256": "7ee3a6c29219db3f8bd104568199931b34c5e65424cff5dd46b8e130e7d41541"
     },
@@ -7630,6 +7786,18 @@
       "sha256": "06255c106d3ee5a1a5c84afcc056a370589bc3bc8577d7e42a7934bfc7b9bede"
     },
     {
+      "path": "roocode/.specify/scripts/runtime/application/check-writing-state.js",
+      "sha256": "3d966a5256cefed94cc1cb9bde8a55c4ddac6d4efb146d4a0dbc6192b02dedb8"
+    },
+    {
+      "path": "roocode/.specify/scripts/runtime/domain/story-artifact.js",
+      "sha256": "010032f357a3154a9e939db41baa9b47bf72d20a7b4d3c1dba65c25c2af2d603"
+    },
+    {
+      "path": "roocode/.specify/scripts/runtime/script-runtime.js",
+      "sha256": "6ddcafa9fca67371f159c0feb8df4d0eda5cda0e80d45bcb11713f43db99ba6c"
+    },
+    {
       "path": "roocode/.specify/templates/agent/agent-contract.md",
       "sha256": "7ee3a6c29219db3f8bd104568199931b34c5e65424cff5dd46b8e130e7d41541"
     },
@@ -8048,6 +8216,18 @@
     {
       "path": "windsurf/.specify/scripts/postbuild.cjs",
       "sha256": "06255c106d3ee5a1a5c84afcc056a370589bc3bc8577d7e42a7934bfc7b9bede"
+    },
+    {
+      "path": "windsurf/.specify/scripts/runtime/application/check-writing-state.js",
+      "sha256": "3d966a5256cefed94cc1cb9bde8a55c4ddac6d4efb146d4a0dbc6192b02dedb8"
+    },
+    {
+      "path": "windsurf/.specify/scripts/runtime/domain/story-artifact.js",
+      "sha256": "010032f357a3154a9e939db41baa9b47bf72d20a7b4d3c1dba65c25c2af2d603"
+    },
+    {
+      "path": "windsurf/.specify/scripts/runtime/script-runtime.js",
+      "sha256": "6ddcafa9fca67371f159c0feb8df4d0eda5cda0e80d45bcb11713f43db99ba6c"
     },
     {
       "path": "windsurf/.specify/templates/agent/agent-contract.md",

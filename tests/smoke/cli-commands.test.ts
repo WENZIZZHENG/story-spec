@@ -33,6 +33,8 @@ describe('CLI command modules smoke', () => {
     expect(help).toContain('agent:doctor [options]');
     expect(help).toContain('contract:print [options]');
     expect(help).toContain('contract:sync [options]');
+    expect(help).toContain('interview [options] [story]');
+    expect(help).toContain('clarify [options] [story]');
     expect(help).toContain('plugins:add [options] <name>');
     expect(help).toContain('upgrade [options]');
     expect(help).toContain('status [options]');

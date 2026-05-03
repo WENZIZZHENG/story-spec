@@ -5,6 +5,7 @@ import { registerCheckStatusCommand } from './commands/check-status.command.js';
 import { registerContractCommand } from './commands/contract.command.js';
 import { registerHandoffCommand } from './commands/handoff.command.js';
 import { registerInfoCommand } from './commands/info.command.js';
+import { registerInterviewCommand } from './commands/interview.command.js';
 import { registerPluginsCommand } from './commands/plugins.command.js';
 import { registerTasksBoardCommand } from './commands/tasks-board.command.js';
 import { registerUpgradeCommand } from './commands/upgrade.command.js';
@@ -52,6 +53,7 @@ export function runProgram(argv: string[]): void {
   registerInitCommand(program, { packageRoot });
   registerAgentCommand(program, { packageRoot });
   registerContractCommand(program, { packageRoot });
+  registerInterviewCommand(program);
   registerCheckStatusCommand(program);
   registerHandoffCommand(program);
   registerTasksBoardCommand(program);
