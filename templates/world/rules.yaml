@@ -6,6 +6,14 @@ worldFacts:
     storyFunction: 说明它如何限制角色选择、制造冲突或推动剧情。
     constraints:
       - 写作时必须遵守的限制。
+    pressure: 说明这条规则如何在场景中压迫、诱惑或改变角色行动。
+    beneficiaries:
+      - 因这条规则获利或维持权力的人/势力。
+    costs:
+      - 因这条规则付出代价或被排除的人/势力。
+    violationConsequence: 角色违反这条规则会发生什么。
+    sceneEvidencePaths:
+      - stories/[story]/scenes/scene-001.yaml
     sourcePaths:
       - spec/knowledge/world-setting.md
     source:

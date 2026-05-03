@@ -14,6 +14,14 @@ describe('worldbuilding domain parsers', () => {
     storyFunction: Creates conflict
     constraints:
       - Must hold
+    pressure: Forces a public choice in scene
+    beneficiaries:
+      - Academy
+    costs:
+      - Poor students take debt
+    violationConsequence: License revoked
+    sceneEvidencePaths:
+      - stories/demo/scenes/scene-001.yaml
     sourcePaths:
       - spec/knowledge/world-setting.md
     status: confirmed
@@ -29,6 +37,11 @@ describe('worldbuilding domain parsers', () => {
         id: 'world.rule',
         storyFunction: 'Creates conflict',
         constraints: ['Must hold'],
+        pressure: 'Forces a public choice in scene',
+        beneficiaries: ['Academy'],
+        costs: ['Poor students take debt'],
+        violationConsequence: 'License revoked',
+        sceneEvidencePaths: ['stories/demo/scenes/scene-001.yaml'],
         source: {
           confirmedByUser: true,
           aiSuggested: false,
@@ -48,6 +61,42 @@ describe('worldbuilding domain parsers', () => {
       expect.objectContaining({ code: 'MISSING_WORLD_FACT_FIELD', path: 'spec/world/rules.yaml#worldFacts[0].title' }),
       expect.objectContaining({ code: 'MISSING_WORLD_FACT_FIELD', path: 'spec/world/rules.yaml#worldFacts[0].storyFunction' }),
       expect.objectContaining({ code: 'MISSING_WORLD_FACT_FIELD', path: 'spec/world/rules.yaml#worldFacts[0].constraints' })
+    ]));
+  });
+
+  it('warns when a high-impact world fact has no scene pressure', () => {
+    const result = parseWorldDocument(`worldFacts:
+  - id: world.knowledge-monopoly
+    title: 知识垄断
+    type: institution
+    summary: 学院垄断咒文许可，贵族控制考试名额。
+    storyFunction: 制造第一卷冲突。
+    constraints:
+      - 平民不能无证施法
+    sourcePaths:
+      - stories/demo/clarifications.json#core.faction-conflict
+    status: confirmed
+    source:
+      confirmedByUser: true
+      aiSuggested: false
+`, 'spec/world/rules.yaml');
+
+    expect(result.worldFacts).toEqual([
+      expect.objectContaining({
+        id: 'world.knowledge-monopoly'
+      })
+    ]);
+    expect(result.issues).toEqual(expect.arrayContaining([
+      expect.objectContaining({
+        code: 'MISSING_WORLD_FACT_PRESSURE',
+        path: 'spec/world/rules.yaml#worldFacts[0].pressure',
+        severity: 'warning',
+        message: expect.stringContaining('考试、禁书、许可、身份审查、资源分配')
+      }),
+      expect.objectContaining({
+        code: 'MISSING_WORLD_FACT_SCENE_EVIDENCE',
+        path: 'spec/world/rules.yaml#worldFacts[0].sceneEvidencePaths'
+      })
     ]));
   });
 

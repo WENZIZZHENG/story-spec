@@ -14,6 +14,14 @@
   storyFunction: 这个事实如何制造冲突、限制选择或推动剧情。
   constraints:
     - 写作时必须遵守的限制。
+  pressure: 这个事实如何在具体场景中压迫、诱惑或改变角色行动。
+  beneficiaries:
+    - 谁因此获利或维持权力。
+  costs:
+    - 谁因此付出代价或被排除。
+  violationConsequence: 角色违反这条规则会发生什么后果。
+  sceneEvidencePaths:
+    - stories/<story>/scenes/scene-001.yaml
   sourcePaths:
     - spec/knowledge/world-setting.md
   source:
@@ -30,6 +38,8 @@
 - `aiSuggested: true` 表示该事实来自 AI 推断或推荐。
 - 只要 `aiSuggested: true` 且 `confirmedByUser: false`，`status` 必须保持 `draft`，并在 `needsClarification` 中写明待确认问题。
 - 不要把未确认 AI 建议写成 `confirmed`；`world:check` 会把这种情况标记为 warning。
+- 高影响世界事实不要只写百科描述。请说明它如何变成考试、禁书、许可、身份审查、资源分配、行动代价或具体冲突。
+- `sceneEvidencePaths` 用来连接 Scene Card 或正文证据，让世界观能回到读者实际看到的场景。
 
 ## Facts
 

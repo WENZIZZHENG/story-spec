@@ -83,4 +83,34 @@ describe('inspectWorldbuilding', () => {
     expect(renderWorldInspection(world)).toContain('UNCONFIRMED_AI_WORLD_FACT');
     expect(renderCanonInspection(canon)).toContain('UNCONFIRMED_AI_CANON_FACT');
   });
+
+  it('renders world pressure warnings separately from valid facts', async () => {
+    const projectRoot = path.join(os.tmpdir(), 'memory-novel-worldbuilding-pressure');
+    const fileSystem = new MemoryFileSystem(projectRoot);
+
+    await fileSystem.writeFile(path.join(projectRoot, 'spec', 'world', 'rules.yaml'), `worldFacts:
+  - id: world.knowledge-monopoly
+    title: 知识垄断
+    summary: 学院垄断咒文许可，贵族控制考试名额。
+    storyFunction: 制造第一卷冲突。
+    constraints:
+      - 平民不能无证施法
+    sourcePaths:
+      - stories/demo/clarifications.json#core.faction-conflict
+    status: confirmed
+    source:
+      confirmedByUser: true
+      aiSuggested: false
+`);
+
+    const world = await inspectWorld({ projectRoot, fileSystem });
+    const rendered = renderWorldInspection(world);
+
+    expect(world.facts).toHaveLength(1);
+    expect(world.issues).toEqual(expect.arrayContaining([
+      expect.objectContaining({ code: 'MISSING_WORLD_FACT_PRESSURE' })
+    ]));
+    expect(rendered).toContain('MISSING_WORLD_FACT_PRESSURE');
+    expect(rendered).toContain('知识垄断');
+  });
 });

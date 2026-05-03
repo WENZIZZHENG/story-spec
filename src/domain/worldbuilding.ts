@@ -16,6 +16,11 @@ export interface WorldFact {
   summary: string;
   storyFunction: string;
   constraints: string[];
+  pressure: string;
+  beneficiaries: string[];
+  costs: string[];
+  violationConsequence: string;
+  sceneEvidencePaths: string[];
   sourcePaths: string[];
   status: WorldFactStatus;
   source: CreativeFactSource;
@@ -44,6 +49,8 @@ export interface WorldbuildingIssue {
     | 'MISSING_WORLD_FACT_FIELD'
     | 'MISSING_WORLD_FACT_SOURCE_PATH'
     | 'MISSING_WORLD_FACT_CONFIRMATION'
+    | 'MISSING_WORLD_FACT_PRESSURE'
+    | 'MISSING_WORLD_FACT_SCENE_EVIDENCE'
     | 'UNCONFIRMED_AI_WORLD_FACT'
     | 'INVALID_CANON_DOCUMENT'
     | 'INVALID_CANON_FACT'
@@ -141,6 +148,47 @@ const confirmedFactMissingSourceState = (
   source: CreativeFactSource
 ): boolean => status === 'confirmed' && !source.confirmedByUser && !source.aiSuggested;
 
+const HIGH_IMPACT_WORLD_KEYWORDS = [
+  '垄断',
+  '学院',
+  '贵族',
+  '许可',
+  '考试',
+  '禁书',
+  '审查',
+  '身份',
+  '资源',
+  '税',
+  '债',
+  '禁令',
+  '阶层',
+  '制度',
+  '教会',
+  '规则',
+  '法术',
+  '知识'
+];
+
+const hasHighImpactWorldSignal = (fact: {
+  title: unknown;
+  type: unknown;
+  summary: unknown;
+  storyFunction: unknown;
+  constraints: string[];
+}): boolean => {
+  const text = [
+    fact.title,
+    fact.type,
+    fact.summary,
+    fact.storyFunction,
+    ...fact.constraints
+  ]
+    .filter(isNonEmptyString)
+    .join(' ');
+
+  return HIGH_IMPACT_WORLD_KEYWORDS.some(keyword => text.includes(keyword));
+};
+
 export const parseWorldDocument = (
   content: string,
   filePath: string
@@ -194,6 +242,57 @@ export const parseWorldDocument = (
 
     const status = isNonEmptyString(candidate.status) ? candidate.status.trim() as WorldFactStatus : 'draft';
     const source = parseFactSource(candidate.source);
+    const pressure = isNonEmptyString(candidate.pressure) ? candidate.pressure.trim() : '';
+    const beneficiaries = toStringArray(candidate.beneficiaries);
+    const costs = toStringArray(candidate.costs);
+    const violationConsequence = isNonEmptyString(candidate.violationConsequence)
+      ? candidate.violationConsequence.trim()
+      : '';
+    const sceneEvidencePaths = toStringArray(candidate.sceneEvidencePaths);
+    const shouldWarnPressure = hasHighImpactWorldSignal({
+      title: candidate.title,
+      type: candidate.type,
+      summary: candidate.summary,
+      storyFunction: candidate.storyFunction,
+      constraints
+    });
+
+    if (shouldWarnPressure && !pressure) {
+      issues.push(issue(
+        'MISSING_WORLD_FACT_PRESSURE',
+        `${basePath}.pressure`,
+        '高影响 WorldFact 需要说明它如何变成考试、禁书、许可、身份审查、资源分配或具体冲突，而不只是百科设定。'
+      ));
+    }
+    if (shouldWarnPressure && beneficiaries.length === 0) {
+      issues.push(issue(
+        'MISSING_WORLD_FACT_PRESSURE',
+        `${basePath}.beneficiaries`,
+        '高影响 WorldFact 需要说明谁因此获利。'
+      ));
+    }
+    if (shouldWarnPressure && costs.length === 0) {
+      issues.push(issue(
+        'MISSING_WORLD_FACT_PRESSURE',
+        `${basePath}.costs`,
+        '高影响 WorldFact 需要说明谁付出代价或受损。'
+      ));
+    }
+    if (shouldWarnPressure && !violationConsequence) {
+      issues.push(issue(
+        'MISSING_WORLD_FACT_PRESSURE',
+        `${basePath}.violationConsequence`,
+        '高影响 WorldFact 需要说明角色违反规则会怎样。'
+      ));
+    }
+    if (shouldWarnPressure && sceneEvidencePaths.length === 0) {
+      issues.push(issue(
+        'MISSING_WORLD_FACT_SCENE_EVIDENCE',
+        `${basePath}.sceneEvidencePaths`,
+        '高影响 WorldFact 需要连接至少一个场景证据路径，说明读者会在哪里看到它改变角色行动。'
+      ));
+    }
+
     if (status === 'confirmed' && toStringArray(candidate.sourcePaths).length === 0) {
       issues.push(issue(
         'MISSING_WORLD_FACT_SOURCE_PATH',
@@ -223,6 +322,11 @@ export const parseWorldDocument = (
       summary: String(candidate.summary).trim(),
       storyFunction: String(candidate.storyFunction).trim(),
       constraints,
+      pressure,
+      beneficiaries,
+      costs,
+      violationConsequence,
+      sceneEvidencePaths,
       sourcePaths: toStringArray(candidate.sourcePaths),
       status,
       source

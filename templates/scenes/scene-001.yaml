@@ -15,7 +15,15 @@ worldElements:
 canonFacts:
   - canon.example.fact
 reveals:
-  - 读者首次看到示例世界规则如何限制主角选择
+  - 读者首次看到 world.example.rule 如何限制主角选择；谁因此获利、谁因此付出代价
+worldReveal:
+  factId: world.example.rule
+  actionImpact: 这条规则如何改变角色本场选择
+  beneficiaries:
+    - 获利方
+  costs:
+    - 受损方或代价
+  violationConsequence: 如果主角违反规则，会发生什么后果
 foreshadowing:
   planted:
     - 示例规则后续会带来代价
