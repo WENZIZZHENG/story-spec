@@ -45,6 +45,64 @@ describe('schema validators', () => {
     ]);
   });
 
+  it('validates slow-burn relationship tracking axes when present', () => {
+    expect(validateTrackingDocument({
+      relationshipArcs: [
+        {
+          id: 'rel.yanwu-rune-apprentice',
+          participants: ['entity.yanwu', 'entity.rune-apprentice'],
+          type: 'partner',
+          currentState: {
+            trust: 35,
+            distance: '互相试探',
+            conflict: '方法论冲突',
+            vulnerability: '都不愿承认需要对方',
+            repair: '共同承担事故后果'
+          },
+          turningPoints: [
+            {
+              chapter: 3,
+              scene: 'scene-003',
+              change: '第一次把后背交给对方',
+              evidencePath: 'stories/demo/content/volume1/chapter-003.md'
+            }
+          ]
+        }
+      ]
+    }, 'relationships.json')).toEqual([]);
+
+    expect(validateTrackingDocument({
+      relationshipArcs: [
+        {
+          id: 'rel.blank',
+          participants: ['A'],
+          currentState: {
+            trust: 'high'
+          },
+          turningPoints: [
+            {
+              chapter: 1,
+              change: '关系变化'
+            }
+          ]
+        }
+      ]
+    }, 'relationships.json')).toEqual(expect.arrayContaining([
+      expect.objectContaining({
+        code: 'INVALID_TRACKING_DOCUMENT',
+        path: 'relationships.json#relationshipArcs[0].participants'
+      }),
+      expect.objectContaining({
+        code: 'INVALID_TRACKING_DOCUMENT',
+        path: 'relationships.json#relationshipArcs[0].currentState.trust'
+      }),
+      expect.objectContaining({
+        code: 'INVALID_TRACKING_DOCUMENT',
+        path: 'relationships.json#relationshipArcs[0].turningPoints[0].evidencePath'
+      })
+    ]));
+  });
+
   it('validates writing task metadata', () => {
     expect(validateWritingTask({
       id: 'T001',

@@ -215,6 +215,57 @@ describe('interviewStory', () => {
     expect(result.markdown).toContain('第一卷只看到第三次寂静的哪一角');
   });
 
+  it('adds relationship follow-up questions for trust, conflict, vulnerability, and repair', async () => {
+    const { projectRoot, fileSystem, storyPath } = await createProject();
+    await fileSystem.writeJson(path.join(storyPath, 'clarifications.json'), {
+      schemaVersion: '1.0',
+      story: 'idea-demo',
+      premise: '异界穿越、慢热感情',
+      createdAt: '2026-05-03T08:00:00.000Z',
+      updatedAt: '2026-05-03T08:00:00.000Z',
+      questions: [
+        {
+          id: 'romance.starting-dynamic',
+          stage: 'specify',
+          topic: 'romance',
+          question: '感情线开局是什么关系？',
+          whyItMatters: '影响慢热阻力。',
+          type: 'single-choice',
+          required: false,
+          options: [],
+          exampleAnswers: ['任务搭档。', '低烈度对立。'],
+          dependsOn: []
+        }
+      ],
+      answers: [
+        {
+          questionId: 'romance.starting-dynamic',
+          answer: '任务搭档，慢热关系从互相不服到一点点信任。',
+          source: 'user-explicit',
+          confidence: 1,
+          confirmed: true,
+          createdAt: '2026-05-03T08:00:00.000Z',
+          updatedAt: '2026-05-03T08:00:00.000Z'
+        }
+      ]
+    }, { spaces: 2 });
+
+    const result = await interviewStory({
+      projectRoot,
+      fileSystem,
+      story: 'idea-demo',
+      premise: '异界穿越、慢热感情',
+      maxQuestions: 5,
+      now: () => new Date('2026-05-03T12:00:00.000Z')
+    });
+
+    expect(result.record.questions.map(question => question.id)).toEqual(expect.arrayContaining([
+      'followup.romance.starting-tension',
+      'followup.romance.relationship-arc'
+    ]));
+    expect(result.markdown).toContain('信任、距离、冲突、脆弱和修复');
+  });
+
   it('skips already confirmed answers and keeps deferred answers open', async () => {
     const { projectRoot, fileSystem, storyPath } = await createProject();
     await fileSystem.writeJson(path.join(storyPath, 'clarifications.json'), {

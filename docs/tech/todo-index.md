@@ -8,7 +8,7 @@ Active。本文是 StorySpec 当前唯一的活跃待办入口。详细规则见
 
 | 路线 | 状态 | 优先级 | 当前下一步 |
 | --- | --- | --- | --- |
-| [故事共创访谈体验增强](story-co-creation-interview-roadmap.md) | Active | P0 | F0-F6 基础门禁已完成；下一步从 F7 人物情感与关系追踪增强开始，读取 [故事要素路线图](story-co-creation-story-elements-roadmap.md) |
+| [故事共创访谈体验增强](story-co-creation-interview-roadmap.md) | Active | P0 | F0-F7 已完成；下一步从 F8 世界观场景压力检查开始，读取 [故事要素路线图](story-co-creation-story-elements-roadmap.md) |
 
 ### 故事共创访谈子路线
 

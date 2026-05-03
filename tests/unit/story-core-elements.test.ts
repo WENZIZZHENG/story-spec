@@ -141,4 +141,37 @@ describe('story core elements', () => {
       status: 'confirmed'
     });
   });
+
+  it('treats a functional partner slot as partial until desire and tension are clear', () => {
+    const functional = byId(evaluateStoryCoreElements({
+      premise: '慢热关系。低烈度冒险。',
+      questions: [
+        question('core.partner', 'partner', '核心伙伴是谁？')
+      ],
+      answers: [
+        answer('core.partner', '核心伙伴是引路人，负责解释本地魔法规则并辅助主角。')
+      ]
+    }));
+
+    const dramatic = byId(evaluateStoryCoreElements({
+      premise: '慢热关系。低烈度冒险。',
+      questions: [
+        question('core.partner', 'partner', '核心伙伴是谁？')
+      ],
+      answers: [
+        answer('core.partner', '核心伙伴是被学院驱逐的符文学徒，想夺回署名权，也会质疑晏无把人当系统重构的傲慢。')
+      ]
+    }));
+
+    expect(functional.get('partner')).toMatchObject({
+      status: 'partial',
+      qualityNotes: expect.arrayContaining([
+        expect.stringContaining('功能位')
+      ])
+    });
+    expect(functional.get('partner')?.nextPrompt).toContain('欲望');
+    expect(dramatic.get('partner')).toMatchObject({
+      status: 'confirmed'
+    });
+  });
 });

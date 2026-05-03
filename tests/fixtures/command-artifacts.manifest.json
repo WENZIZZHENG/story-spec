@@ -123,7 +123,7 @@
     },
     {
       "path": "auggie/.augment/commands/tasks.md",
-      "sha256": "f2b7a6fe80920f51579226640619c6ec33121449594f1bf9a394c11e6a9e72bc",
+      "sha256": "178b70190269b6ec103bbfc7f564de30640f2ae34333e5787fab74808df18d0f",
       "commandSource": {
         "command": "tasks",
         "kind": "legacy-template",
@@ -361,7 +361,7 @@
     },
     {
       "path": "auggie/.specify/templates/clarification/slow-burn-romance.yaml",
-      "sha256": "3ee8bc5d29bac5501e354a985c7865ad1182eec8f8869616cc5cd2b20a755645"
+      "sha256": "2dd9e0e55e5a8ebb60c912d24a465aaa668f2934a7e550b827b60fde7c773934"
     },
     {
       "path": "auggie/.specify/templates/feedback/feedback.json",
@@ -445,7 +445,7 @@
     },
     {
       "path": "auggie/.specify/templates/tracking/character-state.json",
-      "sha256": "81d3dc912c5e3504360d76bfdf9bdf365013857d4cae088f192bce8915c89d70"
+      "sha256": "26d7ba4388d69f87b3d2a4b1475fb993933cc6b5649ae16d66620ea95f13ed2e"
     },
     {
       "path": "auggie/.specify/templates/tracking/plot-tracker.json",
@@ -457,7 +457,7 @@
     },
     {
       "path": "auggie/.specify/templates/tracking/relationships.json",
-      "sha256": "de9567882a8cdf31dba6f0afa8b92bbf68346bb7063164724e47ae4434bddbcf"
+      "sha256": "d10774d9e24ff64ee4c799a44e4b94e6f49c696536e0652aa2e0290cdedbca7f"
     },
     {
       "path": "auggie/.specify/templates/tracking/tension-curve.json",
@@ -693,7 +693,7 @@
     },
     {
       "path": "claude/.claude/commands/storyspec.tasks.md",
-      "sha256": "106d6245c42920d3c41ad698a4bde62b6c490c5a58377d2726734d3882e056eb",
+      "sha256": "5fa03865082f4ee5c11fcfddc8e233ec25be17c95f513e8889fc4fffdff88c15",
       "commandSource": {
         "command": "tasks",
         "kind": "legacy-template",
@@ -931,7 +931,7 @@
     },
     {
       "path": "claude/.specify/templates/clarification/slow-burn-romance.yaml",
-      "sha256": "3ee8bc5d29bac5501e354a985c7865ad1182eec8f8869616cc5cd2b20a755645"
+      "sha256": "2dd9e0e55e5a8ebb60c912d24a465aaa668f2934a7e550b827b60fde7c773934"
     },
     {
       "path": "claude/.specify/templates/feedback/feedback.json",
@@ -1015,7 +1015,7 @@
     },
     {
       "path": "claude/.specify/templates/tracking/character-state.json",
-      "sha256": "81d3dc912c5e3504360d76bfdf9bdf365013857d4cae088f192bce8915c89d70"
+      "sha256": "26d7ba4388d69f87b3d2a4b1475fb993933cc6b5649ae16d66620ea95f13ed2e"
     },
     {
       "path": "claude/.specify/templates/tracking/plot-tracker.json",
@@ -1027,7 +1027,7 @@
     },
     {
       "path": "claude/.specify/templates/tracking/relationships.json",
-      "sha256": "de9567882a8cdf31dba6f0afa8b92bbf68346bb7063164724e47ae4434bddbcf"
+      "sha256": "d10774d9e24ff64ee4c799a44e4b94e6f49c696536e0652aa2e0290cdedbca7f"
     },
     {
       "path": "claude/.specify/templates/tracking/tension-curve.json",
@@ -1263,7 +1263,7 @@
     },
     {
       "path": "codebuddy/.codebuddy/commands/tasks.md",
-      "sha256": "f2b7a6fe80920f51579226640619c6ec33121449594f1bf9a394c11e6a9e72bc",
+      "sha256": "178b70190269b6ec103bbfc7f564de30640f2ae34333e5787fab74808df18d0f",
       "commandSource": {
         "command": "tasks",
         "kind": "legacy-template",
@@ -1501,7 +1501,7 @@
     },
     {
       "path": "codebuddy/.specify/templates/clarification/slow-burn-romance.yaml",
-      "sha256": "3ee8bc5d29bac5501e354a985c7865ad1182eec8f8869616cc5cd2b20a755645"
+      "sha256": "2dd9e0e55e5a8ebb60c912d24a465aaa668f2934a7e550b827b60fde7c773934"
     },
     {
       "path": "codebuddy/.specify/templates/feedback/feedback.json",
@@ -1585,7 +1585,7 @@
     },
     {
       "path": "codebuddy/.specify/templates/tracking/character-state.json",
-      "sha256": "81d3dc912c5e3504360d76bfdf9bdf365013857d4cae088f192bce8915c89d70"
+      "sha256": "26d7ba4388d69f87b3d2a4b1475fb993933cc6b5649ae16d66620ea95f13ed2e"
     },
     {
       "path": "codebuddy/.specify/templates/tracking/plot-tracker.json",
@@ -1597,7 +1597,7 @@
     },
     {
       "path": "codebuddy/.specify/templates/tracking/relationships.json",
-      "sha256": "de9567882a8cdf31dba6f0afa8b92bbf68346bb7063164724e47ae4434bddbcf"
+      "sha256": "d10774d9e24ff64ee4c799a44e4b94e6f49c696536e0652aa2e0290cdedbca7f"
     },
     {
       "path": "codebuddy/.specify/templates/tracking/tension-curve.json",
@@ -1833,7 +1833,7 @@
     },
     {
       "path": "codex/.codex/prompts/storyspec-tasks.md",
-      "sha256": "f2b7a6fe80920f51579226640619c6ec33121449594f1bf9a394c11e6a9e72bc",
+      "sha256": "178b70190269b6ec103bbfc7f564de30640f2ae34333e5787fab74808df18d0f",
       "commandSource": {
         "command": "tasks",
         "kind": "legacy-template",
@@ -2071,7 +2071,7 @@
     },
     {
       "path": "codex/.specify/templates/clarification/slow-burn-romance.yaml",
-      "sha256": "3ee8bc5d29bac5501e354a985c7865ad1182eec8f8869616cc5cd2b20a755645"
+      "sha256": "2dd9e0e55e5a8ebb60c912d24a465aaa668f2934a7e550b827b60fde7c773934"
     },
     {
       "path": "codex/.specify/templates/feedback/feedback.json",
@@ -2155,7 +2155,7 @@
     },
     {
       "path": "codex/.specify/templates/tracking/character-state.json",
-      "sha256": "81d3dc912c5e3504360d76bfdf9bdf365013857d4cae088f192bce8915c89d70"
+      "sha256": "26d7ba4388d69f87b3d2a4b1475fb993933cc6b5649ae16d66620ea95f13ed2e"
     },
     {
       "path": "codex/.specify/templates/tracking/plot-tracker.json",
@@ -2167,7 +2167,7 @@
     },
     {
       "path": "codex/.specify/templates/tracking/relationships.json",
-      "sha256": "de9567882a8cdf31dba6f0afa8b92bbf68346bb7063164724e47ae4434bddbcf"
+      "sha256": "d10774d9e24ff64ee4c799a44e4b94e6f49c696536e0652aa2e0290cdedbca7f"
     },
     {
       "path": "codex/.specify/templates/tracking/tension-curve.json",
@@ -2403,7 +2403,7 @@
     },
     {
       "path": "continue-check/.continue/prompts/tasks.md",
-      "sha256": "82fd7395d2ed30d1b5a8288b31aa811caf1c5890a60e5b9bffe644fed9524857",
+      "sha256": "9b758b0d12c6d4c05b15b673aaf6ce6fb59a9fed14749d2a52a2541013093dcb",
       "commandSource": {
         "command": "tasks",
         "kind": "legacy-template",
@@ -2641,7 +2641,7 @@
     },
     {
       "path": "continue-check/.specify/templates/clarification/slow-burn-romance.yaml",
-      "sha256": "3ee8bc5d29bac5501e354a985c7865ad1182eec8f8869616cc5cd2b20a755645"
+      "sha256": "2dd9e0e55e5a8ebb60c912d24a465aaa668f2934a7e550b827b60fde7c773934"
     },
     {
       "path": "continue-check/.specify/templates/feedback/feedback.json",
@@ -2725,7 +2725,7 @@
     },
     {
       "path": "continue-check/.specify/templates/tracking/character-state.json",
-      "sha256": "81d3dc912c5e3504360d76bfdf9bdf365013857d4cae088f192bce8915c89d70"
+      "sha256": "26d7ba4388d69f87b3d2a4b1475fb993933cc6b5649ae16d66620ea95f13ed2e"
     },
     {
       "path": "continue-check/.specify/templates/tracking/plot-tracker.json",
@@ -2737,7 +2737,7 @@
     },
     {
       "path": "continue-check/.specify/templates/tracking/relationships.json",
-      "sha256": "de9567882a8cdf31dba6f0afa8b92bbf68346bb7063164724e47ae4434bddbcf"
+      "sha256": "d10774d9e24ff64ee4c799a44e4b94e6f49c696536e0652aa2e0290cdedbca7f"
     },
     {
       "path": "continue-check/.specify/templates/tracking/tension-curve.json",
@@ -2973,7 +2973,7 @@
     },
     {
       "path": "copilot/.github/prompts/tasks.prompt.md",
-      "sha256": "d6f14aab99a18d133225a97ac1be780966aabc84e8fe879a85823388142c1b24",
+      "sha256": "cab58eeb000a755202f1f6e5b7def20f418107ac9b663a171944183ce327557a",
       "commandSource": {
         "command": "tasks",
         "kind": "legacy-template",
@@ -3211,7 +3211,7 @@
     },
     {
       "path": "copilot/.specify/templates/clarification/slow-burn-romance.yaml",
-      "sha256": "3ee8bc5d29bac5501e354a985c7865ad1182eec8f8869616cc5cd2b20a755645"
+      "sha256": "2dd9e0e55e5a8ebb60c912d24a465aaa668f2934a7e550b827b60fde7c773934"
     },
     {
       "path": "copilot/.specify/templates/feedback/feedback.json",
@@ -3295,7 +3295,7 @@
     },
     {
       "path": "copilot/.specify/templates/tracking/character-state.json",
-      "sha256": "81d3dc912c5e3504360d76bfdf9bdf365013857d4cae088f192bce8915c89d70"
+      "sha256": "26d7ba4388d69f87b3d2a4b1475fb993933cc6b5649ae16d66620ea95f13ed2e"
     },
     {
       "path": "copilot/.specify/templates/tracking/plot-tracker.json",
@@ -3307,7 +3307,7 @@
     },
     {
       "path": "copilot/.specify/templates/tracking/relationships.json",
-      "sha256": "de9567882a8cdf31dba6f0afa8b92bbf68346bb7063164724e47ae4434bddbcf"
+      "sha256": "d10774d9e24ff64ee4c799a44e4b94e6f49c696536e0652aa2e0290cdedbca7f"
     },
     {
       "path": "copilot/.specify/templates/tracking/tension-curve.json",
@@ -3543,7 +3543,7 @@
     },
     {
       "path": "cursor/.cursor/commands/tasks.md",
-      "sha256": "f2b7a6fe80920f51579226640619c6ec33121449594f1bf9a394c11e6a9e72bc",
+      "sha256": "178b70190269b6ec103bbfc7f564de30640f2ae34333e5787fab74808df18d0f",
       "commandSource": {
         "command": "tasks",
         "kind": "legacy-template",
@@ -3781,7 +3781,7 @@
     },
     {
       "path": "cursor/.specify/templates/clarification/slow-burn-romance.yaml",
-      "sha256": "3ee8bc5d29bac5501e354a985c7865ad1182eec8f8869616cc5cd2b20a755645"
+      "sha256": "2dd9e0e55e5a8ebb60c912d24a465aaa668f2934a7e550b827b60fde7c773934"
     },
     {
       "path": "cursor/.specify/templates/feedback/feedback.json",
@@ -3865,7 +3865,7 @@
     },
     {
       "path": "cursor/.specify/templates/tracking/character-state.json",
-      "sha256": "81d3dc912c5e3504360d76bfdf9bdf365013857d4cae088f192bce8915c89d70"
+      "sha256": "26d7ba4388d69f87b3d2a4b1475fb993933cc6b5649ae16d66620ea95f13ed2e"
     },
     {
       "path": "cursor/.specify/templates/tracking/plot-tracker.json",
@@ -3877,7 +3877,7 @@
     },
     {
       "path": "cursor/.specify/templates/tracking/relationships.json",
-      "sha256": "de9567882a8cdf31dba6f0afa8b92bbf68346bb7063164724e47ae4434bddbcf"
+      "sha256": "d10774d9e24ff64ee4c799a44e4b94e6f49c696536e0652aa2e0290cdedbca7f"
     },
     {
       "path": "cursor/.specify/templates/tracking/tension-curve.json",
@@ -4113,7 +4113,7 @@
     },
     {
       "path": "gemini/.gemini/commands/storyspec/tasks.toml",
-      "sha256": "54a3e9f82ccd54e157cd1820bf820cd7a9cf113230cc63922b7180afe27a3740",
+      "sha256": "3ed3730c97f136dafae7c1ae9d6598001f0eb7535f2c9d76a4c6900e7f889f74",
       "commandSource": {
         "command": "tasks",
         "kind": "legacy-template",
@@ -4351,7 +4351,7 @@
     },
     {
       "path": "gemini/.specify/templates/clarification/slow-burn-romance.yaml",
-      "sha256": "3ee8bc5d29bac5501e354a985c7865ad1182eec8f8869616cc5cd2b20a755645"
+      "sha256": "2dd9e0e55e5a8ebb60c912d24a465aaa668f2934a7e550b827b60fde7c773934"
     },
     {
       "path": "gemini/.specify/templates/feedback/feedback.json",
@@ -4435,7 +4435,7 @@
     },
     {
       "path": "gemini/.specify/templates/tracking/character-state.json",
-      "sha256": "81d3dc912c5e3504360d76bfdf9bdf365013857d4cae088f192bce8915c89d70"
+      "sha256": "26d7ba4388d69f87b3d2a4b1475fb993933cc6b5649ae16d66620ea95f13ed2e"
     },
     {
       "path": "gemini/.specify/templates/tracking/plot-tracker.json",
@@ -4447,7 +4447,7 @@
     },
     {
       "path": "gemini/.specify/templates/tracking/relationships.json",
-      "sha256": "de9567882a8cdf31dba6f0afa8b92bbf68346bb7063164724e47ae4434bddbcf"
+      "sha256": "d10774d9e24ff64ee4c799a44e4b94e6f49c696536e0652aa2e0290cdedbca7f"
     },
     {
       "path": "gemini/.specify/templates/tracking/tension-curve.json",
@@ -4683,7 +4683,7 @@
     },
     {
       "path": "generic/.specify/commands/tasks.md",
-      "sha256": "f64874ccada2ea82806e68438b92b1aa393f95b60f87f90693574bfdf5c9d08d",
+      "sha256": "b34b3e5051f942b2a7be5dc66fed35a9bbb1c17c6321d27ab817d69b8c441dd4",
       "commandSource": {
         "command": "tasks",
         "kind": "legacy-template",
@@ -4921,7 +4921,7 @@
     },
     {
       "path": "generic/.specify/templates/clarification/slow-burn-romance.yaml",
-      "sha256": "3ee8bc5d29bac5501e354a985c7865ad1182eec8f8869616cc5cd2b20a755645"
+      "sha256": "2dd9e0e55e5a8ebb60c912d24a465aaa668f2934a7e550b827b60fde7c773934"
     },
     {
       "path": "generic/.specify/templates/feedback/feedback.json",
@@ -5005,7 +5005,7 @@
     },
     {
       "path": "generic/.specify/templates/tracking/character-state.json",
-      "sha256": "81d3dc912c5e3504360d76bfdf9bdf365013857d4cae088f192bce8915c89d70"
+      "sha256": "26d7ba4388d69f87b3d2a4b1475fb993933cc6b5649ae16d66620ea95f13ed2e"
     },
     {
       "path": "generic/.specify/templates/tracking/plot-tracker.json",
@@ -5017,7 +5017,7 @@
     },
     {
       "path": "generic/.specify/templates/tracking/relationships.json",
-      "sha256": "de9567882a8cdf31dba6f0afa8b92bbf68346bb7063164724e47ae4434bddbcf"
+      "sha256": "d10774d9e24ff64ee4c799a44e4b94e6f49c696536e0652aa2e0290cdedbca7f"
     },
     {
       "path": "generic/.specify/templates/tracking/tension-curve.json",
@@ -5253,7 +5253,7 @@
     },
     {
       "path": "kilocode/.kilocode/workflows/tasks.md",
-      "sha256": "a9a5a95d2a0f428d279ecd601dbbfb2fceb4800054c4823aecc2cfe65ce6ae77",
+      "sha256": "15825f1711ef2190192ffed3f545f7ed3cc50fdefc5030bed5f0c24d94c56a6f",
       "commandSource": {
         "command": "tasks",
         "kind": "legacy-template",
@@ -5491,7 +5491,7 @@
     },
     {
       "path": "kilocode/.specify/templates/clarification/slow-burn-romance.yaml",
-      "sha256": "3ee8bc5d29bac5501e354a985c7865ad1182eec8f8869616cc5cd2b20a755645"
+      "sha256": "2dd9e0e55e5a8ebb60c912d24a465aaa668f2934a7e550b827b60fde7c773934"
     },
     {
       "path": "kilocode/.specify/templates/feedback/feedback.json",
@@ -5575,7 +5575,7 @@
     },
     {
       "path": "kilocode/.specify/templates/tracking/character-state.json",
-      "sha256": "81d3dc912c5e3504360d76bfdf9bdf365013857d4cae088f192bce8915c89d70"
+      "sha256": "26d7ba4388d69f87b3d2a4b1475fb993933cc6b5649ae16d66620ea95f13ed2e"
     },
     {
       "path": "kilocode/.specify/templates/tracking/plot-tracker.json",
@@ -5587,7 +5587,7 @@
     },
     {
       "path": "kilocode/.specify/templates/tracking/relationships.json",
-      "sha256": "de9567882a8cdf31dba6f0afa8b92bbf68346bb7063164724e47ae4434bddbcf"
+      "sha256": "d10774d9e24ff64ee4c799a44e4b94e6f49c696536e0652aa2e0290cdedbca7f"
     },
     {
       "path": "kilocode/.specify/templates/tracking/tension-curve.json",
@@ -5823,7 +5823,7 @@
     },
     {
       "path": "opencode/.opencode/command/tasks.md",
-      "sha256": "a9a5a95d2a0f428d279ecd601dbbfb2fceb4800054c4823aecc2cfe65ce6ae77",
+      "sha256": "15825f1711ef2190192ffed3f545f7ed3cc50fdefc5030bed5f0c24d94c56a6f",
       "commandSource": {
         "command": "tasks",
         "kind": "legacy-template",
@@ -6061,7 +6061,7 @@
     },
     {
       "path": "opencode/.specify/templates/clarification/slow-burn-romance.yaml",
-      "sha256": "3ee8bc5d29bac5501e354a985c7865ad1182eec8f8869616cc5cd2b20a755645"
+      "sha256": "2dd9e0e55e5a8ebb60c912d24a465aaa668f2934a7e550b827b60fde7c773934"
     },
     {
       "path": "opencode/.specify/templates/feedback/feedback.json",
@@ -6145,7 +6145,7 @@
     },
     {
       "path": "opencode/.specify/templates/tracking/character-state.json",
-      "sha256": "81d3dc912c5e3504360d76bfdf9bdf365013857d4cae088f192bce8915c89d70"
+      "sha256": "26d7ba4388d69f87b3d2a4b1475fb993933cc6b5649ae16d66620ea95f13ed2e"
     },
     {
       "path": "opencode/.specify/templates/tracking/plot-tracker.json",
@@ -6157,7 +6157,7 @@
     },
     {
       "path": "opencode/.specify/templates/tracking/relationships.json",
-      "sha256": "de9567882a8cdf31dba6f0afa8b92bbf68346bb7063164724e47ae4434bddbcf"
+      "sha256": "d10774d9e24ff64ee4c799a44e4b94e6f49c696536e0652aa2e0290cdedbca7f"
     },
     {
       "path": "opencode/.specify/templates/tracking/tension-curve.json",
@@ -6393,7 +6393,7 @@
     },
     {
       "path": "q/.amazonq/prompts/tasks.md",
-      "sha256": "d6f14aab99a18d133225a97ac1be780966aabc84e8fe879a85823388142c1b24",
+      "sha256": "cab58eeb000a755202f1f6e5b7def20f418107ac9b663a171944183ce327557a",
       "commandSource": {
         "command": "tasks",
         "kind": "legacy-template",
@@ -6631,7 +6631,7 @@
     },
     {
       "path": "q/.specify/templates/clarification/slow-burn-romance.yaml",
-      "sha256": "3ee8bc5d29bac5501e354a985c7865ad1182eec8f8869616cc5cd2b20a755645"
+      "sha256": "2dd9e0e55e5a8ebb60c912d24a465aaa668f2934a7e550b827b60fde7c773934"
     },
     {
       "path": "q/.specify/templates/feedback/feedback.json",
@@ -6715,7 +6715,7 @@
     },
     {
       "path": "q/.specify/templates/tracking/character-state.json",
-      "sha256": "81d3dc912c5e3504360d76bfdf9bdf365013857d4cae088f192bce8915c89d70"
+      "sha256": "26d7ba4388d69f87b3d2a4b1475fb993933cc6b5649ae16d66620ea95f13ed2e"
     },
     {
       "path": "q/.specify/templates/tracking/plot-tracker.json",
@@ -6727,7 +6727,7 @@
     },
     {
       "path": "q/.specify/templates/tracking/relationships.json",
-      "sha256": "de9567882a8cdf31dba6f0afa8b92bbf68346bb7063164724e47ae4434bddbcf"
+      "sha256": "d10774d9e24ff64ee4c799a44e4b94e6f49c696536e0652aa2e0290cdedbca7f"
     },
     {
       "path": "q/.specify/templates/tracking/tension-curve.json",
@@ -6963,7 +6963,7 @@
     },
     {
       "path": "qwen/.qwen/commands/tasks.toml",
-      "sha256": "54a3e9f82ccd54e157cd1820bf820cd7a9cf113230cc63922b7180afe27a3740",
+      "sha256": "3ed3730c97f136dafae7c1ae9d6598001f0eb7535f2c9d76a4c6900e7f889f74",
       "commandSource": {
         "command": "tasks",
         "kind": "legacy-template",
@@ -7201,7 +7201,7 @@
     },
     {
       "path": "qwen/.specify/templates/clarification/slow-burn-romance.yaml",
-      "sha256": "3ee8bc5d29bac5501e354a985c7865ad1182eec8f8869616cc5cd2b20a755645"
+      "sha256": "2dd9e0e55e5a8ebb60c912d24a465aaa668f2934a7e550b827b60fde7c773934"
     },
     {
       "path": "qwen/.specify/templates/feedback/feedback.json",
@@ -7285,7 +7285,7 @@
     },
     {
       "path": "qwen/.specify/templates/tracking/character-state.json",
-      "sha256": "81d3dc912c5e3504360d76bfdf9bdf365013857d4cae088f192bce8915c89d70"
+      "sha256": "26d7ba4388d69f87b3d2a4b1475fb993933cc6b5649ae16d66620ea95f13ed2e"
     },
     {
       "path": "qwen/.specify/templates/tracking/plot-tracker.json",
@@ -7297,7 +7297,7 @@
     },
     {
       "path": "qwen/.specify/templates/tracking/relationships.json",
-      "sha256": "de9567882a8cdf31dba6f0afa8b92bbf68346bb7063164724e47ae4434bddbcf"
+      "sha256": "d10774d9e24ff64ee4c799a44e4b94e6f49c696536e0652aa2e0290cdedbca7f"
     },
     {
       "path": "qwen/.specify/templates/tracking/tension-curve.json",
@@ -7533,7 +7533,7 @@
     },
     {
       "path": "roocode/.roo/commands/tasks.md",
-      "sha256": "a9a5a95d2a0f428d279ecd601dbbfb2fceb4800054c4823aecc2cfe65ce6ae77",
+      "sha256": "15825f1711ef2190192ffed3f545f7ed3cc50fdefc5030bed5f0c24d94c56a6f",
       "commandSource": {
         "command": "tasks",
         "kind": "legacy-template",
@@ -7771,7 +7771,7 @@
     },
     {
       "path": "roocode/.specify/templates/clarification/slow-burn-romance.yaml",
-      "sha256": "3ee8bc5d29bac5501e354a985c7865ad1182eec8f8869616cc5cd2b20a755645"
+      "sha256": "2dd9e0e55e5a8ebb60c912d24a465aaa668f2934a7e550b827b60fde7c773934"
     },
     {
       "path": "roocode/.specify/templates/feedback/feedback.json",
@@ -7855,7 +7855,7 @@
     },
     {
       "path": "roocode/.specify/templates/tracking/character-state.json",
-      "sha256": "81d3dc912c5e3504360d76bfdf9bdf365013857d4cae088f192bce8915c89d70"
+      "sha256": "26d7ba4388d69f87b3d2a4b1475fb993933cc6b5649ae16d66620ea95f13ed2e"
     },
     {
       "path": "roocode/.specify/templates/tracking/plot-tracker.json",
@@ -7867,7 +7867,7 @@
     },
     {
       "path": "roocode/.specify/templates/tracking/relationships.json",
-      "sha256": "de9567882a8cdf31dba6f0afa8b92bbf68346bb7063164724e47ae4434bddbcf"
+      "sha256": "d10774d9e24ff64ee4c799a44e4b94e6f49c696536e0652aa2e0290cdedbca7f"
     },
     {
       "path": "roocode/.specify/templates/tracking/tension-curve.json",
@@ -8195,7 +8195,7 @@
     },
     {
       "path": "windsurf/.specify/templates/clarification/slow-burn-romance.yaml",
-      "sha256": "3ee8bc5d29bac5501e354a985c7865ad1182eec8f8869616cc5cd2b20a755645"
+      "sha256": "2dd9e0e55e5a8ebb60c912d24a465aaa668f2934a7e550b827b60fde7c773934"
     },
     {
       "path": "windsurf/.specify/templates/feedback/feedback.json",
@@ -8279,7 +8279,7 @@
     },
     {
       "path": "windsurf/.specify/templates/tracking/character-state.json",
-      "sha256": "81d3dc912c5e3504360d76bfdf9bdf365013857d4cae088f192bce8915c89d70"
+      "sha256": "26d7ba4388d69f87b3d2a4b1475fb993933cc6b5649ae16d66620ea95f13ed2e"
     },
     {
       "path": "windsurf/.specify/templates/tracking/plot-tracker.json",
@@ -8291,7 +8291,7 @@
     },
     {
       "path": "windsurf/.specify/templates/tracking/relationships.json",
-      "sha256": "de9567882a8cdf31dba6f0afa8b92bbf68346bb7063164724e47ae4434bddbcf"
+      "sha256": "d10774d9e24ff64ee4c799a44e4b94e6f49c696536e0652aa2e0290cdedbca7f"
     },
     {
       "path": "windsurf/.specify/templates/tracking/tension-curve.json",
@@ -8443,7 +8443,7 @@
     },
     {
       "path": "windsurf/.windsurf/workflows/tasks.md",
-      "sha256": "a9a5a95d2a0f428d279ecd601dbbfb2fceb4800054c4823aecc2cfe65ce6ae77",
+      "sha256": "15825f1711ef2190192ffed3f545f7ed3cc50fdefc5030bed5f0c24d94c56a6f",
       "commandSource": {
         "command": "tasks",
         "kind": "legacy-template",

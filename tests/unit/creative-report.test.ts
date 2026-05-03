@@ -267,4 +267,66 @@ describe('creative report', () => {
     expect(rendered).toContain('你已经创建的小说骨架');
     expect(rendered).toContain('仍可探索的乐趣点');
   });
+
+  it('calls out a core partner who lacks desire and tension', async () => {
+    const projectRoot = path.join(os.tmpdir(), 'memory-novel-creative-report-partner-depth');
+    const fileSystem = new MemoryFileSystem(projectRoot);
+    const storyPath = path.join(projectRoot, 'stories', 'slow-burn-demo');
+
+    await fileSystem.writeFile(path.join(storyPath, 'idea.md'), '# slow burn');
+    await fileSystem.writeJson(path.join(storyPath, 'clarifications.json'), {
+      schemaVersion: '1.0',
+      story: 'slow-burn-demo',
+      premise: '异界穿越、慢热感情。',
+      createdAt: '2026-05-03T00:00:00.000Z',
+      updatedAt: '2026-05-03T00:00:00.000Z',
+      questions: [
+        {
+          id: 'core.partner',
+          stage: 'specify',
+          topic: 'partner',
+          question: '核心伙伴是谁？',
+          whyItMatters: '伙伴需要挑战主角。',
+          type: 'textarea',
+          required: true,
+          options: [],
+          exampleAnswers: [],
+          dependsOn: []
+        }
+      ],
+      answers: [
+        {
+          questionId: 'core.partner',
+          answer: '伙伴是引路人，负责解释异界规则并辅助主角。',
+          source: 'user-explicit',
+          confidence: 1,
+          confirmed: true,
+          createdAt: '2026-05-03T00:00:00.000Z',
+          updatedAt: '2026-05-03T00:00:00.000Z'
+        }
+      ]
+    }, { spaces: 2 });
+
+    const result = await createCreativeReport({
+      projectRoot,
+      fileSystem,
+      story: 'slow-burn-demo'
+    });
+    const rendered = renderCreativeReport(result);
+
+    expect(result.coreElements).toEqual(expect.arrayContaining([
+      expect.objectContaining({
+        id: 'partner',
+        status: 'partial',
+        qualityNotes: expect.arrayContaining([expect.stringContaining('功能位')])
+      })
+    ]));
+    expect(rendered).toContain('功能位');
+    expect(result.funPrompts).toEqual(expect.arrayContaining([
+      expect.objectContaining({
+        label: '核心伙伴',
+        prompt: expect.stringContaining('伙伴会怎样挑战主角')
+      })
+    ]));
+  });
 });

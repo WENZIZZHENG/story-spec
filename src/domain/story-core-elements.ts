@@ -130,8 +130,57 @@ const ELEMENT_KEYWORDS: Record<StoryCoreElementId, readonly string[]> = {
   voice: ['voice', 'narration', 'pov', 'humor', '声音', '叙述', '语气', '幽默', '价值判断', '不写']
 };
 
+const DIRECT_TOPIC_ELEMENT_IDS: Record<string, StoryCoreElementId> = {
+  protagonist: 'protagonist',
+  hero: 'protagonist',
+  partner: 'partner',
+  companion: 'partner',
+  relationship: 'partner',
+  romance: 'partner',
+  setting: 'stage',
+  stage: 'stage',
+  location: 'stage',
+  world: 'stage',
+  'magic-system': 'power',
+  magic: 'power',
+  power: 'power',
+  ability: 'power',
+  faction: 'factionConflict',
+  conflict: 'factionConflict',
+  threat: 'longThreat',
+  civilization: 'longThreat',
+  premise: 'genrePromise',
+  genre: 'genrePromise',
+  tone: 'genrePromise',
+  growth: 'growthRoute',
+  route: 'growthRoute',
+  success: 'growthRoute',
+  voice: 'voice',
+  style: 'voice'
+};
+
 const PROTAGONIST_MATURITY_KEYWORDS = ['想要', '欲望', '目标', '价值观', '误判', '缺陷', '代价', '恐惧', '选择'];
 const STAGE_PRESSURE_KEYWORDS = ['垄断', '债', '审查', '代价', '压迫', '利益', '资源', '法律', '禁令', '阶层', '冲突', '必须', '失败'];
+const PARTNER_DEPTH_KEYWORDS = [
+  '想要',
+  '欲望',
+  '目标',
+  '恐惧',
+  '怕',
+  '误判',
+  '质疑',
+  '反驳',
+  '挑战',
+  '冲突',
+  '立场',
+  '价值观',
+  '张力',
+  '不信任',
+  '署名权',
+  '责任',
+  '代价',
+  '修复'
+];
 
 const statusText: Record<StoryCoreElementStatus, string> = {
   missing: '缺失',
@@ -147,6 +196,19 @@ const includesAny = (text: string, keywords: readonly string[]): boolean =>
   keywords.some(keyword => text.includes(normalize(keyword)));
 
 const matchElementIds = (question: ClarificationQuestion): StoryCoreElementId[] => {
+  const strongSignals = normalize([question.id, question.topic].join(' '));
+  const directMatches = ELEMENT_DEFINITIONS
+    .filter(definition => includesAny(strongSignals, ELEMENT_KEYWORDS[definition.id]))
+    .map(definition => definition.id);
+  const directTopic = DIRECT_TOPIC_ELEMENT_IDS[normalize(question.topic)];
+  if (directTopic) {
+    addUnique(directMatches, directTopic);
+  }
+
+  if (directMatches.length > 0) {
+    return directMatches;
+  }
+
   const haystack = normalize([
     question.id,
     question.topic,
@@ -217,6 +279,15 @@ const buildQualityNotes = (
   definition: StoryCoreElementDefinition,
   signals: ElementSignals
 ): string[] => {
+  if (definition.id === 'partner' && signals.confirmedTexts.length > 0) {
+    const text = normalize(signals.confirmedTexts.join(' '));
+    if (!includesAny(text, PARTNER_DEPTH_KEYWORDS)) {
+      return ['核心伙伴还偏功能位，缺少独立欲望、立场冲突或能挑战主角的张力。'];
+    }
+
+    return [];
+  }
+
   if (definition.id !== 'stage' || signals.confirmedTexts.length === 0) {
     return [];
   }
@@ -257,7 +328,7 @@ const nextPromptFor = (definition: StoryCoreElementDefinition, status: StoryCore
     case 'protagonist':
       return '继续确认主角的欲望、误判和成长代价。';
     case 'partner':
-      return '继续确认核心伙伴或关系线的功能、立场和与主角的张力。';
+      return '继续确认核心伙伴的独立欲望、立场冲突，以及如何挑战主角。';
     case 'stage':
       return '继续确认第一舞台的利益结构、普通人压力和失败代价。';
     case 'power':

@@ -19,11 +19,46 @@
           "initial": "陌生人",
           "current": "朋友",
           "trajectory": "positive",
-          "keyEvents": []
+          "keyEvents": [],
+          "emotionalState": {
+            "trust": 20,
+            "distance": "互相试探",
+            "conflict": "方法论或立场差异",
+            "vulnerability": "尚未暴露真正恐惧",
+            "repair": "尚未发生修复节点"
+          }
         }
       ]
     }
   },
+
+  "relationshipArcs": [
+    {
+      "id": "rel.protagonist-partner",
+      "participants": ["entity.protagonist", "entity.partner"],
+      "type": "partner|romance|rival|mentor|family|faction-trust",
+      "slowBurn": true,
+      "currentState": {
+        "trust": 20,
+        "distance": "陌生/试探/合作/亲近/疏远",
+        "conflict": "价值观、目标、身份或方法论冲突",
+        "vulnerability": "双方尚未敢暴露的弱点或恐惧",
+        "repair": "关系破裂后的修复方式或未决修复"
+      },
+      "turningPoints": [
+        {
+          "chapter": null,
+          "scene": "",
+          "change": "关系如何变化",
+          "evidencePath": "stories/[story]/content/volume1/chapter-001.md"
+        }
+      ],
+      "openQuestions": [
+        "下一次信任变化来自什么行动证据？",
+        "哪件事会让双方距离拉近或拉远？"
+      ]
+    }
+  ],
 
   "factions": {
     "[派系名]": {

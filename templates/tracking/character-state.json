@@ -18,6 +18,10 @@
     },
     "development": {
       "arc": "[成长弧线描述]",
+      "desire": "[主角想要什么]",
+      "fear": "[主角怕失去什么]",
+      "misbelief": "[主角会犯的价值观或方法论误判]",
+      "growthCost": "[每一步成功需要付出的代价]",
       "milestones": [],
       "currentPhase": "起点",
       "nextGoal": ""
@@ -43,7 +47,11 @@
       },
       "arc": {
         "planned": "",
-        "current": ""
+        "current": "",
+        "desire": "",
+        "fear": "",
+        "challengeToProtagonist": "",
+        "relationshipTension": ""
       },
       "secrets": [],
       "motivations": []

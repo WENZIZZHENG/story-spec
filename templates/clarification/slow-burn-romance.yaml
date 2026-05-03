@@ -19,6 +19,34 @@ questions:
       - 任务搭档，互相觉得对方方法离谱，但都能补上自己的短板。
       - 临时雇佣关系，信任从一次次履约和救场里长出来。
       - 对立阵营的低烈度合作，先互相试探，不急着亲密。
+    exampleBranches:
+      - label: 任务搭档
+        answer: 两人先是任务搭档，互相觉得对方方法离谱，但必须一起处理第一场法术事故。
+        flavor: 轻松互怼，信任从具体行动里长出来。
+        tradeoffs:
+          - 关系推进需要靠任务证据，不能只靠暧昧对白。
+        downstreamImpact: relationships.json 需要记录 trust 上升和 conflict 未解的转折点。
+        recommendedFor:
+          - 轻松冒险
+          - 小队关系
+      - label: 互相利用
+        answer: 双方早期互相利用，主角需要本地知识，伙伴需要主角帮自己夺回被学院剥夺的署名权。
+        flavor: 张力更强，慢热来自利益合作到价值理解。
+        tradeoffs:
+          - 需要写清边界，避免关系显得功利到不可亲近。
+        downstreamImpact: 任务需要标注每次合作是否降低 distance 或加深 vulnerability。
+        recommendedFor:
+          - 学院冲突
+          - 制度压力
+      - label: 低烈度对立
+        answer: 伙伴来自旧秩序内部，认可主角的聪明，但反对他把人和制度当系统直接重构。
+        flavor: 情感更克制，价值观碰撞更扎实。
+        tradeoffs:
+          - 升温更慢，需要阶段性修复节点保持读者回报。
+        downstreamImpact: plan 和 tasks 要安排 conflict、repair、trust 的阶段变化。
+        recommendedFor:
+          - 慢热感情
+          - 思想改造作为支撑工具
   - id: romance-boundaries
     stage: specify
     topic: romance
@@ -30,6 +58,34 @@ questions:
       - 第一卷只建立信任和默契，第二卷才出现明确心动。
       - 早期有暧昧但双方都不点破，关系推进靠共同解决危机。
       - 感情更克制，重点是彼此价值观被慢慢改变。
+    exampleBranches:
+      - label: 第一卷只建立信任
+        answer: 第一卷只建立信任和默契，关系变化以“愿意承担共同后果”为节点，第二卷再出现明确心动。
+        flavor: 慢热、稳，读者回报来自信任细节。
+        tradeoffs:
+          - 情感爆点较晚，需要用互相救场和修复节点维持期待。
+        downstreamImpact: relationshipArcs.turningPoints 重点记录 trust 和 repair。
+        recommendedFor:
+          - 冒险主线优先
+          - 慢热感情
+      - label: 暧昧但不点破
+        answer: 早期有暧昧但双方都不点破，关系推进靠共同解决危机后的短暂脆弱。
+        flavor: 轻松中带拉扯，适合角色互动频繁的开局。
+        tradeoffs:
+          - 需要控制暧昧密度，避免抢主线。
+        downstreamImpact: 写作任务要标注 vulnerability 的暴露和 distance 的变化。
+        recommendedFor:
+          - 小队互动
+          - 轻松冒险
+      - label: 价值观慢慢改变
+        answer: 感情更克制，重点是彼此价值观被慢慢改变，亲密来自愿意承认自己错了。
+        flavor: 情感重量更高，关系和主题绑定更紧。
+        tradeoffs:
+          - 情绪回报更慢，需要清楚的冲突与修复链条。
+        downstreamImpact: creative-plan 要安排 conflict -> vulnerability -> repair 的阶段节点。
+        recommendedFor:
+          - 文明级威胁
+          - 价值观冲突
   - id: romance.conflict-function
     stage: specify
     topic: romance
@@ -41,3 +97,33 @@ questions:
       - 对方代表异界旧秩序中善良但受限的一面，主角必须先理解再改变。
       - 两人的信任会决定主角能否获得本地知识，而不是只靠外来技术碾压。
       - 感情对象能指出主角工程思维的盲点，让思想改造不变成单向输出。
+  - id: romance.relationship-arc
+    stage: specify
+    topic: relationship
+    question: 这段慢热关系最重要的变化轴是什么？
+    whyItMatters: 慢热关系需要可追踪的信任、距离、冲突、脆弱和修复节点，否则容易长期原地拉扯。
+    type: textarea
+    required: false
+    exampleAnswers:
+      - 信任从 20 到 45，距离仍保持，因为伙伴还不相信主角理解本地人的代价。
+      - 冲突来自方法论：主角想修系统，伙伴坚持先救具体的人。
+      - 第一次脆弱发生在失败后，双方承认各自害怕失去署名权和行动自由。
+    exampleBranches:
+      - label: 信任上升但距离未消失
+        answer: 第一卷信任上升，但距离不消失；双方能并肩处理事故，却还不愿暴露真正恐惧。
+        flavor: 细腻、稳扎稳打。
+        tradeoffs:
+          - 需要每次关系变化都有行动证据。
+        downstreamImpact: relationships.json 记录 trust 上升、distance 保留和 evidencePath。
+        recommendedFor:
+          - 第一卷慢热
+          - 小队冒险
+      - label: 冲突先加深再修复
+        answer: 双方的价值冲突先加深，第一次修复来自主角承认技术正确不等于人会接受。
+        flavor: 张力更强，关系回报更有重量。
+        tradeoffs:
+          - 前期可能更别扭，需要小回报避免压抑。
+        downstreamImpact: tasks 需要标注 conflict 和 repair 的章节节点。
+        recommendedFor:
+          - 价值观冲突
+          - 思想改造边界

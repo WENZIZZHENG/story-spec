@@ -75,6 +75,7 @@ scripts:
 - 如果任务包含 18+ / 高风险节点，先按任务清单读取“剧情功能、关系变化、后果、边界备注”，正文处理必须服从该边界。
 - 如果任务来自 branch what-if，确认 `branch:promote --yes` 已显式确认；未确认时只写 `stories/*/branches/` 或任务草稿，不覆盖 main 正文。
 - 如果任务涉及对白计划，优先读取或生成待确认 `dialogue/*.yaml`，不得把未确认对白当 canon。
+- 如果任务涉及关系线，必须读取 `spec/tracking/relationships.json` 中对应 `relationshipArcs`；正文结束前说明 trust、distance、conflict、vulnerability、repair 或 turningPoints 哪一项发生变化，并准备 evidencePath 更新。
 
 ### 2. 验证前置条件
 - 检查相关依赖任务是否完成
@@ -91,6 +92,7 @@ scripts:
 - P0 必须包含的元素
 - 目标读者特征
 - 内容红线提醒
+- 关系线任务必须让人物通过行动改变关系状态，不能只靠内心旁白或暧昧台词推进。
 
 **分段格式规范（重要）**：
 - ⛔ **禁止使用**："一"、"二"、"三"等数字标记分段

@@ -292,6 +292,23 @@ const buildFollowUpQuestions = (
     ));
   }
 
+  if (
+    romanceAnswer
+    && answerTextIncludes(romanceAnswer, /慢热|搭档|信任|关系|感情|互相|对立/)
+    && !existingQuestionIds.has('followup.romance.relationship-arc')
+  ) {
+    followUps.push(createFollowUpQuestion(
+      'followup.romance.relationship-arc',
+      'relationship',
+      '这段关系的信任、距离、冲突、脆弱和修复节点分别会怎样变化？',
+      '慢热关系需要可追踪的变化证据，写作任务和正文才能知道每一场互动推进了什么。',
+      [
+        '第一卷从互相试探到能共同承担一次事故后果；信任上升，但立场冲突仍未解决。',
+        '双方保持距离，因为各自害怕失去署名权和行动自由；第一次修复来自一场失败后的坦白。'
+      ]
+    ));
+  }
+
   return followUps;
 };
 

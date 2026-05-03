@@ -32,6 +32,18 @@ export interface ValidationIssue {
   message: string;
 }
 
+interface RelationshipArcLike {
+  id?: unknown;
+  participants?: unknown;
+  currentState?: unknown;
+  turningPoints?: unknown;
+}
+
+interface RelationshipTurningPointLike {
+  change?: unknown;
+  evidencePath?: unknown;
+}
+
 const VALID_COMMAND_PREFIXES = new Set(['/', '/storyspec.', '/storyspec:', '/storyspec-']);
 const VALID_TASK_STATUSES = new Set<WritingTaskStatus>(['todo', 'done']);
 const VALID_TASK_PRIORITIES = new Set<WritingTaskPriority>(['P0', 'P1', 'P2', 'P3', 'PX']);
@@ -91,7 +103,63 @@ export const validateTrackingDocument = (document: unknown, filePath: string): V
     return [issue('INVALID_TRACKING_DOCUMENT', filePath, 'tracking JSON 顶层必须是对象')];
   }
 
-  return [];
+  const issues: ValidationIssue[] = [];
+  const relationshipArcs = document.relationshipArcs;
+  if (!Array.isArray(relationshipArcs)) {
+    return issues;
+  }
+
+  relationshipArcs.forEach((arc: RelationshipArcLike, index) => {
+    const arcPath = `${filePath}#relationshipArcs[${index}]`;
+    if (!isRecord(arc)) {
+      issues.push(issue('INVALID_TRACKING_DOCUMENT', arcPath, 'relationshipArcs 项必须是对象'));
+      return;
+    }
+
+    if (!isNonEmptyString(arc.id)) {
+      issues.push(issue('INVALID_TRACKING_DOCUMENT', `${arcPath}.id`, '关系线 id 不能为空'));
+    }
+
+    if (
+      !Array.isArray(arc.participants)
+      || arc.participants.filter(isNonEmptyString).length < 2
+    ) {
+      issues.push(issue('INVALID_TRACKING_DOCUMENT', `${arcPath}.participants`, '关系线至少需要两个参与角色'));
+    }
+
+    if (isRecord(arc.currentState)) {
+      const trust = arc.currentState.trust;
+      if (trust !== undefined && (typeof trust !== 'number' || trust < 0 || trust > 100)) {
+        issues.push(issue('INVALID_TRACKING_DOCUMENT', `${arcPath}.currentState.trust`, 'trust 必须是 0-100 的数字'));
+      }
+
+      for (const field of ['distance', 'conflict', 'vulnerability', 'repair']) {
+        if (field in arc.currentState && !isNonEmptyString(arc.currentState[field])) {
+          issues.push(issue('INVALID_TRACKING_DOCUMENT', `${arcPath}.currentState.${field}`, `${field} 不能为空`));
+        }
+      }
+    }
+
+    if (Array.isArray(arc.turningPoints)) {
+      arc.turningPoints.forEach((turningPoint: RelationshipTurningPointLike, pointIndex) => {
+        const pointPath = `${arcPath}.turningPoints[${pointIndex}]`;
+        if (!isRecord(turningPoint)) {
+          issues.push(issue('INVALID_TRACKING_DOCUMENT', pointPath, 'turningPoints 项必须是对象'));
+          return;
+        }
+
+        if (!isNonEmptyString(turningPoint.change)) {
+          issues.push(issue('INVALID_TRACKING_DOCUMENT', `${pointPath}.change`, '关系转折必须说明 change'));
+        }
+
+        if (!isNonEmptyString(turningPoint.evidencePath)) {
+          issues.push(issue('INVALID_TRACKING_DOCUMENT', `${pointPath}.evidencePath`, '关系转折必须记录 evidencePath'));
+        }
+      });
+    }
+  });
+
+  return issues;
 };
 
 export const validateWritingTask = (task: unknown): ValidationIssue[] => {
