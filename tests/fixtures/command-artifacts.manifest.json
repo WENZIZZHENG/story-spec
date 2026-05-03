@@ -23,7 +23,7 @@
   "files": [
     {
       "path": "auggie/.augment/commands/analyze.md",
-      "sha256": "8c98e0a822db4744a814d5945e99125b2e2784b2a033a40034705830b58df20a",
+      "sha256": "b94382b639720feda6097f7bcd593e87e28e99d354af94f03a42c01cb88102f8",
       "commandSource": {
         "command": "analyze",
         "kind": "command-spec",
@@ -42,7 +42,7 @@
     },
     {
       "path": "auggie/.augment/commands/clarify.md",
-      "sha256": "72911b090782d26e6bcb4c67aecc7dc5a3beabdb0ef72daf2e50030788456f42",
+      "sha256": "9c66928d83af69f7fe384aa6a88efdadea5cabc5305ec7d882dc698fb235b176",
       "commandSource": {
         "command": "clarify",
         "kind": "legacy-template",
@@ -51,7 +51,7 @@
     },
     {
       "path": "auggie/.augment/commands/constitution.md",
-      "sha256": "557f7ec23126b104549b938157bd97bf8f8fba8544d459704841534b1705903c",
+      "sha256": "a220ed46b66dc26be89e758cc41ee00dbbd8d098ad98729ad02fa151c87e519e",
       "commandSource": {
         "command": "constitution",
         "kind": "legacy-template",
@@ -60,7 +60,7 @@
     },
     {
       "path": "auggie/.augment/commands/context-pack.md",
-      "sha256": "10c2d89f3bf9eeceae23091049071fa5c0860f16c75775179e48d50afb89b1c2",
+      "sha256": "f651ea658e359d4898b3c078dd6e2fd4c378350ea7566f6bfb0abe9b09a8448b",
       "commandSource": {
         "command": "context-pack",
         "kind": "legacy-template",
@@ -69,7 +69,7 @@
     },
     {
       "path": "auggie/.augment/commands/expert.md",
-      "sha256": "423fd3fed88d46e8519c874c471c8be52c01644fe0851bebe0f87f2069adaa5a",
+      "sha256": "ca6c2ee05ee9c043b8929cca3046c767bc4caf28902f0750b45dba80b4dc4241",
       "commandSource": {
         "command": "expert",
         "kind": "legacy-template",
@@ -78,7 +78,7 @@
     },
     {
       "path": "auggie/.augment/commands/plan.md",
-      "sha256": "287044aa80b1e2d750ebec5ffdd355c58adfb50fbca117912d0c6cbd8665f70e",
+      "sha256": "884f91d4aa3d60085fe2ded4cd8307286589021ba8470dcb6bfc9b7934b93e0d",
       "commandSource": {
         "command": "plan",
         "kind": "legacy-template",
@@ -87,7 +87,7 @@
     },
     {
       "path": "auggie/.augment/commands/relations.md",
-      "sha256": "9c520b48ccdeff7c86a8fb895416e5a2ac306815950c6f905440c09afed98fc8",
+      "sha256": "4331632c14d1ca60900333c1ac3275d866fa305fe78f79c4be4593b3f936eb5b",
       "commandSource": {
         "command": "relations",
         "kind": "legacy-template",
@@ -96,7 +96,7 @@
     },
     {
       "path": "auggie/.augment/commands/review.md",
-      "sha256": "3670664b9ac64d3e18cc9fe761fff997ea094fcc98c5caccb689deaf05fb5131",
+      "sha256": "3daae6bf3252c22ebd399cf2325627f03bfa1069f81046aa6a5f321028d4adbd",
       "commandSource": {
         "command": "review",
         "kind": "legacy-template",
@@ -105,7 +105,7 @@
     },
     {
       "path": "auggie/.augment/commands/scene.md",
-      "sha256": "adeb1fa9244ed7f1971a26053adfb039262f634b5250a1d1690efb27cc2cc01f",
+      "sha256": "ec8b98253cf8c8e08b3088b89c7569a96d15c8751f0e30d1dd51eb22111afb65",
       "commandSource": {
         "command": "scene",
         "kind": "legacy-template",
@@ -114,7 +114,7 @@
     },
     {
       "path": "auggie/.augment/commands/specify.md",
-      "sha256": "71a4c31fe95c1879a8137aae086725cdf07b664309eaf17152e9a10d64ec18f9",
+      "sha256": "9019a5589e8788a8cf643e83e641fd356993a778b5a1a1a80830e7654ac6ae4b",
       "commandSource": {
         "command": "specify",
         "kind": "legacy-template",
@@ -132,7 +132,7 @@
     },
     {
       "path": "auggie/.augment/commands/timeline.md",
-      "sha256": "f03fbd8c3bd871b48940b6677588c83b52a84d012bd6f28c0a29368ad655baab",
+      "sha256": "77ceb388e00ef8c847ffb6e119e8898ce44dc902e8c389ba3b6e223899c057ca",
       "commandSource": {
         "command": "timeline",
         "kind": "legacy-template",
@@ -150,7 +150,7 @@
     },
     {
       "path": "auggie/.augment/commands/track.md",
-      "sha256": "9ac511e3bc24d554462c00cfd8a88e9a36d78b059d90f524400a594e0a3a6e85",
+      "sha256": "80c0dd04e1166948914fcb11051d482b4e5c0dc5dcb68b763af472ec7e972433",
       "commandSource": {
         "command": "track",
         "kind": "legacy-template",
@@ -159,7 +159,7 @@
     },
     {
       "path": "auggie/.augment/commands/write.md",
-      "sha256": "12eb7da87062a427a8f90fa8dcdd334d8f145b3e85fcec19cabc71806b384f0d",
+      "sha256": "274f17380a8a64a771ef919259c5dd9c45adc39cc4a329c69b86039c42396a08",
       "commandSource": {
         "command": "write",
         "kind": "command-spec",
@@ -270,18 +270,6 @@
     {
       "path": "auggie/.specify/scripts/postbuild.cjs",
       "sha256": "06255c106d3ee5a1a5c84afcc056a370589bc3bc8577d7e42a7934bfc7b9bede"
-    },
-    {
-      "path": "auggie/.specify/scripts/runtime/application/check-writing-state.js",
-      "sha256": "3d966a5256cefed94cc1cb9bde8a55c4ddac6d4efb146d4a0dbc6192b02dedb8"
-    },
-    {
-      "path": "auggie/.specify/scripts/runtime/domain/story-artifact.js",
-      "sha256": "010032f357a3154a9e939db41baa9b47bf72d20a7b4d3c1dba65c25c2af2d603"
-    },
-    {
-      "path": "auggie/.specify/scripts/runtime/script-runtime.js",
-      "sha256": "6ddcafa9fca67371f159c0feb8df4d0eda5cda0e80d45bcb11713f43db99ba6c"
     },
     {
       "path": "auggie/.specify/templates/agent/agent-contract.md",
@@ -541,7 +529,7 @@
     },
     {
       "path": "claude/.claude/commands/novel.analyze.md",
-      "sha256": "f1e7fce067211e7b6345ddf403f5c5467dcdca7251856c9241782f879ef73757",
+      "sha256": "f3f9c70a825e1892cd3605558043951b85f20918f164a47dff65c5b2a85942c4",
       "commandSource": {
         "command": "analyze",
         "kind": "command-spec",
@@ -560,7 +548,7 @@
     },
     {
       "path": "claude/.claude/commands/novel.clarify.md",
-      "sha256": "9df6b6069d9a9b14ec0236693bbee5752bea901771776a3846dcc09485b2793f",
+      "sha256": "76d6c9520370094cdef1bc9e62f160d571150c09fdbfee55250f7bdc75f59fc4",
       "commandSource": {
         "command": "clarify",
         "kind": "legacy-template",
@@ -569,7 +557,7 @@
     },
     {
       "path": "claude/.claude/commands/novel.constitution.md",
-      "sha256": "925314d92ffdc8198d86f1b6c859c19ff5b523bb0e186f6a2ea8a77ddc4380de",
+      "sha256": "6461c4ead188968856408894a83da135389dca9146624446ec7342c9d4237de9",
       "commandSource": {
         "command": "constitution",
         "kind": "legacy-template",
@@ -578,7 +566,7 @@
     },
     {
       "path": "claude/.claude/commands/novel.context-pack.md",
-      "sha256": "e19326ee7c403fe3d689704c3fcfc5cdc6208078c986a019d76feb09bbeabaae",
+      "sha256": "fcd0286a88900e657898cfcb96fef0b3a53f6035d7426b49aaf77ddc0454b4c2",
       "commandSource": {
         "command": "context-pack",
         "kind": "legacy-template",
@@ -587,7 +575,7 @@
     },
     {
       "path": "claude/.claude/commands/novel.expert.md",
-      "sha256": "84f2b05006abd81188919b8560967b8ac837914695fb2a7b8ee553543dbf3dde",
+      "sha256": "5624ee709b4a6c7168763f8cd2beb67d9a3c2587e333ad794457f6e85007421f",
       "commandSource": {
         "command": "expert",
         "kind": "legacy-template",
@@ -596,7 +584,7 @@
     },
     {
       "path": "claude/.claude/commands/novel.plan.md",
-      "sha256": "d3751b548b82df59f0ec451fd1ec7bcf7c2da2f78cb582a4232f6d06a1f2bcc0",
+      "sha256": "3173c749f97251a51fbdebb57beb441754f44b73fcd2be64292bef8924c9129a",
       "commandSource": {
         "command": "plan",
         "kind": "legacy-template",
@@ -605,7 +593,7 @@
     },
     {
       "path": "claude/.claude/commands/novel.relations.md",
-      "sha256": "b2ba0d38be2fe091cb7e62b4c32fb0a8366a5917fa68831eb97e646fb7a4f2e2",
+      "sha256": "78cabb0352a9a84d4fddf46b37402bafc09633031ac13e35c19883c343218d2d",
       "commandSource": {
         "command": "relations",
         "kind": "legacy-template",
@@ -614,7 +602,7 @@
     },
     {
       "path": "claude/.claude/commands/novel.review.md",
-      "sha256": "403e3ddccc66b72c796c9d7080861c1e926756a29f8aad64da518049f61c9640",
+      "sha256": "3782a0fc9970d055fd0ea8e0ebceecd926ed8070f18f925bb88727a7b808c498",
       "commandSource": {
         "command": "review",
         "kind": "legacy-template",
@@ -623,7 +611,7 @@
     },
     {
       "path": "claude/.claude/commands/novel.scene.md",
-      "sha256": "93006fa661c93b96ed7cc3c660bccdff44ef507fd9eb1bcb18ef8304f6efd23e",
+      "sha256": "246e2af80ec067a76f025326c293f870db5c8e75da6f2198718df022fc1449a7",
       "commandSource": {
         "command": "scene",
         "kind": "legacy-template",
@@ -632,7 +620,7 @@
     },
     {
       "path": "claude/.claude/commands/novel.specify.md",
-      "sha256": "983d47201436e9d747ef942e451a0972b2a09df3ffdfc1a0ec670a9064be16d8",
+      "sha256": "aa5d289eca900b6921109ea79b4408ac8b8c25f3d7a833380bbd3e31ed93af3b",
       "commandSource": {
         "command": "specify",
         "kind": "legacy-template",
@@ -650,7 +638,7 @@
     },
     {
       "path": "claude/.claude/commands/novel.timeline.md",
-      "sha256": "c6490b074d2bfb513c9a3979ed6004709cb990f4c8a4ca29b827e64010f782a5",
+      "sha256": "3ade38bc5429cb04036b30bd37749592cc7828bbe4b349e8bfc7d74ab0498025",
       "commandSource": {
         "command": "timeline",
         "kind": "legacy-template",
@@ -668,7 +656,7 @@
     },
     {
       "path": "claude/.claude/commands/novel.track.md",
-      "sha256": "565e90b4b3050a23e312c0112e8d13ddb07eafa2222539cc7528b456ee173bd0",
+      "sha256": "b975089e7bfbb146cd4660e3d88bae7a4212c8ae32c7b3725f6be1c4aaaab869",
       "commandSource": {
         "command": "track",
         "kind": "legacy-template",
@@ -677,7 +665,7 @@
     },
     {
       "path": "claude/.claude/commands/novel.write.md",
-      "sha256": "eda65b390740c8aef468f85c716da9b8e82cab7a6d137c94698077d4b1ebda46",
+      "sha256": "f2c0c456d53884c364aa26cb42233a719772214f04e79cb3ef2bb588439474d9",
       "commandSource": {
         "command": "write",
         "kind": "command-spec",
@@ -788,18 +776,6 @@
     {
       "path": "claude/.specify/scripts/postbuild.cjs",
       "sha256": "06255c106d3ee5a1a5c84afcc056a370589bc3bc8577d7e42a7934bfc7b9bede"
-    },
-    {
-      "path": "claude/.specify/scripts/runtime/application/check-writing-state.js",
-      "sha256": "3d966a5256cefed94cc1cb9bde8a55c4ddac6d4efb146d4a0dbc6192b02dedb8"
-    },
-    {
-      "path": "claude/.specify/scripts/runtime/domain/story-artifact.js",
-      "sha256": "010032f357a3154a9e939db41baa9b47bf72d20a7b4d3c1dba65c25c2af2d603"
-    },
-    {
-      "path": "claude/.specify/scripts/runtime/script-runtime.js",
-      "sha256": "6ddcafa9fca67371f159c0feb8df4d0eda5cda0e80d45bcb11713f43db99ba6c"
     },
     {
       "path": "claude/.specify/templates/agent/agent-contract.md",
@@ -1059,7 +1035,7 @@
     },
     {
       "path": "codebuddy/.codebuddy/commands/analyze.md",
-      "sha256": "8c98e0a822db4744a814d5945e99125b2e2784b2a033a40034705830b58df20a",
+      "sha256": "b94382b639720feda6097f7bcd593e87e28e99d354af94f03a42c01cb88102f8",
       "commandSource": {
         "command": "analyze",
         "kind": "command-spec",
@@ -1078,7 +1054,7 @@
     },
     {
       "path": "codebuddy/.codebuddy/commands/clarify.md",
-      "sha256": "72911b090782d26e6bcb4c67aecc7dc5a3beabdb0ef72daf2e50030788456f42",
+      "sha256": "9c66928d83af69f7fe384aa6a88efdadea5cabc5305ec7d882dc698fb235b176",
       "commandSource": {
         "command": "clarify",
         "kind": "legacy-template",
@@ -1087,7 +1063,7 @@
     },
     {
       "path": "codebuddy/.codebuddy/commands/constitution.md",
-      "sha256": "557f7ec23126b104549b938157bd97bf8f8fba8544d459704841534b1705903c",
+      "sha256": "a220ed46b66dc26be89e758cc41ee00dbbd8d098ad98729ad02fa151c87e519e",
       "commandSource": {
         "command": "constitution",
         "kind": "legacy-template",
@@ -1096,7 +1072,7 @@
     },
     {
       "path": "codebuddy/.codebuddy/commands/context-pack.md",
-      "sha256": "10c2d89f3bf9eeceae23091049071fa5c0860f16c75775179e48d50afb89b1c2",
+      "sha256": "f651ea658e359d4898b3c078dd6e2fd4c378350ea7566f6bfb0abe9b09a8448b",
       "commandSource": {
         "command": "context-pack",
         "kind": "legacy-template",
@@ -1105,7 +1081,7 @@
     },
     {
       "path": "codebuddy/.codebuddy/commands/expert.md",
-      "sha256": "423fd3fed88d46e8519c874c471c8be52c01644fe0851bebe0f87f2069adaa5a",
+      "sha256": "ca6c2ee05ee9c043b8929cca3046c767bc4caf28902f0750b45dba80b4dc4241",
       "commandSource": {
         "command": "expert",
         "kind": "legacy-template",
@@ -1114,7 +1090,7 @@
     },
     {
       "path": "codebuddy/.codebuddy/commands/plan.md",
-      "sha256": "287044aa80b1e2d750ebec5ffdd355c58adfb50fbca117912d0c6cbd8665f70e",
+      "sha256": "884f91d4aa3d60085fe2ded4cd8307286589021ba8470dcb6bfc9b7934b93e0d",
       "commandSource": {
         "command": "plan",
         "kind": "legacy-template",
@@ -1123,7 +1099,7 @@
     },
     {
       "path": "codebuddy/.codebuddy/commands/relations.md",
-      "sha256": "9c520b48ccdeff7c86a8fb895416e5a2ac306815950c6f905440c09afed98fc8",
+      "sha256": "4331632c14d1ca60900333c1ac3275d866fa305fe78f79c4be4593b3f936eb5b",
       "commandSource": {
         "command": "relations",
         "kind": "legacy-template",
@@ -1132,7 +1108,7 @@
     },
     {
       "path": "codebuddy/.codebuddy/commands/review.md",
-      "sha256": "3670664b9ac64d3e18cc9fe761fff997ea094fcc98c5caccb689deaf05fb5131",
+      "sha256": "3daae6bf3252c22ebd399cf2325627f03bfa1069f81046aa6a5f321028d4adbd",
       "commandSource": {
         "command": "review",
         "kind": "legacy-template",
@@ -1141,7 +1117,7 @@
     },
     {
       "path": "codebuddy/.codebuddy/commands/scene.md",
-      "sha256": "adeb1fa9244ed7f1971a26053adfb039262f634b5250a1d1690efb27cc2cc01f",
+      "sha256": "ec8b98253cf8c8e08b3088b89c7569a96d15c8751f0e30d1dd51eb22111afb65",
       "commandSource": {
         "command": "scene",
         "kind": "legacy-template",
@@ -1150,7 +1126,7 @@
     },
     {
       "path": "codebuddy/.codebuddy/commands/specify.md",
-      "sha256": "71a4c31fe95c1879a8137aae086725cdf07b664309eaf17152e9a10d64ec18f9",
+      "sha256": "9019a5589e8788a8cf643e83e641fd356993a778b5a1a1a80830e7654ac6ae4b",
       "commandSource": {
         "command": "specify",
         "kind": "legacy-template",
@@ -1168,7 +1144,7 @@
     },
     {
       "path": "codebuddy/.codebuddy/commands/timeline.md",
-      "sha256": "f03fbd8c3bd871b48940b6677588c83b52a84d012bd6f28c0a29368ad655baab",
+      "sha256": "77ceb388e00ef8c847ffb6e119e8898ce44dc902e8c389ba3b6e223899c057ca",
       "commandSource": {
         "command": "timeline",
         "kind": "legacy-template",
@@ -1186,7 +1162,7 @@
     },
     {
       "path": "codebuddy/.codebuddy/commands/track.md",
-      "sha256": "9ac511e3bc24d554462c00cfd8a88e9a36d78b059d90f524400a594e0a3a6e85",
+      "sha256": "80c0dd04e1166948914fcb11051d482b4e5c0dc5dcb68b763af472ec7e972433",
       "commandSource": {
         "command": "track",
         "kind": "legacy-template",
@@ -1195,7 +1171,7 @@
     },
     {
       "path": "codebuddy/.codebuddy/commands/write.md",
-      "sha256": "12eb7da87062a427a8f90fa8dcdd334d8f145b3e85fcec19cabc71806b384f0d",
+      "sha256": "274f17380a8a64a771ef919259c5dd9c45adc39cc4a329c69b86039c42396a08",
       "commandSource": {
         "command": "write",
         "kind": "command-spec",
@@ -1306,18 +1282,6 @@
     {
       "path": "codebuddy/.specify/scripts/postbuild.cjs",
       "sha256": "06255c106d3ee5a1a5c84afcc056a370589bc3bc8577d7e42a7934bfc7b9bede"
-    },
-    {
-      "path": "codebuddy/.specify/scripts/runtime/application/check-writing-state.js",
-      "sha256": "3d966a5256cefed94cc1cb9bde8a55c4ddac6d4efb146d4a0dbc6192b02dedb8"
-    },
-    {
-      "path": "codebuddy/.specify/scripts/runtime/domain/story-artifact.js",
-      "sha256": "010032f357a3154a9e939db41baa9b47bf72d20a7b4d3c1dba65c25c2af2d603"
-    },
-    {
-      "path": "codebuddy/.specify/scripts/runtime/script-runtime.js",
-      "sha256": "6ddcafa9fca67371f159c0feb8df4d0eda5cda0e80d45bcb11713f43db99ba6c"
     },
     {
       "path": "codebuddy/.specify/templates/agent/agent-contract.md",
@@ -1577,7 +1541,7 @@
     },
     {
       "path": "codex/.codex/prompts/novel-analyze.md",
-      "sha256": "8c98e0a822db4744a814d5945e99125b2e2784b2a033a40034705830b58df20a",
+      "sha256": "b94382b639720feda6097f7bcd593e87e28e99d354af94f03a42c01cb88102f8",
       "commandSource": {
         "command": "analyze",
         "kind": "command-spec",
@@ -1596,7 +1560,7 @@
     },
     {
       "path": "codex/.codex/prompts/novel-clarify.md",
-      "sha256": "72911b090782d26e6bcb4c67aecc7dc5a3beabdb0ef72daf2e50030788456f42",
+      "sha256": "9c66928d83af69f7fe384aa6a88efdadea5cabc5305ec7d882dc698fb235b176",
       "commandSource": {
         "command": "clarify",
         "kind": "legacy-template",
@@ -1605,7 +1569,7 @@
     },
     {
       "path": "codex/.codex/prompts/novel-constitution.md",
-      "sha256": "557f7ec23126b104549b938157bd97bf8f8fba8544d459704841534b1705903c",
+      "sha256": "a220ed46b66dc26be89e758cc41ee00dbbd8d098ad98729ad02fa151c87e519e",
       "commandSource": {
         "command": "constitution",
         "kind": "legacy-template",
@@ -1614,7 +1578,7 @@
     },
     {
       "path": "codex/.codex/prompts/novel-context-pack.md",
-      "sha256": "10c2d89f3bf9eeceae23091049071fa5c0860f16c75775179e48d50afb89b1c2",
+      "sha256": "f651ea658e359d4898b3c078dd6e2fd4c378350ea7566f6bfb0abe9b09a8448b",
       "commandSource": {
         "command": "context-pack",
         "kind": "legacy-template",
@@ -1623,7 +1587,7 @@
     },
     {
       "path": "codex/.codex/prompts/novel-expert.md",
-      "sha256": "423fd3fed88d46e8519c874c471c8be52c01644fe0851bebe0f87f2069adaa5a",
+      "sha256": "ca6c2ee05ee9c043b8929cca3046c767bc4caf28902f0750b45dba80b4dc4241",
       "commandSource": {
         "command": "expert",
         "kind": "legacy-template",
@@ -1632,7 +1596,7 @@
     },
     {
       "path": "codex/.codex/prompts/novel-plan.md",
-      "sha256": "287044aa80b1e2d750ebec5ffdd355c58adfb50fbca117912d0c6cbd8665f70e",
+      "sha256": "884f91d4aa3d60085fe2ded4cd8307286589021ba8470dcb6bfc9b7934b93e0d",
       "commandSource": {
         "command": "plan",
         "kind": "legacy-template",
@@ -1641,7 +1605,7 @@
     },
     {
       "path": "codex/.codex/prompts/novel-relations.md",
-      "sha256": "9c520b48ccdeff7c86a8fb895416e5a2ac306815950c6f905440c09afed98fc8",
+      "sha256": "4331632c14d1ca60900333c1ac3275d866fa305fe78f79c4be4593b3f936eb5b",
       "commandSource": {
         "command": "relations",
         "kind": "legacy-template",
@@ -1650,7 +1614,7 @@
     },
     {
       "path": "codex/.codex/prompts/novel-review.md",
-      "sha256": "3670664b9ac64d3e18cc9fe761fff997ea094fcc98c5caccb689deaf05fb5131",
+      "sha256": "3daae6bf3252c22ebd399cf2325627f03bfa1069f81046aa6a5f321028d4adbd",
       "commandSource": {
         "command": "review",
         "kind": "legacy-template",
@@ -1659,7 +1623,7 @@
     },
     {
       "path": "codex/.codex/prompts/novel-scene.md",
-      "sha256": "adeb1fa9244ed7f1971a26053adfb039262f634b5250a1d1690efb27cc2cc01f",
+      "sha256": "ec8b98253cf8c8e08b3088b89c7569a96d15c8751f0e30d1dd51eb22111afb65",
       "commandSource": {
         "command": "scene",
         "kind": "legacy-template",
@@ -1668,7 +1632,7 @@
     },
     {
       "path": "codex/.codex/prompts/novel-specify.md",
-      "sha256": "71a4c31fe95c1879a8137aae086725cdf07b664309eaf17152e9a10d64ec18f9",
+      "sha256": "9019a5589e8788a8cf643e83e641fd356993a778b5a1a1a80830e7654ac6ae4b",
       "commandSource": {
         "command": "specify",
         "kind": "legacy-template",
@@ -1686,7 +1650,7 @@
     },
     {
       "path": "codex/.codex/prompts/novel-timeline.md",
-      "sha256": "f03fbd8c3bd871b48940b6677588c83b52a84d012bd6f28c0a29368ad655baab",
+      "sha256": "77ceb388e00ef8c847ffb6e119e8898ce44dc902e8c389ba3b6e223899c057ca",
       "commandSource": {
         "command": "timeline",
         "kind": "legacy-template",
@@ -1704,7 +1668,7 @@
     },
     {
       "path": "codex/.codex/prompts/novel-track.md",
-      "sha256": "9ac511e3bc24d554462c00cfd8a88e9a36d78b059d90f524400a594e0a3a6e85",
+      "sha256": "80c0dd04e1166948914fcb11051d482b4e5c0dc5dcb68b763af472ec7e972433",
       "commandSource": {
         "command": "track",
         "kind": "legacy-template",
@@ -1713,7 +1677,7 @@
     },
     {
       "path": "codex/.codex/prompts/novel-write.md",
-      "sha256": "12eb7da87062a427a8f90fa8dcdd334d8f145b3e85fcec19cabc71806b384f0d",
+      "sha256": "274f17380a8a64a771ef919259c5dd9c45adc39cc4a329c69b86039c42396a08",
       "commandSource": {
         "command": "write",
         "kind": "command-spec",
@@ -1824,18 +1788,6 @@
     {
       "path": "codex/.specify/scripts/postbuild.cjs",
       "sha256": "06255c106d3ee5a1a5c84afcc056a370589bc3bc8577d7e42a7934bfc7b9bede"
-    },
-    {
-      "path": "codex/.specify/scripts/runtime/application/check-writing-state.js",
-      "sha256": "3d966a5256cefed94cc1cb9bde8a55c4ddac6d4efb146d4a0dbc6192b02dedb8"
-    },
-    {
-      "path": "codex/.specify/scripts/runtime/domain/story-artifact.js",
-      "sha256": "010032f357a3154a9e939db41baa9b47bf72d20a7b4d3c1dba65c25c2af2d603"
-    },
-    {
-      "path": "codex/.specify/scripts/runtime/script-runtime.js",
-      "sha256": "6ddcafa9fca67371f159c0feb8df4d0eda5cda0e80d45bcb11713f43db99ba6c"
     },
     {
       "path": "codex/.specify/templates/agent/agent-contract.md",
@@ -2095,7 +2047,7 @@
     },
     {
       "path": "continue-check/.continue/prompts/analyze.md",
-      "sha256": "9338e681cf5b04a46efd37c7c63629a7d381a5ace369c50df66175b40f5fafba",
+      "sha256": "11dffd567b5eaf798f207cbf8d5330974be397341fc179b769bf432f3e02cc85",
       "commandSource": {
         "command": "analyze",
         "kind": "command-spec",
@@ -2114,7 +2066,7 @@
     },
     {
       "path": "continue-check/.continue/prompts/clarify.md",
-      "sha256": "c4a93a77b3cea33669ba1b37d2b9432e03a699bedc3a098265ca53f820f41400",
+      "sha256": "fb33fb45128bbd97bb990d3558d6c38b6de0517552bbf787f7289fd455e6e812",
       "commandSource": {
         "command": "clarify",
         "kind": "legacy-template",
@@ -2123,7 +2075,7 @@
     },
     {
       "path": "continue-check/.continue/prompts/constitution.md",
-      "sha256": "94ea7719a6cdb962b33be277c3b0b15cc18aa69962695ed176ff90b60c89d902",
+      "sha256": "954639cf8728f75a07eaaf0e34a2f438f148e0ca29f70825cb778f28ae764e66",
       "commandSource": {
         "command": "constitution",
         "kind": "legacy-template",
@@ -2132,7 +2084,7 @@
     },
     {
       "path": "continue-check/.continue/prompts/context-pack.md",
-      "sha256": "8bb52ab3fb681fe277d949f2aee30dda5e30be69d82838d22379ea31fde06735",
+      "sha256": "61e5130bff5b41d37d6f7936f7dc164245a5f2cc119b142bb1c55ba7c5414f4c",
       "commandSource": {
         "command": "context-pack",
         "kind": "legacy-template",
@@ -2141,7 +2093,7 @@
     },
     {
       "path": "continue-check/.continue/prompts/expert.md",
-      "sha256": "b195c658e066c60c046cc05e2fb0364f68af3817f3b3706b4c8a31e5ddd54f21",
+      "sha256": "e9d40590478e9dd10b3c8485ab6f537d79c2f3446e9236ae1fee1759aad8383c",
       "commandSource": {
         "command": "expert",
         "kind": "legacy-template",
@@ -2150,7 +2102,7 @@
     },
     {
       "path": "continue-check/.continue/prompts/plan.md",
-      "sha256": "ac33c4c2ab170513305a85ff6173fae89363ae4425d7bce6cc0912438a263e0d",
+      "sha256": "d67388084c885c87540cf1985ddd3b425bd9ea0ebcb41988960b9a606ca24f85",
       "commandSource": {
         "command": "plan",
         "kind": "legacy-template",
@@ -2159,7 +2111,7 @@
     },
     {
       "path": "continue-check/.continue/prompts/relations.md",
-      "sha256": "a74108c61e6269a826db08e8461a976821e5485b3de768e4f74684e596824336",
+      "sha256": "e54346553c2fed47475aaca7b70b0bab5731040c11d2a14a14b0821d2637c178",
       "commandSource": {
         "command": "relations",
         "kind": "legacy-template",
@@ -2168,7 +2120,7 @@
     },
     {
       "path": "continue-check/.continue/prompts/review.md",
-      "sha256": "b837291ca240f6635e8f9698332a92e76876f82634cf210a268d5924724236c4",
+      "sha256": "c3746f483b520ff6f47fdd17df61d4ef7aee397b92e65ecf489d0f2cceb38a79",
       "commandSource": {
         "command": "review",
         "kind": "legacy-template",
@@ -2177,7 +2129,7 @@
     },
     {
       "path": "continue-check/.continue/prompts/scene.md",
-      "sha256": "7512352f6152fb9bd44e6e0c7114fc6d32041a213e025dd09b5468984b784a62",
+      "sha256": "a579ab34ac608768c960b4361cd3f098248b9781c191f7171f591d0514a1c39c",
       "commandSource": {
         "command": "scene",
         "kind": "legacy-template",
@@ -2186,7 +2138,7 @@
     },
     {
       "path": "continue-check/.continue/prompts/specify.md",
-      "sha256": "93ab7eb6f2ec1c9a7a3ee6d837814b409784178f53ceb5182d423fc5d1977d64",
+      "sha256": "c4307a334aff5f89d66710a3de7406f1314b9e57c05f1653efecde6404066dc2",
       "commandSource": {
         "command": "specify",
         "kind": "legacy-template",
@@ -2204,7 +2156,7 @@
     },
     {
       "path": "continue-check/.continue/prompts/timeline.md",
-      "sha256": "84c51f434dac527ab615bf3574897b89330218f8856583579418b925f0169b7d",
+      "sha256": "3605f6b79db613f394cc939c4023b48b354f513d60340f146c5fccc0c504e641",
       "commandSource": {
         "command": "timeline",
         "kind": "legacy-template",
@@ -2222,7 +2174,7 @@
     },
     {
       "path": "continue-check/.continue/prompts/track.md",
-      "sha256": "e74497a521c0284b55fe875f05561240db1a70fbbcf14d2bb14d9940dbfc5c50",
+      "sha256": "26f755c0c830e20b10cba9ffa1918c17a636dec0ba9696f75923fb0f9e51b0bc",
       "commandSource": {
         "command": "track",
         "kind": "legacy-template",
@@ -2231,7 +2183,7 @@
     },
     {
       "path": "continue-check/.continue/prompts/write.md",
-      "sha256": "1eada28a00b7ba1d1a88d63a99ac0c1285e2ede1e2ad23fd106de7b93618e90a",
+      "sha256": "768a220775f61f7878fc51e5b4b26d00b41cecb59468f7031200471aabb7a7f5",
       "commandSource": {
         "command": "write",
         "kind": "command-spec",
@@ -2342,18 +2294,6 @@
     {
       "path": "continue-check/.specify/scripts/postbuild.cjs",
       "sha256": "06255c106d3ee5a1a5c84afcc056a370589bc3bc8577d7e42a7934bfc7b9bede"
-    },
-    {
-      "path": "continue-check/.specify/scripts/runtime/application/check-writing-state.js",
-      "sha256": "3d966a5256cefed94cc1cb9bde8a55c4ddac6d4efb146d4a0dbc6192b02dedb8"
-    },
-    {
-      "path": "continue-check/.specify/scripts/runtime/domain/story-artifact.js",
-      "sha256": "010032f357a3154a9e939db41baa9b47bf72d20a7b4d3c1dba65c25c2af2d603"
-    },
-    {
-      "path": "continue-check/.specify/scripts/runtime/script-runtime.js",
-      "sha256": "6ddcafa9fca67371f159c0feb8df4d0eda5cda0e80d45bcb11713f43db99ba6c"
     },
     {
       "path": "continue-check/.specify/templates/agent/agent-contract.md",
@@ -2613,7 +2553,7 @@
     },
     {
       "path": "copilot/.github/prompts/analyze.prompt.md",
-      "sha256": "600c523bd9cb28db29410711ef7d5b6748319352f6611767f6a8e411d51748c3",
+      "sha256": "b9c84f0a1bfb2d9d2d8d018c42ae32081b9bff45b8c867237f72fc0f91fdd351",
       "commandSource": {
         "command": "analyze",
         "kind": "command-spec",
@@ -2632,7 +2572,7 @@
     },
     {
       "path": "copilot/.github/prompts/clarify.prompt.md",
-      "sha256": "c9c72d09bc83f757a646a774b1d0b0552c8521c78d301becccb42d54a0b35209",
+      "sha256": "d2e742f909b9fcd8ec4c5f8bfc252bd4c27e996908927ccc24dd41fa210023cf",
       "commandSource": {
         "command": "clarify",
         "kind": "legacy-template",
@@ -2641,7 +2581,7 @@
     },
     {
       "path": "copilot/.github/prompts/constitution.prompt.md",
-      "sha256": "557f7ec23126b104549b938157bd97bf8f8fba8544d459704841534b1705903c",
+      "sha256": "a220ed46b66dc26be89e758cc41ee00dbbd8d098ad98729ad02fa151c87e519e",
       "commandSource": {
         "command": "constitution",
         "kind": "legacy-template",
@@ -2650,7 +2590,7 @@
     },
     {
       "path": "copilot/.github/prompts/context-pack.prompt.md",
-      "sha256": "3820abb57a6b6471deeae790c71d0cbc82747b3ded0d2b70ca315b04be7b6a01",
+      "sha256": "43a3ca44ebc47e0d8095867a57469128e5cd1af8764b3c2b92fc52f0d01aba10",
       "commandSource": {
         "command": "context-pack",
         "kind": "legacy-template",
@@ -2659,7 +2599,7 @@
     },
     {
       "path": "copilot/.github/prompts/expert.prompt.md",
-      "sha256": "423fd3fed88d46e8519c874c471c8be52c01644fe0851bebe0f87f2069adaa5a",
+      "sha256": "ca6c2ee05ee9c043b8929cca3046c767bc4caf28902f0750b45dba80b4dc4241",
       "commandSource": {
         "command": "expert",
         "kind": "legacy-template",
@@ -2668,7 +2608,7 @@
     },
     {
       "path": "copilot/.github/prompts/plan.prompt.md",
-      "sha256": "d0fcdd837d78fb33dcc86df262f4b02c632b4ac0b64d2444ef3d8cbc52cc21c8",
+      "sha256": "bd6d3b4d73cae96cb772c0da7fa102a6385612555f2c56fdcd4409d7f23e0a3b",
       "commandSource": {
         "command": "plan",
         "kind": "legacy-template",
@@ -2677,7 +2617,7 @@
     },
     {
       "path": "copilot/.github/prompts/relations.prompt.md",
-      "sha256": "c26c021242d548c960c9b13db815a0396e6980fdf1acff24071d22f00ce824ff",
+      "sha256": "5800defaaaced63438eaea47fd0f1b1f3dc9bbf2f0efdffe73d8696497320bdc",
       "commandSource": {
         "command": "relations",
         "kind": "legacy-template",
@@ -2686,7 +2626,7 @@
     },
     {
       "path": "copilot/.github/prompts/review.prompt.md",
-      "sha256": "3670664b9ac64d3e18cc9fe761fff997ea094fcc98c5caccb689deaf05fb5131",
+      "sha256": "3daae6bf3252c22ebd399cf2325627f03bfa1069f81046aa6a5f321028d4adbd",
       "commandSource": {
         "command": "review",
         "kind": "legacy-template",
@@ -2695,7 +2635,7 @@
     },
     {
       "path": "copilot/.github/prompts/scene.prompt.md",
-      "sha256": "adeb1fa9244ed7f1971a26053adfb039262f634b5250a1d1690efb27cc2cc01f",
+      "sha256": "ec8b98253cf8c8e08b3088b89c7569a96d15c8751f0e30d1dd51eb22111afb65",
       "commandSource": {
         "command": "scene",
         "kind": "legacy-template",
@@ -2704,7 +2644,7 @@
     },
     {
       "path": "copilot/.github/prompts/specify.prompt.md",
-      "sha256": "fa2584d4f83f3bcd08c34603b7e5ac3c08524cc53b3f356b82bc47596737c6c8",
+      "sha256": "d3b558841c8c2daeff97ce0d016ba45ce090e0391aa35789789fe224f8df466a",
       "commandSource": {
         "command": "specify",
         "kind": "legacy-template",
@@ -2722,7 +2662,7 @@
     },
     {
       "path": "copilot/.github/prompts/timeline.prompt.md",
-      "sha256": "6137bb5de8cc41b630f4c2c69744fda250bb77bac7c9c1220c5b16fa550addb3",
+      "sha256": "4b5bcc5a3003310ba1c3e11dab24e6f6932b97b54816cb5aca9c8c6ceba39f28",
       "commandSource": {
         "command": "timeline",
         "kind": "legacy-template",
@@ -2740,7 +2680,7 @@
     },
     {
       "path": "copilot/.github/prompts/track.prompt.md",
-      "sha256": "d573f865cc8db620f083aa109a575eb46f8c548ee0ef0883a25209a06ebc2d55",
+      "sha256": "520661e225f82d5bc5d088216f0f59024b05e7df2f53156f45a86091d5075118",
       "commandSource": {
         "command": "track",
         "kind": "legacy-template",
@@ -2749,7 +2689,7 @@
     },
     {
       "path": "copilot/.github/prompts/write.prompt.md",
-      "sha256": "f676b1ed7931e914e2777adaffca6677907ed6f3b7af8a5f364f425129037031",
+      "sha256": "85791b46042cb4f7a49d4d2f176f307f4cf57385f2e70e96e89532533cb36dc7",
       "commandSource": {
         "command": "write",
         "kind": "command-spec",
@@ -2860,18 +2800,6 @@
     {
       "path": "copilot/.specify/scripts/postbuild.cjs",
       "sha256": "06255c106d3ee5a1a5c84afcc056a370589bc3bc8577d7e42a7934bfc7b9bede"
-    },
-    {
-      "path": "copilot/.specify/scripts/runtime/application/check-writing-state.js",
-      "sha256": "3d966a5256cefed94cc1cb9bde8a55c4ddac6d4efb146d4a0dbc6192b02dedb8"
-    },
-    {
-      "path": "copilot/.specify/scripts/runtime/domain/story-artifact.js",
-      "sha256": "010032f357a3154a9e939db41baa9b47bf72d20a7b4d3c1dba65c25c2af2d603"
-    },
-    {
-      "path": "copilot/.specify/scripts/runtime/script-runtime.js",
-      "sha256": "6ddcafa9fca67371f159c0feb8df4d0eda5cda0e80d45bcb11713f43db99ba6c"
     },
     {
       "path": "copilot/.specify/templates/agent/agent-contract.md",
@@ -3131,7 +3059,7 @@
     },
     {
       "path": "cursor/.cursor/commands/analyze.md",
-      "sha256": "8c98e0a822db4744a814d5945e99125b2e2784b2a033a40034705830b58df20a",
+      "sha256": "b94382b639720feda6097f7bcd593e87e28e99d354af94f03a42c01cb88102f8",
       "commandSource": {
         "command": "analyze",
         "kind": "command-spec",
@@ -3150,7 +3078,7 @@
     },
     {
       "path": "cursor/.cursor/commands/clarify.md",
-      "sha256": "72911b090782d26e6bcb4c67aecc7dc5a3beabdb0ef72daf2e50030788456f42",
+      "sha256": "9c66928d83af69f7fe384aa6a88efdadea5cabc5305ec7d882dc698fb235b176",
       "commandSource": {
         "command": "clarify",
         "kind": "legacy-template",
@@ -3159,7 +3087,7 @@
     },
     {
       "path": "cursor/.cursor/commands/constitution.md",
-      "sha256": "557f7ec23126b104549b938157bd97bf8f8fba8544d459704841534b1705903c",
+      "sha256": "a220ed46b66dc26be89e758cc41ee00dbbd8d098ad98729ad02fa151c87e519e",
       "commandSource": {
         "command": "constitution",
         "kind": "legacy-template",
@@ -3168,7 +3096,7 @@
     },
     {
       "path": "cursor/.cursor/commands/context-pack.md",
-      "sha256": "10c2d89f3bf9eeceae23091049071fa5c0860f16c75775179e48d50afb89b1c2",
+      "sha256": "f651ea658e359d4898b3c078dd6e2fd4c378350ea7566f6bfb0abe9b09a8448b",
       "commandSource": {
         "command": "context-pack",
         "kind": "legacy-template",
@@ -3177,7 +3105,7 @@
     },
     {
       "path": "cursor/.cursor/commands/expert.md",
-      "sha256": "423fd3fed88d46e8519c874c471c8be52c01644fe0851bebe0f87f2069adaa5a",
+      "sha256": "ca6c2ee05ee9c043b8929cca3046c767bc4caf28902f0750b45dba80b4dc4241",
       "commandSource": {
         "command": "expert",
         "kind": "legacy-template",
@@ -3186,7 +3114,7 @@
     },
     {
       "path": "cursor/.cursor/commands/plan.md",
-      "sha256": "287044aa80b1e2d750ebec5ffdd355c58adfb50fbca117912d0c6cbd8665f70e",
+      "sha256": "884f91d4aa3d60085fe2ded4cd8307286589021ba8470dcb6bfc9b7934b93e0d",
       "commandSource": {
         "command": "plan",
         "kind": "legacy-template",
@@ -3195,7 +3123,7 @@
     },
     {
       "path": "cursor/.cursor/commands/relations.md",
-      "sha256": "9c520b48ccdeff7c86a8fb895416e5a2ac306815950c6f905440c09afed98fc8",
+      "sha256": "4331632c14d1ca60900333c1ac3275d866fa305fe78f79c4be4593b3f936eb5b",
       "commandSource": {
         "command": "relations",
         "kind": "legacy-template",
@@ -3204,7 +3132,7 @@
     },
     {
       "path": "cursor/.cursor/commands/review.md",
-      "sha256": "3670664b9ac64d3e18cc9fe761fff997ea094fcc98c5caccb689deaf05fb5131",
+      "sha256": "3daae6bf3252c22ebd399cf2325627f03bfa1069f81046aa6a5f321028d4adbd",
       "commandSource": {
         "command": "review",
         "kind": "legacy-template",
@@ -3213,7 +3141,7 @@
     },
     {
       "path": "cursor/.cursor/commands/scene.md",
-      "sha256": "adeb1fa9244ed7f1971a26053adfb039262f634b5250a1d1690efb27cc2cc01f",
+      "sha256": "ec8b98253cf8c8e08b3088b89c7569a96d15c8751f0e30d1dd51eb22111afb65",
       "commandSource": {
         "command": "scene",
         "kind": "legacy-template",
@@ -3222,7 +3150,7 @@
     },
     {
       "path": "cursor/.cursor/commands/specify.md",
-      "sha256": "71a4c31fe95c1879a8137aae086725cdf07b664309eaf17152e9a10d64ec18f9",
+      "sha256": "9019a5589e8788a8cf643e83e641fd356993a778b5a1a1a80830e7654ac6ae4b",
       "commandSource": {
         "command": "specify",
         "kind": "legacy-template",
@@ -3240,7 +3168,7 @@
     },
     {
       "path": "cursor/.cursor/commands/timeline.md",
-      "sha256": "f03fbd8c3bd871b48940b6677588c83b52a84d012bd6f28c0a29368ad655baab",
+      "sha256": "77ceb388e00ef8c847ffb6e119e8898ce44dc902e8c389ba3b6e223899c057ca",
       "commandSource": {
         "command": "timeline",
         "kind": "legacy-template",
@@ -3258,7 +3186,7 @@
     },
     {
       "path": "cursor/.cursor/commands/track.md",
-      "sha256": "9ac511e3bc24d554462c00cfd8a88e9a36d78b059d90f524400a594e0a3a6e85",
+      "sha256": "80c0dd04e1166948914fcb11051d482b4e5c0dc5dcb68b763af472ec7e972433",
       "commandSource": {
         "command": "track",
         "kind": "legacy-template",
@@ -3267,7 +3195,7 @@
     },
     {
       "path": "cursor/.cursor/commands/write.md",
-      "sha256": "12eb7da87062a427a8f90fa8dcdd334d8f145b3e85fcec19cabc71806b384f0d",
+      "sha256": "274f17380a8a64a771ef919259c5dd9c45adc39cc4a329c69b86039c42396a08",
       "commandSource": {
         "command": "write",
         "kind": "command-spec",
@@ -3378,18 +3306,6 @@
     {
       "path": "cursor/.specify/scripts/postbuild.cjs",
       "sha256": "06255c106d3ee5a1a5c84afcc056a370589bc3bc8577d7e42a7934bfc7b9bede"
-    },
-    {
-      "path": "cursor/.specify/scripts/runtime/application/check-writing-state.js",
-      "sha256": "3d966a5256cefed94cc1cb9bde8a55c4ddac6d4efb146d4a0dbc6192b02dedb8"
-    },
-    {
-      "path": "cursor/.specify/scripts/runtime/domain/story-artifact.js",
-      "sha256": "010032f357a3154a9e939db41baa9b47bf72d20a7b4d3c1dba65c25c2af2d603"
-    },
-    {
-      "path": "cursor/.specify/scripts/runtime/script-runtime.js",
-      "sha256": "6ddcafa9fca67371f159c0feb8df4d0eda5cda0e80d45bcb11713f43db99ba6c"
     },
     {
       "path": "cursor/.specify/templates/agent/agent-contract.md",
@@ -3649,7 +3565,7 @@
     },
     {
       "path": "gemini/.gemini/commands/novel/analyze.toml",
-      "sha256": "30de21700c6bb8a20ce12b6743439c2d060e4c9ae20f582d6e94e6470ecf378a",
+      "sha256": "89f10d09f5eaf5f85859b0de0c9b057ea55f32625e9fded8d2cd88fd8af4eade",
       "commandSource": {
         "command": "analyze",
         "kind": "command-spec",
@@ -3668,7 +3584,7 @@
     },
     {
       "path": "gemini/.gemini/commands/novel/clarify.toml",
-      "sha256": "acb3df2a84342563921e77e5d40555ee850e4762ea43be42cc7c4a79bb923182",
+      "sha256": "6f986892b4e8c75a82b7ce37b5cdbce59f5d9d487d32b621334814620d1600fb",
       "commandSource": {
         "command": "clarify",
         "kind": "legacy-template",
@@ -3677,7 +3593,7 @@
     },
     {
       "path": "gemini/.gemini/commands/novel/constitution.toml",
-      "sha256": "f7964e0da4e9cad8208ee6ceccd00f1d84c6a5021e7a256459206c1fa4ec4337",
+      "sha256": "e9af1db9af9a00f7c05a1847e7e02c15283c6d5a23e3f0311d70b6df196269ea",
       "commandSource": {
         "command": "constitution",
         "kind": "legacy-template",
@@ -3686,7 +3602,7 @@
     },
     {
       "path": "gemini/.gemini/commands/novel/context-pack.toml",
-      "sha256": "a3e7978d63d5900aea7ddeb71f91f9e9974fbf44d627dd861cd58a2f0f0ce748",
+      "sha256": "9565768b37bb068d8f5f49caeeb026354dec06e9bafc6dba4fc8823b3e4f383d",
       "commandSource": {
         "command": "context-pack",
         "kind": "legacy-template",
@@ -3695,7 +3611,7 @@
     },
     {
       "path": "gemini/.gemini/commands/novel/expert.toml",
-      "sha256": "4abb1c472d3eaaae7d091e64d91c558d80529c07be06433ebcd501441686a5a5",
+      "sha256": "68e5050fd260f8d8bc8e7aa3d6708743b89828d7604acdcd0b437a7620854a35",
       "commandSource": {
         "command": "expert",
         "kind": "legacy-template",
@@ -3704,7 +3620,7 @@
     },
     {
       "path": "gemini/.gemini/commands/novel/plan.toml",
-      "sha256": "2500d6f44088cbf4a9bf8984683df3a59c74228a79e0ace8f2b4443ba6f57888",
+      "sha256": "37a89d2a6033749167169a038fb3b3da9106b69a9204b1759028a7dd3eee9b75",
       "commandSource": {
         "command": "plan",
         "kind": "legacy-template",
@@ -3713,7 +3629,7 @@
     },
     {
       "path": "gemini/.gemini/commands/novel/relations.toml",
-      "sha256": "8e1c3fcb72f7a39a6d171b85f6d017d2b932f2af10c8bfedf6f6210b442fdcb6",
+      "sha256": "6162624867381370ec29c8042d9743d01b33a27ad90c1d13b41c5dccddd84a17",
       "commandSource": {
         "command": "relations",
         "kind": "legacy-template",
@@ -3722,7 +3638,7 @@
     },
     {
       "path": "gemini/.gemini/commands/novel/review.toml",
-      "sha256": "5c0b67072a16a3a630c76f2323387398d3894611250ae34828e481aa47b83e3e",
+      "sha256": "84d83119bd0f05ca82fea4d4f868558132f4aedd4a6474840884fe2eb34311e2",
       "commandSource": {
         "command": "review",
         "kind": "legacy-template",
@@ -3731,7 +3647,7 @@
     },
     {
       "path": "gemini/.gemini/commands/novel/scene.toml",
-      "sha256": "24aedb822d00c1a30017ab1f6822c50a30e135d71edec880d9b8d6c7e34d228b",
+      "sha256": "31ee8448afb8d9d5ba20d10faf9c4e43a0128aff33ccbbbf3b9b487bce3d4c3a",
       "commandSource": {
         "command": "scene",
         "kind": "legacy-template",
@@ -3740,7 +3656,7 @@
     },
     {
       "path": "gemini/.gemini/commands/novel/specify.toml",
-      "sha256": "891c8ff4813a66420c6149b994e2e87bd2df8ecc462468324c165482e2c9be61",
+      "sha256": "48b56acc86ed30ecd59b1f3bf8f3c6f6b19c376b0412c8fe3f99d30b0ed01647",
       "commandSource": {
         "command": "specify",
         "kind": "legacy-template",
@@ -3758,7 +3674,7 @@
     },
     {
       "path": "gemini/.gemini/commands/novel/timeline.toml",
-      "sha256": "9598271d188885cf550a623c3fb25a2e447b6b99046a180490aee6c11123e8a9",
+      "sha256": "7a3dce98931dc96ddb2444be654353b858110ff910bf444bda238c7a38441384",
       "commandSource": {
         "command": "timeline",
         "kind": "legacy-template",
@@ -3776,7 +3692,7 @@
     },
     {
       "path": "gemini/.gemini/commands/novel/track.toml",
-      "sha256": "8b531b75860eaed4289d7ff33b00ea5c2cfe071a33cac3f31fdc85e9e6300519",
+      "sha256": "cb9d09cedb59e0b84a42b0baee2396fbe08244cda2165ad219527b2738500ebc",
       "commandSource": {
         "command": "track",
         "kind": "legacy-template",
@@ -3785,7 +3701,7 @@
     },
     {
       "path": "gemini/.gemini/commands/novel/write.toml",
-      "sha256": "dfb2c516093ea76ec1b597deb3685bf09a7fe6d7095e9d2613596a8e956e318a",
+      "sha256": "138d5342c6100a08ebeb414bbff563933c30256225eb843237f52a538077c134",
       "commandSource": {
         "command": "write",
         "kind": "command-spec",
@@ -3896,18 +3812,6 @@
     {
       "path": "gemini/.specify/scripts/postbuild.cjs",
       "sha256": "06255c106d3ee5a1a5c84afcc056a370589bc3bc8577d7e42a7934bfc7b9bede"
-    },
-    {
-      "path": "gemini/.specify/scripts/runtime/application/check-writing-state.js",
-      "sha256": "3d966a5256cefed94cc1cb9bde8a55c4ddac6d4efb146d4a0dbc6192b02dedb8"
-    },
-    {
-      "path": "gemini/.specify/scripts/runtime/domain/story-artifact.js",
-      "sha256": "010032f357a3154a9e939db41baa9b47bf72d20a7b4d3c1dba65c25c2af2d603"
-    },
-    {
-      "path": "gemini/.specify/scripts/runtime/script-runtime.js",
-      "sha256": "6ddcafa9fca67371f159c0feb8df4d0eda5cda0e80d45bcb11713f43db99ba6c"
     },
     {
       "path": "gemini/.specify/templates/agent/agent-contract.md",
@@ -4167,7 +4071,7 @@
     },
     {
       "path": "generic/.specify/commands/analyze.md",
-      "sha256": "778ab2b5aaea7c80d830d39a51f9d134a49d1b20b1a4beeae831ed1336b2255f",
+      "sha256": "70434ecc36faea74da47bd8c3a972b82374b8e7650897782cda37b6c998038bd",
       "commandSource": {
         "command": "analyze",
         "kind": "command-spec",
@@ -4186,7 +4090,7 @@
     },
     {
       "path": "generic/.specify/commands/clarify.md",
-      "sha256": "9fdad16833e1ec5ec4520b8e5822ee894a710aba25ea831ceeabb0392e0be10a",
+      "sha256": "6012c3b9940b493818ee4056d3344b5735f21d3c7f717685d71f1ca3db9da9c2",
       "commandSource": {
         "command": "clarify",
         "kind": "legacy-template",
@@ -4195,7 +4099,7 @@
     },
     {
       "path": "generic/.specify/commands/constitution.md",
-      "sha256": "3160dd43954272267227dc9d6e5fab4d064e36255d973e1ce3afc936bb750958",
+      "sha256": "776e69cb7c1e33cd82abaa67e62e5f8d251b975cfa359daab288c3ae0cbdb545",
       "commandSource": {
         "command": "constitution",
         "kind": "legacy-template",
@@ -4204,7 +4108,7 @@
     },
     {
       "path": "generic/.specify/commands/context-pack.md",
-      "sha256": "a077cb47520470f0f180a5a837bc18b48ceedf3746d1f5d489ec763b6fcefb7c",
+      "sha256": "b9fca2a8682655b34f32a77b273e21ea04471e04d7988baae140cecdbfeb8915",
       "commandSource": {
         "command": "context-pack",
         "kind": "legacy-template",
@@ -4213,7 +4117,7 @@
     },
     {
       "path": "generic/.specify/commands/expert.md",
-      "sha256": "45640928137daf0900b7314e6253e77c4779de5732f54929600220e31a699f71",
+      "sha256": "8d066bfab935ad101f092b1d9759388f250c561fcd26048977c247cf5310595d",
       "commandSource": {
         "command": "expert",
         "kind": "legacy-template",
@@ -4222,7 +4126,7 @@
     },
     {
       "path": "generic/.specify/commands/plan.md",
-      "sha256": "7f1776d1c154a3860c102cb07eafd14d59cf9795b5f7202f46195dfd29427424",
+      "sha256": "346bb8b9430bbef9eac3663ab4637c002621e6edb88e273b958e559dce4abecd",
       "commandSource": {
         "command": "plan",
         "kind": "legacy-template",
@@ -4231,7 +4135,7 @@
     },
     {
       "path": "generic/.specify/commands/relations.md",
-      "sha256": "09ecc131f0153d0040ea736d3869e953f85baea2fcdc35b96ea9693fe5830938",
+      "sha256": "3a4394020ea7f90e5ae382dfb23575bfbb24dd371ce188e8ee1bf915aaf8f944",
       "commandSource": {
         "command": "relations",
         "kind": "legacy-template",
@@ -4240,7 +4144,7 @@
     },
     {
       "path": "generic/.specify/commands/review.md",
-      "sha256": "a9f5e1a01827b70f035e1cb5edfbb5b1d01d21e092c821eade1f3a4da111e25b",
+      "sha256": "99b09f6247987696eef35ffa96ae29c06c5bd8088afba10bc99884b10bcde66c",
       "commandSource": {
         "command": "review",
         "kind": "legacy-template",
@@ -4249,7 +4153,7 @@
     },
     {
       "path": "generic/.specify/commands/scene.md",
-      "sha256": "44bee62ad4317e2e089d0d04522696dc044794e5a66e50761bcee663173467a3",
+      "sha256": "f95f7e70c8b498d43e5c50d394a7ef4a1e54639980062093d4966c578408570c",
       "commandSource": {
         "command": "scene",
         "kind": "legacy-template",
@@ -4258,7 +4162,7 @@
     },
     {
       "path": "generic/.specify/commands/specify.md",
-      "sha256": "3cb7c8c18913cde3d000cf91208f145a7d76963f157e5f418e5404ac8498fa8f",
+      "sha256": "d740b7b50c168d5970b46213235f911bb21b98c15ad0470b4ea08243393e7bd5",
       "commandSource": {
         "command": "specify",
         "kind": "legacy-template",
@@ -4276,7 +4180,7 @@
     },
     {
       "path": "generic/.specify/commands/timeline.md",
-      "sha256": "be33f4483abfd01bdee7ca91d9fc9ce163f4618960d5a7901b454db7091943f3",
+      "sha256": "5b8798484365f861dc11064a9f6a01ad542d3aed5cdb36413c97907886180779",
       "commandSource": {
         "command": "timeline",
         "kind": "legacy-template",
@@ -4294,7 +4198,7 @@
     },
     {
       "path": "generic/.specify/commands/track.md",
-      "sha256": "beaa777ada8154c7e08259e2b778ef5601a0644f708ca79e06558c699c9a2af1",
+      "sha256": "89463c29dd3dae09ee1f0dbd7426a3ed7b0ea2b65da565660abcd9cababce548",
       "commandSource": {
         "command": "track",
         "kind": "legacy-template",
@@ -4303,7 +4207,7 @@
     },
     {
       "path": "generic/.specify/commands/write.md",
-      "sha256": "23e014dfe5270a1b23c90df7326933b9ad5ee46d2fe489cf8f2f54eb00990db6",
+      "sha256": "a9e21afdc90ca51a790ea141f3828423944254fdc9f555141a485d90ec0035ab",
       "commandSource": {
         "command": "write",
         "kind": "command-spec",
@@ -4414,18 +4318,6 @@
     {
       "path": "generic/.specify/scripts/postbuild.cjs",
       "sha256": "06255c106d3ee5a1a5c84afcc056a370589bc3bc8577d7e42a7934bfc7b9bede"
-    },
-    {
-      "path": "generic/.specify/scripts/runtime/application/check-writing-state.js",
-      "sha256": "3d966a5256cefed94cc1cb9bde8a55c4ddac6d4efb146d4a0dbc6192b02dedb8"
-    },
-    {
-      "path": "generic/.specify/scripts/runtime/domain/story-artifact.js",
-      "sha256": "010032f357a3154a9e939db41baa9b47bf72d20a7b4d3c1dba65c25c2af2d603"
-    },
-    {
-      "path": "generic/.specify/scripts/runtime/script-runtime.js",
-      "sha256": "6ddcafa9fca67371f159c0feb8df4d0eda5cda0e80d45bcb11713f43db99ba6c"
     },
     {
       "path": "generic/.specify/templates/agent/agent-contract.md",
@@ -4685,7 +4577,7 @@
     },
     {
       "path": "kilocode/.kilocode/workflows/analyze.md",
-      "sha256": "f1e7fce067211e7b6345ddf403f5c5467dcdca7251856c9241782f879ef73757",
+      "sha256": "f3f9c70a825e1892cd3605558043951b85f20918f164a47dff65c5b2a85942c4",
       "commandSource": {
         "command": "analyze",
         "kind": "command-spec",
@@ -4704,7 +4596,7 @@
     },
     {
       "path": "kilocode/.kilocode/workflows/clarify.md",
-      "sha256": "6aef8185f8a6880f5831502207c60d27e072cd040eed306449cd6465453dc487",
+      "sha256": "418ea801215ddd44c0b1e9634c32e3b6e2d5708bc3e70995352e47c7d280fbe4",
       "commandSource": {
         "command": "clarify",
         "kind": "legacy-template",
@@ -4713,7 +4605,7 @@
     },
     {
       "path": "kilocode/.kilocode/workflows/constitution.md",
-      "sha256": "e4147cedcbef8bb72644eb8bf2d3e6ba4e1d900d30bb08c5f6527d369e1cbfc0",
+      "sha256": "1ef4b1bef80a07fb833e9db0853dfc588320ccc7b0040f47b41a0baaf14036a0",
       "commandSource": {
         "command": "constitution",
         "kind": "legacy-template",
@@ -4722,7 +4614,7 @@
     },
     {
       "path": "kilocode/.kilocode/workflows/context-pack.md",
-      "sha256": "4e4ebb9a369614df6abd3867a60277a3af3ad0a2b0ed60bb4c7bcd082284b586",
+      "sha256": "468a6b2b16a0a7a83fb85e839b2d8ae80384a7c2bd54a34a9edcb261b2d7dc16",
       "commandSource": {
         "command": "context-pack",
         "kind": "legacy-template",
@@ -4731,7 +4623,7 @@
     },
     {
       "path": "kilocode/.kilocode/workflows/expert.md",
-      "sha256": "eb8fe161666c34158806ff1ffdbc06aa4339d7ad5180e9d2a6329e91b3dde52c",
+      "sha256": "f0b82276f8f2c759d8629f88f6d1bc2b6b73b5252bb8eb106d03dc7b806f8d1b",
       "commandSource": {
         "command": "expert",
         "kind": "legacy-template",
@@ -4740,7 +4632,7 @@
     },
     {
       "path": "kilocode/.kilocode/workflows/plan.md",
-      "sha256": "8648c505c8d15186c1146bd8264215f723d1a421e1f51caf347b23d55a455f4d",
+      "sha256": "cbf8fd0e9384fe2de9fecca4c50d061af474adfab182eef74f8007c596a1c70a",
       "commandSource": {
         "command": "plan",
         "kind": "legacy-template",
@@ -4749,7 +4641,7 @@
     },
     {
       "path": "kilocode/.kilocode/workflows/relations.md",
-      "sha256": "335cb989f2b352aad9f1c6dc9a70a52ea860272a11135bbe30337eabe2be1e66",
+      "sha256": "e77fc96fdae31ede137097031f4760637b57288483cf974900bdc3e92b282e01",
       "commandSource": {
         "command": "relations",
         "kind": "legacy-template",
@@ -4758,7 +4650,7 @@
     },
     {
       "path": "kilocode/.kilocode/workflows/review.md",
-      "sha256": "71b936e7454f2a5e13d641975146a2a5144368637f87b2f5b6cfc26d3ff719e2",
+      "sha256": "97a27ca2753b06fa3912d39b6db64c773cd1e2ff3a9e155a5b12387fe00dab76",
       "commandSource": {
         "command": "review",
         "kind": "legacy-template",
@@ -4767,7 +4659,7 @@
     },
     {
       "path": "kilocode/.kilocode/workflows/scene.md",
-      "sha256": "c5537874e0bf8d52a5736de92a6a6b356e388145145fe30edd16e18fcd6a14b3",
+      "sha256": "0f99f5a337697268661690197016764345806446137f46a12b2b338a038ef205",
       "commandSource": {
         "command": "scene",
         "kind": "legacy-template",
@@ -4776,7 +4668,7 @@
     },
     {
       "path": "kilocode/.kilocode/workflows/specify.md",
-      "sha256": "8bf80b9dbce0e3766abeae5f736bf7f0f9834af2d310798da9a4c198bae4169a",
+      "sha256": "7fa118a395138e4c433dea43aab6fb98267fa72090f0f10955c2ff966a619467",
       "commandSource": {
         "command": "specify",
         "kind": "legacy-template",
@@ -4794,7 +4686,7 @@
     },
     {
       "path": "kilocode/.kilocode/workflows/timeline.md",
-      "sha256": "984f650fdc05864e0581e6b28a290d14c39be5eb693aa69100c55e3ae69f4f64",
+      "sha256": "6d13630f554daedc714f19c7b4d519f79f0afa43956d7840a21624dd80384089",
       "commandSource": {
         "command": "timeline",
         "kind": "legacy-template",
@@ -4812,7 +4704,7 @@
     },
     {
       "path": "kilocode/.kilocode/workflows/track.md",
-      "sha256": "11874ff69e07396fc8ffcb6a5544b5797ecc8a90ac408c1730b8fde836413a76",
+      "sha256": "15331c2ad72aae899c0027c3fa23dd747fc84d26db48b1c86d653a2ba5ccd50b",
       "commandSource": {
         "command": "track",
         "kind": "legacy-template",
@@ -4821,7 +4713,7 @@
     },
     {
       "path": "kilocode/.kilocode/workflows/write.md",
-      "sha256": "eda65b390740c8aef468f85c716da9b8e82cab7a6d137c94698077d4b1ebda46",
+      "sha256": "f2c0c456d53884c364aa26cb42233a719772214f04e79cb3ef2bb588439474d9",
       "commandSource": {
         "command": "write",
         "kind": "command-spec",
@@ -4932,18 +4824,6 @@
     {
       "path": "kilocode/.specify/scripts/postbuild.cjs",
       "sha256": "06255c106d3ee5a1a5c84afcc056a370589bc3bc8577d7e42a7934bfc7b9bede"
-    },
-    {
-      "path": "kilocode/.specify/scripts/runtime/application/check-writing-state.js",
-      "sha256": "3d966a5256cefed94cc1cb9bde8a55c4ddac6d4efb146d4a0dbc6192b02dedb8"
-    },
-    {
-      "path": "kilocode/.specify/scripts/runtime/domain/story-artifact.js",
-      "sha256": "010032f357a3154a9e939db41baa9b47bf72d20a7b4d3c1dba65c25c2af2d603"
-    },
-    {
-      "path": "kilocode/.specify/scripts/runtime/script-runtime.js",
-      "sha256": "6ddcafa9fca67371f159c0feb8df4d0eda5cda0e80d45bcb11713f43db99ba6c"
     },
     {
       "path": "kilocode/.specify/templates/agent/agent-contract.md",
@@ -5203,7 +5083,7 @@
     },
     {
       "path": "opencode/.opencode/command/analyze.md",
-      "sha256": "26d86c69bb3480d72b3f8554e2f01d281d938512b51e85b6ca7c049214179cd9",
+      "sha256": "fcc142d4f1b461466ada0550ac736ca8e3ff37dae151cc7c6870b0ad638ebdfd",
       "commandSource": {
         "command": "analyze",
         "kind": "command-spec",
@@ -5222,7 +5102,7 @@
     },
     {
       "path": "opencode/.opencode/command/clarify.md",
-      "sha256": "0397e3ed9229c222cdced270a1f76d9fedc28c0f854a53f4bfef4baf9bffd0d8",
+      "sha256": "be2779aba1be93fffa661e9b4a62052e5568e3e25e9bb1d2637fb31fd1d48622",
       "commandSource": {
         "command": "clarify",
         "kind": "legacy-template",
@@ -5231,7 +5111,7 @@
     },
     {
       "path": "opencode/.opencode/command/constitution.md",
-      "sha256": "d3cd6a8f73f9299f7e0a300632b18c791dcc2a57464923cd9709b191a07dcdbf",
+      "sha256": "6b744e0c4877efa8fb70090d0e43c6d2fcafe09441fd7bd47d86d9df7c5d897d",
       "commandSource": {
         "command": "constitution",
         "kind": "legacy-template",
@@ -5240,7 +5120,7 @@
     },
     {
       "path": "opencode/.opencode/command/context-pack.md",
-      "sha256": "12c773e7d3083d98de480d5e51d168744726c4f724d56053e472e9b5d8150faf",
+      "sha256": "cea560b53ea1e3e0fb52c66ae5914d11dabdcf5156c0135a8f3d8fd656eb8e18",
       "commandSource": {
         "command": "context-pack",
         "kind": "legacy-template",
@@ -5249,7 +5129,7 @@
     },
     {
       "path": "opencode/.opencode/command/expert.md",
-      "sha256": "209d506e1e6cb37a1bbf2b843403caa03f10a72602bbcc3a277bdf9f35b34d6b",
+      "sha256": "f777dd9b8968030cbc369d10aedf644e759790508f2fb9eedc69d64b42c6893e",
       "commandSource": {
         "command": "expert",
         "kind": "legacy-template",
@@ -5258,7 +5138,7 @@
     },
     {
       "path": "opencode/.opencode/command/plan.md",
-      "sha256": "c405fe38b4a0707e69bd1f57f2f3024c01d4c99fd9f8171705fa3ae30182b5ad",
+      "sha256": "599ab73608f45986af1c3d00bb7088832ae342aeda73f18275d0b54ef072084b",
       "commandSource": {
         "command": "plan",
         "kind": "legacy-template",
@@ -5267,7 +5147,7 @@
     },
     {
       "path": "opencode/.opencode/command/relations.md",
-      "sha256": "cd90bd0d88c52614e60e6d171c75bbaf234cf7a6a311f4a7e1e52e6226fd9d70",
+      "sha256": "b1fc98a5595a311d184df58f933c82faace40ad369f25868b2bd13dfd781e23c",
       "commandSource": {
         "command": "relations",
         "kind": "legacy-template",
@@ -5276,7 +5156,7 @@
     },
     {
       "path": "opencode/.opencode/command/review.md",
-      "sha256": "f9882b2eb8a5715fb4ae8c15229de00bcedfbcbec99146b59f8070f24c7e7163",
+      "sha256": "01c6fc8fceb867641efce4b4a3364e5d5ddfcc3e04ec2e6aa154a052df0f2519",
       "commandSource": {
         "command": "review",
         "kind": "legacy-template",
@@ -5285,7 +5165,7 @@
     },
     {
       "path": "opencode/.opencode/command/scene.md",
-      "sha256": "d6174147e3ac12f71e0e6cd4399363c4f8a08116ec781e809dccb8649b2273a6",
+      "sha256": "53cce761a691a8a77b857ad35f3452208295e5c79b47000e354d022ebe23a8ca",
       "commandSource": {
         "command": "scene",
         "kind": "legacy-template",
@@ -5294,7 +5174,7 @@
     },
     {
       "path": "opencode/.opencode/command/specify.md",
-      "sha256": "d6aa88771e6b4fc45466dab76364b9704442cf607a1b30391131143cd7263dcc",
+      "sha256": "faf1e9394a7efaf9614286498fc665d8de75d7ad9acefa6cc86ec796153a34ee",
       "commandSource": {
         "command": "specify",
         "kind": "legacy-template",
@@ -5312,7 +5192,7 @@
     },
     {
       "path": "opencode/.opencode/command/timeline.md",
-      "sha256": "3dd2383dd1eb057dd13a404f8da265c435059a1d4891c1faf4d04b097e9cfda6",
+      "sha256": "7d53f6d534587ef4a0c5577ae92e099e5b1f105f9df947fdca7a6b1cee2df959",
       "commandSource": {
         "command": "timeline",
         "kind": "legacy-template",
@@ -5330,7 +5210,7 @@
     },
     {
       "path": "opencode/.opencode/command/track.md",
-      "sha256": "cc483ebabe2f79b9bfbfa92a4980f3f096b2d00d19f9ee61f307359df1789fea",
+      "sha256": "487574793ee59e9c2b76e4fa4b76add7da19a9995e0608d535f6ebe20df05b69",
       "commandSource": {
         "command": "track",
         "kind": "legacy-template",
@@ -5339,7 +5219,7 @@
     },
     {
       "path": "opencode/.opencode/command/write.md",
-      "sha256": "0a81f71e450c92ecfc043ca5817eddb988a442cb3b6a8957cf9705746d548d21",
+      "sha256": "2de9629e0b2123f2d9e0f63c2471f5eec7565404be1132c8985af9f74dddb909",
       "commandSource": {
         "command": "write",
         "kind": "command-spec",
@@ -5450,18 +5330,6 @@
     {
       "path": "opencode/.specify/scripts/postbuild.cjs",
       "sha256": "06255c106d3ee5a1a5c84afcc056a370589bc3bc8577d7e42a7934bfc7b9bede"
-    },
-    {
-      "path": "opencode/.specify/scripts/runtime/application/check-writing-state.js",
-      "sha256": "3d966a5256cefed94cc1cb9bde8a55c4ddac6d4efb146d4a0dbc6192b02dedb8"
-    },
-    {
-      "path": "opencode/.specify/scripts/runtime/domain/story-artifact.js",
-      "sha256": "010032f357a3154a9e939db41baa9b47bf72d20a7b4d3c1dba65c25c2af2d603"
-    },
-    {
-      "path": "opencode/.specify/scripts/runtime/script-runtime.js",
-      "sha256": "6ddcafa9fca67371f159c0feb8df4d0eda5cda0e80d45bcb11713f43db99ba6c"
     },
     {
       "path": "opencode/.specify/templates/agent/agent-contract.md",
@@ -5721,7 +5589,7 @@
     },
     {
       "path": "q/.amazonq/prompts/analyze.md",
-      "sha256": "600c523bd9cb28db29410711ef7d5b6748319352f6611767f6a8e411d51748c3",
+      "sha256": "b9c84f0a1bfb2d9d2d8d018c42ae32081b9bff45b8c867237f72fc0f91fdd351",
       "commandSource": {
         "command": "analyze",
         "kind": "command-spec",
@@ -5740,7 +5608,7 @@
     },
     {
       "path": "q/.amazonq/prompts/clarify.md",
-      "sha256": "c9c72d09bc83f757a646a774b1d0b0552c8521c78d301becccb42d54a0b35209",
+      "sha256": "d2e742f909b9fcd8ec4c5f8bfc252bd4c27e996908927ccc24dd41fa210023cf",
       "commandSource": {
         "command": "clarify",
         "kind": "legacy-template",
@@ -5749,7 +5617,7 @@
     },
     {
       "path": "q/.amazonq/prompts/constitution.md",
-      "sha256": "557f7ec23126b104549b938157bd97bf8f8fba8544d459704841534b1705903c",
+      "sha256": "a220ed46b66dc26be89e758cc41ee00dbbd8d098ad98729ad02fa151c87e519e",
       "commandSource": {
         "command": "constitution",
         "kind": "legacy-template",
@@ -5758,7 +5626,7 @@
     },
     {
       "path": "q/.amazonq/prompts/context-pack.md",
-      "sha256": "3820abb57a6b6471deeae790c71d0cbc82747b3ded0d2b70ca315b04be7b6a01",
+      "sha256": "43a3ca44ebc47e0d8095867a57469128e5cd1af8764b3c2b92fc52f0d01aba10",
       "commandSource": {
         "command": "context-pack",
         "kind": "legacy-template",
@@ -5767,7 +5635,7 @@
     },
     {
       "path": "q/.amazonq/prompts/expert.md",
-      "sha256": "423fd3fed88d46e8519c874c471c8be52c01644fe0851bebe0f87f2069adaa5a",
+      "sha256": "ca6c2ee05ee9c043b8929cca3046c767bc4caf28902f0750b45dba80b4dc4241",
       "commandSource": {
         "command": "expert",
         "kind": "legacy-template",
@@ -5776,7 +5644,7 @@
     },
     {
       "path": "q/.amazonq/prompts/plan.md",
-      "sha256": "d0fcdd837d78fb33dcc86df262f4b02c632b4ac0b64d2444ef3d8cbc52cc21c8",
+      "sha256": "bd6d3b4d73cae96cb772c0da7fa102a6385612555f2c56fdcd4409d7f23e0a3b",
       "commandSource": {
         "command": "plan",
         "kind": "legacy-template",
@@ -5785,7 +5653,7 @@
     },
     {
       "path": "q/.amazonq/prompts/relations.md",
-      "sha256": "c26c021242d548c960c9b13db815a0396e6980fdf1acff24071d22f00ce824ff",
+      "sha256": "5800defaaaced63438eaea47fd0f1b1f3dc9bbf2f0efdffe73d8696497320bdc",
       "commandSource": {
         "command": "relations",
         "kind": "legacy-template",
@@ -5794,7 +5662,7 @@
     },
     {
       "path": "q/.amazonq/prompts/review.md",
-      "sha256": "3670664b9ac64d3e18cc9fe761fff997ea094fcc98c5caccb689deaf05fb5131",
+      "sha256": "3daae6bf3252c22ebd399cf2325627f03bfa1069f81046aa6a5f321028d4adbd",
       "commandSource": {
         "command": "review",
         "kind": "legacy-template",
@@ -5803,7 +5671,7 @@
     },
     {
       "path": "q/.amazonq/prompts/scene.md",
-      "sha256": "adeb1fa9244ed7f1971a26053adfb039262f634b5250a1d1690efb27cc2cc01f",
+      "sha256": "ec8b98253cf8c8e08b3088b89c7569a96d15c8751f0e30d1dd51eb22111afb65",
       "commandSource": {
         "command": "scene",
         "kind": "legacy-template",
@@ -5812,7 +5680,7 @@
     },
     {
       "path": "q/.amazonq/prompts/specify.md",
-      "sha256": "fa2584d4f83f3bcd08c34603b7e5ac3c08524cc53b3f356b82bc47596737c6c8",
+      "sha256": "d3b558841c8c2daeff97ce0d016ba45ce090e0391aa35789789fe224f8df466a",
       "commandSource": {
         "command": "specify",
         "kind": "legacy-template",
@@ -5830,7 +5698,7 @@
     },
     {
       "path": "q/.amazonq/prompts/timeline.md",
-      "sha256": "6137bb5de8cc41b630f4c2c69744fda250bb77bac7c9c1220c5b16fa550addb3",
+      "sha256": "4b5bcc5a3003310ba1c3e11dab24e6f6932b97b54816cb5aca9c8c6ceba39f28",
       "commandSource": {
         "command": "timeline",
         "kind": "legacy-template",
@@ -5848,7 +5716,7 @@
     },
     {
       "path": "q/.amazonq/prompts/track.md",
-      "sha256": "d573f865cc8db620f083aa109a575eb46f8c548ee0ef0883a25209a06ebc2d55",
+      "sha256": "520661e225f82d5bc5d088216f0f59024b05e7df2f53156f45a86091d5075118",
       "commandSource": {
         "command": "track",
         "kind": "legacy-template",
@@ -5857,7 +5725,7 @@
     },
     {
       "path": "q/.amazonq/prompts/write.md",
-      "sha256": "f676b1ed7931e914e2777adaffca6677907ed6f3b7af8a5f364f425129037031",
+      "sha256": "85791b46042cb4f7a49d4d2f176f307f4cf57385f2e70e96e89532533cb36dc7",
       "commandSource": {
         "command": "write",
         "kind": "command-spec",
@@ -5968,18 +5836,6 @@
     {
       "path": "q/.specify/scripts/postbuild.cjs",
       "sha256": "06255c106d3ee5a1a5c84afcc056a370589bc3bc8577d7e42a7934bfc7b9bede"
-    },
-    {
-      "path": "q/.specify/scripts/runtime/application/check-writing-state.js",
-      "sha256": "3d966a5256cefed94cc1cb9bde8a55c4ddac6d4efb146d4a0dbc6192b02dedb8"
-    },
-    {
-      "path": "q/.specify/scripts/runtime/domain/story-artifact.js",
-      "sha256": "010032f357a3154a9e939db41baa9b47bf72d20a7b4d3c1dba65c25c2af2d603"
-    },
-    {
-      "path": "q/.specify/scripts/runtime/script-runtime.js",
-      "sha256": "6ddcafa9fca67371f159c0feb8df4d0eda5cda0e80d45bcb11713f43db99ba6c"
     },
     {
       "path": "q/.specify/templates/agent/agent-contract.md",
@@ -6239,7 +6095,7 @@
     },
     {
       "path": "qwen/.qwen/commands/analyze.toml",
-      "sha256": "30de21700c6bb8a20ce12b6743439c2d060e4c9ae20f582d6e94e6470ecf378a",
+      "sha256": "89f10d09f5eaf5f85859b0de0c9b057ea55f32625e9fded8d2cd88fd8af4eade",
       "commandSource": {
         "command": "analyze",
         "kind": "command-spec",
@@ -6258,7 +6114,7 @@
     },
     {
       "path": "qwen/.qwen/commands/clarify.toml",
-      "sha256": "acb3df2a84342563921e77e5d40555ee850e4762ea43be42cc7c4a79bb923182",
+      "sha256": "6f986892b4e8c75a82b7ce37b5cdbce59f5d9d487d32b621334814620d1600fb",
       "commandSource": {
         "command": "clarify",
         "kind": "legacy-template",
@@ -6267,7 +6123,7 @@
     },
     {
       "path": "qwen/.qwen/commands/constitution.toml",
-      "sha256": "f7964e0da4e9cad8208ee6ceccd00f1d84c6a5021e7a256459206c1fa4ec4337",
+      "sha256": "e9af1db9af9a00f7c05a1847e7e02c15283c6d5a23e3f0311d70b6df196269ea",
       "commandSource": {
         "command": "constitution",
         "kind": "legacy-template",
@@ -6276,7 +6132,7 @@
     },
     {
       "path": "qwen/.qwen/commands/context-pack.toml",
-      "sha256": "a3e7978d63d5900aea7ddeb71f91f9e9974fbf44d627dd861cd58a2f0f0ce748",
+      "sha256": "9565768b37bb068d8f5f49caeeb026354dec06e9bafc6dba4fc8823b3e4f383d",
       "commandSource": {
         "command": "context-pack",
         "kind": "legacy-template",
@@ -6285,7 +6141,7 @@
     },
     {
       "path": "qwen/.qwen/commands/expert.toml",
-      "sha256": "4abb1c472d3eaaae7d091e64d91c558d80529c07be06433ebcd501441686a5a5",
+      "sha256": "68e5050fd260f8d8bc8e7aa3d6708743b89828d7604acdcd0b437a7620854a35",
       "commandSource": {
         "command": "expert",
         "kind": "legacy-template",
@@ -6294,7 +6150,7 @@
     },
     {
       "path": "qwen/.qwen/commands/plan.toml",
-      "sha256": "2500d6f44088cbf4a9bf8984683df3a59c74228a79e0ace8f2b4443ba6f57888",
+      "sha256": "37a89d2a6033749167169a038fb3b3da9106b69a9204b1759028a7dd3eee9b75",
       "commandSource": {
         "command": "plan",
         "kind": "legacy-template",
@@ -6303,7 +6159,7 @@
     },
     {
       "path": "qwen/.qwen/commands/relations.toml",
-      "sha256": "8e1c3fcb72f7a39a6d171b85f6d017d2b932f2af10c8bfedf6f6210b442fdcb6",
+      "sha256": "6162624867381370ec29c8042d9743d01b33a27ad90c1d13b41c5dccddd84a17",
       "commandSource": {
         "command": "relations",
         "kind": "legacy-template",
@@ -6312,7 +6168,7 @@
     },
     {
       "path": "qwen/.qwen/commands/review.toml",
-      "sha256": "5c0b67072a16a3a630c76f2323387398d3894611250ae34828e481aa47b83e3e",
+      "sha256": "84d83119bd0f05ca82fea4d4f868558132f4aedd4a6474840884fe2eb34311e2",
       "commandSource": {
         "command": "review",
         "kind": "legacy-template",
@@ -6321,7 +6177,7 @@
     },
     {
       "path": "qwen/.qwen/commands/scene.toml",
-      "sha256": "24aedb822d00c1a30017ab1f6822c50a30e135d71edec880d9b8d6c7e34d228b",
+      "sha256": "31ee8448afb8d9d5ba20d10faf9c4e43a0128aff33ccbbbf3b9b487bce3d4c3a",
       "commandSource": {
         "command": "scene",
         "kind": "legacy-template",
@@ -6330,7 +6186,7 @@
     },
     {
       "path": "qwen/.qwen/commands/specify.toml",
-      "sha256": "891c8ff4813a66420c6149b994e2e87bd2df8ecc462468324c165482e2c9be61",
+      "sha256": "48b56acc86ed30ecd59b1f3bf8f3c6f6b19c376b0412c8fe3f99d30b0ed01647",
       "commandSource": {
         "command": "specify",
         "kind": "legacy-template",
@@ -6348,7 +6204,7 @@
     },
     {
       "path": "qwen/.qwen/commands/timeline.toml",
-      "sha256": "9598271d188885cf550a623c3fb25a2e447b6b99046a180490aee6c11123e8a9",
+      "sha256": "7a3dce98931dc96ddb2444be654353b858110ff910bf444bda238c7a38441384",
       "commandSource": {
         "command": "timeline",
         "kind": "legacy-template",
@@ -6366,7 +6222,7 @@
     },
     {
       "path": "qwen/.qwen/commands/track.toml",
-      "sha256": "8b531b75860eaed4289d7ff33b00ea5c2cfe071a33cac3f31fdc85e9e6300519",
+      "sha256": "cb9d09cedb59e0b84a42b0baee2396fbe08244cda2165ad219527b2738500ebc",
       "commandSource": {
         "command": "track",
         "kind": "legacy-template",
@@ -6375,7 +6231,7 @@
     },
     {
       "path": "qwen/.qwen/commands/write.toml",
-      "sha256": "dfb2c516093ea76ec1b597deb3685bf09a7fe6d7095e9d2613596a8e956e318a",
+      "sha256": "138d5342c6100a08ebeb414bbff563933c30256225eb843237f52a538077c134",
       "commandSource": {
         "command": "write",
         "kind": "command-spec",
@@ -6486,18 +6342,6 @@
     {
       "path": "qwen/.specify/scripts/postbuild.cjs",
       "sha256": "06255c106d3ee5a1a5c84afcc056a370589bc3bc8577d7e42a7934bfc7b9bede"
-    },
-    {
-      "path": "qwen/.specify/scripts/runtime/application/check-writing-state.js",
-      "sha256": "3d966a5256cefed94cc1cb9bde8a55c4ddac6d4efb146d4a0dbc6192b02dedb8"
-    },
-    {
-      "path": "qwen/.specify/scripts/runtime/domain/story-artifact.js",
-      "sha256": "010032f357a3154a9e939db41baa9b47bf72d20a7b4d3c1dba65c25c2af2d603"
-    },
-    {
-      "path": "qwen/.specify/scripts/runtime/script-runtime.js",
-      "sha256": "6ddcafa9fca67371f159c0feb8df4d0eda5cda0e80d45bcb11713f43db99ba6c"
     },
     {
       "path": "qwen/.specify/templates/agent/agent-contract.md",
@@ -6757,7 +6601,7 @@
     },
     {
       "path": "roocode/.roo/commands/analyze.md",
-      "sha256": "f1e7fce067211e7b6345ddf403f5c5467dcdca7251856c9241782f879ef73757",
+      "sha256": "f3f9c70a825e1892cd3605558043951b85f20918f164a47dff65c5b2a85942c4",
       "commandSource": {
         "command": "analyze",
         "kind": "command-spec",
@@ -6776,7 +6620,7 @@
     },
     {
       "path": "roocode/.roo/commands/clarify.md",
-      "sha256": "6aef8185f8a6880f5831502207c60d27e072cd040eed306449cd6465453dc487",
+      "sha256": "418ea801215ddd44c0b1e9634c32e3b6e2d5708bc3e70995352e47c7d280fbe4",
       "commandSource": {
         "command": "clarify",
         "kind": "legacy-template",
@@ -6785,7 +6629,7 @@
     },
     {
       "path": "roocode/.roo/commands/constitution.md",
-      "sha256": "e4147cedcbef8bb72644eb8bf2d3e6ba4e1d900d30bb08c5f6527d369e1cbfc0",
+      "sha256": "1ef4b1bef80a07fb833e9db0853dfc588320ccc7b0040f47b41a0baaf14036a0",
       "commandSource": {
         "command": "constitution",
         "kind": "legacy-template",
@@ -6794,7 +6638,7 @@
     },
     {
       "path": "roocode/.roo/commands/context-pack.md",
-      "sha256": "4e4ebb9a369614df6abd3867a60277a3af3ad0a2b0ed60bb4c7bcd082284b586",
+      "sha256": "468a6b2b16a0a7a83fb85e839b2d8ae80384a7c2bd54a34a9edcb261b2d7dc16",
       "commandSource": {
         "command": "context-pack",
         "kind": "legacy-template",
@@ -6803,7 +6647,7 @@
     },
     {
       "path": "roocode/.roo/commands/expert.md",
-      "sha256": "eb8fe161666c34158806ff1ffdbc06aa4339d7ad5180e9d2a6329e91b3dde52c",
+      "sha256": "f0b82276f8f2c759d8629f88f6d1bc2b6b73b5252bb8eb106d03dc7b806f8d1b",
       "commandSource": {
         "command": "expert",
         "kind": "legacy-template",
@@ -6812,7 +6656,7 @@
     },
     {
       "path": "roocode/.roo/commands/plan.md",
-      "sha256": "8648c505c8d15186c1146bd8264215f723d1a421e1f51caf347b23d55a455f4d",
+      "sha256": "cbf8fd0e9384fe2de9fecca4c50d061af474adfab182eef74f8007c596a1c70a",
       "commandSource": {
         "command": "plan",
         "kind": "legacy-template",
@@ -6821,7 +6665,7 @@
     },
     {
       "path": "roocode/.roo/commands/relations.md",
-      "sha256": "335cb989f2b352aad9f1c6dc9a70a52ea860272a11135bbe30337eabe2be1e66",
+      "sha256": "e77fc96fdae31ede137097031f4760637b57288483cf974900bdc3e92b282e01",
       "commandSource": {
         "command": "relations",
         "kind": "legacy-template",
@@ -6830,7 +6674,7 @@
     },
     {
       "path": "roocode/.roo/commands/review.md",
-      "sha256": "71b936e7454f2a5e13d641975146a2a5144368637f87b2f5b6cfc26d3ff719e2",
+      "sha256": "97a27ca2753b06fa3912d39b6db64c773cd1e2ff3a9e155a5b12387fe00dab76",
       "commandSource": {
         "command": "review",
         "kind": "legacy-template",
@@ -6839,7 +6683,7 @@
     },
     {
       "path": "roocode/.roo/commands/scene.md",
-      "sha256": "c5537874e0bf8d52a5736de92a6a6b356e388145145fe30edd16e18fcd6a14b3",
+      "sha256": "0f99f5a337697268661690197016764345806446137f46a12b2b338a038ef205",
       "commandSource": {
         "command": "scene",
         "kind": "legacy-template",
@@ -6848,7 +6692,7 @@
     },
     {
       "path": "roocode/.roo/commands/specify.md",
-      "sha256": "8bf80b9dbce0e3766abeae5f736bf7f0f9834af2d310798da9a4c198bae4169a",
+      "sha256": "7fa118a395138e4c433dea43aab6fb98267fa72090f0f10955c2ff966a619467",
       "commandSource": {
         "command": "specify",
         "kind": "legacy-template",
@@ -6866,7 +6710,7 @@
     },
     {
       "path": "roocode/.roo/commands/timeline.md",
-      "sha256": "984f650fdc05864e0581e6b28a290d14c39be5eb693aa69100c55e3ae69f4f64",
+      "sha256": "6d13630f554daedc714f19c7b4d519f79f0afa43956d7840a21624dd80384089",
       "commandSource": {
         "command": "timeline",
         "kind": "legacy-template",
@@ -6884,7 +6728,7 @@
     },
     {
       "path": "roocode/.roo/commands/track.md",
-      "sha256": "11874ff69e07396fc8ffcb6a5544b5797ecc8a90ac408c1730b8fde836413a76",
+      "sha256": "15331c2ad72aae899c0027c3fa23dd747fc84d26db48b1c86d653a2ba5ccd50b",
       "commandSource": {
         "command": "track",
         "kind": "legacy-template",
@@ -6893,7 +6737,7 @@
     },
     {
       "path": "roocode/.roo/commands/write.md",
-      "sha256": "eda65b390740c8aef468f85c716da9b8e82cab7a6d137c94698077d4b1ebda46",
+      "sha256": "f2c0c456d53884c364aa26cb42233a719772214f04e79cb3ef2bb588439474d9",
       "commandSource": {
         "command": "write",
         "kind": "command-spec",
@@ -7004,18 +6848,6 @@
     {
       "path": "roocode/.specify/scripts/postbuild.cjs",
       "sha256": "06255c106d3ee5a1a5c84afcc056a370589bc3bc8577d7e42a7934bfc7b9bede"
-    },
-    {
-      "path": "roocode/.specify/scripts/runtime/application/check-writing-state.js",
-      "sha256": "3d966a5256cefed94cc1cb9bde8a55c4ddac6d4efb146d4a0dbc6192b02dedb8"
-    },
-    {
-      "path": "roocode/.specify/scripts/runtime/domain/story-artifact.js",
-      "sha256": "010032f357a3154a9e939db41baa9b47bf72d20a7b4d3c1dba65c25c2af2d603"
-    },
-    {
-      "path": "roocode/.specify/scripts/runtime/script-runtime.js",
-      "sha256": "6ddcafa9fca67371f159c0feb8df4d0eda5cda0e80d45bcb11713f43db99ba6c"
     },
     {
       "path": "roocode/.specify/templates/agent/agent-contract.md",
@@ -7378,18 +7210,6 @@
       "sha256": "06255c106d3ee5a1a5c84afcc056a370589bc3bc8577d7e42a7934bfc7b9bede"
     },
     {
-      "path": "windsurf/.specify/scripts/runtime/application/check-writing-state.js",
-      "sha256": "3d966a5256cefed94cc1cb9bde8a55c4ddac6d4efb146d4a0dbc6192b02dedb8"
-    },
-    {
-      "path": "windsurf/.specify/scripts/runtime/domain/story-artifact.js",
-      "sha256": "010032f357a3154a9e939db41baa9b47bf72d20a7b4d3c1dba65c25c2af2d603"
-    },
-    {
-      "path": "windsurf/.specify/scripts/runtime/script-runtime.js",
-      "sha256": "6ddcafa9fca67371f159c0feb8df4d0eda5cda0e80d45bcb11713f43db99ba6c"
-    },
-    {
       "path": "windsurf/.specify/templates/agent/agent-contract.md",
       "sha256": "7ee3a6c29219db3f8bd104568199931b34c5e65424cff5dd46b8e130e7d41541"
     },
@@ -7559,7 +7379,7 @@
     },
     {
       "path": "windsurf/.windsurf/workflows/analyze.md",
-      "sha256": "f1e7fce067211e7b6345ddf403f5c5467dcdca7251856c9241782f879ef73757",
+      "sha256": "f3f9c70a825e1892cd3605558043951b85f20918f164a47dff65c5b2a85942c4",
       "commandSource": {
         "command": "analyze",
         "kind": "command-spec",
@@ -7578,7 +7398,7 @@
     },
     {
       "path": "windsurf/.windsurf/workflows/clarify.md",
-      "sha256": "6aef8185f8a6880f5831502207c60d27e072cd040eed306449cd6465453dc487",
+      "sha256": "418ea801215ddd44c0b1e9634c32e3b6e2d5708bc3e70995352e47c7d280fbe4",
       "commandSource": {
         "command": "clarify",
         "kind": "legacy-template",
@@ -7587,7 +7407,7 @@
     },
     {
       "path": "windsurf/.windsurf/workflows/constitution.md",
-      "sha256": "e4147cedcbef8bb72644eb8bf2d3e6ba4e1d900d30bb08c5f6527d369e1cbfc0",
+      "sha256": "1ef4b1bef80a07fb833e9db0853dfc588320ccc7b0040f47b41a0baaf14036a0",
       "commandSource": {
         "command": "constitution",
         "kind": "legacy-template",
@@ -7596,7 +7416,7 @@
     },
     {
       "path": "windsurf/.windsurf/workflows/context-pack.md",
-      "sha256": "4e4ebb9a369614df6abd3867a60277a3af3ad0a2b0ed60bb4c7bcd082284b586",
+      "sha256": "468a6b2b16a0a7a83fb85e839b2d8ae80384a7c2bd54a34a9edcb261b2d7dc16",
       "commandSource": {
         "command": "context-pack",
         "kind": "legacy-template",
@@ -7605,7 +7425,7 @@
     },
     {
       "path": "windsurf/.windsurf/workflows/expert.md",
-      "sha256": "eb8fe161666c34158806ff1ffdbc06aa4339d7ad5180e9d2a6329e91b3dde52c",
+      "sha256": "f0b82276f8f2c759d8629f88f6d1bc2b6b73b5252bb8eb106d03dc7b806f8d1b",
       "commandSource": {
         "command": "expert",
         "kind": "legacy-template",
@@ -7614,7 +7434,7 @@
     },
     {
       "path": "windsurf/.windsurf/workflows/plan.md",
-      "sha256": "8648c505c8d15186c1146bd8264215f723d1a421e1f51caf347b23d55a455f4d",
+      "sha256": "cbf8fd0e9384fe2de9fecca4c50d061af474adfab182eef74f8007c596a1c70a",
       "commandSource": {
         "command": "plan",
         "kind": "legacy-template",
@@ -7623,7 +7443,7 @@
     },
     {
       "path": "windsurf/.windsurf/workflows/relations.md",
-      "sha256": "335cb989f2b352aad9f1c6dc9a70a52ea860272a11135bbe30337eabe2be1e66",
+      "sha256": "e77fc96fdae31ede137097031f4760637b57288483cf974900bdc3e92b282e01",
       "commandSource": {
         "command": "relations",
         "kind": "legacy-template",
@@ -7632,7 +7452,7 @@
     },
     {
       "path": "windsurf/.windsurf/workflows/review.md",
-      "sha256": "71b936e7454f2a5e13d641975146a2a5144368637f87b2f5b6cfc26d3ff719e2",
+      "sha256": "97a27ca2753b06fa3912d39b6db64c773cd1e2ff3a9e155a5b12387fe00dab76",
       "commandSource": {
         "command": "review",
         "kind": "legacy-template",
@@ -7641,7 +7461,7 @@
     },
     {
       "path": "windsurf/.windsurf/workflows/scene.md",
-      "sha256": "c5537874e0bf8d52a5736de92a6a6b356e388145145fe30edd16e18fcd6a14b3",
+      "sha256": "0f99f5a337697268661690197016764345806446137f46a12b2b338a038ef205",
       "commandSource": {
         "command": "scene",
         "kind": "legacy-template",
@@ -7650,7 +7470,7 @@
     },
     {
       "path": "windsurf/.windsurf/workflows/specify.md",
-      "sha256": "8bf80b9dbce0e3766abeae5f736bf7f0f9834af2d310798da9a4c198bae4169a",
+      "sha256": "7fa118a395138e4c433dea43aab6fb98267fa72090f0f10955c2ff966a619467",
       "commandSource": {
         "command": "specify",
         "kind": "legacy-template",
@@ -7668,7 +7488,7 @@
     },
     {
       "path": "windsurf/.windsurf/workflows/timeline.md",
-      "sha256": "984f650fdc05864e0581e6b28a290d14c39be5eb693aa69100c55e3ae69f4f64",
+      "sha256": "6d13630f554daedc714f19c7b4d519f79f0afa43956d7840a21624dd80384089",
       "commandSource": {
         "command": "timeline",
         "kind": "legacy-template",
@@ -7686,7 +7506,7 @@
     },
     {
       "path": "windsurf/.windsurf/workflows/track.md",
-      "sha256": "11874ff69e07396fc8ffcb6a5544b5797ecc8a90ac408c1730b8fde836413a76",
+      "sha256": "15331c2ad72aae899c0027c3fa23dd747fc84d26db48b1c86d653a2ba5ccd50b",
       "commandSource": {
         "command": "track",
         "kind": "legacy-template",
@@ -7695,7 +7515,7 @@
     },
     {
       "path": "windsurf/.windsurf/workflows/write.md",
-      "sha256": "eda65b390740c8aef468f85c716da9b8e82cab7a6d137c94698077d4b1ebda46",
+      "sha256": "f2c0c456d53884c364aa26cb42233a719772214f04e79cb3ef2bb588439474d9",
       "commandSource": {
         "command": "write",
         "kind": "command-spec",

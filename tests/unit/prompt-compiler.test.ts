@@ -2,10 +2,12 @@ import { readFile } from 'node:fs/promises';
 import path from 'node:path';
 import { describe, expect, it } from 'vitest';
 import {
+  compileCommandSpec,
   compileCommandTemplate,
   rewriteSpecifyPaths,
   type CommandOutputFormat
 } from '../../src/prompt/compiler.js';
+import { parseCommandSpec } from '../../src/prompt/command-spec.js';
 
 const template = `---
 description: 生成创作计划
@@ -33,6 +35,18 @@ const compile = (format: CommandOutputFormat) => compileCommandTemplate({
   outputFormat: format
 });
 
+const commandSpec = parseCommandSpec(`id: write
+title: 章节写作
+stage: drafting
+description: 基于任务清单执行章节写作
+arguments:
+  hint: "[章节编号或任务ID]"
+requiredReads:
+  - stories/*/tasks.md
+allowedWrites:
+  - stories/*/content/**
+`, 'write.command.yaml').spec!;
+
 describe('prompt compiler', () => {
   it('rewrites support paths without duplicating .specify prefixes', () => {
     expect(rewriteSpecifyPaths('memory/a.md .specify/memory/b.md scripts/x.sh templates/t.md'))
@@ -43,6 +57,9 @@ describe('prompt compiler', () => {
     const result = compile('markdown-none');
 
     expect(result).not.toMatch(/^---/);
+    expect(result).toMatch(/^## 空参数引导/);
+    expect(result).toContain('先提示用户补充 `[技术偏好]`');
+    expect(result).toContain('提供 2-3 个可直接复制的示例输入');
     expect(result).toContain('用户输入：$ARGUMENTS');
     expect(result).toContain('Agent: codex');
     expect(result).toContain('运行 .specify/scripts/bash/plan-story.sh');
@@ -66,10 +83,28 @@ describe('prompt compiler', () => {
 
     expect(result).toContain('description = "生成创作计划"');
     expect(result).toContain('prompt = """');
+    expect(result).toContain('## 空参数引导');
+    expect(result).toContain('先提示用户补充 `[技术偏好]`');
     expect(result).toContain('用户输入：{{args}}');
     expect(result).toContain('Agent: gemini');
     expect(result).toContain('运行 .specify/scripts/powershell/plan-story.ps1');
     expect(result.trimEnd()).toMatch(/"""$/);
+  });
+
+  it('adds empty-argument onboarding for CommandSpec prompts', () => {
+    const result = compileCommandSpec({
+      spec: commandSpec,
+      promptBody: '用户输入：$ARGUMENTS\n开始写作。\n',
+      agent: 'codex',
+      argFormat: '$ARGUMENTS',
+      scriptVariant: 'sh',
+      outputFormat: 'markdown-none'
+    });
+
+    expect(result).toMatch(/^## 空参数引导/);
+    expect(result).toContain('本命令用途：基于任务清单执行章节写作。');
+    expect(result).toContain('先提示用户补充 `[章节编号或任务ID]`');
+    expect(result).toContain('用户输入：$ARGUMENTS');
   });
 
   it('compiles a real repository command template', async () => {

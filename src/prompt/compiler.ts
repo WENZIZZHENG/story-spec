@@ -89,6 +89,51 @@ const escapeTomlString = (value: string): string => value.replace(/\\/g, '\\\\')
 
 const noShellScriptInstruction = '当前 agent 不支持 shell；不要执行 CLI/脚本，改为人工读取相关文件并记录无法自动验证的部分。';
 
+const renderEmptyArgumentOnboarding = (
+  description: string | undefined,
+  argumentHint: string | undefined,
+  argFormat: string
+): string => {
+  const normalizedHint = argumentHint?.trim();
+  if (!normalizedHint) {
+    return '';
+  }
+
+  return [
+    '## 空参数引导',
+    '',
+    `本命令用途：${description ?? '执行 Novel Writer 命令'}。`,
+    '',
+    `如果用户输入为空、只有空白，或仍是未替换的 \`${argFormat}\` 占位符：`,
+    '- 不要立即创建、修改或删除文件。',
+    `- 先提示用户补充 \`${normalizedHint}\`。`,
+    '- 提供 2-3 个可直接复制的示例输入，示例要结合本命令用途，而不是只重复参数占位符。',
+    '- 同时提供“让我提问”的选项：用 3-5 个简短问题帮用户补齐信息。',
+    '- 等用户补充有效输入后，再继续执行下面的步骤。',
+    '',
+    ''
+  ].join('\n');
+};
+
+const prependEmptyArgumentOnboarding = (
+  content: string,
+  description: string | undefined,
+  argumentHint: string | undefined,
+  argFormat: string
+): string => {
+  const onboarding = renderEmptyArgumentOnboarding(description, argumentHint, argFormat);
+  if (!onboarding) {
+    return content;
+  }
+
+  const frontmatterMatch = content.match(/^---\n[\s\S]*?\n---\n?/);
+  if (!frontmatterMatch) {
+    return `${onboarding}${content}`;
+  }
+
+  return `${frontmatterMatch[0]}${onboarding}${content.slice(frontmatterMatch[0].length)}`;
+};
+
 const cleanNoShellPromptBody = (content: string, runShell?: boolean): string => {
   if (runShell !== false) {
     return content;
@@ -158,10 +203,16 @@ const compileTemplateBody = (input: CompileCommandTemplateInput): {
     .replaceAll('{ARGS}', input.argFormat)
     .replaceAll('$ARGUMENTS', input.argFormat)
     .replaceAll('__AGENT__', input.agent));
+  const bodyWithOnboarding = prependEmptyArgumentOnboarding(
+    body,
+    parsed.frontmatter.description,
+    parsed.frontmatter.argumentHint,
+    input.argFormat
+  );
 
   return {
-    body,
-    promptBody: extractPromptBody(body),
+    body: bodyWithOnboarding,
+    promptBody: extractPromptBody(bodyWithOnboarding),
     description: parsed.frontmatter.description,
     argumentHint: parsed.frontmatter.argumentHint
   };
@@ -192,6 +243,12 @@ const compileSpecBody = (input: CompileCommandSpecInput): {
     .replaceAll('{ARGS}', input.argFormat)
     .replaceAll('$ARGUMENTS', input.argFormat)
     .replaceAll('__AGENT__', input.agent)), input.runShell);
+  const promptBodyWithOnboarding = prependEmptyArgumentOnboarding(
+    promptBody,
+    input.spec.description,
+    input.spec.arguments?.hint,
+    input.argFormat
+  );
   const frontmatter = [
     '---',
     `description: ${input.spec.description}`,
@@ -201,8 +258,8 @@ const compileSpecBody = (input: CompileCommandSpecInput): {
   ].filter(line => line !== undefined).join('\n');
 
   return {
-    body: `${frontmatter}\n${promptBody}`,
-    promptBody,
+    body: `${frontmatter}\n${promptBodyWithOnboarding}`,
+    promptBody: promptBodyWithOnboarding,
     description: input.spec.description,
     argumentHint: input.spec.arguments?.hint
   };
