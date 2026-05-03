@@ -71,12 +71,20 @@ test -f spec/presets/rhythm-config.json && echo "found" || echo "not-found"
 - ⚠️ **如果不存在**：使用默认节奏规划
 
 **验证规格澄清状态**：
-- 如果存在未澄清的关键决策，提示先运行 `/clarify`
-- 或接受用户明确指示跳过
+- 如果存在未澄清的关键决策，提示先运行 `/clarify` 或 `storyspec creative:report`
+- 如果主角、核心伙伴、第一舞台、能力边界、势力冲突、长线威胁、成功路线或作品声音仍缺失，不要把 AI 候选写成正典
+- 用户明确要求探索性草案时，可以继续，但所有缺口必须保留为 `[需要澄清]`，并说明返工风险
 
 ### 2. 制定创作计划
 
-创建 `stories/*/creative-plan.md`，包含以下内容：
+优先生成 `storyspec preview plan <story>` 对应的计划预览；只有用户确认预览无 blocking 风险，或明确要求草案模式，才写入 `stories/*/creative-plan.md`。计划包含以下内容：
+
+#### 写入门禁
+
+- `source: user` 且 `confirmed: true` 的内容，才可以作为计划中的正典前提。
+- `source: ai-suggested`、`confirmed: false`、示例分叉、跳过回答和“给我示例”只能作为候选项。
+- 对缺失的核心要素使用 `[需要澄清]`，不要用顺手生成的人设、势力、章节或世界观填平。
+- 输出中必须区分“已确认前提”“AI 候选分叉”“仍需作者决定”。
 
 #### 2.1 写作方法选择
 
@@ -347,15 +355,17 @@ test -f spec/presets/rhythm-config.json && echo "found" || echo "not-found"
 
 ### 6. 输出和验证
 
-- 保存计划到 `stories/*/creative-plan.md`
+- 优先输出计划预览，或提示运行 `storyspec preview plan <story>`
+- 只有用户确认预览后，才保存计划到 `stories/*/creative-plan.md`
+- 若用户明确选择探索性草案，写入内容必须保留 `[需要澄清]` 标记，并提示可使用 `storyspec apply <preview-id> --yes --draft`
 - 验证计划符合宪法原则
 - 验证计划满足规格需求
 - 提示下一步：运行 `/tasks` 生成任务
 
 ## 与其他命令的关系
 
-- **输入**：来自 `/specify` 的规格 + `/clarify` 的澄清
-- **输出**：为 `/tasks` 提供任务生成依据
+- **输入**：来自 `/specify` 的规格 + `/clarify` 的澄清 + `storyspec creative:report` 的核心要素成熟度
+- **输出**：优先生成 `creative-plan.md` 预览；确认后才为 `/tasks` 提供任务生成依据
 - **验证**：被 `/analyze` 用于检查实现符合度
 
 ## 注意事项

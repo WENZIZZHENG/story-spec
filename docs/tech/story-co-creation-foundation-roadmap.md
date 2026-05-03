@@ -2,7 +2,9 @@
 
 ## 状态
 
-Planned。本文承接总路线 F0-F6，聚焦共创体验基线、核心要素成熟度、示例分叉、访谈编排、plan 写入门禁、成果报告和文档迁移。
+Completed。本文承接总路线 F0-F6，聚焦共创体验基线、核心要素成熟度、示例分叉、访谈编排、plan 写入门禁、成果报告和文档迁移。
+
+F0-F6 已完成并验证。后续开发应从 [story-co-creation-story-elements-roadmap.md](story-co-creation-story-elements-roadmap.md) 的 F7 开始，不再把本文作为下一批实现入口。
 
 ## 共通上下文
 

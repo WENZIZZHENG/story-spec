@@ -42,7 +42,7 @@
     },
     {
       "path": "auggie/.augment/commands/clarify.md",
-      "sha256": "839b93ad039b76508e227e204dd7e435aafbde1bac544a2eed2bec0afc42ec39",
+      "sha256": "b30371f1715b3b25dda3d49aeadd0d31f8183d296b719ffae65d87802e1615b0",
       "commandSource": {
         "command": "clarify",
         "kind": "legacy-template",
@@ -78,7 +78,7 @@
     },
     {
       "path": "auggie/.augment/commands/plan.md",
-      "sha256": "1378792766827f3a27f43b525d5d66174e80aaf5dfed694980fa082fe8b976a1",
+      "sha256": "28edbbc8eac94094306c325ae85d5fec4549c6c692a93958f86ee279e082ded3",
       "commandSource": {
         "command": "plan",
         "kind": "legacy-template",
@@ -114,7 +114,7 @@
     },
     {
       "path": "auggie/.augment/commands/specify.md",
-      "sha256": "b96d7f33095c92d74362b81ae13766c56c812bde620c50972392790c95e5e929",
+      "sha256": "83bcf9ed2d91724882f702d212c9851e126fb5f9669e67136728492039422f9a",
       "commandSource": {
         "command": "specify",
         "kind": "legacy-template",
@@ -305,11 +305,11 @@
     },
     {
       "path": "auggie/.specify/templates/clarification/civilization-threat.yaml",
-      "sha256": "63a54e22a71e2f9d1f257984826cc930f3cb92a26fb4b3b948707bd3e256e14d"
+      "sha256": "99706894b46ca8c7a20983dc9d4bd068a7ff40a8c16d2d701fdd639878a03b16"
     },
     {
       "path": "auggie/.specify/templates/clarification/core.yaml",
-      "sha256": "1d114da7edb203dda5292fc1de7c8163cac2fa2eb1e932287137a6c403313026"
+      "sha256": "e5ac8827053ab2f3da9c848729a22f091413b38dcbbf949574186d9bc5dd02d5"
     },
     {
       "path": "auggie/.specify/templates/clarification/cozy-adventure.yaml",
@@ -349,7 +349,7 @@
     },
     {
       "path": "auggie/.specify/templates/clarification/magic-system.yaml",
-      "sha256": "84a8587c1c7f18ebb6d95ae90c3c563802e874de49276829c3e475d75246b0a4"
+      "sha256": "b16da6c363323c3e85a0398f217d1e0d8e4c0f8d0e6322dffa020f8da33732d0"
     },
     {
       "path": "auggie/.specify/templates/clarification/portal-fantasy.yaml",
@@ -612,7 +612,7 @@
     },
     {
       "path": "claude/.claude/commands/storyspec.clarify.md",
-      "sha256": "768a7ba5d6e57a2852737325e9df57cd49a95cf5da95c3da508e00584bd910ca",
+      "sha256": "9c6cd4bcd929bab5917384c89445df2e6d45d0e981dc66049257c3696878a0db",
       "commandSource": {
         "command": "clarify",
         "kind": "legacy-template",
@@ -648,7 +648,7 @@
     },
     {
       "path": "claude/.claude/commands/storyspec.plan.md",
-      "sha256": "0bc6f7d2af70ccc397150eefa29e76fd6f2e9a634bd5e342d19524c5e78fcdc8",
+      "sha256": "f44a608669138659a53a57258208063b6500f2997609f5789bf9d647cb1bb5ba",
       "commandSource": {
         "command": "plan",
         "kind": "legacy-template",
@@ -684,7 +684,7 @@
     },
     {
       "path": "claude/.claude/commands/storyspec.specify.md",
-      "sha256": "e2ffe80a494aeb2aab55175f98f089fb119ef7569d66fa468b1aea2149ef0cb6",
+      "sha256": "7bdeed2237becfd8e141097d3b748ec07e0b92287e6606f3d6313a941875442d",
       "commandSource": {
         "command": "specify",
         "kind": "legacy-template",
@@ -875,11 +875,11 @@
     },
     {
       "path": "claude/.specify/templates/clarification/civilization-threat.yaml",
-      "sha256": "63a54e22a71e2f9d1f257984826cc930f3cb92a26fb4b3b948707bd3e256e14d"
+      "sha256": "99706894b46ca8c7a20983dc9d4bd068a7ff40a8c16d2d701fdd639878a03b16"
     },
     {
       "path": "claude/.specify/templates/clarification/core.yaml",
-      "sha256": "1d114da7edb203dda5292fc1de7c8163cac2fa2eb1e932287137a6c403313026"
+      "sha256": "e5ac8827053ab2f3da9c848729a22f091413b38dcbbf949574186d9bc5dd02d5"
     },
     {
       "path": "claude/.specify/templates/clarification/cozy-adventure.yaml",
@@ -919,7 +919,7 @@
     },
     {
       "path": "claude/.specify/templates/clarification/magic-system.yaml",
-      "sha256": "84a8587c1c7f18ebb6d95ae90c3c563802e874de49276829c3e475d75246b0a4"
+      "sha256": "b16da6c363323c3e85a0398f217d1e0d8e4c0f8d0e6322dffa020f8da33732d0"
     },
     {
       "path": "claude/.specify/templates/clarification/portal-fantasy.yaml",
@@ -1182,7 +1182,7 @@
     },
     {
       "path": "codebuddy/.codebuddy/commands/clarify.md",
-      "sha256": "839b93ad039b76508e227e204dd7e435aafbde1bac544a2eed2bec0afc42ec39",
+      "sha256": "b30371f1715b3b25dda3d49aeadd0d31f8183d296b719ffae65d87802e1615b0",
       "commandSource": {
         "command": "clarify",
         "kind": "legacy-template",
@@ -1218,7 +1218,7 @@
     },
     {
       "path": "codebuddy/.codebuddy/commands/plan.md",
-      "sha256": "1378792766827f3a27f43b525d5d66174e80aaf5dfed694980fa082fe8b976a1",
+      "sha256": "28edbbc8eac94094306c325ae85d5fec4549c6c692a93958f86ee279e082ded3",
       "commandSource": {
         "command": "plan",
         "kind": "legacy-template",
@@ -1254,7 +1254,7 @@
     },
     {
       "path": "codebuddy/.codebuddy/commands/specify.md",
-      "sha256": "b96d7f33095c92d74362b81ae13766c56c812bde620c50972392790c95e5e929",
+      "sha256": "83bcf9ed2d91724882f702d212c9851e126fb5f9669e67136728492039422f9a",
       "commandSource": {
         "command": "specify",
         "kind": "legacy-template",
@@ -1445,11 +1445,11 @@
     },
     {
       "path": "codebuddy/.specify/templates/clarification/civilization-threat.yaml",
-      "sha256": "63a54e22a71e2f9d1f257984826cc930f3cb92a26fb4b3b948707bd3e256e14d"
+      "sha256": "99706894b46ca8c7a20983dc9d4bd068a7ff40a8c16d2d701fdd639878a03b16"
     },
     {
       "path": "codebuddy/.specify/templates/clarification/core.yaml",
-      "sha256": "1d114da7edb203dda5292fc1de7c8163cac2fa2eb1e932287137a6c403313026"
+      "sha256": "e5ac8827053ab2f3da9c848729a22f091413b38dcbbf949574186d9bc5dd02d5"
     },
     {
       "path": "codebuddy/.specify/templates/clarification/cozy-adventure.yaml",
@@ -1489,7 +1489,7 @@
     },
     {
       "path": "codebuddy/.specify/templates/clarification/magic-system.yaml",
-      "sha256": "84a8587c1c7f18ebb6d95ae90c3c563802e874de49276829c3e475d75246b0a4"
+      "sha256": "b16da6c363323c3e85a0398f217d1e0d8e4c0f8d0e6322dffa020f8da33732d0"
     },
     {
       "path": "codebuddy/.specify/templates/clarification/portal-fantasy.yaml",
@@ -1752,7 +1752,7 @@
     },
     {
       "path": "codex/.codex/prompts/storyspec-clarify.md",
-      "sha256": "839b93ad039b76508e227e204dd7e435aafbde1bac544a2eed2bec0afc42ec39",
+      "sha256": "b30371f1715b3b25dda3d49aeadd0d31f8183d296b719ffae65d87802e1615b0",
       "commandSource": {
         "command": "clarify",
         "kind": "legacy-template",
@@ -1788,7 +1788,7 @@
     },
     {
       "path": "codex/.codex/prompts/storyspec-plan.md",
-      "sha256": "1378792766827f3a27f43b525d5d66174e80aaf5dfed694980fa082fe8b976a1",
+      "sha256": "28edbbc8eac94094306c325ae85d5fec4549c6c692a93958f86ee279e082ded3",
       "commandSource": {
         "command": "plan",
         "kind": "legacy-template",
@@ -1824,7 +1824,7 @@
     },
     {
       "path": "codex/.codex/prompts/storyspec-specify.md",
-      "sha256": "b96d7f33095c92d74362b81ae13766c56c812bde620c50972392790c95e5e929",
+      "sha256": "83bcf9ed2d91724882f702d212c9851e126fb5f9669e67136728492039422f9a",
       "commandSource": {
         "command": "specify",
         "kind": "legacy-template",
@@ -2015,11 +2015,11 @@
     },
     {
       "path": "codex/.specify/templates/clarification/civilization-threat.yaml",
-      "sha256": "63a54e22a71e2f9d1f257984826cc930f3cb92a26fb4b3b948707bd3e256e14d"
+      "sha256": "99706894b46ca8c7a20983dc9d4bd068a7ff40a8c16d2d701fdd639878a03b16"
     },
     {
       "path": "codex/.specify/templates/clarification/core.yaml",
-      "sha256": "1d114da7edb203dda5292fc1de7c8163cac2fa2eb1e932287137a6c403313026"
+      "sha256": "e5ac8827053ab2f3da9c848729a22f091413b38dcbbf949574186d9bc5dd02d5"
     },
     {
       "path": "codex/.specify/templates/clarification/cozy-adventure.yaml",
@@ -2059,7 +2059,7 @@
     },
     {
       "path": "codex/.specify/templates/clarification/magic-system.yaml",
-      "sha256": "84a8587c1c7f18ebb6d95ae90c3c563802e874de49276829c3e475d75246b0a4"
+      "sha256": "b16da6c363323c3e85a0398f217d1e0d8e4c0f8d0e6322dffa020f8da33732d0"
     },
     {
       "path": "codex/.specify/templates/clarification/portal-fantasy.yaml",
@@ -2322,7 +2322,7 @@
     },
     {
       "path": "continue-check/.continue/prompts/clarify.md",
-      "sha256": "e85337df4d529c1f6e2bcc54b628fd6170061e3c75dacbcd88fe956965aa25f1",
+      "sha256": "ddf3d81ef5df3a0f7e320b79c8f4b79d8759b90d1115caaf9a637918ceaaa5ba",
       "commandSource": {
         "command": "clarify",
         "kind": "legacy-template",
@@ -2358,7 +2358,7 @@
     },
     {
       "path": "continue-check/.continue/prompts/plan.md",
-      "sha256": "ab822933db999fb694bc84c25539f6736155fc8514b18fbc4f844715acc2e7cb",
+      "sha256": "a5eea4c689fdb0cc6b2f351444afd61ea60c9e07608394948337a47e8c64ca0a",
       "commandSource": {
         "command": "plan",
         "kind": "legacy-template",
@@ -2394,7 +2394,7 @@
     },
     {
       "path": "continue-check/.continue/prompts/specify.md",
-      "sha256": "83a19133ba93654a41826106e42a26d795f0de6a0a71d102d85ffab369e5ad7b",
+      "sha256": "856c572c57dc4f0b61f20cab1b0a8901f1fb2e47b08669bb0b368d45fbb492ac",
       "commandSource": {
         "command": "specify",
         "kind": "legacy-template",
@@ -2585,11 +2585,11 @@
     },
     {
       "path": "continue-check/.specify/templates/clarification/civilization-threat.yaml",
-      "sha256": "63a54e22a71e2f9d1f257984826cc930f3cb92a26fb4b3b948707bd3e256e14d"
+      "sha256": "99706894b46ca8c7a20983dc9d4bd068a7ff40a8c16d2d701fdd639878a03b16"
     },
     {
       "path": "continue-check/.specify/templates/clarification/core.yaml",
-      "sha256": "1d114da7edb203dda5292fc1de7c8163cac2fa2eb1e932287137a6c403313026"
+      "sha256": "e5ac8827053ab2f3da9c848729a22f091413b38dcbbf949574186d9bc5dd02d5"
     },
     {
       "path": "continue-check/.specify/templates/clarification/cozy-adventure.yaml",
@@ -2629,7 +2629,7 @@
     },
     {
       "path": "continue-check/.specify/templates/clarification/magic-system.yaml",
-      "sha256": "84a8587c1c7f18ebb6d95ae90c3c563802e874de49276829c3e475d75246b0a4"
+      "sha256": "b16da6c363323c3e85a0398f217d1e0d8e4c0f8d0e6322dffa020f8da33732d0"
     },
     {
       "path": "continue-check/.specify/templates/clarification/portal-fantasy.yaml",
@@ -2892,7 +2892,7 @@
     },
     {
       "path": "copilot/.github/prompts/clarify.prompt.md",
-      "sha256": "5ece8817116aa929a0d44639264c1040b65ec55d7a622cda37bdf71ce8efe344",
+      "sha256": "229f4fc781c540d51278bb6fdb12f310c2f4553e1560acbe6edfc2c35d786343",
       "commandSource": {
         "command": "clarify",
         "kind": "legacy-template",
@@ -2928,7 +2928,7 @@
     },
     {
       "path": "copilot/.github/prompts/plan.prompt.md",
-      "sha256": "398367bcf954bd9da549f2bedeba16990abbfbbf0aa06b488db761499e22a045",
+      "sha256": "e777cc494599e82945368add9e453a390e47c5330f687aa47feb0a98775fedb0",
       "commandSource": {
         "command": "plan",
         "kind": "legacy-template",
@@ -2964,7 +2964,7 @@
     },
     {
       "path": "copilot/.github/prompts/specify.prompt.md",
-      "sha256": "5e96c4ab215b0b281d309d6bfca8aaf6a1576e01b8dd68b18642ff23d8e02ccc",
+      "sha256": "764ef15ff5781ccd5fcac307bd89caf77b60c571e414052b84a19edb7bf65a81",
       "commandSource": {
         "command": "specify",
         "kind": "legacy-template",
@@ -3155,11 +3155,11 @@
     },
     {
       "path": "copilot/.specify/templates/clarification/civilization-threat.yaml",
-      "sha256": "63a54e22a71e2f9d1f257984826cc930f3cb92a26fb4b3b948707bd3e256e14d"
+      "sha256": "99706894b46ca8c7a20983dc9d4bd068a7ff40a8c16d2d701fdd639878a03b16"
     },
     {
       "path": "copilot/.specify/templates/clarification/core.yaml",
-      "sha256": "1d114da7edb203dda5292fc1de7c8163cac2fa2eb1e932287137a6c403313026"
+      "sha256": "e5ac8827053ab2f3da9c848729a22f091413b38dcbbf949574186d9bc5dd02d5"
     },
     {
       "path": "copilot/.specify/templates/clarification/cozy-adventure.yaml",
@@ -3199,7 +3199,7 @@
     },
     {
       "path": "copilot/.specify/templates/clarification/magic-system.yaml",
-      "sha256": "84a8587c1c7f18ebb6d95ae90c3c563802e874de49276829c3e475d75246b0a4"
+      "sha256": "b16da6c363323c3e85a0398f217d1e0d8e4c0f8d0e6322dffa020f8da33732d0"
     },
     {
       "path": "copilot/.specify/templates/clarification/portal-fantasy.yaml",
@@ -3462,7 +3462,7 @@
     },
     {
       "path": "cursor/.cursor/commands/clarify.md",
-      "sha256": "839b93ad039b76508e227e204dd7e435aafbde1bac544a2eed2bec0afc42ec39",
+      "sha256": "b30371f1715b3b25dda3d49aeadd0d31f8183d296b719ffae65d87802e1615b0",
       "commandSource": {
         "command": "clarify",
         "kind": "legacy-template",
@@ -3498,7 +3498,7 @@
     },
     {
       "path": "cursor/.cursor/commands/plan.md",
-      "sha256": "1378792766827f3a27f43b525d5d66174e80aaf5dfed694980fa082fe8b976a1",
+      "sha256": "28edbbc8eac94094306c325ae85d5fec4549c6c692a93958f86ee279e082ded3",
       "commandSource": {
         "command": "plan",
         "kind": "legacy-template",
@@ -3534,7 +3534,7 @@
     },
     {
       "path": "cursor/.cursor/commands/specify.md",
-      "sha256": "b96d7f33095c92d74362b81ae13766c56c812bde620c50972392790c95e5e929",
+      "sha256": "83bcf9ed2d91724882f702d212c9851e126fb5f9669e67136728492039422f9a",
       "commandSource": {
         "command": "specify",
         "kind": "legacy-template",
@@ -3725,11 +3725,11 @@
     },
     {
       "path": "cursor/.specify/templates/clarification/civilization-threat.yaml",
-      "sha256": "63a54e22a71e2f9d1f257984826cc930f3cb92a26fb4b3b948707bd3e256e14d"
+      "sha256": "99706894b46ca8c7a20983dc9d4bd068a7ff40a8c16d2d701fdd639878a03b16"
     },
     {
       "path": "cursor/.specify/templates/clarification/core.yaml",
-      "sha256": "1d114da7edb203dda5292fc1de7c8163cac2fa2eb1e932287137a6c403313026"
+      "sha256": "e5ac8827053ab2f3da9c848729a22f091413b38dcbbf949574186d9bc5dd02d5"
     },
     {
       "path": "cursor/.specify/templates/clarification/cozy-adventure.yaml",
@@ -3769,7 +3769,7 @@
     },
     {
       "path": "cursor/.specify/templates/clarification/magic-system.yaml",
-      "sha256": "84a8587c1c7f18ebb6d95ae90c3c563802e874de49276829c3e475d75246b0a4"
+      "sha256": "b16da6c363323c3e85a0398f217d1e0d8e4c0f8d0e6322dffa020f8da33732d0"
     },
     {
       "path": "cursor/.specify/templates/clarification/portal-fantasy.yaml",
@@ -4032,7 +4032,7 @@
     },
     {
       "path": "gemini/.gemini/commands/storyspec/clarify.toml",
-      "sha256": "44d389b668a435ebbf50bb0220a18828152930d9f7fc92573bca304db00d1d13",
+      "sha256": "e34f1bf68aa10876ceebc085fd0bea0d79effd85cdb02b9ce19d64b30cec4088",
       "commandSource": {
         "command": "clarify",
         "kind": "legacy-template",
@@ -4068,7 +4068,7 @@
     },
     {
       "path": "gemini/.gemini/commands/storyspec/plan.toml",
-      "sha256": "9c2933b2731c25d1074d38c1a9a94bdde355d0b5562abfd6f26b305a5e652c59",
+      "sha256": "750f3eb634539a32d1468432ba942eab951235dd0cf30a5e3f504f944bb799ba",
       "commandSource": {
         "command": "plan",
         "kind": "legacy-template",
@@ -4104,7 +4104,7 @@
     },
     {
       "path": "gemini/.gemini/commands/storyspec/specify.toml",
-      "sha256": "fdaf021f6a96ebcd502823430ad50b3e429141e916ec1b305af073c4216fcbf6",
+      "sha256": "c83165794e125c051d15c22409007c4ccfa592ea2c46c889948702aadeb79fa3",
       "commandSource": {
         "command": "specify",
         "kind": "legacy-template",
@@ -4295,11 +4295,11 @@
     },
     {
       "path": "gemini/.specify/templates/clarification/civilization-threat.yaml",
-      "sha256": "63a54e22a71e2f9d1f257984826cc930f3cb92a26fb4b3b948707bd3e256e14d"
+      "sha256": "99706894b46ca8c7a20983dc9d4bd068a7ff40a8c16d2d701fdd639878a03b16"
     },
     {
       "path": "gemini/.specify/templates/clarification/core.yaml",
-      "sha256": "1d114da7edb203dda5292fc1de7c8163cac2fa2eb1e932287137a6c403313026"
+      "sha256": "e5ac8827053ab2f3da9c848729a22f091413b38dcbbf949574186d9bc5dd02d5"
     },
     {
       "path": "gemini/.specify/templates/clarification/cozy-adventure.yaml",
@@ -4339,7 +4339,7 @@
     },
     {
       "path": "gemini/.specify/templates/clarification/magic-system.yaml",
-      "sha256": "84a8587c1c7f18ebb6d95ae90c3c563802e874de49276829c3e475d75246b0a4"
+      "sha256": "b16da6c363323c3e85a0398f217d1e0d8e4c0f8d0e6322dffa020f8da33732d0"
     },
     {
       "path": "gemini/.specify/templates/clarification/portal-fantasy.yaml",
@@ -4602,7 +4602,7 @@
     },
     {
       "path": "generic/.specify/commands/clarify.md",
-      "sha256": "d0ab4d269ebb1467da811a1d1def3d3eb48712f3885eb1bab0e5b4a3dad3924c",
+      "sha256": "9686f90f6621ab773fb3d0bcae4ad5e9fa77813ec3bacf08b0af8b39c7d98f9c",
       "commandSource": {
         "command": "clarify",
         "kind": "legacy-template",
@@ -4638,7 +4638,7 @@
     },
     {
       "path": "generic/.specify/commands/plan.md",
-      "sha256": "f2c1250f6ec2c12630dd71652fb7aeb9daf6de98e0351958894f34c81f281864",
+      "sha256": "09e7823a58eb8ecb18bb5d54ec254d3910ade6d538a74faad5a36a1eecc19d84",
       "commandSource": {
         "command": "plan",
         "kind": "legacy-template",
@@ -4674,7 +4674,7 @@
     },
     {
       "path": "generic/.specify/commands/specify.md",
-      "sha256": "f21a60bd3ace8b151eb1edeedc8f56e539422255844c8735b9048ae764cd7062",
+      "sha256": "842f483efd2cb5af6834ae43db401444dff7e2be673ccc1de64b5fbc90f2c2af",
       "commandSource": {
         "command": "specify",
         "kind": "legacy-template",
@@ -4865,11 +4865,11 @@
     },
     {
       "path": "generic/.specify/templates/clarification/civilization-threat.yaml",
-      "sha256": "63a54e22a71e2f9d1f257984826cc930f3cb92a26fb4b3b948707bd3e256e14d"
+      "sha256": "99706894b46ca8c7a20983dc9d4bd068a7ff40a8c16d2d701fdd639878a03b16"
     },
     {
       "path": "generic/.specify/templates/clarification/core.yaml",
-      "sha256": "1d114da7edb203dda5292fc1de7c8163cac2fa2eb1e932287137a6c403313026"
+      "sha256": "e5ac8827053ab2f3da9c848729a22f091413b38dcbbf949574186d9bc5dd02d5"
     },
     {
       "path": "generic/.specify/templates/clarification/cozy-adventure.yaml",
@@ -4909,7 +4909,7 @@
     },
     {
       "path": "generic/.specify/templates/clarification/magic-system.yaml",
-      "sha256": "84a8587c1c7f18ebb6d95ae90c3c563802e874de49276829c3e475d75246b0a4"
+      "sha256": "b16da6c363323c3e85a0398f217d1e0d8e4c0f8d0e6322dffa020f8da33732d0"
     },
     {
       "path": "generic/.specify/templates/clarification/portal-fantasy.yaml",
@@ -5172,7 +5172,7 @@
     },
     {
       "path": "kilocode/.kilocode/workflows/clarify.md",
-      "sha256": "091c3dba22a9ead4590bac6b9f3ed60e8d0e1f52676db87d03e88dfd12331f72",
+      "sha256": "2cedcfe43b6f29e792204633ec461c804b81d21934fea364c8ed81cc54e36bdf",
       "commandSource": {
         "command": "clarify",
         "kind": "legacy-template",
@@ -5208,7 +5208,7 @@
     },
     {
       "path": "kilocode/.kilocode/workflows/plan.md",
-      "sha256": "366f4548c0e353175cd679bc7dc8c23e169ad66d48d2c08776df82d8a7cb13bd",
+      "sha256": "f3e0d0542676dbbe009809fb37f535b5e37f287932eafae81a4f7dbdc985c8a1",
       "commandSource": {
         "command": "plan",
         "kind": "legacy-template",
@@ -5244,7 +5244,7 @@
     },
     {
       "path": "kilocode/.kilocode/workflows/specify.md",
-      "sha256": "d31be41909151de1781c87706bcd88e597398314dd206334bdbd69af3b6cccc9",
+      "sha256": "59d145cddc42a72d502170d22f0a792e20ba3656fc088cc5fb1489a095c06d32",
       "commandSource": {
         "command": "specify",
         "kind": "legacy-template",
@@ -5435,11 +5435,11 @@
     },
     {
       "path": "kilocode/.specify/templates/clarification/civilization-threat.yaml",
-      "sha256": "63a54e22a71e2f9d1f257984826cc930f3cb92a26fb4b3b948707bd3e256e14d"
+      "sha256": "99706894b46ca8c7a20983dc9d4bd068a7ff40a8c16d2d701fdd639878a03b16"
     },
     {
       "path": "kilocode/.specify/templates/clarification/core.yaml",
-      "sha256": "1d114da7edb203dda5292fc1de7c8163cac2fa2eb1e932287137a6c403313026"
+      "sha256": "e5ac8827053ab2f3da9c848729a22f091413b38dcbbf949574186d9bc5dd02d5"
     },
     {
       "path": "kilocode/.specify/templates/clarification/cozy-adventure.yaml",
@@ -5479,7 +5479,7 @@
     },
     {
       "path": "kilocode/.specify/templates/clarification/magic-system.yaml",
-      "sha256": "84a8587c1c7f18ebb6d95ae90c3c563802e874de49276829c3e475d75246b0a4"
+      "sha256": "b16da6c363323c3e85a0398f217d1e0d8e4c0f8d0e6322dffa020f8da33732d0"
     },
     {
       "path": "kilocode/.specify/templates/clarification/portal-fantasy.yaml",
@@ -5742,7 +5742,7 @@
     },
     {
       "path": "opencode/.opencode/command/clarify.md",
-      "sha256": "dfd667d6f99fa24cb51fa43794c89716cf7b945c9eb5989ec45a8f1dd242e6db",
+      "sha256": "f95ddb8591274eba397adf82261ad96fa0d0f46a16e69893d708ac05fe53a74e",
       "commandSource": {
         "command": "clarify",
         "kind": "legacy-template",
@@ -5778,7 +5778,7 @@
     },
     {
       "path": "opencode/.opencode/command/plan.md",
-      "sha256": "b8a9f01d1175aa65cf2950ad5ca296c202ef53d553466980061da938a262bb57",
+      "sha256": "89a0c0f5f54f3fee10a057f82d119c3e349bdf4a2a49f9e4d8fcac855beff41f",
       "commandSource": {
         "command": "plan",
         "kind": "legacy-template",
@@ -5814,7 +5814,7 @@
     },
     {
       "path": "opencode/.opencode/command/specify.md",
-      "sha256": "aca1c0f5f936ddba6dd3035f0733127d25a2d8774f7dd1421b2d099a532efb6d",
+      "sha256": "da0091740e72a6c58198d384667aad43fb044cb1c608d44c364e831b0441c2d0",
       "commandSource": {
         "command": "specify",
         "kind": "legacy-template",
@@ -6005,11 +6005,11 @@
     },
     {
       "path": "opencode/.specify/templates/clarification/civilization-threat.yaml",
-      "sha256": "63a54e22a71e2f9d1f257984826cc930f3cb92a26fb4b3b948707bd3e256e14d"
+      "sha256": "99706894b46ca8c7a20983dc9d4bd068a7ff40a8c16d2d701fdd639878a03b16"
     },
     {
       "path": "opencode/.specify/templates/clarification/core.yaml",
-      "sha256": "1d114da7edb203dda5292fc1de7c8163cac2fa2eb1e932287137a6c403313026"
+      "sha256": "e5ac8827053ab2f3da9c848729a22f091413b38dcbbf949574186d9bc5dd02d5"
     },
     {
       "path": "opencode/.specify/templates/clarification/cozy-adventure.yaml",
@@ -6049,7 +6049,7 @@
     },
     {
       "path": "opencode/.specify/templates/clarification/magic-system.yaml",
-      "sha256": "84a8587c1c7f18ebb6d95ae90c3c563802e874de49276829c3e475d75246b0a4"
+      "sha256": "b16da6c363323c3e85a0398f217d1e0d8e4c0f8d0e6322dffa020f8da33732d0"
     },
     {
       "path": "opencode/.specify/templates/clarification/portal-fantasy.yaml",
@@ -6312,7 +6312,7 @@
     },
     {
       "path": "q/.amazonq/prompts/clarify.md",
-      "sha256": "5ece8817116aa929a0d44639264c1040b65ec55d7a622cda37bdf71ce8efe344",
+      "sha256": "229f4fc781c540d51278bb6fdb12f310c2f4553e1560acbe6edfc2c35d786343",
       "commandSource": {
         "command": "clarify",
         "kind": "legacy-template",
@@ -6348,7 +6348,7 @@
     },
     {
       "path": "q/.amazonq/prompts/plan.md",
-      "sha256": "398367bcf954bd9da549f2bedeba16990abbfbbf0aa06b488db761499e22a045",
+      "sha256": "e777cc494599e82945368add9e453a390e47c5330f687aa47feb0a98775fedb0",
       "commandSource": {
         "command": "plan",
         "kind": "legacy-template",
@@ -6384,7 +6384,7 @@
     },
     {
       "path": "q/.amazonq/prompts/specify.md",
-      "sha256": "5e96c4ab215b0b281d309d6bfca8aaf6a1576e01b8dd68b18642ff23d8e02ccc",
+      "sha256": "764ef15ff5781ccd5fcac307bd89caf77b60c571e414052b84a19edb7bf65a81",
       "commandSource": {
         "command": "specify",
         "kind": "legacy-template",
@@ -6575,11 +6575,11 @@
     },
     {
       "path": "q/.specify/templates/clarification/civilization-threat.yaml",
-      "sha256": "63a54e22a71e2f9d1f257984826cc930f3cb92a26fb4b3b948707bd3e256e14d"
+      "sha256": "99706894b46ca8c7a20983dc9d4bd068a7ff40a8c16d2d701fdd639878a03b16"
     },
     {
       "path": "q/.specify/templates/clarification/core.yaml",
-      "sha256": "1d114da7edb203dda5292fc1de7c8163cac2fa2eb1e932287137a6c403313026"
+      "sha256": "e5ac8827053ab2f3da9c848729a22f091413b38dcbbf949574186d9bc5dd02d5"
     },
     {
       "path": "q/.specify/templates/clarification/cozy-adventure.yaml",
@@ -6619,7 +6619,7 @@
     },
     {
       "path": "q/.specify/templates/clarification/magic-system.yaml",
-      "sha256": "84a8587c1c7f18ebb6d95ae90c3c563802e874de49276829c3e475d75246b0a4"
+      "sha256": "b16da6c363323c3e85a0398f217d1e0d8e4c0f8d0e6322dffa020f8da33732d0"
     },
     {
       "path": "q/.specify/templates/clarification/portal-fantasy.yaml",
@@ -6882,7 +6882,7 @@
     },
     {
       "path": "qwen/.qwen/commands/clarify.toml",
-      "sha256": "44d389b668a435ebbf50bb0220a18828152930d9f7fc92573bca304db00d1d13",
+      "sha256": "e34f1bf68aa10876ceebc085fd0bea0d79effd85cdb02b9ce19d64b30cec4088",
       "commandSource": {
         "command": "clarify",
         "kind": "legacy-template",
@@ -6918,7 +6918,7 @@
     },
     {
       "path": "qwen/.qwen/commands/plan.toml",
-      "sha256": "9c2933b2731c25d1074d38c1a9a94bdde355d0b5562abfd6f26b305a5e652c59",
+      "sha256": "750f3eb634539a32d1468432ba942eab951235dd0cf30a5e3f504f944bb799ba",
       "commandSource": {
         "command": "plan",
         "kind": "legacy-template",
@@ -6954,7 +6954,7 @@
     },
     {
       "path": "qwen/.qwen/commands/specify.toml",
-      "sha256": "fdaf021f6a96ebcd502823430ad50b3e429141e916ec1b305af073c4216fcbf6",
+      "sha256": "c83165794e125c051d15c22409007c4ccfa592ea2c46c889948702aadeb79fa3",
       "commandSource": {
         "command": "specify",
         "kind": "legacy-template",
@@ -7145,11 +7145,11 @@
     },
     {
       "path": "qwen/.specify/templates/clarification/civilization-threat.yaml",
-      "sha256": "63a54e22a71e2f9d1f257984826cc930f3cb92a26fb4b3b948707bd3e256e14d"
+      "sha256": "99706894b46ca8c7a20983dc9d4bd068a7ff40a8c16d2d701fdd639878a03b16"
     },
     {
       "path": "qwen/.specify/templates/clarification/core.yaml",
-      "sha256": "1d114da7edb203dda5292fc1de7c8163cac2fa2eb1e932287137a6c403313026"
+      "sha256": "e5ac8827053ab2f3da9c848729a22f091413b38dcbbf949574186d9bc5dd02d5"
     },
     {
       "path": "qwen/.specify/templates/clarification/cozy-adventure.yaml",
@@ -7189,7 +7189,7 @@
     },
     {
       "path": "qwen/.specify/templates/clarification/magic-system.yaml",
-      "sha256": "84a8587c1c7f18ebb6d95ae90c3c563802e874de49276829c3e475d75246b0a4"
+      "sha256": "b16da6c363323c3e85a0398f217d1e0d8e4c0f8d0e6322dffa020f8da33732d0"
     },
     {
       "path": "qwen/.specify/templates/clarification/portal-fantasy.yaml",
@@ -7452,7 +7452,7 @@
     },
     {
       "path": "roocode/.roo/commands/clarify.md",
-      "sha256": "091c3dba22a9ead4590bac6b9f3ed60e8d0e1f52676db87d03e88dfd12331f72",
+      "sha256": "2cedcfe43b6f29e792204633ec461c804b81d21934fea364c8ed81cc54e36bdf",
       "commandSource": {
         "command": "clarify",
         "kind": "legacy-template",
@@ -7488,7 +7488,7 @@
     },
     {
       "path": "roocode/.roo/commands/plan.md",
-      "sha256": "366f4548c0e353175cd679bc7dc8c23e169ad66d48d2c08776df82d8a7cb13bd",
+      "sha256": "f3e0d0542676dbbe009809fb37f535b5e37f287932eafae81a4f7dbdc985c8a1",
       "commandSource": {
         "command": "plan",
         "kind": "legacy-template",
@@ -7524,7 +7524,7 @@
     },
     {
       "path": "roocode/.roo/commands/specify.md",
-      "sha256": "d31be41909151de1781c87706bcd88e597398314dd206334bdbd69af3b6cccc9",
+      "sha256": "59d145cddc42a72d502170d22f0a792e20ba3656fc088cc5fb1489a095c06d32",
       "commandSource": {
         "command": "specify",
         "kind": "legacy-template",
@@ -7715,11 +7715,11 @@
     },
     {
       "path": "roocode/.specify/templates/clarification/civilization-threat.yaml",
-      "sha256": "63a54e22a71e2f9d1f257984826cc930f3cb92a26fb4b3b948707bd3e256e14d"
+      "sha256": "99706894b46ca8c7a20983dc9d4bd068a7ff40a8c16d2d701fdd639878a03b16"
     },
     {
       "path": "roocode/.specify/templates/clarification/core.yaml",
-      "sha256": "1d114da7edb203dda5292fc1de7c8163cac2fa2eb1e932287137a6c403313026"
+      "sha256": "e5ac8827053ab2f3da9c848729a22f091413b38dcbbf949574186d9bc5dd02d5"
     },
     {
       "path": "roocode/.specify/templates/clarification/cozy-adventure.yaml",
@@ -7759,7 +7759,7 @@
     },
     {
       "path": "roocode/.specify/templates/clarification/magic-system.yaml",
-      "sha256": "84a8587c1c7f18ebb6d95ae90c3c563802e874de49276829c3e475d75246b0a4"
+      "sha256": "b16da6c363323c3e85a0398f217d1e0d8e4c0f8d0e6322dffa020f8da33732d0"
     },
     {
       "path": "roocode/.specify/templates/clarification/portal-fantasy.yaml",
@@ -8139,11 +8139,11 @@
     },
     {
       "path": "windsurf/.specify/templates/clarification/civilization-threat.yaml",
-      "sha256": "63a54e22a71e2f9d1f257984826cc930f3cb92a26fb4b3b948707bd3e256e14d"
+      "sha256": "99706894b46ca8c7a20983dc9d4bd068a7ff40a8c16d2d701fdd639878a03b16"
     },
     {
       "path": "windsurf/.specify/templates/clarification/core.yaml",
-      "sha256": "1d114da7edb203dda5292fc1de7c8163cac2fa2eb1e932287137a6c403313026"
+      "sha256": "e5ac8827053ab2f3da9c848729a22f091413b38dcbbf949574186d9bc5dd02d5"
     },
     {
       "path": "windsurf/.specify/templates/clarification/cozy-adventure.yaml",
@@ -8183,7 +8183,7 @@
     },
     {
       "path": "windsurf/.specify/templates/clarification/magic-system.yaml",
-      "sha256": "84a8587c1c7f18ebb6d95ae90c3c563802e874de49276829c3e475d75246b0a4"
+      "sha256": "b16da6c363323c3e85a0398f217d1e0d8e4c0f8d0e6322dffa020f8da33732d0"
     },
     {
       "path": "windsurf/.specify/templates/clarification/portal-fantasy.yaml",
@@ -8362,7 +8362,7 @@
     },
     {
       "path": "windsurf/.windsurf/workflows/clarify.md",
-      "sha256": "091c3dba22a9ead4590bac6b9f3ed60e8d0e1f52676db87d03e88dfd12331f72",
+      "sha256": "2cedcfe43b6f29e792204633ec461c804b81d21934fea364c8ed81cc54e36bdf",
       "commandSource": {
         "command": "clarify",
         "kind": "legacy-template",
@@ -8398,7 +8398,7 @@
     },
     {
       "path": "windsurf/.windsurf/workflows/plan.md",
-      "sha256": "366f4548c0e353175cd679bc7dc8c23e169ad66d48d2c08776df82d8a7cb13bd",
+      "sha256": "f3e0d0542676dbbe009809fb37f535b5e37f287932eafae81a4f7dbdc985c8a1",
       "commandSource": {
         "command": "plan",
         "kind": "legacy-template",
@@ -8434,7 +8434,7 @@
     },
     {
       "path": "windsurf/.windsurf/workflows/specify.md",
-      "sha256": "d31be41909151de1781c87706bcd88e597398314dd206334bdbd69af3b6cccc9",
+      "sha256": "59d145cddc42a72d502170d22f0a792e20ba3656fc088cc5fb1489a095c06d32",
       "commandSource": {
         "command": "specify",
         "kind": "legacy-template",

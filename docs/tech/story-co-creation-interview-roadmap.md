@@ -2,7 +2,7 @@
 
 ## 状态
 
-Planned。本路线用于修复真实使用中暴露出的创作体验问题：StorySpec 已能保护作者确认权，但仍可能过快从少量输入进入规格和创作计划，导致作者没有充分体验“选择、改写、发现小说”的乐趣。
+Active。F0-F6 基础门禁已完成；当前继续推进 F7-F11 的故事要素能力。本路线用于修复真实使用中暴露出的创作体验问题：StorySpec 已能保护作者确认权，但仍可能过快从少量输入进入规格和创作计划，导致作者没有充分体验“选择、改写、发现小说”的乐趣。
 
 ## 当前主线
 
@@ -198,7 +198,7 @@ Planned。本路线用于修复真实使用中暴露出的创作体验问题：S
 
 | 子路线 | 覆盖批次 | 何时读取 |
 | --- | --- | --- |
-| [基础门禁路线图](story-co-creation-foundation-roadmap.md) | F0-F6 | 共创基线、成熟度、示例分叉、访谈、plan 门禁、成果报告、文档迁移 |
+| [基础门禁路线图](story-co-creation-foundation-roadmap.md) | F0-F6 | 已完成；共创基线、成熟度、示例分叉、访谈、plan 门禁、成果报告、文档迁移 |
 | [故事要素路线图](story-co-creation-story-elements-roadmap.md) | F7-F11 | 人物情感、世界压力、Scene Card、节奏配置、作者画像 |
 | [创作工作台路线图](story-co-creation-workbench-roadmap.md) | F12-F15 | 多入口共创、分支管理、创作回声、未决项回流 |
 | [体验验收路线图](story-co-creation-experience-roadmap.md) | F16-F21 | 有趣选择、入口卡、势力入口、首轮共创样例、创作乐趣验收、低负担创作体验 |
