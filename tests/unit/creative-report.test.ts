@@ -14,6 +14,25 @@ describe('creative report', () => {
     const storyPath = path.join(projectRoot, 'stories', 'demo');
 
     await fileSystem.writeFile(path.join(storyPath, 'idea.md'), '# demo');
+    await fileSystem.writeJson(path.join(projectRoot, '.specify', 'memory', 'author-profile.json'), {
+      schemaVersion: '1.0',
+      updatedAt: '2026-05-04T08:00:00.000Z',
+      notes: [],
+      entries: [
+        {
+          id: 'pref.genre',
+          category: 'genre',
+          label: '题材偏好',
+          value: '轻松冒险优先，文明级威胁慢慢浮现',
+          status: 'confirmed',
+          source: 'user-explicit',
+          evidence: ['用户确认'],
+          createdAt: '2026-05-04T08:00:00.000Z',
+          updatedAt: '2026-05-04T08:00:00.000Z',
+          confirmedAt: '2026-05-04T08:00:00.000Z'
+        }
+      ]
+    }, { spaces: 2 });
     await fileSystem.writeJson(path.join(storyPath, 'clarifications.json'), {
       schemaVersion: '1.0',
       story: 'demo',
@@ -106,6 +125,12 @@ describe('creative report', () => {
       expect.stringContaining('阅读承诺')
     ]));
     expect(result.storySkeleton.created.join('\n')).not.toContain('旧文明运行时重启');
+    expect(result.authorProfile.activeHints).toContain('[confirmed] 题材偏好：轻松冒险优先，文明级威胁慢慢浮现');
+    expect(result.storySkeleton.summary).not.toContain('轻松冒险优先，文明级威胁慢慢浮现');
+
+    const rendered = renderCreativeReport(result);
+    expect(rendered).toContain('作者画像回填');
+    expect(rendered).toContain('只影响推荐和示例，不进入故事正典');
   });
 
   it('renders a core element panel for co-creating programming-casting', async () => {

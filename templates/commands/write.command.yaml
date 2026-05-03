@@ -7,6 +7,7 @@ arguments:
 requiredReads:
   - .specify/agent-contract.md
   - .specify/memory/constitution.md
+  - .specify/memory/author-profile.json
   - stories/*/specification.md
   - stories/*/creative-plan.md
   - stories/*/tasks.md

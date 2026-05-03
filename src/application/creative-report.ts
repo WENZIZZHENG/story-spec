@@ -21,6 +21,8 @@ import {
   relativePath,
   selectStoryProject
 } from './workbench-utils.js';
+import { loadAuthorProfile } from './manage-author-profile.js';
+import type { AuthorProfileSummary } from '../domain/author-profile.js';
 
 export interface CreativeReportInput {
   projectRoot: string;
@@ -56,6 +58,7 @@ export interface CreativeReportResult {
   story: string;
   storyPath: string;
   hasClarifications: boolean;
+  authorProfile: AuthorProfileSummary;
   confirmed: CreativeReportAnswer[];
   pendingQuestions: CreativeReportQuestion[];
   aiSuggestions: CreativeReportAnswer[];
@@ -224,6 +227,10 @@ export const createCreativeReport = async (
     projectRoot: input.projectRoot,
     fileSystem: input.fileSystem
   });
+  const authorProfile = await loadAuthorProfile({
+    projectRoot: input.projectRoot,
+    fileSystem: input.fileSystem
+  });
   const storyDriftIssues = drift.issues.filter(issue => issue.story === story.name);
   const confirmed = record?.answers
     .filter(answer =>
@@ -267,6 +274,7 @@ export const createCreativeReport = async (
     story: story.name,
     storyPath: story.path,
     hasClarifications: summary.hasClarifications,
+    authorProfile: authorProfile.summary,
     confirmed,
     pendingQuestions,
     aiSuggestions,
@@ -304,6 +312,12 @@ export const renderCreativeReport = (result: CreativeReportResult): string => [
   ...(result.aiSuggestions.length > 0
     ? result.aiSuggestions.map(item => `- ${item.questionId}：${item.answer}`)
     : ['- 暂无。']),
+  '',
+  '作者画像回填：',
+  `- 状态：${result.authorProfile.exists ? '已建立' : '未建立'}；只影响推荐和示例，不进入故事正典。`,
+  ...(result.authorProfile.activeHints.length > 0
+    ? result.authorProfile.activeHints.map(item => `- ${item}`)
+    : ['- 暂无可回填偏好；首次使用可运行 `storyspec author-profile --init` 做可跳过采样。']),
   '',
   '你已经创建的小说骨架：',
   `- 摘要：${result.storySkeleton.summary}`,

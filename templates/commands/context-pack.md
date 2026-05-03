@@ -22,6 +22,7 @@ scripts:
    - 每个 `mustRead` 必须有 `reason`。
    - 写作用途的 pack 必须把目标 Scene Card 作为 required mustRead；没有目标 Scene Card 时，constraints 必须提示先补卡预览。
    - 目标 Scene Card 必须说明 `plotThread`、`readerPromise`、`relationshipChange`、`worldReveal`、`emotionalBeat`、`endingHook`、`successCriteria`。
+   - 如果存在 `.specify/memory/author-profile.json`，应进入 `mustRead`，reason 必须说明“只用于推荐和风味上下文，不作为故事正典”。
    - `allowedWrites` 必须来自任务边界或用户明确授权。
    - pack 不修改正文，只写 `.specify/context-packs/`。
 4. 如已有 pack，运行 `storyspec context:validate <pack.json>` 检查是否过期、路径是否缺失。

@@ -423,7 +423,7 @@ const updateMemory = async (
     await fs.copy(memorySource, memoryDest, { overwrite: true });
   }
 
-  const memoryCount = await countFiles(fs, memorySource, file => file.endsWith('.md'), true);
+  const memoryCount = await countFiles(fs, memorySource, file => file.endsWith('.md') || file.endsWith('.json'), true);
   emit(onEvent, { type: 'info', message: `更新 ${memoryCount} 个记忆文件` });
 
   return memoryCount;

@@ -20,6 +20,7 @@ scripts:
 
 运行 `{SCRIPT}` 检查并加载：
 - 宪法文件：`.specify/memory/constitution.md`
+- 作者画像（如果存在 `.specify/memory/author-profile.json`）：只作为作者长期偏好上下文，不作为故事正典
 - 规格文件：`stories/*/specification.md`
 - 澄清记录（如果已运行 `/clarify`）
 - 当前 Genre Preset（如果存在 `spec/presets/current-preset.json`，读取 `.specify/presets/<id>/preset.yaml` 和 `.specify/presets/<id>/commands/plan.md`）
@@ -84,6 +85,7 @@ test -f spec/tracking/rhythm-config.json && echo "found" || echo "not-found"
 
 - `source: user` 且 `confirmed: true` 的内容，才可以作为计划中的正典前提。
 - `source: ai-suggested`、`confirmed: false`、示例分叉、跳过回答和“给我示例”只能作为候选项。
+- `.specify/memory/author-profile.json` 只影响推荐、示例和风味参考；当前故事的 `clarifications.json` 与用户即时指令永远优先。
 - 对缺失的核心要素使用 `[需要澄清]`，不要用顺手生成的人设、势力、章节或世界观填平。
 - 输出中必须区分“已确认前提”“AI 候选分叉”“仍需作者决定”。
 

@@ -42,6 +42,8 @@ scripts:
 - 解析 JSON 获取 `STORY_PATH` 和 `STORY_NAME`
 - 如果没有找到故事文件，提示用户先运行 `/story` 创建故事大纲
 - 加载故事文件内容进行分析
+- 如果存在 `.specify/memory/author-profile.json`，只把它作为作者长期偏好上下文读取；不得把其中内容写成当前故事正典，也不得覆盖用户在 `clarifications.json` 中的明确回答。
+- 如果作者画像不存在，首次使用只能提示可运行 `storyspec author-profile --init` 做可跳过偏好采样，不要假装已有画像可回填。
 
 <!-- PLUGIN_HOOK: genre-knowledge-clarify -->
 <!-- 插件增强区：类型识别

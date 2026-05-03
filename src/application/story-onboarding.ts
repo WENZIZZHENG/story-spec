@@ -19,6 +19,11 @@ import {
 } from '../domain/story-core-elements.js';
 import { summarizeCreativeControl } from './creative-control-summary.js';
 import type { ClarificationRecord } from './manage-clarifications.js';
+import {
+  loadAuthorProfile,
+  renderAuthorProfileSamplingGuide
+} from './manage-author-profile.js';
+import type { AuthorProfileSummary } from '../domain/author-profile.js';
 
 export type StoryOnboardingErrorCode =
   | 'MISSING_STORY_NAME'
@@ -50,6 +55,7 @@ export interface CreateStoryIdeaResult {
   idea: string;
   nextCommands: string[];
   markdown: string;
+  authorProfile: AuthorProfileSummary;
 }
 
 export interface GetStoryNextInput {
@@ -81,6 +87,7 @@ export interface StoryNextResult {
   pendingQuestions: string[];
   coCreationEntrypoints: StoryCoCreationEntrypoint[];
   coreElements: StoryCoreElementAssessment[];
+  authorProfile: AuthorProfileSummary;
   actions: StoryNextAction[];
 }
 
@@ -143,6 +150,15 @@ export const createStoryIdea = async (
     idea,
     (input.now ?? (() => new Date()))().toISOString()
   );
+  const authorProfile = await loadAuthorProfile({
+    projectRoot: input.projectRoot,
+    fileSystem: input.fileSystem
+  });
+  const nextCommands = [
+    ...(authorProfile.summary.firstUse ? ['storyspec author-profile --init'] : []),
+    `storyspec interview ${story}`,
+    `storyspec next ${story}`
+  ];
   await input.fileSystem.ensureDir(storyPath);
   await input.fileSystem.writeFile(ideaPath, markdown);
 
@@ -151,11 +167,9 @@ export const createStoryIdea = async (
     storyPath,
     ideaPath,
     idea,
-    nextCommands: [
-      `storyspec interview ${story}`,
-      `storyspec next ${story}`
-    ],
-    markdown
+    nextCommands,
+    markdown,
+    authorProfile: authorProfile.summary
   };
 };
 
@@ -225,6 +239,9 @@ const buildActions = (
     actions.push(action(1, `storyspec interview ${result.story}`, '先把一句话创意转成澄清记录，不急着生成完整设定。'));
     actions.push(action(2, `storyspec creative:report ${result.story}`, '查看哪些内容仍不能被当作正典。'));
     actions.push(action(3, `storyspec preview specify ${result.story}`, '生成写入前规格预览，确认后再 apply。'));
+    if (result.authorProfile.firstUse) {
+      actions.push(action(4, 'storyspec author-profile --init', '首次使用暂无历史画像可回填，可做 2-4 个可跳过偏好采样。'));
+    }
     return actions;
   }
 
@@ -305,6 +322,10 @@ export const getStoryNext = async (
 
   const story = await selectStoryProject(input.projectRoot, input.fileSystem, input.story);
   const record = await readClarificationRecord(input.fileSystem, story.path);
+  const authorProfile = await loadAuthorProfile({
+    projectRoot: input.projectRoot,
+    fileSystem: input.fileSystem
+  });
   const creativeControl = await summarizeCreativeControl({
     projectRoot: input.projectRoot,
     storyPath: story.path,
@@ -329,7 +350,8 @@ export const getStoryNext = async (
         questions: record.questions,
         answers: record.answers
       })
-      : []
+      : [],
+    authorProfile: authorProfile.summary
   };
 
   return {
@@ -347,6 +369,9 @@ export const renderCreateStoryIdea = (result: CreateStoryIdeaResult): string => 
   '下一步：',
   ...result.nextCommands.map(command => `- ${command}`),
   '',
+  '作者画像：',
+  ...renderAuthorProfileSamplingGuide(result.authorProfile),
+  '',
   '提示：这里只记录用户原文和待澄清问题，不会自动扩写完整设定。'
 ].join('\n');
 
@@ -363,6 +388,9 @@ export const renderStoryNext = (result: StoryNextResult): string => [
   ...(result.coCreationEntrypoints.length > 0
     ? result.coCreationEntrypoints.map(item => `- ${item.label}：${item.command}。${item.reason}`)
     : ['- 当前阶段暂无专门入口；请按建议动作继续。']),
+  '',
+  '作者画像：',
+  ...renderAuthorProfileSamplingGuide(result.authorProfile),
   '',
   '核心要素：',
   ...(result.coreElements.length > 0

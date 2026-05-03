@@ -19,6 +19,7 @@ import { registerWorkbenchCommand } from './commands/workbench.command.js';
 import { registerStoryOnboardingCommand } from './commands/story-onboarding.command.js';
 import { registerCreativeReportCommand } from './commands/creative-report.command.js';
 import { registerPreviewApplyCommand } from './commands/preview-apply.command.js';
+import { registerAuthorProfileCommand } from './commands/author-profile.command.js';
 import chalk from 'chalk';
 import path from 'path';
 import { fileURLToPath } from 'url';
@@ -69,6 +70,7 @@ export function runProgram(argv: string[]): void {
   registerReviewCommand(program, { packageRoot });
   registerPresetCommand(program, { packageRoot });
   registerWorkbenchCommand(program);
+  registerAuthorProfileCommand(program);
   registerStoryOnboardingCommand(program);
   registerCreativeReportCommand(program);
   registerPreviewApplyCommand(program);

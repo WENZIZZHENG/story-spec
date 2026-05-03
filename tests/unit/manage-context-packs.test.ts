@@ -14,6 +14,12 @@ const createProject = async () => {
 
   await fileSystem.writeFile(path.join(projectRoot, 'AGENTS.md'), '# Agents');
   await fileSystem.writeFile(path.join(projectRoot, '.specify', 'memory', 'constitution.md'), '# constitution');
+  await fileSystem.writeJson(path.join(projectRoot, '.specify', 'memory', 'author-profile.json'), {
+    schemaVersion: '1.0',
+    updatedAt: '2026-05-04T08:00:00.000Z',
+    notes: [],
+    entries: []
+  }, { spaces: 2 });
   await fileSystem.writeFile(path.join(storyPath, 'specification.md'), '# spec');
   await fileSystem.writeFile(path.join(storyPath, 'creative-plan.md'), '# plan');
   await fileSystem.writeJson(path.join(storyPath, 'clarifications.json'), {
@@ -162,6 +168,10 @@ describe('manage context packs', () => {
         path: 'stories/001-demo/scenes/scene-001.yaml',
         reason: expect.stringContaining('Scene Card 写作门禁'),
         required: true
+      }),
+      expect.objectContaining({
+        path: '.specify/memory/author-profile.json',
+        reason: expect.stringContaining('不作为故事正典')
       })
     ]));
     expect(result.pack.allowedWrites).toEqual([

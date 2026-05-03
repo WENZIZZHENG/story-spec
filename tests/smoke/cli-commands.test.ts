@@ -55,6 +55,7 @@ describe('CLI command modules smoke', () => {
     expect(help).toContain('narrative:test [options] [story]');
     expect(help).toContain('dialogue:extract [options] [story]');
     expect(help).toContain('branch:create [options] <title>');
+    expect(help).toContain('author-profile [options]');
     expect(help).toContain('promise:check [options]');
     expect(help).toContain('tension:chart [options]');
     expect(help).toContain('research:add [options] <title>');

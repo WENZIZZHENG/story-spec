@@ -19,6 +19,8 @@ import {
   relativePath,
   selectStoryProject
 } from './workbench-utils.js';
+import { loadAuthorProfile } from './manage-author-profile.js';
+import type { AuthorProfileSummary } from '../domain/author-profile.js';
 
 export type InterviewStoryErrorCode =
   | 'MISSING_PREMISE'
@@ -75,6 +77,7 @@ export interface InterviewStoryResult extends InterviewStoryState {
   selection: ClarificationSelectionResult;
   markdown: string;
   handoffPrompt: string;
+  authorProfile: AuthorProfileSummary;
   written: boolean;
   updatedAnswerIds: string[];
   reusedAnswerIds: string[];
@@ -408,11 +411,17 @@ const buildAnswerUpdates = (
 };
 
 const renderInterviewHandoffPrompt = (
-  result: Pick<InterviewStoryResult, 'projectRoot' | 'jsonPath' | 'record'>
+  result: Pick<InterviewStoryResult, 'projectRoot' | 'jsonPath' | 'record' | 'authorProfile'>
 ): string => [
   `/storyspec-specify ${result.record.premise}`,
   '',
   `请先读取 \`${relativePath(result.projectRoot, result.jsonPath)}\`，并按澄清记录继续创作。`,
+  ...(result.authorProfile.exists
+    ? [
+      `可读取 \`${relativePath(result.projectRoot, result.authorProfile.path)}\` 作为作者长期偏好上下文。`,
+      '作者画像只影响推荐、示例和风味参考，不得覆盖 clarifications.json 中当前故事的明确回答，也不得写入正典。'
+    ]
+    : ['当前没有作者画像；首次使用只能做可跳过偏好采样，不能假装已有历史画像可回填。']),
   '只把 `confirmed: true` 且 `source: user-explicit/imported` 的答案视为用户已确认。',
   '`source: ai-suggested` 或 `confirmed: false` 的内容只能作为待确认建议。',
   'required 未答问题必须继续输出为 `[需要澄清]`，不得写入正典或 specification。',
@@ -424,6 +433,10 @@ export const interviewStory = async (
 ): Promise<InterviewStoryResult> => {
   const state = await getInterviewStoryState(input);
   const premise = resolvePremise(input.premise, state.existingRecord);
+  const authorProfile = await loadAuthorProfile({
+    projectRoot: input.projectRoot,
+    fileSystem: input.fileSystem
+  });
   const prepared = await prepareInterviewQuestions({
     premise,
     maxQuestions: input.maxQuestions
@@ -472,6 +485,7 @@ export const interviewStory = async (
     record,
     selection: prepared.selection,
     markdown,
+    authorProfile: authorProfile.summary,
     written: input.write ?? true,
     updatedAnswerIds,
     reusedAnswerIds
@@ -479,7 +493,8 @@ export const interviewStory = async (
   const handoffPrompt = renderInterviewHandoffPrompt({
     projectRoot: resultBase.projectRoot,
     jsonPath: resultBase.jsonPath,
-    record
+    record,
+    authorProfile: resultBase.authorProfile
   });
   const result: InterviewStoryResult = {
     ...resultBase,
@@ -504,6 +519,7 @@ export const renderInterviewSummary = (result: InterviewStoryResult): string => 
   `问题数：${result.record.questions.length}`,
   `本轮新增/更新答案：${result.updatedAnswerIds.length}`,
   `复用旧答案：${result.reusedAnswerIds.length}`,
+  `作者画像：${result.authorProfile.exists ? `${result.authorProfile.activeHints.length} 条可用提示` : '未建立，可选采样'}`,
   `写入状态：${result.written ? '已写入' : '预览未写入'}`,
   '',
   '可复制给 Codex：',

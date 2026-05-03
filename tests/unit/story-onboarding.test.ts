@@ -40,6 +40,42 @@ describe('story onboarding', () => {
       .resolves.toBe(false);
   });
 
+  it('surfaces author profile sampling as optional context without writing it into the idea draft', async () => {
+    const { projectRoot, fileSystem } = await createProject();
+    await fileSystem.writeJson(path.join(projectRoot, '.specify', 'memory', 'author-profile.json'), {
+      schemaVersion: '1.0',
+      updatedAt: '2026-05-04T08:00:00.000Z',
+      notes: [],
+      entries: [
+        {
+          id: 'pref.genre',
+          category: 'genre',
+          label: '题材偏好',
+          value: '轻松冒险优先，文明级威胁慢慢浮现',
+          status: 'confirmed',
+          source: 'user-explicit',
+          evidence: ['用户确认'],
+          createdAt: '2026-05-04T08:00:00.000Z',
+          updatedAt: '2026-05-04T08:00:00.000Z',
+          confirmedAt: '2026-05-04T08:00:00.000Z'
+        }
+      ]
+    }, { spaces: 2 });
+
+    const result = await createStoryIdea({
+      projectRoot,
+      fileSystem,
+      name: '法术编译纪元',
+      idea: '异界穿越、编程施法'
+    });
+
+    expect(result.authorProfile.activeHints).toEqual([
+      '[confirmed] 题材偏好：轻松冒险优先，文明级威胁慢慢浮现'
+    ]);
+    expect(result.nextCommands).not.toContain('storyspec author-profile --init');
+    await expect(fileSystem.readFile(result.ideaPath)).resolves.not.toContain('轻松冒险优先');
+  });
+
   it('guides idea-stage stories back to interview before specification writing', async () => {
     const { projectRoot, fileSystem } = await createProject();
     await createStoryIdea({

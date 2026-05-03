@@ -51,6 +51,8 @@ const createPackageRootFixture = async () => {
   await writeFile(path.join(packageRoot, 'templates', 'canon', 'facts.json'), '{"canonFacts": []}');
   await writeFile(path.join(packageRoot, 'templates', 'graph', 'entities.json'), '{"entities": []}');
   await writeFile(path.join(packageRoot, 'templates', 'voice', 'character-voices.yaml'), 'voiceFingerprints: []');
+  await mkdir(path.join(packageRoot, 'memory'), { recursive: true });
+  await writeFile(path.join(packageRoot, 'memory', 'author-profile.json'), '{"schemaVersion":"1.0","updatedAt":"","notes":[],"entries":[]}');
 
   await mkdir(path.join(packageRoot, 'spec', 'presets', 'three-act'), { recursive: true });
   await writeFile(path.join(packageRoot, 'spec', 'config.json'), '{}');
@@ -103,6 +105,7 @@ describe('initProject', () => {
     await expect(exists(path.join(projectPath, 'spec', 'voice', 'character-voices.yaml'))).resolves.toBe(true);
     await expect(exists(path.join(projectPath, 'spec', 'presets'))).resolves.toBe(true);
     await expect(exists(path.join(projectPath, '.specify', 'context-packs'))).resolves.toBe(true);
+    await expect(exists(path.join(projectPath, '.specify', 'memory', 'author-profile.json'))).resolves.toBe(true);
     await expect(exists(path.join(projectPath, 'build'))).resolves.toBe(true);
   });
 

@@ -46,6 +46,8 @@ const createPackageRootFixture = async () => {
   await writeFile(path.join(packageRoot, 'spec', 'presets', 'three-act', 'story.md'), 'new spec');
   await writeFile(path.join(packageRoot, 'spec', 'tracking', 'should-not-copy.json'), '{}');
   await writeFile(path.join(packageRoot, 'spec', 'knowledge', 'should-not-copy.md'), 'knowledge');
+  await mkdir(path.join(packageRoot, 'memory'), { recursive: true });
+  await writeFile(path.join(packageRoot, 'memory', 'author-profile.json'), '{"schemaVersion":"1.0","updatedAt":"","notes":[],"entries":[]}');
 
   return packageRoot;
 };
@@ -64,6 +66,8 @@ const createProjectFixture = async () => {
 
   await mkdir(path.join(projectPath, '.specify', 'scripts'), { recursive: true });
   await writeFile(path.join(projectPath, '.specify', 'scripts', 'old.txt'), 'old script');
+  await mkdir(path.join(projectPath, '.specify', 'memory'), { recursive: true });
+  await writeFile(path.join(projectPath, '.specify', 'memory', 'old.md'), 'old memory');
 
   await mkdir(path.join(projectPath, 'spec', 'tracking'), { recursive: true });
   await mkdir(path.join(projectPath, 'spec', 'knowledge'), { recursive: true });
@@ -181,6 +185,31 @@ describe('upgradeProject', () => {
         commandSurface: 'slash-command'
       })
     ]);
+  });
+
+  it('updates memory json templates when memory content is selected', async () => {
+    const packageRoot = await createPackageRootFixture();
+    const projectPath = await createProjectFixture();
+
+    const result = await upgradeProject({
+      projectPath,
+      packageRoot,
+      updateContent: {
+        commands: false,
+        scripts: false,
+        templates: false,
+        memory: true,
+        spec: false,
+        experts: false
+      },
+      fileSystem: nodeFileSystem,
+      dryRun: false,
+      backup: false
+    });
+
+    expect(result.stats.memory).toBe(1);
+    await expect(readFile(path.join(projectPath, '.specify', 'memory', 'author-profile.json'), 'utf8'))
+      .resolves.toContain('"schemaVersion":"1.0"');
   });
 
   it('can add generic agent commands to an existing project', async () => {

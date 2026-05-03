@@ -5,7 +5,7 @@
 ## 前置检查
 
 1. 运行 `{SCRIPT}` 检查当前创作状态。
-2. 按 `.specify/agent-contract.md` 与本命令的 `requiredReads` 读取上下文。
+2. 按 `.specify/agent-contract.md` 与本命令的 `requiredReads` 读取上下文；如果存在 `.specify/memory/author-profile.json`，只把它作为作者偏好上下文，不作为故事正典。
 3. 从 `stories/*/tasks.md` 选择一个允许写作的任务，并确认任务边界。
 
 ## 任务边界
@@ -20,7 +20,7 @@
 ## 写作流程
 
 1. 将选中任务标记为 `in_progress`。
-2. 读取宪法、故事规格、创作计划、任务清单、tracking、World Bible、Canon Ledger、Entity Graph、Scene Cards、VoiceFingerprint 与知识库。
+2. 读取宪法、作者画像（如有）、故事规格、创作计划、任务清单、tracking、World Bible、Canon Ledger、Entity Graph、Scene Cards、VoiceFingerprint 与知识库。
 3. 先按 Scene Card 确认 sceneGoal、conflict、outcome、plotThread、readerPromise、relationshipChange、worldReveal、emotionalBeat、endingHook、successCriteria；未通过时停止正文写作。
 4. 明确本次章节的目标、冲突、人物变化、场景限制和字数要求。
 5. 写入 `stories/*/content/**` 中的目标章节文件。
@@ -33,6 +33,7 @@
 ## 写作要求
 
 - 正文必须服从上层规格、创作计划和当前任务。
+- 作者画像只影响推荐和风味参考；如果与当前故事明确回答冲突，优先服从当前故事。
 - 不使用“一、二、三”等数字标题拆分正文段落。
 - 场景转换使用空行自然分隔。
 - 优先使用具体行动、对话和可见细节表达人物状态，避免解释式总结。

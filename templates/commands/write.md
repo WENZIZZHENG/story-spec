@@ -27,6 +27,7 @@ scripts:
 **查询顺序**：
 1. **先查（最高优先级）**：
    - `.specify/memory/constitution.md`（创作宪法 - 最高原则）
+   - `.specify/memory/author-profile.json`（作者画像 - 如果存在；只用于推荐和风味参考，不作为故事正典）
    - `.specify/memory/style-reference.md`（风格参考 - 如果通过 `/book-internalize` 生成）
 
 2. **再查（规格和计划）**：
@@ -77,6 +78,7 @@ scripts:
 - 如果任务来自 branch what-if，确认 `branch:promote --yes` 已显式确认；未确认时只写 `stories/*/branches/` 或任务草稿，不覆盖 main 正文。
 - 如果任务涉及对白计划，优先读取或生成待确认 `dialogue/*.yaml`，不得把未确认对白当 canon。
 - 如果任务涉及关系线，必须读取 `spec/tracking/relationships.json` 中对应 `relationshipArcs`；正文结束前说明 trust、distance、conflict、vulnerability、repair 或 turningPoints 哪一项发生变化，并准备 evidencePath 更新。
+- 作者画像不能覆盖当前任务、Scene Card、clarifications 或正文证据；如果画像偏好与当前故事明确回答冲突，优先服从当前故事。
 - 写正文前必须存在目标章节或目标 scene 的 Scene Card；没有时先运行 `storyspec scene:init <story> --id <scene-id>` 或输出 Scene Card preview。
 - Scene Card 必须通过写作门禁：`plotThread`、`readerPromise`、`relationshipChange`、`worldReveal`、`emotionalBeat`、`endingHook`、`successCriteria` 都要可读。
 

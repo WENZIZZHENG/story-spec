@@ -117,6 +117,12 @@ else:
 - 确保规格符合宪法价值观
 - 在规格中引用相关原则
 
+如果存在 `.specify/memory/author-profile.json`：
+- 只把它作为作者长期偏好上下文，帮助选择提问顺序和示例风味。
+- 不得把作者画像中的偏好写成当前故事正典。
+- 当前故事的用户明确回答、澄清记录和即时指令永远优先。
+- 如果作者画像不存在，不要回填；首次使用只能提示可选运行 `storyspec author-profile --init` 做轻量采样。
+
 ### 2.5 读取当前 Genre Preset（如有）
 
 如果存在 `spec/presets/current-preset.json`：

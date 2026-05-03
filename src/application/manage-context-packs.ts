@@ -200,6 +200,13 @@ export const generateContextPack = async (
 
   addMustRead(mustRead, 'AGENTS.md', '项目级 agent 工作边界');
   addMustRead(mustRead, '.specify/memory/constitution.md', '创作宪法与最高原则');
+  if (await fs.pathExists(path.join(projectRoot, '.specify', 'memory', 'author-profile.json'))) {
+    addMustRead(
+      mustRead,
+      '.specify/memory/author-profile.json',
+      '作者长期偏好；只用于推荐、示例和风味上下文，不作为故事正典'
+    );
+  }
   addMustRead(mustRead, findStoryArtifactPath(story, 'specification') ? relativePath(projectRoot, findStoryArtifactPath(story, 'specification')!) : undefined, '故事规格');
   addMustRead(mustRead, findStoryArtifactPath(story, 'creative-plan') ? relativePath(projectRoot, findStoryArtifactPath(story, 'creative-plan')!) : undefined, '创作计划');
   addMustRead(mustRead, creativeControl.recordPath ? relativePath(projectRoot, creativeControl.recordPath) : undefined, '澄清记录与创作控制摘要');

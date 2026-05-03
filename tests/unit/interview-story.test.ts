@@ -43,6 +43,25 @@ describe('interviewStory', () => {
   it('writes clarification records and a copyable handoff prompt without touching specification', async () => {
     const { projectRoot, fileSystem, storyPath } = await createProject();
     await fileSystem.writeFile(path.join(storyPath, 'specification.md'), '# 旧规格');
+    await fileSystem.writeJson(path.join(projectRoot, '.specify', 'memory', 'author-profile.json'), {
+      schemaVersion: '1.0',
+      updatedAt: '2026-05-04T08:00:00.000Z',
+      notes: [],
+      entries: [
+        {
+          id: 'pref.boundary',
+          category: 'boundary',
+          label: '创作禁区',
+          value: '不要把建设流写成纯种田',
+          status: 'confirmed',
+          source: 'user-explicit',
+          evidence: ['用户确认'],
+          createdAt: '2026-05-04T08:00:00.000Z',
+          updatedAt: '2026-05-04T08:00:00.000Z',
+          confirmedAt: '2026-05-04T08:00:00.000Z'
+        }
+      ]
+    }, { spaces: 2 });
 
     const result = await interviewStory({
       projectRoot,
@@ -67,6 +86,8 @@ describe('interviewStory', () => {
     }));
     expect(result.handoffPrompt).toContain('/storyspec-specify');
     expect(result.handoffPrompt).toContain('clarifications.json');
+    expect(result.handoffPrompt).toContain('author-profile.json');
+    expect(result.authorProfile.activeHints).toContain('[confirmed] 创作禁区：不要把建设流写成纯种田');
     await expect(fileSystem.readFile(result.markdownPath)).resolves.toContain('## 需要澄清');
     await expect(fileSystem.readFile(result.markdownPath)).resolves.toContain('## 示例分叉');
     await expect(fileSystem.readFile(result.markdownPath)).resolves.toContain('后续影响');

@@ -45,6 +45,7 @@ npm install -g story-spec-cn
 ```bash
 storyspec init my-novel --agent codex
 cd my-novel
+storyspec author-profile --init --answers "genre=18+ 玄幻、异界穿越、轻松冒险;pacing=慢热共创，先玩关键选择;boundary=建设流和思想改造只是支撑工具"
 storyspec story:new 法术编译纪元 --idea "异界穿越、轻松冒险、编程施法、慢热感情、文明级威胁。建设流和思想改造只是支撑工具。"
 storyspec next 法术编译纪元
 
@@ -67,6 +68,7 @@ storyspec validate
 
 | 文件 | 用途 |
 | --- | --- |
+| `.specify/memory/author-profile.json` | 作者长期偏好画像；只影响推荐和示例，不进入故事正典 |
 | `stories/<story>/idea.md` | 保存作者原始灵感，不把 AI 补全混进去 |
 | `stories/<story>/clarifications.json` | 记录已确认、未确认、跳过和 AI 建议来源 |
 | `stories/<story>/clarifications.md` | 给作者阅读的澄清摘要 |
@@ -125,6 +127,7 @@ init -> story:new -> next -> interview/clarify -> creative:report -> preview spe
 | --- | --- |
 | `storyspec init` | 创建小说项目、目录、模板和 agent 入口 |
 | `storyspec story:new` | 保存作者原始想法，建立故事工作区 |
+| `storyspec author-profile` | 可选维护作者画像；首次只做可跳过采样，后续才回填已确认偏好 |
 | `storyspec next` | 根据当前状态提示下一步该做什么 |
 | `storyspec interview` / `storyspec clarify` | 访谈式澄清，不把未确认内容写成正典 |
 | `storyspec creative:report` | 查看作者已经创建的小说骨架、待澄清问题和 AI 建议风险 |
@@ -166,6 +169,7 @@ StorySpec 会尽量把“作者确认”和“AI 建议”分开：
 - `storyspec review` / `storyspec validate` 会检查未确认 AI 建议是否被提前写入规格、任务或正文。
 - `storyspec preview specify`、`storyspec preview plan` 和 `storyspec apply` 用来把“准备写入”和“确认写入”分开。
 - `creative-plan.md` 不应过早替作者定稿；核心伙伴、第一舞台、能力边界、势力冲突等仍缺失时，计划预览应保留 `[需要澄清]` 或要求继续访谈。
+- `.specify/memory/author-profile.json` 是长期偏好记忆，只影响推荐、示例和风味参考；当前故事的 `clarifications.json` 与用户即时回答永远优先。
 
 这意味着 AI 可以积极帮你提出选项，但不能把选项伪装成你的决定。
 
@@ -187,6 +191,7 @@ StorySpec 会尽量把“作者确认”和“AI 建议”分开：
 | 命令 | 作用 |
 | --- | --- |
 | `storyspec story:new <name> --idea <text>` | 新建故事工作区并保存原始灵感 |
+| `storyspec author-profile` | 查看、初始化、确认、废弃、忽略或清空作者画像偏好 |
 | `storyspec interview [story]` | 运行 CLI 创作访谈，保存澄清记录并输出 agent handoff prompt |
 | `storyspec clarify [story]` | `interview` 的 CLI 澄清入口，适合非 agent 环境 |
 | `storyspec creative:report [story]` | 查看作者确认、待澄清、AI 建议和漂移风险 |
