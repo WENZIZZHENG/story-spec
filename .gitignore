@@ -36,10 +36,12 @@ coverage/
 .cache/
 temp/
 
-# Reference materials (keep locally, exclude from git)
-# other/
+# Reference materials and generated local projects
+other/
+stories/
+.specify/
 
 # AI tools
-.claude
-.codex
-.playwright-mcp 
+.claude/
+.codex/
+.playwright-mcp/

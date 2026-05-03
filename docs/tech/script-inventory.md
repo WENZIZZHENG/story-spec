@@ -8,8 +8,7 @@
 
 | 范围 | Bash | PowerShell | 备注 |
 | --- | ---: | ---: | --- |
-| `scripts/` 源目录 | 18 | 16 | npm 构建产物会复制到 `.specify/scripts/` |
-| `.specify/scripts/` 本仓工作流目录 | 22 | 16 | 仍包含部分旧流程脚本 |
+| `scripts/` 源目录 | 18 | 16 | npm 构建产物会复制到用户项目的 `.specify/scripts/` |
 
 ## `scripts/` 源目录对应关系
 
@@ -32,22 +31,13 @@
 | 分析故事 | `analyze-story.sh` | `analyze-story.ps1` | 双实现 | 依赖多个 scanner，后迁移 |
 | 世界观检查 | `check-world.sh` | 无 | Bash-only | 需要补齐 PowerShell 兼容或直接迁移 TS |
 | 字数测试 | `test-word-count.sh` | 无 | Bash-only | 适合首批迁移到 TypeScript |
-| 分析阶段检查 | 无 | `check-analyze-stage.ps1` | PowerShell-only | 需要确认是否仍被 prompt 调用 |
+| 分析阶段检查 | 无 | `check-analyze-stage.ps1` | PowerShell-only | 被 `analyze` 命令使用，后续应补齐 Bash 或迁移 TS |
 
-## `.specify/scripts/` 额外脚本
+## 生成路径说明
 
-| 脚本 | Bash | PowerShell | 备注 |
-| --- | --- | --- | --- |
-| `create-new-story` | 有 | 有 | 当前 `scripts/` 源目录缺失 |
-| `method` | 有 | 有 | 当前 `scripts/` 源目录缺失 |
-| `setup-outline` | 有 | 有 | 当前 `scripts/` 源目录缺失 |
-| `setup-style` | 有 | 有 | 当前 `scripts/` 源目录缺失 |
-| `style-manager` | 有 | 有 | 当前 `scripts/` 源目录缺失 |
-| `write-chapter` | 有 | 有 | 当前 `scripts/` 源目录缺失 |
-| `analyze-story` | 有 | 无 | 源目录已有 PowerShell 版本，但 `.specify/scripts/` 未同步 |
-| `check-analyze-stage` | 无 | 无 | 仅 `scripts/powershell/` 源目录存在 |
-| `check-world` | 无 | 无 | 仅 `scripts/bash/` 源目录存在 |
-| `test-word-count` | 无 | 无 | 仅 `scripts/bash/` 源目录存在 |
+- 仓库根目录不再跟踪 `.specify/scripts/` 副本。
+- `.specify/scripts/` 是用户项目内的运行路径，由 `storyspec init` 或 `npm run build:commands` 从 `scripts/` 和 TypeScript runtime 生成。
+- 后续新增或迁移脚本时，只维护 `scripts/` 源目录、命令模板和对应测试，不再手改根目录 `.specify/` 产物。
 
 ## 首批迁移候选
 
@@ -58,6 +48,6 @@
 
 ## 后续约束
 
-- 迁移前保留旧 shell 路径，避免已生成 prompt 失效。
+- 迁移前保留用户项目中的旧 shell 路径，避免已生成 prompt 失效。
 - 每迁移一个脚本能力，新增对应 TypeScript 单元测试和 CLI smoke。
 - Bash/PowerShell 双实现不一致时，先以现有 smoke 行为为准，再补决策记录。
