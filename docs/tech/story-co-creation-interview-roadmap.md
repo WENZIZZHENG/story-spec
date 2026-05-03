@@ -65,6 +65,10 @@ Planned。本路线用于修复真实使用中暴露出的创作体验问题：S
 | P1 | F4 | creative-plan 写入节奏门禁 | 避免少量输入后过早生成完整计划 |
 | P2 | F5 | 作者成就感与状态报告 | 让用户看见自己已创造的小说骨架和仍可探索的空间 |
 | P2 | F6 | 文档、示例与迁移说明 | 更新 README、工作流和贡献规范 |
+| P1 | F7 | 人物情感与关系追踪增强 | 强化主角欲望、伙伴张力、慢热关系和关系状态变化 |
+| P1 | F8 | 世界观场景压力检查 | 确保世界观设定落到场景行动、利益结构和代价 |
+| P2 | F9 | Scene Card 写作前门禁 | 让正文写作先经过场景意图卡，而不是直接 `/write` |
+| P3 | F10 | 参考作品节奏内化 | 谨慎支持对标作品的节奏/结构学习，不复制剧情和表达 |
 
 ## Batch F0：共创体验基线与回归样例
 
@@ -419,6 +423,233 @@ Planned。本路线用于修复真实使用中暴露出的创作体验问题：S
 不做/边界：
 
 - 不承诺尚未实现的 GUI、自动迁移或外部平台功能。
+
+## Batch F7：人物情感与关系追踪增强
+
+类型：领域模型、追踪、访谈、任务生成
+
+目标：把 StorySpec 的人物系统从“角色资料管理”推进到“人物欲望、情感关系和关系变化追踪”。长篇是否立得住，很大程度取决于主角和核心伙伴能否持续相互影响。
+
+已有基础：
+
+- `spec/tracking/relationships.json` 和 `character-state.json` 已存在。
+- `templates/knowledge/character-profiles.md`、`templates/knowledge/character-voices.md` 已有角色资料入口。
+- AGENTS 画像中已有 `slow-burn`、`romance`、`multi-thread` 边界。
+
+缺口：
+
+- 早期访谈对主角欲望、恐惧、误判和成长代价追问不足。
+- 核心伙伴容易被写成功能位，例如引路人、恋爱对象、竞争者，而不是能挑战主角的人。
+- 慢热关系缺少可追踪的信任、距离、冲突、脆弱、修复节点。
+
+建议方案：
+
+1. 在核心要素成熟度中增加人物情感子项：
+   - 主角想要什么。
+   - 主角怕失去什么。
+   - 主角会犯什么价值观或方法论误判。
+   - 核心伙伴如何挑战主角，而不是只帮助主角。
+2. 增强 `relationships.json` 模板或校验，支持：
+   - `trust`
+   - `distance`
+   - `conflict`
+   - `vulnerability`
+   - `repair`
+   - `turningPoints`
+3. 在 `/tasks` 或任务生成中要求每个关系线任务说明：
+   - 本任务推进哪段关系。
+   - 关系状态如何变化。
+   - 是否有事件证据。
+4. 为慢热关系添加访谈分叉：搭档、互相利用、低烈度对立、救命债、共同调查等。
+
+涉及文件/模块：
+
+- `templates/tracking/relationships.json`
+- `templates/tracking/character-state.json`
+- `templates/clarification/slow-burn-romance.yaml`
+- `templates/clarification/core.yaml`
+- `src/application/interview-story.ts`
+- `src/validation/rules/writing-rules.ts`
+- `templates/commands/tasks.md`
+- `templates/commands/write.md`
+
+验收标准：
+
+- 对包含慢热感情的故事，访谈至少追问关系起点、阻力、边界和第一次信任变化。
+- `creative:report` 能指出核心伙伴是否只是功能位，还是已有独立欲望和与主角的张力。
+- 写作任务能标注关系变化，正文后可追踪到 evidence path。
+
+不做/边界：
+
+- 不强制每部作品有恋爱线；人物情感也包括师徒、伙伴、竞争、亲情、阵营信任等关系。
+
+## Batch F8：世界观场景压力检查
+
+类型：世界观质量、校验、Scene Card、reviewer
+
+目标：让世界观从设定表落到场景压力。真实的世界观不是资料越多越好，而是规则、资源、禁令和利益结构会改变角色行动。
+
+已有基础：
+
+- World Bible、Canon Ledger、Entity Graph 和 Scene Card 已存在。
+- `xuanhuan-cultivation` preset 已要求境界、灵力、势力秩序有代价和限制。
+- reviewer loop 已有 worldbuilding 权重。
+
+缺口：
+
+- 世界设定可能停留在百科描述，没有落实为角色面临的选择和代价。
+- `world.cultivation.*` 等 draft facts 不一定能说明谁获利、谁受损、违反规则会怎样。
+- `creative-plan.md` 和 Scene Card 不一定标注世界观 reveal 如何通过行动呈现。
+
+建议方案：
+
+1. 为 WorldFact 增加或鼓励字段：
+   - `pressure`
+   - `beneficiaries`
+   - `costs`
+   - `violationConsequence`
+   - `sceneEvidencePaths`
+2. 增强 `world:check` / `validate`：
+   - 对关键世界观事实缺少场景压力给 warning。
+   - 对只有百科描述、没有行动影响的事实给改写建议。
+3. 在 Scene Card 中要求 `reveals` 标注：
+   - 揭示的世界规则。
+   - 该规则如何影响角色行动。
+   - 谁因此获利或受损。
+4. 在 `review` 中增加“世界观是否落地到场景”检查项。
+
+涉及文件/模块：
+
+- `templates/world/world-bible.md`
+- `templates/world/*.yaml`
+- `src/domain/story-artifact.ts`
+- `src/application/inspect-worldbuilding.ts`
+- `src/validation/rules/writing-rules.ts`
+- `templates/scenes/scene-001.yaml`
+- `templates/commands/review.md`
+
+验收标准：
+
+- 对“知识垄断”类设定，系统能要求说明它如何变成考试、禁书、许可、身份审查、资源分配或具体冲突。
+- `world:check` 能区分“有设定文本”和“有场景压力”。
+- Scene Card 的 `reveals` 能连接到 WorldFact，并说明行动后果。
+
+不做/边界：
+
+- 不要求所有背景设定都有完整压力模型；只对主线相关或高影响设定强制/提示。
+
+## Batch F9：Scene Card 写作前门禁
+
+类型：写作工作台、任务流、校验
+
+目标：把 Scene Card 变成正文写作前的核心入口。真正写章节前，先确认本场景推进哪条线、揭示什么信息、改变哪段关系、建立或兑现哪个 promise、读者情绪是什么、结尾钩子是什么。
+
+已有基础：
+
+- `storyspec scene:init`、`scene:list`、`scene:check`、`scene:compile` 已存在。
+- `templates/scenes/scene-001.yaml` 已有基础模板。
+- `context:pack` 能声明 mustRead 和 allowedWrites。
+
+缺口：
+
+- `/write` 仍可能直接写正文，没有强制读取或生成 Scene Card。
+- Scene Card 与 promise/tension/relationships/world reveals 的连接还不够强。
+- 任务拆分后，写作任务不一定先经过场景意图验证。
+
+建议方案：
+
+1. 增强 Scene Card 模板，加入：
+   - `plotThread`
+   - `readerPromise`
+   - `relationshipChange`
+   - `worldReveal`
+   - `emotionalBeat`
+   - `endingHook`
+   - `successCriteria`
+2. 增强 `/write` prompt：
+   - 写作前三章或任意章节前，优先读取对应 Scene Card。
+   - 没有 Scene Card 时，先输出 Scene Card preview，不直接写正文。
+3. 增强 `context:pack`：
+   - 对写作任务把 Scene Card 标为 mustRead。
+   - 限制 allowedWrites，避免无任务边界写整章外内容。
+4. 增强 `scene:check`：
+   - 检查是否推进至少一条线。
+   - 检查是否有 reader emotion / ending hook。
+   - 检查是否连接 promise/tension/relationship/world reveal。
+
+涉及文件/模块：
+
+- `templates/scenes/scene-001.yaml`
+- `src/application/inspect-story-structure.ts`
+- `src/application/check-writing-state.ts`
+- `templates/commands/write.md`
+- `templates/commands/context-pack.md`
+- `src/cli/commands/story-structure.command.ts`
+- `tests/unit/inspect-story-structure.test.ts`
+
+验收标准：
+
+- 没有 Scene Card 的章节写作路径会优先提示创建/预览场景卡。
+- Scene Card 能明确说明本场景推进的情节、信息、关系和情绪。
+- `scene:check` 能发现“只有事件摘要，没有读者情绪或结尾钩子”的场景卡。
+
+不做/边界：
+
+- 不让 Scene Card 变成比正文还重的负担；短篇或草稿模式可允许简化卡片，但必须保留核心意图。
+
+## Batch F10：参考作品节奏内化
+
+类型：研究、节奏配置、文档
+
+目标：谨慎支持“参考作品内化”：只学习节奏、结构、信息密度、爽点间隔、章节长度和情绪曲线，不复制具体剧情、人物、设定或表达。
+
+已有基础：
+
+- `/plan` prompt 已预留 `rhythm-config.json`。
+- `tension-curve.json` 已能记录章节张力、情绪、信息收益和回报。
+- 文档中已有节奏配置的引用，但功能边界尚未系统化。
+
+缺口：
+
+- 参考作品内化还没有明确安全边界和数据结构。
+- 没有工具帮助作者把“我喜欢某本书的节奏”转成可验证的 rhythm config。
+- 容易误导为模仿剧情或风格表达。
+
+建议方案：
+
+1. 新增设计文档或研究任务，定义 `rhythm-config.json` schema：
+   - `averageChapterLength`
+   - `hookFrequency`
+   - `payoffInterval`
+   - `dialogueActionDescriptionRatio`
+   - `tensionPattern`
+   - `infoRevealDensity`
+2. 增加命令或文档入口：
+   - `storyspec rhythm:init`
+   - 或先以 `docs/tech/rhythm-config.md` 作为研究稿。
+3. 在 README 和命令模板中强调：
+   - 借鉴结构，不借鉴表达。
+   - 不生成对标作品的角色、桥段或专有设定。
+4. 让 `plan` 和 `tension:chart` 能读取 rhythm config 并提示节奏偏差。
+
+涉及文件/模块：
+
+- `spec/tracking/tension-curve.json`
+- `templates/tracking/tension-curve.json`
+- `templates/commands/plan.md`
+- `src/application/*tension*`
+- `docs/tech/`
+- `README.md`
+
+验收标准：
+
+- 能用一个本地 rhythm config 表达“章节长度、爽点间隔、张力曲线、信息揭示密度”。
+- plan 阶段能引用 rhythm config，但不会生成对标作品的具体剧情或人物。
+- 文档明确版权和原创边界。
+
+不做/边界：
+
+- 本批次不联网抓取作品，不自动解析受版权保护文本；只处理用户提供的抽象节奏数据或手工配置。
 
 ## 风险与缓解
 
