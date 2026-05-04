@@ -45,3 +45,6 @@ stories/
 .claude/
 .codex/
 .playwright-mcp/
+
+# Local development worktrees
+.worktrees/
