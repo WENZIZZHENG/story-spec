@@ -10,6 +10,7 @@ import {
 } from '../domain/story-stage.js';
 import {
   evaluateStoryCoreElements,
+  getStoryCoreElementSourceLabel,
   getStoryCoreElementStatusText,
   type StoryCoreElementAssessment
 } from '../domain/story-core-elements.js';
@@ -47,11 +48,13 @@ export interface CreativeReportAnswer {
   questionId: string;
   answer: string;
   source: ClarificationAnswer['source'];
+  sourceLabel: string;
 }
 
 export interface CreativeReportQuestion {
   questionId: string;
   question: string;
+  sourceLabel: string;
 }
 
 export interface CreativeReportStorySkeleton {
@@ -310,7 +313,8 @@ export const createCreativeReport = async (
     .map(answer => ({
       questionId: answer.questionId,
       answer: answerText(answer),
-      source: answer.source
+      source: answer.source,
+      sourceLabel: getStoryCoreElementSourceLabel('confirmed')
     })) ?? [];
   const aiSuggestions = record?.answers
     .filter(answer =>
@@ -321,13 +325,15 @@ export const createCreativeReport = async (
     .map(answer => ({
       questionId: answer.questionId,
       answer: answerText(answer),
-      source: answer.source
+      source: answer.source,
+      sourceLabel: getStoryCoreElementSourceLabel('suggested')
     })) ?? [];
   const pendingQuestions = record?.questions
     .filter(question => question.required && !hasConfirmedAnswer(record.answers, question))
     .map(question => ({
       questionId: question.id,
-      question: question.question
+      question: question.question,
+      sourceLabel: getStoryCoreElementSourceLabel('missing')
     })) ?? [];
   const coreElements = record
     ? evaluateStoryCoreElements({
@@ -374,17 +380,17 @@ export const renderCreativeReport = (result: CreativeReportResult): string => [
   '',
   '用户已确认：',
   ...(result.confirmed.length > 0
-    ? result.confirmed.map(item => `- ${item.questionId}：${item.answer}`)
+    ? result.confirmed.map(item => `- ${item.questionId} [${item.sourceLabel}]：${item.answer}`)
     : ['- 暂无。']),
   '',
   '需要澄清：',
   ...(result.pendingQuestions.length > 0
-    ? result.pendingQuestions.map(item => `- ${item.questionId}：${item.question}`)
+    ? result.pendingQuestions.map(item => `- ${item.questionId} [${item.sourceLabel}]：${item.question}`)
     : ['- 暂无 required 待确认问题。']),
   '',
   'AI 建议待确认：',
   ...(result.aiSuggestions.length > 0
-    ? result.aiSuggestions.map(item => `- ${item.questionId}：${item.answer}`)
+    ? result.aiSuggestions.map(item => `- ${item.questionId} [${item.sourceLabel}]：${item.answer}`)
     : ['- 暂无。']),
   '',
   '作者画像回填：',
@@ -426,7 +432,7 @@ export const renderCreativeReport = (result: CreativeReportResult): string => [
   '核心要素面板：',
   ...(result.coreElements.length > 0
     ? result.coreElements.map(item => [
-      `- ${item.label}：${getStoryCoreElementStatusText(item.status)}。${item.summary}`,
+      `- ${item.label}：${getStoryCoreElementStatusText(item.status)} [${item.sourceLabel}]。${item.summary}`,
       ...item.qualityNotes.map(note => `  - ${note}`)
     ].join('\n'))
     : ['- 暂无结构化核心要素；请先运行 storyspec interview。']),

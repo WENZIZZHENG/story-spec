@@ -36,6 +36,7 @@ export interface StoryCoreElementDefinition {
 
 export interface StoryCoreElementAssessment extends StoryCoreElementDefinition {
   status: StoryCoreElementStatus;
+  sourceLabel: string;
   questionIds: string[];
   confirmedAnswerIds: string[];
   suggestedAnswerIds: string[];
@@ -381,6 +382,21 @@ const nextPromptFor = (definition: StoryCoreElementDefinition, status: StoryCore
 export const getStoryCoreElementStatusText = (status: StoryCoreElementStatus): string =>
   statusText[status];
 
+export const getStoryCoreElementSourceLabel = (status: StoryCoreElementStatus): string => {
+  switch (status) {
+    case 'confirmed':
+      return '作者确认';
+    case 'partial':
+      return '部分确认';
+    case 'suggested':
+      return 'AI 候选';
+    case 'deferred':
+      return '稍后决定';
+    case 'missing':
+      return '待澄清';
+  }
+};
+
 export const evaluateStoryCoreElements = (
   input: EvaluateStoryCoreElementsInput
 ): StoryCoreElementAssessment[] => {
@@ -430,6 +446,7 @@ export const evaluateStoryCoreElements = (
     return {
       ...definition,
       status,
+      sourceLabel: getStoryCoreElementSourceLabel(status),
       questionIds: elementSignals.questionIds,
       confirmedAnswerIds: elementSignals.confirmedAnswerIds,
       suggestedAnswerIds: elementSignals.suggestedAnswerIds,

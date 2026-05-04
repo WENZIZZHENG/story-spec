@@ -162,15 +162,15 @@ describe('story core summary', () => {
 
     expect(await fileSystem.readFile(path.join(storyPath, 'clarifications.json'))).toBe(originalRecord);
     expect(result.items).toEqual(expect.arrayContaining([
-      expect.objectContaining({ id: 'premise', label: '核心创意', status: 'confirmed' }),
-      expect.objectContaining({ id: 'protagonist', label: '主角', status: 'partial' }),
+      expect.objectContaining({ id: 'premise', label: '核心创意', status: 'confirmed', sourceLabel: '作者确认' }),
+      expect.objectContaining({ id: 'protagonist', label: '主角', status: 'partial', sourceLabel: '部分确认' }),
       expect.objectContaining({ id: 'partner', label: '核心伙伴', status: 'confirmed' }),
       expect.objectContaining({ id: 'stage', label: '第一舞台', status: 'confirmed' }),
       expect.objectContaining({ id: 'power', label: '能力体系', status: 'confirmed' }),
       expect.objectContaining({ id: 'scope', label: '创作边界', status: 'confirmed' })
     ]));
     expect(rendered).toContain('StorySpec 核心信息面板');
-    expect(rendered).toContain('核心创意：已确认');
+    expect(rendered).toContain('核心创意：已确认 [作者确认]');
     expect(rendered).toContain('能力体系：已确认');
     expect(rendered).toContain('创作边界：已确认');
     expect(rendered).toContain('不能定稿最终反派');
@@ -238,7 +238,7 @@ describe('story core summary', () => {
 
     expect(result.items.some(item => item.status === 'confirmed')).toBe(false);
     expect(rendered).toContain('只显示缺失或未完成项');
-    expect(rendered).toContain('核心伙伴：缺失');
+    expect(rendered).toContain('核心伙伴：缺失 [待澄清]');
     expect(rendered).not.toContain('主角：已确认');
   });
 });

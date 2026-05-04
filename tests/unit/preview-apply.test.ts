@@ -90,20 +90,23 @@ describe('preview apply', () => {
       confirmedItems: expect.arrayContaining([
         expect.objectContaining({
           questionId: 'core.premise',
-          source: 'user-explicit'
+          source: 'user-explicit',
+          sourceLabel: '作者确认'
         })
       ]),
       agentSuggestions: expect.arrayContaining([
         expect.objectContaining({
-          label: expect.any(String)
+          label: expect.any(String),
+          sourceLabel: 'AI 候选'
         })
       ]),
       pendingItems: expect.any(Array)
     });
     await expect(fileSystem.readFile(preview.markdownPath)).resolves.toContain('## 写入摘要');
     await expect(fileSystem.readFile(preview.markdownPath)).resolves.toContain('### 作者确认项');
-    await expect(fileSystem.readFile(preview.markdownPath)).resolves.toContain('core.premise');
+    await expect(fileSystem.readFile(preview.markdownPath)).resolves.toContain('core.premise [作者确认]');
     await expect(fileSystem.readFile(preview.markdownPath)).resolves.toContain('### Agent 建议');
+    await expect(fileSystem.readFile(preview.markdownPath)).resolves.toContain('[AI 候选]');
     await expect(fileSystem.readFile(preview.markdownPath)).resolves.toContain('### 待确认项');
   });
 

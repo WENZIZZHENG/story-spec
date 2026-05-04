@@ -1,5 +1,8 @@
 import type { StoryCoreElementStatus } from '../domain/story-core-elements.js';
-import { getStoryCoreElementStatusText } from '../domain/story-core-elements.js';
+import {
+  getStoryCoreElementSourceLabel,
+  getStoryCoreElementStatusText
+} from '../domain/story-core-elements.js';
 import type { ProjectFileSystem } from './project-ports.js';
 import {
   createCreativeReport,
@@ -20,6 +23,7 @@ export interface StoryCoreSummaryItem {
   id: string;
   label: string;
   status: StoryCoreSummaryItemStatus;
+  sourceLabel: string;
   summary: string;
   nextPrompt?: string;
   qualityNotes: string[];
@@ -63,6 +67,7 @@ const buildSingleAnswerItem = (
     id,
     label,
     status: answer ? 'confirmed' : 'missing',
+    sourceLabel: answer ? getStoryCoreElementSourceLabel('confirmed') : getStoryCoreElementSourceLabel('missing'),
     summary: answer ?? fallbackSummary,
     nextPrompt: answer ? undefined : `继续确认${label}。`,
     qualityNotes: [],
@@ -75,6 +80,7 @@ const buildCoreItems = (report: CreativeReportResult): StoryCoreSummaryItem[] =>
     id: element.id,
     label: element.label,
     status: element.status,
+    sourceLabel: element.sourceLabel,
     summary: element.summary,
     nextPrompt: element.nextPrompt,
     qualityNotes: element.qualityNotes,
@@ -138,7 +144,7 @@ export const renderStoryCoreSummary = (result: StoryCoreSummaryResult): string =
   '',
   ...(result.items.length > 0
     ? result.items.flatMap(item => [
-      `${item.label}：${getStoryCoreElementStatusText(item.status)}`,
+      `${item.label}：${getStoryCoreElementStatusText(item.status)} [${item.sourceLabel}]`,
       `- ${item.summary}`,
       ...(item.qualityNotes.length > 0 ? item.qualityNotes.map(note => `- ${note}`) : []),
       ...(item.nextPrompt ? [`- 下一步：${item.nextPrompt}`] : []),

@@ -18,6 +18,7 @@ import {
 import {
   evaluateStoryCoreElements,
   getPlanBlockingCoreElements,
+  getStoryCoreElementSourceLabel,
   getStoryCoreElementStatusText,
   type StoryCoreElementAssessment
 } from '../domain/story-core-elements.js';
@@ -48,6 +49,7 @@ export interface PreviewWriteSummaryItem {
   label: string;
   questionId?: string;
   source?: string;
+  sourceLabel: string;
   text: string;
 }
 
@@ -231,6 +233,7 @@ const buildWriteSummary = (
       label: answer.questionId,
       questionId: answer.questionId,
       source: answer.source,
+      sourceLabel: getStoryCoreElementSourceLabel('confirmed'),
       text: truncateSummaryText(formatAnswerText(answer.answer))
     }));
   const agentSuggestions = coreElements
@@ -238,6 +241,7 @@ const buildWriteSummary = (
       label: element.label,
       questionId: element.questionIds[0],
       source: element.qualityNotes.length > 0 ? 'quality-note' : 'core-element',
+      sourceLabel: getStoryCoreElementSourceLabel('suggested'),
       text: truncateSummaryText(coreElementSuggestion(element) ?? element.description)
     }))
     .filter(item => item.text.length > 0)
@@ -248,6 +252,7 @@ const buildWriteSummary = (
       label: element.label,
       questionId: element.questionIds[0],
       source: 'pending-core-element',
+      sourceLabel: element.sourceLabel,
       text: truncateSummaryText(element.nextPrompt ?? '请继续共创确认。')
     }));
 
@@ -527,19 +532,19 @@ const renderPreviewReport = (
   '### 作者确认项',
   '',
   ...(record.writeSummary.confirmedItems.length > 0
-    ? record.writeSummary.confirmedItems.map(item => `- ${item.questionId ?? item.label}（${item.source ?? 'unknown'}）：${item.text}`)
+    ? record.writeSummary.confirmedItems.map(item => `- ${item.questionId ?? item.label} [${item.sourceLabel}]（${item.source ?? 'unknown'}）：${item.text}`)
     : ['- 暂无。']),
   '',
   '### Agent 建议',
   '',
   ...(record.writeSummary.agentSuggestions.length > 0
-    ? record.writeSummary.agentSuggestions.map(item => `- ${item.label}：${item.text}`)
+    ? record.writeSummary.agentSuggestions.map(item => `- ${item.label} [${item.sourceLabel}]：${item.text}`)
     : ['- 暂无。']),
   '',
   '### 待确认项',
   '',
   ...(record.writeSummary.pendingItems.length > 0
-    ? record.writeSummary.pendingItems.map(item => `- ${item.label}：${item.text}`)
+    ? record.writeSummary.pendingItems.map(item => `- ${item.label} [${item.sourceLabel}]：${item.text}`)
     : ['- 暂无。']),
   '',
   '## 应用命令',

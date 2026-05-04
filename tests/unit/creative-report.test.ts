@@ -131,6 +131,9 @@ describe('creative report', () => {
     const rendered = renderCreativeReport(result);
     expect(rendered).toContain('作者画像回填');
     expect(rendered).toContain('只影响推荐和示例，不进入故事正典');
+    expect(rendered).toContain('core.premise [作者确认]：编程施法只是工具');
+    expect(rendered).toContain('romance.boundary [待澄清]：慢热感情边界是什么？');
+    expect(rendered).toContain('threat.shape [AI 候选]：旧文明运行时重启');
   });
 
   it('renders a core element panel for co-creating programming-casting', async () => {
@@ -266,8 +269,8 @@ describe('creative report', () => {
       expect.objectContaining({ id: 'factionConflict', label: '势力与冲突', status: 'missing' })
     ]));
     expect(rendered).toContain('核心要素面板');
-    expect(rendered).toContain('主角：部分确认');
-    expect(rendered).toContain('核心伙伴：缺失');
+    expect(rendered).toContain('主角：部分确认 [部分确认]');
+    expect(rendered).toContain('核心伙伴：缺失 [待澄清]');
     expect(rendered).toContain('第一舞台：缺失');
     expect(rendered).toContain('势力与冲突：缺失');
     expect(result.storySkeleton.summary).toContain('晏无');

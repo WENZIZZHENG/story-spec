@@ -89,10 +89,35 @@ Active。
 ### P2-2 候选/正典可视化标记
 
 - 类型：CLI 输出可读性。
+- 状态：基础版已落地，`core`、`creative:report` 与 preview 写入摘要会显示来源/状态标记，JSON 中保留 `sourceLabel`。
 - 背景/问题：作者需要一眼区分作者确认、AI 候选、不可定稿和待澄清。
 - 建议方案：在核心面板、creative report 和 preview 摘要中统一标记 `作者确认 / AI 候选 / 不可定稿 / 待澄清`。
 - 验收标准：文本和 JSON 都能表达来源与状态；纯文本不依赖 emoji 也能读清。
 - 不做/边界：不破坏机器可解析输出。
+
+## P3 后续储备
+
+### P3-1 共创输入工作台交互层
+
+- 类型：CLI 交互、产品体验。
+- 背景/问题：当前已支持长文吸收、批量答案、核心面板和预览摘要，但仍主要依赖命令参数；对非命令行用户，完整链路还不够像“创作工作台”。
+- 已有基础：`storyspec next`、`storyspec interview`、`storyspec ingest`、`storyspec core`、`storyspec preview` 已能覆盖主要数据流。
+- 缺口：缺少一个连续入口，把“粘贴长文 -> 看拆分 -> 选择确认 -> 查看核心面板 -> 生成预览”串成低负担会话。
+- 建议方案：后续新增轻量 workbench 命令或现有 `next` 模式增强，复用已实现的本地规则和确认门禁。
+- 涉及文件/模块：`src/cli/commands/workbench.command.ts`、`src/application/co-creation-workbench.ts`、`src/application/ingest-story-input.ts`、README。
+- 验收标准：作者可以从一个入口完成长文导入、候选确认、核心缺口查看和下一步命令选择；默认不绕过确认门禁。
+- 不做/边界：不在本路线第一批引入 TUI/网页 UI，不接入 LLM 自动语义理解。
+
+### P3-2 语义识别质量增强
+
+- 类型：输入解析、研究储备。
+- 背景/问题：`ingest` 首批使用标题和关键词规则，适合明确长文，但对自然散文、聊天式设定和混合段落识别有限。
+- 已有基础：`src/application/ingest-story-input.ts` 已有明确字段识别和 dry-run/apply 门禁。
+- 缺口：需要更细的段落证据、置信度说明、冲突检测和“可能属于多个字段”的候选提示。
+- 建议方案：先扩展本地规则与测试语料；后续再评估是否接入可选 LLM 解析，但输出必须仍走候选/确认门禁。
+- 涉及文件/模块：`src/application/ingest-story-input.ts`、`tests/unit/ingest-story-input.test.ts`、`tests/fixtures`。
+- 验收标准：无标题 500 字设定能给出更合理的候选分组；低置信度内容不会自动写入 confirmed。
+- 不做/边界：不承诺自动理解所有隐喻和复杂阴谋线。
 
 ## 完成同步规则
 
