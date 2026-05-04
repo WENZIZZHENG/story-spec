@@ -64,6 +64,7 @@ interface IngestFieldDefinition {
   questionId: string;
   label: string;
   aliases: string[];
+  candidateKeywords: string[];
   pending: boolean;
 }
 
@@ -72,48 +73,56 @@ const FIELD_DEFINITIONS: readonly IngestFieldDefinition[] = [
     questionId: 'core.premise',
     label: '核心创意',
     aliases: ['核心创意', '故事核心', '一句话创意', '创意'],
+    candidateKeywords: ['穿越', '故事', '开局', '第一卷', '冒险', '世界'],
     pending: true
   },
   {
     questionId: 'core.protagonist',
     label: '主角',
     aliases: ['主角', '主人公', '晏无'],
+    candidateKeywords: ['晏无', '开朗务实', '主要矛盾', '行动力', '感情迟钝', '价值观'],
     pending: true
   },
   {
     questionId: 'core.partner',
     label: '核心伙伴',
     aliases: ['核心伙伴', '伙伴', '同伴', '团队'],
+    candidateKeywords: ['伙伴', '团队', '莉莉丝', '瑟琳娜', '塞拉斯蒂娅', '同伴'],
     pending: true
   },
   {
     questionId: 'core.stage',
     label: '第一舞台',
     aliases: ['第一舞台', '主要舞台', '舞台', '地点'],
+    candidateKeywords: ['魔导边境学院', '学院', '学府', '知识解释权', '贵族系统', '底层工作人员'],
     pending: true
   },
   {
     questionId: 'magic.rule-hardness',
     label: '能力体系',
     aliases: ['能力体系', '魔法体系', '法术体系', '能力', '金手指'],
+    candidateKeywords: ['法术程序', '符文', '魔力流向', '术式断点', '精神力', '材料'],
     pending: true
   },
   {
     questionId: 'core.faction-conflict',
     label: '势力与冲突',
     aliases: ['势力与冲突', '势力冲突', '第一卷冲突', '势力', '冲突'],
+    candidateKeywords: ['制度', '垄断', '审查', '资源', '许可', '贵族'],
     pending: true
   },
   {
     questionId: 'threat.first-symptom',
     label: '长线威胁',
     aliases: ['长线威胁', '文明威胁', '早期异常', '威胁'],
+    candidateKeywords: ['长线', '文明', '威胁', '异常', '真相', '逐步揭示'],
     pending: false
   },
   {
     questionId: 'core.scope',
     label: '创作边界',
     aliases: ['创作边界', '边界', '不能定稿', '不可定稿'],
+    candidateKeywords: ['不想提前定稿', '不能提前定稿', '最终反派', '感情线归属', '完整阴谋', '只能作为候选'],
     pending: true
   }
 ];
@@ -204,6 +213,50 @@ const recognizeConfirmedItems = (text: string): IngestedStoryInputItem[] => {
   return [...itemsByQuestionId.values()];
 };
 
+const splitCandidateChunks = (text: string): string[] =>
+  normalizeText(text)
+    .split(/\n\s*\n|(?<=[。！？!?])\s+/)
+    .map(cleanAnswer)
+    .filter(chunk => chunk.length >= 12);
+
+const keywordHits = (chunk: string, definition: IngestFieldDefinition): number =>
+  definition.candidateKeywords.filter(keyword => chunk.includes(keyword)).length;
+
+const recognizeCandidateItems = (
+  text: string,
+  confirmedItems: readonly IngestedStoryInputItem[]
+): IngestedStoryInputItem[] => {
+  const confirmedIds = new Set(confirmedItems.map(item => item.questionId));
+  const chunks = splitCandidateChunks(text);
+  const itemsByQuestionId = new Map<string, IngestedStoryInputItem>();
+
+  for (const definition of FIELD_DEFINITIONS) {
+    if (confirmedIds.has(definition.questionId)) {
+      continue;
+    }
+
+    const matches = chunks
+      .map(chunk => ({ chunk, hits: keywordHits(chunk, definition) }))
+      .filter(match => match.hits > 0)
+      .sort((left, right) => right.hits - left.hits || right.chunk.length - left.chunk.length);
+    const best = matches[0];
+    if (!best) {
+      continue;
+    }
+
+    itemsByQuestionId.set(definition.questionId, {
+      questionId: definition.questionId,
+      label: definition.label,
+      sourceLabel: `候选：${definition.label}`,
+      answer: best.chunk,
+      confidence: 0.55,
+      reason: '未发现明确字段标签，仅按关键词归类；需要作者确认后才能写入。'
+    });
+  }
+
+  return [...itemsByQuestionId.values()];
+};
+
 const buildAnswers = (items: readonly IngestedStoryInputItem[]): Record<string, unknown> =>
   Object.fromEntries(items.map(item => [item.questionId, item.answer]));
 
@@ -259,6 +312,7 @@ export const ingestStoryInput = async (
   const story = await selectStoryProject(input.projectRoot, input.fileSystem, input.story);
   const { text, sourceFile } = await resolveInputText(input);
   const confirmedItems = recognizeConfirmedItems(text);
+  const candidateItems = recognizeCandidateItems(text, confirmedItems);
   const premise = await resolvePremise(input, story.path, confirmedItems);
   const write = Boolean(input.applyConfirmed && confirmedItems.length > 0);
   const interview = await interviewStory({
@@ -279,7 +333,7 @@ export const ingestStoryInput = async (
     sourceFile,
     ingestedTextLength: text.length,
     confirmedItems,
-    candidateItems: [],
+    candidateItems,
     pendingQuestions: buildPendingQuestions(confirmedItems),
     jsonPath: interview.jsonPath,
     markdownPath: interview.markdownPath,

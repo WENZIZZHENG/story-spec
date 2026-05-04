@@ -17,6 +17,14 @@ const LONG_INPUT = [
   '风格补充：我希望学院日常和实习任务里有轻松冒险的互动感，也要能看到晏无用拆问题、找主要矛盾、做可执行步骤的方法理解异世界制度。规则呈现中度偏硬，关键事故讲清代价，日常对话保持轻巧。'
 ].join('\n\n');
 
+const UNTITLED_INPUT = [
+  '晏无是个开朗务实的工科马列青年，穿越后没有把异界当成游戏副本，而是习惯先拆问题、找主要矛盾，再把复杂事故拆成可以执行的步骤。他尊重人，行动力强，但感情迟钝，容易把亲密关系也理解成需要调试的系统。',
+  '故事开局放在魔导边境学院。这里表面上是人类六国共同创办的最高魔法学府，口号是知识无国界，实际问题却是知识解释权被学院高层和贵族系统垄断，普通学生、底层工作人员和老学者都被制度程序牵制。',
+  '他的能力来自穿越事故、禁区残响和符文碎片，能感知魔力流向、符文连接和术式断点。他用现代工程思维把异常理解为可读、可测、可调试的系统，建立法术程序；但精神力有限，材料有限，初期正面战力弱。',
+  '团队里有莉莉丝、瑟琳娜和塞拉斯蒂娅。莉莉丝曾被囚禁和研究，拥有材料变换天赋，弧线是从被驯化对象变成主动制造者；瑟琳娜守序正直，负责外部防线；塞拉斯蒂娅是精灵学者，负责理论校验。',
+  '第一阶段我不想提前定稿最终反派、长线文明威胁真相、感情线归属和莉莉丝身份背后的完整阴谋。这些只能作为候选逐步揭示，第一卷更关注学院制度、实习任务、救援事故和伙伴互动。'
+].join('\n\n');
+
 const createProject = async () => {
   const projectRoot = path.join(os.tmpdir(), 'memory-storyspec-ingest');
   const fileSystem = new MemoryFileSystem(projectRoot);
@@ -99,5 +107,49 @@ describe('ingestStoryInput', () => {
       });
     await expect(fileSystem.readFile(path.join(storyPath, 'clarifications.md')))
       .resolves.toContain('core.scope：第一阶段不能定稿第一卷最终反派');
+  });
+
+  it('keeps unlabelled long-form clues as candidates instead of auto-confirming them', async () => {
+    const { projectRoot, fileSystem, storyPath } = await createProject();
+
+    const result = await ingestStoryInput({
+      projectRoot,
+      fileSystem,
+      story: '法术程序师',
+      text: UNTITLED_INPUT,
+      applyConfirmed: true,
+      now: () => new Date('2026-05-04T13:00:00.000Z')
+    });
+    const rendered = renderIngestStoryInputResult(result);
+
+    expect(result.confirmedItems).toEqual([]);
+    expect(result.candidateItems).toEqual(expect.arrayContaining([
+      expect.objectContaining({
+        questionId: 'core.protagonist',
+        sourceLabel: '候选：主角',
+        confidence: 0.55,
+        answer: expect.stringContaining('开朗务实')
+      }),
+      expect.objectContaining({
+        questionId: 'core.stage',
+        sourceLabel: '候选：第一舞台',
+        answer: expect.stringContaining('魔导边境学院')
+      }),
+      expect.objectContaining({
+        questionId: 'magic.rule-hardness',
+        sourceLabel: '候选：能力体系',
+        answer: expect.stringContaining('法术程序')
+      }),
+      expect.objectContaining({
+        questionId: 'core.scope',
+        sourceLabel: '候选：创作边界',
+        answer: expect.stringContaining('不想提前定稿')
+      })
+    ]));
+    expect(result.written).toBe(false);
+    expect(result.updatedAnswerIds).toEqual([]);
+    expect(rendered).toContain('保留候选');
+    expect(rendered).toContain('候选：主角');
+    await expect(fileSystem.pathExists(path.join(storyPath, 'clarifications.json'))).resolves.toBe(false);
   });
 });

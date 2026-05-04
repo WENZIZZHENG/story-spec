@@ -20,6 +20,13 @@ const LONG_INPUT = [
   '补充：规则中度偏硬，学院日常和实习任务要有互动冒险感。'
 ].join('\n\n');
 
+const UNTITLED_INPUT = [
+  '晏无是个开朗务实的工科马列青年，穿越后习惯先拆问题、找主要矛盾，再把复杂事故拆成可以执行的步骤。他尊重人，行动力强，但感情迟钝，容易把亲密关系也理解成需要调试的系统。',
+  '故事开局放在魔导边境学院。这里表面上是人类六国共同创办的最高魔法学府，真实问题却是知识解释权被学院高层和贵族系统垄断。',
+  '他的能力来自穿越事故、禁区残响和符文碎片，能感知魔力流向、符文连接和术式断点。他用现代工程思维建立法术程序；但精神力有限，材料有限，初期正面战力弱。',
+  '第一阶段不想提前定稿最终反派、长线文明威胁真相、感情线归属和莉莉丝身份背后的完整阴谋，这些只能作为候选逐步揭示。'
+].join('\n\n');
+
 const makeTempDir = async () => {
   const dir = await mkdtemp(path.join(os.tmpdir(), 'storyspec-ingest-cli-'));
   tempDirs.push(dir);
@@ -93,5 +100,50 @@ describe('ingest CLI smoke', () => {
     ]));
     await expect(readFile(path.join(projectPath, 'stories', '法术程序师', 'clarifications.json'), 'utf-8'))
       .resolves.toContain('core.scope');
+  });
+
+  it('keeps unlabelled long-form input as candidates in JSON output', async () => {
+    const cwd = await makeTempDir();
+    await execFileAsync('node', [
+      cliPath,
+      'init',
+      'smoke',
+      '--agent',
+      'generic',
+      '--method',
+      'three-act',
+      '--no-git'
+    ], { cwd });
+
+    const projectPath = path.join(cwd, 'smoke');
+    await execFileAsync('node', [
+      cliPath,
+      'story:new',
+      '法术程序师',
+      '--idea',
+      '工科青年穿越到剑与魔法世界。',
+      '--json'
+    ], { cwd: projectPath });
+
+    const result = await execFileAsync('node', [
+      cliPath,
+      'ingest',
+      '法术程序师',
+      '--text',
+      UNTITLED_INPUT,
+      '--apply-confirmed',
+      '--json'
+    ], { cwd: projectPath });
+    const parsed = JSON.parse(result.stdout);
+
+    expect(parsed.confirmedItems).toEqual([]);
+    expect(parsed.candidateItems).toEqual(expect.arrayContaining([
+      expect.objectContaining({ questionId: 'core.protagonist', sourceLabel: '候选：主角' }),
+      expect.objectContaining({ questionId: 'core.stage', sourceLabel: '候选：第一舞台' }),
+      expect.objectContaining({ questionId: 'magic.rule-hardness', sourceLabel: '候选：能力体系' })
+    ]));
+    expect(parsed.written).toBe(false);
+    await expect(readFile(path.join(projectPath, 'stories', '法术程序师', 'clarifications.json'), 'utf-8'))
+      .rejects.toThrow();
   });
 });
