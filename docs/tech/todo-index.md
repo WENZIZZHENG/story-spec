@@ -8,7 +8,7 @@ Active。本文是 StorySpec 当前唯一的活跃待办入口。详细规则见
 
 | 路线 | 状态 | 当前优先级 | 下一步 |
 | --- | --- | --- | --- |
-| 当前无活跃路线 | - | - | 新增长期增强时，先按 [todo-governance.md](todo-governance.md) 建立专题 roadmap。 |
+| [章节生产流程优化](chapter-production-workflow-roadmap.md) | Planned | P0 | 先实现 Scene Card 路径语义校验与自动修复，再实现 `storyspec task:finish <taskId>` 章节收尾命令。 |
 
 ## 暂不作为活跃待办
 
