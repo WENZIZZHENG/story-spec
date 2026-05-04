@@ -404,6 +404,30 @@ describe('story onboarding', () => {
     expect(result.actions.map(action => action.command)).not.toContain('继续运行平台对应 plan 命令');
   });
 
+  it('guides planned stories to agent tasks and local writing preflight commands', async () => {
+    const { projectRoot, fileSystem } = await createProject();
+    const storyPath = path.join(projectRoot, 'stories', 'demo');
+    await fileSystem.writeFile(path.join(storyPath, 'idea.md'), '# demo');
+    await fileSystem.writeFile(path.join(storyPath, 'clarifications.md'), '# clarifications');
+    await fileSystem.writeFile(path.join(storyPath, 'specification.md'), '# spec');
+    await fileSystem.writeFile(path.join(storyPath, 'creative-plan.md'), '# plan');
+
+    const result = await getStoryNext({
+      projectRoot,
+      fileSystem,
+      story: 'demo'
+    });
+
+    expect(result.stage).toBe('planned');
+    expect(result.actions[0]).toMatchObject({
+      command: '/storyspec-tasks',
+      copyableCommand: '/storyspec-tasks',
+      reason: expect.stringContaining('stories/demo/tasks.md')
+    });
+    expect(result.actions.map(action => action.command)).toContain('storyspec status');
+    expect(result.actions.map(action => action.command)).toContain('storyspec tasks:board demo');
+  });
+
   it('presents a multi-entry co-creation workbench instead of a linear-only next step', async () => {
     const { projectRoot, fileSystem } = await createProject();
     await createStoryIdea({

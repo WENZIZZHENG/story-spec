@@ -159,6 +159,11 @@ storyspec preview plan 法术编译纪元
 # 核心要素成熟后再应用；探索性草案可显式加 --draft
 storyspec apply PLAN_PREVIEW_ID --yes
 
+在 agent 中执行 /storyspec-tasks，生成 stories/法术编译纪元/tasks.md
+storyspec tasks:board 法术编译纪元
+storyspec scene:init 法术编译纪元
+storyspec context:pack 法术编译纪元
+storyspec draft:new 法术编译纪元 --chapter 001
 storyspec status
 storyspec validate
 ```
@@ -174,6 +179,8 @@ storyspec validate
 | `.specify/previews/` | 存放待确认的规格预览 |
 | `stories/<story>/specification.md` | 通过 `storyspec apply` 后才写入的正式规格 |
 | `stories/<story>/creative-plan.md` | 通过 `storyspec preview plan` 并确认后才写入的创作计划 |
+| `stories/<story>/tasks.md` | 在 agent 中执行 `/storyspec-tasks` 后生成的可执行任务清单 |
+| `.specify/context-packs/` | `storyspec context:pack` 生成的写作上下文包 |
 
 ## 先澄清，而不是抢写
 
@@ -217,7 +224,7 @@ storyspec interview 王国异常日志 --premise "主角团队用日志、断点
 ## 流程总览
 
 ```text
-init -> story:new -> next -> interview/clarify -> creative:report -> preview specify -> apply -> preview plan -> apply -> /tasks -> /write -> /review -> validate
+init -> story:new -> next -> interview/clarify -> creative:report -> preview specify -> apply -> preview plan -> apply -> /storyspec-tasks -> tasks:board -> scene:init -> context:pack -> draft:new/write -> review -> validate
 ```
 
 每一步的职责不同：
@@ -234,7 +241,10 @@ init -> story:new -> next -> interview/clarify -> creative:report -> preview spe
 | `storyspec apply` | 确认无 blocking 风险后写入正式规格 |
 | `storyspec preview plan` | 生成 `creative-plan.md` 写入预览，不直接替作者定稿 |
 | `storyspec apply` | 确认无 blocking 风险后写入正式规格或创作计划；探索性计划可显式加 `--draft` |
-| `/tasks` / `/write` | 在 agent 中继续拆任务和写正文 |
+| `/storyspec-tasks` | 在 agent 中把 `creative-plan.md` 拆成 `stories/<story>/tasks.md` |
+| `storyspec tasks:board` | 终端检查任务看板、WRITE-READY、PLAN-ONLY 和输出路径 |
+| `storyspec scene:init` / `storyspec context:pack` | 补 Scene Card 并生成写作上下文包 |
+| `storyspec draft:new` / `/storyspec-write` | 创建草稿或在 agent 中按任务和 Scene Card 写正文 |
 | `/review` / `storyspec validate` | 检查漂移、结构、任务和写作规则 |
 
 ## 两类命令

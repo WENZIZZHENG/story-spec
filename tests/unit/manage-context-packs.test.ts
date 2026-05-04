@@ -5,6 +5,7 @@ import {
   generateContextPack,
   validateContextPack
 } from '../../src/application/manage-context-packs.js';
+import { StorySelectionError } from '../../src/application/workbench-utils.js';
 import { MemoryFileSystem } from '../helpers/memory-file-system.js';
 
 const createProject = async () => {
@@ -223,5 +224,29 @@ describe('manage context packs', () => {
       expect.objectContaining({ code: 'CONTEXT_PACK_EMPTY_REASON' }),
       expect.objectContaining({ code: 'CONTEXT_PACK_MISSING_FILE', severity: 'error' })
     ]));
+  });
+
+  it('points planned stories without tasks to the agent tasks command', async () => {
+    const projectRoot = path.join(os.tmpdir(), 'memory-novel-context-pack-missing-tasks');
+    const fileSystem = new MemoryFileSystem(projectRoot);
+    const storyPath = path.join(projectRoot, 'stories', 'planned-demo');
+
+    await fileSystem.writeFile(path.join(storyPath, 'specification.md'), '# spec');
+    await fileSystem.writeFile(path.join(storyPath, 'creative-plan.md'), '# plan');
+
+    await expect(generateContextPack({
+      projectRoot,
+      fileSystem,
+      story: 'planned-demo'
+    })).rejects.toMatchObject({
+      code: 'MISSING_TASKS',
+      message: expect.stringContaining('/storyspec-tasks')
+    } satisfies Partial<StorySelectionError>);
+
+    await expect(generateContextPack({
+      projectRoot,
+      fileSystem,
+      story: 'planned-demo'
+    })).rejects.toThrow('storyspec tasks:board planned-demo');
   });
 });

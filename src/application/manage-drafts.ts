@@ -5,6 +5,7 @@ import type {
   DraftRecord,
 } from '../domain/workbench.js';
 import {
+  buildMissingTasksGuidance,
   relativePath,
   requireTasksPath,
   selectStoryProject,
@@ -35,6 +36,7 @@ export interface PromoteDraftInput extends ListDraftsInput {
 }
 
 export interface CreateDraftResult {
+  story: string;
   record: DraftRecord;
   indexPath: string;
   draftPath: string;
@@ -148,6 +150,7 @@ export const createDraft = async (input: CreateDraftInput): Promise<CreateDraftR
   const indexPath = await writeDraftIndex(input.fileSystem, story.path, index);
 
   return {
+    story: story.name,
     record,
     indexPath,
     draftPath
@@ -210,7 +213,12 @@ export const renderDraftCreateSummary = (result: CreateDraftResult): string => [
   `Draft：${result.record.id}`,
   `状态：${result.record.status}`,
   `路径：${result.draftPath}`,
-  `索引：${result.indexPath}`
+  `索引：${result.indexPath}`,
+  '',
+  '写作前检查：',
+  `- ${buildMissingTasksGuidance(result.story).boardCommand}`,
+  `- storyspec context:pack ${result.story} --chapter ${result.record.chapter}`,
+  `- ${buildMissingTasksGuidance(result.story).sceneInitCommand}`
 ].join('\n');
 
 export const renderDraftList = (result: ListDraftsResult): string => [

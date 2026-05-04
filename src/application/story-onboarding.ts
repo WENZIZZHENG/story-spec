@@ -1,6 +1,7 @@
 import path from 'node:path';
 import type { ProjectFileSystem } from './project-ports.js';
 import {
+  buildMissingTasksGuidance,
   relativePath,
   selectStoryProject,
   slugifyPathPart
@@ -639,7 +640,10 @@ const buildActions = (
     actions.push(action(1, `storyspec review --panel continuity`, '检查规格是否引用未确认建议或待澄清主题。'));
     actions.push(action(2, '继续运行平台对应 plan 命令', '规格已存在，下一步应生成创作计划。'));
   } else if (result.stage === 'planned') {
-    actions.push(action(1, '继续运行平台对应 tasks 命令', '创作计划已存在，下一步应拆成可执行任务。'));
+    const tasksGuidance = buildMissingTasksGuidance(result.story);
+    actions.push(action(1, tasksGuidance.agentCommand, `创作计划已存在，下一步应生成 ${tasksGuidance.targetPath}。${tasksGuidance.summary}`));
+    actions.push(action(2, tasksGuidance.statusCommand, '生成 tasks 后再确认项目阶段和缺口。'));
+    actions.push(action(3, tasksGuidance.boardCommand, 'tasks.md 生成后导出本地看板，检查 WRITE-READY、PLAN-ONLY 和输出路径。'));
   } else if (result.stage === 'tasked') {
     actions.push(action(1, `storyspec context:pack ${result.story}`, '任务已存在，先生成上下文包再写作。'));
     actions.push(action(2, `storyspec review ${result.story}`, '开始写作前做一次 reviewer loop。'));

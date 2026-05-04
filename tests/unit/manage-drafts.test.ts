@@ -4,7 +4,8 @@ import { describe, expect, it } from 'vitest';
 import {
   createDraft,
   listDrafts,
-  promoteDraft
+  promoteDraft,
+  renderDraftCreateSummary
 } from '../../src/application/manage-drafts.js';
 import { MemoryFileSystem } from '../helpers/memory-file-system.js';
 
@@ -52,6 +53,23 @@ describe('manage drafts', () => {
 
     const drafts = await listDrafts({ projectRoot, fileSystem, chapter: '001' });
     expect(drafts.records).toHaveLength(1);
+  });
+
+  it('shows writing preflight commands after creating a draft', async () => {
+    const { projectRoot, fileSystem } = await createProject();
+
+    const result = await createDraft({
+      projectRoot,
+      fileSystem,
+      story: '001-demo',
+      chapter: '001'
+    });
+    const summary = renderDraftCreateSummary(result);
+
+    expect(summary).toContain('写作前检查：');
+    expect(summary).toContain('storyspec context:pack 001-demo --chapter chapter-001');
+    expect(summary).toContain('storyspec scene:init 001-demo');
+    expect(summary).toContain('storyspec tasks:board 001-demo');
   });
 
   it('promotes drafts only after explicit confirmation', async () => {

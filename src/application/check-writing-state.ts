@@ -5,6 +5,7 @@ import {
   inspectScenes
 } from './inspect-story-structure.js';
 import { parseWritingTasksFromMarkdown } from '../domain/story-artifact.js';
+import { buildMissingTasksGuidance } from './workbench-utils.js';
 
 export interface WritingStateDocuments {
   constitution: boolean;
@@ -380,6 +381,13 @@ export const renderWritingStateChecklist = (state: WritingStateResult): string =
 
   if (state.sceneGate.missingSceneCard) {
     lines.push('', '- [ ] 先运行 storyspec scene:init 或补写 Scene Card preview，再进入正文写作');
+  } else if (!state.documents.tasks && state.story) {
+    const tasksGuidance = buildMissingTasksGuidance(state.story.name);
+    lines.push(
+      '',
+      `- [ ] 先在 agent 中执行 \`${tasksGuidance.agentCommand}\` 生成 \`${tasksGuidance.targetPath}\``,
+      `- [ ] 生成后运行 \`${tasksGuidance.boardCommand}\` 检查任务看板，再运行 \`${tasksGuidance.contextPackCommand}\``
+    );
   } else if (state.sceneGate.missingIntent > 0) {
     lines.push('', '- [ ] 补齐 Scene Card 的 plotThread、readerPromise、relationshipChange、worldReveal、emotionalBeat、endingHook 和 successCriteria');
   } else if (!state.canWrite) {

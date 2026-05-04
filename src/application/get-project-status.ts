@@ -22,6 +22,7 @@ import {
   summarizeCreationEcho,
   type CreationEchoSummary
 } from './creation-echo.js';
+import { buildMissingTasksGuidance } from './workbench-utils.js';
 
 export interface StorySummary {
   name: string;
@@ -375,7 +376,9 @@ const buildNextActions = (status: Omit<ProjectStatus, 'nextActions'>): string[] 
   } else if (!status.story.hasCreativePlan) {
     actions.push(`生成计划预览：\`storyspec preview plan ${status.story.name}\`，确认后再 apply`);
   } else if (!status.story.hasTasks) {
-    actions.push('在 agent 中继续执行 `/storyspec-tasks` 或平台对应命令生成可执行任务清单');
+    const tasksGuidance = buildMissingTasksGuidance(status.story.name);
+    actions.push(`生成任务清单：在 agent 中执行 \`${tasksGuidance.agentCommand}\`，写入 \`${tasksGuidance.targetPath}\``);
+    actions.push(`任务生成后运行 \`${tasksGuidance.boardCommand}\` 检查任务看板，再运行 \`${tasksGuidance.contextPackCommand}\``);
   } else if (status.story.nextTask !== '暂无未完成任务') {
     actions.push(`下一步任务：${status.story.nextTask}`);
   } else {

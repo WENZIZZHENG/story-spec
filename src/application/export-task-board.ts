@@ -5,6 +5,7 @@ import { scanStoryArtifacts } from '../validation/artifact-scanner.js';
 import type { WritingTask, WritingTaskStatus } from '../domain/story-artifact.js';
 import { inspectScenes, inspectStoryGraph } from './inspect-story-structure.js';
 import type { SceneCard } from '../domain/story-structure.js';
+import { renderMissingTasksMessage } from './workbench-utils.js';
 
 export type TaskBoardExportErrorCode =
   | 'NO_STORIES'
@@ -305,7 +306,7 @@ const selectStory = async (
 const assertTasksFile = (story: ScannedStoryProject): string => {
   const tasksArtifact = story.artifacts.find(artifact => artifact.kind === 'tasks');
   if (!tasksArtifact?.exists) {
-    throw new TaskBoardExportError('MISSING_TASKS', `故事缺少 tasks.md：${story.name}`);
+    throw new TaskBoardExportError('MISSING_TASKS', renderMissingTasksMessage(story.name));
   }
 
   return tasksArtifact.path;

@@ -95,10 +95,44 @@ export const findStoryArtifactPath = (
   kind: 'specification' | 'creative-plan' | 'tasks'
 ): string | undefined => story.artifacts.find(artifact => artifact.kind === kind && artifact.exists)?.path;
 
+export interface MissingTasksGuidance {
+  targetPath: string;
+  agentCommand: string;
+  statusCommand: string;
+  boardCommand: string;
+  contextPackCommand: string;
+  sceneInitCommand: string;
+  summary: string;
+}
+
+export const buildMissingTasksGuidance = (storyName: string): MissingTasksGuidance => {
+  const targetPath = `stories/${storyName}/tasks.md`;
+  const boardCommand = `storyspec tasks:board ${storyName}`;
+  const contextPackCommand = `storyspec context:pack ${storyName}`;
+
+  return {
+    targetPath,
+    agentCommand: '/storyspec-tasks',
+    statusCommand: 'storyspec status',
+    boardCommand,
+    contextPackCommand,
+    sceneInitCommand: `storyspec scene:init ${storyName}`,
+    summary: `先在 agent 中执行 \`/storyspec-tasks\`，根据 specification.md 和 creative-plan.md 生成 \`${targetPath}\`；生成后运行 \`${boardCommand}\` 检查任务看板，再运行 \`${contextPackCommand}\` 生成写作上下文。`
+  };
+};
+
+export const renderMissingTasksMessage = (storyName: string): string => {
+  const guidance = buildMissingTasksGuidance(storyName);
+  return [
+    `故事缺少 tasks.md：${storyName}`,
+    guidance.summary
+  ].join('\n');
+};
+
 export const requireTasksPath = (story: ScannedStoryProject): string => {
   const tasksPath = findStoryArtifactPath(story, 'tasks');
   if (!tasksPath) {
-    throw new StorySelectionError('MISSING_TASKS', `故事缺少 tasks.md：${story.name}`);
+    throw new StorySelectionError('MISSING_TASKS', renderMissingTasksMessage(story.name));
   }
 
   return tasksPath;

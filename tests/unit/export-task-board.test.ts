@@ -141,4 +141,28 @@ describe('exportTaskBoard', () => {
       code: 'NO_STORIES'
     } satisfies Partial<TaskBoardExportError>);
   });
+
+  it('explains how to create tasks before exporting the board', async () => {
+    const projectRoot = path.join(os.tmpdir(), 'memory-novel-task-board-missing-tasks');
+    const fileSystem = new MemoryFileSystem(projectRoot);
+    const storyPath = path.join(projectRoot, 'stories', 'planned-demo');
+
+    await fileSystem.writeFile(path.join(storyPath, 'specification.md'), '# spec');
+    await fileSystem.writeFile(path.join(storyPath, 'creative-plan.md'), '# plan');
+
+    await expect(exportTaskBoard({
+      projectRoot,
+      fileSystem,
+      story: 'planned-demo'
+    })).rejects.toMatchObject({
+      code: 'MISSING_TASKS',
+      message: expect.stringContaining('/storyspec-tasks')
+    } satisfies Partial<TaskBoardExportError>);
+
+    await expect(exportTaskBoard({
+      projectRoot,
+      fileSystem,
+      story: 'planned-demo'
+    })).rejects.toThrow('stories/planned-demo/tasks.md');
+  });
 });

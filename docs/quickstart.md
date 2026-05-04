@@ -62,10 +62,19 @@ storyspec apply <preview-id> --yes # 确认后写入 specification.md
 
 ### 步骤 8：继续规划和写作
 
-```
+```text
 /storyspec-plan 基于已确认 specification 规划第一卷结构
 /storyspec-tasks 把第一卷拆成可执行写作任务
 /storyspec-write 开始写作第一章
+```
+
+如果你在终端里继续，先用 CLI 检查 `/storyspec-tasks` 生成的文件，再进入正文：
+
+```bash
+storyspec tasks:board 法术编译纪元
+storyspec scene:init 法术编译纪元
+storyspec context:pack 法术编译纪元
+storyspec draft:new 法术编译纪元 --chapter 001
 ```
 
 恭喜！你已经开始了你的小说创作之旅。
@@ -190,6 +199,14 @@ AI 会创建 `stories/001-都市修仙者/tasks.md`，包含：
 - 需要补充的设定
 - 角色深化任务
 - 伏笔安排
+
+生成后在终端中运行：
+
+```bash
+storyspec tasks:board 都市修仙者
+```
+
+如果任务清单还不存在，`tasks:board`、`context:pack` 和写作状态检查都会提示先执行 `/storyspec-tasks`，并给出后续可复制命令。
 
 ### 第 8 步：开始写作（agent 内部命令）
 

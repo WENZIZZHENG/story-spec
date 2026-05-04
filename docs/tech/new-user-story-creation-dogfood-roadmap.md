@@ -260,7 +260,7 @@ node dist/cli.js validate
 - 生成产物：新增 `changes/2026-05-04-creative-report-status-maturity.md`。
 - 后续遗留：`creative:report` 目前仍是完整长报告，若后续要做新手默认视图，可再另拆 progressive disclosure 任务。
 
-### P1-4 打通从 plan 到 tasks/context/write 的可执行路径
+### P1-4 打通从 plan 到 tasks/context/write 的可执行路径（已完成，2026-05-04）
 
 - 类型：工作流衔接、写作入口
 - 背景/问题：`preview plan` 和 `apply --draft` 可用，但之后 `context:pack` 和 `tasks:board` 都因缺少 `tasks.md` 失败；`status` 建议 `/tasks`，但 CLI 没有生成 tasks.md 的等价命令，只有 agent prompt 和 board 读取命令。`draft:new` 可以创建空草稿，但没有提醒缺 tasks/Scene Card/context。
@@ -288,6 +288,13 @@ node dist/cli.js validate
   - 不照搬：不引入 Gherkin 语法。
   - 落地方式：tasks 是写作执行的 gate，缺失时要能自动指路。
 - 不做/边界：不让正文写作绕过 tasks 和 Scene Card 门禁。
+
+完成记录：
+
+- 完成内容：planned 阶段的 `storyspec next` 改为明确指向 `/storyspec-tasks`、`storyspec status` 和 `storyspec tasks:board <story>`；`context:pack`、`tasks:board`、写作状态检查在缺 `tasks.md` 时统一提示生成路径；`draft:new` 创建草稿后提示任务看板、Scene Card 和 Context Pack 前置检查。
+- 验证方式：`npx vitest run tests/unit/story-onboarding.test.ts tests/unit/export-task-board.test.ts tests/unit/manage-context-packs.test.ts tests/unit/manage-drafts.test.ts tests/unit/check-writing-state.test.ts`。
+- 生成产物：新增 `changes/2026-05-04-tasks-context-write-guidance.md`，并同步 README / quickstart 的 agent-assisted tasks 与 CLI preflight 路径。
+- 后续遗留：本任务没有新增 `storyspec preview tasks` 或 CLI 内置任务生成器；如果后续需要完全 CLI-only 的 tasks 草案，应另开更大的“tasks preview/apply”任务。
 
 ## P2 体验和效率
 
