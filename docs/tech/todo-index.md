@@ -6,7 +6,9 @@ Active。本文是 StorySpec 当前唯一的活跃待办入口。详细规则见
 
 ## 当前待办
 
-当前无活跃待办。已完成路线见 [todo-archive.md](todo-archive.md)；新增长期路线时，先按 [todo-governance.md](todo-governance.md) 建立专题 roadmap 并在本文登记。
+| 路线 | 状态 | 当前优先级 | 下一步 |
+| --- | --- | --- | --- |
+| [共创输入与核心信息面板路线图](co-creation-input-and-core-roadmap.md) | Active | P0 | 先实现 `storyspec core` 核心信息面板，再推进长文吸收与批量澄清预览。 |
 
 ## 暂不作为活跃待办
 

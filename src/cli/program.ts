@@ -17,6 +17,7 @@ import { registerReviewCommand } from './commands/review.command.js';
 import { registerPresetCommand } from './commands/preset.command.js';
 import { registerWorkbenchCommand } from './commands/workbench.command.js';
 import { registerStoryOnboardingCommand } from './commands/story-onboarding.command.js';
+import { registerCoreCommand } from './commands/core.command.js';
 import { registerCreativeReportCommand } from './commands/creative-report.command.js';
 import { registerPreviewApplyCommand } from './commands/preview-apply.command.js';
 import { registerAuthorProfileCommand } from './commands/author-profile.command.js';
@@ -72,6 +73,7 @@ export function runProgram(argv: string[]): void {
   registerWorkbenchCommand(program);
   registerAuthorProfileCommand(program);
   registerStoryOnboardingCommand(program);
+  registerCoreCommand(program);
   registerCreativeReportCommand(program);
   registerPreviewApplyCommand(program);
   registerInfoCommand(program);
@@ -85,6 +87,7 @@ export function runProgram(argv: string[]): void {
     console.log('  $ storyspec story:new 法术编译纪元 --idea "异界穿越、编程施法"');
     console.log('  $ storyspec next 法术编译纪元');
     console.log('  $ storyspec interview 法术编译纪元 --focus protagonist --premise "异界穿越、编程施法"');
+    console.log('  $ storyspec core 法术编译纪元 --missing');
     console.log('  $ storyspec creative:report 法术编译纪元');
     console.log('  $ storyspec preview specify 法术编译纪元');
     console.log('  $ storyspec apply <preview-id> --yes');
@@ -93,6 +96,7 @@ export function runProgram(argv: string[]): void {
     console.log('  story:new         保存作者原始灵感，不自动扩写成正典');
     console.log('  next              选择今天从角色、场景、设定或分支哪里继续');
     console.log('  interview         完成一轮低负担访谈，区分已确认和候选');
+    console.log('  core              查看世界观、人物、舞台、能力体系等核心信息缺口');
     console.log('  creative:report   查看故事骨架、缺口和 AI 建议风险');
     console.log('  preview/apply     先预览 specification 或 plan，确认后再写入');
     console.log('');

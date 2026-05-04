@@ -37,6 +37,7 @@ describe('CLI command modules smoke', () => {
     expect(help).toContain('clarify [options] [story]');
     expect(help).toContain('story:new [options] <name>');
     expect(help).toContain('next [options] [story]');
+    expect(help).toContain('core [options] [story]');
     expect(help).toContain('creative:report [options] [story]');
     expect(help).toContain('clarification:rollback');
     expect(help).toContain('preview');

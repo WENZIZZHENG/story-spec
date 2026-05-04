@@ -149,6 +149,7 @@ storyspec story:new 法术编译纪元 --idea "异界穿越、轻松冒险、编
 storyspec next 法术编译纪元
 
 storyspec interview 法术编译纪元 --focus protagonist --premise "异界穿越、轻松冒险、编程施法、慢热感情、文明级威胁" --max-questions 6
+storyspec core 法术编译纪元 --missing
 storyspec creative:report 法术编译纪元
 
 storyspec preview specify 法术编译纪元
@@ -236,6 +237,7 @@ init -> story:new -> next -> interview/clarify -> creative:report -> preview spe
 | `storyspec author-profile` | 可选维护作者画像；首次只做可跳过采样，后续才回填已确认偏好 |
 | `storyspec next` | 根据当前状态显示一条可复制主命令；加 `--verbose` 展开创作模式、推荐入口卡、多入口导航和未决项回流 |
 | `storyspec interview` / `storyspec clarify` | 访谈式澄清；可用 `--focus` 或 `--entry protagonist/partner/world/stage/power/faction/conflict/scene/ending/branch` 从某个共创入口开始，并带回历史“稍后决定” |
+| `storyspec core` | 查看核心创意、主角、伙伴、第一舞台、能力体系和创作边界；加 `--missing` 只看缺口 |
 | `storyspec creative:report` | 查看作者已经创建的小说骨架、创作回声、未决项回流、待澄清问题和 AI 建议风险 |
 | `storyspec preview specify` | 生成规格写入预览 |
 | `storyspec apply` | 确认无 blocking 风险后写入正式规格 |
@@ -289,6 +291,7 @@ StorySpec 有两类入口，容易混淆：
 | `storyspec author-profile` | 查看、初始化、确认、废弃、忽略或清空作者画像偏好 |
 | `storyspec interview [story]` | 运行 CLI 创作访谈，保存澄清记录并输出 agent handoff prompt |
 | `storyspec clarify [story]` | `interview` 的 CLI 澄清入口，适合非 agent 环境 |
+| `storyspec core [story]` | 查看故事核心信息面板；支持 `--missing` 和 `--json` |
 | `storyspec creative:report [story]` | 查看作者确认、创作回声、待澄清、AI 建议和漂移风险 |
 | `storyspec clarification:rollback --story <story> [--question <id>]` | 把最近一次确认或指定问题退回候选，保留原答案和证据，不修改正文或正典文件 |
 | `storyspec preview specify [story]` | 生成 StorySpec v0 规格草案，不直接写入正式规格 |
