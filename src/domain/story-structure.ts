@@ -79,6 +79,7 @@ export interface StoryStructureIssue {
     | 'INVALID_SCENE_CARD'
     | 'MISSING_SCENE_FIELD'
     | 'MISSING_SCENE_INTENT'
+    | 'INVALID_SCENE_STORY_PATH'
     | 'DUPLICATE_SCENE_ORDER'
     | 'UNKNOWN_SCENE_ENTITY';
   path: string;
@@ -311,6 +312,63 @@ const readWorldReveal = (value: unknown): SceneWorldReveal => {
   };
 };
 
+const toPosixPath = (value: string): string => value.replace(/\\/g, '/');
+
+const sceneStoryPrefix = (filePath: string): string | undefined => {
+  const parts = toPosixPath(filePath).split('/');
+  const storiesIndex = parts.lastIndexOf('stories');
+  const storyName = storiesIndex >= 0 ? parts[storiesIndex + 1] : undefined;
+
+  return storyName ? `stories/${storyName}/` : undefined;
+};
+
+const validateStoryRelativeScenePath = (
+  basePath: string,
+  fieldPath: string,
+  value: string,
+  storyPrefix: string | undefined
+): StoryStructureIssue[] => {
+  if (!storyPrefix) {
+    return [];
+  }
+
+  const normalized = toPosixPath(value.trim());
+  if (!normalized.startsWith(storyPrefix)) {
+    return [];
+  }
+
+  const suggestedPath = normalized.slice(storyPrefix.length);
+  if (!suggestedPath) {
+    return [];
+  }
+
+  return [issue(
+    'INVALID_SCENE_STORY_PATH',
+    `${basePath}.${fieldPath}`,
+    `Scene Card 路径应相对故事目录，建议改为：${suggestedPath}`
+  )];
+};
+
+const validateSceneCardPaths = (
+  basePath: string,
+  scene: SceneCard,
+  sourcePath: string
+): StoryStructureIssue[] => {
+  const storyPrefix = sceneStoryPrefix(sourcePath);
+
+  return [
+    ...scene.requiredReads.flatMap((value, index) =>
+      validateStoryRelativeScenePath(basePath, `requiredReads[${index}]`, value, storyPrefix)
+    ),
+    ...scene.allowedWrites.flatMap((value, index) =>
+      validateStoryRelativeScenePath(basePath, `allowedWrites[${index}]`, value, storyPrefix)
+    ),
+    ...(scene.draftPath
+      ? validateStoryRelativeScenePath(basePath, 'draftPath', scene.draftPath, storyPrefix)
+      : [])
+  ];
+};
+
 export const parseSceneCardDocument = (
   content: string,
   filePath: string
@@ -370,7 +428,7 @@ export const parseSceneCardDocument = (
       return;
     }
 
-    scenes.push({
+    const scene: SceneCard = {
       id: String(candidate.id).trim(),
       chapter: String(candidate.chapter).trim(),
       order,
@@ -396,7 +454,10 @@ export const parseSceneCardDocument = (
       requiredReads: toStringArray(candidate.requiredReads),
       allowedWrites: toStringArray(candidate.allowedWrites),
       draftPath: isNonEmptyString(candidate.draftPath) ? candidate.draftPath.trim() : undefined
-    });
+    };
+
+    scenes.push(scene);
+    issues.push(...validateSceneCardPaths(basePath, scene, filePath));
   });
 
   return { scenes, issues };

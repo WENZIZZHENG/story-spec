@@ -107,7 +107,7 @@ export const createInitialSceneCard = async (
   const contextItems = confirmedContextItems(record);
   const withStoryId = template.replace(/^id: scene-001$/m, `id: ${sceneId}`);
   const content = addStoryContext(withStoryId, story.name, contextItems)
-    .replace(/stories\/\*/g, `stories/${story.name}`);
+    .replace(/stories\/\*\//g, '');
 
   await input.fileSystem.ensureDir(path.dirname(outputPath));
   await input.fileSystem.writeFile(outputPath, content);

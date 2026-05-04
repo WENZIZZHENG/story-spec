@@ -38,8 +38,8 @@ foreshadowing:
   paidOff: []
 requiredReads:
   - .specify/memory/constitution.md
-  - stories/*/specification.md
-  - stories/*/creative-plan.md
+  - specification.md
+  - creative-plan.md
 allowedWrites:
-  - stories/*/content/chapter-001.md
-draftPath: stories/*/content/chapter-001.md
+  - content/chapter-001.md
+draftPath: content/chapter-001.md

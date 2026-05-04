@@ -48,8 +48,8 @@ requiredReads:
   - stories/*/specification.md
   - stories/*/creative-plan.md
 allowedWrites:
-  - stories/*/content/chapter-001.md
-draftPath: stories/*/content/chapter-001.md
+  - content/chapter-001.md
+draftPath: content/chapter-001.md
 `);
     const storyPath = path.join(projectRoot, 'stories', '星尘驿站');
     await fileSystem.writeFile(path.join(storyPath, 'specification.md'), '# 星尘驿站 StorySpec v0\n\n岑舟在宇宙边境经营给迷路灵魂和破损飞船歇脚的驿站。');
@@ -120,8 +120,9 @@ draftPath: stories/*/content/chapter-001.md
     expect(content).toContain('story: 星尘驿站');
     expect(content).toContain('主角岑舟是退休星舰导航员。');
     expect(content).toContain('第一舞台是宇宙边境的星尘驿站大厅。');
-    expect(content).toContain('stories/星尘驿站/specification.md');
-    expect(content).toContain('stories/星尘驿站/creative-plan.md');
+    expect(content).toContain('  - specification.md');
+    expect(content).toContain('  - creative-plan.md');
+    expect(content).toContain('draftPath: content/chapter-001.md');
     expect(content).not.toContain('world.example.rule');
     expect(renderSceneCardCreateSummary(result)).toContain('候选上下文：2');
   });

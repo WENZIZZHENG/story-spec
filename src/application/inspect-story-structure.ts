@@ -28,6 +28,25 @@ export interface SceneInspectionResult {
   issues: StoryStructureIssue[];
 }
 
+export interface ScenePathReplacement {
+  file: string;
+  from: string;
+  to: string;
+}
+
+export interface FixSceneCardPathsInput extends InspectStoryStructureInput {
+  write?: boolean;
+}
+
+export interface FixSceneCardPathsResult {
+  projectRoot: string;
+  storyPath?: string;
+  write: boolean;
+  checkedFiles: string[];
+  changedFiles: string[];
+  replacements: ScenePathReplacement[];
+}
+
 export interface StoryGraphIndexes {
   schemaVersion: '1.0';
   byType: Record<string, string[]>;
@@ -148,6 +167,75 @@ const listSceneFiles = async (
     || file.endsWith('.yml')
     || file.endsWith('.json')
   );
+};
+
+const storyPrefixForSceneFile = (filePath: string): string | undefined => {
+  const parts = toPosixPath(filePath).split('/');
+  const storiesIndex = parts.lastIndexOf('stories');
+  const storyName = storiesIndex >= 0 ? parts[storiesIndex + 1] : undefined;
+
+  return storyName ? `stories/${storyName}/` : undefined;
+};
+
+const collectScenePathReplacements = (
+  filePath: string,
+  content: string
+): ScenePathReplacement[] => {
+  const storyPrefix = storyPrefixForSceneFile(filePath);
+  if (!storyPrefix) {
+    return [];
+  }
+
+  const pattern = new RegExp(storyPrefix.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + '[^\\s\\]}",]+', 'g');
+  const values = [...new Set(content.match(pattern) ?? [])]
+    .filter(value => value.length > storyPrefix.length)
+    .sort();
+
+  return values.map(value => ({
+    file: filePath,
+    from: value,
+    to: value.slice(storyPrefix.length)
+  }));
+};
+
+export const fixSceneCardPaths = async (
+  input: FixSceneCardPathsInput
+): Promise<FixSceneCardPathsResult> => {
+  const storyDirs = await resolveStoryDirs(input);
+  const checkedFiles: string[] = [];
+  const changedFiles: string[] = [];
+  const replacements: ScenePathReplacement[] = [];
+
+  for (const storyPath of storyDirs) {
+    for (const file of await listSceneFiles(input.fileSystem, storyPath)) {
+      checkedFiles.push(file);
+      const content = await input.fileSystem.readFile(file);
+      const fileReplacements = collectScenePathReplacements(file, content);
+      if (fileReplacements.length === 0) {
+        continue;
+      }
+
+      replacements.push(...fileReplacements);
+      changedFiles.push(file);
+
+      if (input.write) {
+        const nextContent = fileReplacements.reduce(
+          (current, replacement) => current.split(replacement.from).join(replacement.to),
+          content
+        );
+        await input.fileSystem.writeFile(file, nextContent);
+      }
+    }
+  }
+
+  return {
+    projectRoot: input.projectRoot,
+    storyPath: storyDirs.length === 1 ? storyDirs[0] : undefined,
+    write: Boolean(input.write),
+    checkedFiles: checkedFiles.sort(),
+    changedFiles: [...new Set(changedFiles)].sort(),
+    replacements
+  };
 };
 
 const validateSceneReferences = (

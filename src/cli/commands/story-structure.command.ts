@@ -3,6 +3,7 @@ import chalk from 'chalk';
 import path from 'node:path';
 import {
   buildStoryGraphIndexes,
+  fixSceneCardPaths,
   inspectScenes,
   inspectStoryGraph,
   renderSceneInspection,
@@ -205,10 +206,38 @@ export const registerStoryStructureCommand = (
     .command('scene:check')
     .argument('[story]', '故事目录名，默认扫描所有 stories/*')
     .option('--json', '输出 JSON，便于自动化读取')
+    .option('--fix-paths', '修复 Scene Card 中重复 stories/<story>/ 前缀的路径')
     .description('检查 Scene Cards 的关键字段和 entity 引用')
     .action(async (story, options) => {
       try {
         const projectRoot = await ensureProjectRoot();
+        if (options.fixPaths) {
+          const fixResult = await fixSceneCardPaths({
+            projectRoot,
+            fileSystem: nodeFileSystem,
+            story,
+            write: true
+          });
+          if (options.json) {
+            console.log(JSON.stringify(fixResult, null, 2));
+          } else {
+            console.log([
+              'Scene Card 路径修复',
+              '',
+              `检查文件：${fixResult.checkedFiles.length}`,
+              `修改文件：${fixResult.changedFiles.length}`,
+              `替换：${fixResult.replacements.length}`,
+              '',
+              ...(fixResult.replacements.length > 0
+                ? fixResult.replacements.map(item =>
+                  `- ${path.relative(projectRoot, item.file)}: ${item.from} -> ${item.to}`
+                )
+                : ['- 无需修复'])
+            ].join('\n'));
+          }
+          return;
+        }
+
         const result = await inspectScenes({ projectRoot, fileSystem: nodeFileSystem, story });
 
         console.log(options.json ? JSON.stringify(result, null, 2) : renderSceneInspection(result));
