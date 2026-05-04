@@ -2,11 +2,13 @@
 
 ## 状态
 
-Active。本文是 StorySpec 当前唯一的活跃待办入口。详细规则见 [todo-governance.md](todo-governance.md)，已完成事项见 [todo-archive.md](todo-archive.md)。当前无活跃路线；新增长期增强时先在本文登记。
+Active。本文是 StorySpec 当前唯一的活跃待办入口。详细规则见 [todo-governance.md](todo-governance.md)，已完成事项见 [todo-archive.md](todo-archive.md)。当前有 1 条活跃路线；新增长期增强时先在本文登记。
 
 ## 当前待办
 
-当前无活跃路线。
+| 路线 | 状态 | 优先级 | 下一步 |
+| --- | --- | --- | --- |
+| [StorySpec 自用创作流程问题待办](storyspec-dogfood-friction-roadmap.md) | Planned | P0 | 先修复 `task:finish` / `tasks:set-status` 源码与 `dist` 产物漂移，再统一章节路径解析、写作阶段验证范围和 tracking evidence schema。 |
 
 ## 暂不作为活跃待办
 
