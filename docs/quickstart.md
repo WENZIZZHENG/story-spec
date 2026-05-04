@@ -41,7 +41,7 @@ storyspec creative:report 法术编译纪元
 
 你也可以把 `--focus protagonist` 换成 `--focus scene`、`--focus partner`、`--focus world` 等入口，先玩一个角色、一幕戏或一个世界压力点。你可以回答“稍后决定”“不知道”或选择示例；它们会被记录下来，但不会被当成已经定稿的正典设定。
 
-### 步骤 6：生成规格预览
+### 步骤 6：生成 StorySpec v0 草案
 
 ```bash
 storyspec preview specify 法术编译纪元
@@ -129,7 +129,7 @@ storyspec creative:report 都市修仙者
 - 女主是否在第一卷觉醒？
 - 反派组织是早登场还是只露出线索？
 
-### 第 4 步：生成并确认规格预览
+### 第 4 步：生成并确认 StorySpec v0 草案
 
 ```bash
 storyspec preview specify 都市修仙者
@@ -224,7 +224,7 @@ AI 会根据大纲和风格设定，生成第一章内容：
 
 ### storyspec story:new / storyspec next / storyspec interview / storyspec preview specify - 创建故事规格
 
-**用途**：先保存原始创意，再选择入口澄清关键选择，最后生成可确认的规格预览
+**用途**：先保存原始创意，再选择入口澄清关键选择，最后生成可确认的 StorySpec v0 草案
 
 **示例**：
 ```bash

@@ -253,7 +253,7 @@ describe('getProjectStatus', () => {
 
     const output = renderProjectStatus(status);
     expect(output).toContain('创作阶段：idea');
-    expect(output).toContain('创作缺口：');
+    expect(output).toContain('还需要补齐：');
     expect(output).toContain('主角欲望、核心伙伴、第一舞台和第一卷冲突仍未确认');
   });
 
@@ -386,7 +386,8 @@ describe('getProjectStatus', () => {
     });
     expect(output).toContain('当前故事长成了什么：');
     expect(output).toContain('当前风味：');
-    expect(output).toContain('最有生命力：');
+    expect(output).toContain('成熟度：');
+    expect(output).toContain('已长出的关键部件：');
     expect(output).toContain('还差的关键部件：');
   });
 });

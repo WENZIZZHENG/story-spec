@@ -290,7 +290,8 @@ describe('creative report', () => {
     ]));
     expect(result.nextActions).toContain('先确认核心伙伴：运行 storyspec interview 编程施法，或直接回答“伙伴会怎样挑战主角？”');
     expect(rendered).toContain('你已经创建的小说骨架');
-    expect(rendered).toContain('仍可探索的乐趣点');
+    expect(rendered).toContain('成熟度');
+    expect(rendered).toContain('可继续探索的乐趣点');
   });
 
   it('calls out a core partner who lacks desire and tension', async () => {
@@ -582,11 +583,11 @@ describe('creative report', () => {
       missingPieces: expect.arrayContaining([
         expect.stringContaining('核心伙伴')
       ]),
-      nextEcho: expect.stringContaining('这次创作让')
+      nextEcho: expect.stringContaining('这次创作已经让')
     });
     expect(rendered).toContain('创作回声');
     expect(rendered).toContain('当前风味');
-    expect(rendered).toContain('最有生命力');
+    expect(rendered).toContain('已长出的关键部件');
     expect(rendered).toContain('还差的关键部件');
     expect(rendered).toContain('下一轮回声');
   });

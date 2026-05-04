@@ -105,6 +105,30 @@ const readClarificationRecord = async (
 const answerText = (answer: ClarificationAnswer): string =>
   clarificationAnswerToText(answer.answer).replace(/\s+/g, ' ').trim();
 
+const compact = (value: string): string => value.replace(/\s+/g, ' ').trim();
+
+const uniqueTexts = (values: string[]): string[] => {
+  const seen = new Set<string>();
+  const result: string[] = [];
+
+  for (const value of values) {
+    const text = compact(value);
+    if (!text) {
+      continue;
+    }
+
+    const key = text.toLowerCase();
+    if (seen.has(key)) {
+      continue;
+    }
+
+    seen.add(key);
+    result.push(text);
+  }
+
+  return result;
+};
+
 const hasConfirmedAnswer = (
   answers: ClarificationAnswer[],
   question: ClarificationQuestion
@@ -186,27 +210,33 @@ const buildStorySkeleton = (
   coreElements: StoryCoreElementAssessment[],
   confirmed: CreativeReportAnswer[]
 ): CreativeReportStorySkeleton => {
-  const created = coreElements
+  const created = uniqueTexts(coreElements
     .filter(element => element.status === 'confirmed' || element.status === 'partial')
-    .map(element => `${skeletonLabelByElementId(element.id)}：${element.summary}`);
-  const pendingSoul = coreElements
+    .map(element => `${skeletonLabelByElementId(element.id)}：${element.summary}`));
+  const pendingSoul = uniqueTexts(coreElements
     .filter(element => element.status === 'missing' || element.status === 'partial' || element.status === 'deferred')
     .slice(0, 5)
-    .map(element => `${element.label}：${element.nextPrompt ?? '仍待共创。'}`);
-  const confirmedText = confirmed.map(item => item.answer).join('；');
-  const summaryParts = [
-    record?.premise.trim(),
+    .map(element => `${element.label}：${element.nextPrompt ?? '仍待共创。'}`));
+  const summaryParts = uniqueTexts([
+    record?.premise ?? '',
     ...coreElements
       .filter(element => element.status === 'confirmed' || element.status === 'partial')
       .map(element => element.summary),
-    confirmedText
-  ]
-    .filter((item): item is string => Boolean(item && item.trim()))
-    .join('；');
+    ...confirmed.map(item => item.answer)
+  ]).join('；');
+  const planCriticalConfirmedCount = coreElements.filter(element =>
+    element.planCritical && (element.status === 'confirmed' || element.status === 'partial')
+  ).length;
+  const planCriticalTotal = coreElements.filter(element => element.planCritical).length;
+  const maturityNote = planCriticalConfirmedCount === 0
+    ? '目前还在聚拢灵感，先补主角、舞台和第一轮冲突最划算。'
+    : planCriticalConfirmedCount >= planCriticalTotal
+      ? '核心骨架已经成形，可以进入规格、计划和写作。'
+      : '核心骨架已经长出大半，只差几块关键部件。';
 
   return {
     summary: summaryParts || '这部小说的灵魂仍待共创；目前只有项目框架或零散线索。',
-    created: created.length > 0 ? created : ['项目框架已建立，但小说灵魂仍待共创。'],
+    created: created.length > 0 ? created : [maturityNote],
     pendingSoul
   };
 };
@@ -228,6 +258,9 @@ const buildFunPrompts = (
 
   return coreElements
     .filter(element => element.status !== 'confirmed')
+    .filter((element, index, list) =>
+      list.findIndex(item => item.id === element.id) === index
+    )
     .flatMap(element => {
       const prompt = promptsById[element.id];
       if (!prompt) {
@@ -362,11 +395,12 @@ export const renderCreativeReport = (result: CreativeReportResult): string => [
   '',
   '你已经创建的小说骨架：',
   `- 摘要：${result.storySkeleton.summary}`,
+  `- 成熟度：${result.creationEcho.maturityNote}`,
   ...result.storySkeleton.created.map(item => `- ${item}`),
   '',
   '创作回声：',
   `- 当前风味：${result.creationEcho.flavor}`,
-  '- 最有生命力：',
+  '- 已长出的关键部件：',
   ...result.creationEcho.strongestParts.map(item => `  - ${item}`),
   '- 还差的关键部件：',
   ...(result.creationEcho.missingPieces.length > 0
@@ -377,7 +411,7 @@ export const renderCreativeReport = (result: CreativeReportResult): string => [
   '未决项回流与决策日志：',
   ...renderDeferredDecisionItems(result.decisionLog.deferredItems),
   '',
-  '仍可探索的乐趣点：',
+  '可继续探索的乐趣点：',
   ...(result.funPrompts.length > 0
     ? result.funPrompts.map(item => `- ${item.label}：${item.prompt}（${item.command}）`)
     : ['- 暂无明显乐趣缺口；可以进入预览或审稿。']),

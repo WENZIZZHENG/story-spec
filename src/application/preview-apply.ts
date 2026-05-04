@@ -11,7 +11,10 @@ import {
 import {
   getStoryStageNextQuestions
 } from '../domain/story-stage.js';
-import { hasResolvedClarificationAnswer } from '../domain/clarification-answer-utils.js';
+import {
+  clarificationAnswerToText,
+  hasResolvedClarificationAnswer
+} from '../domain/clarification-answer-utils.js';
 import {
   evaluateStoryCoreElements,
   getPlanBlockingCoreElements,
@@ -106,6 +109,45 @@ const addDays = (date: Date, days: number): Date => {
   return next;
 };
 
+const trimText = (value: string | undefined): string => value?.trim() ?? '';
+
+const formatAnswerText = (value: unknown): string =>
+  clarificationAnswerToText(value).replace(/\s+/g, ' ').trim();
+
+const line = (label: string, value: string | undefined, fallback = '[需要澄清]'): string =>
+  `- ${label}：${trimText(value) || fallback}`;
+
+const renderTripletSection = (
+  title: string,
+  confirmed: string | undefined,
+  suggestion: string | undefined,
+  pending: string | undefined
+): string => [
+  `## ${title}`,
+  '',
+  `- [作者已确认] ${trimText(confirmed) || '[需要澄清]'}`,
+  `- [agent 建议] ${trimText(suggestion) || '暂时没有建议'}`,
+  `- [待确认] ${trimText(pending) || '[需要澄清]'}`,
+  ''
+].join('\n');
+
+const findCoreElement = (
+  coreElements: StoryCoreElementAssessment[],
+  id: StoryCoreElementAssessment['id']
+): StoryCoreElementAssessment | undefined =>
+  coreElements.find(element => element.id === id);
+
+const coreElementSuggestion = (element?: StoryCoreElementAssessment): string | undefined =>
+  element?.qualityNotes[0] || element?.description;
+
+const coreElementConfirmed = (
+  element?: StoryCoreElementAssessment,
+  fallback?: string
+): string | undefined => trimText(element?.summary) || trimText(fallback);
+
+const coreElementPending = (element?: StoryCoreElementAssessment): string | undefined =>
+  element?.nextPrompt;
+
 const readClarificationRecord = async (
   fs: ProjectFileSystem,
   storyPath: string
@@ -125,41 +167,94 @@ const renderSpecifyContent = (
   story: string,
   record: ClarificationRecord
 ): string => {
-  const confirmed = record.answers.filter(answer =>
-    answer.confirmed && answer.source !== 'ai-suggested'
-  );
-  const pending = record.questions.filter(question =>
+  const coreElements = evaluateStoryCoreElements({
+    premise: record.premise,
+    questions: record.questions,
+    answers: record.answers
+  });
+  const pendingQuestions = record.questions.filter(question =>
     question.required && !record.answers.some(answer =>
       answer.questionId === question.id
       && answer.confirmed
       && hasResolvedClarificationAnswer(answer.answer)
     )
   );
+  const genreElement = findCoreElement(coreElements, 'genrePromise');
+  const protagonistElement = findCoreElement(coreElements, 'protagonist');
+  const partnerElement = findCoreElement(coreElements, 'partner');
+  const conflictElement = findCoreElement(coreElements, 'factionConflict')
+    ?? findCoreElement(coreElements, 'longThreat');
+  const worldElement = findCoreElement(coreElements, 'stage')
+    ?? findCoreElement(coreElements, 'power');
+  const voiceElement = findCoreElement(coreElements, 'voice');
 
   return [
-    `# ${story} 规格预览`,
+    `# ${story} StorySpec v0`,
     '',
-    '## 原始创意',
+    '## 作品定位',
     '',
-    record.premise || '未记录。',
+    line('[作者已确认]', record.premise || '未记录。'),
+    line('[agent 建议]', coreElementSuggestion(genreElement), '暂时没有建议'),
+    line('[待确认]', coreElementPending(genreElement) ?? pendingQuestions[0]?.question),
     '',
-    '## 用户已确认',
+    '## 一句话故事',
     '',
-    ...(confirmed.length > 0
-      ? confirmed.map(answer => `- ${answer.questionId}：${Array.isArray(answer.answer) ? answer.answer.join('、') : String(answer.answer)}`)
-      : ['- 暂无。']),
+    line('[作者已确认]', coreElementConfirmed(genreElement, record.premise)),
+    line('[agent 建议]', coreElementSuggestion(protagonistElement), '暂时没有建议'),
+    line('[待确认]', coreElementPending(protagonistElement) ?? pendingQuestions.find(question => question.topic === 'premise')?.question),
     '',
-    '## 需要澄清',
+    renderTripletSection(
+      '主角核心',
+      coreElementConfirmed(protagonistElement, record.premise),
+      coreElementSuggestion(protagonistElement),
+      coreElementPending(protagonistElement)
+    ),
+    renderTripletSection(
+      '关系线',
+      coreElementConfirmed(partnerElement),
+      coreElementSuggestion(partnerElement),
+      coreElementPending(partnerElement)
+    ),
+    renderTripletSection(
+      '关键冲突',
+      coreElementConfirmed(conflictElement),
+      coreElementSuggestion(conflictElement),
+      coreElementPending(conflictElement)
+    ),
+    renderTripletSection(
+      '世界规则',
+      coreElementConfirmed(worldElement),
+      coreElementSuggestion(worldElement),
+      coreElementPending(worldElement)
+    ),
+    renderTripletSection(
+      '文风约束',
+      coreElementConfirmed(voiceElement),
+      coreElementSuggestion(voiceElement),
+      coreElementPending(voiceElement)
+    ),
+    '## 下一步入口',
     '',
-    ...(pending.length > 0
-      ? pending.map(question => `- [需要澄清] ${question.id}：${question.question}`)
+    `- 继续访谈：storyspec interview ${story}`,
+    `- 查看创作回声：storyspec creative:report ${story}`,
+    `- 预览计划：storyspec preview plan ${story}`,
+    '',
+    '## [需要澄清] 细项',
+    '',
+    ...(pendingQuestions.length > 0
+      ? pendingQuestions.map(question => `- [需要澄清] ${question.id}：${question.question}`)
       : ['- 暂无 required 待确认问题。']),
     '',
-    '## 写作边界',
+    '## 参考答案',
     '',
-    '- 本文件由 preview 生成；只有 apply 后才进入正式 specification。',
-    '- 未确认 AI 建议、示例答案和“稍后决定”不能视为正典。',
-    ''
+    ...(record.questions.length > 0
+      ? record.questions.flatMap(question => [
+        `### ${question.id}`,
+        ...(question.exampleAnswers.length > 0
+          ? question.exampleAnswers.map(answer => `- ${answer}`)
+          : ['- 暂无。'])
+      ])
+      : ['- 暂无。'])
   ].join('\n');
 };
 
@@ -168,36 +263,73 @@ const renderPlanContent = (
   record: ClarificationRecord,
   coreElements: StoryCoreElementAssessment[]
 ): string => {
-  const confirmedElements = coreElements.filter(element => element.status === 'confirmed' || element.status === 'partial');
   const blockingElements = getPlanBlockingCoreElements(coreElements);
   const candidateBranches = record.questions
     .flatMap(question => question.exampleBranches ?? [])
     .slice(0, 6);
+  const genreElement = findCoreElement(coreElements, 'genrePromise');
+  const protagonistElement = findCoreElement(coreElements, 'protagonist');
+  const partnerElement = findCoreElement(coreElements, 'partner');
+  const conflictElement = findCoreElement(coreElements, 'factionConflict')
+    ?? findCoreElement(coreElements, 'longThreat');
+  const worldElement = findCoreElement(coreElements, 'stage')
+    ?? findCoreElement(coreElements, 'power');
+  const voiceElement = findCoreElement(coreElements, 'voice');
 
   return [
-    `# ${story} 创作计划预览`,
+    `# ${story} 创作计划 v0`,
     '',
     '## 来源',
     '',
     '- 来源：clarifications.json',
-    '- 本文件由 preview plan 生成；只有 apply 后才进入 creative-plan.md。',
+    '- 本文件是根据已确认核心要素生成的草案，不替作者决定最终结构。',
     '',
-    '## 用户已确认核心要素',
+    '## 作品定位',
     '',
-    ...(confirmedElements.length > 0
-      ? confirmedElements.map(element => `- ${element.label}：${getStoryCoreElementStatusText(element.status)}。${element.summary}`)
-      : ['- 暂无。']),
+    line('[作者已确认]', record.premise || '未记录。'),
+    line('[agent 建议]', coreElementSuggestion(genreElement), '暂时没有建议'),
+    line('[待确认]', coreElementPending(genreElement) ?? blockingElements[0]?.nextPrompt),
+    '',
+    renderTripletSection(
+      '主角核心',
+      coreElementConfirmed(protagonistElement),
+      coreElementSuggestion(protagonistElement),
+      coreElementPending(protagonistElement)
+    ),
+    renderTripletSection(
+      '关系线',
+      coreElementConfirmed(partnerElement),
+      coreElementSuggestion(partnerElement),
+      coreElementPending(partnerElement)
+    ),
+    renderTripletSection(
+      '关键冲突',
+      coreElementConfirmed(conflictElement),
+      coreElementSuggestion(conflictElement),
+      coreElementPending(conflictElement)
+    ),
+    renderTripletSection(
+      '世界规则',
+      coreElementConfirmed(worldElement),
+      coreElementSuggestion(worldElement),
+      coreElementPending(worldElement)
+    ),
+    renderTripletSection(
+      '文风约束',
+      coreElementConfirmed(voiceElement),
+      coreElementSuggestion(voiceElement),
+      coreElementPending(voiceElement)
+    ),
+    '## 下一步入口',
+    '',
+    `- 继续访谈：storyspec interview ${story} --focus protagonist`,
+    `- 查看创作回声：storyspec creative:report ${story}`,
+    `- 预览计划：storyspec preview plan ${story}`,
     '',
     '## [需要澄清] 核心缺口',
     '',
     ...(blockingElements.length > 0
       ? blockingElements.map(element => `- [需要澄清] ${element.label}：${element.nextPrompt ?? '请继续共创确认。'}`)
-      : ['- 暂无。']),
-    '',
-    '## AI 候选分叉',
-    '',
-    ...(candidateBranches.length > 0
-      ? candidateBranches.map(branch => `- ${branch.label}：${branch.answer}（风味：${branch.flavor}；后续影响：${branch.downstreamImpact}；confirmed: false）`)
       : ['- 暂无。']),
     '',
     '## 拟写入范围',
@@ -208,6 +340,12 @@ const renderPlanContent = (
     '- 成功路线：先写阶段性回报与代价占位，不直接生成完整章节安排。',
     '- 冲突回报：只规划第一卷可见阻力和阶段胜利，不提前定死终局。',
     '- 独特声音：未确认时保留 [需要澄清]，不替作者定文风。',
+    '',
+    '## AI 候选分叉',
+    '',
+    ...(candidateBranches.length > 0
+      ? candidateBranches.map(branch => `- ${branch.label}：${branch.answer}（风味：${branch.flavor}；后续影响：${branch.downstreamImpact}；confirmed: false）`)
+      : ['- 暂无。']),
     '',
     '## 写作边界',
     '',

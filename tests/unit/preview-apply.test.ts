@@ -61,7 +61,19 @@ describe('preview apply', () => {
 
     expect(preview.record.risks).toEqual([]);
     await expect(fileSystem.readFile(path.join(storyPath, 'specification.md'))).resolves.toBe('# old spec');
-    await expect(fileSystem.readFile(preview.contentPath)).resolves.toContain('## 用户已确认');
+    await expect(fileSystem.readFile(preview.contentPath)).resolves.toContain('# demo StorySpec v0');
+    await expect(fileSystem.readFile(preview.contentPath)).resolves.toContain('## 作品定位');
+    await expect(fileSystem.readFile(preview.contentPath)).resolves.toContain('## 一句话故事');
+    await expect(fileSystem.readFile(preview.contentPath)).resolves.toContain('## 主角核心');
+    await expect(fileSystem.readFile(preview.contentPath)).resolves.toContain('## 关系线');
+    await expect(fileSystem.readFile(preview.contentPath)).resolves.toContain('## 关键冲突');
+    await expect(fileSystem.readFile(preview.contentPath)).resolves.toContain('## 世界规则');
+    await expect(fileSystem.readFile(preview.contentPath)).resolves.toContain('## 文风约束');
+    await expect(fileSystem.readFile(preview.contentPath)).resolves.toContain('## 下一步入口');
+    await expect(fileSystem.readFile(preview.contentPath)).resolves.toContain('[作者已确认]');
+    await expect(fileSystem.readFile(preview.contentPath)).resolves.toContain('[agent 建议]');
+    await expect(fileSystem.readFile(preview.contentPath)).resolves.toContain('[待确认]');
+    await expect(fileSystem.readFile(preview.contentPath)).resolves.not.toContain('本文件由 preview 生成');
   });
 
   it('applies a preview only after explicit confirmation', async () => {
@@ -92,7 +104,8 @@ describe('preview apply', () => {
     });
 
     expect(applied.applied).toBe(true);
-    await expect(fileSystem.readFile(path.join(storyPath, 'specification.md'))).resolves.toContain('# demo 规格预览');
+    await expect(fileSystem.readFile(path.join(storyPath, 'specification.md'))).resolves.toContain('# demo StorySpec v0');
+    await expect(fileSystem.readFile(path.join(storyPath, 'specification.md'))).resolves.not.toContain('本文件由 preview 生成');
   });
 
   it('blocks apply when required clarification is deferred', async () => {
@@ -203,6 +216,11 @@ describe('preview apply', () => {
     });
 
     expect(preview.record.kind).toBe('plan');
+    await expect(fileSystem.readFile(preview.contentPath)).resolves.toContain('# demo 创作计划 v0');
+    await expect(fileSystem.readFile(preview.contentPath)).resolves.toContain('## 作品定位');
+    await expect(fileSystem.readFile(preview.contentPath)).resolves.toContain('## 主角核心');
+    await expect(fileSystem.readFile(preview.contentPath)).resolves.toContain('## 下一步入口');
+    await expect(fileSystem.readFile(preview.contentPath)).resolves.not.toContain('本文件由 preview plan 生成');
     expect(preview.record.targetPath).toBe(path.join(storyPath, 'creative-plan.md'));
     expect(preview.record.risks).toEqual(expect.arrayContaining([
       expect.objectContaining({
@@ -321,5 +339,7 @@ describe('preview apply', () => {
     expect(applied.applied).toBe(true);
     await expect(fileSystem.readFile(path.join(storyPath, 'creative-plan.md'))).resolves.toContain('[需要澄清]');
     await expect(fileSystem.readFile(path.join(storyPath, 'creative-plan.md'))).resolves.toContain('来源：clarifications.json');
+    await expect(fileSystem.readFile(path.join(storyPath, 'creative-plan.md'))).resolves.toContain('# demo 创作计划 v0');
+    await expect(fileSystem.readFile(path.join(storyPath, 'creative-plan.md'))).resolves.not.toContain('本文件由 preview plan 生成');
   });
 });

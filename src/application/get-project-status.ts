@@ -458,7 +458,8 @@ export const renderProjectStatus = (status: ProjectStatus): string => {
     lines.push(`正文：${status.story.contentFiles} 个 Markdown，约 ${status.story.contentChars} 字符`);
     lines.push('当前故事长成了什么：');
     lines.push(`- 当前风味：${status.story.creationEcho.flavor}`);
-    lines.push('- 最有生命力：');
+    lines.push(`- 成熟度：${status.story.creationEcho.maturityNote}`);
+    lines.push('- 已长出的关键部件：');
     for (const item of status.story.creationEcho.strongestParts.slice(0, 3)) {
       lines.push(`  - ${item}`);
     }
@@ -481,13 +482,13 @@ export const renderProjectStatus = (status: ProjectStatus): string => {
       }
     }
     if (status.story.creativeGaps.length > 0) {
-      lines.push('创作缺口：');
-      for (const gap of status.story.creativeGaps) {
+      lines.push('还需要补齐：');
+      for (const gap of status.story.creativeGaps.slice(0, 3)) {
         lines.push(`- ${gap}`);
       }
     }
     if (status.story.nextQuestions.length > 0) {
-      lines.push('下一步问题：');
+      lines.push('下一轮问题：');
       for (const question of status.story.nextQuestions.slice(0, 3)) {
         lines.push(`- ${question}`);
       }

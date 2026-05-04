@@ -5,6 +5,7 @@ export interface CreationEchoSummary {
   strongestParts: string[];
   missingPieces: string[];
   nextEcho: string;
+  maturityNote: string;
 }
 
 const labelForEcho = (element: StoryCoreElementAssessment): string => {
@@ -32,6 +33,50 @@ const labelForEcho = (element: StoryCoreElementAssessment): string => {
 
 const compact = (value: string): string => value.replace(/\s+/g, ' ').trim();
 
+const stripSentenceEnd = (value: string): string => compact(value).replace(/[。.!！?？]+$/u, '');
+
+const uniqueTexts = (values: string[]): string[] => {
+  const seen = new Set<string>();
+  const result: string[] = [];
+
+  for (const value of values) {
+    const text = compact(value);
+    if (!text) {
+      continue;
+    }
+
+    const key = text.toLowerCase();
+    if (seen.has(key)) {
+      continue;
+    }
+
+    seen.add(key);
+    result.push(text);
+  }
+
+  return result;
+};
+
+const maturityNoteFor = (
+  story: string,
+  planCriticalConfirmedCount: number,
+  planCriticalTotal: number
+): string => {
+  if (planCriticalConfirmedCount === 0) {
+    return `${story} 还在聚拢灵感，先补主角、舞台和第一轮冲突最划算。`;
+  }
+
+  if (planCriticalConfirmedCount >= planCriticalTotal) {
+    return `${story} 的核心骨架已经成形，可以进入规格、计划和写作。`;
+  }
+
+  if (planCriticalConfirmedCount >= Math.max(2, Math.ceil(planCriticalTotal / 2))) {
+    return `${story} 的核心骨架已经长出大半，只差几块关键部件。`;
+  }
+
+  return `${story} 已经长出一些关键部件，但还需要继续补齐主角、舞台或冲突。`;
+};
+
 export const summarizeCreationEcho = (
   story: string,
   premise: string | undefined,
@@ -39,23 +84,28 @@ export const summarizeCreationEcho = (
 ): CreationEchoSummary => {
   const confirmedOrPartial = coreElements
     .filter(element => element.status === 'confirmed' || element.status === 'partial');
-  const strongestParts = confirmedOrPartial
+  const planCriticalElements = coreElements.filter(element => element.planCritical);
+  const planCriticalConfirmedCount = planCriticalElements.filter(element =>
+    element.status === 'confirmed' || element.status === 'partial'
+  ).length;
+  const strongestParts = uniqueTexts(confirmedOrPartial
     .slice(0, 5)
-    .map(element => `${labelForEcho(element)}：${element.summary}`);
-  const missingPieces = coreElements
+    .map(element => `${labelForEcho(element)}：${element.summary}`));
+  const missingPieces = uniqueTexts(coreElements
     .filter(element => element.status === 'missing' || element.status === 'partial' || element.status === 'deferred')
     .slice(0, 5)
-    .map(element => `${element.label}：${element.nextPrompt ?? '仍待共创。'}`);
-  const sourceFlavor = [
+    .map(element => `${element.label}：${element.nextPrompt ?? '仍待共创。'}`));
+  const sourceFlavor = uniqueTexts([
     compact(premise ?? ''),
-    ...confirmedOrPartial.slice(0, 4).map(element => compact(element.summary))
-  ].filter(Boolean).join('；');
+    ...confirmedOrPartial.slice(0, 3).map(element => compact(element.summary))
+  ]).join('；');
   const flavor = sourceFlavor
-    ? `${story} 现在长成了：${sourceFlavor}`
+    ? `${story}：${sourceFlavor}`
     : `${story} 现在还处在灵感聚拢阶段，小说灵魂仍待共创。`;
+  const maturityNote = maturityNoteFor(story, planCriticalConfirmedCount, planCriticalElements.length);
   const nextEcho = missingPieces.length > 0
-    ? `这次创作让 ${strongestParts.length > 0 ? strongestParts[0] : story} 更清楚了；下一轮最值得补的是 ${missingPieces[0]}`
-    : `这次创作让 ${story} 的核心部件基本成形；下一轮可以进入预览、分支比较或场景写作。`;
+    ? `这次创作已经让故事轮廓更清楚；${maturityNote} 下一轮最值得补的是 ${stripSentenceEnd(missingPieces[0])}。`
+    : `${maturityNote} 现在可以进入预览、分支比较或场景写作。`;
 
   return {
     flavor,
@@ -63,6 +113,7 @@ export const summarizeCreationEcho = (
       ? strongestParts
       : ['项目框架已建立，但小说灵魂仍待共创。'],
     missingPieces,
-    nextEcho
+    nextEcho,
+    maturityNote
   };
 };

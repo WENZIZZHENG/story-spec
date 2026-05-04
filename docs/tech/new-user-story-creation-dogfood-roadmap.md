@@ -192,7 +192,7 @@ node dist/cli.js validate
 - 生成产物：新增 `changes/2026-05-04-next-progressive-disclosure.md`。
 - 后续遗留：`--all` 目前等同于 `--verbose`；如果后续还要进一步压缩默认视图，可再单独拆出更严格的极简模式。
 
-### P1-2 让 specification/apply 产物真正像第一版 StorySpec
+### P1-2 让 specification/apply 产物真正像第一版 StorySpec（已完成，2026-05-04）
 
 - 类型：规格文档、创作产物质量
 - 背景/问题：`apply specify` 后生成的 `specification.md` 标题仍是“规格预览”，内容主要是“原始创意 + 用户已确认列表 + 写作边界”，不像可指导创作的第一版 StorySpec。用户期待“作品骨架”，实际得到的是记录表。
@@ -219,7 +219,14 @@ node dist/cli.js validate
   - 落地方式：先做 v0 轻量结构。
 - 不做/边界：不绕过用户确认；不把 AI 建议改写成正典。
 
-### P1-3 优化 creative:report/status 的摘要去重和成熟度解释
+完成记录：
+
+- 完成内容：`preview specify` 现在输出 StorySpec v0 骨架，按“作品定位 / 一句话故事 / 主角核心 / 关系线 / 关键冲突 / 世界规则 / 文风约束 / 下一步入口”组织；`apply` 后写入正式 `specification.md`，不再保留“预览”语义。
+- 验证方式：`npm run build`、`npx vitest run tests/unit/preview-apply.test.ts`。
+- 生成产物：新增 `changes/2026-05-04-storyspec-v0-preview.md`。
+- 后续遗留：后续如果想把 `StorySpec v0` 再进一步收敛成更像“作品名片”的首页，可再单独拆一个更小的文案优化任务。
+
+### P1-3 优化 creative:report/status 的摘要去重和成熟度解释（已完成，2026-05-04）
 
 - 类型：报告质量、状态解释
 - 背景/问题：`creative:report` 和 `status` 的“当前风味/摘要”多次重复拼接同一答案；已确认 6 个答案后仍大段提示“项目框架已建立，但小说灵魂仍待共创”或“还差主角/舞台”，容易让作者觉得自己的回答没有价值。
@@ -245,6 +252,13 @@ node dist/cli.js validate
   - 不照搬：不引入外部依赖或任务系统。
   - 落地方式：摘要分为“已成形 / 还缺 / 下一步”。
 - 不做/边界：不降低成熟度门禁，只优化解释方式。
+
+完成记录：
+
+- 完成内容：`creative:report` 和 `status` 现在共享去重后的创作回声，新增成熟度说明、已长出的关键部件、还需要补齐和下一轮问题；重复摘要被压掉，语气从“灵魂仍待共创”调整为更明确的成形判断。
+- 验证方式：`npm run build`、`npx vitest run tests/unit/creative-report.test.ts tests/unit/get-project-status.test.ts tests/unit/preview-apply.test.ts`。
+- 生成产物：新增 `changes/2026-05-04-creative-report-status-maturity.md`。
+- 后续遗留：`creative:report` 目前仍是完整长报告，若后续要做新手默认视图，可再另拆 progressive disclosure 任务。
 
 ### P1-4 打通从 plan 到 tasks/context/write 的可执行路径
 
