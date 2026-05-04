@@ -45,6 +45,11 @@ import {
   summarizeDecisionLog,
   type DecisionLogSummary
 } from './decision-log.js';
+import {
+  buildInterviewCommand,
+  quoteCliArgument,
+  readIdeaPremise
+} from './story-idea.js';
 
 export type StoryOnboardingErrorCode =
   | 'MISSING_STORY_NAME'
@@ -88,6 +93,8 @@ export interface GetStoryNextInput {
 export interface StoryNextAction {
   priority: number;
   command: string;
+  copyableCommand: string;
+  requiresPremise: boolean;
   reason: string;
 }
 
@@ -97,6 +104,8 @@ export interface StoryCoCreationEntrypoint {
   title: string;
   mode: StoryCreationModeId;
   command: string;
+  copyableCommand: string;
+  requiresPremise: boolean;
   reason: string;
   whenToUse: string;
   openingQuestions: string[];
@@ -124,6 +133,8 @@ export interface StoryTodayCreationMode {
   id: TodayCreationModeId;
   label: string;
   command: string;
+  copyableCommand: string;
+  requiresPremise: boolean;
   entrypointIds: StoryCoCreationEntrypointId[];
   maxQuestions: number;
   candidateLimit: number;
@@ -156,6 +167,7 @@ export interface StoryNextResult {
   coreElements: StoryCoreElementAssessment[];
   decisionLog: DecisionLogSummary;
   authorProfile: AuthorProfileSummary;
+  ideaPremise: string;
   actions: StoryNextAction[];
 }
 
@@ -193,7 +205,7 @@ const renderIdeaMarkdown = (
   '',
   '## 下一步',
   '',
-  `- 运行 \`storyspec interview ${story}\`，先回答澄清问题。`,
+  `- 运行 \`${buildInterviewCommand(story, { premise: idea || '一句话创意' })}\`，先回答澄清问题。`,
   `- 运行 \`storyspec next ${story}\`，随时查看当前下一步。`,
   ''
 ].join('\n');
@@ -224,7 +236,7 @@ export const createStoryIdea = async (
   });
   const nextCommands = [
     ...(authorProfile.summary.firstUse ? ['storyspec author-profile --init'] : []),
-    `storyspec interview ${story}`,
+    buildInterviewCommand(story, { premise: idea || '一句话创意' }),
     `storyspec next ${story}`
   ];
   await input.fileSystem.ensureDir(storyPath);
@@ -241,9 +253,16 @@ export const createStoryIdea = async (
   };
 };
 
-const action = (priority: number, command: string, reason: string): StoryNextAction => ({
+const action = (
+  priority: number,
+  command: string,
+  reason: string,
+  requiresPremise = false
+): StoryNextAction => ({
   priority,
   command,
+  copyableCommand: command,
+  requiresPremise,
   reason
 });
 
@@ -327,13 +346,22 @@ const buildCreationModes = (
 const entrypointToResult = (
   story: string,
   entrypoint: CoCreationEntrypointDefinition,
+  premise: string,
   recommendationReason = ''
 ): StoryCoCreationEntrypoint => ({
   id: entrypoint.id,
   label: entrypoint.label,
   title: entrypoint.title,
   mode: entrypoint.mode,
-  command: `storyspec interview ${story} --focus ${entrypoint.id}`,
+  command: buildInterviewCommand(story, {
+    focus: entrypoint.id,
+    premise: premise || '一句话创意'
+  }),
+  copyableCommand: buildInterviewCommand(story, {
+    focus: entrypoint.id,
+    premise: premise || '一句话创意'
+  }),
+  requiresPremise: !premise,
   reason: entrypoint.reason,
   whenToUse: entrypoint.whenToUse,
   openingQuestions: entrypoint.openingQuestions,
@@ -467,7 +495,8 @@ const buildCoCreationEntrypoints = (
   story: string,
   stage: StoryMaturityStage,
   coreElements: readonly StoryCoreElementAssessment[],
-  ideaText: string
+  ideaText: string,
+  premise: string
 ): StoryCoCreationEntrypoint[] => {
   if (![
     'idea',
@@ -489,15 +518,27 @@ const buildCoCreationEntrypoints = (
   ];
 
   return ordered.map(entrypoint =>
-    entrypointToResult(story, entrypoint, recommendationById.get(entrypoint.id)?.reason)
+    entrypointToResult(story, entrypoint, premise, recommendationById.get(entrypoint.id)?.reason)
   );
 };
 
-const buildTodayCreationModes = (story: string): StoryTodayCreationMode[] =>
+const buildTodayCreationModes = (story: string, premise: string): StoryTodayCreationMode[] =>
   TODAY_CREATION_MODES.map(mode => ({
     id: mode.id,
     label: mode.label,
-    command: `storyspec interview ${story} --focus ${mode.entrypointIds[0]} --max-questions ${mode.maxQuestions} --no-write`,
+    command: buildInterviewCommand(story, {
+      focus: mode.entrypointIds[0],
+      maxQuestions: mode.maxQuestions,
+      noWrite: true,
+      premise: premise || '一句话创意'
+    }),
+    copyableCommand: buildInterviewCommand(story, {
+      focus: mode.entrypointIds[0],
+      maxQuestions: mode.maxQuestions,
+      noWrite: true,
+      premise: premise || '一句话创意'
+    }),
+    requiresPremise: !premise,
     entrypointIds: [...mode.entrypointIds],
     maxQuestions: mode.maxQuestions,
     candidateLimit: mode.candidateLimit,
@@ -528,17 +569,23 @@ const buildActions = (
   const activeBranch = result.activeBranches[0];
   const deferredItem = result.decisionLog.deferredItems[0];
   const recommendedEntry = result.coCreationEntrypoints.find(entry => entry.recommended);
-  const interviewCommand = recommendedEntry?.command ?? `storyspec interview ${result.story}`;
+  const interviewCommand = recommendedEntry?.command ?? buildInterviewCommand(result.story, {
+    premise: result.ideaPremise || '一句话创意'
+  });
+  const interviewRequiresPremise = recommendedEntry?.requiresPremise ?? !result.ideaPremise;
   const interviewReason = recommendedEntry
     ? `推荐入口：${recommendedEntry.label}。${recommendedEntry.recommendationReason}`
     : '先把一句话创意转成澄清记录，不急着生成完整设定。';
 
   if (deferredItem && result.stage !== 'idea') {
-    actions.push(action(1, deferredItem.resumeCommand, `${deferredItem.question} 曾选择“${deferredItem.answer}”；${deferredItem.trigger}。`));
+    const resumeCommand = deferredItem.resumeCommand.includes('storyspec interview')
+      ? `${deferredItem.resumeCommand} --premise ${quoteCliArgument(result.ideaPremise || '一句话创意')}`
+      : deferredItem.resumeCommand;
+    actions.push(action(1, resumeCommand, `${deferredItem.question} 曾选择“${deferredItem.answer}”；${deferredItem.trigger}。`, !result.ideaPremise));
   }
 
   if (result.stage === 'idea') {
-    actions.push(action(1, interviewCommand, interviewReason));
+    actions.push(action(1, interviewCommand, interviewReason, interviewRequiresPremise));
     actions.push(action(2, `storyspec creative:report ${result.story}`, '查看哪些内容仍不能被当作正典。'));
     actions.push(action(3, `storyspec preview specify ${result.story}`, '生成写入前规格预览，确认后再 apply。'));
     if (activeBranch) {
@@ -560,6 +607,8 @@ const buildActions = (
       recommendedEntry
         ? `推荐入口：${recommendedEntry.label}。${recommendedEntry.recommendationReason}`
         : `${summarizeCoreElementGaps(result.coreElements).join('；')}，先共创再进入完整计划。`
+      ,
+      interviewRequiresPremise
     ));
     actions.push(action(2, `storyspec creative:report ${result.story}`, '查看核心要素面板和仍不能进入正典的内容。'));
     actions.push(action(3, `storyspec preview specify ${result.story}`, '仅生成写入前预览，处理缺口后再 apply。'));
@@ -570,7 +619,12 @@ const buildActions = (
   }
 
   if (result.pendingQuestions.length > 0) {
-    actions.push(action(1, `storyspec interview ${result.story}`, '继续回答 required 问题或处理 AI 候选。'));
+    actions.push(action(
+      1,
+      buildInterviewCommand(result.story, { premise: result.ideaPremise || '一句话创意' }),
+      '继续回答 required 问题或处理 AI 候选。',
+      !result.ideaPremise
+    ));
   }
 
   if (result.stage === 'interviewing') {
@@ -590,7 +644,12 @@ const buildActions = (
   }
 
   if (actions.length === 0) {
-    actions.push(action(1, `storyspec interview ${result.story}`, '当前状态不完整，先回到澄清访谈。'));
+    actions.push(action(
+      1,
+      buildInterviewCommand(result.story, { premise: result.ideaPremise || '一句话创意' }),
+      '当前状态不完整，先回到澄清访谈。',
+      !result.ideaPremise
+    ));
   }
 
   if (activeBranch) {
@@ -653,6 +712,7 @@ export const getStoryNext = async (
   const story = await selectStoryProject(input.projectRoot, input.fileSystem, input.story);
   const record = await readClarificationRecord(input.fileSystem, story.path);
   const ideaText = await readIdeaText(input.fileSystem, story.path);
+  const ideaPremise = record?.premise.trim() || await readIdeaPremise(input.fileSystem, story.path);
   const authorProfile = await loadAuthorProfile({
     projectRoot: input.projectRoot,
     fileSystem: input.fileSystem
@@ -688,13 +748,14 @@ export const getStoryNext = async (
       ...creativeControl.cannotFinalize.filter(item => item.startsWith('AI 建议待确认'))
     ],
     creationModes: buildCreationModes(story.name, story.stage, coreElements),
-    todayCreationModes: buildTodayCreationModes(story.name),
+    todayCreationModes: buildTodayCreationModes(story.name, ideaPremise),
     minimumFunLoop: buildMinimumFunLoop(),
-    coCreationEntrypoints: buildCoCreationEntrypoints(story.name, story.stage, coreElements, ideaText),
+    coCreationEntrypoints: buildCoCreationEntrypoints(story.name, story.stage, coreElements, ideaText, ideaPremise),
     activeBranches,
     coreElements,
     decisionLog,
-    authorProfile: authorProfile.summary
+    authorProfile: authorProfile.summary,
+    ideaPremise
   };
 
   return {

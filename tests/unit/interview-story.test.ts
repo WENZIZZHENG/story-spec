@@ -2,6 +2,7 @@ import os from 'node:os';
 import path from 'node:path';
 import { describe, expect, it } from 'vitest';
 import {
+  InterviewStoryError,
   interviewStory,
   prepareInterviewQuestions
 } from '../../src/application/interview-story.js';
@@ -96,6 +97,54 @@ describe('interviewStory', () => {
       answers: expect.any(Array)
     });
     await expect(fileSystem.readFile(path.join(storyPath, 'specification.md'))).resolves.toBe('# 旧规格');
+  });
+
+  it('uses the saved idea draft as premise when no premise is provided', async () => {
+    const { projectRoot, fileSystem, storyPath } = await createProject();
+    await fileSystem.writeFile(path.join(storyPath, 'idea.md'), [
+      '# 星尘驿站 创意草稿',
+      '',
+      '## 用户原文',
+      '',
+      '退休星舰导航员在宇宙边境开一间给迷路灵魂和破损飞船歇脚的驿站。',
+      '',
+      '## 待澄清',
+      '',
+      '- 主角是谁？'
+    ].join('\n'));
+
+    const result = await interviewStory({
+      projectRoot,
+      fileSystem,
+      story: 'idea-demo',
+      focus: 'stage',
+      maxQuestions: 3,
+      now: () => new Date('2026-05-04T10:30:00.000Z')
+    });
+
+    expect(result.record.premise).toBe('退休星舰导航员在宇宙边境开一间给迷路灵魂和破损飞船歇脚的驿站。');
+    expect(result.record.questions[0]).toMatchObject({
+      id: 'focus.stage'
+    });
+    await expect(fileSystem.readJson(result.jsonPath)).resolves.toMatchObject({
+      premise: '退休星舰导航员在宇宙边境开一间给迷路灵魂和破损飞船歇脚的驿站。'
+    });
+  });
+
+  it('gives a full recoverable command when no premise source exists', async () => {
+    const { projectRoot, fileSystem, storyPath } = await createProject();
+    await fileSystem.writeFile(path.join(storyPath, 'idea.md'), '# 空白灵感');
+
+    await expect(interviewStory({
+      projectRoot,
+      fileSystem,
+      story: 'idea-demo',
+      focus: 'stage',
+      maxQuestions: 3
+    })).rejects.toMatchObject({
+      code: 'MISSING_PREMISE',
+      message: '请先提供一句话创意或创作方向，例如：storyspec interview idea-demo --premise "一句话创意"'
+    } satisfies Partial<InterviewStoryError>);
   });
 
   it('replays existing answers and only updates explicit new answers', async () => {

@@ -94,9 +94,39 @@ describe('story onboarding', () => {
 
     expect(result.stage).toBe('idea');
     expect(result.actions[0]).toMatchObject({
-      command: 'storyspec interview 法术编译纪元 --focus power'
+      command: 'storyspec interview 法术编译纪元 --focus power --premise "异界穿越、编程施法"'
     });
     expect(result.actions.map(action => action.command)).toContain('storyspec preview specify 法术编译纪元');
+  });
+
+  it('marks next interview recommendations as copyable with premise context from idea drafts', async () => {
+    const { projectRoot, fileSystem } = await createProject();
+    await createStoryIdea({
+      projectRoot,
+      fileSystem,
+      name: '星尘驿站',
+      idea: '退休星舰导航员在宇宙边境开一间给迷路灵魂和破损飞船歇脚的驿站。'
+    });
+
+    const result = await getStoryNext({
+      projectRoot,
+      fileSystem,
+      story: '星尘驿站'
+    });
+    const interviewAction = result.actions.find(action => action.command.startsWith('storyspec interview'));
+    const entryAction = result.coCreationEntrypoints.find(entry => entry.command.startsWith('storyspec interview'));
+    const rendered = renderStoryNext(result);
+
+    expect(interviewAction).toMatchObject({
+      copyableCommand: 'storyspec interview 星尘驿站 --focus stage --premise "退休星舰导航员在宇宙边境开一间给迷路灵魂和破损飞船歇脚的驿站。"',
+      requiresPremise: false
+    });
+    expect(interviewAction?.command).toBe(interviewAction?.copyableCommand);
+    expect(entryAction).toMatchObject({
+      copyableCommand: expect.stringContaining('--premise "退休星舰导航员在宇宙边境开一间给迷路灵魂和破损飞船歇脚的驿站。"'),
+      requiresPremise: false
+    });
+    expect(rendered).toContain('storyspec interview 星尘驿站 --focus stage --premise "退休星舰导航员在宇宙边境开一间给迷路灵魂和破损飞船歇脚的驿站。"');
   });
 
   it('keeps the programming-casting sample in co-creation before downstream planning', async () => {
@@ -138,7 +168,7 @@ describe('story onboarding', () => {
       'stage',
       'power'
     ]));
-    expect(result.actions[0].command).toMatch(/^storyspec interview 编程施法 --focus (stage|power|faction)$/);
+    expect(result.actions[0].command).toMatch(/^storyspec interview 编程施法 --focus (stage|power|faction) --premise /);
     expect(result.actions.map(action => action.command)).not.toContain('继续运行平台对应 plan 命令');
   });
 
@@ -182,7 +212,7 @@ describe('story onboarding', () => {
     });
 
     expect(result.pendingQuestions.join('\n')).toContain('AI 建议待确认');
-    expect(result.actions[0].command).toBe('storyspec interview demo');
+    expect(result.actions[0].command).toBe('storyspec interview demo --premise "异界穿越"');
   });
 
   it('prioritizes partner, stage, and conflict co-creation when core elements are immature', async () => {
@@ -283,7 +313,7 @@ describe('story onboarding', () => {
       recommendationReason: expect.stringContaining('核心伙伴')
     }));
     expect(result.actions[0]).toMatchObject({
-      command: 'storyspec interview demo --focus partner'
+      command: 'storyspec interview demo --focus partner --premise "主角晏无是一名工科马列青年，穿越到剑与魔法世界；编程施法、文明级威胁。"'
     });
     expect(result.actions[0].reason).toContain('核心伙伴');
     expect(result.actions.map(action => action.command)).not.toContain('继续运行平台对应 plan 命令');
@@ -459,7 +489,7 @@ describe('story onboarding', () => {
       'scene'
     ]));
     expect(result.coCreationEntrypoints.find(entry => entry.id === 'partner')?.command)
-      .toBe('storyspec interview demo --focus partner');
+      .toBe('storyspec interview demo --focus partner --premise "主角晏无是一名工科马列青年，穿越到剑与魔法世界；编程施法、文明级威胁。"');
   });
 
   it('surfaces active what-if branches in next navigation', async () => {
@@ -551,7 +581,7 @@ describe('story onboarding', () => {
       })
     ]);
     expect(result.actions[0]).toMatchObject({
-      command: 'storyspec interview demo --focus partner'
+      command: 'storyspec interview demo --focus partner --premise "异界穿越、编程施法、慢热感情"'
     });
     expect(rendered).toContain('未决项回流：');
     expect(rendered).toContain('partner.core：核心伙伴是谁？');

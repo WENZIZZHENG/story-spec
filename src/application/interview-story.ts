@@ -30,6 +30,10 @@ import {
   summarizeDecisionLog,
   type DecisionLogSummary
 } from './decision-log.js';
+import {
+  buildInterviewCommand,
+  readIdeaPremise
+} from './story-idea.js';
 
 export type InterviewStoryErrorCode =
   | 'MISSING_PREMISE'
@@ -410,13 +414,19 @@ export const prepareInterviewQuestions = async (
   };
 };
 
-const resolvePremise = (
+const resolvePremise = async (
   inputPremise: string | undefined,
-  existingRecord: ClarificationRecord | undefined
-): string => {
-  const premise = inputPremise?.trim() || existingRecord?.premise.trim() || '';
+  state: InterviewStoryState,
+  fileSystem: ProjectFileSystem
+): Promise<string> => {
+  const premise = inputPremise?.trim()
+    || state.existingRecord?.premise.trim()
+    || await readIdeaPremise(fileSystem, state.storyPath);
   if (!premise) {
-    throw new InterviewStoryError('MISSING_PREMISE', '请先提供一句话创意或创作方向。');
+    throw new InterviewStoryError(
+      'MISSING_PREMISE',
+      `请先提供一句话创意或创作方向，例如：${buildInterviewCommand(state.story, { premise: '一句话创意' })}`
+    );
   }
 
   return premise;
@@ -483,7 +493,7 @@ export const interviewStory = async (
   input: InterviewStoryInput
 ): Promise<InterviewStoryResult> => {
   const state = await getInterviewStoryState(input);
-  const premise = resolvePremise(input.premise, state.existingRecord);
+  const premise = await resolvePremise(input.premise, state, input.fileSystem);
   const authorProfile = await loadAuthorProfile({
     projectRoot: input.projectRoot,
     fileSystem: input.fileSystem

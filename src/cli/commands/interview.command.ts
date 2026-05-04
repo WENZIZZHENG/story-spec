@@ -14,6 +14,10 @@ import type { ClarificationQuestion } from '../../domain/clarification.js';
 import {
   normalizeCoCreationEntrypointId
 } from '../../domain/co-creation-workbench.js';
+import {
+  buildInterviewCommand,
+  readIdeaPremise
+} from '../../application/story-idea.js';
 import { nodeFileSystem } from '../../infrastructure/node-file-system.js';
 import { isInteractive } from '../../utils/interactive.js';
 import { ensureProjectRoot } from '../../utils/project.js';
@@ -361,11 +365,15 @@ const runInterviewCommand = async (
         fileSystem: nodeFileSystem,
         story
       });
-      premise = state.existingRecord?.premise.trim();
+      premise = state.existingRecord?.premise.trim()
+        || await readIdeaPremise(nodeFileSystem, state.storyPath);
       if (!premise) {
         throw new InterviewStoryError(
           'MISSING_PREMISE',
-          '非交互环境请传入 --premise "一句话创意"。'
+          `非交互环境请传入 --premise，或先用 storyspec story:new 保存创意。示例：${buildInterviewCommand(state.story, {
+            focus,
+            premise: '一句话创意'
+          })}`
         );
       }
     }
