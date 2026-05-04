@@ -28,13 +28,13 @@
   - Depends on: S1。
   - Validation: 在非 StorySpec 目录触发创作入口时，输出只要求工作区路径；用户提供路径后可直接初始化；初始化成功后显示素材分流。
 
-- [ ] P2. 实现原始灵感和长文资料输入向导
+- [x] P2. 实现原始灵感和长文资料输入向导
   - May edit: `src/application/story-onboarding.ts`、`src/application/ingest-story-input.ts`、`src/application/co-create-workbench.ts`、`src/application/creative-report.ts`、相关 fixtures/snapshots。
   - Must not edit: 正文生成流程、章节任务系统、`dist/**`。
   - Depends on: S1、S3。
   - Validation: 覆盖一句灵感 20-200 字、首轮长文 500-3000 字、超长资料分段建议；输出包含可复制示例、核心要点清单和“待澄清不是失败”的解释。
 
-- [ ] P3. 实现 Markdown 表格资料 onboarding
+- [x] P3. 实现 Markdown 表格资料 onboarding
   - May edit: ingest/co-create 输入解析、表格导入预览、clarification reason 输出、相关 unit fixtures。
   - Must not edit: 数据库/存储架构、非 onboarding 的表格工具、`dist/**`。
   - Depends on: S1、S3。
@@ -72,7 +72,7 @@
   - Depends on: P6。
   - Validation: `npm run build`、`npm run test:smoke`、`node dist/cli.js --help`、`node dist/cli.js codex-status --json` 通过。
 
-- [ ] V3. 验证确认流安全
+- [x] V3. 验证确认流安全
   - May edit: 与 preview/confirm/apply 相关的 focused tests。
   - Must not edit: 放宽确认门槛、自动写入正典。
   - Depends on: P2、P3。

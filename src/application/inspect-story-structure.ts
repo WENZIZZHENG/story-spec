@@ -59,9 +59,24 @@ export interface InspectStoryStructureInput {
   projectRoot: string;
   fileSystem: ProjectFileSystem;
   story?: string;
+  chapters?: string[];
+  scenes?: string[];
 }
 
 const toPosixPath = (value: string): string => value.split(path.sep).join('/');
+
+const normalizeChapterId = (chapter: string): string => {
+  const trimmed = chapter.trim();
+  return /^\d+$/.test(trimmed) ? `chapter-${trimmed.padStart(3, '0')}` : trimmed;
+};
+
+const toNormalizedSet = (values: string[] | undefined, normalize = (value: string) => value): Set<string> | undefined => {
+  const normalized = (values ?? [])
+    .map(value => normalize(value).trim())
+    .filter(Boolean);
+
+  return normalized.length > 0 ? new Set(normalized) : undefined;
+};
 
 const relativePath = (projectRoot: string, filePath: string): string =>
   toPosixPath(path.relative(projectRoot, filePath));
@@ -324,6 +339,8 @@ export const inspectScenes = async (
   const graph = await inspectStoryGraph(input);
   const entityIds = new Set(graph.entities.map(entity => entity.id));
   const storyDirs = await resolveStoryDirs(input);
+  const chapterFilter = toNormalizedSet(input.chapters, normalizeChapterId);
+  const sceneFilter = toNormalizedSet(input.scenes);
   const files: string[] = [];
   const scenes: SceneCard[] = [];
   const sceneSources: Array<{ scene: SceneCard; file: string }> = [];
@@ -331,13 +348,19 @@ export const inspectScenes = async (
 
   for (const storyPath of storyDirs) {
     for (const file of await listSceneFiles(input.fileSystem, storyPath)) {
-      files.push(file);
       const result = parseSceneCardDocument(await input.fileSystem.readFile(file), file);
-      scenes.push(...result.scenes);
-      sceneSources.push(...result.scenes.map(scene => ({ scene, file })));
+      const relevantScenes = result.scenes.filter(scene =>
+        (!chapterFilter || chapterFilter.has(scene.chapter))
+        && (!sceneFilter || sceneFilter.has(scene.id))
+      );
+      if (!chapterFilter && !sceneFilter || relevantScenes.length > 0) {
+        files.push(file);
+      }
+      scenes.push(...relevantScenes);
+      sceneSources.push(...relevantScenes.map(scene => ({ scene, file })));
       issues.push(...result.issues);
-      issues.push(...result.scenes.flatMap(scene => validateSceneReferences(file, scene, entityIds)));
-      issues.push(...result.scenes.flatMap(scene => validateSceneWritingGateIntent(file, scene)));
+      issues.push(...relevantScenes.flatMap(scene => validateSceneReferences(file, scene, entityIds)));
+      issues.push(...relevantScenes.flatMap(scene => validateSceneWritingGateIntent(file, scene)));
     }
   }
 

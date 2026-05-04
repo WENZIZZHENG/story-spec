@@ -56,6 +56,17 @@ export interface ContextPackItem {
   required: boolean;
 }
 
+export type ContextPackScopeType = 'story' | 'task' | 'chapter' | 'scene';
+
+export interface ContextPackScope {
+  type: ContextPackScopeType;
+  id: string;
+  task?: string;
+  chapter?: string;
+  scene?: string;
+  warnings: string[];
+}
+
 export interface ContextPack {
   schemaVersion: '1.0';
   id: string;
@@ -64,6 +75,7 @@ export interface ContextPack {
   targetTask?: string;
   targetChapter?: string;
   targetScene?: string;
+  scope: ContextPackScope;
   generatedAt: string;
   mustRead: ContextPackItem[];
   allowedWrites: string[];

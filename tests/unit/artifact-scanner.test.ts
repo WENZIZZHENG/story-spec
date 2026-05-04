@@ -56,12 +56,13 @@ describe('scanStoryArtifacts', () => {
       kind: 'chapter',
       exists: true
     });
-    expect(ready?.issues).toContainEqual({
+    expect(ready?.issues).toContainEqual(expect.objectContaining({
       severity: 'warning',
+      scope: 'task-output',
       code: 'MISSING_TASK_OUTPUT',
       message: '任务 T002 的输出文件不存在: content/volume1/chapter-002.md',
       path: path.join(projectRoot, 'stories', 'ready', 'content', 'volume1', 'chapter-002.md')
-    });
+    }));
 
     const missing = result.stories.find(story => story.name === 'missing');
     expect(missing?.stage).toBe('specified');

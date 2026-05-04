@@ -28,13 +28,13 @@
   - Depends on: S1
   - Validation: 写章 smoke 或 snapshot 证明开始阶段输出 3-6 条 scene beat，正文阶段至少一次分块进度，收尾阶段输出验证摘要
 
-- [ ] P2. 实现 task/chapter scope 的 context pack
+- [x] P2. 实现 task/chapter scope 的 context pack
   - May edit: `src/application/manage-context-packs.ts`、context pack CLI command、handoff 集成、对应 tests
   - Must not edit: tracking schema 迁移、GUI、其他 change 目录
   - Depends on: S1
   - Validation: unit tests 覆盖 `--task <id>`、`--chapter <n>`、资料不足 warning、Windows story-relative 路径
 
-- [ ] P3. 实现卷计划一屏摘要
+- [x] P3. 实现卷计划一屏摘要
   - May edit: `src/application/creative-report.ts`、`src/application/preview-apply.ts`、creative plan report 类型、对应 tests
   - Must not edit: 正文生成逻辑、context pack scope 逻辑
   - Depends on: S1

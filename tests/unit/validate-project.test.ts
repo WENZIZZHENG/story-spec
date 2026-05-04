@@ -126,6 +126,56 @@ describe('validateProject', () => {
     ]));
   });
 
+  it('classifies missing outputs for unstarted tasks as task-output info', async () => {
+    const projectRoot = path.join(os.tmpdir(), 'memory-novel-unstarted-output-scope');
+    const packageRoot = path.join(os.tmpdir(), 'memory-novel-unstarted-output-scope-package');
+    const fileSystem = new MemoryFileSystem(projectRoot);
+    const storyPath = path.join(projectRoot, 'stories', 'demo');
+
+    await fileSystem.ensureDir(path.join(packageRoot, 'templates'));
+    await fileSystem.writeJson(path.join(projectRoot, '.specify', 'config.json'), {
+      name: 'unstarted-output-scope',
+      type: 'novel',
+      version: '1.0.0'
+    });
+    await fileSystem.writeFile(path.join(projectRoot, '.specify', 'agent-contract.md'), '# contract');
+    await fileSystem.writeFile(path.join(projectRoot, 'AGENTS.md'), '# agents');
+    await fileSystem.ensureDir(path.join(projectRoot, 'spec', 'tracking'));
+    await fileSystem.ensureDir(path.join(projectRoot, 'spec', 'world'));
+    await fileSystem.ensureDir(path.join(projectRoot, 'spec', 'canon'));
+    await fileSystem.ensureDir(path.join(projectRoot, 'spec', 'graph'));
+    await fileSystem.ensureDir(path.join(projectRoot, 'spec', 'voice'));
+    await fileSystem.writeFile(path.join(storyPath, 'specification.md'), '# spec');
+    await fileSystem.writeFile(path.join(storyPath, 'creative-plan.md'), '# plan');
+    await fileSystem.writeFile(path.join(storyPath, 'tasks.md'), `- [ ] [P0] **T001** - 起草第一章
+  - **输出**：\`content/chapter-001.md\`
+`);
+
+    const result = await validateProject({
+      projectRoot,
+      packageRoot,
+      fileSystem
+    });
+
+    expect(result.valid).toBe(true);
+    expect(result.issues).toEqual(expect.arrayContaining([
+      expect.objectContaining({
+        code: 'MISSING_TASK_OUTPUT',
+        severity: 'info',
+        scope: 'task-output',
+        path: path.join(storyPath, 'content', 'chapter-001.md')
+      })
+    ]));
+    expect(result.scopeCounts).toEqual(expect.arrayContaining([
+      expect.objectContaining({
+        scope: 'task-output',
+        blocking: 0,
+        advisory: 0,
+        info: 1
+      })
+    ]));
+  });
+
   it('reports missing agent contract entry files', async () => {
     const projectRoot = path.join(os.tmpdir(), 'memory-novel-missing-contract');
     const packageRoot = path.join(os.tmpdir(), 'memory-novel-missing-contract-package');
@@ -272,10 +322,19 @@ describe('validateProject', () => {
 
     expect(result.issues).toEqual(expect.arrayContaining([
       expect.objectContaining({
-        code: 'MISSING_REQUIRED_CLARIFICATION_ANSWER'
+        code: 'MISSING_REQUIRED_CLARIFICATION_ANSWER',
+        scope: 'import-clarification'
       }),
       expect.objectContaining({
         code: 'CREATIVE_INTENT_DRIFT_UNCONFIRMED_AI_SUGGESTION'
+      })
+    ]));
+    expect(result.scopeCounts).toEqual(expect.arrayContaining([
+      expect.objectContaining({
+        scope: 'import-clarification',
+        blocking: 0,
+        advisory: 1,
+        info: 0
       })
     ]));
   });
@@ -648,6 +707,11 @@ validateRules: []
     expect(output).toContain('voice fingerprints：1');
     expect(output).toContain('active preset：无');
     expect(output).toContain('generic commands：0');
+    expect(output).toContain('分类摘要：');
+    expect(output).toContain('project-structure');
+    expect(output).toContain('blocking=');
+    expect(output).toContain('advisory=');
+    expect(output).toContain('info=');
     expect(output).toContain('MISSING_TEMPLATE');
     expect(output).toContain('INVALID_TRACKING_JSON');
   });
@@ -662,8 +726,8 @@ validateRules: []
 
     const output = renderProjectValidation(result, { minSeverity: 'error' });
 
-    expect(output).toContain('[error]');
-    expect(output).not.toContain('[warning]');
-    expect(output).not.toContain('[info]');
+    expect(output).toContain('[blocking/error]');
+    expect(output).not.toContain('[advisory/warning]');
+    expect(output).not.toContain('[info/info]');
   });
 });

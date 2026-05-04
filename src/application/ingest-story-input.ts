@@ -43,12 +43,42 @@ export interface IngestedStoryInputItem {
   reason: string;
 }
 
+export type StoryInputProfileId =
+  | 'short-idea'
+  | 'longform-material'
+  | 'table-material';
+
+export interface StoryInputProfile {
+  id: StoryInputProfileId;
+  label: string;
+  recommendedRange: string;
+  guidance: string;
+  corePointChecklist: string[];
+}
+
+export interface MarkdownTableCandidateMapping {
+  column: string;
+  questionId: string;
+  label: string;
+  status: 'candidate';
+  reason: string;
+}
+
+export interface MarkdownTableAnalysis {
+  detected: boolean;
+  recognizedColumns: string[];
+  unrecognizedColumns: string[];
+  candidateMappings: MarkdownTableCandidateMapping[];
+}
+
 export interface IngestStoryInputResult {
   projectRoot: string;
   story: string;
   storyPath: string;
   sourceFile?: string;
   ingestedTextLength: number;
+  inputProfile: StoryInputProfile;
+  tableAnalysis?: MarkdownTableAnalysis;
   confirmedItems: IngestedStoryInputItem[];
   candidateItems: IngestedStoryInputItem[];
   pendingQuestions: string[];
@@ -268,6 +298,150 @@ const buildPendingQuestions = (confirmedItems: readonly IngestedStoryInputItem[]
     .map(definition => `${definition.label}：未从长文中识别到明确段落。`);
 };
 
+const splitMarkdownTableRow = (line: string): string[] =>
+  line
+    .trim()
+    .replace(/^\|/, '')
+    .replace(/\|$/, '')
+    .split('|')
+    .map(cell => cleanAnswer(cell));
+
+const isMarkdownTableSeparator = (line: string): boolean =>
+  /^\s*\|?\s*:?-{3,}:?\s*(\|\s*:?-{3,}:?\s*)+\|?\s*$/.test(line);
+
+const columnMapping = (column: string): Omit<MarkdownTableCandidateMapping, 'column'> | undefined => {
+  if (/角色|主角|人物|姓名/.test(column)) {
+    return {
+      questionId: 'core.protagonist',
+      label: '主角',
+      status: 'candidate',
+      reason: '表格列名像人物或主角信息，需要作者确认后才能写入。'
+    };
+  }
+
+  if (/伙伴|同伴|关系|互动/.test(column)) {
+    return {
+      questionId: 'core.partner',
+      label: '核心伙伴',
+      status: 'candidate',
+      reason: '表格列名像伙伴或关系信息，需要作者确认后才能写入。'
+    };
+  }
+
+  if (/舞台|地点|场景|位置/.test(column)) {
+    return {
+      questionId: 'core.stage',
+      label: '第一舞台',
+      status: 'candidate',
+      reason: '表格列名像舞台或地点信息，需要作者确认后才能写入。'
+    };
+  }
+
+  if (/能力|魔法|法术|体系|金手指/.test(column)) {
+    return {
+      questionId: 'magic.rule-hardness',
+      label: '能力体系',
+      status: 'candidate',
+      reason: '表格列名像能力体系信息，需要作者确认后才能写入。'
+    };
+  }
+
+  if (/势力|冲突|阵营|组织/.test(column)) {
+    return {
+      questionId: 'core.faction-conflict',
+      label: '势力与冲突',
+      status: 'candidate',
+      reason: '表格列名像势力或冲突信息，需要作者确认后才能写入。'
+    };
+  }
+
+  if (/定位|职责|功能/.test(column)) {
+    return {
+      questionId: 'core.protagonist',
+      label: '主角',
+      status: 'candidate',
+      reason: '定位类表格列可辅助人物理解，需要作者确认映射目标。'
+    };
+  }
+
+  return undefined;
+};
+
+const analyzeMarkdownTable = (text: string): MarkdownTableAnalysis | undefined => {
+  const lines = normalizeText(text).split('\n');
+  const headerIndex = lines.findIndex((line, index) =>
+    line.includes('|')
+    && index + 1 < lines.length
+    && isMarkdownTableSeparator(lines[index + 1])
+  );
+
+  if (headerIndex === -1) {
+    return undefined;
+  }
+
+  const headers = splitMarkdownTableRow(lines[headerIndex]).filter(Boolean);
+  const candidateMappings = headers.flatMap(column => {
+    const mapping = columnMapping(column);
+    return mapping ? [{ column, ...mapping }] : [];
+  });
+  const recognizedColumns = candidateMappings.map(mapping => mapping.column);
+
+  return {
+    detected: true,
+    recognizedColumns,
+    unrecognizedColumns: headers.filter(column => !recognizedColumns.includes(column)),
+    candidateMappings
+  };
+};
+
+const buildInputProfile = (
+  text: string,
+  tableAnalysis?: MarkdownTableAnalysis
+): StoryInputProfile => {
+  if (tableAnalysis?.detected) {
+    return {
+      id: 'table-material',
+      label: 'Markdown 表格资料',
+      recommendedRange: '1-5 张小表优先',
+      guidance: '表格会先作为字段映射候选；未确认前不会写入正典、specification 或 confirmed clarifications。',
+      corePointChecklist: [
+        '表格列名对应什么故事字段',
+        '哪些列只是备注或临时想法',
+        '哪些行可以作为候选事实'
+      ]
+    };
+  }
+
+  if (text.length < 500) {
+    return {
+      id: 'short-idea',
+      label: '一句灵感',
+      recommendedRange: '20-200 字',
+      guidance: '短灵感缺少也没关系；系统会保留你的原话，再用低负担问题补齐可写方向。',
+      corePointChecklist: [
+        '主角是谁或正在面对什么',
+        '第一眼舞台或冲突',
+        '能力、关系或爽点钩子'
+      ]
+    };
+  }
+
+  return {
+    id: 'longform-material',
+    label: '长文资料',
+    recommendedRange: '500-3000 字',
+    guidance: text.length > 3000
+      ? '首轮材料偏长，建议分段输入；待澄清不是导入失败，而是把不确定内容留给作者确认。'
+      : '长文会拆成已识别、保留候选和仍需确认；待澄清不是导入失败。',
+    corePointChecklist: [
+      '一句话核心创意',
+      '主角、伙伴与第一舞台',
+      '能力体系或主要冲突',
+      '不能提前定稿或必须保留候选的边界'
+    ]
+  };
+};
+
 const resolveInputText = async (input: IngestStoryInput): Promise<{ text: string; sourceFile?: string }> => {
   const textParts: string[] = [];
   let sourceFile: string | undefined;
@@ -311,10 +485,12 @@ export const ingestStoryInput = async (
 ): Promise<IngestStoryInputResult> => {
   const story = await selectStoryProject(input.projectRoot, input.fileSystem, input.story);
   const { text, sourceFile } = await resolveInputText(input);
+  const tableAnalysis = analyzeMarkdownTable(text);
+  const inputProfile = buildInputProfile(text, tableAnalysis);
   const confirmedItems = recognizeConfirmedItems(text);
   const candidateItems = recognizeCandidateItems(text, confirmedItems);
   const premise = await resolvePremise(input, story.path, confirmedItems);
-  const write = Boolean(input.applyConfirmed && confirmedItems.length > 0);
+  const write = Boolean(input.applyConfirmed && confirmedItems.length > 0 && !tableAnalysis?.detected);
   const interview = await interviewStory({
     projectRoot: input.projectRoot,
     fileSystem: input.fileSystem,
@@ -332,6 +508,8 @@ export const ingestStoryInput = async (
     storyPath: story.path,
     sourceFile,
     ingestedTextLength: text.length,
+    inputProfile,
+    tableAnalysis,
     confirmedItems,
     candidateItems,
     pendingQuestions: buildPendingQuestions(confirmedItems),
@@ -353,8 +531,31 @@ export const renderIngestStoryInputResult = (result: IngestStoryInputResult): st
   `故事：${result.story}`,
   ...(result.sourceFile ? [`来源文件：${relativePath(result.projectRoot, result.sourceFile)}`] : []),
   `输入长度：${result.ingestedTextLength}`,
+  `素材类型：${result.inputProfile.label}`,
+  `推荐范围：${result.inputProfile.recommendedRange}`,
+  `输入建议：${result.inputProfile.guidance}`,
   `写入状态：${result.written ? '已写入 clarifications.json/md' : '预览未写入'}`,
   '',
+  '核心要点清单',
+  '',
+  ...result.inputProfile.corePointChecklist.map(item => `- ${item}`),
+  '',
+  ...(result.tableAnalysis?.detected
+    ? [
+      'Markdown 表格识别',
+      '',
+      `已识别列：${result.tableAnalysis.recognizedColumns.length > 0 ? result.tableAnalysis.recognizedColumns.join('、') : '无'}`,
+      `未识别列：${result.tableAnalysis.unrecognizedColumns.length > 0 ? result.tableAnalysis.unrecognizedColumns.join('、') : '无'}`,
+      '字段映射候选：',
+      ...(result.tableAnalysis.candidateMappings.length > 0
+        ? result.tableAnalysis.candidateMappings.map(mapping =>
+          `- ${mapping.column} -> ${mapping.questionId}（${mapping.label}）：${mapping.reason}`
+        )
+        : ['- 暂无。']),
+      '提示：表格内容未确认前不会写入正典。',
+      ''
+    ]
+    : []),
   '建议写入（作者明确表达）',
   '',
   ...(result.confirmedItems.length > 0

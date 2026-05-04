@@ -10,7 +10,8 @@ import { inspectVoice } from './inspect-voice.js';
 import type {
   ContextPack,
   ContextPackItem,
-  ContextPackPurpose
+  ContextPackPurpose,
+  ContextPackScope
 } from '../domain/workbench.js';
 import type { WritingTask } from '../domain/story-artifact.js';
 import {
@@ -135,6 +136,50 @@ const chapterFromTask = (task?: WritingTask): string | undefined => {
   ].map(chapterFromPath).find(Boolean);
 };
 
+const createScope = (
+  storyName: string,
+  task: WritingTask | undefined,
+  chapter: string | undefined,
+  scene: string | undefined,
+  warnings: string[]
+): ContextPackScope => {
+  if (scene) {
+    return {
+      type: 'scene',
+      id: scene,
+      ...(task ? { task: task.id } : {}),
+      ...(chapter ? { chapter } : {}),
+      scene,
+      warnings
+    };
+  }
+
+  if (chapter) {
+    return {
+      type: 'chapter',
+      id: chapter,
+      ...(task ? { task: task.id } : {}),
+      chapter,
+      warnings
+    };
+  }
+
+  if (task) {
+    return {
+      type: 'task',
+      id: task.id,
+      task: task.id,
+      warnings
+    };
+  }
+
+  return {
+    type: 'story',
+    id: storyName,
+    warnings
+  };
+};
+
 const createPackId = (
   storyName: string,
   purpose: ContextPackPurpose,
@@ -183,11 +228,21 @@ export const generateContextPack = async (
   const targetTask = findTargetTask(story.tasks, input.task);
   const purpose = input.purpose ?? 'write';
   const targetChapter = normalizeChapter(input.chapter) ?? chapterFromTask(targetTask);
+  const scopeWarnings: string[] = [];
+  if (targetTask && !targetChapter && purpose === 'write') {
+    scopeWarnings.push(`任务 ${targetTask.id} 未能从输出或允许修改路径推断章节；ContextPack 将保留任务级范围。`);
+  }
   const [world, canon, graph, scenes, voice] = await Promise.all([
     inspectWorld({ projectRoot, fileSystem: fs }),
     inspectCanon({ projectRoot, fileSystem: fs }),
     inspectStoryGraph({ projectRoot, fileSystem: fs }),
-    inspectScenes({ projectRoot, fileSystem: fs, story: story.name }),
+    inspectScenes({
+      projectRoot,
+      fileSystem: fs,
+      story: story.name,
+      ...(targetChapter ? { chapters: [targetChapter] } : {}),
+      ...(input.scene ? { scenes: [input.scene] } : {})
+    }),
     inspectVoice({ projectRoot, fileSystem: fs })
   ]);
   const creativeControl = await summarizeCreativeControl({
@@ -228,6 +283,9 @@ export const generateContextPack = async (
     (!targetChapter || scene.chapter === targetChapter)
     && (!input.scene || scene.id === input.scene)
   );
+  if (purpose === 'write' && (targetChapter || input.scene) && targetScenes.length === 0) {
+    scopeWarnings.push('资料不足：未找到目标章节或场景的 Scene Card；先生成/补齐 Scene Card，再进入正文写作。');
+  }
   if (purpose === 'write') {
     for (const scene of targetScenes) {
       addMustRead(
@@ -271,12 +329,13 @@ export const generateContextPack = async (
     targetTask: targetTask?.id,
     targetChapter,
     targetScene: input.scene,
+    scope: createScope(story.name, targetTask, targetChapter, input.scene, unique(scopeWarnings)),
     generatedAt: (input.now ?? (() => new Date()))().toISOString(),
     mustRead: [...mustRead.values()],
     allowedWrites,
     worldFacts: world.facts.map(fact => fact.id),
     canonFacts: canon.facts.map(fact => fact.id),
-    sceneCards: scenes.scenes.map(scene => scene.id),
+    sceneCards: targetScenes.map(scene => scene.id),
     voiceFingerprints: voice.fingerprints.map(fingerprint => fingerprint.characterId),
     recentSummary: await readRecentSummary(projectRoot, fs, story.path, targetChapter),
     constraints,
@@ -321,7 +380,16 @@ export const renderContextPackMarkdown = (pack: ContextPack): string => [
   `任务：${pack.targetTask ?? '无'}`,
   `章节：${pack.targetChapter ?? '无'}`,
   `场景：${pack.targetScene ?? '无'}`,
+  `Scope：${pack.scope.type}/${pack.scope.id}`,
   `生成时间：${pack.generatedAt}`,
+  ...(pack.scope.warnings.length > 0
+    ? [
+      '',
+      '## Scope Warning',
+      '',
+      ...pack.scope.warnings.map(item => `- ${item}`)
+    ]
+    : []),
   '',
   '## 必须读取',
   '',
@@ -420,6 +488,8 @@ export const renderContextPackSummary = (result: GenerateContextPackResult): str
   `ID：${result.pack.id}`,
   `故事：${result.pack.story}`,
   `任务：${result.pack.targetTask ?? '无'}`,
+  `Scope：${result.pack.scope.type}/${result.pack.scope.id}`,
+  ...(result.pack.scope.warnings.length > 0 ? [`Scope Warning：${result.pack.scope.warnings.length}`] : []),
   `必须读取：${result.pack.mustRead.length}`,
   `允许修改：${result.pack.allowedWrites.length}`,
   ...(result.outputJsonPath ? [`JSON：${result.outputJsonPath}`] : []),

@@ -113,6 +113,93 @@ reveals:
     expect(scenes.issues).toEqual([]);
   });
 
+  it('filters scene scope after parsing aggregated scene card files', async () => {
+    const projectRoot = path.join(os.tmpdir(), 'memory-novel-story-structure-aggregated-scenes');
+    const fileSystem = new MemoryFileSystem(projectRoot);
+    const storyPath = path.join(projectRoot, 'stories', 'demo');
+
+    await fileSystem.writeJson(path.join(projectRoot, 'spec', 'graph', 'entities.json'), {
+      entities: [{
+        id: 'entity.hero',
+        type: 'character',
+        name: 'Hero'
+      }]
+    });
+    await fileSystem.writeJson(path.join(projectRoot, 'spec', 'graph', 'edges.json'), { edges: [] });
+    await fileSystem.writeFile(path.join(storyPath, 'scenes', 'chapter-001.yaml'), `scenes:
+  - id: scene-001
+    chapter: chapter-001
+    order: 1
+    pov: Hero
+    location: Gate
+    time: Dawn
+    sceneGoal: Open
+    conflict: Trouble
+    outcome: Move
+    plotThread: 主线
+    readerPromise: 谜题
+    relationshipChange: 初识
+    worldReveal:
+      factId: world.rule
+      actionImpact: 推动选择
+      beneficiaries:
+        - Hero
+      costs:
+        - Hero
+      violationConsequence: 追捕
+    emotionalBeat: 决意
+    endingHook: 门响
+    successCriteria:
+      - 主角行动
+    entities:
+      - entity.hero
+  - id: scene-002
+    chapter: chapter-001
+    order: 2
+    pov: Hero
+    location: Road
+    time: Morning
+    sceneGoal: Follow
+    conflict: False trail
+    outcome: Discover
+    plotThread: 追踪线
+    readerPromise: 新谜题
+    relationshipChange: 协作
+    worldReveal:
+      factId: world.rule
+      actionImpact: 改变路线
+      beneficiaries:
+        - Hero
+      costs:
+        - Hero
+      violationConsequence: 迷路
+    emotionalBeat: 冷静
+    endingHook: 路标改写
+    successCriteria:
+      - 找到线索
+    entities:
+      - entity.hero
+`);
+
+    const scenes = await inspectScenes({
+      projectRoot,
+      fileSystem,
+      story: 'demo',
+      scenes: ['scene-002']
+    });
+
+    expect(scenes.scenes.map(scene => scene.id)).toEqual(['scene-002']);
+    expect(scenes.files.map(file => path.relative(projectRoot, file).split(path.sep).join('/'))).toEqual([
+      'stories/demo/scenes/chapter-001.yaml'
+    ]);
+    expect(scenes.sceneSources).toEqual([
+      expect.objectContaining({
+        sceneId: 'scene-002',
+        chapter: 'chapter-001'
+      })
+    ]);
+  });
+
   it('fixes story-prefixed paths in scene cards', async () => {
     const projectRoot = path.join(os.tmpdir(), 'memory-novel-story-structure-fix-scene-paths');
     const fileSystem = new MemoryFileSystem(projectRoot);

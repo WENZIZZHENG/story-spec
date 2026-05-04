@@ -10,9 +10,15 @@ import {
 } from '../../domain/plugin-manifest.js';
 
 export type ValidationSeverity = 'error' | 'warning' | 'info';
+export type ValidationScope =
+  | 'project-structure'
+  | 'task-output'
+  | 'foreshadowing'
+  | 'import-clarification';
 
 export interface ValidationIssue {
   severity: ValidationSeverity;
+  scope?: ValidationScope;
   code:
     | 'DUPLICATE_AI_PLATFORM'
     | 'INVALID_AI_PLATFORM_FIELD'
@@ -57,12 +63,14 @@ const issue = (
   code: ValidationIssue['code'],
   path: string,
   message: string,
-  severity: ValidationSeverity = 'error'
+  severity: ValidationSeverity = 'error',
+  scope?: ValidationScope
 ): ValidationIssue => ({
   code,
   path,
   message,
-  severity
+  severity,
+  ...(scope ? { scope } : {})
 });
 
 const isNonEmptyString = (value: unknown): value is string => typeof value === 'string' && value.trim().length > 0;
@@ -236,7 +244,7 @@ export const validateWritingTask = (task: unknown): ValidationIssue[] => {
   }
 
   if (!Array.isArray((task as Partial<WritingTask>).outputs) || (task as Partial<WritingTask>).outputs?.length === 0) {
-    issues.push(issue('MISSING_TASK_OUTPUT', 'task.outputs', '任务必须声明至少一个输出路径'));
+    issues.push(issue('MISSING_TASK_OUTPUT', 'task.outputs', '任务必须声明至少一个输出路径', 'error', 'task-output'));
   }
 
   return issues;

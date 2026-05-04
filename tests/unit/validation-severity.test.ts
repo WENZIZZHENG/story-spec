@@ -1,14 +1,18 @@
 import { describe, expect, it } from 'vitest';
 import {
   countIssuesBySeverity,
+  countIssuesByScopeAndSeverity,
+  countIssuesByBucket,
   filterIssuesBySeverity,
   isValidationSeverity,
+  toValidationSeverityBucket,
   sortIssuesBySeverity
 } from '../../src/validation/severity.js';
-import type { ValidationSeverity } from '../../src/validation/schema/index.js';
+import type { ValidationScope, ValidationSeverity } from '../../src/validation/schema/index.js';
 
 interface TestIssue {
   severity: ValidationSeverity;
+  scope?: ValidationScope;
   code: string;
   path: string;
 }
@@ -38,6 +42,31 @@ describe('validation severity helpers', () => {
       error: 0,
       warning: 0,
       info: 0
+    });
+  });
+
+  it('maps severity to output buckets', () => {
+    expect(toValidationSeverityBucket('error')).toBe('blocking');
+    expect(toValidationSeverityBucket('warning')).toBe('advisory');
+    expect(toValidationSeverityBucket('info')).toBe('info');
+    expect(countIssuesByBucket(issues)).toEqual({
+      blocking: 2,
+      advisory: 1,
+      info: 1
+    });
+  });
+
+  it('counts issues by scope and severity with zero defaults per scope', () => {
+    expect(countIssuesByScopeAndSeverity([
+      { severity: 'info', scope: 'task-output', code: 'MISSING_TASK_OUTPUT', path: 'tasks.md#T001' },
+      { severity: 'info', scope: 'foreshadowing', code: 'FORESHADOWING_PLANNED_PAYOFF', path: 'scene.yaml' },
+      { severity: 'warning', scope: 'import-clarification', code: 'MISSING_REQUIRED_CLARIFICATION_ANSWER', path: 'clarifications.json' },
+      { severity: 'error', code: 'MISSING_PROJECT_CONFIG', path: '.specify/config.json' }
+    ])).toEqual({
+      'project-structure': { error: 1, warning: 0, info: 0 },
+      'task-output': { error: 0, warning: 0, info: 1 },
+      foreshadowing: { error: 0, warning: 0, info: 1 },
+      'import-clarification': { error: 0, warning: 1, info: 0 }
     });
   });
 

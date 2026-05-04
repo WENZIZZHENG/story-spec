@@ -25,6 +25,15 @@ const UNTITLED_INPUT = [
   '第一阶段我不想提前定稿最终反派、长线文明威胁真相、感情线归属和莉莉丝身份背后的完整阴谋。这些只能作为候选逐步揭示，第一卷更关注学院制度、实习任务、救援事故和伙伴互动。'
 ].join('\n\n');
 
+const SHORT_IDEA_INPUT = '工科青年穿越到剑与魔法世界，用可调试的法术程序改造学院制度。';
+
+const TABLE_INPUT = [
+  '| 角色 | 定位 | 关系备注 | 未识别列 |',
+  '| --- | --- | --- | --- |',
+  '| 晏无 | 工科主角 | 与瑟琳娜、莉莉丝、塞拉斯蒂娅并肩推进改革 | 这列只是作者临时备注 |',
+  '| 莉莉丝 | 制造核心 | 从受助到互助 | 夜间炼金炉场景 |'
+].join('\n');
+
 const createProject = async () => {
   const projectRoot = path.join(os.tmpdir(), 'memory-storyspec-ingest');
   const fileSystem = new MemoryFileSystem(projectRoot);
@@ -150,6 +159,96 @@ describe('ingestStoryInput', () => {
     expect(result.updatedAnswerIds).toEqual([]);
     expect(rendered).toContain('保留候选');
     expect(rendered).toContain('候选：主角');
+    await expect(fileSystem.pathExists(path.join(storyPath, 'clarifications.json'))).resolves.toBe(false);
+  });
+
+  it('classifies short ideas with lightweight guidance and core point checklist', async () => {
+    const { projectRoot, fileSystem } = await createProject();
+
+    const result = await ingestStoryInput({
+      projectRoot,
+      fileSystem,
+      story: '法术程序师',
+      text: SHORT_IDEA_INPUT,
+      now: () => new Date('2026-05-04T13:30:00.000Z')
+    });
+    const rendered = renderIngestStoryInputResult(result);
+
+    expect(result.inputProfile).toMatchObject({
+      id: 'short-idea',
+      label: '一句灵感',
+      recommendedRange: '20-200 字'
+    });
+    expect(result.inputProfile.corePointChecklist).toEqual(expect.arrayContaining([
+      '主角是谁或正在面对什么',
+      '第一眼舞台或冲突',
+      '能力、关系或爽点钩子'
+    ]));
+    expect(rendered).toContain('素材类型：一句灵感');
+    expect(rendered).toContain('推荐范围：20-200 字');
+    expect(rendered).toContain('缺少也没关系');
+  });
+
+  it('explains long-form onboarding ranges and overlong split guidance', async () => {
+    const { projectRoot, fileSystem } = await createProject();
+    const overlong = `${LONG_INPUT}\n\n${'补充资料：学院制度、实习任务、伙伴夜谈、魔法合作社。'.repeat(180)}`;
+
+    const result = await ingestStoryInput({
+      projectRoot,
+      fileSystem,
+      story: '法术程序师',
+      text: overlong,
+      now: () => new Date('2026-05-04T14:00:00.000Z')
+    });
+    const rendered = renderIngestStoryInputResult(result);
+
+    expect(result.inputProfile).toMatchObject({
+      id: 'longform-material',
+      label: '长文资料',
+      recommendedRange: '500-3000 字'
+    });
+    expect(result.inputProfile.guidance).toContain('建议分段');
+    expect(result.inputProfile.corePointChecklist).toContain('不能提前定稿或必须保留候选的边界');
+    expect(rendered).toContain('素材类型：长文资料');
+    expect(rendered).toContain('推荐范围：500-3000 字');
+    expect(rendered).toContain('待澄清不是导入失败');
+  });
+
+  it('analyzes Markdown table material as candidate mappings without auto-confirming it', async () => {
+    const { projectRoot, fileSystem, storyPath } = await createProject();
+
+    const result = await ingestStoryInput({
+      projectRoot,
+      fileSystem,
+      story: '法术程序师',
+      text: TABLE_INPUT,
+      applyConfirmed: true,
+      now: () => new Date('2026-05-04T14:30:00.000Z')
+    });
+    const rendered = renderIngestStoryInputResult(result);
+
+    expect(result.inputProfile.id).toBe('table-material');
+    expect(result.tableAnalysis).toMatchObject({
+      detected: true,
+      recognizedColumns: ['角色', '定位', '关系备注'],
+      unrecognizedColumns: ['未识别列']
+    });
+    expect(result.tableAnalysis?.candidateMappings).toEqual(expect.arrayContaining([
+      expect.objectContaining({
+        column: '角色',
+        questionId: 'core.protagonist',
+        status: 'candidate'
+      }),
+      expect.objectContaining({
+        column: '关系备注',
+        questionId: 'core.partner',
+        status: 'candidate'
+      })
+    ]));
+    expect(result.written).toBe(false);
+    expect(result.updatedAnswerIds).toEqual([]);
+    expect(rendered).toContain('Markdown 表格识别');
+    expect(rendered).toContain('未确认前不会写入正典');
     await expect(fileSystem.pathExists(path.join(storyPath, 'clarifications.json'))).resolves.toBe(false);
   });
 });

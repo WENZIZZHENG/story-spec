@@ -150,12 +150,13 @@ describe('getProjectStatus', () => {
     expect(status.tracking.find(item => item.file === 'broken.json')).toMatchObject({
       valid: false
     });
-    expect(status.blockers).toContainEqual({
-      severity: 'warning',
+    expect(status.blockers).toContainEqual(expect.objectContaining({
+      severity: 'info',
+      scope: 'task-output',
       code: 'MISSING_TASK_OUTPUT',
       message: '任务 T001 的输出文件不存在: content/chapter-02.md',
       path: path.join(projectRoot, 'stories', '001-demo', 'content', 'chapter-02.md')
-    });
+    }));
     expect(status.nextActions).toContain('先确认 1 个创作决策，再进入下一轮写入');
     expect(status.story?.creativeControl.cannotFinalize).toContain('未确认：感情线慢热边界是什么？');
     expect(status.story?.creativeControl.cannotFinalize).toContain('AI 建议待确认：romance.boundary');

@@ -125,6 +125,7 @@ describe('writing rules', () => {
       expect.objectContaining({
         code: 'FORESHADOWING_OPEN_LOOP',
         severity: 'info',
+        scope: 'foreshadowing',
         path: path.join(projectRoot, 'stories', 'demo', 'scenes', 'scene-001.yaml#scene-001.foreshadowing')
       })
     ]));
@@ -175,7 +176,7 @@ describe('writing rules', () => {
     ]));
   });
 
-  it('does not flag planned foreshadowing payoff as an open loop', async () => {
+  it('classifies planned foreshadowing payoff as non-blocking foreshadowing context', async () => {
     const projectRoot = path.join(os.tmpdir(), 'memory-novel-writing-rules-planned-foreshadowing');
     const fileSystem = new MemoryFileSystem(projectRoot);
     const storyRoot = path.join(projectRoot, 'stories', 'demo');
@@ -209,6 +210,14 @@ foreshadowing:
       rules: createDefaultWritingRules({ minChapterChars: 1 })
     });
 
+    expect(result.issues).toEqual(expect.arrayContaining([
+      expect.objectContaining({
+        code: 'FORESHADOWING_PLANNED_PAYOFF',
+        severity: 'info',
+        scope: 'foreshadowing',
+        path: path.join(projectRoot, 'stories', 'demo', 'scenes', 'scene-001.yaml#scene-001.foreshadowing')
+      })
+    ]));
     expect(result.issues).not.toEqual(expect.arrayContaining([
       expect.objectContaining({
         code: 'FORESHADOWING_OPEN_LOOP',

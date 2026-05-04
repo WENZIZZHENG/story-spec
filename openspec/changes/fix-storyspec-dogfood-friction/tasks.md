@@ -25,7 +25,7 @@
 
 ## 3. 写作验证与 tracking
 
-- [ ] 3.1 为写作验证结果引入 scope / severity 分类，并把未开始任务输出缺失、planned foreshadowing、长文导入澄清映射到明确类别。
+- [x] 3.1 为写作验证结果引入 scope / severity 分类，并把未开始任务输出缺失、planned foreshadowing、长文导入澄清映射到明确类别。
   - May edit: 验证规则、错误聚合、报告摘要
   - Must not edit: related draft 匹配逻辑、tracking schema 类型
   - Depends on: 1.1

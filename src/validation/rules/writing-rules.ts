@@ -7,7 +7,7 @@ import type {
   ArtifactScanResult,
   ScannedStoryProject
 } from '../artifact-scanner.js';
-import type { ValidationSeverity } from '../schema/index.js';
+import type { ValidationScope, ValidationSeverity } from '../schema/index.js';
 
 export type WritingRuleIssueCode =
   | 'UNKNOWN_TASK_DEPENDENCY'
@@ -17,10 +17,12 @@ export type WritingRuleIssueCode =
   | 'COMMON_CHARACTER_SUBSTITUTION'
   | 'WORLD_DENSITY_HIGH'
   | 'REVEAL_PACING_GAP'
-  | 'FORESHADOWING_OPEN_LOOP';
+  | 'FORESHADOWING_OPEN_LOOP'
+  | 'FORESHADOWING_PLANNED_PAYOFF';
 
 export interface WritingRuleIssue {
   severity: ValidationSeverity;
+  scope?: ValidationScope;
   code: WritingRuleIssueCode;
   path: string;
   message: string;
@@ -70,9 +72,11 @@ const issue = (
   code: WritingRuleIssueCode,
   filePath: string,
   message: string,
-  severity: ValidationSeverity = 'warning'
+  severity: ValidationSeverity = 'warning',
+  scope?: ValidationScope
 ): WritingRuleIssue => ({
   severity,
+  ...(scope ? { scope } : {}),
   code,
   path: filePath,
   message
@@ -365,7 +369,22 @@ const createSceneQualityRule = (maxSceneWorldReferences: number): WritingRule =>
           'FORESHADOWING_OPEN_LOOP',
           `${scenePath}#${scene.id}.foreshadowing`,
           `场景 ${scene.id} 埋下 ${scene.foreshadowing.planted.length} 个伏笔但没有回收记录，请确认后续回收任务`,
-          'info'
+          'info',
+          'foreshadowing'
+        ));
+      }
+
+      if (
+        scene.foreshadowing.planted.length > 0
+        && scene.foreshadowing.paidOff.length === 0
+        && scene.foreshadowing.plannedPayoff.length > 0
+      ) {
+        issues.push(issue(
+          'FORESHADOWING_PLANNED_PAYOFF',
+          `${scenePath}#${scene.id}.foreshadowing`,
+          `场景 ${scene.id} 埋下 ${scene.foreshadowing.planted.length} 个伏笔，已计划在 ${scene.foreshadowing.plannedPayoff.join('、')} 回收`,
+          'info',
+          'foreshadowing'
         ));
       }
     }

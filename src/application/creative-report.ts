@@ -69,6 +69,77 @@ export interface CreativeReportFunPrompt {
   command: string;
 }
 
+export type CreativeReportDigestStatus =
+  | 'confirmed'
+  | 'candidate'
+  | 'missing'
+  | 'needs-confirmation';
+
+export interface CreativeReportDigestText {
+  status: CreativeReportDigestStatus;
+  text: string;
+  evidence: string[];
+}
+
+export interface CreativeReportDigestAct {
+  act: 'setup' | 'confrontation' | 'resolution';
+  label: string;
+  chapters: string;
+  status: CreativeReportDigestStatus;
+  summary: string;
+  evidence: string[];
+}
+
+export interface CreativeReportChapterRhythm {
+  chapter: number;
+  status: CreativeReportDigestStatus;
+  rhythm: string;
+  function: string;
+  emotionalBeat: string;
+  plotTurn: string;
+  evidence: string[];
+}
+
+export interface CreativeReportCharacterArc {
+  character: string;
+  status: CreativeReportDigestStatus;
+  start: string;
+  turn: string;
+  end: string;
+  evidence: string[];
+  nextConfirmation?: string;
+}
+
+export interface CreativeReportPlotCurve {
+  chapterRange: string;
+  status: CreativeReportDigestStatus;
+  tension: string;
+  payoff: string;
+  evidence: string[];
+}
+
+export interface CreativeReportRelationshipOverview {
+  participants: string[];
+  status: CreativeReportDigestStatus;
+  dynamic: string;
+  conflict: string;
+  evidence: string[];
+  nextConfirmation?: string;
+}
+
+export interface CreativeReportVolumePlanDigest {
+  available: boolean;
+  sourcePath?: string;
+  volume: number;
+  oneSentenceGoal: CreativeReportDigestText;
+  threeActSummary: CreativeReportDigestAct[];
+  chapterRhythm: CreativeReportChapterRhythm[];
+  characterArcs: CreativeReportCharacterArc[];
+  plotCurve: CreativeReportPlotCurve[];
+  relationships: CreativeReportRelationshipOverview[];
+  nextActions: string[];
+}
+
 export interface CreativeReportResult {
   projectRoot: string;
   story: string;
@@ -84,6 +155,7 @@ export interface CreativeReportResult {
   decisionLog: DecisionLogSummary;
   funPrompts: CreativeReportFunPrompt[];
   activeBranches: ActiveBranchSummary[];
+  volumePlanDigest: CreativeReportVolumePlanDigest;
   driftIssues: CreativeIntentDriftIssue[];
   cannotFinalize: string[];
   nextActions: string[];
@@ -279,6 +351,347 @@ const buildFunPrompts = (
     .slice(0, 6);
 };
 
+const digestStatuses = new Set<CreativeReportDigestStatus>([
+  'confirmed',
+  'candidate',
+  'missing',
+  'needs-confirmation'
+]);
+
+const defaultActs: CreativeReportDigestAct[] = [
+  {
+    act: 'setup',
+    label: '第一幕',
+    chapters: '1-3',
+    status: 'missing',
+    summary: '资料不足',
+    evidence: []
+  },
+  {
+    act: 'confrontation',
+    label: '第二幕',
+    chapters: '4-9',
+    status: 'missing',
+    summary: '资料不足',
+    evidence: []
+  },
+  {
+    act: 'resolution',
+    label: '第三幕',
+    chapters: '10-12',
+    status: 'missing',
+    summary: '资料不足',
+    evidence: []
+  }
+];
+
+const isRecord = (value: unknown): value is Record<string, unknown> =>
+  typeof value === 'object' && value !== null && !Array.isArray(value);
+
+const textValue = (value: unknown): string =>
+  typeof value === 'string' ? compact(value) : '';
+
+const statusValue = (
+  value: unknown,
+  fallback: CreativeReportDigestStatus
+): CreativeReportDigestStatus =>
+  typeof value === 'string' && digestStatuses.has(value as CreativeReportDigestStatus)
+    ? value as CreativeReportDigestStatus
+    : fallback;
+
+const stringList = (value: unknown): string[] =>
+  Array.isArray(value)
+    ? uniqueTexts(value.map(item => typeof item === 'string' ? item : ''))
+    : [];
+
+const slotStatus = (
+  source: Record<string, unknown>,
+  fallback: CreativeReportDigestStatus
+): CreativeReportDigestStatus => {
+  const explicit = statusValue(source.status, fallback);
+  const hasText = Object.entries(source)
+    .some(([key, value]) => key !== 'status' && key !== 'evidence' && textValue(value));
+
+  return hasText ? explicit : 'missing';
+};
+
+const normalizeDigestText = (value: unknown): CreativeReportDigestText => {
+  const source = isRecord(value) ? value : {};
+  const text = textValue(source.text);
+
+  return {
+    status: text ? statusValue(source.status, 'needs-confirmation') : 'missing',
+    text: text || '待确认',
+    evidence: stringList(source.evidence)
+  };
+};
+
+const normalizeDigestAct = (
+  value: unknown,
+  fallback: CreativeReportDigestAct
+): CreativeReportDigestAct => {
+  const source = isRecord(value) ? value : {};
+  const summary = textValue(source.summary);
+
+  return {
+    act: fallback.act,
+    label: textValue(source.label) || fallback.label,
+    chapters: textValue(source.chapters) || fallback.chapters,
+    status: summary ? statusValue(source.status, 'needs-confirmation') : 'missing',
+    summary: summary || '资料不足',
+    evidence: stringList(source.evidence)
+  };
+};
+
+const normalizeChapterRhythm = (
+  value: unknown,
+  chapter: number
+): CreativeReportChapterRhythm => {
+  const source = isRecord(value) ? value : {};
+
+  return {
+    chapter,
+    status: slotStatus(source, 'needs-confirmation'),
+    rhythm: textValue(source.rhythm) || '待确认',
+    function: textValue(source.function) || '待确认',
+    emotionalBeat: textValue(source.emotionalBeat) || '待确认',
+    plotTurn: textValue(source.plotTurn) || '待确认',
+    evidence: stringList(source.evidence)
+  };
+};
+
+const normalizeCharacterArc = (value: unknown): CreativeReportCharacterArc | undefined => {
+  if (!isRecord(value)) {
+    return undefined;
+  }
+
+  const character = textValue(value.character);
+  if (!character) {
+    return undefined;
+  }
+
+  return {
+    character,
+    status: slotStatus(value, 'needs-confirmation'),
+    start: textValue(value.start) || '资料不足',
+    turn: textValue(value.turn) || '资料不足',
+    end: textValue(value.end) || '资料不足',
+    evidence: stringList(value.evidence),
+    nextConfirmation: textValue(value.nextConfirmation) || undefined
+  };
+};
+
+const normalizePlotCurve = (value: unknown): CreativeReportPlotCurve | undefined => {
+  if (!isRecord(value)) {
+    return undefined;
+  }
+
+  const chapterRange = textValue(value.chapterRange);
+  if (!chapterRange) {
+    return undefined;
+  }
+
+  return {
+    chapterRange,
+    status: slotStatus(value, 'needs-confirmation'),
+    tension: textValue(value.tension) || '资料不足',
+    payoff: textValue(value.payoff) || '资料不足',
+    evidence: stringList(value.evidence)
+  };
+};
+
+const normalizeRelationship = (value: unknown): CreativeReportRelationshipOverview | undefined => {
+  if (!isRecord(value)) {
+    return undefined;
+  }
+
+  const participants = stringList(value.participants);
+  const dynamic = textValue(value.dynamic);
+  if (participants.length === 0 && !dynamic) {
+    return undefined;
+  }
+
+  return {
+    participants,
+    status: slotStatus(value, 'needs-confirmation'),
+    dynamic: dynamic || '资料不足',
+    conflict: textValue(value.conflict) || '资料不足',
+    evidence: stringList(value.evidence),
+    nextConfirmation: textValue(value.nextConfirmation) || undefined
+  };
+};
+
+const findRawAct = (
+  values: unknown[],
+  fallback: CreativeReportDigestAct,
+  index: number
+): unknown =>
+  values.find(value =>
+    isRecord(value)
+    && (value.act === fallback.act || value.label === fallback.label)
+  ) ?? values[index];
+
+const buildDigestNextActions = (
+  digest: Omit<CreativeReportVolumePlanDigest, 'nextActions'>
+): string[] => {
+  const actions: string[] = [];
+
+  if (!digest.available) {
+    actions.push('补齐 volume-plan-digest.json，或先运行 storyspec preview plan 生成保留缺口的计划草案。');
+  }
+
+  if (digest.oneSentenceGoal.status !== 'confirmed') {
+    actions.push('确认第一卷一句话目标，避免计划摘要替作者定案。');
+  }
+
+  digest.threeActSummary
+    .filter(item => item.status === 'missing' || item.status === 'needs-confirmation')
+    .forEach(item => actions.push(`确认${item.label}结构摘要。`));
+  digest.chapterRhythm
+    .filter(item => item.status === 'missing' || item.status === 'needs-confirmation')
+    .slice(0, 3)
+    .forEach(item => actions.push(`补齐第${item.chapter}章节奏或章节功能。`));
+  digest.characterArcs
+    .filter(item => item.status !== 'confirmed' || item.evidence.length === 0)
+    .forEach(item => actions.push(item.nextConfirmation ?? `确认角色弧线：${item.character}。`));
+  digest.relationships
+    .filter(item => item.status !== 'confirmed' || item.evidence.length === 0)
+    .forEach(item => {
+      const label = item.participants.length > 0 ? item.participants.join(' / ') : '人物关系';
+      actions.push(item.nextConfirmation
+        ? `确认人物关系：${label}。${item.nextConfirmation}`
+        : `确认人物关系：${label}。`);
+    });
+
+  return uniqueTexts(actions).slice(0, 8);
+};
+
+const buildMissingVolumePlanDigest = (
+  sourcePath?: string
+): CreativeReportVolumePlanDigest => {
+  const base: Omit<CreativeReportVolumePlanDigest, 'nextActions'> = {
+    available: false,
+    sourcePath,
+    volume: 1,
+    oneSentenceGoal: {
+      status: 'missing',
+      text: '待确认',
+      evidence: []
+    },
+    threeActSummary: defaultActs.map(item => ({ ...item })),
+    chapterRhythm: Array.from({ length: 12 }, (_, index) => ({
+      chapter: index + 1,
+      status: 'missing' as const,
+      rhythm: '待确认',
+      function: '待确认',
+      emotionalBeat: '待确认',
+      plotTurn: '待确认',
+      evidence: []
+    })),
+    characterArcs: [{
+      character: '核心角色',
+      status: 'missing',
+      start: '资料不足',
+      turn: '资料不足',
+      end: '资料不足',
+      evidence: []
+    }],
+    plotCurve: [{
+      chapterRange: '1-12',
+      status: 'missing',
+      tension: '资料不足',
+      payoff: '资料不足',
+      evidence: []
+    }],
+    relationships: [{
+      participants: [],
+      status: 'missing',
+      dynamic: '资料不足',
+      conflict: '资料不足',
+      evidence: []
+    }]
+  };
+
+  return {
+    ...base,
+    nextActions: buildDigestNextActions(base)
+  };
+};
+
+const readVolumePlanDigest = async (
+  fs: ProjectFileSystem,
+  storyPath: string
+): Promise<CreativeReportVolumePlanDigest> => {
+  const sourcePath = path.join(storyPath, 'volume-plan-digest.json');
+  if (!await fs.pathExists(sourcePath)) {
+    return buildMissingVolumePlanDigest();
+  }
+
+  let raw: unknown;
+  try {
+    raw = await fs.readJson<unknown>(sourcePath);
+  } catch {
+    return buildMissingVolumePlanDigest(sourcePath);
+  }
+
+  if (!isRecord(raw)) {
+    return buildMissingVolumePlanDigest(sourcePath);
+  }
+
+  const rawActs = Array.isArray(raw.threeActSummary) ? raw.threeActSummary : [];
+  const rawChapters = Array.isArray(raw.chapterRhythm) ? raw.chapterRhythm : [];
+  const findRawChapter = (chapter: number): unknown =>
+    rawChapters.find(value =>
+      isRecord(value)
+      && typeof value.chapter === 'number'
+      && value.chapter === chapter
+    ) ?? rawChapters[chapter - 1];
+  const characterArcs = Array.isArray(raw.characterArcs)
+    ? raw.characterArcs.flatMap(item => {
+      const normalized = normalizeCharacterArc(item);
+      return normalized ? [normalized] : [];
+    })
+    : [];
+  const plotCurve = Array.isArray(raw.plotCurve)
+    ? raw.plotCurve.flatMap(item => {
+      const normalized = normalizePlotCurve(item);
+      return normalized ? [normalized] : [];
+    })
+    : [];
+  const relationships = Array.isArray(raw.relationships)
+    ? raw.relationships.flatMap(item => {
+      const normalized = normalizeRelationship(item);
+      return normalized ? [normalized] : [];
+    })
+    : [];
+  const base: Omit<CreativeReportVolumePlanDigest, 'nextActions'> = {
+    available: true,
+    sourcePath,
+    volume: typeof raw.volume === 'number' && Number.isFinite(raw.volume) ? raw.volume : 1,
+    oneSentenceGoal: normalizeDigestText(raw.oneSentenceGoal),
+    threeActSummary: defaultActs.map((act, index) =>
+      normalizeDigestAct(findRawAct(rawActs, act, index), act)
+    ),
+    chapterRhythm: Array.from({ length: 12 }, (_, index) =>
+      normalizeChapterRhythm(findRawChapter(index + 1), index + 1)
+    ),
+    characterArcs: characterArcs.length > 0
+      ? characterArcs
+      : buildMissingVolumePlanDigest(sourcePath).characterArcs,
+    plotCurve: plotCurve.length > 0
+      ? plotCurve
+      : buildMissingVolumePlanDigest(sourcePath).plotCurve,
+    relationships: relationships.length > 0
+      ? relationships
+      : buildMissingVolumePlanDigest(sourcePath).relationships
+  };
+
+  return {
+    ...base,
+    nextActions: buildDigestNextActions(base)
+  };
+};
+
 export const createCreativeReport = async (
   input: CreativeReportInput
 ): Promise<CreativeReportResult> => {
@@ -346,6 +759,7 @@ export const createCreativeReport = async (
   const creationEcho = summarizeCreationEcho(story.name, record?.premise, coreElements);
   const decisionLog = summarizeDecisionLog(record, story.name, story.stage);
   const funPrompts = buildFunPrompts(story.name, coreElements);
+  const volumePlanDigest = await readVolumePlanDigest(input.fileSystem, story.path);
   const base = {
     projectRoot: input.projectRoot,
     story: story.name,
@@ -361,6 +775,7 @@ export const createCreativeReport = async (
     decisionLog,
     funPrompts,
     activeBranches,
+    volumePlanDigest,
     driftIssues: storyDriftIssues,
     cannotFinalize: summary.cannotFinalize
   };
@@ -370,6 +785,41 @@ export const createCreativeReport = async (
     nextActions: buildNextActions(base)
   };
 };
+
+const renderVolumePlanDigest = (
+  result: CreativeReportResult
+): string[] => [
+  '第一卷一屏摘要：',
+  `- 来源：${result.volumePlanDigest.sourcePath
+    ? relativePath(result.projectRoot, result.volumePlanDigest.sourcePath)
+    : '待确认'}`,
+  `- 第一卷一句话目标 [${result.volumePlanDigest.oneSentenceGoal.status}]：${result.volumePlanDigest.oneSentenceGoal.text}`,
+  '- 三幕结构摘要：',
+  ...result.volumePlanDigest.threeActSummary.map(item =>
+    `  - ${item.label}（第${item.chapters}章）[${item.status}]：${item.summary}`
+  ),
+  '- 12 章节奏/章节功能表：',
+  ...result.volumePlanDigest.chapterRhythm.map(item =>
+    `  - 第${item.chapter}章 [${item.status}]：${item.rhythm}｜${item.function}｜${item.emotionalBeat}｜${item.plotTurn}`
+  ),
+  '- 核心角色弧线：',
+  ...result.volumePlanDigest.characterArcs.map(item =>
+    `  - ${item.character} [${item.status}]：${item.start} -> ${item.turn} -> ${item.end}；证据：${item.evidence.length > 0 ? item.evidence.join('；') : '资料不足'}`
+  ),
+  '- 剧情起伏：',
+  ...result.volumePlanDigest.plotCurve.map(item =>
+    `  - ${item.chapterRange} [${item.status}]：${item.tension}；回报/释放：${item.payoff}`
+  ),
+  '- 人物关系概况：',
+  ...result.volumePlanDigest.relationships.map(item => {
+    const participants = item.participants.length > 0 ? item.participants.join(' / ') : '待确认';
+    return `  - ${participants} [${item.status}]：${item.dynamic}；冲突：${item.conflict}`;
+  }),
+  '- 补齐建议：',
+  ...(result.volumePlanDigest.nextActions.length > 0
+    ? result.volumePlanDigest.nextActions.map(item => `  - ${item}`)
+    : ['  - 暂无。'])
+];
 
 export const renderCreativeReport = (result: CreativeReportResult): string => [
   'StorySpec 创作控制权报告',
@@ -403,6 +853,8 @@ export const renderCreativeReport = (result: CreativeReportResult): string => [
   `- 摘要：${result.storySkeleton.summary}`,
   `- 成熟度：${result.creationEcho.maturityNote}`,
   ...result.storySkeleton.created.map(item => `- ${item}`),
+  '',
+  ...renderVolumePlanDigest(result),
   '',
   '创作回声：',
   `- 当前风味：${result.creationEcho.flavor}`,

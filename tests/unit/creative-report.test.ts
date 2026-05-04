@@ -8,6 +8,201 @@ import {
 import { MemoryFileSystem } from '../helpers/memory-file-system.js';
 
 describe('creative report', () => {
+  it('outputs a one-screen structured volume plan digest without promoting candidates', async () => {
+    const projectRoot = path.join(os.tmpdir(), 'memory-novel-creative-report-volume-digest');
+    const fileSystem = new MemoryFileSystem(projectRoot);
+    const storyPath = path.join(projectRoot, 'stories', 'volume-demo');
+
+    await fileSystem.writeFile(path.join(storyPath, 'idea.md'), '# volume demo');
+    await fileSystem.writeJson(path.join(storyPath, 'clarifications.json'), {
+      schemaVersion: '1.0',
+      story: 'volume-demo',
+      premise: '第一卷是学院维修库里的编程施法冒险。',
+      createdAt: '2026-05-03T00:00:00.000Z',
+      updatedAt: '2026-05-03T00:00:00.000Z',
+      questions: [],
+      answers: []
+    }, { spaces: 2 });
+    await fileSystem.writeJson(path.join(storyPath, 'volume-plan-digest.json'), {
+      schemaVersion: '1.0',
+      volume: 1,
+      oneSentenceGoal: {
+        status: 'confirmed',
+        text: '晏无在 12 章内证明编程施法能修复民生法器，并把第三次寂静的第一枚异常钉住。',
+        evidence: ['stories/volume-demo/creative-plan.md#第一卷目标']
+      },
+      threeActSummary: [
+        {
+          act: 'setup',
+          label: '第一幕',
+          chapters: '1-3',
+          status: 'confirmed',
+          summary: '维修库事故暴露知识垄断，晏无被迫公开调试思路。'
+        },
+        {
+          act: 'confrontation',
+          label: '第二幕',
+          chapters: '4-9',
+          status: 'confirmed',
+          summary: '学院和工坊争夺修复权，民生法器连续失灵。'
+        },
+        {
+          act: 'resolution',
+          label: '第三幕',
+          chapters: '10-12',
+          status: 'confirmed',
+          summary: '晏无用最小可行术式稳定城区核心，但只确认寂静的一角。'
+        }
+      ],
+      chapterRhythm: Array.from({ length: 12 }, (_, index) => ({
+        chapter: index + 1,
+        status: index === 6 ? 'candidate' : 'confirmed',
+        rhythm: index < 3 ? '建立' : index < 9 ? '升级' : '释放',
+        function: `章节功能 ${index + 1}`,
+        emotionalBeat: `情绪推进 ${index + 1}`,
+        plotTurn: `剧情转折 ${index + 1}`
+      })),
+      characterArcs: [
+        {
+          character: '晏无',
+          status: 'confirmed',
+          start: '把施法当工程问题',
+          turn: '承认异界规则也有政治代价',
+          end: '愿意为公开修复方案承担风险',
+          evidence: ['stories/volume-demo/creative-plan.md#晏无']
+        },
+        {
+          character: '莉安',
+          status: 'needs-confirmation',
+          start: '学院观察者',
+          turn: '资料不足',
+          end: '资料不足',
+          evidence: []
+        }
+      ],
+      plotCurve: [
+        { chapterRange: '1-3', status: 'confirmed', tension: '从事故钩子升到学院介入', payoff: '证明调试法可用' },
+        { chapterRange: '4-9', status: 'confirmed', tension: '权力争夺和连续失灵抬升', payoff: '锁定异常来源' },
+        { chapterRange: '10-12', status: 'confirmed', tension: '城区核心失控达到峰值', payoff: '稳定核心但留下长线威胁' }
+      ],
+      relationships: [
+        {
+          participants: ['晏无', '莉安'],
+          status: 'candidate',
+          dynamic: '从监视与试探到有限互信',
+          conflict: '是否公开编程施法原理',
+          nextConfirmation: '确认第一卷只到有限互信，不进入表白。'
+        }
+      ]
+    }, { spaces: 2 });
+
+    const result = await createCreativeReport({
+      projectRoot,
+      fileSystem,
+      story: 'volume-demo'
+    });
+    const rendered = renderCreativeReport(result);
+
+    expect(result.volumePlanDigest).toMatchObject({
+      available: true,
+      sourcePath: path.join(storyPath, 'volume-plan-digest.json'),
+      volume: 1,
+      oneSentenceGoal: {
+        status: 'confirmed',
+        text: expect.stringContaining('12 章')
+      },
+      threeActSummary: [
+        expect.objectContaining({ act: 'setup', status: 'confirmed' }),
+        expect.objectContaining({ act: 'confrontation', status: 'confirmed' }),
+        expect.objectContaining({ act: 'resolution', status: 'confirmed' })
+      ],
+      characterArcs: expect.arrayContaining([
+        expect.objectContaining({
+          character: '莉安',
+          status: 'needs-confirmation',
+          evidence: []
+        })
+      ]),
+      relationships: [
+        expect.objectContaining({
+          participants: ['晏无', '莉安'],
+          status: 'candidate'
+        })
+      ]
+    });
+    expect(result.volumePlanDigest.chapterRhythm).toHaveLength(12);
+    expect(result.volumePlanDigest.chapterRhythm[6]).toEqual(expect.objectContaining({
+      chapter: 7,
+      status: 'candidate'
+    }));
+    expect(result.volumePlanDigest.nextActions).toEqual(expect.arrayContaining([
+      expect.stringContaining('莉安'),
+      expect.stringContaining('晏无 / 莉安')
+    ]));
+    expect(rendered).toContain('第一卷一屏摘要');
+    expect(rendered).toContain('第一卷一句话目标 [confirmed]');
+    expect(rendered).toContain('第7章 [candidate]');
+    expect(rendered).toContain('莉安 [needs-confirmation]');
+    expect(rendered).toContain('晏无 / 莉安 [candidate]');
+    expect(rendered).not.toContain('莉安 [confirmed]');
+    expect(rendered.length).toBeLessThan(9000);
+  });
+
+  it('marks missing volume digest fields as待确认 without inventing facts', async () => {
+    const projectRoot = path.join(os.tmpdir(), 'memory-novel-creative-report-volume-digest-missing');
+    const fileSystem = new MemoryFileSystem(projectRoot);
+    const storyPath = path.join(projectRoot, 'stories', 'missing-volume-demo');
+
+    await fileSystem.writeFile(path.join(storyPath, 'idea.md'), '# missing volume demo');
+    await fileSystem.writeJson(path.join(storyPath, 'clarifications.json'), {
+      schemaVersion: '1.0',
+      story: 'missing-volume-demo',
+      premise: '第一卷目标还在共创。',
+      createdAt: '2026-05-03T00:00:00.000Z',
+      updatedAt: '2026-05-03T00:00:00.000Z',
+      questions: [],
+      answers: []
+    }, { spaces: 2 });
+
+    const result = await createCreativeReport({
+      projectRoot,
+      fileSystem,
+      story: 'missing-volume-demo'
+    });
+    const rendered = renderCreativeReport(result);
+
+    expect(result.volumePlanDigest).toMatchObject({
+      available: false,
+      oneSentenceGoal: {
+        status: 'missing',
+        text: '待确认'
+      },
+      threeActSummary: [
+        expect.objectContaining({ act: 'setup', status: 'missing', summary: '资料不足' }),
+        expect.objectContaining({ act: 'confrontation', status: 'missing', summary: '资料不足' }),
+        expect.objectContaining({ act: 'resolution', status: 'missing', summary: '资料不足' })
+      ],
+      chapterRhythm: expect.arrayContaining([
+        expect.objectContaining({ chapter: 1, status: 'missing', function: '待确认' }),
+        expect.objectContaining({ chapter: 12, status: 'missing', function: '待确认' })
+      ]),
+      characterArcs: [
+        expect.objectContaining({ character: '核心角色', status: 'missing', start: '资料不足' })
+      ],
+      plotCurve: [
+        expect.objectContaining({ chapterRange: '1-12', status: 'missing', tension: '资料不足' })
+      ],
+      relationships: [
+        expect.objectContaining({ participants: [], status: 'missing', dynamic: '资料不足' })
+      ]
+    });
+    expect(result.volumePlanDigest.nextActions).toContain('补齐 volume-plan-digest.json，或先运行 storyspec preview plan 生成保留缺口的计划草案。');
+    expect(rendered).toContain('第一卷一句话目标 [missing]：待确认');
+    expect(rendered).toContain('人物关系概况');
+    expect(rendered).toContain('资料不足');
+    expect(rendered).not.toContain('自动补全');
+  });
+
   it('separates confirmed user choices, pending questions, AI suggestions, and drift issues', async () => {
     const projectRoot = path.join(os.tmpdir(), 'memory-novel-creative-report');
     const fileSystem = new MemoryFileSystem(projectRoot);

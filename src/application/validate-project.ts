@@ -6,6 +6,7 @@ import {
   validateTrackingDocument,
   validateWritingTask,
   type ValidationIssue,
+  type ValidationScope,
   type ValidationSeverity
 } from '../validation/schema/index.js';
 import {
@@ -35,6 +36,8 @@ import { inspectPreset } from './manage-presets.js';
 import type { PresetDoctorIssue } from './manage-presets.js';
 import {
   countIssuesBySeverity,
+  countIssuesByScopeAndSeverity,
+  countIssuesByBucket,
   filterIssuesBySeverity,
   sortIssuesBySeverity
 } from '../validation/severity.js';
@@ -79,6 +82,7 @@ export type ProjectValidationIssueCode =
 
 export interface ProjectValidationIssue {
   severity: ValidationSeverity;
+  scope?: ValidationScope;
   code: ProjectValidationIssueCode;
   path: string;
   message: string;
@@ -100,11 +104,20 @@ export interface ProjectValidationSummary {
   activePreset?: string;
 }
 
+export interface ProjectValidationScopeSummary {
+  scope: string;
+  blocking: number;
+  advisory: number;
+  info: number;
+}
+
 export interface ProjectValidationResult {
   projectRoot: string;
   valid: boolean;
   summary: ProjectValidationSummary;
   issueCounts: Record<ValidationSeverity, number>;
+  severityBuckets: Record<'blocking' | 'advisory' | 'info', number>;
+  scopeCounts: ProjectValidationScopeSummary[];
   issues: ProjectValidationIssue[];
 }
 
@@ -142,6 +155,7 @@ const createIssue = (
 
 const toProjectIssue = (issue: ValidationIssue | ArtifactIssue | WritingRuleIssue): ProjectValidationIssue => ({
   severity: issue.severity,
+  ...(issue.scope ? { scope: issue.scope } : {}),
   code: issue.code,
   path: issue.path,
   message: issue.message
@@ -177,6 +191,7 @@ const toPresetProjectIssue = (issue: PresetDoctorIssue): ProjectValidationIssue 
 
 const toClarificationProjectIssue = (storyPath: string, issue: ClarificationIssue): ProjectValidationIssue => ({
   severity: issue.severity,
+  scope: 'import-clarification',
   code: issue.code,
   path: `${path.join(storyPath, 'clarifications.json')}#${issue.path}`,
   message: issue.message
@@ -693,6 +708,13 @@ export const validateProject = async (input: ValidateProjectInput): Promise<Proj
     ))
   ]);
   const issueCounts = countIssuesBySeverity(issues);
+  const severityBuckets = countIssuesByBucket(issues);
+  const scopeCounts = Object.entries(countIssuesByScopeAndSeverity(issues)).map(([scope, counts]) => ({
+    scope,
+    blocking: counts.error,
+    advisory: counts.warning,
+    info: counts.info
+  }));
 
   return {
     projectRoot,
@@ -716,8 +738,23 @@ export const validateProject = async (input: ValidateProjectInput): Promise<Proj
       activePreset: presetResult.activePreset?.id
     },
     issueCounts,
+    severityBuckets,
+    scopeCounts,
     issues
   };
+};
+
+const renderScopeSummary = (result: ProjectValidationResult): string[] => {
+  if (result.scopeCounts.length === 0) {
+    return ['分类摘要：无'];
+  }
+
+  return [
+    '分类摘要：',
+    ...result.scopeCounts.map(entry =>
+      `- ${entry.scope}: blocking=${entry.blocking}, advisory=${entry.advisory}, info=${entry.info}`
+    )
+  ];
 };
 
 export const renderProjectValidation = (
@@ -749,10 +786,17 @@ export const renderProjectValidation = (
     `问题：${result.issueCounts.error} error / ${result.issueCounts.warning} warning / ${result.issueCounts.info} info`
   ];
 
+  lines.push('', ...renderScopeSummary(result));
+
   if (visibleIssues.length > 0) {
     lines.push('', '问题列表：');
     for (const issue of visibleIssues) {
-      lines.push(`- [${issue.severity}] ${issue.code}: ${issue.path} - ${issue.message}`);
+      const bucket = issue.severity === 'error'
+        ? 'blocking'
+        : issue.severity === 'warning'
+          ? 'advisory'
+          : 'info';
+      lines.push(`- [${bucket}/${issue.severity}] ${issue.code}: ${issue.path} - ${issue.message}`);
     }
   }
 

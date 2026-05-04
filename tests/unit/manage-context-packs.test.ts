@@ -249,4 +249,93 @@ describe('manage context packs', () => {
       story: 'planned-demo'
     })).rejects.toThrow('storyspec tasks:board planned-demo');
   });
+
+  it('generates a chapter-scoped pack with Windows task paths and only target scene cards', async () => {
+    const { projectRoot, fileSystem, storyPath } = await createProject();
+    await fileSystem.writeFile(path.join(storyPath, 'tasks.md'), `# tasks
+
+- [ ] [P0] [WRITE-READY] **T001** - 起草第二章
+  - **必须读取**：
+    - \`specification.md\`
+    - \`content\\chapter-001.md\`
+  - **允许修改**：
+    - \`content\\chapter-002.md\`
+    - \`tasks.md\`
+  - **输出**：\`content\\chapter-002.md\`
+  - **验收标准**：
+    - [ ] 第二章推进追踪线索
+`);
+    await fileSystem.writeFile(path.join(storyPath, 'content', 'chapter-001.md'), '# 第一章\n\n主角已经出发。');
+    await fileSystem.writeFile(path.join(storyPath, 'scenes', 'scene-002.yaml'), `id: scene-002
+chapter: chapter-002
+order: 1
+pov: Hero
+location: Road
+time: Night
+sceneGoal: Open chapter two
+conflict: A false trail appears
+outcome: Hero hesitates
+plotThread: 主线转入追踪
+readerPromise: 留下第二章谜题
+relationshipChange: 主角和同伴从戒备变成协作
+worldReveal:
+  factId: world.rule
+  actionImpact: 规则迫使主角改变路线
+  beneficiaries:
+    - 追踪者
+  costs:
+    - 主角
+  violationConsequence: 暴露行踪
+emotionalBeat: 从急躁转向克制
+endingHook: 路标被人提前改写
+successCriteria:
+  - 主角主动选择绕路
+entities:
+  - entity.hero
+draftPath: stories/001-demo/content/chapter-002.md
+`);
+
+    const result = await generateContextPack({
+      projectRoot,
+      fileSystem,
+      task: 'T001',
+      write: false
+    });
+
+    expect(result.pack.scope).toMatchObject({
+      type: 'chapter',
+      id: 'chapter-002'
+    });
+    expect(result.pack.sceneCards).toEqual(['scene-002']);
+    expect(result.pack.allowedWrites).toEqual([
+      'stories/001-demo/content/chapter-002.md',
+      'stories/001-demo/tasks.md'
+    ]);
+    expect(result.pack.mustRead).toEqual(expect.arrayContaining([
+      expect.objectContaining({
+        path: 'stories/001-demo/scenes/scene-002.yaml',
+        reason: expect.stringContaining('Scene Card')
+      })
+    ]));
+  });
+
+  it('adds a scope warning when a chapter pack lacks scene cards', async () => {
+    const { projectRoot, fileSystem } = await createProject();
+
+    const result = await generateContextPack({
+      projectRoot,
+      fileSystem,
+      chapter: '3',
+      write: false
+    });
+
+    expect(result.pack.scope).toMatchObject({
+      type: 'chapter',
+      id: 'chapter-003'
+    });
+    expect(result.pack.scope.warnings).toEqual(expect.arrayContaining([
+      expect.stringContaining('资料不足')
+    ]));
+    expect(result.markdown).toContain('Scope Warning');
+  });
 });

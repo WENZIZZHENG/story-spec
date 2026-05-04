@@ -13,11 +13,13 @@ import {
   type StageRequiredArtifact,
   type StoryMaturityStage
 } from '../domain/story-stage.js';
+import type { ValidationScope } from './schema/index.js';
 
 export type ArtifactIssueSeverity = 'error' | 'warning' | 'info';
 
 export interface ArtifactIssue {
   severity: ArtifactIssueSeverity;
+  scope?: ValidationScope;
   code:
     | 'MISSING_SPECIFICATION'
     | 'MISSING_CREATIVE_PLAN'
@@ -116,9 +118,11 @@ const createMissingIssue = (
   code: ArtifactIssue['code'],
   message: string,
   filePath: string,
-  severity: ArtifactIssueSeverity = 'warning'
+  severity: ArtifactIssueSeverity = 'warning',
+  scope?: ValidationScope
 ): ArtifactIssue => ({
   severity,
+  ...(scope ? { scope } : {}),
   code,
   message,
   path: filePath
@@ -241,7 +245,9 @@ const scanStory = async (
         issues.push(createMissingIssue(
           'MISSING_TASK_OUTPUT',
           `任务 ${task.id} 的输出文件不存在: ${output}`,
-          outputPath
+          outputPath,
+          task.status === 'todo' ? 'info' : 'warning',
+          'task-output'
         ));
       }
     }
