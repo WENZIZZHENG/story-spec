@@ -8,6 +8,7 @@ Active。本文是 StorySpec 当前唯一的活跃待办入口。详细规则见
 
 | 路线 | 状态 | 优先级 | 当前下一步 |
 | --- | --- | --- | --- |
+| [新用户小说创建端到端体验](new-user-story-creation-dogfood-roadmap.md) | Active | P0 | 先处理 P0-1 到 P0-3：统一首次路径、修复 next 可复制命令、移除固定示例污染 |
 | [故事共创访谈体验增强](story-co-creation-interview-roadmap.md) | Completed | P0 | F0-F21 已完成；后续新体验优化应按 [todo-governance.md](todo-governance.md) 新建专题 roadmap |
 
 ### 故事共创访谈子路线
