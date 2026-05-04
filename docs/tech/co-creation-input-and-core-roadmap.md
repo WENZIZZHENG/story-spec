@@ -60,6 +60,7 @@ Active。
 ### P1-1 预览摘要与来源 diff
 
 - 类型：preview/apply 体验。
+- 状态：基础版已落地，preview JSON 和 `.preview.md` 会展示作者确认项、Agent 建议和待确认项。
 - 背景/问题：`preview specify` 只显示风险和文件路径，作者难以判断“这次到底会写入什么”。
 - 建议方案：给 `preview specify/plan` 增加摘要区，展示新增/更新项、来源、仍待确认项和风险。
 - 验收标准：预览报告中出现“将写入的作者确认项 / agent 建议 / 待确认项 / 风险”。

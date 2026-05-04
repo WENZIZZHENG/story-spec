@@ -76,6 +76,37 @@ describe('preview apply', () => {
     await expect(fileSystem.readFile(preview.contentPath)).resolves.not.toContain('本文件由 preview 生成');
   });
 
+  it('renders a write summary in preview records and reports', async () => {
+    const { projectRoot, fileSystem } = await createProject();
+
+    const preview = await createSpecifyPreview({
+      projectRoot,
+      fileSystem,
+      story: 'demo',
+      now: () => new Date('2026-05-03T12:00:00.000Z')
+    });
+
+    expect(preview.record.writeSummary).toMatchObject({
+      confirmedItems: expect.arrayContaining([
+        expect.objectContaining({
+          questionId: 'core.premise',
+          source: 'user-explicit'
+        })
+      ]),
+      agentSuggestions: expect.arrayContaining([
+        expect.objectContaining({
+          label: expect.any(String)
+        })
+      ]),
+      pendingItems: expect.any(Array)
+    });
+    await expect(fileSystem.readFile(preview.markdownPath)).resolves.toContain('## 写入摘要');
+    await expect(fileSystem.readFile(preview.markdownPath)).resolves.toContain('### 作者确认项');
+    await expect(fileSystem.readFile(preview.markdownPath)).resolves.toContain('core.premise');
+    await expect(fileSystem.readFile(preview.markdownPath)).resolves.toContain('### Agent 建议');
+    await expect(fileSystem.readFile(preview.markdownPath)).resolves.toContain('### 待确认项');
+  });
+
   it('applies a preview only after explicit confirmation', async () => {
     const { projectRoot, fileSystem, storyPath } = await createProject();
     const preview = await createSpecifyPreview({

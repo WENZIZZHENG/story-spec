@@ -44,6 +44,19 @@ export interface PreviewRisk {
   message: string;
 }
 
+export interface PreviewWriteSummaryItem {
+  label: string;
+  questionId?: string;
+  source?: string;
+  text: string;
+}
+
+export interface PreviewWriteSummary {
+  confirmedItems: PreviewWriteSummaryItem[];
+  agentSuggestions: PreviewWriteSummaryItem[];
+  pendingItems: PreviewWriteSummaryItem[];
+}
+
 export interface PreviewRecord {
   schemaVersion: '1.0';
   id: string;
@@ -53,6 +66,7 @@ export interface PreviewRecord {
   targetPath: string;
   sourcePaths: string[];
   summary: string;
+  writeSummary: PreviewWriteSummary;
   content: string;
   risks: PreviewRisk[];
   createdAt: string;
@@ -147,6 +161,46 @@ const coreElementConfirmed = (
 
 const coreElementPending = (element?: StoryCoreElementAssessment): string | undefined =>
   element?.nextPrompt;
+
+const truncateSummaryText = (value: string): string =>
+  value.length > 120 ? `${value.slice(0, 117)}...` : value;
+
+const buildWriteSummary = (
+  record: ClarificationRecord,
+  coreElements: StoryCoreElementAssessment[]
+): PreviewWriteSummary => {
+  const confirmedItems = record.answers
+    .filter(answer => answer.confirmed && hasResolvedClarificationAnswer(answer.answer))
+    .map(answer => ({
+      label: answer.questionId,
+      questionId: answer.questionId,
+      source: answer.source,
+      text: truncateSummaryText(formatAnswerText(answer.answer))
+    }));
+  const agentSuggestions = coreElements
+    .map(element => ({
+      label: element.label,
+      questionId: element.questionIds[0],
+      source: element.qualityNotes.length > 0 ? 'quality-note' : 'core-element',
+      text: truncateSummaryText(coreElementSuggestion(element) ?? element.description)
+    }))
+    .filter(item => item.text.length > 0)
+    .slice(0, 6);
+  const pendingItems = coreElements
+    .filter(element => element.status !== 'confirmed' && element.nextPrompt)
+    .map(element => ({
+      label: element.label,
+      questionId: element.questionIds[0],
+      source: 'pending-core-element',
+      text: truncateSummaryText(element.nextPrompt ?? '请继续共创确认。')
+    }));
+
+  return {
+    confirmedItems,
+    agentSuggestions,
+    pendingItems
+  };
+};
 
 const readClarificationRecord = async (
   fs: ProjectFileSystem,
@@ -378,6 +432,26 @@ const renderPreviewReport = (
     ? record.risks.map(risk => `- [${risk.severity}] ${risk.message}`)
     : ['- 暂无。']),
   '',
+  '## 写入摘要',
+  '',
+  '### 作者确认项',
+  '',
+  ...(record.writeSummary.confirmedItems.length > 0
+    ? record.writeSummary.confirmedItems.map(item => `- ${item.questionId ?? item.label}（${item.source ?? 'unknown'}）：${item.text}`)
+    : ['- 暂无。']),
+  '',
+  '### Agent 建议',
+  '',
+  ...(record.writeSummary.agentSuggestions.length > 0
+    ? record.writeSummary.agentSuggestions.map(item => `- ${item.label}：${item.text}`)
+    : ['- 暂无。']),
+  '',
+  '### 待确认项',
+  '',
+  ...(record.writeSummary.pendingItems.length > 0
+    ? record.writeSummary.pendingItems.map(item => `- ${item.label}：${item.text}`)
+    : ['- 暂无。']),
+  '',
   '## 应用命令',
   '',
   `- 预览：storyspec apply ${record.id}`,
@@ -430,6 +504,11 @@ export const createSpecifyPreview = async (
   });
   const id = `specify-${slugifyPathPart(story.name)}-${now.toISOString().slice(0, 10).replace(/-/g, '')}-${String(now.getTime())}`;
   const targetPath = path.join(story.path, 'specification.md');
+  const coreElements = evaluateStoryCoreElements({
+    premise: record.premise,
+    questions: record.questions,
+    answers: record.answers
+  });
   const content = renderSpecifyContent(story.name, record);
   const previewRecord: PreviewRecord = {
     schemaVersion: '1.0',
@@ -443,6 +522,7 @@ export const createSpecifyPreview = async (
       path.join(story.path, 'clarifications.json')
     ],
     summary: '根据用户已确认澄清答案生成 specification 预览；不会直接覆盖正式规格。',
+    writeSummary: buildWriteSummary(record, coreElements),
     content,
     risks: [
       ...buildRisks(summary),
@@ -495,6 +575,7 @@ export const createPlanPreview = async (
       path.join(story.path, 'specification.md')
     ],
     summary: '根据用户已确认核心要素生成 creative-plan 预览；核心缺口会保留为 [需要澄清]。',
+    writeSummary: buildWriteSummary(record, coreElements),
     content,
     risks: buildPlanRisks(coreElements),
     createdAt: now.toISOString(),
