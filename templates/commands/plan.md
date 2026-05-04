@@ -73,7 +73,8 @@ test -f spec/tracking/rhythm-config.json && echo "found" || echo "not-found"
 - ⚠️ **如果不存在**：使用默认节奏规划
 
 **验证规格澄清状态**：
-- 如果存在未澄清的关键决策，提示先运行 `/clarify` 或 `storyspec creative:report`
+- 如果存在未澄清的关键决策，提示先运行 `/clarify`、`storyspec core --missing` 或 `storyspec creative:report`
+- 如果作者已经有长文资料但尚未沉淀，提示先运行 `storyspec ingest <story> --file notes.md` 或 `storyspec co:create <story> --file notes.md --apply-confirmed --preview specify`
 - 如果主角、核心伙伴、第一舞台、能力边界、势力冲突、长线威胁、成功路线或作品声音仍缺失，不要把 AI 候选写成正典
 - 用户明确要求探索性草案时，可以继续，但所有缺口必须保留为 `[需要澄清]`，并说明返工风险
 
@@ -85,6 +86,7 @@ test -f spec/tracking/rhythm-config.json && echo "found" || echo "not-found"
 
 - `source: user` 且 `confirmed: true` 的内容，才可以作为计划中的正典前提。
 - `source: ai-suggested`、`confirmed: false`、示例分叉、跳过回答和“给我示例”只能作为候选项。
+- `storyspec ingest` / `storyspec co:create` 识别出的无标题长文候选只能作为候选项；不能因为出现在 `candidateItems` 就进入计划正典。
 - `.specify/memory/author-profile.json` 只影响推荐、示例和风味参考；当前故事的 `clarifications.json` 与用户即时指令永远优先。
 - 对缺失的核心要素使用 `[需要澄清]`，不要用顺手生成的人设、势力、章节或世界观填平。
 - 输出中必须区分“已确认前提”“AI 候选分叉”“仍需作者决定”。
@@ -374,7 +376,7 @@ test -f spec/tracking/rhythm-config.json && echo "found" || echo "not-found"
 
 ## 与其他命令的关系
 
-- **输入**：来自 `/specify` 的规格 + `/clarify` 的澄清 + `storyspec creative:report` 的核心要素成熟度
+- **输入**：来自 `/specify` 的规格 + `/clarify` 的澄清 + `storyspec core` / `storyspec creative:report` 的核心要素成熟度；长文资料先通过 `storyspec ingest` / `storyspec co:create` 进入确认门禁
 - **输出**：优先生成 `creative-plan.md` 预览；确认后才为 `/tasks` 提供任务生成依据
 - **验证**：被 `/analyze` 用于检查实现符合度
 

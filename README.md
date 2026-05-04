@@ -239,7 +239,7 @@ storyspec interview 王国异常日志 --premise "主角团队用日志、断点
 ## 流程总览
 
 ```text
-init -> story:new -> next -> interview/clarify -> creative:report -> preview specify -> apply -> preview plan -> apply -> /storyspec-tasks -> tasks:board -> scene:init -> context:pack -> draft:new/write -> review -> validate
+init -> story:new -> next -> interview/clarify 或 ingest/co:create -> core/creative:report -> preview specify -> apply -> preview plan -> apply -> /storyspec-tasks -> tasks:board -> scene:init -> context:pack -> draft:new/write -> review -> validate
 ```
 
 每一步的职责不同：
@@ -253,6 +253,7 @@ init -> story:new -> next -> interview/clarify -> creative:report -> preview spe
 | `storyspec interview` / `storyspec clarify` | 访谈式澄清；可用 `--focus` 或 `--entry protagonist/partner/world/stage/power/faction/conflict/scene/ending/branch` 从某个共创入口开始；`--answers` 支持 `questionId=...` 和 `主角=...;第一舞台=...` 中文别名 |
 | `storyspec core` | 查看核心创意、主角、伙伴、第一舞台、能力体系和创作边界；加 `--missing` 只看缺口 |
 | `storyspec ingest` | 吸收自然语言长文，拆成核心澄清项预览；加 `--apply-confirmed` 才写入 |
+| `storyspec co:create` | 连续共创入口：长文吸收、核心面板和可选 preview 串在一起；默认只预览 |
 | `storyspec creative:report` | 查看作者已经创建的小说骨架、创作回声、未决项回流、待澄清问题和 AI 建议风险 |
 | `storyspec preview specify` | 生成规格写入预览 |
 | `storyspec apply` | 确认无 blocking 风险后写入正式规格 |
@@ -308,6 +309,7 @@ StorySpec 有两类入口，容易混淆：
 | `storyspec clarify [story]` | `interview` 的 CLI 澄清入口，适合非 agent 环境 |
 | `storyspec core [story]` | 查看故事核心信息面板；支持 `--missing` 和 `--json` |
 | `storyspec ingest [story]` | 从 `--text` 或 `--file` 吸收长文创作资料，默认预览；支持 `--apply-confirmed` 和 `--json` |
+| `storyspec co:create [story]` | 把长文吸收、核心缺口查看和 `preview specify/plan` 串成一个低摩擦入口；支持 `--text`、`--file`、`--apply-confirmed`、`--preview specify|plan|both` |
 | `storyspec creative:report [story]` | 查看作者确认、创作回声、待澄清、AI 建议和漂移风险 |
 | `storyspec clarification:rollback --story <story> [--question <id>]` | 把最近一次确认或指定问题退回候选，保留原答案和证据，不修改正文或正典文件 |
 | `storyspec preview specify [story]` | 生成 StorySpec v0 规格草案，不直接写入正式规格 |

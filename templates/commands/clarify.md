@@ -28,6 +28,14 @@ scripts:
 2. **需要澄清**：一次最多 6-10 个关键问题，每个问题说明 `whyItMatters`。
 3. **可复制示例分叉**：至少 2-3 个不同方向的示例答案，帮助用户继续创作，而不是替用户定稿。
 
+如果用户已经一次给出多条回复、几百字设定、会议记录或“整理上面讨论”，不要继续把内容拆成逐个问题逼问。先按核心创意、主角、伙伴、第一舞台、能力体系、势力冲突、长线威胁和创作边界整理为：
+
+1. **作者已确认**：用户明确表达或明确确认的内容。
+2. **保留候选**：无标题自然段、推断项和 agent 建议。
+3. **仍需确认**：影响规格、计划或正文的缺口。
+
+已有故事工作区时，优先建议终端运行 `storyspec ingest <story> --file notes.md` 预览吸收结果；想串联长文吸收、核心缺口和规格预览时，建议 `storyspec co:create <story> --file notes.md --apply-confirmed --preview specify`。候选项不能因为 `--apply-confirmed` 自动进入正典。
+
 如果用户回答“你推荐”，必须把推荐标记为 `ai-suggested` 和 `confirmed: false`，等待用户确认后才能进入规格、计划、任务或 canon。
 
 澄清记录优先写入：
@@ -300,3 +308,13 @@ storyspec interview <story> --focus branch
 ```
 
 `--focus` 只改变本轮访谈的切入点，不会绕过用户确认，也不会自动写入 specification、World Bible、Scene Card、tracking 或 tasks。
+
+如果用户已经有长文资料或多条回复，可以建议：
+
+```bash
+storyspec core <story> --missing
+storyspec ingest <story> --file notes.md
+storyspec co:create <story> --file notes.md --apply-confirmed --preview specify
+```
+
+`core` 用来查看核心缺口；`ingest` 默认只预览；`co:create` 生成的 preview 仍需 `storyspec apply <preview-id> --yes` 才会覆盖正式文件。

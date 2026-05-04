@@ -7,9 +7,10 @@
 ```text
 storyspec story:new
 storyspec next
-/clarify 或 storyspec interview --focus <entry> / --entry <entry>
+storyspec interview --focus <entry> / storyspec ingest / storyspec co:create
+storyspec core 或 storyspec creative:report
 /constitution
-/specify
+storyspec preview specify -> storyspec apply
 /plan
 /tasks
 /write
@@ -25,6 +26,9 @@ storyspec next
 | `storyspec story:new <name> --idea "..."` | 保存一句话灵感和原始创作意图 |
 | `storyspec next [story]` | 根据当前阶段展示创作模式、推荐入口卡和多入口共创导航 |
 | `storyspec interview [story]` | 在终端完成创作访谈，可用 `--focus` 或 `--entry` 从指定入口卡开始 |
+| `storyspec ingest [story]` | 从 `--text` 或 `--file` 吸收长文创作资料；默认只预览，`--apply-confirmed` 只写入明确字段 |
+| `storyspec co:create [story]` | 把长文吸收、核心缺口和可选 preview 串起来；适合一次粘贴多条回复或几百字设定 |
+| `storyspec core [story]` | 查看核心信息面板；`--missing` 只显示缺口，`--json` 保留 `sourceLabel` |
 | `storyspec creative:report [story]` | 查看已确认、创作回声、未决项回流、待澄清、AI 候选和偏离风险 |
 | `storyspec preview specify [story]` | 预览规格写入内容 |
 | `storyspec apply <preview-id> --yes` | 明确确认后写入 preview |
@@ -126,7 +130,9 @@ storyspec <command> --help
 ## 常见判断
 
 - 只有一句题材：先 `storyspec story:new` 或 `/clarify`，不要直接 `/specify` 到完整设定。
+- 已经有一大段设定或多条回复：先 `storyspec ingest [story] --file notes.md` 看候选，再用 `storyspec co:create [story] --file notes.md --apply-confirmed --preview specify` 串起写入前预览。
 - 只想先玩一个局部：运行 `storyspec next [story]`，再复制某个入口命令，例如 `storyspec interview 编程施法 --entry power`。
+- 想快速看核心缺口：运行 `storyspec core [story] --missing`，再决定继续访谈、吸收长文还是生成 preview。
 - 规格还不稳定：用 `preview`，不要直接覆盖正式文件。
 - 想写正文：先确认 `specification.md`、`creative-plan.md`、`tasks.md`。
 - 想让另一个 agent 接手：先运行 `storyspec status` 和 `storyspec context:pack`。

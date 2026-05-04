@@ -29,10 +29,12 @@
 2. 我有主角，想搭世界和冲突
 3. 我有世界观，想找到主线
 4. 我有一幕场景，想顺着写下去
-5. 我想写类型文，但还没具体想法
+5. 我已经有一大段设定，想先整理成可确认资料
+6. 我想写类型文，但还没具体想法
 ```
 
 如果用户已经给出明确入口，直接沿该入口推进，不再重复选择。
+如果用户一次给出几百字设定、多个回复、会议记录或“把上面讨论整理一下”，不要强行拆成逐题问答。先把内容归纳为“作者已确认 / 候选 / 待确认”，并建议使用 `storyspec ingest <story> --text "<文本>"` 或 `storyspec co:create <story> --file notes.md` 做本地预览。
 
 ## 低负担启动问题
 
@@ -48,6 +50,17 @@
 ```
 
 如果用户已经给出部分信息，只问缺失的 1 到 3 项。不要重复索要已提供内容。若作者只想先写一幕，优先问场景中的人物、冲突和结尾钩子，而不是强行补齐世界观。
+
+## 多回复和长文处理
+
+作者可以一次输入多条回答或 500 字以上的创作资料。agent 应当：
+
+- 先按核心创意、主角、伙伴、第一舞台、能力体系、势力冲突、长线威胁和创作边界拆分信息。
+- 明确标签或作者直接确认的内容，才放进“作者已确认”。
+- 无标题自然段、推断内容和 agent 补全，只放进“候选”或“待确认”。
+- 建议作者运行 `storyspec core <story> --missing` 查看核心缺口。
+- 已有故事工作区时，优先建议 `storyspec ingest <story> --file notes.md`；想把吸收、核心面板和 preview 串起来时，建议 `storyspec co:create <story> --file notes.md --apply-confirmed --preview specify`。
+- 即使使用 `--apply-confirmed`，也只能写入明确字段；候选不能跳过作者确认。
 
 ## 生成第一版 StorySpec
 
@@ -77,7 +90,8 @@
 如果当前 agent 可以写文件，按项目状态选择落点：
 
 - 尚未创建故事：先用对话产出 StorySpec v0 草案，再建议运行 `storyspec story:new <故事名> --idea "<原始灵感>"` 保存原始灵感。
-- 已有故事但无规格：优先生成 `stories/<story>/specification.md` 的 preview 或建议运行 `storyspec preview specify <story>`。
+- 已有故事但核心资料分散：先建议运行 `storyspec ingest <story> --file notes.md` 或 `storyspec co:create <story> --file notes.md --preview specify`，再根据 preview 决定是否 `apply`。
+- 已有故事但无规格：优先建议运行 `storyspec core <story> --missing` 和 `storyspec preview specify <story>`，不要直接覆盖 `stories/<story>/specification.md`。
 - 还在探索：把内容作为候选留在对话或 `stories/<story>/clarifications.md`，不要写入正典。
 
 如果当前 agent 不能写文件，输出补丁式建议：
@@ -120,6 +134,7 @@
 - 不要在用户只给一句灵感时直接生成完整世界观、人物小传和几十章大纲。
 - 不要把 AI 候选写成正典事实。
 - 不要跳过 preview / confirm / apply 或等价确认流程。
+- 不要把 `storyspec ingest` 的候选项当成 confirmed；无标题长文只能作为候选，直到作者明确确认。
 - 不要用大量问题阻塞用户开始创作。
 
 ## 工具降级

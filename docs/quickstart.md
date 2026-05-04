@@ -13,7 +13,7 @@ npm install -g story-spec-cn
 ### 步骤 2：初始化项目
 
 ```bash
-storyspec init 我的第一本小说 --ai claude
+storyspec init 我的第一本小说 --agent claude
 cd 我的第一本小说
 ```
 
@@ -36,10 +36,20 @@ storyspec next 法术编译纪元
 
 ```bash
 storyspec interview 法术编译纪元 --focus protagonist --premise "异界穿越、轻松冒险、编程施法、慢热感情、文明级威胁" --max-questions 6
+storyspec core 法术编译纪元 --missing
 storyspec creative:report 法术编译纪元
 ```
 
 你也可以把 `--focus protagonist` 换成 `--focus scene`、`--focus partner`、`--focus world` 等入口，先玩一个角色、一幕戏或一个世界压力点。你可以回答“稍后决定”“不知道”或选择示例；它们会被记录下来，但不会被当成已经定稿的正典设定。
+
+如果你已经和 AI 聊出了一大段设定，或者想一次粘贴多条回复，不必拆成很多个 `questionId=answer`。先放进 `notes.md`，然后运行：
+
+```bash
+storyspec ingest 法术编译纪元 --file notes.md
+storyspec co:create 法术编译纪元 --file notes.md --apply-confirmed --preview specify
+```
+
+`ingest` 默认只预览；`co:create` 会把长文吸收、核心缺口和规格预览串起来。无标题自然段只会进入候选，不会因为 `--apply-confirmed` 自动写入正典。
 
 ### 步骤 6：生成 StorySpec v0 草案
 
@@ -87,7 +97,7 @@ storyspec draft:new 法术编译纪元 --chapter 001
 
 ```bash
 # 创建项目
-storyspec init 都市修仙者 --ai claude
+storyspec init 都市修仙者 --agent claude
 
 # 进入项目目录
 cd 都市修仙者
@@ -111,6 +121,7 @@ cd 都市修仙者
      storyspec next 故事名
   5. 完成一轮低负担访谈，再预览规格:
      storyspec interview 故事名 --focus protagonist --premise "一句话创意"
+     storyspec core 故事名 --missing
      storyspec creative:report 故事名
      storyspec preview specify 故事名
      storyspec apply <preview-id> --yes
@@ -129,6 +140,7 @@ storyspec next 都市修仙者
 
 ```bash
 storyspec interview 都市修仙者 --premise "都市修仙、程序员、修仙 APP、隐藏身份、保护身边的人" --max-questions 6
+storyspec core 都市修仙者 --missing
 storyspec creative:report 都市修仙者
 ```
 
@@ -239,7 +251,7 @@ AI 会根据大纲和风格设定，生成第一章内容：
 
 ## 命令详解
 
-### storyspec story:new / storyspec next / storyspec interview / storyspec preview specify - 创建故事规格
+### storyspec story:new / storyspec next / storyspec interview / storyspec ingest / storyspec co:create / storyspec preview specify - 创建故事规格
 
 **用途**：先保存原始创意，再选择入口澄清关键选择，最后生成可确认的 StorySpec v0 草案
 
@@ -248,6 +260,8 @@ AI 会根据大纲和风格设定，生成第一章内容：
 storyspec story:new 重生之都市仙尊 --idea "前世仙尊重生回高三时期"
 storyspec next 重生之都市仙尊
 storyspec interview 重生之都市仙尊 --premise "都市修仙、重生、弥补遗憾、守护所爱之人"
+storyspec ingest 重生之都市仙尊 --file notes.md
+storyspec co:create 重生之都市仙尊 --file notes.md --apply-confirmed --preview specify
 storyspec preview specify 重生之都市仙尊
 ```
 

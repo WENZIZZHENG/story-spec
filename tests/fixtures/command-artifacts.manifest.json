@@ -51,7 +51,7 @@
     },
     {
       "path": "auggie/.augment/commands/clarify.md",
-      "sha256": "2e71f634f77252456fe6684bbf831e2d915cd5f331197266d1465f5d7f98c35d",
+      "sha256": "01b6015de73441c5fce809c5556be1e1caccb24ed137520a1570baf4d9adc6cb",
       "commandSource": {
         "command": "clarify",
         "kind": "legacy-template",
@@ -87,7 +87,7 @@
     },
     {
       "path": "auggie/.augment/commands/plan.md",
-      "sha256": "48020e141a05724216ad1125056ff7541e77a304e420b945702e5fc9a72e7d0e",
+      "sha256": "0293d2d8d8f48faa15d93df1d316fccc41009a04f8c55d37a58bd31bc527b355",
       "commandSource": {
         "command": "plan",
         "kind": "legacy-template",
@@ -123,7 +123,7 @@
     },
     {
       "path": "auggie/.augment/commands/specify.md",
-      "sha256": "73ef07d63c4db4cb054575bce70dc47a37bd0dcbb44ee7a86fcbcc26d2b47a54",
+      "sha256": "b12e8f53f768127a6cdaac99eaaabc5258bac1531a2a3b372cb07a269d012666",
       "commandSource": {
         "command": "specify",
         "kind": "legacy-template",
@@ -178,7 +178,7 @@
     },
     {
       "path": "auggie/.specify/agent-guides/story-creation-guide.md",
-      "sha256": "408c5e6de41487db2c807a155c2f3adfb12be432c2a5c8687a441a101c320177"
+      "sha256": "577d64e5894710d65eb8466b7f624cb3f216fa6b7e0698e93b07edc51a384ec1"
     },
     {
       "path": "auggie/.specify/experts/core/character.md",
@@ -290,7 +290,7 @@
     },
     {
       "path": "auggie/.specify/scripts/runtime/application/check-writing-state.js",
-      "sha256": "9099cc6efbe9c99552677ddefe653264bdfe406439a3a456c34f12333fc9b44b"
+      "sha256": "1dc8556a3fc1be4769fc3f585e4ba605f43302750f28abb7be76ed9fd7f74236"
     },
     {
       "path": "auggie/.specify/scripts/runtime/domain/story-artifact.js",
@@ -302,7 +302,7 @@
     },
     {
       "path": "auggie/.specify/templates/agent/agent-contract.md",
-      "sha256": "9805a9fdde74e010fb1f1a151b6b1c2a3b2a202b1a37e0d7832dc3ca7b1d4d80"
+      "sha256": "e59a517192022dd3648aaeb02533b81616bd4fd954a8e9c2ffa56f61bdecd369"
     },
     {
       "path": "auggie/.specify/templates/canon/contradictions.md",
@@ -326,11 +326,11 @@
     },
     {
       "path": "auggie/.specify/templates/clarification/core.yaml",
-      "sha256": "9b6bee56428f0990d2368e40a5b28e5ffbd7ae95ea5f7f86c738ac3cfd2626d0"
+      "sha256": "1415caa574189e422bd91688e36c8a7d4db76a186a2969fc6b6802f80bb07345"
     },
     {
       "path": "auggie/.specify/templates/clarification/cozy-adventure.yaml",
-      "sha256": "aba3282c099929f2f3c7f8ac1413666f1f9e8e161742e205c5611d61eec0fe52"
+      "sha256": "6baecb6777f9a6bfba2b57e00f253ae4afc0402b4abe64c8581b11caffd4f6d2"
     },
     {
       "path": "auggie/.specify/templates/clarification/examples/civilization-threat.yaml",
@@ -338,11 +338,11 @@
     },
     {
       "path": "auggie/.specify/templates/clarification/examples/core.yaml",
-      "sha256": "22038ad0d9f240a86235359d4925bbaca2ffab414ef5515bafba44786f7f9825"
+      "sha256": "46861445cb635d0756c50d47d4941e45012fda765141f4934492b2ed54851dc7"
     },
     {
       "path": "auggie/.specify/templates/clarification/examples/cozy-adventure.yaml",
-      "sha256": "ac14fd9b83789d42b5a04e097e07e2668484cc57042685ba75cce1f50ec841f6"
+      "sha256": "ed48d69fb439b8c1b1d8affe416c9ba424dbb214bad85c992b726f5b386c23ac"
     },
     {
       "path": "auggie/.specify/templates/clarification/examples/kingdom-building-support.yaml",
@@ -382,7 +382,7 @@
     },
     {
       "path": "auggie/.specify/templates/CLAUDE.md",
-      "sha256": "c938419b7b6471aa852e31f32aba35e3d476133e6604c8695104b83e08fe29b3"
+      "sha256": "d139132ced37995bfdb917ba4bac484a9b8d1d256c1b14ad94e918b1fb053f93"
     },
     {
       "path": "auggie/.specify/templates/continue-rules/story-spec.md",
@@ -390,7 +390,7 @@
     },
     {
       "path": "auggie/.specify/templates/copilot-instructions.md",
-      "sha256": "feb255ef0b9ef5c07e9ea09a9fdff7720a8f287d3ef8896c81703efaec54487f"
+      "sha256": "194be2f7feccb8e24a420006eed0282056cf727f550b4898587b4dfcd5dd2d4a"
     },
     {
       "path": "auggie/.specify/templates/cursor-rules/story-spec.mdc",
@@ -406,7 +406,7 @@
     },
     {
       "path": "auggie/.specify/templates/GEMINI.md",
-      "sha256": "e43a125248686c855de4d9d4fc9361180865b9df0112d9c8bbab52f0593302b5"
+      "sha256": "b97fa59452d223366ec92a3263b3298c60b0e058530dbef679c162496a0b6299"
     },
     {
       "path": "auggie/.specify/templates/graph/edges.json",
@@ -658,7 +658,7 @@
     },
     {
       "path": "claude/.claude/commands/storyspec.clarify.md",
-      "sha256": "57dc38a8b1775bf86019a2e51b9417efd7200a8531492f9283518be070baafda",
+      "sha256": "a33d1f8f1f420bfaacfceb636fdf31c6fe2e06c55c84ddb16ecb817fa78c3a3d",
       "commandSource": {
         "command": "clarify",
         "kind": "legacy-template",
@@ -694,7 +694,7 @@
     },
     {
       "path": "claude/.claude/commands/storyspec.plan.md",
-      "sha256": "373c82ab49c602edd9ba2276dc96a4a2cbf1e6c75c6bfd8726b9923a660f2d60",
+      "sha256": "b0e8a0fa40e4b1b5d45bd8eb0412e9c8dbed4204c04fd71aa404c5245ad757ee",
       "commandSource": {
         "command": "plan",
         "kind": "legacy-template",
@@ -730,7 +730,7 @@
     },
     {
       "path": "claude/.claude/commands/storyspec.specify.md",
-      "sha256": "2b7abcbbfc894063d773a4cefe0cc0eeb21665a718e751616f7a2b09c8230c41",
+      "sha256": "a9612da5d74a9ea71f0e3e02c9d658ed831e386b3d698e3ff1b37c5e6696cc66",
       "commandSource": {
         "command": "specify",
         "kind": "legacy-template",
@@ -785,7 +785,7 @@
     },
     {
       "path": "claude/.specify/agent-guides/story-creation-guide.md",
-      "sha256": "408c5e6de41487db2c807a155c2f3adfb12be432c2a5c8687a441a101c320177"
+      "sha256": "577d64e5894710d65eb8466b7f624cb3f216fa6b7e0698e93b07edc51a384ec1"
     },
     {
       "path": "claude/.specify/experts/core/character.md",
@@ -897,7 +897,7 @@
     },
     {
       "path": "claude/.specify/scripts/runtime/application/check-writing-state.js",
-      "sha256": "9099cc6efbe9c99552677ddefe653264bdfe406439a3a456c34f12333fc9b44b"
+      "sha256": "1dc8556a3fc1be4769fc3f585e4ba605f43302750f28abb7be76ed9fd7f74236"
     },
     {
       "path": "claude/.specify/scripts/runtime/domain/story-artifact.js",
@@ -909,7 +909,7 @@
     },
     {
       "path": "claude/.specify/templates/agent/agent-contract.md",
-      "sha256": "9805a9fdde74e010fb1f1a151b6b1c2a3b2a202b1a37e0d7832dc3ca7b1d4d80"
+      "sha256": "e59a517192022dd3648aaeb02533b81616bd4fd954a8e9c2ffa56f61bdecd369"
     },
     {
       "path": "claude/.specify/templates/canon/contradictions.md",
@@ -933,11 +933,11 @@
     },
     {
       "path": "claude/.specify/templates/clarification/core.yaml",
-      "sha256": "9b6bee56428f0990d2368e40a5b28e5ffbd7ae95ea5f7f86c738ac3cfd2626d0"
+      "sha256": "1415caa574189e422bd91688e36c8a7d4db76a186a2969fc6b6802f80bb07345"
     },
     {
       "path": "claude/.specify/templates/clarification/cozy-adventure.yaml",
-      "sha256": "aba3282c099929f2f3c7f8ac1413666f1f9e8e161742e205c5611d61eec0fe52"
+      "sha256": "6baecb6777f9a6bfba2b57e00f253ae4afc0402b4abe64c8581b11caffd4f6d2"
     },
     {
       "path": "claude/.specify/templates/clarification/examples/civilization-threat.yaml",
@@ -945,11 +945,11 @@
     },
     {
       "path": "claude/.specify/templates/clarification/examples/core.yaml",
-      "sha256": "22038ad0d9f240a86235359d4925bbaca2ffab414ef5515bafba44786f7f9825"
+      "sha256": "46861445cb635d0756c50d47d4941e45012fda765141f4934492b2ed54851dc7"
     },
     {
       "path": "claude/.specify/templates/clarification/examples/cozy-adventure.yaml",
-      "sha256": "ac14fd9b83789d42b5a04e097e07e2668484cc57042685ba75cce1f50ec841f6"
+      "sha256": "ed48d69fb439b8c1b1d8affe416c9ba424dbb214bad85c992b726f5b386c23ac"
     },
     {
       "path": "claude/.specify/templates/clarification/examples/kingdom-building-support.yaml",
@@ -989,7 +989,7 @@
     },
     {
       "path": "claude/.specify/templates/CLAUDE.md",
-      "sha256": "c938419b7b6471aa852e31f32aba35e3d476133e6604c8695104b83e08fe29b3"
+      "sha256": "d139132ced37995bfdb917ba4bac484a9b8d1d256c1b14ad94e918b1fb053f93"
     },
     {
       "path": "claude/.specify/templates/continue-rules/story-spec.md",
@@ -997,7 +997,7 @@
     },
     {
       "path": "claude/.specify/templates/copilot-instructions.md",
-      "sha256": "feb255ef0b9ef5c07e9ea09a9fdff7720a8f287d3ef8896c81703efaec54487f"
+      "sha256": "194be2f7feccb8e24a420006eed0282056cf727f550b4898587b4dfcd5dd2d4a"
     },
     {
       "path": "claude/.specify/templates/cursor-rules/story-spec.mdc",
@@ -1013,7 +1013,7 @@
     },
     {
       "path": "claude/.specify/templates/GEMINI.md",
-      "sha256": "e43a125248686c855de4d9d4fc9361180865b9df0112d9c8bbab52f0593302b5"
+      "sha256": "b97fa59452d223366ec92a3263b3298c60b0e058530dbef679c162496a0b6299"
     },
     {
       "path": "claude/.specify/templates/graph/edges.json",
@@ -1153,7 +1153,7 @@
     },
     {
       "path": "claude/CLAUDE.md",
-      "sha256": "c938419b7b6471aa852e31f32aba35e3d476133e6604c8695104b83e08fe29b3"
+      "sha256": "d139132ced37995bfdb917ba4bac484a9b8d1d256c1b14ad94e918b1fb053f93"
     },
     {
       "path": "claude/spec/checklists/README.md",
@@ -1269,7 +1269,7 @@
     },
     {
       "path": "codebuddy/.codebuddy/commands/clarify.md",
-      "sha256": "2e71f634f77252456fe6684bbf831e2d915cd5f331197266d1465f5d7f98c35d",
+      "sha256": "01b6015de73441c5fce809c5556be1e1caccb24ed137520a1570baf4d9adc6cb",
       "commandSource": {
         "command": "clarify",
         "kind": "legacy-template",
@@ -1305,7 +1305,7 @@
     },
     {
       "path": "codebuddy/.codebuddy/commands/plan.md",
-      "sha256": "48020e141a05724216ad1125056ff7541e77a304e420b945702e5fc9a72e7d0e",
+      "sha256": "0293d2d8d8f48faa15d93df1d316fccc41009a04f8c55d37a58bd31bc527b355",
       "commandSource": {
         "command": "plan",
         "kind": "legacy-template",
@@ -1341,7 +1341,7 @@
     },
     {
       "path": "codebuddy/.codebuddy/commands/specify.md",
-      "sha256": "73ef07d63c4db4cb054575bce70dc47a37bd0dcbb44ee7a86fcbcc26d2b47a54",
+      "sha256": "b12e8f53f768127a6cdaac99eaaabc5258bac1531a2a3b372cb07a269d012666",
       "commandSource": {
         "command": "specify",
         "kind": "legacy-template",
@@ -1396,7 +1396,7 @@
     },
     {
       "path": "codebuddy/.specify/agent-guides/story-creation-guide.md",
-      "sha256": "408c5e6de41487db2c807a155c2f3adfb12be432c2a5c8687a441a101c320177"
+      "sha256": "577d64e5894710d65eb8466b7f624cb3f216fa6b7e0698e93b07edc51a384ec1"
     },
     {
       "path": "codebuddy/.specify/experts/core/character.md",
@@ -1508,7 +1508,7 @@
     },
     {
       "path": "codebuddy/.specify/scripts/runtime/application/check-writing-state.js",
-      "sha256": "9099cc6efbe9c99552677ddefe653264bdfe406439a3a456c34f12333fc9b44b"
+      "sha256": "1dc8556a3fc1be4769fc3f585e4ba605f43302750f28abb7be76ed9fd7f74236"
     },
     {
       "path": "codebuddy/.specify/scripts/runtime/domain/story-artifact.js",
@@ -1520,7 +1520,7 @@
     },
     {
       "path": "codebuddy/.specify/templates/agent/agent-contract.md",
-      "sha256": "9805a9fdde74e010fb1f1a151b6b1c2a3b2a202b1a37e0d7832dc3ca7b1d4d80"
+      "sha256": "e59a517192022dd3648aaeb02533b81616bd4fd954a8e9c2ffa56f61bdecd369"
     },
     {
       "path": "codebuddy/.specify/templates/canon/contradictions.md",
@@ -1544,11 +1544,11 @@
     },
     {
       "path": "codebuddy/.specify/templates/clarification/core.yaml",
-      "sha256": "9b6bee56428f0990d2368e40a5b28e5ffbd7ae95ea5f7f86c738ac3cfd2626d0"
+      "sha256": "1415caa574189e422bd91688e36c8a7d4db76a186a2969fc6b6802f80bb07345"
     },
     {
       "path": "codebuddy/.specify/templates/clarification/cozy-adventure.yaml",
-      "sha256": "aba3282c099929f2f3c7f8ac1413666f1f9e8e161742e205c5611d61eec0fe52"
+      "sha256": "6baecb6777f9a6bfba2b57e00f253ae4afc0402b4abe64c8581b11caffd4f6d2"
     },
     {
       "path": "codebuddy/.specify/templates/clarification/examples/civilization-threat.yaml",
@@ -1556,11 +1556,11 @@
     },
     {
       "path": "codebuddy/.specify/templates/clarification/examples/core.yaml",
-      "sha256": "22038ad0d9f240a86235359d4925bbaca2ffab414ef5515bafba44786f7f9825"
+      "sha256": "46861445cb635d0756c50d47d4941e45012fda765141f4934492b2ed54851dc7"
     },
     {
       "path": "codebuddy/.specify/templates/clarification/examples/cozy-adventure.yaml",
-      "sha256": "ac14fd9b83789d42b5a04e097e07e2668484cc57042685ba75cce1f50ec841f6"
+      "sha256": "ed48d69fb439b8c1b1d8affe416c9ba424dbb214bad85c992b726f5b386c23ac"
     },
     {
       "path": "codebuddy/.specify/templates/clarification/examples/kingdom-building-support.yaml",
@@ -1600,7 +1600,7 @@
     },
     {
       "path": "codebuddy/.specify/templates/CLAUDE.md",
-      "sha256": "c938419b7b6471aa852e31f32aba35e3d476133e6604c8695104b83e08fe29b3"
+      "sha256": "d139132ced37995bfdb917ba4bac484a9b8d1d256c1b14ad94e918b1fb053f93"
     },
     {
       "path": "codebuddy/.specify/templates/continue-rules/story-spec.md",
@@ -1608,7 +1608,7 @@
     },
     {
       "path": "codebuddy/.specify/templates/copilot-instructions.md",
-      "sha256": "feb255ef0b9ef5c07e9ea09a9fdff7720a8f287d3ef8896c81703efaec54487f"
+      "sha256": "194be2f7feccb8e24a420006eed0282056cf727f550b4898587b4dfcd5dd2d4a"
     },
     {
       "path": "codebuddy/.specify/templates/cursor-rules/story-spec.mdc",
@@ -1624,7 +1624,7 @@
     },
     {
       "path": "codebuddy/.specify/templates/GEMINI.md",
-      "sha256": "e43a125248686c855de4d9d4fc9361180865b9df0112d9c8bbab52f0593302b5"
+      "sha256": "b97fa59452d223366ec92a3263b3298c60b0e058530dbef679c162496a0b6299"
     },
     {
       "path": "codebuddy/.specify/templates/graph/edges.json",
@@ -1876,7 +1876,7 @@
     },
     {
       "path": "codex/.codex/prompts/storyspec-clarify.md",
-      "sha256": "2e71f634f77252456fe6684bbf831e2d915cd5f331197266d1465f5d7f98c35d",
+      "sha256": "01b6015de73441c5fce809c5556be1e1caccb24ed137520a1570baf4d9adc6cb",
       "commandSource": {
         "command": "clarify",
         "kind": "legacy-template",
@@ -1912,7 +1912,7 @@
     },
     {
       "path": "codex/.codex/prompts/storyspec-plan.md",
-      "sha256": "48020e141a05724216ad1125056ff7541e77a304e420b945702e5fc9a72e7d0e",
+      "sha256": "0293d2d8d8f48faa15d93df1d316fccc41009a04f8c55d37a58bd31bc527b355",
       "commandSource": {
         "command": "plan",
         "kind": "legacy-template",
@@ -1948,7 +1948,7 @@
     },
     {
       "path": "codex/.codex/prompts/storyspec-specify.md",
-      "sha256": "73ef07d63c4db4cb054575bce70dc47a37bd0dcbb44ee7a86fcbcc26d2b47a54",
+      "sha256": "b12e8f53f768127a6cdaac99eaaabc5258bac1531a2a3b372cb07a269d012666",
       "commandSource": {
         "command": "specify",
         "kind": "legacy-template",
@@ -2003,7 +2003,7 @@
     },
     {
       "path": "codex/.specify/agent-guides/story-creation-guide.md",
-      "sha256": "408c5e6de41487db2c807a155c2f3adfb12be432c2a5c8687a441a101c320177"
+      "sha256": "577d64e5894710d65eb8466b7f624cb3f216fa6b7e0698e93b07edc51a384ec1"
     },
     {
       "path": "codex/.specify/experts/core/character.md",
@@ -2115,7 +2115,7 @@
     },
     {
       "path": "codex/.specify/scripts/runtime/application/check-writing-state.js",
-      "sha256": "9099cc6efbe9c99552677ddefe653264bdfe406439a3a456c34f12333fc9b44b"
+      "sha256": "1dc8556a3fc1be4769fc3f585e4ba605f43302750f28abb7be76ed9fd7f74236"
     },
     {
       "path": "codex/.specify/scripts/runtime/domain/story-artifact.js",
@@ -2127,7 +2127,7 @@
     },
     {
       "path": "codex/.specify/templates/agent/agent-contract.md",
-      "sha256": "9805a9fdde74e010fb1f1a151b6b1c2a3b2a202b1a37e0d7832dc3ca7b1d4d80"
+      "sha256": "e59a517192022dd3648aaeb02533b81616bd4fd954a8e9c2ffa56f61bdecd369"
     },
     {
       "path": "codex/.specify/templates/canon/contradictions.md",
@@ -2151,11 +2151,11 @@
     },
     {
       "path": "codex/.specify/templates/clarification/core.yaml",
-      "sha256": "9b6bee56428f0990d2368e40a5b28e5ffbd7ae95ea5f7f86c738ac3cfd2626d0"
+      "sha256": "1415caa574189e422bd91688e36c8a7d4db76a186a2969fc6b6802f80bb07345"
     },
     {
       "path": "codex/.specify/templates/clarification/cozy-adventure.yaml",
-      "sha256": "aba3282c099929f2f3c7f8ac1413666f1f9e8e161742e205c5611d61eec0fe52"
+      "sha256": "6baecb6777f9a6bfba2b57e00f253ae4afc0402b4abe64c8581b11caffd4f6d2"
     },
     {
       "path": "codex/.specify/templates/clarification/examples/civilization-threat.yaml",
@@ -2163,11 +2163,11 @@
     },
     {
       "path": "codex/.specify/templates/clarification/examples/core.yaml",
-      "sha256": "22038ad0d9f240a86235359d4925bbaca2ffab414ef5515bafba44786f7f9825"
+      "sha256": "46861445cb635d0756c50d47d4941e45012fda765141f4934492b2ed54851dc7"
     },
     {
       "path": "codex/.specify/templates/clarification/examples/cozy-adventure.yaml",
-      "sha256": "ac14fd9b83789d42b5a04e097e07e2668484cc57042685ba75cce1f50ec841f6"
+      "sha256": "ed48d69fb439b8c1b1d8affe416c9ba424dbb214bad85c992b726f5b386c23ac"
     },
     {
       "path": "codex/.specify/templates/clarification/examples/kingdom-building-support.yaml",
@@ -2207,7 +2207,7 @@
     },
     {
       "path": "codex/.specify/templates/CLAUDE.md",
-      "sha256": "c938419b7b6471aa852e31f32aba35e3d476133e6604c8695104b83e08fe29b3"
+      "sha256": "d139132ced37995bfdb917ba4bac484a9b8d1d256c1b14ad94e918b1fb053f93"
     },
     {
       "path": "codex/.specify/templates/continue-rules/story-spec.md",
@@ -2215,7 +2215,7 @@
     },
     {
       "path": "codex/.specify/templates/copilot-instructions.md",
-      "sha256": "feb255ef0b9ef5c07e9ea09a9fdff7720a8f287d3ef8896c81703efaec54487f"
+      "sha256": "194be2f7feccb8e24a420006eed0282056cf727f550b4898587b4dfcd5dd2d4a"
     },
     {
       "path": "codex/.specify/templates/cursor-rules/story-spec.mdc",
@@ -2231,7 +2231,7 @@
     },
     {
       "path": "codex/.specify/templates/GEMINI.md",
-      "sha256": "e43a125248686c855de4d9d4fc9361180865b9df0112d9c8bbab52f0593302b5"
+      "sha256": "b97fa59452d223366ec92a3263b3298c60b0e058530dbef679c162496a0b6299"
     },
     {
       "path": "codex/.specify/templates/graph/edges.json",
@@ -2483,7 +2483,7 @@
     },
     {
       "path": "continue-check/.continue/prompts/clarify.md",
-      "sha256": "8dd9c44bf46fa9855a8d688a8684fb858ed55a944a1cfb89c38095564fd6e5d6",
+      "sha256": "97f8af9ac8062a6996e564311ea16025d0637a5509fcf5312157fc549fcf292e",
       "commandSource": {
         "command": "clarify",
         "kind": "legacy-template",
@@ -2519,7 +2519,7 @@
     },
     {
       "path": "continue-check/.continue/prompts/plan.md",
-      "sha256": "57189318b7b7b6e4f91c16c51db2ddaf17bfa463b7dcb576216bdb80191b02ce",
+      "sha256": "dd7ae561f41c9b493b2713490acddc1eca8654b8a2d8a30117e9b161b48a417d",
       "commandSource": {
         "command": "plan",
         "kind": "legacy-template",
@@ -2555,7 +2555,7 @@
     },
     {
       "path": "continue-check/.continue/prompts/specify.md",
-      "sha256": "1e845bcc70826e096e202f699b18a3c0a92d0b36b22852d25e5647b490dc1aa7",
+      "sha256": "123fd6c884f875c5f240009aff297c3b0d7fdb64a62e1d7b7810cd6103752ff3",
       "commandSource": {
         "command": "specify",
         "kind": "legacy-template",
@@ -2614,7 +2614,7 @@
     },
     {
       "path": "continue-check/.specify/agent-guides/story-creation-guide.md",
-      "sha256": "408c5e6de41487db2c807a155c2f3adfb12be432c2a5c8687a441a101c320177"
+      "sha256": "577d64e5894710d65eb8466b7f624cb3f216fa6b7e0698e93b07edc51a384ec1"
     },
     {
       "path": "continue-check/.specify/experts/core/character.md",
@@ -2726,7 +2726,7 @@
     },
     {
       "path": "continue-check/.specify/scripts/runtime/application/check-writing-state.js",
-      "sha256": "9099cc6efbe9c99552677ddefe653264bdfe406439a3a456c34f12333fc9b44b"
+      "sha256": "1dc8556a3fc1be4769fc3f585e4ba605f43302750f28abb7be76ed9fd7f74236"
     },
     {
       "path": "continue-check/.specify/scripts/runtime/domain/story-artifact.js",
@@ -2738,7 +2738,7 @@
     },
     {
       "path": "continue-check/.specify/templates/agent/agent-contract.md",
-      "sha256": "9805a9fdde74e010fb1f1a151b6b1c2a3b2a202b1a37e0d7832dc3ca7b1d4d80"
+      "sha256": "e59a517192022dd3648aaeb02533b81616bd4fd954a8e9c2ffa56f61bdecd369"
     },
     {
       "path": "continue-check/.specify/templates/canon/contradictions.md",
@@ -2762,11 +2762,11 @@
     },
     {
       "path": "continue-check/.specify/templates/clarification/core.yaml",
-      "sha256": "9b6bee56428f0990d2368e40a5b28e5ffbd7ae95ea5f7f86c738ac3cfd2626d0"
+      "sha256": "1415caa574189e422bd91688e36c8a7d4db76a186a2969fc6b6802f80bb07345"
     },
     {
       "path": "continue-check/.specify/templates/clarification/cozy-adventure.yaml",
-      "sha256": "aba3282c099929f2f3c7f8ac1413666f1f9e8e161742e205c5611d61eec0fe52"
+      "sha256": "6baecb6777f9a6bfba2b57e00f253ae4afc0402b4abe64c8581b11caffd4f6d2"
     },
     {
       "path": "continue-check/.specify/templates/clarification/examples/civilization-threat.yaml",
@@ -2774,11 +2774,11 @@
     },
     {
       "path": "continue-check/.specify/templates/clarification/examples/core.yaml",
-      "sha256": "22038ad0d9f240a86235359d4925bbaca2ffab414ef5515bafba44786f7f9825"
+      "sha256": "46861445cb635d0756c50d47d4941e45012fda765141f4934492b2ed54851dc7"
     },
     {
       "path": "continue-check/.specify/templates/clarification/examples/cozy-adventure.yaml",
-      "sha256": "ac14fd9b83789d42b5a04e097e07e2668484cc57042685ba75cce1f50ec841f6"
+      "sha256": "ed48d69fb439b8c1b1d8affe416c9ba424dbb214bad85c992b726f5b386c23ac"
     },
     {
       "path": "continue-check/.specify/templates/clarification/examples/kingdom-building-support.yaml",
@@ -2818,7 +2818,7 @@
     },
     {
       "path": "continue-check/.specify/templates/CLAUDE.md",
-      "sha256": "c938419b7b6471aa852e31f32aba35e3d476133e6604c8695104b83e08fe29b3"
+      "sha256": "d139132ced37995bfdb917ba4bac484a9b8d1d256c1b14ad94e918b1fb053f93"
     },
     {
       "path": "continue-check/.specify/templates/continue-rules/story-spec.md",
@@ -2826,7 +2826,7 @@
     },
     {
       "path": "continue-check/.specify/templates/copilot-instructions.md",
-      "sha256": "feb255ef0b9ef5c07e9ea09a9fdff7720a8f287d3ef8896c81703efaec54487f"
+      "sha256": "194be2f7feccb8e24a420006eed0282056cf727f550b4898587b4dfcd5dd2d4a"
     },
     {
       "path": "continue-check/.specify/templates/cursor-rules/story-spec.mdc",
@@ -2842,7 +2842,7 @@
     },
     {
       "path": "continue-check/.specify/templates/GEMINI.md",
-      "sha256": "e43a125248686c855de4d9d4fc9361180865b9df0112d9c8bbab52f0593302b5"
+      "sha256": "b97fa59452d223366ec92a3263b3298c60b0e058530dbef679c162496a0b6299"
     },
     {
       "path": "continue-check/.specify/templates/graph/edges.json",
@@ -3066,7 +3066,7 @@
     },
     {
       "path": "copilot/.github/copilot-instructions.md",
-      "sha256": "feb255ef0b9ef5c07e9ea09a9fdff7720a8f287d3ef8896c81703efaec54487f"
+      "sha256": "194be2f7feccb8e24a420006eed0282056cf727f550b4898587b4dfcd5dd2d4a"
     },
     {
       "path": "copilot/.github/prompts/analyze.prompt.md",
@@ -3098,7 +3098,7 @@
     },
     {
       "path": "copilot/.github/prompts/clarify.prompt.md",
-      "sha256": "cde820376783b1a8ae463204a9690bff736906f5b615815057eae7ce4ce1e784",
+      "sha256": "b6ed286a72db721d7a66aa94dd60a0807cd5a8c7ab127d7a7b95050b87d9f8f1",
       "commandSource": {
         "command": "clarify",
         "kind": "legacy-template",
@@ -3134,7 +3134,7 @@
     },
     {
       "path": "copilot/.github/prompts/plan.prompt.md",
-      "sha256": "6c1086c33264929d0e4f0a4bad57b3d509b5a4e55de58b13576c8951ea6aeb2e",
+      "sha256": "4a41307cb284799195033ae7566d4638b9e57ee4016ece8858e3f294fd3131ba",
       "commandSource": {
         "command": "plan",
         "kind": "legacy-template",
@@ -3170,7 +3170,7 @@
     },
     {
       "path": "copilot/.github/prompts/specify.prompt.md",
-      "sha256": "24ebce0cb069da39e2404af389519f6fd25da59199620ca1f200bb215609d48b",
+      "sha256": "8d378e1da99fbf9064ad3af8d2ad8f766ef7e6ce50939a18d954f5b1bda9dec7",
       "commandSource": {
         "command": "specify",
         "kind": "legacy-template",
@@ -3225,7 +3225,7 @@
     },
     {
       "path": "copilot/.specify/agent-guides/story-creation-guide.md",
-      "sha256": "408c5e6de41487db2c807a155c2f3adfb12be432c2a5c8687a441a101c320177"
+      "sha256": "577d64e5894710d65eb8466b7f624cb3f216fa6b7e0698e93b07edc51a384ec1"
     },
     {
       "path": "copilot/.specify/experts/core/character.md",
@@ -3337,7 +3337,7 @@
     },
     {
       "path": "copilot/.specify/scripts/runtime/application/check-writing-state.js",
-      "sha256": "9099cc6efbe9c99552677ddefe653264bdfe406439a3a456c34f12333fc9b44b"
+      "sha256": "1dc8556a3fc1be4769fc3f585e4ba605f43302750f28abb7be76ed9fd7f74236"
     },
     {
       "path": "copilot/.specify/scripts/runtime/domain/story-artifact.js",
@@ -3349,7 +3349,7 @@
     },
     {
       "path": "copilot/.specify/templates/agent/agent-contract.md",
-      "sha256": "9805a9fdde74e010fb1f1a151b6b1c2a3b2a202b1a37e0d7832dc3ca7b1d4d80"
+      "sha256": "e59a517192022dd3648aaeb02533b81616bd4fd954a8e9c2ffa56f61bdecd369"
     },
     {
       "path": "copilot/.specify/templates/canon/contradictions.md",
@@ -3373,11 +3373,11 @@
     },
     {
       "path": "copilot/.specify/templates/clarification/core.yaml",
-      "sha256": "9b6bee56428f0990d2368e40a5b28e5ffbd7ae95ea5f7f86c738ac3cfd2626d0"
+      "sha256": "1415caa574189e422bd91688e36c8a7d4db76a186a2969fc6b6802f80bb07345"
     },
     {
       "path": "copilot/.specify/templates/clarification/cozy-adventure.yaml",
-      "sha256": "aba3282c099929f2f3c7f8ac1413666f1f9e8e161742e205c5611d61eec0fe52"
+      "sha256": "6baecb6777f9a6bfba2b57e00f253ae4afc0402b4abe64c8581b11caffd4f6d2"
     },
     {
       "path": "copilot/.specify/templates/clarification/examples/civilization-threat.yaml",
@@ -3385,11 +3385,11 @@
     },
     {
       "path": "copilot/.specify/templates/clarification/examples/core.yaml",
-      "sha256": "22038ad0d9f240a86235359d4925bbaca2ffab414ef5515bafba44786f7f9825"
+      "sha256": "46861445cb635d0756c50d47d4941e45012fda765141f4934492b2ed54851dc7"
     },
     {
       "path": "copilot/.specify/templates/clarification/examples/cozy-adventure.yaml",
-      "sha256": "ac14fd9b83789d42b5a04e097e07e2668484cc57042685ba75cce1f50ec841f6"
+      "sha256": "ed48d69fb439b8c1b1d8affe416c9ba424dbb214bad85c992b726f5b386c23ac"
     },
     {
       "path": "copilot/.specify/templates/clarification/examples/kingdom-building-support.yaml",
@@ -3429,7 +3429,7 @@
     },
     {
       "path": "copilot/.specify/templates/CLAUDE.md",
-      "sha256": "c938419b7b6471aa852e31f32aba35e3d476133e6604c8695104b83e08fe29b3"
+      "sha256": "d139132ced37995bfdb917ba4bac484a9b8d1d256c1b14ad94e918b1fb053f93"
     },
     {
       "path": "copilot/.specify/templates/continue-rules/story-spec.md",
@@ -3437,7 +3437,7 @@
     },
     {
       "path": "copilot/.specify/templates/copilot-instructions.md",
-      "sha256": "feb255ef0b9ef5c07e9ea09a9fdff7720a8f287d3ef8896c81703efaec54487f"
+      "sha256": "194be2f7feccb8e24a420006eed0282056cf727f550b4898587b4dfcd5dd2d4a"
     },
     {
       "path": "copilot/.specify/templates/cursor-rules/story-spec.mdc",
@@ -3453,7 +3453,7 @@
     },
     {
       "path": "copilot/.specify/templates/GEMINI.md",
-      "sha256": "e43a125248686c855de4d9d4fc9361180865b9df0112d9c8bbab52f0593302b5"
+      "sha256": "b97fa59452d223366ec92a3263b3298c60b0e058530dbef679c162496a0b6299"
     },
     {
       "path": "copilot/.specify/templates/graph/edges.json",
@@ -3709,7 +3709,7 @@
     },
     {
       "path": "cursor/.cursor/commands/clarify.md",
-      "sha256": "2e71f634f77252456fe6684bbf831e2d915cd5f331197266d1465f5d7f98c35d",
+      "sha256": "01b6015de73441c5fce809c5556be1e1caccb24ed137520a1570baf4d9adc6cb",
       "commandSource": {
         "command": "clarify",
         "kind": "legacy-template",
@@ -3745,7 +3745,7 @@
     },
     {
       "path": "cursor/.cursor/commands/plan.md",
-      "sha256": "48020e141a05724216ad1125056ff7541e77a304e420b945702e5fc9a72e7d0e",
+      "sha256": "0293d2d8d8f48faa15d93df1d316fccc41009a04f8c55d37a58bd31bc527b355",
       "commandSource": {
         "command": "plan",
         "kind": "legacy-template",
@@ -3781,7 +3781,7 @@
     },
     {
       "path": "cursor/.cursor/commands/specify.md",
-      "sha256": "73ef07d63c4db4cb054575bce70dc47a37bd0dcbb44ee7a86fcbcc26d2b47a54",
+      "sha256": "b12e8f53f768127a6cdaac99eaaabc5258bac1531a2a3b372cb07a269d012666",
       "commandSource": {
         "command": "specify",
         "kind": "legacy-template",
@@ -3840,7 +3840,7 @@
     },
     {
       "path": "cursor/.specify/agent-guides/story-creation-guide.md",
-      "sha256": "408c5e6de41487db2c807a155c2f3adfb12be432c2a5c8687a441a101c320177"
+      "sha256": "577d64e5894710d65eb8466b7f624cb3f216fa6b7e0698e93b07edc51a384ec1"
     },
     {
       "path": "cursor/.specify/experts/core/character.md",
@@ -3952,7 +3952,7 @@
     },
     {
       "path": "cursor/.specify/scripts/runtime/application/check-writing-state.js",
-      "sha256": "9099cc6efbe9c99552677ddefe653264bdfe406439a3a456c34f12333fc9b44b"
+      "sha256": "1dc8556a3fc1be4769fc3f585e4ba605f43302750f28abb7be76ed9fd7f74236"
     },
     {
       "path": "cursor/.specify/scripts/runtime/domain/story-artifact.js",
@@ -3964,7 +3964,7 @@
     },
     {
       "path": "cursor/.specify/templates/agent/agent-contract.md",
-      "sha256": "9805a9fdde74e010fb1f1a151b6b1c2a3b2a202b1a37e0d7832dc3ca7b1d4d80"
+      "sha256": "e59a517192022dd3648aaeb02533b81616bd4fd954a8e9c2ffa56f61bdecd369"
     },
     {
       "path": "cursor/.specify/templates/canon/contradictions.md",
@@ -3988,11 +3988,11 @@
     },
     {
       "path": "cursor/.specify/templates/clarification/core.yaml",
-      "sha256": "9b6bee56428f0990d2368e40a5b28e5ffbd7ae95ea5f7f86c738ac3cfd2626d0"
+      "sha256": "1415caa574189e422bd91688e36c8a7d4db76a186a2969fc6b6802f80bb07345"
     },
     {
       "path": "cursor/.specify/templates/clarification/cozy-adventure.yaml",
-      "sha256": "aba3282c099929f2f3c7f8ac1413666f1f9e8e161742e205c5611d61eec0fe52"
+      "sha256": "6baecb6777f9a6bfba2b57e00f253ae4afc0402b4abe64c8581b11caffd4f6d2"
     },
     {
       "path": "cursor/.specify/templates/clarification/examples/civilization-threat.yaml",
@@ -4000,11 +4000,11 @@
     },
     {
       "path": "cursor/.specify/templates/clarification/examples/core.yaml",
-      "sha256": "22038ad0d9f240a86235359d4925bbaca2ffab414ef5515bafba44786f7f9825"
+      "sha256": "46861445cb635d0756c50d47d4941e45012fda765141f4934492b2ed54851dc7"
     },
     {
       "path": "cursor/.specify/templates/clarification/examples/cozy-adventure.yaml",
-      "sha256": "ac14fd9b83789d42b5a04e097e07e2668484cc57042685ba75cce1f50ec841f6"
+      "sha256": "ed48d69fb439b8c1b1d8affe416c9ba424dbb214bad85c992b726f5b386c23ac"
     },
     {
       "path": "cursor/.specify/templates/clarification/examples/kingdom-building-support.yaml",
@@ -4044,7 +4044,7 @@
     },
     {
       "path": "cursor/.specify/templates/CLAUDE.md",
-      "sha256": "c938419b7b6471aa852e31f32aba35e3d476133e6604c8695104b83e08fe29b3"
+      "sha256": "d139132ced37995bfdb917ba4bac484a9b8d1d256c1b14ad94e918b1fb053f93"
     },
     {
       "path": "cursor/.specify/templates/continue-rules/story-spec.md",
@@ -4052,7 +4052,7 @@
     },
     {
       "path": "cursor/.specify/templates/copilot-instructions.md",
-      "sha256": "feb255ef0b9ef5c07e9ea09a9fdff7720a8f287d3ef8896c81703efaec54487f"
+      "sha256": "194be2f7feccb8e24a420006eed0282056cf727f550b4898587b4dfcd5dd2d4a"
     },
     {
       "path": "cursor/.specify/templates/cursor-rules/story-spec.mdc",
@@ -4068,7 +4068,7 @@
     },
     {
       "path": "cursor/.specify/templates/GEMINI.md",
-      "sha256": "e43a125248686c855de4d9d4fc9361180865b9df0112d9c8bbab52f0593302b5"
+      "sha256": "b97fa59452d223366ec92a3263b3298c60b0e058530dbef679c162496a0b6299"
     },
     {
       "path": "cursor/.specify/templates/graph/edges.json",
@@ -4320,7 +4320,7 @@
     },
     {
       "path": "gemini/.gemini/commands/storyspec/clarify.toml",
-      "sha256": "ba345ce1c9dbf5d03097cb6f32cfdc0dbc718c18f8b6519ec9e3eb087ce7cc25",
+      "sha256": "a1ec5f1df3bddd6757ab19604831ba3954c0250b7847274ee9eb3f59f053c446",
       "commandSource": {
         "command": "clarify",
         "kind": "legacy-template",
@@ -4356,7 +4356,7 @@
     },
     {
       "path": "gemini/.gemini/commands/storyspec/plan.toml",
-      "sha256": "1fbacc6c91da290fe86a7c0e5af224be72aa7379be3e43d456c59c7f0cc04f5a",
+      "sha256": "75c302842cb959f48088394917957447c117c9c7fb6717e49d4fd7d382e97d93",
       "commandSource": {
         "command": "plan",
         "kind": "legacy-template",
@@ -4392,7 +4392,7 @@
     },
     {
       "path": "gemini/.gemini/commands/storyspec/specify.toml",
-      "sha256": "8a9a415d6eb66f57bf3b545e71d998644408d8e67960d95d29f14342705d068f",
+      "sha256": "7f4d9a86cb543644e92217891b85902f19a76ea5b1ddb670e1c2f42ae575475f",
       "commandSource": {
         "command": "specify",
         "kind": "legacy-template",
@@ -4447,11 +4447,11 @@
     },
     {
       "path": "gemini/.gemini/GEMINI.md",
-      "sha256": "e43a125248686c855de4d9d4fc9361180865b9df0112d9c8bbab52f0593302b5"
+      "sha256": "b97fa59452d223366ec92a3263b3298c60b0e058530dbef679c162496a0b6299"
     },
     {
       "path": "gemini/.specify/agent-guides/story-creation-guide.md",
-      "sha256": "408c5e6de41487db2c807a155c2f3adfb12be432c2a5c8687a441a101c320177"
+      "sha256": "577d64e5894710d65eb8466b7f624cb3f216fa6b7e0698e93b07edc51a384ec1"
     },
     {
       "path": "gemini/.specify/experts/core/character.md",
@@ -4563,7 +4563,7 @@
     },
     {
       "path": "gemini/.specify/scripts/runtime/application/check-writing-state.js",
-      "sha256": "9099cc6efbe9c99552677ddefe653264bdfe406439a3a456c34f12333fc9b44b"
+      "sha256": "1dc8556a3fc1be4769fc3f585e4ba605f43302750f28abb7be76ed9fd7f74236"
     },
     {
       "path": "gemini/.specify/scripts/runtime/domain/story-artifact.js",
@@ -4575,7 +4575,7 @@
     },
     {
       "path": "gemini/.specify/templates/agent/agent-contract.md",
-      "sha256": "9805a9fdde74e010fb1f1a151b6b1c2a3b2a202b1a37e0d7832dc3ca7b1d4d80"
+      "sha256": "e59a517192022dd3648aaeb02533b81616bd4fd954a8e9c2ffa56f61bdecd369"
     },
     {
       "path": "gemini/.specify/templates/canon/contradictions.md",
@@ -4599,11 +4599,11 @@
     },
     {
       "path": "gemini/.specify/templates/clarification/core.yaml",
-      "sha256": "9b6bee56428f0990d2368e40a5b28e5ffbd7ae95ea5f7f86c738ac3cfd2626d0"
+      "sha256": "1415caa574189e422bd91688e36c8a7d4db76a186a2969fc6b6802f80bb07345"
     },
     {
       "path": "gemini/.specify/templates/clarification/cozy-adventure.yaml",
-      "sha256": "aba3282c099929f2f3c7f8ac1413666f1f9e8e161742e205c5611d61eec0fe52"
+      "sha256": "6baecb6777f9a6bfba2b57e00f253ae4afc0402b4abe64c8581b11caffd4f6d2"
     },
     {
       "path": "gemini/.specify/templates/clarification/examples/civilization-threat.yaml",
@@ -4611,11 +4611,11 @@
     },
     {
       "path": "gemini/.specify/templates/clarification/examples/core.yaml",
-      "sha256": "22038ad0d9f240a86235359d4925bbaca2ffab414ef5515bafba44786f7f9825"
+      "sha256": "46861445cb635d0756c50d47d4941e45012fda765141f4934492b2ed54851dc7"
     },
     {
       "path": "gemini/.specify/templates/clarification/examples/cozy-adventure.yaml",
-      "sha256": "ac14fd9b83789d42b5a04e097e07e2668484cc57042685ba75cce1f50ec841f6"
+      "sha256": "ed48d69fb439b8c1b1d8affe416c9ba424dbb214bad85c992b726f5b386c23ac"
     },
     {
       "path": "gemini/.specify/templates/clarification/examples/kingdom-building-support.yaml",
@@ -4655,7 +4655,7 @@
     },
     {
       "path": "gemini/.specify/templates/CLAUDE.md",
-      "sha256": "c938419b7b6471aa852e31f32aba35e3d476133e6604c8695104b83e08fe29b3"
+      "sha256": "d139132ced37995bfdb917ba4bac484a9b8d1d256c1b14ad94e918b1fb053f93"
     },
     {
       "path": "gemini/.specify/templates/continue-rules/story-spec.md",
@@ -4663,7 +4663,7 @@
     },
     {
       "path": "gemini/.specify/templates/copilot-instructions.md",
-      "sha256": "feb255ef0b9ef5c07e9ea09a9fdff7720a8f287d3ef8896c81703efaec54487f"
+      "sha256": "194be2f7feccb8e24a420006eed0282056cf727f550b4898587b4dfcd5dd2d4a"
     },
     {
       "path": "gemini/.specify/templates/cursor-rules/story-spec.mdc",
@@ -4679,7 +4679,7 @@
     },
     {
       "path": "gemini/.specify/templates/GEMINI.md",
-      "sha256": "e43a125248686c855de4d9d4fc9361180865b9df0112d9c8bbab52f0593302b5"
+      "sha256": "b97fa59452d223366ec92a3263b3298c60b0e058530dbef679c162496a0b6299"
     },
     {
       "path": "gemini/.specify/templates/graph/edges.json",
@@ -4903,7 +4903,7 @@
     },
     {
       "path": "generic/.specify/agent-guides/story-creation-guide.md",
-      "sha256": "408c5e6de41487db2c807a155c2f3adfb12be432c2a5c8687a441a101c320177"
+      "sha256": "577d64e5894710d65eb8466b7f624cb3f216fa6b7e0698e93b07edc51a384ec1"
     },
     {
       "path": "generic/.specify/commands/analyze.md",
@@ -4935,7 +4935,7 @@
     },
     {
       "path": "generic/.specify/commands/clarify.md",
-      "sha256": "614f12c6d3f29a7b605139cedb7ce95dfa9c88ee129fdd29db5a97a51342f4b2",
+      "sha256": "68233b970edac59d96c98ad432530831d2df7242187e7cabce57b3b619becc8e",
       "commandSource": {
         "command": "clarify",
         "kind": "legacy-template",
@@ -4971,7 +4971,7 @@
     },
     {
       "path": "generic/.specify/commands/plan.md",
-      "sha256": "b2e3c2a242c4193fcc997c91b4bd5c2ed8bec9b6bd4f8585c452b5e055270d36",
+      "sha256": "62e4a5c69b5719e8c3f8376f682ab3267fa20b120529051a49367fc57b01d0a6",
       "commandSource": {
         "command": "plan",
         "kind": "legacy-template",
@@ -5007,7 +5007,7 @@
     },
     {
       "path": "generic/.specify/commands/specify.md",
-      "sha256": "988b783136474833ce9fb2dd90dcf48d7178be70dab1d2e234d045d08dda9c2c",
+      "sha256": "079e27fe5b6e615104465362415f3f10db89180c61c2388053819ed60712ad49",
       "commandSource": {
         "command": "specify",
         "kind": "legacy-template",
@@ -5170,7 +5170,7 @@
     },
     {
       "path": "generic/.specify/scripts/runtime/application/check-writing-state.js",
-      "sha256": "9099cc6efbe9c99552677ddefe653264bdfe406439a3a456c34f12333fc9b44b"
+      "sha256": "1dc8556a3fc1be4769fc3f585e4ba605f43302750f28abb7be76ed9fd7f74236"
     },
     {
       "path": "generic/.specify/scripts/runtime/domain/story-artifact.js",
@@ -5182,7 +5182,7 @@
     },
     {
       "path": "generic/.specify/templates/agent/agent-contract.md",
-      "sha256": "9805a9fdde74e010fb1f1a151b6b1c2a3b2a202b1a37e0d7832dc3ca7b1d4d80"
+      "sha256": "e59a517192022dd3648aaeb02533b81616bd4fd954a8e9c2ffa56f61bdecd369"
     },
     {
       "path": "generic/.specify/templates/canon/contradictions.md",
@@ -5206,11 +5206,11 @@
     },
     {
       "path": "generic/.specify/templates/clarification/core.yaml",
-      "sha256": "9b6bee56428f0990d2368e40a5b28e5ffbd7ae95ea5f7f86c738ac3cfd2626d0"
+      "sha256": "1415caa574189e422bd91688e36c8a7d4db76a186a2969fc6b6802f80bb07345"
     },
     {
       "path": "generic/.specify/templates/clarification/cozy-adventure.yaml",
-      "sha256": "aba3282c099929f2f3c7f8ac1413666f1f9e8e161742e205c5611d61eec0fe52"
+      "sha256": "6baecb6777f9a6bfba2b57e00f253ae4afc0402b4abe64c8581b11caffd4f6d2"
     },
     {
       "path": "generic/.specify/templates/clarification/examples/civilization-threat.yaml",
@@ -5218,11 +5218,11 @@
     },
     {
       "path": "generic/.specify/templates/clarification/examples/core.yaml",
-      "sha256": "22038ad0d9f240a86235359d4925bbaca2ffab414ef5515bafba44786f7f9825"
+      "sha256": "46861445cb635d0756c50d47d4941e45012fda765141f4934492b2ed54851dc7"
     },
     {
       "path": "generic/.specify/templates/clarification/examples/cozy-adventure.yaml",
-      "sha256": "ac14fd9b83789d42b5a04e097e07e2668484cc57042685ba75cce1f50ec841f6"
+      "sha256": "ed48d69fb439b8c1b1d8affe416c9ba424dbb214bad85c992b726f5b386c23ac"
     },
     {
       "path": "generic/.specify/templates/clarification/examples/kingdom-building-support.yaml",
@@ -5262,7 +5262,7 @@
     },
     {
       "path": "generic/.specify/templates/CLAUDE.md",
-      "sha256": "c938419b7b6471aa852e31f32aba35e3d476133e6604c8695104b83e08fe29b3"
+      "sha256": "d139132ced37995bfdb917ba4bac484a9b8d1d256c1b14ad94e918b1fb053f93"
     },
     {
       "path": "generic/.specify/templates/continue-rules/story-spec.md",
@@ -5270,7 +5270,7 @@
     },
     {
       "path": "generic/.specify/templates/copilot-instructions.md",
-      "sha256": "feb255ef0b9ef5c07e9ea09a9fdff7720a8f287d3ef8896c81703efaec54487f"
+      "sha256": "194be2f7feccb8e24a420006eed0282056cf727f550b4898587b4dfcd5dd2d4a"
     },
     {
       "path": "generic/.specify/templates/cursor-rules/story-spec.mdc",
@@ -5286,7 +5286,7 @@
     },
     {
       "path": "generic/.specify/templates/GEMINI.md",
-      "sha256": "e43a125248686c855de4d9d4fc9361180865b9df0112d9c8bbab52f0593302b5"
+      "sha256": "b97fa59452d223366ec92a3263b3298c60b0e058530dbef679c162496a0b6299"
     },
     {
       "path": "generic/.specify/templates/graph/edges.json",
@@ -5538,7 +5538,7 @@
     },
     {
       "path": "kilocode/.kilocode/workflows/clarify.md",
-      "sha256": "07fd29e2e9cae1bfe3c283d747388124a8124fc59a6adf1cd98050b8550e7af4",
+      "sha256": "0eddecd8b2360dca79cc1536d3682b6db1cca63205604b1401b07fe4b0096a0d",
       "commandSource": {
         "command": "clarify",
         "kind": "legacy-template",
@@ -5574,7 +5574,7 @@
     },
     {
       "path": "kilocode/.kilocode/workflows/plan.md",
-      "sha256": "6ef724794b7454f803d5d4d954887ffee34f65f01b987ef7c6b4f773638b000e",
+      "sha256": "daa6c89e18a7d3d0210bffc1b69da3467073d0013499493cbda8cdb38462e005",
       "commandSource": {
         "command": "plan",
         "kind": "legacy-template",
@@ -5610,7 +5610,7 @@
     },
     {
       "path": "kilocode/.kilocode/workflows/specify.md",
-      "sha256": "38ba33a8fd00b60964b948293969a649a23223855f00a9280e317490c963e725",
+      "sha256": "ce7b8a1e844efbe5e1749407550370f3ccd4ee933647b13b88dd70519b5a5675",
       "commandSource": {
         "command": "specify",
         "kind": "legacy-template",
@@ -5665,7 +5665,7 @@
     },
     {
       "path": "kilocode/.specify/agent-guides/story-creation-guide.md",
-      "sha256": "408c5e6de41487db2c807a155c2f3adfb12be432c2a5c8687a441a101c320177"
+      "sha256": "577d64e5894710d65eb8466b7f624cb3f216fa6b7e0698e93b07edc51a384ec1"
     },
     {
       "path": "kilocode/.specify/experts/core/character.md",
@@ -5777,7 +5777,7 @@
     },
     {
       "path": "kilocode/.specify/scripts/runtime/application/check-writing-state.js",
-      "sha256": "9099cc6efbe9c99552677ddefe653264bdfe406439a3a456c34f12333fc9b44b"
+      "sha256": "1dc8556a3fc1be4769fc3f585e4ba605f43302750f28abb7be76ed9fd7f74236"
     },
     {
       "path": "kilocode/.specify/scripts/runtime/domain/story-artifact.js",
@@ -5789,7 +5789,7 @@
     },
     {
       "path": "kilocode/.specify/templates/agent/agent-contract.md",
-      "sha256": "9805a9fdde74e010fb1f1a151b6b1c2a3b2a202b1a37e0d7832dc3ca7b1d4d80"
+      "sha256": "e59a517192022dd3648aaeb02533b81616bd4fd954a8e9c2ffa56f61bdecd369"
     },
     {
       "path": "kilocode/.specify/templates/canon/contradictions.md",
@@ -5813,11 +5813,11 @@
     },
     {
       "path": "kilocode/.specify/templates/clarification/core.yaml",
-      "sha256": "9b6bee56428f0990d2368e40a5b28e5ffbd7ae95ea5f7f86c738ac3cfd2626d0"
+      "sha256": "1415caa574189e422bd91688e36c8a7d4db76a186a2969fc6b6802f80bb07345"
     },
     {
       "path": "kilocode/.specify/templates/clarification/cozy-adventure.yaml",
-      "sha256": "aba3282c099929f2f3c7f8ac1413666f1f9e8e161742e205c5611d61eec0fe52"
+      "sha256": "6baecb6777f9a6bfba2b57e00f253ae4afc0402b4abe64c8581b11caffd4f6d2"
     },
     {
       "path": "kilocode/.specify/templates/clarification/examples/civilization-threat.yaml",
@@ -5825,11 +5825,11 @@
     },
     {
       "path": "kilocode/.specify/templates/clarification/examples/core.yaml",
-      "sha256": "22038ad0d9f240a86235359d4925bbaca2ffab414ef5515bafba44786f7f9825"
+      "sha256": "46861445cb635d0756c50d47d4941e45012fda765141f4934492b2ed54851dc7"
     },
     {
       "path": "kilocode/.specify/templates/clarification/examples/cozy-adventure.yaml",
-      "sha256": "ac14fd9b83789d42b5a04e097e07e2668484cc57042685ba75cce1f50ec841f6"
+      "sha256": "ed48d69fb439b8c1b1d8affe416c9ba424dbb214bad85c992b726f5b386c23ac"
     },
     {
       "path": "kilocode/.specify/templates/clarification/examples/kingdom-building-support.yaml",
@@ -5869,7 +5869,7 @@
     },
     {
       "path": "kilocode/.specify/templates/CLAUDE.md",
-      "sha256": "c938419b7b6471aa852e31f32aba35e3d476133e6604c8695104b83e08fe29b3"
+      "sha256": "d139132ced37995bfdb917ba4bac484a9b8d1d256c1b14ad94e918b1fb053f93"
     },
     {
       "path": "kilocode/.specify/templates/continue-rules/story-spec.md",
@@ -5877,7 +5877,7 @@
     },
     {
       "path": "kilocode/.specify/templates/copilot-instructions.md",
-      "sha256": "feb255ef0b9ef5c07e9ea09a9fdff7720a8f287d3ef8896c81703efaec54487f"
+      "sha256": "194be2f7feccb8e24a420006eed0282056cf727f550b4898587b4dfcd5dd2d4a"
     },
     {
       "path": "kilocode/.specify/templates/cursor-rules/story-spec.mdc",
@@ -5893,7 +5893,7 @@
     },
     {
       "path": "kilocode/.specify/templates/GEMINI.md",
-      "sha256": "e43a125248686c855de4d9d4fc9361180865b9df0112d9c8bbab52f0593302b5"
+      "sha256": "b97fa59452d223366ec92a3263b3298c60b0e058530dbef679c162496a0b6299"
     },
     {
       "path": "kilocode/.specify/templates/graph/edges.json",
@@ -6145,7 +6145,7 @@
     },
     {
       "path": "opencode/.opencode/command/clarify.md",
-      "sha256": "cbf3f29c651f7cacbe12c625c39f9a3b76ac2316b29c9bc377110490532cea7b",
+      "sha256": "1b00944bc967d95a25ec94eafe2ca9d205b204a5cb9c3564068f039244e6ac84",
       "commandSource": {
         "command": "clarify",
         "kind": "legacy-template",
@@ -6181,7 +6181,7 @@
     },
     {
       "path": "opencode/.opencode/command/plan.md",
-      "sha256": "13a701e34a6912ab0000411b9ef4e3e862fc0e36be512f35a9fe981d61704ab9",
+      "sha256": "4ab1724ff66804a4a97b9a1c255789bb8c0d86dc918eae1e4659025a617415f8",
       "commandSource": {
         "command": "plan",
         "kind": "legacy-template",
@@ -6217,7 +6217,7 @@
     },
     {
       "path": "opencode/.opencode/command/specify.md",
-      "sha256": "ce754e02734b6edb6f91e09a47cef38e458a53bbe59d31ea06db72cb0ea7fe52",
+      "sha256": "640b02644e8d8f51b20c2654ef44cb0c09720a42124c923e8965cfa59733f640",
       "commandSource": {
         "command": "specify",
         "kind": "legacy-template",
@@ -6272,7 +6272,7 @@
     },
     {
       "path": "opencode/.specify/agent-guides/story-creation-guide.md",
-      "sha256": "408c5e6de41487db2c807a155c2f3adfb12be432c2a5c8687a441a101c320177"
+      "sha256": "577d64e5894710d65eb8466b7f624cb3f216fa6b7e0698e93b07edc51a384ec1"
     },
     {
       "path": "opencode/.specify/experts/core/character.md",
@@ -6384,7 +6384,7 @@
     },
     {
       "path": "opencode/.specify/scripts/runtime/application/check-writing-state.js",
-      "sha256": "9099cc6efbe9c99552677ddefe653264bdfe406439a3a456c34f12333fc9b44b"
+      "sha256": "1dc8556a3fc1be4769fc3f585e4ba605f43302750f28abb7be76ed9fd7f74236"
     },
     {
       "path": "opencode/.specify/scripts/runtime/domain/story-artifact.js",
@@ -6396,7 +6396,7 @@
     },
     {
       "path": "opencode/.specify/templates/agent/agent-contract.md",
-      "sha256": "9805a9fdde74e010fb1f1a151b6b1c2a3b2a202b1a37e0d7832dc3ca7b1d4d80"
+      "sha256": "e59a517192022dd3648aaeb02533b81616bd4fd954a8e9c2ffa56f61bdecd369"
     },
     {
       "path": "opencode/.specify/templates/canon/contradictions.md",
@@ -6420,11 +6420,11 @@
     },
     {
       "path": "opencode/.specify/templates/clarification/core.yaml",
-      "sha256": "9b6bee56428f0990d2368e40a5b28e5ffbd7ae95ea5f7f86c738ac3cfd2626d0"
+      "sha256": "1415caa574189e422bd91688e36c8a7d4db76a186a2969fc6b6802f80bb07345"
     },
     {
       "path": "opencode/.specify/templates/clarification/cozy-adventure.yaml",
-      "sha256": "aba3282c099929f2f3c7f8ac1413666f1f9e8e161742e205c5611d61eec0fe52"
+      "sha256": "6baecb6777f9a6bfba2b57e00f253ae4afc0402b4abe64c8581b11caffd4f6d2"
     },
     {
       "path": "opencode/.specify/templates/clarification/examples/civilization-threat.yaml",
@@ -6432,11 +6432,11 @@
     },
     {
       "path": "opencode/.specify/templates/clarification/examples/core.yaml",
-      "sha256": "22038ad0d9f240a86235359d4925bbaca2ffab414ef5515bafba44786f7f9825"
+      "sha256": "46861445cb635d0756c50d47d4941e45012fda765141f4934492b2ed54851dc7"
     },
     {
       "path": "opencode/.specify/templates/clarification/examples/cozy-adventure.yaml",
-      "sha256": "ac14fd9b83789d42b5a04e097e07e2668484cc57042685ba75cce1f50ec841f6"
+      "sha256": "ed48d69fb439b8c1b1d8affe416c9ba424dbb214bad85c992b726f5b386c23ac"
     },
     {
       "path": "opencode/.specify/templates/clarification/examples/kingdom-building-support.yaml",
@@ -6476,7 +6476,7 @@
     },
     {
       "path": "opencode/.specify/templates/CLAUDE.md",
-      "sha256": "c938419b7b6471aa852e31f32aba35e3d476133e6604c8695104b83e08fe29b3"
+      "sha256": "d139132ced37995bfdb917ba4bac484a9b8d1d256c1b14ad94e918b1fb053f93"
     },
     {
       "path": "opencode/.specify/templates/continue-rules/story-spec.md",
@@ -6484,7 +6484,7 @@
     },
     {
       "path": "opencode/.specify/templates/copilot-instructions.md",
-      "sha256": "feb255ef0b9ef5c07e9ea09a9fdff7720a8f287d3ef8896c81703efaec54487f"
+      "sha256": "194be2f7feccb8e24a420006eed0282056cf727f550b4898587b4dfcd5dd2d4a"
     },
     {
       "path": "opencode/.specify/templates/cursor-rules/story-spec.mdc",
@@ -6500,7 +6500,7 @@
     },
     {
       "path": "opencode/.specify/templates/GEMINI.md",
-      "sha256": "e43a125248686c855de4d9d4fc9361180865b9df0112d9c8bbab52f0593302b5"
+      "sha256": "b97fa59452d223366ec92a3263b3298c60b0e058530dbef679c162496a0b6299"
     },
     {
       "path": "opencode/.specify/templates/graph/edges.json",
@@ -6752,7 +6752,7 @@
     },
     {
       "path": "q/.amazonq/prompts/clarify.md",
-      "sha256": "cde820376783b1a8ae463204a9690bff736906f5b615815057eae7ce4ce1e784",
+      "sha256": "b6ed286a72db721d7a66aa94dd60a0807cd5a8c7ab127d7a7b95050b87d9f8f1",
       "commandSource": {
         "command": "clarify",
         "kind": "legacy-template",
@@ -6788,7 +6788,7 @@
     },
     {
       "path": "q/.amazonq/prompts/plan.md",
-      "sha256": "6c1086c33264929d0e4f0a4bad57b3d509b5a4e55de58b13576c8951ea6aeb2e",
+      "sha256": "4a41307cb284799195033ae7566d4638b9e57ee4016ece8858e3f294fd3131ba",
       "commandSource": {
         "command": "plan",
         "kind": "legacy-template",
@@ -6824,7 +6824,7 @@
     },
     {
       "path": "q/.amazonq/prompts/specify.md",
-      "sha256": "24ebce0cb069da39e2404af389519f6fd25da59199620ca1f200bb215609d48b",
+      "sha256": "8d378e1da99fbf9064ad3af8d2ad8f766ef7e6ce50939a18d954f5b1bda9dec7",
       "commandSource": {
         "command": "specify",
         "kind": "legacy-template",
@@ -6879,7 +6879,7 @@
     },
     {
       "path": "q/.specify/agent-guides/story-creation-guide.md",
-      "sha256": "408c5e6de41487db2c807a155c2f3adfb12be432c2a5c8687a441a101c320177"
+      "sha256": "577d64e5894710d65eb8466b7f624cb3f216fa6b7e0698e93b07edc51a384ec1"
     },
     {
       "path": "q/.specify/experts/core/character.md",
@@ -6991,7 +6991,7 @@
     },
     {
       "path": "q/.specify/scripts/runtime/application/check-writing-state.js",
-      "sha256": "9099cc6efbe9c99552677ddefe653264bdfe406439a3a456c34f12333fc9b44b"
+      "sha256": "1dc8556a3fc1be4769fc3f585e4ba605f43302750f28abb7be76ed9fd7f74236"
     },
     {
       "path": "q/.specify/scripts/runtime/domain/story-artifact.js",
@@ -7003,7 +7003,7 @@
     },
     {
       "path": "q/.specify/templates/agent/agent-contract.md",
-      "sha256": "9805a9fdde74e010fb1f1a151b6b1c2a3b2a202b1a37e0d7832dc3ca7b1d4d80"
+      "sha256": "e59a517192022dd3648aaeb02533b81616bd4fd954a8e9c2ffa56f61bdecd369"
     },
     {
       "path": "q/.specify/templates/canon/contradictions.md",
@@ -7027,11 +7027,11 @@
     },
     {
       "path": "q/.specify/templates/clarification/core.yaml",
-      "sha256": "9b6bee56428f0990d2368e40a5b28e5ffbd7ae95ea5f7f86c738ac3cfd2626d0"
+      "sha256": "1415caa574189e422bd91688e36c8a7d4db76a186a2969fc6b6802f80bb07345"
     },
     {
       "path": "q/.specify/templates/clarification/cozy-adventure.yaml",
-      "sha256": "aba3282c099929f2f3c7f8ac1413666f1f9e8e161742e205c5611d61eec0fe52"
+      "sha256": "6baecb6777f9a6bfba2b57e00f253ae4afc0402b4abe64c8581b11caffd4f6d2"
     },
     {
       "path": "q/.specify/templates/clarification/examples/civilization-threat.yaml",
@@ -7039,11 +7039,11 @@
     },
     {
       "path": "q/.specify/templates/clarification/examples/core.yaml",
-      "sha256": "22038ad0d9f240a86235359d4925bbaca2ffab414ef5515bafba44786f7f9825"
+      "sha256": "46861445cb635d0756c50d47d4941e45012fda765141f4934492b2ed54851dc7"
     },
     {
       "path": "q/.specify/templates/clarification/examples/cozy-adventure.yaml",
-      "sha256": "ac14fd9b83789d42b5a04e097e07e2668484cc57042685ba75cce1f50ec841f6"
+      "sha256": "ed48d69fb439b8c1b1d8affe416c9ba424dbb214bad85c992b726f5b386c23ac"
     },
     {
       "path": "q/.specify/templates/clarification/examples/kingdom-building-support.yaml",
@@ -7083,7 +7083,7 @@
     },
     {
       "path": "q/.specify/templates/CLAUDE.md",
-      "sha256": "c938419b7b6471aa852e31f32aba35e3d476133e6604c8695104b83e08fe29b3"
+      "sha256": "d139132ced37995bfdb917ba4bac484a9b8d1d256c1b14ad94e918b1fb053f93"
     },
     {
       "path": "q/.specify/templates/continue-rules/story-spec.md",
@@ -7091,7 +7091,7 @@
     },
     {
       "path": "q/.specify/templates/copilot-instructions.md",
-      "sha256": "feb255ef0b9ef5c07e9ea09a9fdff7720a8f287d3ef8896c81703efaec54487f"
+      "sha256": "194be2f7feccb8e24a420006eed0282056cf727f550b4898587b4dfcd5dd2d4a"
     },
     {
       "path": "q/.specify/templates/cursor-rules/story-spec.mdc",
@@ -7107,7 +7107,7 @@
     },
     {
       "path": "q/.specify/templates/GEMINI.md",
-      "sha256": "e43a125248686c855de4d9d4fc9361180865b9df0112d9c8bbab52f0593302b5"
+      "sha256": "b97fa59452d223366ec92a3263b3298c60b0e058530dbef679c162496a0b6299"
     },
     {
       "path": "q/.specify/templates/graph/edges.json",
@@ -7359,7 +7359,7 @@
     },
     {
       "path": "qwen/.qwen/commands/clarify.toml",
-      "sha256": "ba345ce1c9dbf5d03097cb6f32cfdc0dbc718c18f8b6519ec9e3eb087ce7cc25",
+      "sha256": "a1ec5f1df3bddd6757ab19604831ba3954c0250b7847274ee9eb3f59f053c446",
       "commandSource": {
         "command": "clarify",
         "kind": "legacy-template",
@@ -7395,7 +7395,7 @@
     },
     {
       "path": "qwen/.qwen/commands/plan.toml",
-      "sha256": "1fbacc6c91da290fe86a7c0e5af224be72aa7379be3e43d456c59c7f0cc04f5a",
+      "sha256": "75c302842cb959f48088394917957447c117c9c7fb6717e49d4fd7d382e97d93",
       "commandSource": {
         "command": "plan",
         "kind": "legacy-template",
@@ -7431,7 +7431,7 @@
     },
     {
       "path": "qwen/.qwen/commands/specify.toml",
-      "sha256": "8a9a415d6eb66f57bf3b545e71d998644408d8e67960d95d29f14342705d068f",
+      "sha256": "7f4d9a86cb543644e92217891b85902f19a76ea5b1ddb670e1c2f42ae575475f",
       "commandSource": {
         "command": "specify",
         "kind": "legacy-template",
@@ -7486,7 +7486,7 @@
     },
     {
       "path": "qwen/.specify/agent-guides/story-creation-guide.md",
-      "sha256": "408c5e6de41487db2c807a155c2f3adfb12be432c2a5c8687a441a101c320177"
+      "sha256": "577d64e5894710d65eb8466b7f624cb3f216fa6b7e0698e93b07edc51a384ec1"
     },
     {
       "path": "qwen/.specify/experts/core/character.md",
@@ -7598,7 +7598,7 @@
     },
     {
       "path": "qwen/.specify/scripts/runtime/application/check-writing-state.js",
-      "sha256": "9099cc6efbe9c99552677ddefe653264bdfe406439a3a456c34f12333fc9b44b"
+      "sha256": "1dc8556a3fc1be4769fc3f585e4ba605f43302750f28abb7be76ed9fd7f74236"
     },
     {
       "path": "qwen/.specify/scripts/runtime/domain/story-artifact.js",
@@ -7610,7 +7610,7 @@
     },
     {
       "path": "qwen/.specify/templates/agent/agent-contract.md",
-      "sha256": "9805a9fdde74e010fb1f1a151b6b1c2a3b2a202b1a37e0d7832dc3ca7b1d4d80"
+      "sha256": "e59a517192022dd3648aaeb02533b81616bd4fd954a8e9c2ffa56f61bdecd369"
     },
     {
       "path": "qwen/.specify/templates/canon/contradictions.md",
@@ -7634,11 +7634,11 @@
     },
     {
       "path": "qwen/.specify/templates/clarification/core.yaml",
-      "sha256": "9b6bee56428f0990d2368e40a5b28e5ffbd7ae95ea5f7f86c738ac3cfd2626d0"
+      "sha256": "1415caa574189e422bd91688e36c8a7d4db76a186a2969fc6b6802f80bb07345"
     },
     {
       "path": "qwen/.specify/templates/clarification/cozy-adventure.yaml",
-      "sha256": "aba3282c099929f2f3c7f8ac1413666f1f9e8e161742e205c5611d61eec0fe52"
+      "sha256": "6baecb6777f9a6bfba2b57e00f253ae4afc0402b4abe64c8581b11caffd4f6d2"
     },
     {
       "path": "qwen/.specify/templates/clarification/examples/civilization-threat.yaml",
@@ -7646,11 +7646,11 @@
     },
     {
       "path": "qwen/.specify/templates/clarification/examples/core.yaml",
-      "sha256": "22038ad0d9f240a86235359d4925bbaca2ffab414ef5515bafba44786f7f9825"
+      "sha256": "46861445cb635d0756c50d47d4941e45012fda765141f4934492b2ed54851dc7"
     },
     {
       "path": "qwen/.specify/templates/clarification/examples/cozy-adventure.yaml",
-      "sha256": "ac14fd9b83789d42b5a04e097e07e2668484cc57042685ba75cce1f50ec841f6"
+      "sha256": "ed48d69fb439b8c1b1d8affe416c9ba424dbb214bad85c992b726f5b386c23ac"
     },
     {
       "path": "qwen/.specify/templates/clarification/examples/kingdom-building-support.yaml",
@@ -7690,7 +7690,7 @@
     },
     {
       "path": "qwen/.specify/templates/CLAUDE.md",
-      "sha256": "c938419b7b6471aa852e31f32aba35e3d476133e6604c8695104b83e08fe29b3"
+      "sha256": "d139132ced37995bfdb917ba4bac484a9b8d1d256c1b14ad94e918b1fb053f93"
     },
     {
       "path": "qwen/.specify/templates/continue-rules/story-spec.md",
@@ -7698,7 +7698,7 @@
     },
     {
       "path": "qwen/.specify/templates/copilot-instructions.md",
-      "sha256": "feb255ef0b9ef5c07e9ea09a9fdff7720a8f287d3ef8896c81703efaec54487f"
+      "sha256": "194be2f7feccb8e24a420006eed0282056cf727f550b4898587b4dfcd5dd2d4a"
     },
     {
       "path": "qwen/.specify/templates/cursor-rules/story-spec.mdc",
@@ -7714,7 +7714,7 @@
     },
     {
       "path": "qwen/.specify/templates/GEMINI.md",
-      "sha256": "e43a125248686c855de4d9d4fc9361180865b9df0112d9c8bbab52f0593302b5"
+      "sha256": "b97fa59452d223366ec92a3263b3298c60b0e058530dbef679c162496a0b6299"
     },
     {
       "path": "qwen/.specify/templates/graph/edges.json",
@@ -7966,7 +7966,7 @@
     },
     {
       "path": "roocode/.roo/commands/clarify.md",
-      "sha256": "07fd29e2e9cae1bfe3c283d747388124a8124fc59a6adf1cd98050b8550e7af4",
+      "sha256": "0eddecd8b2360dca79cc1536d3682b6db1cca63205604b1401b07fe4b0096a0d",
       "commandSource": {
         "command": "clarify",
         "kind": "legacy-template",
@@ -8002,7 +8002,7 @@
     },
     {
       "path": "roocode/.roo/commands/plan.md",
-      "sha256": "6ef724794b7454f803d5d4d954887ffee34f65f01b987ef7c6b4f773638b000e",
+      "sha256": "daa6c89e18a7d3d0210bffc1b69da3467073d0013499493cbda8cdb38462e005",
       "commandSource": {
         "command": "plan",
         "kind": "legacy-template",
@@ -8038,7 +8038,7 @@
     },
     {
       "path": "roocode/.roo/commands/specify.md",
-      "sha256": "38ba33a8fd00b60964b948293969a649a23223855f00a9280e317490c963e725",
+      "sha256": "ce7b8a1e844efbe5e1749407550370f3ccd4ee933647b13b88dd70519b5a5675",
       "commandSource": {
         "command": "specify",
         "kind": "legacy-template",
@@ -8093,7 +8093,7 @@
     },
     {
       "path": "roocode/.specify/agent-guides/story-creation-guide.md",
-      "sha256": "408c5e6de41487db2c807a155c2f3adfb12be432c2a5c8687a441a101c320177"
+      "sha256": "577d64e5894710d65eb8466b7f624cb3f216fa6b7e0698e93b07edc51a384ec1"
     },
     {
       "path": "roocode/.specify/experts/core/character.md",
@@ -8205,7 +8205,7 @@
     },
     {
       "path": "roocode/.specify/scripts/runtime/application/check-writing-state.js",
-      "sha256": "9099cc6efbe9c99552677ddefe653264bdfe406439a3a456c34f12333fc9b44b"
+      "sha256": "1dc8556a3fc1be4769fc3f585e4ba605f43302750f28abb7be76ed9fd7f74236"
     },
     {
       "path": "roocode/.specify/scripts/runtime/domain/story-artifact.js",
@@ -8217,7 +8217,7 @@
     },
     {
       "path": "roocode/.specify/templates/agent/agent-contract.md",
-      "sha256": "9805a9fdde74e010fb1f1a151b6b1c2a3b2a202b1a37e0d7832dc3ca7b1d4d80"
+      "sha256": "e59a517192022dd3648aaeb02533b81616bd4fd954a8e9c2ffa56f61bdecd369"
     },
     {
       "path": "roocode/.specify/templates/canon/contradictions.md",
@@ -8241,11 +8241,11 @@
     },
     {
       "path": "roocode/.specify/templates/clarification/core.yaml",
-      "sha256": "9b6bee56428f0990d2368e40a5b28e5ffbd7ae95ea5f7f86c738ac3cfd2626d0"
+      "sha256": "1415caa574189e422bd91688e36c8a7d4db76a186a2969fc6b6802f80bb07345"
     },
     {
       "path": "roocode/.specify/templates/clarification/cozy-adventure.yaml",
-      "sha256": "aba3282c099929f2f3c7f8ac1413666f1f9e8e161742e205c5611d61eec0fe52"
+      "sha256": "6baecb6777f9a6bfba2b57e00f253ae4afc0402b4abe64c8581b11caffd4f6d2"
     },
     {
       "path": "roocode/.specify/templates/clarification/examples/civilization-threat.yaml",
@@ -8253,11 +8253,11 @@
     },
     {
       "path": "roocode/.specify/templates/clarification/examples/core.yaml",
-      "sha256": "22038ad0d9f240a86235359d4925bbaca2ffab414ef5515bafba44786f7f9825"
+      "sha256": "46861445cb635d0756c50d47d4941e45012fda765141f4934492b2ed54851dc7"
     },
     {
       "path": "roocode/.specify/templates/clarification/examples/cozy-adventure.yaml",
-      "sha256": "ac14fd9b83789d42b5a04e097e07e2668484cc57042685ba75cce1f50ec841f6"
+      "sha256": "ed48d69fb439b8c1b1d8affe416c9ba424dbb214bad85c992b726f5b386c23ac"
     },
     {
       "path": "roocode/.specify/templates/clarification/examples/kingdom-building-support.yaml",
@@ -8297,7 +8297,7 @@
     },
     {
       "path": "roocode/.specify/templates/CLAUDE.md",
-      "sha256": "c938419b7b6471aa852e31f32aba35e3d476133e6604c8695104b83e08fe29b3"
+      "sha256": "d139132ced37995bfdb917ba4bac484a9b8d1d256c1b14ad94e918b1fb053f93"
     },
     {
       "path": "roocode/.specify/templates/continue-rules/story-spec.md",
@@ -8305,7 +8305,7 @@
     },
     {
       "path": "roocode/.specify/templates/copilot-instructions.md",
-      "sha256": "feb255ef0b9ef5c07e9ea09a9fdff7720a8f287d3ef8896c81703efaec54487f"
+      "sha256": "194be2f7feccb8e24a420006eed0282056cf727f550b4898587b4dfcd5dd2d4a"
     },
     {
       "path": "roocode/.specify/templates/cursor-rules/story-spec.mdc",
@@ -8321,7 +8321,7 @@
     },
     {
       "path": "roocode/.specify/templates/GEMINI.md",
-      "sha256": "e43a125248686c855de4d9d4fc9361180865b9df0112d9c8bbab52f0593302b5"
+      "sha256": "b97fa59452d223366ec92a3263b3298c60b0e058530dbef679c162496a0b6299"
     },
     {
       "path": "roocode/.specify/templates/graph/edges.json",
@@ -8545,7 +8545,7 @@
     },
     {
       "path": "windsurf/.specify/agent-guides/story-creation-guide.md",
-      "sha256": "408c5e6de41487db2c807a155c2f3adfb12be432c2a5c8687a441a101c320177"
+      "sha256": "577d64e5894710d65eb8466b7f624cb3f216fa6b7e0698e93b07edc51a384ec1"
     },
     {
       "path": "windsurf/.specify/experts/core/character.md",
@@ -8657,7 +8657,7 @@
     },
     {
       "path": "windsurf/.specify/scripts/runtime/application/check-writing-state.js",
-      "sha256": "9099cc6efbe9c99552677ddefe653264bdfe406439a3a456c34f12333fc9b44b"
+      "sha256": "1dc8556a3fc1be4769fc3f585e4ba605f43302750f28abb7be76ed9fd7f74236"
     },
     {
       "path": "windsurf/.specify/scripts/runtime/domain/story-artifact.js",
@@ -8669,7 +8669,7 @@
     },
     {
       "path": "windsurf/.specify/templates/agent/agent-contract.md",
-      "sha256": "9805a9fdde74e010fb1f1a151b6b1c2a3b2a202b1a37e0d7832dc3ca7b1d4d80"
+      "sha256": "e59a517192022dd3648aaeb02533b81616bd4fd954a8e9c2ffa56f61bdecd369"
     },
     {
       "path": "windsurf/.specify/templates/canon/contradictions.md",
@@ -8693,11 +8693,11 @@
     },
     {
       "path": "windsurf/.specify/templates/clarification/core.yaml",
-      "sha256": "9b6bee56428f0990d2368e40a5b28e5ffbd7ae95ea5f7f86c738ac3cfd2626d0"
+      "sha256": "1415caa574189e422bd91688e36c8a7d4db76a186a2969fc6b6802f80bb07345"
     },
     {
       "path": "windsurf/.specify/templates/clarification/cozy-adventure.yaml",
-      "sha256": "aba3282c099929f2f3c7f8ac1413666f1f9e8e161742e205c5611d61eec0fe52"
+      "sha256": "6baecb6777f9a6bfba2b57e00f253ae4afc0402b4abe64c8581b11caffd4f6d2"
     },
     {
       "path": "windsurf/.specify/templates/clarification/examples/civilization-threat.yaml",
@@ -8705,11 +8705,11 @@
     },
     {
       "path": "windsurf/.specify/templates/clarification/examples/core.yaml",
-      "sha256": "22038ad0d9f240a86235359d4925bbaca2ffab414ef5515bafba44786f7f9825"
+      "sha256": "46861445cb635d0756c50d47d4941e45012fda765141f4934492b2ed54851dc7"
     },
     {
       "path": "windsurf/.specify/templates/clarification/examples/cozy-adventure.yaml",
-      "sha256": "ac14fd9b83789d42b5a04e097e07e2668484cc57042685ba75cce1f50ec841f6"
+      "sha256": "ed48d69fb439b8c1b1d8affe416c9ba424dbb214bad85c992b726f5b386c23ac"
     },
     {
       "path": "windsurf/.specify/templates/clarification/examples/kingdom-building-support.yaml",
@@ -8749,7 +8749,7 @@
     },
     {
       "path": "windsurf/.specify/templates/CLAUDE.md",
-      "sha256": "c938419b7b6471aa852e31f32aba35e3d476133e6604c8695104b83e08fe29b3"
+      "sha256": "d139132ced37995bfdb917ba4bac484a9b8d1d256c1b14ad94e918b1fb053f93"
     },
     {
       "path": "windsurf/.specify/templates/continue-rules/story-spec.md",
@@ -8757,7 +8757,7 @@
     },
     {
       "path": "windsurf/.specify/templates/copilot-instructions.md",
-      "sha256": "feb255ef0b9ef5c07e9ea09a9fdff7720a8f287d3ef8896c81703efaec54487f"
+      "sha256": "194be2f7feccb8e24a420006eed0282056cf727f550b4898587b4dfcd5dd2d4a"
     },
     {
       "path": "windsurf/.specify/templates/cursor-rules/story-spec.mdc",
@@ -8773,7 +8773,7 @@
     },
     {
       "path": "windsurf/.specify/templates/GEMINI.md",
-      "sha256": "e43a125248686c855de4d9d4fc9361180865b9df0112d9c8bbab52f0593302b5"
+      "sha256": "b97fa59452d223366ec92a3263b3298c60b0e058530dbef679c162496a0b6299"
     },
     {
       "path": "windsurf/.specify/templates/graph/edges.json",
@@ -8941,7 +8941,7 @@
     },
     {
       "path": "windsurf/.windsurf/workflows/clarify.md",
-      "sha256": "07fd29e2e9cae1bfe3c283d747388124a8124fc59a6adf1cd98050b8550e7af4",
+      "sha256": "0eddecd8b2360dca79cc1536d3682b6db1cca63205604b1401b07fe4b0096a0d",
       "commandSource": {
         "command": "clarify",
         "kind": "legacy-template",
@@ -8977,7 +8977,7 @@
     },
     {
       "path": "windsurf/.windsurf/workflows/plan.md",
-      "sha256": "6ef724794b7454f803d5d4d954887ffee34f65f01b987ef7c6b4f773638b000e",
+      "sha256": "daa6c89e18a7d3d0210bffc1b69da3467073d0013499493cbda8cdb38462e005",
       "commandSource": {
         "command": "plan",
         "kind": "legacy-template",
@@ -9013,7 +9013,7 @@
     },
     {
       "path": "windsurf/.windsurf/workflows/specify.md",
-      "sha256": "38ba33a8fd00b60964b948293969a649a23223855f00a9280e317490c963e725",
+      "sha256": "ce7b8a1e844efbe5e1749407550370f3ccd4ee933647b13b88dd70519b5a5675",
       "commandSource": {
         "command": "specify",
         "kind": "legacy-template",

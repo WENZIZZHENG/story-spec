@@ -60,6 +60,13 @@ scripts:
   - 示例分叉必须包含“作者主导/继续提问”类型，不允许只给单向推荐。
 - 用户确认或补充后，再回到下面的层级判断和规格生成。
 
+如果用户输入不是低信息量，而是长文设定、上轮讨论汇总或多条回答混在一起：
+
+- 先建议把文本保存为 `notes.md`，运行 `storyspec ingest <story> --file notes.md` 查看“建议写入 / 保留候选 / 仍需确认”。
+- 若作者想连续推进，建议 `storyspec co:create <story> --file notes.md --apply-confirmed --preview specify`。
+- 不要把无标题自然段和 agent 推断直接写入 `specification.md`；它们只能作为 preview 中的候选或待确认项。
+- 可以用 `storyspec core <story> --missing` 检查主角、伙伴、第一舞台、能力体系、势力冲突和创作边界是否已经足够成熟。
+
 **低信息量输入的典型特征**：
 - 只有类型标签：如“异界穿越、慢热感情、文明危机”。
 - 只有否定边界：如“不是纯种田文”“不要太黑暗”。
@@ -722,7 +729,8 @@ else:
 
 ### 与后续步骤的关系
 - **Level 1-3**：可以直接开始写作（适合探索性创作）
-- **Level 4**：运行 `/clarify` 处理所有 `[需要澄清]` 标记，并用 `storyspec creative:report` 检查核心要素
+- **Level 4**：运行 `/clarify` 处理所有 `[需要澄清]` 标记，并用 `storyspec core --missing` 或 `storyspec creative:report` 检查核心要素
+- **长文资料**：运行 `storyspec ingest` 或 `storyspec co:create`，把明确内容和候选内容分开后再生成规格 preview
 - **澄清后**：运行 `storyspec preview plan` 制定创作计划预览；只有用户确认后才写入 `creative-plan.md`
 - **执行时**：运行 `/analyze` 验证实现是否符合规格
 

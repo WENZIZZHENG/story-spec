@@ -46,8 +46,8 @@ pnpm add -g story-spec-cn
 ### 3. 验证安装
 
 ```bash
-novel --version
-novel --help
+storyspec --version
+storyspec --help
 ```
 
 ## 初始化项目
@@ -59,9 +59,9 @@ novel --help
 storyspec init 我的小说
 
 # 指定 AI 助手类型
-storyspec init 我的小说 --ai claude
-storyspec init 我的小说 --ai cursor
-storyspec init 我的小说 --ai gemini
+storyspec init 我的小说 --agent claude
+storyspec init 我的小说 --agent cursor
+storyspec init 我的小说 --agent gemini
 ```
 
 ### 在现有目录初始化
@@ -71,8 +71,10 @@ storyspec init 我的小说 --ai gemini
 storyspec init --here
 
 # 指定 AI 助手
-storyspec init --here --ai claude
+storyspec init --here --agent claude
 ```
+
+旧 `--ai` 入口仍处于兼容期，但新项目建议使用 `--agent`；需要一次生成全部入口时使用 `--all-agents`。
 
 ### 不使用 Git（如果没有安装 Git）
 
@@ -109,20 +111,26 @@ storyspec init 我的小说 --no-git
 
 ```
 我的小说/
-├── .specify/          # Spec Kit 配置目录
-│   ├── config.json    # 项目配置
-│   └── spec.md        # 命令规范文档
-├── memory/            # 创作记忆
-│   └── writing-constitution.md  # 创作风格设定
-├── stories/           # 故事内容
-│   └── 001-故事名/    # 具体故事目录
-│       ├── story.md   # 故事大纲
-│       ├── outline.md # 章节规划
-│       ├── tasks.md   # 任务列表
-│       └── chapters/  # 章节内容
-└── scripts/           # 辅助脚本
-    ├── bash/          # Unix/Linux/Mac 脚本
-    └── powershell/    # Windows 脚本
+├── .specify/                    # StorySpec 配置、模板、命令和 agent 合约
+│   ├── agent-contract.md        # agent 共用协作边界
+│   ├── agent-guides/            # 小说创建引导协议
+│   ├── commands/                # 通用 Markdown 命令入口
+│   ├── memory/                  # 作者画像等长期偏好
+│   ├── previews/                # 待确认的规格和计划预览
+│   └── templates/               # 项目模板
+├── AGENTS.md                    # agent 读取入口
+├── spec/                        # world/canon/tracking/voice 等长期资料
+├── stories/                     # 故事工作区
+│   └── 故事名/
+│       ├── idea.md              # 作者原始灵感
+│       ├── clarifications.json  # 作者确认、AI 候选和待确认记录
+│       ├── clarifications.md    # 给作者阅读的澄清摘要
+│       ├── specification.md     # apply 后写入的故事规格
+│       ├── creative-plan.md     # apply 后写入的创作计划
+│       ├── tasks.md             # agent 生成的写作任务
+│       ├── content/             # 正文
+│       └── scenes/              # Scene Card
+└── research/                    # 本地资料和 citation
 ```
 
 ## 环境检查
@@ -187,15 +195,16 @@ storyspec init wo-de-xiao-shuo
 ### Q: AI 助手无法识别斜杠命令
 
 1. 确保项目已正确初始化
-2. 检查 `.specify/spec.md` 文件是否存在
+2. 检查 `.specify/agent-contract.md` 和对应 agent 命令目录是否存在
 3. 在 AI 助手中明确说明你在使用 StorySpec
-4. 尝试复制命令内容手动输入
+4. 尝试运行 `storyspec agent:doctor` 查看入口文件是否完整
+5. 如果当前工具不支持斜杠命令，读取 `.specify/commands/*.md` 并按文档手动执行
 
 ## 升级 StorySpec
 
 ```bash
 # 查看当前版本
-novel --version
+storyspec --version
 
 # 升级到最新版本
 npm update -g story-spec-cn
