@@ -2,18 +2,17 @@
 
 ## 状态
 
-Active。本文是 StorySpec 当前唯一的活跃待办入口。详细规则见 [todo-governance.md](todo-governance.md)，已完成事项见 [todo-archive.md](todo-archive.md)。
+Active。本文是 StorySpec 当前唯一的活跃待办入口。详细规则见 [todo-governance.md](todo-governance.md)，已完成事项见 [todo-archive.md](todo-archive.md)。当前无活跃路线；新增长期增强时先在本文登记。
 
 ## 当前待办
 
-| 路线 | 状态 | 当前优先级 | 下一步 |
-| --- | --- | --- | --- |
-| [章节生产流程优化](chapter-production-workflow-roadmap.md) | Active | P2 | P0、P1-1、P1-2、P1-3、P2-1 已完成；下一步让任务看板刷新与 `tasks.md` 状态更新保持幂等。 |
+当前无活跃路线。
 
 ## 暂不作为活跃待办
 
 | 文件 | 原因 | 归档入口 |
 | --- | --- | --- |
+| [archive/completed-roadmaps/chapter-production-workflow-roadmap.md](archive/completed-roadmaps/chapter-production-workflow-roadmap.md) | 章节生产流程优化 P0-P2 已完成并归档 | [todo-archive.md](todo-archive.md#章节生产流程优化) |
 | [archive/completed-roadmaps/new-user-story-creation-dogfood-roadmap.md](archive/completed-roadmaps/new-user-story-creation-dogfood-roadmap.md) | 新用户小说创建端到端体验 P0-P2 已完成并归档 | [todo-archive.md](todo-archive.md#新用户小说创建端到端体验) |
 | [archive/completed-roadmaps/co-creation-input-and-core-roadmap.md](archive/completed-roadmaps/co-creation-input-and-core-roadmap.md) | 共创输入与核心信息面板 P0-P3 已完成并归档 | [todo-archive.md](todo-archive.md#共创输入与核心信息面板) |
 | [archive/completed-roadmaps/story-co-creation-interview-roadmap.md](archive/completed-roadmaps/story-co-creation-interview-roadmap.md) | 故事共创访谈体验增强 F0-F21 已完成；后续新体验优化应新建专题 roadmap | [todo-archive.md](todo-archive.md#故事共创访谈体验增强) |

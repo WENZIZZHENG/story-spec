@@ -36,7 +36,7 @@ const topicFiles: Record<MaintenanceContextTopic, string[]> = {
   todo: [TODO_INDEX_PATH],
   chapter: [
     'docs/tech/todo-index.md',
-    'docs/tech/chapter-production-workflow-roadmap.md'
+    'docs/tech/archive/completed-roadmaps/chapter-production-workflow-roadmap.md'
   ],
   release: [
     'changes/',

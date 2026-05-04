@@ -17,7 +17,7 @@ const createProject = async () => {
 
 | 路线 | 状态 | 当前优先级 | 下一步 |
 | --- | --- | --- | --- |
-| [章节生产流程优化](chapter-production-workflow-roadmap.md) | Planned | P0 | 先实现 Scene Card 路径语义校验与自动修复。 |
+| [章节生产流程优化](archive/completed-roadmaps/chapter-production-workflow-roadmap.md) | Completed | Done | 章节生产流程优化 P0-P2 已完成。 |
 `);
 
   return { projectRoot, fileSystem };
@@ -42,10 +42,10 @@ describe('getMaintenanceContext', () => {
     expect(result.activeRoutes).toEqual([
       {
         title: '章节生产流程优化',
-        path: 'docs/tech/chapter-production-workflow-roadmap.md',
-        status: 'Planned',
-        priority: 'P0',
-        nextStep: '先实现 Scene Card 路径语义校验与自动修复。'
+        path: 'docs/tech/archive/completed-roadmaps/chapter-production-workflow-roadmap.md',
+        status: 'Completed',
+        priority: 'Done',
+        nextStep: '章节生产流程优化 P0-P2 已完成。'
       }
     ]);
     expect(result.rules.length).toBeLessThanOrEqual(5);

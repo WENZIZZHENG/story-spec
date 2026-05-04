@@ -50,6 +50,7 @@ describe('CLI command modules smoke', () => {
     expect(help).toContain('status [options]');
     expect(help).toContain('handoff [options] [story]');
     expect(help).toContain('tasks:board [options] [story]');
+    expect(help).toContain('tasks:set-status [options] <taskId>');
     expect(help).toContain('validate [options]');
     expect(help).toContain('review [options]');
     expect(help).toContain('preset:list [options]');
@@ -399,6 +400,75 @@ describe('CLI command modules smoke', () => {
     expect(board.story.name).toBe('001-demo');
     expect(board.summary.total).toBe(1);
     expect(board.tasks[0].githubIssue.title).toBe('[P0] T001 起草第一章');
+  });
+
+  it('sets a task status from the CLI without rewriting unchanged files', async () => {
+    const cwd = await makeTempDir();
+    await execFileAsync('node', [
+      cliPath,
+      'init',
+      'smoke',
+      '--ai',
+      'codex',
+      '--method',
+      'three-act',
+      '--no-git'
+    ], { cwd });
+
+    const projectPath = path.join(cwd, 'smoke');
+    const storyPath = path.join(projectPath, 'stories', '001-demo');
+    const tasksPath = path.join(storyPath, 'tasks.md');
+    const boardPath = path.join(storyPath, 'task-board.json');
+    await mkdir(storyPath, { recursive: true });
+    await writeFile(tasksPath, `- [ ] [P0] [WRITE-READY] **T001** - 起草第一章
+  - **必须读取**：
+    - \`specification.md\`
+  - **允许修改**：
+    - \`content/chapter-001.md\`
+  - **依赖**：无
+  - **输出**：\`content/chapter-001.md\`
+`);
+
+    const doneResult = await execFileAsync('node', [
+      cliPath,
+      'tasks:set-status',
+      'T001',
+      '001-demo',
+      '--status',
+      'done',
+      '--json'
+    ], { cwd: projectPath });
+    const done = JSON.parse(doneResult.stdout);
+
+    expect(done).toMatchObject({
+      taskId: 'T001',
+      statusBefore: 'todo',
+      statusAfter: 'done',
+      changed: true
+    });
+    await expect(readFile(tasksPath, 'utf-8'))
+      .resolves.toContain('- [x] [P0] [WRITE-READY] **T001** - 起草第一章');
+    const boardAfterFirstRun = await readFile(boardPath, 'utf-8');
+
+    const doneAgainResult = await execFileAsync('node', [
+      cliPath,
+      'tasks:set-status',
+      'T001',
+      '001-demo',
+      '--status',
+      'done',
+      '--json'
+    ], { cwd: projectPath });
+    const doneAgain = JSON.parse(doneAgainResult.stdout);
+
+    expect(doneAgain).toMatchObject({
+      taskId: 'T001',
+      statusBefore: 'done',
+      statusAfter: 'done',
+      changed: false,
+      updatedFiles: []
+    });
+    await expect(readFile(boardPath, 'utf-8')).resolves.toBe(boardAfterFirstRun);
   });
 
   it('generates a JSON handoff package', async () => {

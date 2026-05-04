@@ -90,6 +90,7 @@ export interface ExportTaskBoardInput {
 export interface ExportTaskBoardResult {
   board: TaskBoard;
   outputPath?: string;
+  written: boolean;
 }
 
 const STATUS_TITLES: Record<WritingTaskStatus, string> = {
@@ -354,6 +355,28 @@ const createTaskBoard = (
   };
 };
 
+const comparableBoard = (board: TaskBoard): Omit<TaskBoard, 'generatedAt'> => {
+  const { generatedAt: _generatedAt, ...rest } = board;
+  return rest;
+};
+
+const shouldWriteBoard = async (
+  fs: ProjectFileSystem,
+  outputPath: string,
+  board: TaskBoard
+): Promise<boolean> => {
+  if (!await fs.pathExists(outputPath)) {
+    return true;
+  }
+
+  try {
+    const existing = await fs.readJson<TaskBoard>(outputPath);
+    return JSON.stringify(comparableBoard(existing)) !== JSON.stringify(comparableBoard(board));
+  } catch {
+    return true;
+  }
+};
+
 export const exportTaskBoard = async (
   input: ExportTaskBoardInput
 ): Promise<ExportTaskBoardResult> => {
@@ -374,17 +397,21 @@ export const exportTaskBoard = async (
   );
 
   if (input.write === false) {
-    return { board };
+    return { board, written: false };
   }
 
   const outputPath = input.output
     ? path.resolve(projectRoot, input.output)
     : path.join(story.path, 'task-board.json');
 
+  if (!await shouldWriteBoard(fs, outputPath, board)) {
+    return { board, written: false };
+  }
+
   await fs.ensureDir(path.dirname(outputPath));
   await fs.writeJson(outputPath, board, { spaces: 2 });
 
-  return { board, outputPath };
+  return { board, outputPath, written: true };
 };
 
 export const renderTaskBoardExportSummary = (result: ExportTaskBoardResult): string => {

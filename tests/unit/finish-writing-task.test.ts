@@ -3,7 +3,8 @@ import path from 'node:path';
 import { describe, expect, it } from 'vitest';
 import {
   finishWritingTask,
-  renderFinishWritingTaskSummary
+  renderFinishWritingTaskSummary,
+  setWritingTaskStatus
 } from '../../src/application/finish-writing-task.js';
 import { MemoryFileSystem } from '../helpers/memory-file-system.js';
 
@@ -118,5 +119,81 @@ describe('finishWritingTask', () => {
     const board = await fileSystem.readJson<any>(path.join(storyPath, 'task-board.json'));
     expect(board.summary).toMatchObject({ total: 1, todo: 0, done: 1 });
     expect(board.tasks[0]).toMatchObject({ id: 'T001', status: 'done' });
+  });
+
+  it('does not rewrite tasks markdown or task board when the task is already done', async () => {
+    const { projectRoot, fileSystem, storyPath, tasksPath } = await createProject();
+
+    await finishWritingTask({
+      projectRoot,
+      fileSystem,
+      story: 'demo',
+      taskId: 'T001',
+      apply: true,
+      now: () => new Date('2026-05-04T00:00:00.000Z')
+    });
+    const tasksAfterFirstRun = await fileSystem.readFile(tasksPath);
+    const boardAfterFirstRun = await fileSystem.readFile(path.join(storyPath, 'task-board.json'));
+
+    const result = await finishWritingTask({
+      projectRoot,
+      fileSystem,
+      story: 'demo',
+      taskId: 'T001',
+      apply: true,
+      now: () => new Date('2026-05-05T00:00:00.000Z')
+    });
+
+    expect(result.updatedFiles).toEqual([]);
+    expect(result.task).toMatchObject({
+      statusBefore: 'done',
+      statusAfter: 'done'
+    });
+    expect(await fileSystem.readFile(tasksPath)).toBe(tasksAfterFirstRun);
+    expect(await fileSystem.readFile(path.join(storyPath, 'task-board.json'))).toBe(boardAfterFirstRun);
+  });
+
+  it('sets a writing task status in both directions through one idempotent helper', async () => {
+    const { projectRoot, fileSystem, storyPath, tasksPath } = await createProject();
+
+    const done = await setWritingTaskStatus({
+      projectRoot,
+      fileSystem,
+      story: 'demo',
+      taskId: 'T001',
+      status: 'done',
+      now: () => new Date('2026-05-04T00:00:00.000Z')
+    });
+
+    expect(done.changed).toBe(true);
+    expect(done.updatedFiles).toEqual([
+      tasksPath,
+      path.join(storyPath, 'task-board.json')
+    ]);
+    expect(await fileSystem.readFile(tasksPath)).toContain('- [x] [P0] [WRITE-READY] **T001** - 起草第一章');
+
+    const todo = await setWritingTaskStatus({
+      projectRoot,
+      fileSystem,
+      story: 'demo',
+      taskId: 'T001',
+      status: 'todo',
+      now: () => new Date('2026-05-04T00:10:00.000Z')
+    });
+
+    expect(todo.changed).toBe(true);
+    expect(await fileSystem.readFile(tasksPath)).toContain('- [ ] [P0] [WRITE-READY] **T001** - 起草第一章');
+
+    const todoAgain = await setWritingTaskStatus({
+      projectRoot,
+      fileSystem,
+      story: 'demo',
+      taskId: 'T001',
+      status: 'todo',
+      now: () => new Date('2026-05-05T00:00:00.000Z')
+    });
+
+    expect(todoAgain.changed).toBe(false);
+    expect(todoAgain.updatedFiles).toEqual([]);
   });
 });

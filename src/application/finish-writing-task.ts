@@ -33,16 +33,40 @@ export interface FinishWritingTaskResult {
   updatedFiles: string[];
 }
 
+export interface SetWritingTaskStatusInput {
+  projectRoot: string;
+  fileSystem: ProjectFileSystem;
+  story?: string;
+  taskId: string;
+  status: WritingTask['status'];
+  now?: () => Date;
+}
+
+export interface SetWritingTaskStatusResult {
+  projectRoot: string;
+  story: string;
+  storyPath: string;
+  taskId: string;
+  statusBefore: WritingTask['status'];
+  statusAfter: WritingTask['status'];
+  changed: boolean;
+  updatedFiles: string[];
+}
+
 const normalizeToPosix = (value: string): string => value.split(path.sep).join('/');
+
+const taskBoardOutputPath = (storyPath: string): string => path.join(storyPath, 'task-board.json');
 
 const writeTasksMarkdown = (
   content: string,
-  taskId: string
+  taskId: string,
+  status: WritingTask['status']
 ): string => {
   const escapedTaskId = taskId.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-  const taskLinePattern = new RegExp(`^(\\s*-\\s*)\\[\\s*\\](.*(?:\\*\\*)?${escapedTaskId}(?:\\*\\*)?\\s*-\\s*.+)$`, 'm');
+  const taskLinePattern = new RegExp(`^(\\s*-\\s*)\\[\\s*[ xX]\\s*\\](.*(?:\\*\\*)?${escapedTaskId}(?:\\*\\*)?\\s*-\\s*.+)$`, 'm');
+  const marker = status === 'done' ? 'x' : ' ';
 
-  return content.replace(taskLinePattern, '$1[x]$2');
+  return content.replace(taskLinePattern, `$1[${marker}]$2`);
 };
 
 const readStoryTasks = async (
@@ -93,10 +117,6 @@ export const finishWritingTask = async (
     throw new Error(`未找到任务：${input.taskId}`);
   }
 
-  const updatedTaskMarkdown = input.apply
-    ? writeTasksMarkdown(tasksMarkdown, input.taskId)
-    : tasksMarkdown;
-
   const draftPaths = relatedDraftPaths(task);
   const verificationCommands = [
     'storyspec validate',
@@ -108,22 +128,15 @@ export const finishWritingTask = async (
   const updatedFiles: string[] = [];
 
   if (input.apply) {
-    if (updatedTaskMarkdown !== tasksMarkdown) {
-      await input.fileSystem.writeFile(tasksPath, updatedTaskMarkdown);
-      updatedFiles.push(tasksPath);
-    }
-
-    const boardResult = await exportTaskBoard({
+    const statusResult = await setWritingTaskStatus({
       projectRoot: input.projectRoot,
       fileSystem: input.fileSystem,
       story: input.story,
-      output: path.join(storyPath, 'task-board.json'),
-      write: true,
+      taskId: input.taskId,
+      status: 'done',
       now: input.now
     });
-    if (boardResult.outputPath) {
-      updatedFiles.push(boardResult.outputPath);
-    }
+    updatedFiles.push(...statusResult.updatedFiles);
   }
 
   return {
@@ -141,6 +154,51 @@ export const finishWritingTask = async (
     },
     draftPaths,
     verificationCommands,
+    updatedFiles
+  };
+};
+
+export const setWritingTaskStatus = async (
+  input: SetWritingTaskStatusInput
+): Promise<SetWritingTaskStatusResult> => {
+  const { storyPath, tasksPath, tasks, tasksMarkdown } = await readStoryTasks(
+    input.projectRoot,
+    input.fileSystem,
+    input.story
+  );
+  const task = tasks.find(item => item.id === input.taskId);
+  if (!task) {
+    throw new Error(`未找到任务：${input.taskId}`);
+  }
+
+  const updatedTaskMarkdown = writeTasksMarkdown(tasksMarkdown, input.taskId, input.status);
+  const updatedFiles: string[] = [];
+
+  if (updatedTaskMarkdown !== tasksMarkdown) {
+    await input.fileSystem.writeFile(tasksPath, updatedTaskMarkdown);
+    updatedFiles.push(tasksPath);
+  }
+
+  const boardResult = await exportTaskBoard({
+    projectRoot: input.projectRoot,
+    fileSystem: input.fileSystem,
+    story: input.story,
+    output: taskBoardOutputPath(storyPath),
+    write: true,
+    now: input.now
+  });
+  if (boardResult.outputPath && boardResult.written) {
+    updatedFiles.push(boardResult.outputPath);
+  }
+
+  return {
+    projectRoot: input.projectRoot,
+    story: path.basename(storyPath),
+    storyPath,
+    taskId: input.taskId,
+    statusBefore: task.status,
+    statusAfter: input.status,
+    changed: updatedFiles.length > 0,
     updatedFiles
   };
 };

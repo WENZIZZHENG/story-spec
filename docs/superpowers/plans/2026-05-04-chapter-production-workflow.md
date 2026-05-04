@@ -2,7 +2,7 @@
 
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
-**Goal:** Build the P0 chapter production workflow improvements from `docs/tech/chapter-production-workflow-roadmap.md`.
+**Goal:** Build the P0 chapter production workflow improvements from `docs/tech/archive/completed-roadmaps/chapter-production-workflow-roadmap.md`.
 
 **Architecture:** Implement small application services behind existing CLI command groups. Keep high-impact writes behind preview/apply style flags, and preserve author control by making validation failures non-mutating.
 
@@ -113,7 +113,7 @@ Run:
 ### Task 4: Documentation And Route Status
 
 **Files:**
-- Modify: `docs/tech/chapter-production-workflow-roadmap.md`
+- Modify: `docs/tech/archive/completed-roadmaps/chapter-production-workflow-roadmap.md`
 - Add: `changes/2026-05-04-chapter-production-workflow.md`
 
 - [ ] **Step 1: Update roadmap checkmarks**

@@ -577,6 +577,56 @@ validateRules: []
     ]));
   });
 
+  it('warns when task-board.json is out of sync with tasks.md', async () => {
+    const projectRoot = path.join(os.tmpdir(), 'memory-novel-stale-task-board');
+    const packageRoot = path.join(os.tmpdir(), 'memory-novel-stale-task-board-package');
+    const fileSystem = new MemoryFileSystem(projectRoot);
+    const storyPath = path.join(projectRoot, 'stories', '001-demo');
+
+    await fileSystem.ensureDir(path.join(packageRoot, 'templates'));
+    await fileSystem.writeJson(path.join(projectRoot, '.specify', 'config.json'), {
+      name: 'stale-task-board',
+      type: 'novel',
+      version: '1.0.0'
+    });
+    await fileSystem.writeFile(path.join(projectRoot, '.specify', 'agent-contract.md'), '# contract');
+    await fileSystem.writeFile(path.join(projectRoot, 'AGENTS.md'), '# agents');
+    await fileSystem.ensureDir(path.join(projectRoot, 'spec', 'tracking'));
+    await fileSystem.ensureDir(path.join(projectRoot, 'spec', 'world'));
+    await fileSystem.ensureDir(path.join(projectRoot, 'spec', 'canon'));
+    await fileSystem.ensureDir(path.join(projectRoot, 'spec', 'graph'));
+    await fileSystem.ensureDir(path.join(projectRoot, 'spec', 'voice'));
+    await fileSystem.writeFile(path.join(storyPath, 'specification.md'), '# spec');
+    await fileSystem.writeFile(path.join(storyPath, 'creative-plan.md'), '# plan');
+    await fileSystem.writeFile(path.join(storyPath, 'content', 'chapter-001.md'), '# 第一章');
+    await fileSystem.writeFile(path.join(storyPath, 'tasks.md'), `- [x] [P0] [WRITE-READY] **T001** - 起草第一章
+  - **输出**：\`content/chapter-001.md\`
+`);
+    await fileSystem.writeJson(path.join(storyPath, 'task-board.json'), {
+      schemaVersion: '1.0',
+      tasks: [{
+        id: 'T001',
+        status: 'todo'
+      }]
+    });
+
+    const result = await validateProject({
+      projectRoot,
+      packageRoot,
+      fileSystem
+    });
+
+    expect(result.valid).toBe(true);
+    expect(result.issues).toEqual(expect.arrayContaining([
+      expect.objectContaining({
+        code: 'TASK_BOARD_OUT_OF_SYNC',
+        severity: 'warning',
+        path: path.join(storyPath, 'task-board.json'),
+        message: expect.stringContaining('storyspec tasks:board 001-demo')
+      })
+    ]));
+  });
+
   it('renders a concise validation report', async () => {
     const { projectRoot, packageRoot, fileSystem } = await createFileSystem();
     const result = await validateProject({

@@ -133,6 +133,29 @@ describe('exportTaskBoard', () => {
     expect(renderTaskBoardExportSummary(result)).toContain('GitHub issue 草稿：2');
   });
 
+  it('does not rewrite an unchanged task board when existing content only differs by generatedAt', async () => {
+    const { projectRoot, fileSystem, storyPath } = await createProject();
+
+    await exportTaskBoard({
+      projectRoot,
+      fileSystem,
+      story: '001-demo',
+      now: () => new Date('2026-05-02T00:00:00.000Z')
+    });
+    const boardPath = path.join(storyPath, 'task-board.json');
+    const before = await fileSystem.readFile(boardPath);
+
+    const result = await exportTaskBoard({
+      projectRoot,
+      fileSystem,
+      story: '001-demo',
+      now: () => new Date('2026-05-03T00:00:00.000Z')
+    });
+
+    expect(result.outputPath).toBeUndefined();
+    expect(await fileSystem.readFile(boardPath)).toBe(before);
+  });
+
   it('reports missing stories with a typed error', async () => {
     const projectRoot = path.join(os.tmpdir(), 'memory-novel-empty-task-board');
     const fileSystem = new MemoryFileSystem(projectRoot);

@@ -74,7 +74,8 @@ export type ProjectValidationIssueCode =
   | 'MISSING_AGENT_CONTRACT'
   | 'MISSING_AGENTS_FILE'
   | 'MISSING_AGENT_COMMAND'
-  | 'CORE_ELEMENT_NOT_READY_FOR_PLAN';
+  | 'CORE_ELEMENT_NOT_READY_FOR_PLAN'
+  | 'TASK_BOARD_OUT_OF_SYNC';
 
 export interface ProjectValidationIssue {
   severity: ValidationSeverity;
@@ -481,6 +482,49 @@ const validateCoreElementsForPlan = async (
   return issues;
 };
 
+const validateTaskBoardSync = async (
+  fs: ProjectFileSystem,
+  artifactScan: Awaited<ReturnType<typeof scanStoryArtifacts>>
+): Promise<ProjectValidationIssue[]> => {
+  const issues: ProjectValidationIssue[] = [];
+
+  for (const story of artifactScan.stories) {
+    const boardPath = path.join(story.path, 'task-board.json');
+    if (!await fs.pathExists(boardPath)) {
+      continue;
+    }
+
+    try {
+      const board = await fs.readJson<{ tasks?: Array<{ id?: unknown; status?: unknown }> }>(boardPath);
+      const boardStatuses = new Map(
+        (Array.isArray(board.tasks) ? board.tasks : [])
+          .filter(task => typeof task.id === 'string')
+          .map(task => [String(task.id).toUpperCase(), task.status])
+      );
+      const isOutOfSync = story.tasks.some(task => boardStatuses.get(task.id) !== task.status)
+        || boardStatuses.size !== story.tasks.length;
+
+      if (isOutOfSync) {
+        issues.push(createIssue(
+          'TASK_BOARD_OUT_OF_SYNC',
+          boardPath,
+          `task-board.json 与 tasks.md 不同步，请运行 storyspec tasks:board ${story.name} 刷新看板。`,
+          'warning'
+        ));
+      }
+    } catch {
+      issues.push(createIssue(
+        'TASK_BOARD_OUT_OF_SYNC',
+        boardPath,
+        `task-board.json 无法读取，请运行 storyspec tasks:board ${story.name} 重新生成看板。`,
+        'warning'
+      ));
+    }
+  }
+
+  return issues;
+};
+
 const readProjectConfig = async (
   fs: ProjectFileSystem,
   projectRoot: string
@@ -592,6 +636,7 @@ export const validateProject = async (input: ValidateProjectInput): Promise<Proj
   const artifactScan = await scanStoryArtifacts({ projectRoot, fileSystem: fs });
   const clarificationIssues = await validateClarificationRecords(fs, artifactScan);
   const coreElementIssues = await validateCoreElementsForPlan(fs, artifactScan);
+  const taskBoardIssues = await validateTaskBoardSync(fs, artifactScan);
   const driftResult = await detectCreativeIntentDrift({
     projectRoot,
     fileSystem: fs,
@@ -639,6 +684,7 @@ export const validateProject = async (input: ValidateProjectInput): Promise<Proj
     ...templateResult.issues,
     ...clarificationIssues,
     ...coreElementIssues,
+    ...taskBoardIssues,
     ...driftResult.issues.map(issue => createIssue(
       issue.code,
       issue.path,
