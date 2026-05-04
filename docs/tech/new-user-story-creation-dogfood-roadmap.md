@@ -314,7 +314,7 @@ node dist/cli.js validate
 - 生成产物：新增 `changes/2026-05-04-init-output-order.md`。
 - 后续遗留：本任务只收缩终端成功输出，不重做完整交互式 init wizard。
 
-### P2-2 让 Scene Card 模板使用当前故事上下文
+### P2-2 让 Scene Card 模板使用当前故事上下文（已完成，2026-05-04）
 
 - 类型：模板质量、写作前置
 - 背景/问题：`scene:init` 创建的 `scene-001.yaml` 仍是“起始地点 / world.example.rule / canon.example.fact”等占位，未引用当前 `specification.md` 中的驿站、岑舟、航务局等内容。
@@ -322,6 +322,13 @@ node dist/cli.js validate
 - 涉及文件/模块：`src/application/story-structure.ts`、`templates/scenes/scene-001.yaml`
 - 验收标准：对 dogfood 故事生成的 Scene Card 至少包含故事名、已确认舞台和主角候选。
 - 不做/边界：自动填入内容标记为候选，不直接写 canon。
+
+完成记录：
+
+- 完成内容：新增 `createInitialSceneCard` 应用层函数，`scene:init` 复用该函数；初始化 Scene Card 时带入 `storyContext.confirmed`、当前故事路径的 requiredReads/allowedWrites/draftPath，并把示例 world/canon 引用降为 pending 占位。
+- 验证方式：`npm run build`、`npx vitest run tests/unit/create-scene-card.test.ts tests/unit/story-structure.test.ts tests/unit/inspect-story-structure.test.ts`。
+- 生成产物：新增 `changes/2026-05-04-scene-card-story-context.md`。
+- 后续遗留：本任务只使用已确认澄清答案做候选上下文，不做更复杂的 specification 章节解析和实体自动建模。
 
 ## 完成同步
 

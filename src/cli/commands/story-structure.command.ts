@@ -8,6 +8,10 @@ import {
   renderSceneInspection,
   renderStoryGraphInspection
 } from '../../application/inspect-story-structure.js';
+import {
+  createInitialSceneCard,
+  renderSceneCardCreateSummary
+} from '../../application/create-scene-card.js';
 import { nodeFileSystem } from '../../infrastructure/node-file-system.js';
 import { ensureProjectRoot } from '../../utils/project.js';
 
@@ -24,21 +28,6 @@ const handleProjectError = (error: any, fallbackMessage: string): never => {
 
   console.error(chalk.red(fallbackMessage), error);
   process.exit(1);
-};
-
-const resolveStoryPath = (
-  projectRoot: string,
-  story: string
-): string => {
-  if (path.isAbsolute(story)) {
-    return story;
-  }
-
-  if (story.startsWith('stories/')) {
-    return path.join(projectRoot, ...story.split('/'));
-  }
-
-  return path.join(projectRoot, 'stories', story);
 };
 
 export const registerStoryStructureCommand = (
@@ -132,42 +121,21 @@ export const registerStoryStructureCommand = (
     .action(async (story, commandOptions) => {
       try {
         const projectRoot = await ensureProjectRoot();
-        const storyPath = resolveStoryPath(projectRoot, story);
-        const sceneId = commandOptions.id;
-        const outputPath = path.join(storyPath, 'scenes', `${sceneId}.yaml`);
-
-        if (!await nodeFileSystem.pathExists(storyPath)) {
-          await nodeFileSystem.ensureDir(storyPath);
-        }
-        await nodeFileSystem.ensureDir(path.dirname(outputPath));
-
-        if (await nodeFileSystem.pathExists(outputPath)) {
-          console.log(chalk.red(`Scene Card 已存在：${outputPath}`));
-          process.exit(1);
-        }
-
-        const templatePath = path.join(options.packageRoot, 'templates', 'scenes', 'scene-001.yaml');
-        const template = await nodeFileSystem.readFile(templatePath);
-        const content = template.replace(/^id: scene-001$/m, `id: ${sceneId}`);
-
-        await nodeFileSystem.writeFile(outputPath, content);
-
-        const result = {
+        const result = await createInitialSceneCard({
           projectRoot,
-          storyPath,
-          sceneId,
-          outputPath
-        };
+          packageRoot: options.packageRoot,
+          fileSystem: nodeFileSystem,
+          story,
+          id: commandOptions.id
+        });
         console.log(commandOptions.json
           ? JSON.stringify(result, null, 2)
-          : [
-            'Scene Card 初始化',
-            '',
-            `故事：${storyPath}`,
-            `场景：${sceneId}`,
-            `输出：${outputPath}`
-          ].join('\n'));
+          : renderSceneCardCreateSummary(result));
       } catch (error: any) {
+        if (String(error.message).startsWith('SCENE_CARD_EXISTS:')) {
+          console.log(chalk.red(`Scene Card 已存在：${error.message.replace('SCENE_CARD_EXISTS:', '')}`));
+          process.exit(1);
+        }
         handleProjectError(error, 'Scene Card 初始化失败');
       }
     });
