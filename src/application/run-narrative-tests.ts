@@ -133,7 +133,27 @@ const testScene = (
     }));
   }
 
-  if (scene.foreshadowing.planted.length > 0 && scene.foreshadowing.paidOff.length === 0) {
+  if (
+    scene.foreshadowing.planted.length > 0
+    && scene.foreshadowing.plannedPayoff.length > 0
+    && scene.foreshadowing.paidOff.length === 0
+  ) {
+    issues.push(result({
+      id: `scene-${scene.id}-foreshadowing-planned`,
+      severity: 'info',
+      status: 'pass',
+      path: pathValue,
+      evidence: `${scene.foreshadowing.planted.join(', ')} -> ${scene.foreshadowing.plannedPayoff.join(', ')}`,
+      message: '场景伏笔已有计划回收位置。',
+      suggestedAction: '后续写到 plannedPayoff 场景时补充 paidOff 记录。'
+    }));
+  }
+
+  if (
+    scene.foreshadowing.planted.length > 0
+    && scene.foreshadowing.paidOff.length === 0
+    && scene.foreshadowing.plannedPayoff.length === 0
+  ) {
     issues.push(result({
       id: `scene-${scene.id}-promise`,
       severity: 'info',

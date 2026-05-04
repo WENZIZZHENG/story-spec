@@ -8,7 +8,7 @@ Active。本文是 StorySpec 当前唯一的活跃待办入口。详细规则见
 
 | 路线 | 状态 | 当前优先级 | 下一步 |
 | --- | --- | --- | --- |
-| [章节生产流程优化](chapter-production-workflow-roadmap.md) | Active | P1 | P0 基线和 P1-1 已完成；下一步为伏笔增加“计划回收”状态，区分正常未回收与缺少计划的 open loop。 |
+| [章节生产流程优化](chapter-production-workflow-roadmap.md) | Active | P1 | P0、P1-1、P1-2 已完成；下一步增加 `clarification:doctor --fix`，清理历史澄清孤儿答案。 |
 
 ## 暂不作为活跃待办
 

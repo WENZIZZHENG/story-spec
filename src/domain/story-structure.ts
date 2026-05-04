@@ -51,6 +51,7 @@ export interface SceneCard {
   reveals: string[];
   foreshadowing: {
     planted: string[];
+    plannedPayoff: string[];
     paidOff: string[];
   };
   requiredReads: string[];
@@ -283,11 +284,12 @@ const toNumber = (value: unknown): number | undefined => {
 
 const readForeshadowing = (value: unknown): SceneCard['foreshadowing'] => {
   if (!isRecord(value)) {
-    return { planted: [], paidOff: [] };
+    return { planted: [], plannedPayoff: [], paidOff: [] };
   }
 
   return {
     planted: toStringArray(value.planted),
+    plannedPayoff: toStringArray(value.plannedPayoff),
     paidOff: toStringArray(value.paidOff)
   };
 };

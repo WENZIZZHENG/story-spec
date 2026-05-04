@@ -356,7 +356,11 @@ const createSceneQualityRule = (maxSceneWorldReferences: number): WritingRule =>
         ));
       }
 
-      if (scene.foreshadowing.planted.length > 0 && scene.foreshadowing.paidOff.length === 0) {
+      if (
+        scene.foreshadowing.planted.length > 0
+        && scene.foreshadowing.paidOff.length === 0
+        && scene.foreshadowing.plannedPayoff.length === 0
+      ) {
         issues.push(issue(
           'FORESHADOWING_OPEN_LOOP',
           `${scenePath}#${scene.id}.foreshadowing`,

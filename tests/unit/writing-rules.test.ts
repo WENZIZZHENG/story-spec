@@ -174,4 +174,46 @@ describe('writing rules', () => {
       })
     ]));
   });
+
+  it('does not flag planned foreshadowing payoff as an open loop', async () => {
+    const projectRoot = path.join(os.tmpdir(), 'memory-novel-writing-rules-planned-foreshadowing');
+    const fileSystem = new MemoryFileSystem(projectRoot);
+    const storyRoot = path.join(projectRoot, 'stories', 'demo');
+
+    await fileSystem.writeFile(path.join(storyRoot, 'specification.md'), '# spec');
+    await fileSystem.writeFile(path.join(storyRoot, 'creative-plan.md'), '# plan');
+    await fileSystem.writeFile(path.join(storyRoot, 'tasks.md'), '- [ ] [P0] **T001** - 第一章');
+    await fileSystem.writeFile(path.join(storyRoot, 'content', 'chapter-001.md'), '足够长的正文内容。');
+    await fileSystem.writeFile(path.join(storyRoot, 'scenes', 'scene-001.yaml'), `id: scene-001
+chapter: chapter-001
+order: 1
+pov: 晏无
+location: 起点
+time: 第一夜
+sceneGoal: 埋下线索
+conflict: 线索无人相信
+outcome: 主角记录异常
+reveals: []
+foreshadowing:
+  planted:
+    - 静默异常
+  plannedPayoff:
+    - scene-008
+  paidOff: []
+`);
+
+    const result = await runWritingRules({
+      projectRoot,
+      fileSystem,
+      artifactScan: await scanStoryArtifacts({ projectRoot, fileSystem }),
+      rules: createDefaultWritingRules({ minChapterChars: 1 })
+    });
+
+    expect(result.issues).not.toEqual(expect.arrayContaining([
+      expect.objectContaining({
+        code: 'FORESHADOWING_OPEN_LOOP',
+        path: path.join(projectRoot, 'stories', 'demo', 'scenes', 'scene-001.yaml#scene-001.foreshadowing')
+      })
+    ]));
+  });
 });

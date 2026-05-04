@@ -454,7 +454,7 @@
     },
     {
       "path": "auggie/.specify/templates/scenes/scene-001.yaml",
-      "sha256": "e20b633393c3020266d5bedfcfc88b106e791d36394e1cf1a1c5e22d58f7eaf7"
+      "sha256": "449e8108dfb8fc0f8fc0bd6ee680122be84d284d569b246c8f543887ac1b3588"
     },
     {
       "path": "auggie/.specify/templates/story-template.md",
@@ -1061,7 +1061,7 @@
     },
     {
       "path": "claude/.specify/templates/scenes/scene-001.yaml",
-      "sha256": "e20b633393c3020266d5bedfcfc88b106e791d36394e1cf1a1c5e22d58f7eaf7"
+      "sha256": "449e8108dfb8fc0f8fc0bd6ee680122be84d284d569b246c8f543887ac1b3588"
     },
     {
       "path": "claude/.specify/templates/story-template.md",
@@ -1672,7 +1672,7 @@
     },
     {
       "path": "codebuddy/.specify/templates/scenes/scene-001.yaml",
-      "sha256": "e20b633393c3020266d5bedfcfc88b106e791d36394e1cf1a1c5e22d58f7eaf7"
+      "sha256": "449e8108dfb8fc0f8fc0bd6ee680122be84d284d569b246c8f543887ac1b3588"
     },
     {
       "path": "codebuddy/.specify/templates/story-template.md",
@@ -2279,7 +2279,7 @@
     },
     {
       "path": "codex/.specify/templates/scenes/scene-001.yaml",
-      "sha256": "e20b633393c3020266d5bedfcfc88b106e791d36394e1cf1a1c5e22d58f7eaf7"
+      "sha256": "449e8108dfb8fc0f8fc0bd6ee680122be84d284d569b246c8f543887ac1b3588"
     },
     {
       "path": "codex/.specify/templates/story-template.md",
@@ -2890,7 +2890,7 @@
     },
     {
       "path": "continue-check/.specify/templates/scenes/scene-001.yaml",
-      "sha256": "e20b633393c3020266d5bedfcfc88b106e791d36394e1cf1a1c5e22d58f7eaf7"
+      "sha256": "449e8108dfb8fc0f8fc0bd6ee680122be84d284d569b246c8f543887ac1b3588"
     },
     {
       "path": "continue-check/.specify/templates/story-template.md",
@@ -3501,7 +3501,7 @@
     },
     {
       "path": "copilot/.specify/templates/scenes/scene-001.yaml",
-      "sha256": "e20b633393c3020266d5bedfcfc88b106e791d36394e1cf1a1c5e22d58f7eaf7"
+      "sha256": "449e8108dfb8fc0f8fc0bd6ee680122be84d284d569b246c8f543887ac1b3588"
     },
     {
       "path": "copilot/.specify/templates/story-template.md",
@@ -4116,7 +4116,7 @@
     },
     {
       "path": "cursor/.specify/templates/scenes/scene-001.yaml",
-      "sha256": "e20b633393c3020266d5bedfcfc88b106e791d36394e1cf1a1c5e22d58f7eaf7"
+      "sha256": "449e8108dfb8fc0f8fc0bd6ee680122be84d284d569b246c8f543887ac1b3588"
     },
     {
       "path": "cursor/.specify/templates/story-template.md",
@@ -4727,7 +4727,7 @@
     },
     {
       "path": "gemini/.specify/templates/scenes/scene-001.yaml",
-      "sha256": "e20b633393c3020266d5bedfcfc88b106e791d36394e1cf1a1c5e22d58f7eaf7"
+      "sha256": "449e8108dfb8fc0f8fc0bd6ee680122be84d284d569b246c8f543887ac1b3588"
     },
     {
       "path": "gemini/.specify/templates/story-template.md",
@@ -5334,7 +5334,7 @@
     },
     {
       "path": "generic/.specify/templates/scenes/scene-001.yaml",
-      "sha256": "e20b633393c3020266d5bedfcfc88b106e791d36394e1cf1a1c5e22d58f7eaf7"
+      "sha256": "449e8108dfb8fc0f8fc0bd6ee680122be84d284d569b246c8f543887ac1b3588"
     },
     {
       "path": "generic/.specify/templates/story-template.md",
@@ -5941,7 +5941,7 @@
     },
     {
       "path": "kilocode/.specify/templates/scenes/scene-001.yaml",
-      "sha256": "e20b633393c3020266d5bedfcfc88b106e791d36394e1cf1a1c5e22d58f7eaf7"
+      "sha256": "449e8108dfb8fc0f8fc0bd6ee680122be84d284d569b246c8f543887ac1b3588"
     },
     {
       "path": "kilocode/.specify/templates/story-template.md",
@@ -6548,7 +6548,7 @@
     },
     {
       "path": "opencode/.specify/templates/scenes/scene-001.yaml",
-      "sha256": "e20b633393c3020266d5bedfcfc88b106e791d36394e1cf1a1c5e22d58f7eaf7"
+      "sha256": "449e8108dfb8fc0f8fc0bd6ee680122be84d284d569b246c8f543887ac1b3588"
     },
     {
       "path": "opencode/.specify/templates/story-template.md",
@@ -7155,7 +7155,7 @@
     },
     {
       "path": "q/.specify/templates/scenes/scene-001.yaml",
-      "sha256": "e20b633393c3020266d5bedfcfc88b106e791d36394e1cf1a1c5e22d58f7eaf7"
+      "sha256": "449e8108dfb8fc0f8fc0bd6ee680122be84d284d569b246c8f543887ac1b3588"
     },
     {
       "path": "q/.specify/templates/story-template.md",
@@ -7762,7 +7762,7 @@
     },
     {
       "path": "qwen/.specify/templates/scenes/scene-001.yaml",
-      "sha256": "e20b633393c3020266d5bedfcfc88b106e791d36394e1cf1a1c5e22d58f7eaf7"
+      "sha256": "449e8108dfb8fc0f8fc0bd6ee680122be84d284d569b246c8f543887ac1b3588"
     },
     {
       "path": "qwen/.specify/templates/story-template.md",
@@ -8369,7 +8369,7 @@
     },
     {
       "path": "roocode/.specify/templates/scenes/scene-001.yaml",
-      "sha256": "e20b633393c3020266d5bedfcfc88b106e791d36394e1cf1a1c5e22d58f7eaf7"
+      "sha256": "449e8108dfb8fc0f8fc0bd6ee680122be84d284d569b246c8f543887ac1b3588"
     },
     {
       "path": "roocode/.specify/templates/story-template.md",
@@ -8821,7 +8821,7 @@
     },
     {
       "path": "windsurf/.specify/templates/scenes/scene-001.yaml",
-      "sha256": "e20b633393c3020266d5bedfcfc88b106e791d36394e1cf1a1c5e22d58f7eaf7"
+      "sha256": "449e8108dfb8fc0f8fc0bd6ee680122be84d284d569b246c8f543887ac1b3588"
     },
     {
       "path": "windsurf/.specify/templates/story-template.md",

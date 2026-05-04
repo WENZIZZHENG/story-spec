@@ -114,6 +114,61 @@ reveals:
     });
   });
 
+  it('reports planned foreshadowing without warning about missing payoff', async () => {
+    const { projectRoot, fileSystem, storyPath } = await createProject();
+    await fileSystem.writeFile(path.join(storyPath, 'scenes', 'scene-001.yaml'), `id: scene-001
+chapter: chapter-001
+order: 1
+pov: Hero
+location: Home
+time: Morning
+sceneGoal: 主角做出选择
+conflict: 外部麻烦逼近
+outcome: 主角接受任务
+plotThread: 主线推进
+readerPromise: 建立异变谜题
+relationshipChange: 主角和向导建立最低限度信任
+worldReveal:
+  factId: world.rule
+  actionImpact: 主角必须绕过许可制度
+  beneficiaries:
+    - 管理者
+  costs:
+    - 主角
+  violationConsequence: 被巡查者通缉
+emotionalBeat: 从戒备转向试探性信任
+endingHook: 寂静异象第一次逼近城市边缘
+successCriteria:
+  - 主角主动选择接受任务
+worldElements:
+  - world.rule
+reveals:
+  - world.rule 会限制主角行动并制造代价
+foreshadowing:
+  planted:
+    - 静默异常
+  plannedPayoff:
+    - scene-008
+  paidOff: []
+`);
+
+    const report = await runNarrativeTests({
+      projectRoot,
+      fileSystem,
+      chapter: '001'
+    });
+
+    expect(report.summary).toMatchObject({ warning: 0, fail: 0 });
+    expect(report.results).toEqual(expect.arrayContaining([
+      expect.objectContaining({
+        id: 'scene-scene-001-foreshadowing-planned',
+        status: 'pass',
+        severity: 'info',
+        evidence: '静默异常 -> scene-008'
+      })
+    ]));
+  });
+
   it('blocks chapter writing with a scene-card gate when no scene card exists', async () => {
     const projectRoot = path.join(os.tmpdir(), 'memory-novel-narrative-fallback');
     const fileSystem = new MemoryFileSystem(projectRoot);

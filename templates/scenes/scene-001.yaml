@@ -35,6 +35,8 @@ worldReveal:
 foreshadowing:
   planted:
     - 示例规则后续会带来代价
+  plannedPayoff:
+    - scene-008
   paidOff: []
 requiredReads:
   - .specify/memory/constitution.md
