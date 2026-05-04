@@ -3,30 +3,15 @@
 [![npm version](https://badge.fury.io/js/story-spec-cn.svg)](https://www.npmjs.com/package/story-spec-cn)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-StorySpec 是一个面向中文长篇小说的 agent-neutral 创作工作流工具。它的核心不是让 AI 把一句灵感直接扩写成一整套设定，而是先保护作者的创作决定，再把澄清、规格、计划、正文、审稿和交接拆成可维护的项目文件。
+StorySpec 是一个面向中文长篇小说的共创型编辑台。它不是让 AI 把一句灵感直接扩写成完整大纲，而是先陪作者围绕主角、伙伴、舞台、能力、势力、冲突和场景做有趣选择，再把确认过的内容沉淀成规格、计划、正文和追踪文件。
 
-你可以把它理解成一套“小说项目工程化工作台”：
+你可以把它理解成：
 
-- 灵感会先被保存为作者原始输入，不会被静默改写成正典。
-- AI 可以给出示例、候选项和下一步建议，但未确认内容会保留为 `[需要澄清]`。
-- 角色、世界观、时间线、伏笔、文风、反馈和章节草稿都有稳定文件承载。
-- Codex、Claude、Gemini、Cursor、Continue 等 agent 可以共用同一套项目资料。
-- 写作前可以先预览 AI 准备写入的规格，再决定是否应用。
-
-## 适合谁
-
-- 你想写长篇中文小说，希望 AI 帮忙推进，但不希望它抢走设定权。
-- 你有一句灵感、几条类型偏好或一个模糊主题，需要先被追问，而不是被立即代写。
-- 你需要维护世界观、正典、人物关系、伏笔、章节任务和多轮修改记录。
-- 你想让不同 AI 工具接力创作，并且每次接手都能读到同一份上下文。
-- 你喜欢 Spec Kit / SDD 式的结构化流程，希望把它迁移到小说创作中。
-
-## 不适合谁
-
-- 你只想输入一句话，然后立刻得到完整大纲、人物小传和正文。
-- 你希望 AI 自动决定所有设定，作者只负责验收成品。
-- 你写的是一次性短文本，不需要长期维护资料、正典和版本。
-- 你不想使用命令行，也不希望把小说拆成项目文件管理。
+- 先保存作者原始灵感，不静默改写成正典。
+- 先给少量候选和有后果的分叉，不急着生成完整计划。
+- 作者可以确认、改写、拒绝或稍后决定。
+- AI 候选进入正典前必须经过 preview / confirm / apply 或等价确认流程。
+- Codex、Claude、Gemini、Cursor、Continue 等 agent 可以共用同一套故事资料。
 
 ## 安装
 
@@ -38,9 +23,114 @@ npm install -g story-spec-cn
 
 本仓库开发时可以使用 `npm` 脚本；仓库锁文件是 `bun.lock`，安装依赖时优先保留现有包管理方式。
 
-## 快速开始
+## 3 分钟体验
 
-下面是一条推荐的新故事路径。重点是：先建项目，再保存灵感，然后进入共创访谈；规格和创作计划都先预览，确认后再写入。
+假设你想创建《编程施法》：
+
+```bash
+storyspec init my-novel --agent codex
+cd my-novel
+storyspec story:new 编程施法 --idea "主角晏无是一名工科马列青年，穿越到剑与魔法世界，并获得编程施法金手指，展开轻松冒险；慢热感情，文明级威胁。"
+storyspec next 编程施法
+```
+
+`storyspec next` 不会只给你一个线性下一步。它会先问你今天想怎么玩：
+
+- 我想玩角色
+- 我想写一幕
+- 我想整理设定
+- 我想比较分支
+- 我只想随便聊聊
+
+每个今日创作模式都默认低负担：最多 2 个问题、2 个候选、`--no-write`，先陪你发散，不写入文件，不生成完整大纲。
+
+比如你今天只想玩能力：
+
+```bash
+storyspec interview 编程施法 --focus power --max-questions 2 --no-write
+```
+
+你可以先比较“轻量隐喻”“中度规则”“硬规则”会让这本书长成什么味道，再决定是否确认、改写、拒绝或稍后。
+
+## 今日创作模式
+
+| 模式 | 适合什么时候用 | 默认行为 |
+| --- | --- | --- |
+| 我想玩角色 | 想先抓主角、伙伴、关系张力 | 进入主角/伙伴入口，只给少量人物候选 |
+| 我想写一幕 | 脑中已经有事故、相遇、对话或高光 | 进入场景/舞台/能力入口，先试一幕能不能写动 |
+| 我想整理设定 | 世界观很多，但还没落到故事压力 | 进入世界/舞台/势力/能力入口，整理候选边界 |
+| 我想比较分支 | 在几条路线之间摇摆 | 进入分支/冲突/结尾入口，比较风味和代价 |
+| 我只想随便聊聊 | 不想开正式流程，只想发散 | 进入轻量入口，不写文件，不生成计划 |
+
+这些模式借鉴了 Inquirer.js 的轻量选择、Twine 的任意入口探索、Redux 的可追溯决策思想和 Cucumber.js 的行为场景验收，但不会把 StorySpec 变成复杂 UI 或版本控制系统。
+
+## 共创入口卡
+
+`storyspec next` 会根据故事状态推荐入口卡。入口卡不是表单，而是“今天从哪里继续玩”。
+
+| 入口 | 命令示例 | 会帮你创造什么 |
+| --- | --- | --- |
+| 主角 | `storyspec interview 编程施法 --focus protagonist` | 欲望、误判、成长代价、成功路线候选 |
+| 伙伴 | `storyspec interview 编程施法 --focus partner` | 能挑战主角的人、慢热关系张力、互相改变的代价 |
+| 舞台 | `storyspec interview 编程施法 --focus stage` | 第一眼异界、资源结构、普通人压力、开局碰撞 |
+| 能力 | `storyspec interview 编程施法 --focus power` | 编程施法的爽点、限制、失败代价和世界误读 |
+| 势力 | `storyspec interview 编程施法 --focus faction` | 谁垄断知识/资源/合法性，谁获利，谁受损 |
+| 冲突 | `storyspec interview 编程施法 --focus conflict` | 第一卷阻力、阶段胜利、文明级威胁的小异常 |
+| 场景 | `storyspec interview 编程施法 --focus scene` | 一幕可写的事故、对话、合作或高光 |
+| 分支 | `storyspec interview 编程施法 --focus branch` | what-if 路线、风味差异、关系和世界压力变化 |
+
+高影响候选会展示：吸引力、代价、关系影响、世界影响、后续钩子和确认边界。它检查的是系统给出的候选是否可玩，不评价作者创意高低。
+
+## 最小快乐闭环
+
+StorySpec 的早期目标不是马上生成完整 `creative-plan.md`，而是先让第一轮共创变得好玩：
+
+```text
+选择今日创作模式
+  -> 看 2 个有后果的候选
+  -> 确认 / 改写 / 拒绝 / 稍后
+  -> 得到一句创作回声
+  -> 核心要素不足时阻止完整 plan
+```
+
+`storyspec creative:report 编程施法` 会告诉你已经创造出了什么、哪些仍是候选、下一轮最值得玩哪里。
+
+## 候选不是正典
+
+StorySpec 会尽量把“作者确认”和“AI 建议”分开：
+
+- `source: user-explicit` 且 `confirmed: true` 的内容，才适合进入正典、规格、计划和正文。
+- `source: ai-suggested`、`confirmed: false` 或跳过回答的内容，只能作为候选。
+- `不知道`、`稍后决定`、`给我示例` 会保留在澄清记录里，但不算完成回答。
+- `storyspec preview specify`、`storyspec preview plan` 和 `storyspec apply` 用来把“准备写入”和“确认写入”分开。
+- `creative-plan.md` 不应过早替作者定稿；核心伙伴、第一舞台、能力边界、势力冲突等仍缺失时，计划预览应保留 `[需要澄清]` 或要求继续访谈。
+
+如果你确认后又反悔，可以把答案退回候选：
+
+```bash
+storyspec clarification:rollback --story 编程施法 --question magic.rule-hardness
+```
+
+它会保留原答案和证据路径，把该项重新放回“AI 建议，待确认”，不会修改正文、正典、规格或创作计划。
+
+## 适合谁
+
+- 你想写长篇中文小说，希望 AI 帮忙推进，但不希望它抢走设定权。
+- 你有一句灵感、几条类型偏好或一个模糊主题，需要先被追问，而不是被立即代写。
+- 你想体验“创建小说世界”的乐趣，而不是只验收 AI 大纲。
+- 你需要维护世界观、正典、人物关系、伏笔、章节任务和多轮修改记录。
+- 你想让不同 AI 工具接力创作，并且每次接手都能读到同一份上下文。
+
+## 不适合谁
+
+- 你只想输入一句话，然后立刻得到完整大纲、人物小传和正文。
+- 你希望 AI 自动决定所有设定，作者只负责验收成品。
+- 你写的是一次性短文本，不需要长期维护资料、正典和版本。
+- 你不想使用命令行，也不希望把小说拆成项目文件管理。
+
+## 完整工作流
+
+下面是一条更完整的新故事路径。重点是：先建项目，再保存灵感，然后进入共创访谈；规格和创作计划都先预览，确认后再写入。
 
 ```bash
 storyspec init my-novel --agent codex
@@ -115,7 +205,7 @@ storyspec story:new 王国异常日志 --idea "轻松群像、冒险调查、编
 storyspec interview 王国异常日志 --premise "主角团队用日志、断点和测试用例定位世界规则异常" --max-questions 8
 ```
 
-## 推荐工作流
+## 流程总览
 
 ```text
 init -> story:new -> next -> interview/clarify -> creative:report -> preview specify -> apply -> preview plan -> apply -> /tasks -> /write -> /review -> validate
@@ -158,20 +248,6 @@ StorySpec 有两类入口，容易混淆：
 | Claude Code | `/storyspec.write` |
 | Gemini CLI | `/storyspec:write` |
 | Continue Check | 只读检查提示，不直接写正文 |
-
-## 创作控制权规则
-
-StorySpec 会尽量把“作者确认”和“AI 建议”分开：
-
-- `source: user` 且 `confirmed: true` 的内容，才适合进入正典、规格、计划和正文。
-- `source: ai-suggested`、`confirmed: false` 或跳过回答的内容，只能作为候选项。
-- `不知道`、`稍后决定`、`给我示例` 会保留在澄清记录里，但不算完成回答。
-- `storyspec review` / `storyspec validate` 会检查未确认 AI 建议是否被提前写入规格、任务或正文。
-- `storyspec preview specify`、`storyspec preview plan` 和 `storyspec apply` 用来把“准备写入”和“确认写入”分开。
-- `creative-plan.md` 不应过早替作者定稿；核心伙伴、第一舞台、能力边界、势力冲突等仍缺失时，计划预览应保留 `[需要澄清]` 或要求继续访谈。
-- `.specify/memory/author-profile.json` 是长期偏好记忆，只影响推荐、示例和风味参考；当前故事的 `clarifications.json` 与用户即时回答永远优先。
-
-这意味着 AI 可以积极帮你提出选项，但不能把选项伪装成你的决定。
 
 ## 高频命令
 
