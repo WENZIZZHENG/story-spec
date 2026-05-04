@@ -1,6 +1,6 @@
 # StorySpec 项目级协作说明
 
-本文件只记录 StorySpec 仓库专属约定；通用语言、编辑、验证、SDD 和工具规则继承全局 `AGENTS.md`。
+本文件只记录 StorySpec 仓库专属约定；通用语言、编辑、验证、SDD 启用场景和工具规则继承全局 `AGENTS.md`。若本文件与全局规则冲突，按“用户最新指令 > 项目级规则 > 全局规则”的优先级处理。
 
 ## 包管理与常用命令
 
@@ -49,7 +49,7 @@
 
 - CLI 行为、模板契约、生成产物、项目结构或公共接口变化，新增 `changes/*.md`。
 - 长期路线才登记到 `docs/tech/todo-index.md`；完成后归档到 `docs/tech/todo-archive.md`。
-- 重要维护规则以 `SDD.md` 为准。
+- SDD 启用条件、读取顺序和 OpenSpec-first 流程继承全局 `AGENTS.md`；进入 SDD 后按全局顺序优先读取本仓库 `SDD.md`（若存在），再读取父级和全局 `SDD.md`。
 - README 只写真实可用能力，不提前承诺未实现功能。
 
 ## 创作控制权
