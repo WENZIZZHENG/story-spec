@@ -51,19 +51,21 @@ storyspec apply <preview-id> --yes # 确认后写入 specification.md
 
 如果还有 required 问题未确认，`apply --yes` 会被阻止，避免 AI 把候选建议写进正式规格。
 
-### 步骤 7：设定创作风格
+### 步骤 7：可选：设定创作风格
 
-在 AI 助手中输入：
+如果你已经明确文风和更新节奏，可以在 AI 助手中补充作者偏好；如果还没想好，可以先跳过，不影响继续生成规格和计划。
+
+在 AI 助手中输入平台对应的 agent 命令，例如：
 ```
-/constitution 我想写一本网络爽文风格的小说，节奏明快，代入感强，主角有明确的升级路线
+/storyspec-constitution 我想写一本网络爽文风格的小说，节奏明快，代入感强，主角有明确的升级路线
 ```
 
 ### 步骤 8：继续规划和写作
 
 ```
-/plan 基于已确认 specification 规划第一卷结构
-/tasks 把第一卷拆成可执行写作任务
-/write 开始写作第一章
+/storyspec-plan 基于已确认 specification 规划第一卷结构
+/storyspec-tasks 把第一卷拆成可执行写作任务
+/storyspec-write 开始写作第一章
 ```
 
 恭喜！你已经开始了你的小说创作之旅。
@@ -94,35 +96,29 @@ cd 都市修仙者
 接下来:
   1. cd 都市修仙者 - 进入项目目录
   2. 在 Claude 中打开项目
-  3. 先用终端命令保存创意并澄清，再进入斜杠命令规划:
-     storyspec story:new - 创建创意草稿
-     storyspec next - 查看下一步导航
-     storyspec interview - 完成创作访谈
-     /plan - 规划章节结构
-     /tasks - 分解写作任务
-     /write - 开始创作
+  3. 先保存一句灵感，不急着生成完整大纲:
+     storyspec story:new 故事名 --idea "一句话创意"
+  4. 选择今天的创作入口:
+     storyspec next 故事名
+  5. 完成一轮低负担访谈，再预览规格:
+     storyspec interview 故事名 --focus protagonist --premise "一句话创意"
+     storyspec creative:report 故事名
+     storyspec preview specify 故事名
+     storyspec apply <preview-id> --yes
 ```
 
-### 第 2 步：设定创作风格（/constitution）
-
-在 AI 助手中输入：
-
-```text
-/constitution 创作风格设定：
-- 文体：网文爽文风格，节奏明快
-- 视角：第三人称限制视角，以主角为主
-- 语言：通俗易懂，对话生活化
-- 描写：动作场面详细，打斗精彩
-- 节奏：2-3章一个小高潮，10章一个大高潮
-- 字数：每章3000-4000字
-```
-
-AI 会创建 `memory/writing-constitution.md` 文件，记录你的创作风格。
-
-### 第 3 步：保存创意并完成澄清
+### 第 2 步：保存创意并查看下一步入口
 
 ```bash
 storyspec story:new 都市修仙者 --idea "25岁程序员陈凡，996加班时意外激活手机里的修仙 APP。"
+storyspec next 都市修仙者
+```
+
+`next` 会根据当前故事状态推荐可以复制的下一步命令，并显示主角、伙伴、世界、场景等入口。
+
+### 第 3 步：完成创作访谈和报告
+
+```bash
 storyspec interview 都市修仙者 --premise "都市修仙、程序员、修仙 APP、隐藏身份、保护身边的人" --max-questions 6
 storyspec creative:report 都市修仙者
 ```
@@ -142,10 +138,26 @@ storyspec apply <preview-id> --yes
 
 AI 只会在 `apply --yes` 且无 blocking 风险时写入 `stories/都市修仙者/specification.md`。
 
-### 第 5 步：规划章节结构（/plan）
+### 第 5 步：可选：补充创作风格
+
+如果你已经明确希望 AI 遵循的文风，可以在 AI 助手中输入：
 
 ```text
-/plan 规划前30章的结构：
+/storyspec-constitution 创作风格设定：
+- 文体：网文爽文风格，节奏明快
+- 视角：第三人称限制视角，以主角为主
+- 语言：通俗易懂，对话生活化
+- 描写：动作场面详细，打斗精彩
+- 节奏：2-3章一个小高潮，10章一个大高潮
+- 字数：每章3000-4000字
+```
+
+AI 会创建 `memory/writing-constitution.md` 文件，记录你的创作偏好。
+
+### 第 6 步：规划章节结构（agent 内部命令）
+
+```text
+/storyspec-plan 规划前30章的结构：
 
 第一卷：初入修仙（1-10章）
 - 第1章：996猝死危机，激活修仙APP
@@ -167,10 +179,10 @@ AI 只会在 `apply --yes` 且无 blocking 风险时写入 `stories/都市修仙
 ...
 ```
 
-### 第 6 步：生成任务列表（/tasks）
+### 第 7 步：生成任务列表（agent 内部命令）
 
 ```text
-/tasks 基于章节规划生成写作任务
+/storyspec-tasks 基于章节规划生成写作任务
 ```
 
 AI 会创建 `stories/001-都市修仙者/tasks.md`，包含：
@@ -179,10 +191,10 @@ AI 会创建 `stories/001-都市修仙者/tasks.md`，包含：
 - 角色深化任务
 - 伏笔安排
 
-### 第 7 步：开始写作（/write）
+### 第 8 步：开始写作（agent 内部命令）
 
 ```text
-/write 开始写作第一章
+/storyspec-write 开始写作第一章
 ```
 
 AI 会根据大纲和风格设定，生成第一章内容：
@@ -208,39 +220,42 @@ AI 会根据大纲和风格设定，生成第一章内容：
 发现自己还坐在工位上，但整个世界似乎都不一样了...
 ```
 
-## 斜杠命令详解
+## 命令详解
 
-### /constitution - 设定创作风格
+### storyspec story:new / storyspec next / storyspec interview / storyspec preview specify - 创建故事规格
+
+**用途**：先保存原始创意，再选择入口澄清关键选择，最后生成可确认的规格预览
+
+**示例**：
+```bash
+storyspec story:new 重生之都市仙尊 --idea "前世仙尊重生回高三时期"
+storyspec next 重生之都市仙尊
+storyspec interview 重生之都市仙尊 --premise "都市修仙、重生、弥补遗憾、守护所爱之人"
+storyspec preview specify 重生之都市仙尊
+```
+
+### /storyspec-constitution - 可选设定创作风格
 
 **用途**：定义你的写作风格和创作准则
 
+建议在第一版 specification 已确认后补充；它不是创建故事的第一步。
+
 **示例**：
 ```text
-/constitution
+/storyspec-constitution
 写作风格：轻松幽默的都市文
 叙事视角：第一人称
 语言特点：网络流行语适度使用，对话贴近生活
 更新计划：日更4000字
 ```
 
-### storyspec story:new / storyspec interview / storyspec preview specify - 创建故事规格
-
-**用途**：先保存原始创意，再澄清关键选择，最后生成可确认的规格预览
-
-**示例**：
-```bash
-storyspec story:new 重生之都市仙尊 --idea "前世仙尊重生回高三时期"
-storyspec interview 重生之都市仙尊 --premise "都市修仙、重生、弥补遗憾、守护所爱之人"
-storyspec preview specify 重生之都市仙尊
-```
-
-### /plan - 章节规划
+### /storyspec-plan - 章节规划
 
 **用途**：将故事分解为具体的章节，明确每章的目标
 
 **示例**：
 ```text
-/plan
+/storyspec-plan
 规划前50章内容，分为5个小高潮：
 1-10章：重生归来，展现实力
 11-20章：守护家人，初露锋芒
@@ -249,26 +264,26 @@ storyspec preview specify 重生之都市仙尊
 41-50章：灵气初现，大战将起
 ```
 
-### /tasks - 任务分解
+### /storyspec-tasks - 任务分解
 
 **用途**：生成具体的写作任务清单
 
 **示例**：
 ```text
-/tasks
+/storyspec-tasks
 基于大纲生成任务：
 - 优先级1：写作开篇3章
 - 优先级2：完善主要角色设定
 - 优先级3：补充都市修炼体系
 ```
 
-### /write - 章节写作
+### /storyspec-write - 章节写作
 
 **用途**：AI 辅助创作具体章节内容
 
 **示例**：
 ```text
-/write
+/storyspec-write
 写作第二章，要点：
 - 主角初次修炼成功
 - 体现修炼的独特之处
@@ -279,7 +294,7 @@ storyspec preview specify 重生之都市仙尊
 
 ### 1. 保持风格一致性
 
-每次使用 `/write` 前，AI 都会参考 `memory/writing-constitution.md`，确保风格统一。
+每次使用 `/storyspec-write` 前，AI 都会参考 `memory/writing-constitution.md`，确保风格统一。
 
 ### 2. 灵活调整大纲
 
@@ -292,7 +307,7 @@ storyspec preview specify 重生之都市仙尊
 
 可以一次性安排多个章节的写作：
 ```text
-/write 连续写作第3-5章，保持剧情连贯性
+/storyspec-write 连续写作第3-5章，保持剧情连贯性
 ```
 
 ### 4. 版本管理
@@ -319,8 +334,8 @@ git commit -m "完成第一卷创作"
 **Q: AI 生成的内容不符合我的预期怎么办？**
 
 A: 可以通过以下方式调整：
-1. 修改 `/constitution` 中的风格设定
-2. 在 `/write` 时提供更详细的要求
+1. 修改 `/storyspec-constitution` 中的风格设定
+2. 在 `/storyspec-write` 时提供更详细的要求
 3. 直接编辑生成的内容，AI 会学习你的修改
 
 **Q: 如何确保剧情的连贯性？**

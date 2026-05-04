@@ -363,17 +363,19 @@ const buildNextActions = (status: Omit<ProjectStatus, 'nextActions'>): string[] 
   }
 
   if (!status.story) {
-    actions.push('在 AI 助手中使用 `/specify` 或平台对应命令创建第一个故事规格');
+    actions.push('先保存一句灵感：`storyspec story:new <故事名> --idea "<一句话创意>"`');
+    actions.push('然后运行 `storyspec next <故事名>` 选择角色、场景、设定或分支入口');
   } else if (status.story.stage === 'idea' || status.story.stage === 'interviewing') {
-    actions.push('继续创作访谈：回答 3 个早期问题，或运行 `/clarify` 生成澄清记录');
+    actions.push(`继续创作访谈：运行 \`storyspec next ${status.story.name}\` 查看推荐入口`);
+    actions.push(`或直接运行 \`storyspec interview ${status.story.name} --premise "<一句话创意>"\` 补齐第一版 StorySpec`);
   } else if (status.story.creativeControl.pendingDecisions > 0) {
     actions.push(`先确认 ${status.story.creativeControl.pendingDecisions} 个创作决策，再进入下一轮写入`);
   } else if (!status.story.hasSpecification) {
-    actions.push('先补齐 `stories/*/specification.md`');
+    actions.push(`生成规格预览：\`storyspec preview specify ${status.story.name}\`，确认后再 apply`);
   } else if (!status.story.hasCreativePlan) {
-    actions.push('继续执行 `/plan` 或平台对应命令生成创作计划');
+    actions.push(`生成计划预览：\`storyspec preview plan ${status.story.name}\`，确认后再 apply`);
   } else if (!status.story.hasTasks) {
-    actions.push('继续执行 `/tasks` 或平台对应命令生成可执行任务清单');
+    actions.push('在 agent 中继续执行 `/storyspec-tasks` 或平台对应命令生成可执行任务清单');
   } else if (status.story.nextTask !== '暂无未完成任务') {
     actions.push(`下一步任务：${status.story.nextTask}`);
   } else {
@@ -491,7 +493,7 @@ export const renderProjectStatus = (status: ProjectStatus): string => {
       }
     }
   } else {
-    lines.push('当前故事：未发现 stories/* 目录');
+    lines.push('当前故事：尚未创建故事');
   }
 
   lines.push('');

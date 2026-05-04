@@ -75,27 +75,31 @@
 
 ## 工作原理
 
-1. **设定创作风格** (`/constitution`)
-   - 定义你的写作风格和准则
-   - AI 会记住并遵循这些设定
+1. **保存原始创意并选择入口** (`storyspec story:new` / `storyspec next`)
+   - 先把一句话灵感保存下来
+   - 从主角、伙伴、世界、场景、分支等入口选择今天要聊的方向
 
-2. **创作访谈** (`storyspec interview` / `/clarify`)
+2. **创作访谈** (`storyspec interview`)
    - 从一句话灵感开始收集澄清答案
    - 记录用户已明确、需要澄清和 AI 建议
 
-3. **创建故事规格** (`/specify`)
-   - 先输出 preview
+3. **创建故事规格** (`storyspec preview specify` / `storyspec apply`)
+   - 先输出可审阅的 preview
    - 只把已确认答案写入规格
 
-4. **规划章节结构** (`/plan`)
+4. **可选：设定创作风格** (`/storyspec-constitution`)
+   - 定义你的写作风格和准则
+   - AI 会记住并遵循这些设定
+
+5. **规划章节结构** (`/storyspec-plan`)
    - 将故事分解为具体章节
    - 明确每章的目标和冲突
 
-5. **生成写作任务** (`/tasks`)
+6. **生成写作任务** (`/storyspec-tasks`)
    - 创建可执行的任务列表
    - 按优先级组织写作进度
 
-6. **AI 辅助写作** (`/write`)
+7. **AI 辅助写作** (`/storyspec-write`)
    - 根据大纲生成章节内容
    - 保持风格和逻辑一致性
 

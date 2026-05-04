@@ -189,7 +189,15 @@ export function registerInitCommand(program: Command, context: InitCommandContex
           console.log(`  2. ${chalk.white(`在 ${selectedAgent?.displayName ?? selectedPlatform?.displayName ?? 'agent'} 中打开项目`)}`);
         }
         const usesMarkdownCommands = targetAgents.some(agent => agent.commandSurface === 'markdown-command' && !agent.slashPrefix);
-        console.log(`  3. 使用以下${usesMarkdownCommands ? '命令文档' : '斜杠命令'}开始创作:`);
+        console.log(`  3. ${chalk.white('先保存一句灵感，不急着生成完整大纲:')}`);
+        console.log(`     ${chalk.cyan('storyspec story:new 故事名 --idea "一句话创意"')}`);
+        console.log(`  4. ${chalk.white('选择今天的创作入口:')}`);
+        console.log(`     ${chalk.cyan('storyspec next 故事名')}`);
+        console.log(`  5. ${chalk.white('完成一轮低负担访谈，再预览规格:')}`);
+        console.log(`     ${chalk.cyan('storyspec interview 故事名 --focus protagonist --premise "一句话创意"')}`);
+        console.log(`     ${chalk.cyan('storyspec creative:report 故事名')}`);
+        console.log(`     ${chalk.cyan('storyspec preview specify 故事名')}`);
+        console.log(`     ${chalk.cyan('storyspec apply <preview-id> --yes')}`);
 
         const formatCommand = (commandName: string): string => {
           if (usesMarkdownCommands) {
@@ -203,21 +211,10 @@ export function registerInitCommand(program: Command, context: InitCommandContex
           return formatAICommand(selectedPlatform, commandName, !!options.all);
         };
 
-        console.log('\n' + chalk.yellow('     📝 七步方法论:'));
-        console.log(`     ${chalk.cyan(formatCommand('constitution'))} - 创建创作宪法，定义核心原则`);
-        console.log(`     ${chalk.cyan(formatCommand('specify'))}      - 定义故事规格，明确要创造什么`);
-        console.log(`     ${chalk.cyan(formatCommand('clarify'))}      - 澄清关键决策点，明确模糊之处`);
-        console.log(`     ${chalk.cyan(formatCommand('plan'))}         - 制定技术方案，决定如何创作`);
-        console.log(`     ${chalk.cyan(formatCommand('tasks'))}        - 分解执行任务，生成可执行清单`);
-        console.log(`     ${chalk.cyan(formatCommand('write'))}        - AI 辅助写作章节内容`);
-        console.log(`     ${chalk.cyan(formatCommand('analyze'))}      - 综合验证分析，确保质量一致`);
-
-        console.log('\n' + chalk.yellow('     📊 追踪管理命令:'));
-        console.log(`     ${chalk.cyan(formatCommand('plot-check'))}  - 检查情节一致性`);
-        console.log(`     ${chalk.cyan(formatCommand('timeline'))}    - 管理故事时间线`);
-        console.log(`     ${chalk.cyan(formatCommand('relations'))}   - 追踪角色关系`);
-        console.log(`     ${chalk.cyan(formatCommand('world-check'))} - 验证世界观设定`);
-        console.log(`     ${chalk.cyan(formatCommand('track'))}       - 综合追踪与智能分析`);
+        console.log('\n' + chalk.yellow(`     ${usesMarkdownCommands ? '后续 agent 命令文档' : '后续 agent 斜杠命令'}:`));
+        console.log(`     ${chalk.cyan(formatCommand('plan'))}  - 基于已确认 specification 规划章节结构`);
+        console.log(`     ${chalk.cyan(formatCommand('tasks'))} - 拆成可执行写作任务`);
+        console.log(`     ${chalk.cyan(formatCommand('write'))} - 在任务和 Scene Card 明确后写正文`);
 
         // 如果安装了专家模式，显示提示
         if (options.withExperts) {
@@ -237,10 +234,10 @@ export function registerInitCommand(program: Command, context: InitCommandContex
           }
         }
 
-        console.log('\n' + chalk.gray('推荐流程: constitution → specify → clarify → plan → tasks → write → analyze'));
+        console.log('\n' + chalk.gray('推荐流程: story:new → next → interview → creative:report → preview specify → apply → plan/tasks/write'));
         console.log(chalk.dim(usesMarkdownCommands
-          ? '提示: 让 agent 读取对应 .specify/commands/*.md 文件并按步骤执行'
-          : '提示: 斜杠命令在 AI 助手内部使用，不是在终端中'));
+          ? '提示: 命令文档在 agent 内部使用；终端里先用 storyspec story:new / next / interview。'
+          : '提示: 斜杠命令在 AI 助手内部使用；终端里先用 storyspec story:new / next / interview。'));
         if (compatibilityHint) {
           console.log(chalk.gray(compatibilityHint));
         }

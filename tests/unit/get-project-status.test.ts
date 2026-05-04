@@ -247,13 +247,43 @@ describe('getProjectStatus', () => {
       hasTasks: false
     });
     expect(status.story?.creativeGaps).toContain('主角欲望、核心伙伴、第一舞台和第一卷冲突仍未确认');
-    expect(status.nextActions).toContain('继续创作访谈：回答 3 个早期问题，或运行 `/clarify` 生成澄清记录');
+    expect(status.nextActions).toContain('继续创作访谈：运行 `storyspec next idea-demo` 查看推荐入口');
+    expect(status.nextActions).toContain('或直接运行 `storyspec interview idea-demo --premise "<一句话创意>"` 补齐第一版 StorySpec');
     expect(status.nextActions).not.toContain('先补齐 `stories/*/specification.md`');
 
     const output = renderProjectStatus(status);
     expect(output).toContain('创作阶段：idea');
     expect(output).toContain('创作缺口：');
     expect(output).toContain('主角欲望、核心伙伴、第一舞台和第一卷冲突仍未确认');
+  });
+
+  it('guides empty projects to save an idea instead of starting from slash specify', async () => {
+    const projectRoot = path.join(os.tmpdir(), 'memory-novel-empty-status');
+    const fileSystem = new MemoryFileSystem(projectRoot);
+
+    await fileSystem.ensureDir(path.join(projectRoot, '.specify'));
+    await fileSystem.writeJson(path.join(projectRoot, '.specify', 'config.json'), {
+      name: 'empty-status',
+      version: '1.0.0'
+    });
+
+    const status = await getProjectStatus({
+      projectRoot,
+      fileSystem,
+      git: {
+        init: async () => undefined,
+        addAll: async () => undefined,
+        commit: async () => undefined,
+        statusShort: async () => []
+      }
+    });
+    const output = renderProjectStatus(status);
+
+    expect(status.story).toBeNull();
+    expect(status.nextActions).toContain('先保存一句灵感：`storyspec story:new <故事名> --idea "<一句话创意>"`');
+    expect(status.nextActions).toContain('然后运行 `storyspec next <故事名>` 选择角色、场景、设定或分支入口');
+    expect(output).toContain('当前故事：尚未创建故事');
+    expect(output).not.toContain('/specify');
   });
 
   it('shows what the current story has grown into instead of only file state', async () => {
