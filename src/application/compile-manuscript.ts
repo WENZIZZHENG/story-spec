@@ -20,6 +20,7 @@ export interface CompileManuscriptInput {
   format?: 'markdown';
   withFrontmatter?: boolean;
   includeAppendix?: boolean;
+  writtenOnly?: boolean;
   now?: () => Date;
 }
 
@@ -111,7 +112,7 @@ const sceneOrderedChapterPaths = async (
     );
 
   for (const item of ordered) {
-    if (!await input.fileSystem.pathExists(item.absolutePath)) {
+    if (!input.writtenOnly && !await input.fileSystem.pathExists(item.absolutePath)) {
       warnings.push({
         severity: 'warning',
         code: 'MISSING_CHAPTER_FILE',
@@ -144,10 +145,10 @@ const collectChapterPaths = async (
 
   if (existingScenePaths.length > 0) {
     return {
-      paths: existingScenePaths,
-      warnings: sceneOrdered.warnings
-    };
-  }
+    paths: existingScenePaths,
+    warnings: input.writtenOnly ? [] : sceneOrdered.warnings
+  };
+}
 
   const contentFiles = await listMarkdownFiles(input.fileSystem, path.join(storyPath, 'content'));
   return {

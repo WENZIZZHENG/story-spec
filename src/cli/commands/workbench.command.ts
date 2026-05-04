@@ -161,6 +161,7 @@ export const registerWorkbenchCommand = (program: Command): void => {
     .option('--format <format>', '输出格式，当前支持 markdown', 'markdown')
     .option('--with-frontmatter', '同时输出 build/manuscript.frontmatter.json')
     .option('--include <parts>', '可选附录；传入 appendix 时在 manuscript 末尾写入统计附录')
+    .option('--written-only', '只编译已存在正文，不把未来 Scene Card 缺失章节作为 warning')
     .option('--json', '输出 JSON，便于自动化读取')
     .description('编译 Markdown manuscript；只写 build/，不修改正文')
     .action(async (commandOptions) => {
@@ -172,7 +173,8 @@ export const registerWorkbenchCommand = (program: Command): void => {
           story: commandOptions.story,
           format: parseCompileFormat(commandOptions.format),
           withFrontmatter: commandOptions.withFrontmatter,
-          includeAppendix: commandOptions.include === 'appendix'
+          includeAppendix: commandOptions.include === 'appendix',
+          writtenOnly: Boolean(commandOptions.writtenOnly)
         });
 
         console.log(commandOptions.json

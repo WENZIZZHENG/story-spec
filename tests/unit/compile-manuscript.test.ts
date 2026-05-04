@@ -73,4 +73,19 @@ describe('compile manuscript', () => {
     await expect(fixture.fileSystem.readFile(result.outputPath)).resolves.toContain('<!-- source: stories/001-demo/content/chapter-001.md; words: 4 -->');
     await expect(fixture.fileSystem.readFile(path.join(fixture.projectRoot, 'stories', '001-demo', 'content', 'chapter-001.md'))).resolves.toContain('他推开门。');
   });
+
+  it('compiles written chapters only without warning about future scene cards', async () => {
+    const fixture = await createProject();
+
+    const result = await compileManuscript({
+      ...fixture,
+      story: '001-demo',
+      writtenOnly: true
+    });
+
+    expect(result.chapters.map(chapter => chapter.path)).toEqual([
+      'stories/001-demo/content/chapter-001.md'
+    ]);
+    expect(result.warnings).toEqual([]);
+  });
 });

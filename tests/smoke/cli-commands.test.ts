@@ -1199,6 +1199,18 @@ reveals:
       'outcome: 推开门',
       'draftPath: content/chapter-001.md'
     ].join('\n'));
+    await writeFile(path.join(storyPath, 'scenes', 'scene-002.yaml'), [
+      'id: scene-002',
+      'chapter: chapter-002',
+      'order: 2',
+      'pov: 主角',
+      'location: 堂前',
+      'time: 夜',
+      'sceneGoal: 对峙',
+      'conflict: 谎言',
+      'outcome: 暂退',
+      'draftPath: content/chapter-002.md'
+    ].join('\n'));
     await writeFile(path.join(projectPath, 'feedback', 'beta-reader-001.md'), '开头目标不够清楚。');
 
     const researchAddResult = await execFileAsync('node', [
@@ -1269,7 +1281,22 @@ reveals:
     const compiled = JSON.parse(compileResult.stdout);
     expect(compiled.outputPath).toContain(path.join('build', 'manuscript.md'));
     expect(compiled.frontmatterPath).toContain(path.join('build', 'manuscript.frontmatter.json'));
+    expect(compiled.warnings).toEqual(expect.arrayContaining([
+      expect.objectContaining({ code: 'MISSING_CHAPTER_FILE' })
+    ]));
     await expect(readFile(path.join(projectPath, 'build', 'manuscript.md'), 'utf-8')).resolves.toContain('# 第一章');
+
+    const writtenOnlyCompileResult = await execFileAsync('node', [
+      cliPath,
+      'compile',
+      '--story',
+      '001-demo',
+      '--written-only',
+      '--json'
+    ], { cwd: projectPath });
+    const writtenOnlyCompiled = JSON.parse(writtenOnlyCompileResult.stdout);
+    expect(writtenOnlyCompiled.chapters).toHaveLength(1);
+    expect(writtenOnlyCompiled.warnings).toEqual([]);
 
     const feedbackImportResult = await execFileAsync('node', [
       cliPath,
