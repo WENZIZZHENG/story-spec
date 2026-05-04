@@ -6,28 +6,14 @@ Active。本文是 StorySpec 当前唯一的活跃待办入口。详细规则见
 
 ## 当前待办
 
-| 路线 | 状态 | 优先级 | 当前下一步 |
-| --- | --- | --- | --- |
-| [新用户小说创建端到端体验](new-user-story-creation-dogfood-roadmap.md) | Active | P0 | 先处理 P0-1 到 P0-3：统一首次路径、修复 next 可复制命令、移除固定示例污染 |
-| [故事共创访谈体验增强](story-co-creation-interview-roadmap.md) | Completed | P0 | F0-F21 已完成；后续新体验优化应按 [todo-governance.md](todo-governance.md) 新建专题 roadmap |
-
-### 故事共创访谈子路线
-
-`story-co-creation-interview-roadmap.md` 是轻量总览；开发时不要默认读取全部子路线。按任务范围读取对应文档：
-
-| 子路线 | 覆盖批次 | 适用开发范围 |
-| --- | --- | --- |
-| [基础门禁路线图](story-co-creation-foundation-roadmap.md) | F0-F6 | 已完成；仅作历史参考和契约依据 |
-| [故事要素路线图](story-co-creation-story-elements-roadmap.md) | F7-F11 | 人物情感、世界压力、Scene Card、节奏配置、作者画像 |
-| [创作工作台路线图](story-co-creation-workbench-roadmap.md) | F12-F15 | 已完成；多入口共创、分支管理、创作回声、未决项回流 |
-| [体验验收路线图](story-co-creation-experience-roadmap.md) | F16-F21 | 已完成；有趣选择、入口卡、首轮样例、体验验收和低负担创作闭环 |
-
-已完成路线见 [todo-archive.md](todo-archive.md)；新增长期路线时，先按 [todo-governance.md](todo-governance.md) 建立专题 roadmap 并在本文登记。
+当前无活跃待办。已完成路线见 [todo-archive.md](todo-archive.md)；新增长期路线时，先按 [todo-governance.md](todo-governance.md) 建立专题 roadmap 并在本文登记。
 
 ## 暂不作为活跃待办
 
 | 文件 | 原因 | 归档入口 |
 | --- | --- | --- |
+| [archive/completed-roadmaps/new-user-story-creation-dogfood-roadmap.md](archive/completed-roadmaps/new-user-story-creation-dogfood-roadmap.md) | 新用户小说创建端到端体验 P0-P2 已完成并归档 | [todo-archive.md](todo-archive.md#新用户小说创建端到端体验) |
+| [archive/completed-roadmaps/story-co-creation-interview-roadmap.md](archive/completed-roadmaps/story-co-creation-interview-roadmap.md) | 故事共创访谈体验增强 F0-F21 已完成；后续新体验优化应新建专题 roadmap | [todo-archive.md](todo-archive.md#故事共创访谈体验增强) |
 | [archive/full-refactor/full-refactor-todo.md](archive/full-refactor/full-refactor-todo.md) | A/B/C 主路线已完成，当前仅保留历史索引 | [todo-archive.md](todo-archive.md#full-refactor-主路线) |
 | [archive/completed-roadmaps/creative-control-roadmap.md](archive/completed-roadmaps/creative-control-roadmap.md) | 创作控制权 D0-D10 已完成，当前无后续活跃批次 | [todo-archive.md](todo-archive.md#创作控制权体验优化) |
 | [archive/completed-roadmaps/story-onboarding-navigation-roadmap.md](archive/completed-roadmaps/story-onboarding-navigation-roadmap.md) | 新故事引导与创作导航 E0-E5 已完成，当前无后续活跃批次 | [todo-archive.md](todo-archive.md#新故事引导与创作导航) |

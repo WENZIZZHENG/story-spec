@@ -474,6 +474,6 @@ F0-F6 已完成并验证。后续开发应从 [story-co-creation-story-elements-
 ## 完成后需要同步
 
 - 更新 [story-co-creation-interview-roadmap.md](story-co-creation-interview-roadmap.md) 中对应批次状态。
-- 更新 [todo-index.md](todo-index.md) 的当前下一步。
+- 更新 [todo-index.md](../../todo-index.md) 的当前下一步。
 - 涉及 CLI、模板、生成产物或验证变化时新增 changeset。
 - 按影响面运行构建、测试、command manifest 和 changeset 检查。

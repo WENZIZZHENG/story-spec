@@ -2,7 +2,7 @@
 
 ## 状态
 
-Active。本文记录 2026-05-04 从“刚接触 StorySpec 的作者”视角完成一次端到端 dogfood 的问题和后续优化任务。
+Completed。本文记录 2026-05-04 从“刚接触 StorySpec 的作者”视角完成一次端到端 dogfood 的问题和已落地优化任务。
 
 ## 走查目标
 
@@ -67,7 +67,7 @@ node dist/cli.js validate
 
 - 类型：CLI 引导、文档契约、模板一致性
 - 背景/问题：中心协议已经要求“先选择创作入口”，但新用户实跑 `init` 后看到的是 `/storyspec-constitution -> /storyspec-specify -> /storyspec-clarify -> /storyspec-plan -> /storyspec-tasks -> /storyspec-write`。`status` 在空项目时建议 `/specify`，`--help` 的核心创作命令仍是 `/method /style /story /outline /track-init /write`。用户会被带离 `story:new -> next -> interview -> preview/apply` 的新流程。
-- 已有基础：[story-creation-guide.md](../agent-guides/story-creation-guide.md) 已改为入口优先；`story:new`、`next`、`interview`、`preview`、`apply` 已可用。
+- 已有基础：[story-creation-guide.md](../../../agent-guides/story-creation-guide.md) 已改为入口优先；`story:new`、`next`、`interview`、`preview`、`apply` 已可用。
 - 缺口：CLI 初始化输出、状态建议、help 文案和 agent prompt 仍存在旧入口。
 - 建议方案：
   1. 把 `init` 成功后的推荐流程改为 `story:new -> next -> interview -> creative:report -> preview specify -> apply`。
@@ -87,7 +87,7 @@ node dist/cli.js validate
   - `storyspec --help` 的示例命令与 quickstart 和 agent guide 一致。
   - 相关 CLI 输出有单测或快照覆盖。
 - 参考项目/资料：
-  - 参考资料：本仓库 [story-creation-guide.md](../agent-guides/story-creation-guide.md)。
+  - 参考资料：本仓库 [story-creation-guide.md](../../../agent-guides/story-creation-guide.md)。
   - 借鉴点：先进入故事入口，命令只作为落地方式。
   - 不照搬：不把 agent 对话协议全文塞进 CLI 输出。
   - 落地方式：CLI 输出只给一条主路径和 2-3 条可选分支。
@@ -352,4 +352,4 @@ node dist/cli.js validate
 - 如涉及 CLI 行为、模板契约或生成产物，新增 `changes/*.md`。
 - 同步 `README.md` / `docs/quickstart.md` 中的真实推荐流程。
 - 运行与变更匹配的 `npm run build`、相关单测、`npm run build:commands`、`npm run check:command-manifest`、`npm run check:changes` 或 `git diff --check`。
-- 路线全部完成后，按 [todo-governance.md](todo-governance.md) 归档到 [todo-archive.md](todo-archive.md)。
+- 路线全部完成后，按 [todo-governance.md](../../todo-governance.md) 归档到 [todo-archive.md](../../todo-archive.md)。

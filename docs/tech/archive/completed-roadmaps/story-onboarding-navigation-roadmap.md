@@ -204,8 +204,8 @@ Completed。E0-E5 已完成首版实现并通过验证；归档入口见 [todo-a
 
 ## 完成后需要同步
 
-- 更新 [todo-index.md](todo-index.md) 的状态或移除已完成路线。
-- 更新 [todo-archive.md](todo-archive.md)，记录完成范围和验证证据。
+- 更新 [todo-index.md](../../todo-index.md) 的状态或移除已完成路线。
+- 更新 [todo-archive.md](../../todo-archive.md)，记录完成范围和验证证据。
 - 若涉及 CLI 行为、模板契约、生成产物或项目结构变化，新增 `changes/YYYY-MM-DD-story-onboarding-navigation.md`。
 - 更新用户文档中的快速开始、命令说明或工作流文档。
 - 至少运行 `git diff --check`；涉及代码时按批次补充单元测试和 `npm test` / `npm run build` 等验证。

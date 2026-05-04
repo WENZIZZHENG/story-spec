@@ -61,8 +61,6 @@
 
 ## 🖼️ 架构图
 
-![StorySpec 架构图](images/story-spec-architecture.svg)
-
 **架构图说明**：
 
 该图展示了 StorySpec 的完整工作流程：

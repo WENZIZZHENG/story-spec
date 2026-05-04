@@ -320,7 +320,7 @@ Completed。本文承接总路线 F16-F21，聚焦有趣选择质量标准、六
 - `tests/fixtures/`
 - `tests/unit/interview-story.test.ts`
 - `tests/unit/story-onboarding.test.ts`
-- `docs/tech/story-co-creation-interview-roadmap.md`
+- `docs/tech/archive/completed-roadmaps/story-co-creation-interview-roadmap.md`
 - `docs/tech/clarification-question-packs.md`
 - `templates/commands/clarify.md`
 - `templates/commands/plan.md`
@@ -400,7 +400,7 @@ Completed。本文承接总路线 F16-F21，聚焦有趣选择质量标准、六
 - `tests/unit/story-onboarding.test.ts`
 - `tests/unit/interview-story.test.ts`
 - `tests/unit/preview-apply.test.ts`
-- `docs/tech/story-co-creation-interview-roadmap.md`
+- `docs/tech/archive/completed-roadmaps/story-co-creation-interview-roadmap.md`
 - `docs/tech/clarification-question-packs.md`
 - `changes/*.md`
 
@@ -434,7 +434,7 @@ Completed。本文承接总路线 F16-F21，聚焦有趣选择质量标准、六
 
 ## Batch F21：低负担创作模式与最小快乐闭环
 
-状态：Completed（2026-05-04）。已在 `storyspec next` 中加入五个今日创作模式：我想玩角色、我想写一幕、我想整理设定、我想比较分支、我只想随便聊聊；每个模式默认 `--max-questions 2 --no-write`，只给少量候选和创作回声，不写入文件。已新增最小快乐闭环数据和渲染：选择模式 -> 看 2 个有后果候选 -> 确认/改写/拒绝/稍后 -> 创作回声 -> 阻止过早 plan。已新增 `storyspec clarification:rollback`，可把最近一次确认或指定问题退回候选并保留证据来源；详见 [low-burden-co-creation.md](low-burden-co-creation.md)。
+状态：Completed（2026-05-04）。已在 `storyspec next` 中加入五个今日创作模式：我想玩角色、我想写一幕、我想整理设定、我想比较分支、我只想随便聊聊；每个模式默认 `--max-questions 2 --no-write`，只给少量候选和创作回声，不写入文件。已新增最小快乐闭环数据和渲染：选择模式 -> 看 2 个有后果候选 -> 确认/改写/拒绝/稍后 -> 创作回声 -> 阻止过早 plan。已新增 `storyspec clarification:rollback`，可把最近一次确认或指定问题退回候选并保留证据来源；详见 [low-burden-co-creation.md](../../low-burden-co-creation.md)。
 
 类型：产品体验、交互模式、可逆操作、提示词、测试
 
@@ -541,6 +541,6 @@ Completed。本文承接总路线 F16-F21，聚焦有趣选择质量标准、六
 ## 完成后需要同步
 
 - 更新 [story-co-creation-interview-roadmap.md](story-co-creation-interview-roadmap.md) 中对应批次状态。
-- 更新 [todo-index.md](todo-index.md) 的当前下一步。
+- 更新 [todo-index.md](../../todo-index.md) 的当前下一步。
 - 涉及 CLI、模板、生成产物或验证变化时新增 changeset。
 - 按影响面运行构建、测试、command manifest 和 changeset 检查。
