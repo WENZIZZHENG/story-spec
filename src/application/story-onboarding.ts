@@ -171,6 +171,11 @@ export interface StoryNextResult {
   actions: StoryNextAction[];
 }
 
+export interface RenderStoryNextOptions {
+  verbose?: boolean;
+  modes?: boolean;
+}
+
 const normalizeStoryName = (name: string): string => {
   const trimmed = name.trim();
   if (!trimmed) {
@@ -779,7 +784,70 @@ export const renderCreateStoryIdea = (result: CreateStoryIdeaResult): string => 
   '提示：这里只记录用户原文和待澄清问题，不会自动扩写完整设定。'
 ].join('\n');
 
-export const renderStoryNext = (result: StoryNextResult): string => [
+const renderStoryNextSummary = (result: StoryNextResult): string => {
+  const primaryAction = result.actions[0];
+  const alternativeEntrypoints = result.coCreationEntrypoints
+    .filter(entry => entry.copyableCommand !== primaryAction?.copyableCommand)
+    .slice(0, 2);
+  const gaps = [
+    ...result.creativeGaps,
+    ...result.pendingQuestions
+  ].slice(0, 3);
+
+  return [
+    'StorySpec 下一步导航',
+    '',
+    `故事：${result.story}`,
+    `阶段：${result.stage}`,
+    '',
+    '下一步复制这条：',
+    primaryAction ? `  ${primaryAction.copyableCommand}` : '  storyspec interview <故事名>',
+    '',
+    '为什么：',
+    primaryAction ? `  ${primaryAction.reason}` : '  当前状态不完整，先回到澄清访谈。',
+    '',
+    '也可以从这里继续：',
+    ...(alternativeEntrypoints.length > 0
+      ? alternativeEntrypoints.map(entry =>
+        `- ${entry.label}：${entry.copyableCommand}${entry.recommended ? `。${entry.recommendationReason}` : ''}`
+      )
+      : result.actions.slice(1, 3).map(item => `- ${item.copyableCommand}：${item.reason}`)),
+    '',
+    '当前还缺：',
+    ...(gaps.length > 0 ? gaps.map(item => `- ${item}`) : ['- 暂无明显缺口。']),
+    '',
+    '展开更多：',
+    `- storyspec next ${result.story} --verbose：查看完整入口卡、作者画像、核心要素和结构问题。`,
+    `- storyspec next ${result.story} --modes：查看低负担模式。`,
+    `- storyspec next ${result.story} --json：输出完整结构化数据。`
+  ].join('\n');
+};
+
+const renderStoryNextModes = (result: StoryNextResult): string => [
+  'StorySpec 今日创作模式',
+  '',
+  `故事：${result.story}`,
+  `阶段：${result.stage}`,
+  '',
+  '今日创作模式：',
+  ...result.todayCreationModes.map(item => [
+    `- ${item.label}（${item.id}）：${item.copyableCommand}`,
+    `  - 入口：${item.entrypointIds.join(' / ')}`,
+    `  - 低负担：最多 ${item.maxQuestions} 个问题，${item.candidateLimit} 个候选，不写入文件。`,
+    `  - 输出边界：${item.outputContract}`,
+    `  - 正典边界：${item.canonBoundary}`,
+    `  - 回应方式：${item.responseOptions.join(' / ')}`,
+    `  - 语气：${item.toneGuide}`
+  ].join('\n')),
+  '',
+  '最小快乐闭环：',
+  ...result.minimumFunLoop.steps.map((step, index) => `- ${index + 1}. ${step}`),
+  `- Plan 门禁：${result.minimumFunLoop.planGate}`,
+  '',
+  `完整入口卡：storyspec next ${result.story} --verbose`
+].join('\n');
+
+const renderStoryNextVerbose = (result: StoryNextResult): string => [
   'StorySpec 下一步导航',
   '',
   `故事：${result.story}`,
@@ -847,3 +915,18 @@ export const renderStoryNext = (result: StoryNextResult): string => [
   '结构问题：',
   ...(result.issues.length > 0 ? result.issues.map(item => `- ${item}`) : ['- 暂无。'])
 ].join('\n');
+
+export const renderStoryNext = (
+  result: StoryNextResult,
+  options: RenderStoryNextOptions = {}
+): string => {
+  if (options.modes) {
+    return renderStoryNextModes(result);
+  }
+
+  if (options.verbose) {
+    return renderStoryNextVerbose(result);
+  }
+
+  return renderStoryNextSummary(result);
+};

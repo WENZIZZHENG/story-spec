@@ -18,6 +18,9 @@ type StoryNewOptions = {
 
 type StoryNextOptions = {
   json?: boolean;
+  verbose?: boolean;
+  all?: boolean;
+  modes?: boolean;
 };
 
 const handleStoryOnboardingError = (error: any, label: string): never => {
@@ -71,7 +74,10 @@ const runStoryNext = async (
 
     console.log(options.json
       ? JSON.stringify(result, null, 2)
-      : renderStoryNext(result));
+      : renderStoryNext(result, {
+        verbose: options.verbose || options.all,
+        modes: options.modes
+      }));
   } catch (error: any) {
     handleStoryOnboardingError(error, '下一步导航失败');
   }
@@ -92,6 +98,9 @@ export const registerStoryOnboardingCommand = (program: Command): void => {
     .command('next')
     .argument('[story]', '故事目录名或路径，默认使用最近更新的 stories/*')
     .option('--json', '输出 JSON，便于自动化读取')
+    .option('--verbose', '展开完整入口卡、作者画像、核心要素和结构问题')
+    .option('--all', '等同于 --verbose')
+    .option('--modes', '只展示低负担今日创作模式')
     .description('根据当前故事状态给出下一步创作导航')
     .action(async (storyName, options) => {
       await runStoryNext(storyName, options);

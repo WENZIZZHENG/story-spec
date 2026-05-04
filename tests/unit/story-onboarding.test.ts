@@ -129,6 +129,91 @@ describe('story onboarding', () => {
     expect(rendered).toContain('storyspec interview 星尘驿站 --focus stage --premise "退休星舰导航员在宇宙边境开一间给迷路灵魂和破损飞船歇脚的驿站。"');
   });
 
+  it('renders next navigation as a concise default view with one primary command', async () => {
+    const { projectRoot, fileSystem } = await createProject();
+    await createStoryIdea({
+      projectRoot,
+      fileSystem,
+      name: '编程施法',
+      idea: '工科马列青年穿越剑与魔法世界，用编程施法展开轻松冒险。'
+    });
+
+    const result = await getStoryNext({
+      projectRoot,
+      fileSystem,
+      story: '编程施法'
+    });
+    const rendered = renderStoryNext(result);
+
+    expect(rendered).toContain('下一步复制这条：');
+    expect(rendered).toContain(result.actions[0].copyableCommand);
+    expect(rendered).toContain('为什么：');
+    expect(rendered).toContain('也可以从这里继续：');
+    expect(rendered).toContain('storyspec next 编程施法 --verbose');
+    expect(rendered).toContain('storyspec next 编程施法 --modes');
+    expect(rendered.split('\n').length).toBeLessThanOrEqual(24);
+    expect(rendered).not.toContain('今日创作模式');
+    expect(rendered).not.toContain('最小快乐闭环');
+    expect(rendered).not.toContain('有趣选择');
+    expect(rendered).not.toContain('核心要素：');
+    expect(rendered).not.toContain('结构问题：');
+  });
+
+  it('renders the full workbench only in verbose next navigation', async () => {
+    const { projectRoot, fileSystem } = await createProject();
+    await createStoryIdea({
+      projectRoot,
+      fileSystem,
+      name: '编程施法',
+      idea: '工科马列青年穿越剑与魔法世界，用编程施法展开轻松冒险。'
+    });
+
+    const result = await getStoryNext({
+      projectRoot,
+      fileSystem,
+      story: '编程施法'
+    });
+    const rendered = renderStoryNext(result, { verbose: true });
+
+    expect(rendered).toContain('今日创作模式');
+    expect(rendered).toContain('最小快乐闭环');
+    expect(rendered).toContain('你想从哪里继续？');
+    expect(rendered).toContain('有趣选择');
+    expect(rendered).toContain('核心要素：');
+    expect(rendered).toContain('结构问题：');
+    expect(rendered).toContain('storyspec interview 编程施法 --focus scene');
+  });
+
+  it('renders today modes as a separate low-burden next view', async () => {
+    const { projectRoot, fileSystem } = await createProject();
+    await createStoryIdea({
+      projectRoot,
+      fileSystem,
+      name: programmingCastingFixture.story,
+      idea: [
+        programmingCastingFixture.idea,
+        ...programmingCastingFixture.preferences,
+        programmingCastingFixture.confirmed.threat,
+        `编程施法偏${programmingCastingFixture.confirmed.magicStyle}`
+      ].join('；')
+    });
+
+    const result = await getStoryNext({
+      projectRoot,
+      fileSystem,
+      story: programmingCastingFixture.story
+    });
+    const rendered = renderStoryNext(result, { modes: true });
+
+    expect(rendered).toContain('今日创作模式');
+    expect(rendered).toContain('我只想随便聊聊');
+    expect(rendered).toContain('最小快乐闭环');
+    expect(rendered).toContain('不写入文件');
+    expect(rendered).not.toContain('你想从哪里继续？');
+    expect(rendered).not.toContain('核心要素：');
+    expect(rendered).not.toContain('结构问题：');
+  });
+
   it('keeps the programming-casting sample in co-creation before downstream planning', async () => {
     const { projectRoot, fileSystem } = await createProject();
     await createStoryIdea({
@@ -365,7 +450,7 @@ describe('story onboarding', () => {
       && entry.maturityImpact.length > 0
     )).toBe(true);
 
-    const rendered = renderStoryNext(result);
+    const rendered = renderStoryNext(result, { verbose: true });
 
     expect(rendered).toContain('你想从哪里继续？');
     expect(rendered).toContain('推荐入口');
@@ -428,7 +513,7 @@ describe('story onboarding', () => {
     ]);
     expect(result.minimumFunLoop.planGate).toContain('不生成完整 creative-plan');
 
-    const rendered = renderStoryNext(result);
+    const rendered = renderStoryNext(result, { modes: true });
 
     expect(rendered).toContain('今日创作模式');
     expect(rendered).toContain('我只想随便聊聊');
@@ -513,7 +598,7 @@ describe('story onboarding', () => {
       fileSystem,
       story: 'demo'
     });
-    const rendered = renderStoryNext(result);
+    const rendered = renderStoryNext(result, { verbose: true });
 
     expect(result.activeBranches).toEqual([
       expect.objectContaining({
@@ -571,7 +656,7 @@ describe('story onboarding', () => {
       fileSystem,
       story: 'demo'
     });
-    const rendered = renderStoryNext(result);
+    const rendered = renderStoryNext(result, { verbose: true });
 
     expect(result.decisionLog.deferredItems).toEqual([
       expect.objectContaining({
