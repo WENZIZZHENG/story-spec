@@ -158,8 +158,8 @@ describe('CLI init smoke', () => {
     ], { cwd });
 
     const projectPath = path.join(cwd, 'smoke');
-    expect(stdout).toContain('.specify/commands/constitution.md');
-    expect(stdout).toContain('.specify/commands/write.md');
+    expect(stdout).toContain('storyspec story:new 故事名 --idea "一句话创意"');
+    expect(stdout).toContain('storyspec next 故事名');
     expect(await exists(path.join(projectPath, '.specify', 'commands', 'write.md'))).toBe(true);
     expect(await exists(path.join(projectPath, 'spec', 'world', 'rules.yaml'))).toBe(true);
     expect(await exists(path.join(projectPath, 'spec', 'canon', 'facts.json'))).toBe(true);

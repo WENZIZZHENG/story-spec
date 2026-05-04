@@ -587,7 +587,7 @@ describe('CLI command modules smoke', () => {
     expect(entity.entities.length).toBe(graph.entities.length);
     expect(scenes.scenes).toHaveLength(1);
     expect(scenes.issues).toEqual([]);
-    expect(compiled.draftPaths).toContain('stories/*/content/chapter-001.md');
+    expect(compiled.draftPaths).toContain('content/chapter-001.md');
     expect(impact.edges.length).toBeGreaterThan(0);
     expect(impact.evidencePaths.length).toBeGreaterThan(0);
   });
@@ -885,7 +885,7 @@ reveals:
     const next = JSON.parse(nextResult.stdout);
 
     expect(next.stage).toBe('idea');
-    expect(next.actions[0].command).toBe('storyspec interview 法术编译纪元 --focus power');
+    expect(next.actions[0].command).toBe('storyspec interview 法术编译纪元 --focus power --premise "异界穿越、轻松冒险、编程施法"');
 
     await execFileAsync('node', [
       cliPath,

@@ -8,11 +8,11 @@
       "trackingFiles": 8
     },
     "requiredStdout": [
-      "/storyspec-constitution",
-      "/storyspec-specify",
-      "/storyspec-tasks",
-      "/storyspec-write",
-      "/storyspec-analyze"
+      "storyspec story:new 故事名 --idea \"一句话创意\"",
+      "storyspec next 故事名",
+      "storyspec creative:report 故事名",
+      "storyspec preview specify 故事名",
+      "storyspec apply <preview-id> --yes"
     ],
     "requiredFiles": [
       "AGENTS.md",
