@@ -238,8 +238,8 @@ export const CO_CREATION_ENTRYPOINTS: readonly CoCreationEntrypointDefinition[] 
       { coreElement: 'growthRoute', priority: 2, reason: '把主角如何阶段性成功和付出代价变成可追踪路线。' }
     ],
     exampleAnswers: [
-      '晏无想证明工程方法也能拯救魔法事故，但会低估制度和人情成本。',
-      '第一次成功来自拆解旧法阵依赖，第一次失败来自把活人选择当成系统变量。'
+      '主角想证明自己的旧经验仍然有用，但会低估本地规则和人情成本。',
+      '第一次成功来自拆解现场问题，第一次失败来自把活人选择当成可控变量。'
     ]
   }),
   defineEntrypoint({
@@ -259,7 +259,7 @@ export const CO_CREATION_ENTRYPOINTS: readonly CoCreationEntrypointDefinition[] 
         appeal: '伙伴不只是功能位，会让每次胜利多一层关系判断。',
         cost: '伙伴欲望越独立，主角推进路线就越不能一路顺风。',
         relationshipImpact: '慢热感情有了互相试探、冲突和修复的具体抓手。',
-        worldImpact: '伙伴立场能带出学院、贵族或工会的内部合理性。',
+        worldImpact: '伙伴立场能带出管理机构、地方权力或工会的内部合理性。',
         futureHook: '下一轮可以追问第一次合作后，谁更不愿承认自己被改变。',
         confirmationBoundary: '关系起点和情感推进都是候选，确认前不写入关系追踪。'
       },
@@ -283,8 +283,8 @@ export const CO_CREATION_ENTRYPOINTS: readonly CoCreationEntrypointDefinition[] 
       { coreElement: 'voice', priority: 3, reason: '通过互动暴露主角叙述声音、幽默和价值判断。' }
     ],
     exampleAnswers: [
-      '伙伴熟悉学院规训，能指出晏无把魔法世界当系统调试的傲慢。',
-      'TA 需要主角解决事故，但不相信主角能理解事故背后的政治代价。'
+      '伙伴熟悉本地规训，能指出主角用旧经验解释一切的傲慢。',
+      'TA 需要主角解决事故，但不相信主角能理解事故背后的社会代价。'
     ]
   }),
   defineEntrypoint({
@@ -319,8 +319,8 @@ export const CO_CREATION_ENTRYPOINTS: readonly CoCreationEntrypointDefinition[] 
       { coreElement: 'longThreat', priority: 3, reason: '把长线威胁拆成早期小异常。' }
     ],
     exampleAnswers: [
-      '边境学院垄断符文编译许可，民生法器开始间歇性失灵。',
-      '港口工坊发现旧日志在无人触发时自我改写，贵族先把它压成事故。'
+      '地方机构垄断关键许可，民生设施开始间歇性失灵。',
+      '港口仓库发现旧记录在无人触发时自我改写，管理者先把它压成事故。'
     ]
   }),
   defineEntrypoint({
@@ -364,8 +364,8 @@ export const CO_CREATION_ENTRYPOINTS: readonly CoCreationEntrypointDefinition[] 
       { coreElement: 'factionConflict', priority: 3, reason: '舞台禁令可引出第一卷势力碰撞。' }
     ],
     exampleAnswers: [
-      '开局在学院维修库，所有低阶法器都需要贵族签发的维护许可。',
-      '开局在冒险者公会，委托墙开始出现无人发布的古代任务。'
+      '开局在一个固定据点，所有关键服务都需要管理者签发的维护许可。',
+      '开局在任务大厅，委托墙开始出现无人发布的旧任务。'
     ]
   }),
   defineEntrypoint({
@@ -382,11 +382,11 @@ export const CO_CREATION_ENTRYPOINTS: readonly CoCreationEntrypointDefinition[] 
     ],
     interestingChoices: [
       {
-        appeal: '先玩能力入口，编程施法的辨识度会最快出现。',
+        appeal: '先玩能力入口，核心能力的辨识度会最快出现。',
         cost: '能力太万能会削弱冒险和关系张力，需要明确失败代价。',
         relationshipImpact: '伙伴可以质疑主角把人和制度当成系统变量。',
         worldImpact: '本地魔法体系的误读会暴露知识垄断和规则边界。',
-        futureHook: '下一轮可以追问第一次施法失败污染了什么日志。',
+        futureHook: '下一轮可以追问第一次失败污染了什么记录或关系。',
         confirmationBoundary: '能力爽点、限制和例外都是候选，确认后才进入规格。'
       },
       {
@@ -410,7 +410,7 @@ export const CO_CREATION_ENTRYPOINTS: readonly CoCreationEntrypointDefinition[] 
     ],
     exampleAnswers: [
       '爽点来自把法术问题拆成可验证步骤，但不能凭空创造材料。',
-      '失败后会污染局部法阵日志，让学院误以为主角触犯禁术。'
+      '失败后会污染局部记录，让管理者误以为主角触犯禁令。'
     ]
   }),
   defineEntrypoint({
@@ -419,7 +419,7 @@ export const CO_CREATION_ENTRYPOINTS: readonly CoCreationEntrypointDefinition[] 
     mode: 'co-create',
     focusTopic: 'faction',
     reason: '探索谁垄断知识、资源或合法性，以及主角第一碰撞点。',
-    whenToUse: '你想先确认学院、贵族、工会、教会或商会之间的利益结构。',
+    whenToUse: '你想先确认管理机构、地方权力、工会、守护组织或商会之间的利益结构。',
     openingQuestions: [
       '谁垄断知识、资源或合法性，谁从现有秩序获利？',
       '主角第一次会碰到哪条不可见规则？',
@@ -439,7 +439,7 @@ export const CO_CREATION_ENTRYPOINTS: readonly CoCreationEntrypointDefinition[] 
         cost: '合理反派会削弱爽快打脸，需要设计阶段性回报。',
         relationshipImpact: '角色可能被夹在私人信任和组织责任之间。',
         worldImpact: '制度冲突能解释为什么个体善意无法立刻修好世界。',
-        futureHook: '下一轮可以选择学院、贵族、工会谁最先压制主角。',
+        futureHook: '下一轮可以选择哪个组织最先压制主角。',
         confirmationBoundary: '第一碰撞点只是候选，不自动决定整卷反派。'
       }
     ],
@@ -454,7 +454,7 @@ export const CO_CREATION_ENTRYPOINTS: readonly CoCreationEntrypointDefinition[] 
       { coreElement: 'stage', priority: 3, reason: '让第一舞台拥有制度压力，而不是空泛地点。' }
     ],
     exampleAnswers: [
-      '学院垄断施法认证，贵族垄断材料，工坊只能在夹缝里修补民生法器。',
+      '管理机构垄断专业认证，地方权力垄断材料，维修者只能在夹缝里维持民生设施。',
       '主角第一次碰撞是绕过许可救人，却让伙伴背上违纪风险。'
     ]
   }),
@@ -483,7 +483,7 @@ export const CO_CREATION_ENTRYPOINTS: readonly CoCreationEntrypointDefinition[] 
         appeal: '把异常做小，文明危机会慢慢逼近而不是开场压顶。',
         cost: '异常太轻会显得威胁不足，需要设计可见后果。',
         relationshipImpact: '角色会围绕“这是事故还是征兆”产生立场分歧。',
-        worldImpact: '第三次寂静可以从民生法器、旧日志或任务墙的异常浮现。',
+        worldImpact: '长线危机可以从民生设施、旧记录或任务墙的异常浮现。',
         futureHook: '下一轮可以选择谁最先把异常压成普通事故。',
         confirmationBoundary: '长线威胁解释先作为候选，不提前定稿；只确认第一卷能看见的一角。'
       }
@@ -499,8 +499,8 @@ export const CO_CREATION_ENTRYPOINTS: readonly CoCreationEntrypointDefinition[] 
       { coreElement: 'longThreat', priority: 1, reason: '把文明级威胁拆成第一卷能承受的小异常。' }
     ],
     exampleAnswers: [
-      '第一卷阻力来自学院掩盖事故，主角赢得救援资格，却失去合法身份。',
-      '冲突表面是贵族事故，实质露出第三次寂静正在改写底层规则。'
+      '第一卷阻力来自管理者掩盖事故，主角赢得救援资格，却失去合法身份。',
+      '冲突表面是地方事故，实质露出长线危机正在改写底层规则。'
     ]
   }),
   defineEntrypoint({
@@ -535,7 +535,7 @@ export const CO_CREATION_ENTRYPOINTS: readonly CoCreationEntrypointDefinition[] 
       { coreElement: 'partner', priority: 4, reason: '用互动验证关系张力。' }
     ],
     exampleAnswers: [
-      '候选 Scene Card：维修库突然全线报警，晏无用日志定位事故，伙伴阻止他越权。',
+      '候选 Scene Card：据点突然全线报警，主角用旧记录定位事故，伙伴阻止他越权。',
       '候选 Scene Card：公会任务墙出现已完成的未来委托，主角先当成系统缓存错误。'
     ]
   }),
@@ -571,8 +571,8 @@ export const CO_CREATION_ENTRYPOINTS: readonly CoCreationEntrypointDefinition[] 
       { coreElement: 'genrePromise', priority: 5, reason: '确认读者最终获得的是震撼、治愈还是价值反转。' }
     ],
     exampleAnswers: [
-      '第三次寂静不是外敌，而是文明为了自救反复重启知识系统留下的副作用。',
-      '第一卷只露出旧日志会梦游，不能直接解释远古神族和高等精灵的全貌。'
+      '长线危机不是外敌，而是过去为了自救反复重启秩序留下的副作用。',
+      '第一卷只露出旧记录会梦游，不能直接解释远古遗留问题的全貌。'
     ]
   }),
   defineEntrypoint({
@@ -607,8 +607,8 @@ export const CO_CREATION_ENTRYPOINTS: readonly CoCreationEntrypointDefinition[] 
       { coreElement: 'growthRoute', priority: 4, reason: '比较不同成功路线的收益和代价。' }
     ],
     exampleAnswers: [
-      '分支 A 强化学院冒险，牺牲广阔世界感；分支 B 强化边境调查，牺牲校园关系密度。',
-      '如果伙伴一开始代表学院，会提升慢热张力，但需要更早解释制度并非纯恶。'
+      '分支 A 强化据点日常，牺牲广阔世界感；分支 B 强化旅途调查，牺牲固定关系密度。',
+      '如果伙伴一开始代表现有秩序，会提升慢热张力，但需要更早解释制度并非纯恶。'
     ]
   })
 ];

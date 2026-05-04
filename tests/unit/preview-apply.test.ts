@@ -216,6 +216,60 @@ describe('preview apply', () => {
     await expect(fileSystem.readFile(preview.contentPath)).resolves.toContain('符文学徒');
   });
 
+  it('keeps unrelated programming-casting branches out of stardust inn plan previews', async () => {
+    const projectRoot = path.join(os.tmpdir(), 'memory-novel-preview-stardust-inn');
+    const fileSystem = new MemoryFileSystem(projectRoot);
+    const storyPath = path.join(projectRoot, 'stories', '星尘驿站');
+
+    await fileSystem.writeFile(path.join(storyPath, 'idea.md'), '# 星尘驿站');
+    await fileSystem.writeFile(path.join(storyPath, 'specification.md'), '# spec');
+    await fileSystem.writeJson(path.join(storyPath, 'clarifications.json'), {
+      schemaVersion: '1.0',
+      story: '星尘驿站',
+      premise: '退休星舰导航员在宇宙边境开一间给迷路灵魂和破损飞船歇脚的驿站；轻松治愈，慢热群像，背后有一场被遗忘的星际战争。',
+      createdAt: '2026-05-04T00:00:00.000Z',
+      updatedAt: '2026-05-04T00:00:00.000Z',
+      questions: [
+        {
+          id: 'core.stage',
+          stage: 'specify',
+          topic: 'setting',
+          question: '第一卷主要发生在哪类舞台？',
+          whyItMatters: '影响第一卷的故事压力。',
+          type: 'textarea',
+          required: false,
+          options: [],
+          exampleAnswers: ['驿站大厅。', '边境航道。'],
+          exampleBranches: [
+            {
+              label: '漂泊者驿站',
+              answer: '第一卷围绕边境驿站展开，每位来客都带来一个轻小但有余韵的问题。',
+              flavor: '治愈、群像、低压冒险。',
+              tradeoffs: ['需要让每个来客都带来新的故事压力。'],
+              downstreamImpact: '计划会围绕来客单元和被遗忘战争线索展开。',
+              recommendedFor: ['治愈群像']
+            }
+          ],
+          dependsOn: []
+        }
+      ],
+      answers: []
+    }, { spaces: 2 });
+
+    const preview = await createPlanPreview({
+      projectRoot,
+      fileSystem,
+      story: '星尘驿站',
+      now: () => new Date('2026-05-04T12:00:00.000Z')
+    });
+    const content = await fileSystem.readFile(preview.contentPath);
+
+    expect(content).toContain('漂泊者驿站');
+    for (const term of ['晏无', '编程施法', '学院工坊', '贵族许可', '边境小城', '工科马列', '第三次寂静']) {
+      expect(content).not.toContain(term);
+    }
+  });
+
   it('blocks full plan apply but allows explicit draft mode with gaps preserved', async () => {
     const { projectRoot, fileSystem, storyPath } = await createProject();
     await fileSystem.writeFile(path.join(storyPath, 'specification.md'), '# spec');

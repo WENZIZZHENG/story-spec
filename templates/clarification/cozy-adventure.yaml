@@ -17,8 +17,8 @@ questions:
     required: false
     exampleAnswers:
       - 每到一个地方修一个魔法小问题，顺手发现旧文明线索。
-      - 小队接委托，委托看似日常，解决方式体现编程施法。
-      - 学院或工坊任务，每次像课程项目，也推进关系线。
+      - 小队接委托，委托看似日常，解决方式体现主角的独特经验。
+      - 据点或专业场所任务，每次像一个小项目，也推进关系线。
   - id: adventure.danger-level
     stage: specify
     topic: adventure

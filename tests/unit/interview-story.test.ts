@@ -131,6 +131,36 @@ describe('interviewStory', () => {
     });
   });
 
+  it('does not render unrelated programming-casting examples for a stardust inn premise', async () => {
+    const { projectRoot, fileSystem } = await createProject();
+
+    const result = await interviewStory({
+      projectRoot,
+      fileSystem,
+      story: 'idea-demo',
+      premise: '退休星舰导航员在宇宙边境开一间给迷路灵魂和破损飞船歇脚的驿站；轻松治愈，慢热群像，背后有一场被遗忘的星际战争。',
+      focus: 'stage',
+      maxQuestions: 6,
+      now: () => new Date('2026-05-04T10:40:00.000Z')
+    });
+
+    const pollutedTerms = [
+      '晏无',
+      '编程施法',
+      '学院工坊',
+      '贵族许可',
+      '边境小城',
+      '工科马列',
+      '第三次寂静'
+    ];
+
+    for (const term of pollutedTerms) {
+      expect(result.markdown).not.toContain(term);
+    }
+    expect(result.markdown).toContain('星际');
+    expect(result.markdown).toContain('驿站');
+  });
+
   it('gives a full recoverable command when no premise source exists', async () => {
     const { projectRoot, fileSystem, storyPath } = await createProject();
     await fileSystem.writeFile(path.join(storyPath, 'idea.md'), '# 空白灵感');

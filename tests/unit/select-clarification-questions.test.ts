@@ -169,8 +169,8 @@ describe('selectClarificationQuestions', () => {
       && branch.powerStructure.relationshipHooks.length > 0
     )).toBe(true);
     expect(branches.map(branch => branch.label)).toEqual(expect.arrayContaining([
-      '学院许可',
-      '地方贵族',
+      '许可体系',
+      '地方权力',
       '禁忌守护者'
     ]));
   });
