@@ -75,6 +75,8 @@ import {
   renderStyleLint
 } from '../../application/manage-style.js';
 import {
+  doctorClarificationRecord,
+  renderClarificationDoctorSummary,
   renderClarificationRollbackSummary,
   rollbackLatestClarificationAnswer
 } from '../../application/manage-clarifications.js';
@@ -537,6 +539,30 @@ export const registerWorkbenchCommand = (program: Command): void => {
           : renderBranchPromote(result));
       } catch (error: any) {
         handleWorkbenchError(error, 'Branch promote 失败');
+      }
+    });
+
+  program
+    .command('clarification:doctor')
+    .option('--story <story>', '故事目录名或路径，默认使用最近更新的 stories/*')
+    .option('--fix', '把孤儿答案移入 archivedAnswers，并重写 clarifications.md')
+    .option('--json', '输出 JSON，便于自动化读取')
+    .description('检查澄清记录的孤儿答案、重复问题和未确认候选；默认只预览')
+    .action(async (commandOptions) => {
+      try {
+        const projectRoot = await ensureProjectRoot();
+        const result = await doctorClarificationRecord({
+          projectRoot,
+          fileSystem: nodeFileSystem,
+          story: commandOptions.story,
+          fix: Boolean(commandOptions.fix)
+        });
+
+        console.log(commandOptions.json
+          ? JSON.stringify(result, null, 2)
+          : renderClarificationDoctorSummary(result));
+      } catch (error: any) {
+        handleWorkbenchError(error, 'Clarification doctor 失败');
       }
     });
 

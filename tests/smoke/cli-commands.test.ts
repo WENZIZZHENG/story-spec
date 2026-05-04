@@ -41,6 +41,7 @@ describe('CLI command modules smoke', () => {
     expect(help).toContain('ingest [options] [story]');
     expect(help).toContain('co:create [options] [story]');
     expect(help).toContain('creative:report [options] [story]');
+    expect(help).toContain('clarification:doctor');
     expect(help).toContain('clarification:rollback');
     expect(help).toContain('preview');
     expect(help).toContain('apply [options] <previewId>');
@@ -1004,6 +1005,111 @@ reveals:
     });
     await expect(readFile(path.join(projectPath, 'stories', '法术编译纪元', 'clarifications.md'), 'utf-8'))
       .resolves.toContain('AI 建议，待确认');
+  });
+
+  it('previews and fixes orphan clarification answers from the CLI', async () => {
+    const cwd = await makeTempDir();
+    await execFileAsync('node', [
+      cliPath,
+      'init',
+      'smoke',
+      '--agent',
+      'generic',
+      '--method',
+      'three-act',
+      '--no-git'
+    ], { cwd });
+
+    const projectPath = path.join(cwd, 'smoke');
+    await execFileAsync('node', [
+      cliPath,
+      'story:new',
+      '法术编译纪元',
+      '--idea',
+      '异界穿越、轻松冒险、编程施法',
+      '--json'
+    ], { cwd: projectPath });
+    const storyPath = path.join(projectPath, 'stories', '法术编译纪元');
+    await writeFile(path.join(storyPath, 'clarifications.json'), JSON.stringify({
+      schemaVersion: '1.0',
+      story: '法术编译纪元',
+      premise: '异界穿越、轻松冒险、编程施法',
+      createdAt: '2026-05-03T12:00:00.000Z',
+      updatedAt: '2026-05-03T12:00:00.000Z',
+      questions: [{
+        id: 'core.premise',
+        stage: 'specify',
+        topic: 'premise',
+        question: '故事核心是什么？',
+        whyItMatters: '影响规格生成。',
+        type: 'textarea',
+        required: true,
+        options: [],
+        exampleAnswers: [],
+        dependsOn: []
+      }],
+      answers: [
+        {
+          questionId: 'core.premise',
+          answer: '编程施法只是工具。',
+          source: 'user-explicit',
+          confidence: 1,
+          confirmed: true,
+          createdAt: '2026-05-03T12:00:00.000Z',
+          updatedAt: '2026-05-03T12:00:00.000Z'
+        },
+        {
+          questionId: '文风',
+          answer: '轻松明快。',
+          source: 'user-explicit',
+          confidence: 1,
+          confirmed: true,
+          createdAt: '2026-05-03T12:01:00.000Z',
+          updatedAt: '2026-05-03T12:01:00.000Z'
+        }
+      ]
+    }, null, 2));
+
+    const previewResult = await execFileAsync('node', [
+      cliPath,
+      'clarification:doctor',
+      '--story',
+      '法术编译纪元',
+      '--json'
+    ], { cwd: projectPath });
+    const preview = JSON.parse(previewResult.stdout);
+
+    expect(preview.fixed).toBe(false);
+    expect(preview.summary.orphanAnswers).toBe(1);
+    expect(preview.orphanAnswers[0]).toMatchObject({
+      questionId: '文风',
+      action: 'archive'
+    });
+
+    const fixResult = await execFileAsync('node', [
+      cliPath,
+      'clarification:doctor',
+      '--story',
+      '法术编译纪元',
+      '--fix',
+      '--json'
+    ], { cwd: projectPath });
+    const fixed = JSON.parse(fixResult.stdout);
+
+    expect(fixed.fixed).toBe(true);
+    const record = JSON.parse(await readFile(path.join(storyPath, 'clarifications.json'), 'utf-8'));
+    expect(record.answers).toEqual([
+      expect.objectContaining({ questionId: 'core.premise' })
+    ]);
+    expect(record.archivedAnswers).toEqual([
+      expect.objectContaining({
+        questionId: '文风',
+        answer: '轻松明快。',
+        reason: 'orphan-answer-question-not-found'
+      })
+    ]);
+    await expect(readFile(path.join(storyPath, 'clarifications.md'), 'utf-8'))
+      .resolves.toContain('## 已归档澄清答案');
   });
 
   it('runs dialogue, branch, promise, and tension commands as JSON', async () => {

@@ -3,6 +3,7 @@ import path from 'node:path';
 import { describe, expect, it } from 'vitest';
 import {
   createClarificationRecord,
+  doctorClarificationRecord,
   listClarificationRecords,
   renderClarificationMarkdown,
   renderClarificationSummary,
@@ -406,5 +407,164 @@ describe('manage clarifications', () => {
       });
     await expect(fileSystem.readFile(path.join(storyPath, 'clarifications.md')))
       .resolves.toContain('AI 建议，待确认');
+  });
+
+  it('previews orphan clarification answers without modifying the record', async () => {
+    const { projectRoot, fileSystem, storyPath } = await createProject();
+    await fileSystem.writeJson(path.join(storyPath, 'clarifications.json'), {
+      schemaVersion: '1.0',
+      story: '001-demo',
+      premise: '编程施法',
+      createdAt: '2026-05-03T12:00:00.000Z',
+      updatedAt: '2026-05-03T12:00:00.000Z',
+      questions: [{
+        id: 'core.premise',
+        stage: 'specify',
+        topic: 'premise',
+        question: '故事核心是什么？',
+        whyItMatters: '影响规格生成。',
+        type: 'textarea',
+        required: true,
+        options: [],
+        exampleAnswers: [],
+        dependsOn: []
+      }],
+      answers: [
+        {
+          questionId: 'core.premise',
+          answer: '编程施法是工具。',
+          source: 'user-explicit',
+          confidence: 1,
+          confirmed: true,
+          createdAt: '2026-05-03T12:00:00.000Z',
+          updatedAt: '2026-05-03T12:00:00.000Z'
+        },
+        {
+          questionId: '文风',
+          answer: '轻松明快。',
+          source: 'user-explicit',
+          confidence: 1,
+          confirmed: true,
+          createdAt: '2026-05-03T12:01:00.000Z',
+          updatedAt: '2026-05-03T12:01:00.000Z'
+        }
+      ]
+    }, { spaces: 2 });
+
+    const result = await doctorClarificationRecord({
+      projectRoot,
+      fileSystem,
+      story: '001-demo'
+    });
+
+    expect(result.fixed).toBe(false);
+    expect(result.summary).toMatchObject({
+      orphanAnswers: 1,
+      duplicateQuestions: 0,
+      unconfirmedSuggestions: 0
+    });
+    expect(result.orphanAnswers).toEqual([
+      expect.objectContaining({
+        questionId: '文风',
+        action: 'archive'
+      })
+    ]);
+    await expect(fileSystem.readJson<any>(path.join(storyPath, 'clarifications.json')))
+      .resolves.toMatchObject({
+        answers: expect.arrayContaining([
+          expect.objectContaining({ questionId: '文风' })
+        ])
+      });
+  });
+
+  it('fixes orphan clarification answers by archiving them without deleting user content', async () => {
+    const { projectRoot, fileSystem, storyPath } = await createProject();
+    await fileSystem.writeJson(path.join(storyPath, 'clarifications.json'), {
+      schemaVersion: '1.0',
+      story: '001-demo',
+      premise: '编程施法',
+      createdAt: '2026-05-03T12:00:00.000Z',
+      updatedAt: '2026-05-03T12:00:00.000Z',
+      questions: [{
+        id: 'core.premise',
+        stage: 'specify',
+        topic: 'premise',
+        question: '故事核心是什么？',
+        whyItMatters: '影响规格生成。',
+        type: 'textarea',
+        required: true,
+        options: [],
+        exampleAnswers: [],
+        dependsOn: []
+      }],
+      answers: [
+        {
+          questionId: 'core.premise',
+          answer: '编程施法是工具。',
+          source: 'user-explicit',
+          confidence: 1,
+          confirmed: true,
+          createdAt: '2026-05-03T12:00:00.000Z',
+          updatedAt: '2026-05-03T12:00:00.000Z'
+        },
+        {
+          questionId: 'core.scope',
+          answer: '第一卷先写边境试点。',
+          source: 'user-explicit',
+          confidence: 1,
+          confirmed: true,
+          createdAt: '2026-05-03T12:01:00.000Z',
+          updatedAt: '2026-05-03T12:01:00.000Z'
+        }
+      ],
+      archivedAnswers: [{
+        questionId: 'legacy.old',
+        answer: '旧归档。',
+        source: 'imported',
+        confidence: 0.8,
+        confirmed: true,
+        createdAt: '2026-05-02T12:00:00.000Z',
+        updatedAt: '2026-05-02T12:00:00.000Z',
+        archivedAt: '2026-05-02T13:00:00.000Z',
+        reason: 'previous archive'
+      }]
+    }, { spaces: 2 });
+
+    const result = await doctorClarificationRecord({
+      projectRoot,
+      fileSystem,
+      story: '001-demo',
+      fix: true,
+      now: () => new Date('2026-05-03T12:30:00.000Z')
+    });
+
+    expect(result.fixed).toBe(true);
+    expect(result.orphanAnswers).toEqual([
+      expect.objectContaining({
+        questionId: 'core.scope',
+        action: 'archive'
+      })
+    ]);
+    await expect(fileSystem.readJson<any>(path.join(storyPath, 'clarifications.json')))
+      .resolves.toMatchObject({
+        updatedAt: '2026-05-03T12:30:00.000Z',
+        answers: [
+          expect.objectContaining({ questionId: 'core.premise' })
+        ],
+        archivedAnswers: expect.arrayContaining([
+          expect.objectContaining({
+            questionId: 'core.scope',
+            answer: '第一卷先写边境试点。',
+            archivedAt: '2026-05-03T12:30:00.000Z',
+            reason: 'orphan-answer-question-not-found'
+          }),
+          expect.objectContaining({
+            questionId: 'legacy.old',
+            answer: '旧归档。'
+          })
+        ])
+      });
+    await expect(fileSystem.readFile(path.join(storyPath, 'clarifications.md')))
+      .resolves.toContain('## 已归档澄清答案');
   });
 });

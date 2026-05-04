@@ -8,7 +8,7 @@ Active。本文是 StorySpec 当前唯一的活跃待办入口。详细规则见
 
 | 路线 | 状态 | 当前优先级 | 下一步 |
 | --- | --- | --- | --- |
-| [章节生产流程优化](chapter-production-workflow-roadmap.md) | Active | P1 | P0、P1-1、P1-2 已完成；下一步增加 `clarification:doctor --fix`，清理历史澄清孤儿答案。 |
+| [章节生产流程优化](chapter-production-workflow-roadmap.md) | Active | P2 | P0、P1-1、P1-2、P1-3 已完成；下一步让生成目录默认更安静，减少临时 `build/` 工作区噪音。 |
 
 ## 暂不作为活跃待办
 

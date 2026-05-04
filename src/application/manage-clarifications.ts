@@ -7,6 +7,7 @@ import type {
   ClarificationQuestion
 } from '../domain/clarification.js';
 import {
+  hasClarificationAnswerContent,
   hasResolvedClarificationAnswer,
   isDeferredClarificationAnswer
 } from '../domain/clarification-answer-utils.js';
@@ -27,6 +28,12 @@ export interface ClarificationRecord {
   updatedAt: string;
   questions: ClarificationQuestion[];
   answers: ClarificationAnswer[];
+  archivedAnswers?: ArchivedClarificationAnswer[];
+}
+
+export interface ArchivedClarificationAnswer extends ClarificationAnswer {
+  archivedAt: string;
+  reason: string;
 }
 
 export interface ClarificationNextStep {
@@ -77,6 +84,51 @@ export interface RollbackClarificationAnswerInput {
   questionId?: string;
   mode?: 'candidate';
   now?: () => Date;
+}
+
+export interface DoctorClarificationRecordInput {
+  projectRoot: string;
+  fileSystem: ProjectFileSystem;
+  story?: string;
+  fix?: boolean;
+  now?: () => Date;
+}
+
+export interface ClarificationDoctorOrphanAnswer {
+  questionId: string;
+  answer: unknown;
+  source: ClarificationAnswer['source'];
+  confirmed: boolean;
+  confidence: number;
+  evidencePath: string;
+  action: 'archive';
+}
+
+export interface ClarificationDoctorDuplicateQuestion {
+  questionId: string;
+  count: number;
+  evidencePath: string;
+}
+
+export interface ClarificationDoctorSuggestion {
+  questionId: string;
+  answer: unknown;
+  evidencePath: string;
+}
+
+export interface ClarificationDoctorSummary {
+  orphanAnswers: number;
+  duplicateQuestions: number;
+  unconfirmedSuggestions: number;
+}
+
+export interface DoctorClarificationRecordResult extends ClarificationRecordResult {
+  record: ClarificationRecord;
+  fixed: boolean;
+  orphanAnswers: ClarificationDoctorOrphanAnswer[];
+  duplicateQuestions: ClarificationDoctorDuplicateQuestion[];
+  unconfirmedSuggestions: ClarificationDoctorSuggestion[];
+  summary: ClarificationDoctorSummary;
 }
 
 export interface RolledBackClarificationAnswer {
@@ -157,6 +209,47 @@ const findRollbackAnswerIndex = (
   return latestIndex;
 };
 
+const findOrphanAnswers = (record: ClarificationRecord): ClarificationDoctorOrphanAnswer[] => {
+  const questionIds = new Set(record.questions.map(question => question.id));
+  return record.answers
+    .filter(answer => !questionIds.has(answer.questionId))
+    .map(answer => ({
+      questionId: answer.questionId,
+      answer: answer.answer,
+      source: answer.source,
+      confirmed: answer.confirmed,
+      confidence: answer.confidence,
+      evidencePath: `clarifications.json#answers.${answer.questionId}`,
+      action: 'archive'
+    }));
+};
+
+const findDuplicateQuestions = (record: ClarificationRecord): ClarificationDoctorDuplicateQuestion[] => {
+  const counts = new Map<string, number>();
+  record.questions.forEach(question => counts.set(question.id, (counts.get(question.id) ?? 0) + 1));
+
+  return [...counts.entries()]
+    .filter(([, count]) => count > 1)
+    .map(([questionId, count]) => ({
+      questionId,
+      count,
+      evidencePath: `clarifications.json#questions.${questionId}`
+    }));
+};
+
+const findUnconfirmedSuggestions = (record: ClarificationRecord): ClarificationDoctorSuggestion[] =>
+  record.answers
+    .filter(answer =>
+      answer.source === 'ai-suggested'
+      && !answer.confirmed
+      && hasClarificationAnswerContent(answer.answer)
+    )
+    .map(answer => ({
+      questionId: answer.questionId,
+      answer: answer.answer,
+      evidencePath: `clarifications.json#answers.${answer.questionId}`
+    }));
+
 const bulletList = (items: string[], fallback: string): string[] =>
   items.length > 0
     ? items.map(item => `- ${item}`)
@@ -213,6 +306,17 @@ const renderClarificationExampleBranches = (branches: ClarificationExampleBranch
       ''
     ])
     : ['- 暂无问题级示例分叉。', ''])
+];
+
+const renderArchivedClarificationAnswers = (answers: ArchivedClarificationAnswer[] = []): string[] => [
+  '## 已归档澄清答案',
+  '',
+  ...bulletList(
+    answers.map(answer =>
+      `${answer.questionId}：${answerToMarkdown(answer.answer)}（${answer.reason}；archivedAt ${answer.archivedAt}）`
+    ),
+    '暂无已归档澄清答案。'
+  )
 ];
 
 export const renderClarificationSummary = (input: ClarificationSummaryInput): string => [
@@ -313,6 +417,8 @@ export const renderClarificationMarkdown = (record: ClarificationRecord): string
       aiSuggestions.map(answer => `${answer.questionId}：${answerToMarkdown(answer.answer)}（confidence ${answer.confidence}）`),
       '暂无 AI 建议。'
     ),
+    '',
+    ...renderArchivedClarificationAnswers(record.archivedAnswers),
     '',
     '## 全部问题',
     '',
@@ -444,6 +550,68 @@ export const rollbackLatestClarificationAnswer = async (
   };
 };
 
+export const doctorClarificationRecord = async (
+  input: DoctorClarificationRecordInput
+): Promise<DoctorClarificationRecordResult> => {
+  const story = await selectStoryProject(input.projectRoot, input.fileSystem, input.story);
+  const jsonPath = clarificationJsonPath(story.path);
+  if (!await input.fileSystem.pathExists(jsonPath)) {
+    throw new Error('CLARIFICATION_RECORD_NOT_FOUND');
+  }
+
+  const record = await input.fileSystem.readJson<ClarificationRecord>(jsonPath);
+  const orphanAnswers = findOrphanAnswers(record);
+  const duplicateQuestions = findDuplicateQuestions(record);
+  const unconfirmedSuggestions = findUnconfirmedSuggestions(record);
+  const timestamp = (input.now ?? (() => new Date()))().toISOString();
+  const fixed = Boolean(input.fix && orphanAnswers.length > 0);
+  const updatedRecord: ClarificationRecord = fixed
+    ? {
+      ...record,
+      updatedAt: timestamp,
+      answers: record.answers.filter(answer =>
+        !orphanAnswers.some(orphan => orphan.questionId === answer.questionId)
+      ),
+      archivedAnswers: [
+        ...(record.archivedAnswers ?? []),
+        ...record.answers
+          .filter(answer => orphanAnswers.some(orphan => orphan.questionId === answer.questionId))
+          .map(answer => ({
+            ...answer,
+            archivedAt: timestamp,
+            reason: 'orphan-answer-question-not-found'
+          }))
+      ]
+    }
+    : record;
+  const markdownPath = clarificationMarkdownPath(story.path);
+  const markdown = renderClarificationMarkdown(updatedRecord);
+
+  if (fixed) {
+    await input.fileSystem.writeJson(jsonPath, updatedRecord, { spaces: 2 });
+    await input.fileSystem.writeFile(markdownPath, markdown);
+  }
+
+  return {
+    projectRoot: input.projectRoot,
+    story: story.name,
+    storyPath: story.path,
+    jsonPath,
+    markdownPath,
+    record: updatedRecord,
+    markdown,
+    fixed,
+    orphanAnswers,
+    duplicateQuestions,
+    unconfirmedSuggestions,
+    summary: {
+      orphanAnswers: orphanAnswers.length,
+      duplicateQuestions: duplicateQuestions.length,
+      unconfirmedSuggestions: unconfirmedSuggestions.length
+    }
+  };
+};
+
 export const renderClarificationRecordSummary = (result: CreatedClarificationRecordResult): string => [
   'StorySpec Clarifications',
   '',
@@ -469,5 +637,31 @@ export const renderClarificationRollbackSummary = (
   `Markdown：${relativePath(result.projectRoot, result.markdownPath)}`,
   '',
   result.summary,
+  ''
+].join('\n');
+
+export const renderClarificationDoctorSummary = (
+  result: DoctorClarificationRecordResult
+): string => [
+  'StorySpec Clarification Doctor',
+  '',
+  `故事：${result.story}`,
+  `JSON：${relativePath(result.projectRoot, result.jsonPath)}`,
+  `模式：${result.fixed ? '已修复' : '预览'}`,
+  `孤儿答案：${result.summary.orphanAnswers}`,
+  `重复问题：${result.summary.duplicateQuestions}`,
+  `未确认候选：${result.summary.unconfirmedSuggestions}`,
+  '',
+  '孤儿答案处理：',
+  ...bulletList(
+    result.orphanAnswers.map(answer =>
+      `${answer.questionId}：将归档，保留 answer/source/confirmed/confidence`
+    ),
+    '未发现孤儿答案。'
+  ),
+  '',
+  result.fixed
+    ? '已将孤儿答案移入 archivedAnswers，并重写 clarifications.md。'
+    : '预览未写入；确认后运行同一命令加 --fix。',
   ''
 ].join('\n');
