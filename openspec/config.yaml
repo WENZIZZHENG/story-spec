@@ -1,0 +1,38 @@
+schema: spec-driven
+
+# Project context (optional)
+# This is shown to AI when creating artifacts.
+# Add your tech stack, conventions, style guides, domain knowledge, etc.
+# Example:
+#   context: |
+#     Tech stack: TypeScript, React, Node.js
+#     We use conventional commits
+#     Domain: e-commerce platform
+context: |
+  项目：StorySpec，中文长篇小说创作工作流 CLI。
+  技术栈：TypeScript、Node.js ESM、Commander、Vitest。锁文件是 bun.lock，但贡献者命令以 package.json 的 npm scripts 为准。
+  关键命令：npm run build、npm run build:commands、npm run check:command-manifest、npm test、npm run test:smoke、npm run verify。
+  源目录：src/ 是 CLI 与应用服务源码；templates/commands/*.md 是 agent command 模板源；templates/、scripts/、memory/ 是用户项目初始化模板；dist/ 是构建产物，不手工编辑。
+  本地生成物边界：根目录 .specify/、stories/、spec/tracking/、.claude/、.codex/ 是本地生成物或用户项目数据，不作为仓库源目录。OpenSpec 初始化产生的 openspec/ 是 SDD 主记录。
+  创作控制权：StorySpec 应帮助作者澄清选择，而不是替作者过早定案；涉及正典事实、世界观、角色关系、主题和感情推进时，必须保留 preview / confirm / apply 和来源追踪。
+  文档同步：CLI 行为、模板契约、生成产物、项目结构或公共接口变化时，需要 changes/*.md；README 只写真实可用能力，不提前承诺未实现功能。
+
+# Per-artifact rules (optional)
+# Add custom rules for specific artifacts.
+# Example:
+#   rules:
+#     proposal:
+#       - Keep proposals under 500 words
+#       - Always include a "Non-goals" section
+#     tasks:
+#       - Break tasks into chunks of max 2 hours
+rules:
+  proposal:
+    - 使用中文说明用户问题、目标、非目标和影响范围。
+    - Capabilities 必须列出 spec 目录名，并与 specs/ 下的文件一一对应。
+  design:
+    - 明确哪些文件是源文件，哪些是生成产物；不得建议手工编辑 dist/。
+    - 涉及作者确认、正典、tracking 或写作正文时，必须说明 preview / confirm / apply 边界。
+  tasks:
+    - 使用 S/P/V 分组：S 为串行共享契约，P 为可并行任务，V 为集成验证。
+    - 每个 P 任务必须写明 May edit、Must not edit、Depends on、Validation。
