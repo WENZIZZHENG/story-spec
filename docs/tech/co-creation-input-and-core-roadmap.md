@@ -38,9 +38,10 @@ Active。
 ### P0-2 长文吸收与批量澄清预览
 
 - 类型：CLI 工作流、输入体验。
+- 状态：基础版已落地，`storyspec ingest [story]` 支持 `--text`、`--file`、`--apply-confirmed` 和 `--json`。
 - 背景/问题：作者自然会一次输入几百字设定，逐题输入 `questionId=answer` 成本高。
 - 已有基础：`interview --answers` 已支持分号分隔的多字段写入，`clarifications.json` 已有来源与确认状态。
-- 缺口：用户不能直接输入自然长文；工具不能展示“识别到哪些确认项、候选项、仍需澄清项”。
+- 缺口：长文预览和明确字段写入已补齐；后续可继续增强中文别名、无标题段落识别和候选项分组。
 - 建议方案：
   1. 新增 `storyspec ingest [story] --text <text>` 与 `--file <path>`。
   2. 首批用本地规则识别明确段落和关键词，映射到 `core.premise`、`core.protagonist`、`core.stage`、`core.partner`、`focus.power`、`core.faction-conflict`、`core.scope` 等常用字段。
