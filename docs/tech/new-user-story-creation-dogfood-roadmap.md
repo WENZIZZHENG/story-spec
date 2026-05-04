@@ -63,7 +63,7 @@ node dist/cli.js validate
 
 ## P0 立即处理
 
-### P0-1 统一首次路径，不再让 init/status/help 把用户带回旧七步命令
+### P0-1 统一首次路径，不再让 init/status/help 把用户带回旧七步命令（已完成，2026-05-04）
 
 - 类型：CLI 引导、文档契约、模板一致性
 - 背景/问题：中心协议已经要求“先选择创作入口”，但新用户实跑 `init` 后看到的是 `/storyspec-constitution -> /storyspec-specify -> /storyspec-clarify -> /storyspec-plan -> /storyspec-tasks -> /storyspec-write`。`status` 在空项目时建议 `/specify`，`--help` 的核心创作命令仍是 `/method /style /story /outline /track-init /write`。用户会被带离 `story:new -> next -> interview -> preview/apply` 的新流程。
@@ -93,7 +93,14 @@ node dist/cli.js validate
   - 落地方式：CLI 输出只给一条主路径和 2-3 条可选分支。
 - 不做/边界：不移除旧 slash commands；只调整首次推荐优先级和文案。
 
-### P0-2 修复 next 推荐命令不可复制即用的问题
+完成记录：
+
+- 完成内容：初始化成功提示、`storyspec status` 空项目建议、`storyspec --help` 示例和 quickstart 已统一到 `story:new -> next -> interview -> creative:report -> preview specify -> apply` 的首次路径；agent 内部命令保留为后续可选路径。
+- 验证方式：相关状态输出单测、构建和 changes 检查已随 commit `ca06eaa` 完成。
+- 生成产物：新增 `changes/2026-05-04-first-run-path.md`。
+- 后续遗留：本任务不移除旧 agent slash commands；只调整首次推荐优先级。
+
+### P0-2 修复 next 推荐命令不可复制即用的问题（已完成，2026-05-04）
 
 - 类型：CLI 导航、非交互可用性
 - 背景/问题：`storyspec next 星尘驿站` 推荐 `storyspec interview 星尘驿站 --focus stage`，但在非交互环境直接运行会失败：`非交互环境请传入 --premise "一句话创意"`。新手照抄第一条推荐就被阻断。
@@ -120,6 +127,13 @@ node dist/cli.js validate
   - 不照搬：不要求 StorySpec 全部变成 TTY wizard。
   - 落地方式：CLI 命令推荐要自带必要上下文。
 - 不做/边界：不把 `idea.md` 自动写成正典，只作为 premise 上下文。
+
+完成记录：
+
+- 完成内容：`storyspec next` 的访谈推荐会携带从 `idea.md`/澄清记录读取的 `--premise`，`interview` 在非交互环境也可从 idea 回退；结构化输出新增可复制命令和 premise 需求状态。
+- 验证方式：新增 story onboarding 与 interview 非交互回归测试；相关构建和 changes 检查已随 commit `0d8831e` 完成。
+- 生成产物：新增 `changes/2026-05-04-copyable-next-interview.md`。
+- 后续遗留：premise 只作为访谈上下文，不自动进入正典。
 
 ### P0-3 移除与当前故事不匹配的固定示例污染（已完成，2026-05-04）
 
