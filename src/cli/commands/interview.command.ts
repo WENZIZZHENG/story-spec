@@ -38,6 +38,32 @@ const parsePositiveInteger = (value: string | undefined, fallback: number): numb
   return Number.isFinite(parsed) && parsed > 0 ? parsed : fallback;
 };
 
+const ANSWER_KEY_ALIASES: Record<string, string> = {
+  核心创意: 'core.premise',
+  创意: 'core.premise',
+  主角: 'core.protagonist',
+  主人公: 'core.protagonist',
+  伙伴: 'core.partner',
+  核心伙伴: 'core.partner',
+  同伴: 'core.partner',
+  第一舞台: 'core.stage',
+  舞台: 'core.stage',
+  地点: 'core.stage',
+  能力体系: 'magic.rule-hardness',
+  魔法体系: 'magic.rule-hardness',
+  法术体系: 'magic.rule-hardness',
+  能力: 'magic.rule-hardness',
+  势力冲突: 'core.faction-conflict',
+  势力与冲突: 'core.faction-conflict',
+  冲突: 'core.faction-conflict',
+  创作边界: 'core.scope',
+  边界: 'core.scope',
+  不能定稿: 'core.scope'
+};
+
+const normalizeAnswerKey = (value: string): string =>
+  ANSWER_KEY_ALIASES[value.trim()] ?? value.trim();
+
 const parseAnswerPairs = (value: string | undefined): Record<string, unknown> => {
   if (!value?.trim()) {
     return {};
@@ -58,7 +84,7 @@ const parseAnswerPairs = (value: string | undefined): Record<string, unknown> =>
         }
 
         return [
-          pair.slice(0, separatorIndex).trim(),
+          normalizeAnswerKey(pair.slice(0, separatorIndex)),
           pair.slice(separatorIndex + 1).trim()
         ];
       })
@@ -427,7 +453,7 @@ export const registerInterviewCommand = (program: Command): void => {
   const configureInterviewCommand = (command: Command) => command
     .argument('[story]', '故事目录名或路径，默认使用最近更新的 stories/*')
     .option('--premise <text>', '一句话创意或创作方向；非交互环境必填')
-    .option('--answers <pairs>', '预填答案，格式：questionId=answer;questionId2=answer2')
+    .option('--answers <pairs>', '预填答案，格式：questionId=answer;questionId2=answer2，也支持主角=...;第一舞台=...等中文别名')
     .option('--focus <entry>', '从指定共创入口开始：protagonist/partner/world/stage/power/faction/conflict/scene/ending/branch')
     .option('--entry <entry>', '同 --focus，按入口卡开始一轮共创')
     .option('--use-examples', '把未回答问题填入第一个可复制示例，适合 smoke 或快速起步')
