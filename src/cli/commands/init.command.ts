@@ -33,6 +33,52 @@ interface InitCommandContext {
   packageRoot: string;
 }
 
+export interface RenderInitSuccessNextStepsInput {
+  projectName: string;
+  targetAgents: Array<{
+    displayName: string;
+    commandSurface: string;
+    slashPrefix?: string;
+  }>;
+  here: boolean;
+  all: boolean;
+  allAgents: boolean;
+  selectedAgentDisplayName: string;
+  compatibilityHint?: string;
+}
+
+export const renderInitSuccessNextSteps = (input: RenderInitSuccessNextStepsInput): string => {
+  const lines: string[] = [
+    '',
+    chalk.cyan('接下来:'),
+    chalk.gray('─────────────────────────────')
+  ];
+
+  if (!input.here) {
+    lines.push(`  1. ${chalk.white(`cd ${input.projectName}`)} - 进入项目目录`);
+  }
+
+  lines.push(`  2. ${chalk.white(`在 ${input.selectedAgentDisplayName} 中打开项目`)}`);
+  lines.push(`  3. ${chalk.white('保存一句灵感:')}`);
+  lines.push(`     ${chalk.cyan('storyspec story:new 故事名 --idea "一句话创意"')}`);
+  lines.push(`  4. ${chalk.white('查看今天最适合的下一步:')}`);
+  lines.push(`     ${chalk.cyan('storyspec next 故事名')}`);
+  lines.push(`  5. ${chalk.white('完成一轮访谈后预览规格:')}`);
+  lines.push(`     ${chalk.cyan('storyspec creative:report 故事名')}`);
+  lines.push(`     ${chalk.cyan('storyspec preview specify 故事名')}`);
+  lines.push(`     ${chalk.cyan('storyspec apply <preview-id> --yes')}`);
+  lines.push('');
+  lines.push(chalk.gray('推荐流程: story:new → next → interview → creative:report → preview specify → apply → plan/tasks/write'));
+  lines.push(chalk.dim('更多 agent 命令和专家/插件入口可运行 storyspec init --help 查看。'));
+  lines.push(chalk.dim('提示: agent 命令在 AI 助手内部使用；终端里先用 storyspec story:new / next / interview。'));
+
+  if (input.compatibilityHint) {
+    lines.push(chalk.gray(input.compatibilityHint));
+  }
+
+  return lines.join('\n');
+};
+
 export function registerInitCommand(program: Command, context: InitCommandContext): void {
   const { packageRoot } = context;
 
@@ -140,6 +186,7 @@ export function registerInitCommand(program: Command, context: InitCommandContex
           : undefined;
 
       const spinner = ora('正在初始化小说项目...').start();
+      const deferredEvents: Array<{ type: 'info' | 'warning'; message: string }> = [];
 
       try {
         const result = await initProject({
@@ -162,10 +209,8 @@ export function registerInitCommand(program: Command, context: InitCommandContex
           onEvent: event => {
             if (event.type === 'progress') {
               spinner.text = event.message;
-            } else if (event.type === 'warning') {
-              console.log(chalk.yellow(event.message));
             } else {
-              console.log(event.message);
+              deferredEvents.push(event);
             }
           }
         });
@@ -173,73 +218,22 @@ export function registerInitCommand(program: Command, context: InitCommandContex
 
         spinner.succeed(chalk.green(`小说项目 "${projectName}" 创建成功！`));
 
-        // 显示后续步骤
-        console.log('\n' + chalk.cyan('接下来:'));
-        console.log(chalk.gray('─────────────────────────────'));
+        console.log(renderInitSuccessNextSteps({
+          projectName,
+          targetAgents,
+          here: !!options.here,
+          all: !!options.all,
+          allAgents: !!options.allAgents,
+          selectedAgentDisplayName: options.allAgents
+            ? `任意 agent（${formatAgentDisplayNames(AGENT_INTEGRATIONS)}）`
+            : options.all
+              ? `任意 AI 助手（${formatDisplayNames(AI_PLATFORMS)}）`
+              : selectedAgent?.displayName ?? selectedPlatform?.displayName ?? 'agent',
+          compatibilityHint
+        }));
 
-        if (!options.here) {
-          console.log(`  1. ${chalk.white(`cd ${projectName}`)} - 进入项目目录`);
-        }
-
-        if (options.allAgents) {
-          console.log(`  2. ${chalk.white(`在任意 agent 中打开项目（${formatAgentDisplayNames(AGENT_INTEGRATIONS)}）`)}`);
-        } else if (options.all) {
-          console.log(`  2. ${chalk.white(`在任意 AI 助手中打开项目（${formatDisplayNames(AI_PLATFORMS)}）`)}`);
-        } else {
-          console.log(`  2. ${chalk.white(`在 ${selectedAgent?.displayName ?? selectedPlatform?.displayName ?? 'agent'} 中打开项目`)}`);
-        }
-        const usesMarkdownCommands = targetAgents.some(agent => agent.commandSurface === 'markdown-command' && !agent.slashPrefix);
-        console.log(`  3. ${chalk.white('先保存一句灵感，不急着生成完整大纲:')}`);
-        console.log(`     ${chalk.cyan('storyspec story:new 故事名 --idea "一句话创意"')}`);
-        console.log(`  4. ${chalk.white('选择今天的创作入口:')}`);
-        console.log(`     ${chalk.cyan('storyspec next 故事名')}`);
-        console.log(`  5. ${chalk.white('完成一轮低负担访谈，再预览规格:')}`);
-        console.log(`     ${chalk.cyan('storyspec interview 故事名 --focus protagonist --premise "一句话创意"')}`);
-        console.log(`     ${chalk.cyan('storyspec creative:report 故事名')}`);
-        console.log(`     ${chalk.cyan('storyspec preview specify 故事名')}`);
-        console.log(`     ${chalk.cyan('storyspec apply <preview-id> --yes')}`);
-
-        const formatCommand = (commandName: string): string => {
-          if (usesMarkdownCommands) {
-            return `.specify/commands/${commandName}.md`;
-          }
-
-          if (selectedAgent) {
-            return formatAgentCommand(selectedAgent, commandName, !!options.allAgents || !!options.all);
-          }
-
-          return formatAICommand(selectedPlatform, commandName, !!options.all);
-        };
-
-        console.log('\n' + chalk.yellow(`     ${usesMarkdownCommands ? '后续 agent 命令文档' : '后续 agent 斜杠命令'}:`));
-        console.log(`     ${chalk.cyan(formatCommand('plan'))}  - 基于已确认 specification 规划章节结构`);
-        console.log(`     ${chalk.cyan(formatCommand('tasks'))} - 拆成可执行写作任务`);
-        console.log(`     ${chalk.cyan(formatCommand('write'))} - 在任务和 Scene Card 明确后写正文`);
-
-        // 如果安装了专家模式，显示提示
-        if (options.withExperts) {
-          console.log('\n' + chalk.yellow('     🎓 专家模式:'));
-          console.log(`     ${chalk.cyan(formatCommand('expert'))}       - 列出可用专家`);
-          console.log(`     ${chalk.cyan(`${formatCommand('expert')} plot`)} - 剧情结构专家`);
-          console.log(`     ${chalk.cyan(`${formatCommand('expert')} character`)} - 人物塑造专家`);
-        }
-
-        // 如果安装了插件，显示插件命令
-        if (options.plugins) {
-          const installedPlugins = options.plugins.split(',').map((p: string) => p.trim());
-          if (installedPlugins.includes('translate')) {
-            console.log('\n' + chalk.yellow('     🌍 翻译插件:'));
-            console.log(`     ${chalk.cyan('/translate')}   - 中英文翻译`);
-            console.log(`     ${chalk.cyan('/polish')}      - 英文润色`);
-          }
-        }
-
-        console.log('\n' + chalk.gray('推荐流程: story:new → next → interview → creative:report → preview specify → apply → plan/tasks/write'));
-        console.log(chalk.dim(usesMarkdownCommands
-          ? '提示: 命令文档在 agent 内部使用；终端里先用 storyspec story:new / next / interview。'
-          : '提示: 斜杠命令在 AI 助手内部使用；终端里先用 storyspec story:new / next / interview。'));
-        if (compatibilityHint) {
-          console.log(chalk.gray(compatibilityHint));
+        for (const event of deferredEvents) {
+          console.log(event.type === 'warning' ? chalk.yellow(event.message) : event.message);
         }
 
       } catch (error) {

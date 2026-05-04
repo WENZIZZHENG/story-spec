@@ -298,7 +298,7 @@ node dist/cli.js validate
 
 ## P2 体验和效率
 
-### P2-1 改善初始化输出顺序和成功反馈
+### P2-1 改善初始化输出顺序和成功反馈（已完成，2026-05-04）
 
 - 类型：CLI 输出 polish
 - 背景/问题：`init` 输出中“接下来”长列表出现在 `- 正在初始化小说项目...` 和“创建成功”之前，阅读顺序像任务还没结束。新用户容易误判是否已经成功。
@@ -306,6 +306,13 @@ node dist/cli.js validate
 - 涉及文件/模块：`src/cli/commands/init.command.ts`
 - 验收标准：初始化输出顺序为“开始 -> 成功 -> 下一步”。
 - 不做/边界：不改变初始化实际行为。
+
+完成记录：
+
+- 完成内容：`storyspec init` 成功输出抽出可测试渲染器，成功后先显示主路径；初始化过程中的 info/warning 延后到成功提示之后展示，避免打断 spinner -> 成功 -> 下一步的阅读顺序。
+- 验证方式：`npm run build`、`npx vitest run tests/unit/init-command-output.test.ts tests/unit/init-project.test.ts`。
+- 生成产物：新增 `changes/2026-05-04-init-output-order.md`。
+- 后续遗留：本任务只收缩终端成功输出，不重做完整交互式 init wizard。
 
 ### P2-2 让 Scene Card 模板使用当前故事上下文
 
