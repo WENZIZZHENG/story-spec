@@ -13,6 +13,18 @@ if [ "$1" = "--checklist" ]; then
     CHECKLIST_MODE=true
 fi
 
+json_get() {
+    jq -r "$1 // empty" "$PLOT_TRACKER" 2>/dev/null || true
+}
+
+summarize_completed_node_evidence() {
+    if [ -f "$PLOT_TRACKER" ] && jq -e '.plotlines.main.completedNodeEvidence? | type == "object" and length > 0' "$PLOT_TRACKER" >/dev/null 2>&1; then
+        jq -r '.plotlines.main.completedNodeEvidence
+            | to_entries[]
+            | "  • " + .key + " -> " + .value' "$PLOT_TRACKER" 2>/dev/null || true
+    fi
+}
+
 # 获取当前故事目录
 STORY_DIR=$(get_current_story)
 
@@ -75,13 +87,14 @@ analyze_plot_alignment() {
         echo "📖 主线进度：$MAIN_PLOT [$PLOT_STATUS]"
 
         # 完成的节点
-        COMPLETED_COUNT=$(jq '.plotlines.main.completedNodes | length' "$PLOT_TRACKER")
+        COMPLETED_COUNT=$(jq '.plotlines.main.completedNodes | length' "$PLOT_TRACKER" 2>/dev/null || echo 0)
         echo ""
         echo "✅ 已完成节点：${COMPLETED_COUNT}个"
         jq -r '.plotlines.main.completedNodes[]? | "  • " + .' "$PLOT_TRACKER" 2>/dev/null || true
+        summarize_completed_node_evidence
 
         # 即将到来的节点
-        UPCOMING_COUNT=$(jq '.plotlines.main.upcomingNodes | length' "$PLOT_TRACKER")
+        UPCOMING_COUNT=$(jq '.plotlines.main.upcomingNodes | length' "$PLOT_TRACKER" 2>/dev/null || echo 0)
         if [ "$UPCOMING_COUNT" -gt 0 ]; then
             echo ""
             echo "→ 接下来的节点："
@@ -195,8 +208,8 @@ output_checklist() {
     if [ -f "$PLOT_TRACKER" ]; then
         main_plot=$(jq -r '.plotlines.main.currentNode // "未设定"' "$PLOT_TRACKER")
         plot_status=$(jq -r '.plotlines.main.status // "unknown"' "$PLOT_TRACKER")
-        completed_count=$(jq '.plotlines.main.completedNodes | length' "$PLOT_TRACKER")
-        upcoming_count=$(jq '.plotlines.main.upcomingNodes | length' "$PLOT_TRACKER")
+        completed_count=$(jq '.plotlines.main.completedNodes | length' "$PLOT_TRACKER" 2>/dev/null || echo 0)
+        upcoming_count=$(jq '.plotlines.main.upcomingNodes | length' "$PLOT_TRACKER" 2>/dev/null || echo 0)
 
         total_foreshadow=$(jq '.foreshadowing | length' "$PLOT_TRACKER")
         active_foreshadow=$(jq '[.foreshadowing[] | select(.status == "active")] | length' "$PLOT_TRACKER")
@@ -233,6 +246,18 @@ output_checklist() {
 - [x] CHK005 主线情节节点进度：$main_plot
 - [$([ $completed_count -gt 0 ] && echo "x" || echo " ")] CHK006 已完成情节节点（$completed_count 个）
 - [$([ $upcoming_count -gt 0 ] && echo "x" || echo " ")] CHK007 后续情节节点已规划（$upcoming_count 个）
+
+EOF
+
+    if [ -f "$PLOT_TRACKER" ] && jq -e '.plotlines.main.completedNodeEvidence? | type == "object" and length > 0' "$PLOT_TRACKER" >/dev/null 2>&1; then
+        echo "## 节点证据"
+        echo ""
+        echo "- [x] CHK007A 节点证据旁路字段已记录"
+        jq -r '.plotlines.main.completedNodeEvidence | to_entries[] | "- " + .key + ": " + .value' "$PLOT_TRACKER" 2>/dev/null || true
+        echo ""
+    fi
+
+    cat <<EOF
 
 ## 伏笔管理
 

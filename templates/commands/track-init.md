@@ -50,6 +50,7 @@ scripts:
          "status": "active",
          "currentNode": "[起点]",
          "completedNodes": [],
+      "completedNodeEvidence": {},
          "upcomingNodes": "[从交汇点和章节规划读取]"
        },
        "subplots": [

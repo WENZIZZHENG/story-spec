@@ -16,6 +16,7 @@
       "status": "active",
       "currentNode": "[当前节点]",
       "completedNodes": [],
+      "completedNodeEvidence": {},
       "upcomingNodes": [],
       "plannedClimax": {
         "chapter": null,

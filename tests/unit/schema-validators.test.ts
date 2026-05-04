@@ -45,6 +45,52 @@ describe('schema validators', () => {
     ]);
   });
 
+  it('keeps completedNodes as a string array and accepts optional evidence旁路字段', () => {
+    expect(validateTrackingDocument({
+      currentState: {},
+      plotlines: {
+        main: {
+          completedNodes: ['node-001', 'node-002'],
+          completedNodeEvidence: {
+            'node-001': 'stories/demo/content/chapter-001.md',
+            'node-002': 'stories/demo/content/chapter-002.md'
+          }
+        }
+      }
+    }, 'plot-tracker.json')).toEqual([]);
+
+    expect(validateTrackingDocument({
+      currentState: {},
+      plotlines: {
+        main: {
+          completedNodes: [
+            { id: 'node-001', evidencePath: 'stories/demo/content/chapter-001.md' }
+          ]
+        }
+      }
+    }, 'plot-tracker.json')).toEqual(expect.arrayContaining([
+      expect.objectContaining({
+        code: 'INVALID_TRACKING_DOCUMENT',
+        path: 'plot-tracker.json#plotlines.main.completedNodes[0]'
+      })
+    ]));
+
+    expect(validateTrackingDocument({
+      currentState: {},
+      plotlines: {
+        main: {
+          completedNodes: ['node-001'],
+          completedNodeEvidence: ['stories/demo/content/chapter-001.md']
+        }
+      }
+    }, 'plot-tracker.json')).toEqual(expect.arrayContaining([
+      expect.objectContaining({
+        code: 'INVALID_TRACKING_DOCUMENT',
+        path: 'plot-tracker.json#plotlines.main.completedNodeEvidence'
+      })
+    ]));
+  });
+
   it('validates slow-burn relationship tracking axes when present', () => {
     expect(validateTrackingDocument({
       relationshipArcs: [

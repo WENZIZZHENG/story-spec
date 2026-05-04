@@ -129,6 +129,57 @@ describe('story onboarding', () => {
     expect(rendered).toContain('storyspec interview 星尘驿站 --focus stage --premise "退休星舰导航员在宇宙边境开一间给迷路灵魂和破损飞船歇脚的驿站。"');
   });
 
+  it('returns stable natural-language material entrypoints in next JSON results', async () => {
+    const { projectRoot, fileSystem } = await createProject();
+    await createStoryIdea({
+      projectRoot,
+      fileSystem,
+      name: '素材入口',
+      idea: '一个退休调查员收到旧案卷宗，里面夹着一张不会褪色的车票。'
+    });
+
+    const result = await getStoryNext({
+      projectRoot,
+      fileSystem,
+      story: '素材入口'
+    });
+
+    expect(result.sourceMaterialEntrypoints.map(entry => entry.id)).toEqual([
+      'longform-material',
+      'short-idea',
+      'table-material',
+      'casual-chat'
+    ]);
+    expect(result.sourceMaterialEntrypoints).toEqual([
+      expect.objectContaining({
+        id: 'longform-material',
+        label: '我有长文资料',
+        recommendedCommand: expect.stringContaining('storyspec interview 素材入口'),
+        copyableCommand: expect.stringContaining('storyspec interview 素材入口'),
+        inputGuidance: expect.stringContaining('500-3000 字')
+      }),
+      expect.objectContaining({
+        id: 'short-idea',
+        label: '我只有一句灵感',
+        inputGuidance: expect.stringContaining('20-200 字')
+      }),
+      expect.objectContaining({
+        id: 'table-material',
+        label: '我有表格资料',
+        inputGuidance: expect.stringContaining('表格会保守作为候选')
+      }),
+      expect.objectContaining({
+        id: 'casual-chat',
+        label: '我想先随便聊聊',
+        inputGuidance: expect.stringContaining('待澄清不是导入失败')
+      })
+    ]);
+    expect(result.sourceMaterialEntrypoints.every(entry =>
+      entry.description.length > 0
+      && entry.recommendedCommand === entry.copyableCommand
+    )).toBe(true);
+  });
+
   it('renders next navigation as a concise default view with one primary command', async () => {
     const { projectRoot, fileSystem } = await createProject();
     await createStoryIdea({
@@ -145,13 +196,23 @@ describe('story onboarding', () => {
     });
     const rendered = renderStoryNext(result);
 
+    expect(rendered).toContain('先选你手里的素材：');
+    expect(rendered).toContain('我有长文资料');
+    expect(rendered).toContain('首轮建议 500-3000 字');
+    expect(rendered).toContain('我只有一句灵感');
+    expect(rendered).toContain('20-200 字');
+    expect(rendered).toContain('我有表格资料');
+    expect(rendered).toContain('表格会保守作为候选');
+    expect(rendered).toContain('我想先随便聊聊');
+    expect(rendered).toContain('待澄清不是导入失败');
     expect(rendered).toContain('下一步复制这条：');
     expect(rendered).toContain(result.actions[0].copyableCommand);
     expect(rendered).toContain('为什么：');
     expect(rendered).toContain('也可以从这里继续：');
     expect(rendered).toContain('storyspec next 编程施法 --verbose');
     expect(rendered).toContain('storyspec next 编程施法 --modes');
-    expect(rendered.split('\n').length).toBeLessThanOrEqual(24);
+    expect(rendered.indexOf('先选你手里的素材：')).toBeLessThan(rendered.indexOf('下一步复制这条：'));
+    expect(rendered.split('\n').length).toBeLessThanOrEqual(34);
     expect(rendered).not.toContain('今日创作模式');
     expect(rendered).not.toContain('最小快乐闭环');
     expect(rendered).not.toContain('有趣选择');

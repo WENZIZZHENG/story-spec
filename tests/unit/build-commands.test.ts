@@ -55,6 +55,20 @@ scripts:
 `);
   await writeFile(path.join(rootDir, 'templates', 'commands', 'write.prompt.md'), `Input: $ARGUMENTS
 Agent: __AGENT__
+## 任务边界
+
+- 只执行状态为 \`pending\` 或用户明确指定的写作任务。
+- 如果任务标记为 [PLAN-ONLY]，停止正文写作，先提示补充规划或澄清。
+- 写章前先输出 3-6 条 scene beat 或等价方向预览，beat 只是方向预览，不是已完成正文。
+- 资料不足时，先列出缺失上下文，不得编造正典事实。
+- 写作必须经过 preview / confirm / apply，不得跳过预览直接修改正文，也不得修改未授权文件。
+
+## 写作流程
+
+1. 将选中任务标记为 in_progress。
+2. 先输出 3-6 条 scene beat 或等价方向预览。
+3. 长章节必须分块输出。
+4. 收尾时单独给出摘要，必须包含正文路径、建议或已执行验证、tracking 待更新/待确认、next action。
 Run {SCRIPT}
 `);
 
@@ -129,6 +143,10 @@ describe('buildCommandArtifacts', () => {
     expect(codexSpecPrompt).not.toMatch(/^---/);
     expect(codexSpecPrompt).toContain('Agent: codex');
     expect(codexSpecPrompt).toContain('.specify/scripts/bash/check-writing-state.sh');
+    expect(codexSpecPrompt).toContain('任务边界');
+    expect(codexSpecPrompt).toContain('3-6 条 scene beat');
+    expect(codexSpecPrompt).toContain('长章节必须分块输出');
+    expect(codexSpecPrompt).toContain('收尾时单独给出摘要');
 
     const geminiPrompt = await readFile(path.join(outDir, 'gemini', '.gemini', 'commands', 'storyspec', 'plan.toml'), 'utf-8');
     expect(geminiPrompt).toContain('description = "Plan story"');
@@ -138,6 +156,10 @@ describe('buildCommandArtifacts', () => {
     expect(geminiSpecPrompt).toContain('description = "Write chapter from tasks"');
     expect(geminiSpecPrompt).toContain('Input: {{args}}');
     expect(geminiSpecPrompt).toContain('.specify/scripts/bash/check-writing-state.sh');
+    expect(geminiSpecPrompt).toContain('任务边界');
+    expect(geminiSpecPrompt).toContain('3-6 条 scene beat');
+    expect(geminiSpecPrompt).toContain('长章节必须分块输出');
+    expect(geminiSpecPrompt).toContain('收尾时单独给出摘要');
 
     await expect(exists(path.join(outDir, 'codex', '.specify', 'memory', 'constitution.md'))).resolves.toBe(true);
     await expect(exists(path.join(outDir, 'codex', '.specify', 'scripts', 'bash', 'plan-story.sh'))).resolves.toBe(true);
@@ -205,6 +227,10 @@ describe('buildCommandArtifacts', () => {
     expect(genericCommand).toContain('## 降级方案');
     expect(genericCommand).not.toContain('.specify/scripts/bash/plan-story.sh');
     expect(genericCommand).toContain('当前 agent 不支持 shell');
+    expect(genericSpecCommand).toContain('任务边界');
+    expect(genericSpecCommand).toContain('3-6 条 scene beat');
+    expect(genericSpecCommand).toContain('长章节必须分块输出');
+    expect(genericSpecCommand).toContain('收尾时单独给出摘要');
   });
 
   it('generates read-only Continue check prompts', async () => {

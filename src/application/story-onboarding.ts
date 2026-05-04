@@ -147,6 +147,21 @@ export interface StoryTodayCreationMode {
   responseOptions: string[];
 }
 
+export type StorySourceMaterialEntrypointId =
+  | 'longform-material'
+  | 'short-idea'
+  | 'table-material'
+  | 'casual-chat';
+
+export interface StorySourceMaterialEntrypoint {
+  id: StorySourceMaterialEntrypointId;
+  label: string;
+  description: string;
+  recommendedCommand: string;
+  copyableCommand: string;
+  inputGuidance: string;
+}
+
 export interface StoryMinimumFunLoop {
   steps: string[];
   planGate: string;
@@ -162,6 +177,7 @@ export interface StoryNextResult {
   pendingQuestions: string[];
   creationModes: StoryCreationModeOption[];
   todayCreationModes: StoryTodayCreationMode[];
+  sourceMaterialEntrypoints: StorySourceMaterialEntrypoint[];
   minimumFunLoop: StoryMinimumFunLoop;
   coCreationEntrypoints: StoryCoCreationEntrypoint[];
   activeBranches: ActiveBranchSummary[];
@@ -556,6 +572,53 @@ const buildTodayCreationModes = (story: string, premise: string): StoryTodayCrea
     responseOptions: [...mode.responseOptions]
   }));
 
+const buildSourceMaterialEntrypoints = (
+  story: string,
+  premise: string
+): StorySourceMaterialEntrypoint[] => {
+  const premiseArgument = premise || '把你的原始素材粘贴在这里';
+  const command = (focus: StoryCoCreationEntrypointId): string =>
+    buildInterviewCommand(story, {
+      focus,
+      premise: premiseArgument
+    });
+
+  return [
+    {
+      id: 'longform-material',
+      label: '我有长文资料',
+      description: '适合已有设定片段、人物小传、世界观说明、旧稿摘要或混杂笔记。',
+      recommendedCommand: command('world'),
+      copyableCommand: command('world'),
+      inputGuidance: '长文首轮建议 500-3000 字，先粘最能代表故事方向的一段；超长资料建议分段输入，系统会先提炼候选和待澄清点。'
+    },
+    {
+      id: 'short-idea',
+      label: '我只有一句灵感',
+      description: '适合一句话脑洞、题材组合、主角钩子或一个还没有展开的场面。',
+      recommendedCommand: command('protagonist'),
+      copyableCommand: command('protagonist'),
+      inputGuidance: '一句灵感可以 20-200 字，先保留你的原话；信息少也没关系，后续问题会把它慢慢变成可选择的故事方向。'
+    },
+    {
+      id: 'table-material',
+      label: '我有表格资料',
+      description: '适合 Markdown 表格、角色表、势力表、章节表或资料清单。',
+      recommendedCommand: command('faction'),
+      copyableCommand: command('faction'),
+      inputGuidance: '表格会保守作为候选：先识别列名、未识别列和字段映射建议，未确认前不会自动写入正典或 specification。'
+    },
+    {
+      id: 'casual-chat',
+      label: '我想先随便聊聊',
+      description: '适合还不想整理素材，只想让系统用低负担问题陪你摸清方向。',
+      recommendedCommand: command('scene'),
+      copyableCommand: command('scene'),
+      inputGuidance: '可以从零散想法开始；待澄清不是导入失败，只是把不确定内容留在候选区，等你确认、改写、拒绝或稍后。'
+    }
+  ];
+};
+
 const buildMinimumFunLoop = (): StoryMinimumFunLoop => ({
   steps: [
     '选择一个今日创作模式',
@@ -758,6 +821,7 @@ export const getStoryNext = async (
     ],
     creationModes: buildCreationModes(story.name, story.stage, coreElements),
     todayCreationModes: buildTodayCreationModes(story.name, ideaPremise),
+    sourceMaterialEntrypoints: buildSourceMaterialEntrypoints(story.name, ideaPremise),
     minimumFunLoop: buildMinimumFunLoop(),
     coCreationEntrypoints: buildCoCreationEntrypoints(story.name, story.stage, coreElements, ideaText, ideaPremise),
     activeBranches,
@@ -803,6 +867,11 @@ const renderStoryNextSummary = (result: StoryNextResult): string => {
     '',
     `故事：${result.story}`,
     `阶段：${result.stage}`,
+    '',
+    '先选你手里的素材：',
+    ...result.sourceMaterialEntrypoints.map(item =>
+      `- ${item.label}：${item.inputGuidance} 可复制：${item.copyableCommand}`
+    ),
     '',
     '下一步复制这条：',
     primaryAction ? `  ${primaryAction.copyableCommand}` : '  storyspec interview <故事名>',

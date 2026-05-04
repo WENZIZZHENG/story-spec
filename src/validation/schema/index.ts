@@ -44,6 +44,11 @@ interface RelationshipTurningPointLike {
   evidencePath?: unknown;
 }
 
+interface PlotlineLike {
+  completedNodes?: unknown;
+  completedNodeEvidence?: unknown;
+}
+
 const VALID_COMMAND_PREFIXES = new Set(['/', '/storyspec.', '/storyspec:', '/storyspec-']);
 const VALID_TASK_STATUSES = new Set<WritingTaskStatus>(['todo', 'done']);
 const VALID_TASK_PRIORITIES = new Set<WritingTaskPriority>(['P0', 'P1', 'P2', 'P3', 'PX']);
@@ -104,9 +109,54 @@ export const validateTrackingDocument = (document: unknown, filePath: string): V
   }
 
   const issues: ValidationIssue[] = [];
+  const validatePlotline = (plotline: PlotlineLike, pathPrefix: string) => {
+    if (plotline.completedNodes !== undefined) {
+      if (!Array.isArray(plotline.completedNodes)) {
+        issues.push(issue('INVALID_TRACKING_DOCUMENT', `${pathPrefix}.completedNodes`, 'completedNodes 必须是字符串数组'));
+      } else {
+        plotline.completedNodes.forEach((node, index) => {
+          if (!isNonEmptyString(node)) {
+            issues.push(issue('INVALID_TRACKING_DOCUMENT', `${pathPrefix}.completedNodes[${index}]`, 'completedNodes 项必须是字符串'));
+          }
+        });
+      }
+    }
+
+    if (plotline.completedNodeEvidence !== undefined) {
+      if (!isRecord(plotline.completedNodeEvidence)) {
+        issues.push(issue('INVALID_TRACKING_DOCUMENT', `${pathPrefix}.completedNodeEvidence`, 'completedNodeEvidence 必须是对象'));
+      } else {
+        Object.entries(plotline.completedNodeEvidence).forEach(([nodeId, evidencePath]) => {
+          if (!isNonEmptyString(nodeId)) {
+            issues.push(issue('INVALID_TRACKING_DOCUMENT', `${pathPrefix}.completedNodeEvidence`, 'completedNodeEvidence 的键必须是非空字符串'));
+          }
+          if (!isNonEmptyString(evidencePath)) {
+            issues.push(issue('INVALID_TRACKING_DOCUMENT', `${pathPrefix}.completedNodeEvidence.${nodeId}`, 'completedNodeEvidence 的值必须是字符串路径'));
+          }
+        });
+      }
+    }
+  };
+
   const relationshipArcs = document.relationshipArcs;
   if (!Array.isArray(relationshipArcs)) {
+    if (isRecord(document.plotlines)) {
+      Object.entries(document.plotlines).forEach(([plotlineName, plotline]) => {
+        if (isRecord(plotline)) {
+          validatePlotline(plotline as PlotlineLike, `${filePath}#plotlines.${plotlineName}`);
+        }
+      });
+    }
+
     return issues;
+  }
+
+  if (isRecord(document.plotlines)) {
+    Object.entries(document.plotlines).forEach(([plotlineName, plotline]) => {
+      if (isRecord(plotline)) {
+        validatePlotline(plotline as PlotlineLike, `${filePath}#plotlines.${plotlineName}`);
+      }
+    });
   }
 
   relationshipArcs.forEach((arc: RelationshipArcLike, index) => {

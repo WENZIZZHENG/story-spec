@@ -81,6 +81,9 @@ scripts:
 - 作者画像不能覆盖当前任务、Scene Card、clarifications 或正文证据；如果画像偏好与当前故事明确回答冲突，优先服从当前故事。
 - 写正文前必须存在目标章节或目标 scene 的 Scene Card；没有时先运行 `storyspec scene:init <story> --id <scene-id>` 或输出 Scene Card preview。
 - Scene Card 必须通过写作门禁：`plotThread`、`readerPromise`、`relationshipChange`、`worldReveal`、`emotionalBeat`、`endingHook`、`successCriteria` 都要可读。
+- 写章前必须先输出 3-6 条 scene beat 或等价章节方向预览；beat 只是方向预览，不是已完成正文。
+- 资料不足时，beat 和后续正文都要先列出缺失上下文，不得编造正典事实。
+- 写作必须走 preview / confirm / apply 流程，不允许跳过预览直接落正文，也不允许修改未授权文件。
 
 ### 2. 验证前置条件
 - 检查相关依赖任务是否完成
@@ -224,10 +227,9 @@ scripts:
 ---
 
 ### 5. 根据计划创作内容：
-   - **开场**：吸引读者，承接前文
-   - **发展**：推进情节，深化人物
-   - **转折**：制造冲突或悬念
-   - **收尾**：适当收束，引出下文
+   - **阶段 1 - 计划 / beat**：先给出 3-6 条 scene beat 或等价方向预览，确认本章准备写什么、打算怎么推进。
+   - **阶段 2 - 正文块**：长章节必须分块输出，按自然段或小节逐段推进，不要一次性混写成不可辨认的大段。
+   - **阶段 3 - 收尾摘要**：正文结束后单独给出收尾摘要，说明正文路径、建议或已执行验证、tracking 待更新/待确认项、next action。
 
 ### 6. 质量自检
 
@@ -356,6 +358,7 @@ scripts:
 - 记录完成时间和字数
 - 如本章建立、推进或兑现 promise，更新 `spec/tracking/promises.json` 或生成待确认任务草稿。
 - 如本章改变张力/情绪/信息收益/兑现强度，更新 `spec/tracking/tension-curve.json` 或记录待补项。
+- 收尾摘要中要明确正文路径、建议或已执行验证、tracking 待更新/待确认、next action。
 
 ## 写作要点
 

@@ -56,6 +56,14 @@ function Analyze-PlotAlignment {
     Write-Host "✅ 已完成节点：$($completed.Count)个"
     $completed | ForEach-Object { Write-Host "  • $_" }
 
+    if ($main.PSObject.Properties.Name -contains 'completedNodeEvidence' -and $main.completedNodeEvidence -is [pscustomobject] -and $main.completedNodeEvidence.PSObject.Properties.Count -gt 0) {
+      Write-Host ""
+      Write-Host "📎 节点证据"
+      $main.completedNodeEvidence.PSObject.Properties | ForEach-Object {
+        Write-Host ("  • " + $_.Name + " -> " + $_.Value)
+      }
+    }
+
     $upcoming = @($main.upcomingNodes)
     if ($upcoming.Count -gt 0) {
       Write-Host ""

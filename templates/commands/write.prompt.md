@@ -16,19 +16,24 @@
 - 如果任务涉及高风险内容，只处理剧情功能、人物动机、同意边界、后果和任务标注，不扩写未授权内容。
 - 写正文前必须找到目标章节或目标 scene 的 Scene Card；没有 Scene Card 时先输出 Scene Card preview，不直接写正文。
 - Scene Card 必须具备 `plotThread`、`readerPromise`、`relationshipChange`、`worldReveal`、`emotionalBeat`、`endingHook`、`successCriteria`；缺任一项时先补卡并等待作者确认。
+- 写章前先输出 3-6 条 scene beat 或等价方向预览，beat 只是方向预览，不是已完成正文。
+- 资料不足时，先列出缺失上下文，不得编造正典事实。
+- 写作必须经过 preview / confirm / apply，不得跳过预览直接修改正文，也不得修改未授权文件。
 
 ## 写作流程
 
 1. 将选中任务标记为 `in_progress`。
 2. 读取宪法、作者画像（如有）、故事规格、创作计划、任务清单、tracking、World Bible、Canon Ledger、Entity Graph、Scene Cards、VoiceFingerprint 与知识库。
 3. 先按 Scene Card 确认 sceneGoal、conflict、outcome、plotThread、readerPromise、relationshipChange、worldReveal、emotionalBeat、endingHook、successCriteria；未通过时停止正文写作。
-4. 明确本次章节的目标、冲突、人物变化、场景限制和字数要求。
-5. 写入 `stories/*/content/**` 中的目标章节文件。
-6. 更新相关 `spec/tracking/**`，至少覆盖角色状态、关系变化、剧情进度和时间线。
-7. 写完后只生成待确认 canon fact 或 propagation debt；不要自动重写既有正文。
-8. 如 scene draftPath 或 graph evidencePaths 发生变化，只更新显式引用和 `spec/graph/indexes.json`，不要用 AI 推断补 graph facts。
-9. 涉及角色对白时，先读取相关 `spec/voice/**`，按 VoiceFingerprint 控制句长、称呼、禁用词和冲突表达。
-10. 将任务状态更新为 `completed`，记录完成时间、章节路径和字数。
+4. 先输出 3-6 条 scene beat 或等价方向预览，确认本次章节的目标、冲突、人物变化、场景限制和字数要求。
+5. 正文按分块推进，长章节必须拆成多个阶段块输出，不要一次性混写成无法扫描的大段。
+6. 写入 `stories/*/content/**` 中的目标章节文件。
+7. 更新相关 `spec/tracking/**`，至少覆盖角色状态、关系变化、剧情进度和时间线。
+8. 写完后只生成待确认 canon fact 或 propagation debt；不要自动重写既有正文。
+9. 如 scene draftPath 或 graph evidencePaths 发生变化，只更新显式引用和 `spec/graph/indexes.json`，不要用 AI 推断补 graph facts。
+10. 涉及角色对白时，先读取相关 `spec/voice/**`，按 VoiceFingerprint 控制句长、称呼、禁用词和冲突表达。
+11. 收尾时单独给出摘要，必须包含正文路径、建议或已执行验证、tracking 待更新/待确认、next action。
+12. 将任务状态更新为 `completed`，记录完成时间、章节路径和字数。
 
 ## 写作要求
 
@@ -38,6 +43,7 @@
 - 场景转换使用空行自然分隔。
 - 优先使用具体行动、对话和可见细节表达人物状态，避免解释式总结。
 - 字数统计必须按中文字符语境处理，不使用 `wc -w` 作为中文字数依据。
+- 收尾摘要必须包含正文路径、建议或已执行验证、tracking 待更新/待确认、next action。
 
 ## 完成报告
 

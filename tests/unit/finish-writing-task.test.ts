@@ -66,6 +66,22 @@ draftPath: content/chapter-001.md
   return { projectRoot, fileSystem, storyPath, tasksPath };
 };
 
+const createProjectWithTasksMarkdown = async (tasksMarkdown: string) => {
+  const projectRoot = path.join(os.tmpdir(), 'memory-novel-finish-writing-task');
+  const fileSystem = new MemoryFileSystem(projectRoot);
+  const storyPath = path.join(projectRoot, 'stories', 'demo');
+  const tasksPath = path.join(storyPath, 'tasks.md');
+
+  await fileSystem.writeJson(path.join(projectRoot, 'spec', 'graph', 'entities.json'), { entities: [] });
+  await fileSystem.writeJson(path.join(projectRoot, 'spec', 'graph', 'edges.json'), { edges: [] });
+  await fileSystem.writeFile(path.join(storyPath, 'specification.md'), '# spec');
+  await fileSystem.writeFile(path.join(storyPath, 'creative-plan.md'), '# plan');
+  await fileSystem.writeFile(path.join(storyPath, 'content', 'chapter-001.md'), '# chapter-001');
+  await fileSystem.writeFile(tasksPath, tasksMarkdown);
+
+  return { projectRoot, fileSystem, storyPath, tasksPath };
+};
+
 describe('finishWritingTask', () => {
   it('previews a writing task finish without changing files', async () => {
     const { projectRoot, fileSystem, tasksPath } = await createProject();
@@ -96,6 +112,28 @@ describe('finishWritingTask', () => {
     ]);
     expect(renderFinishWritingTaskSummary(result)).toContain('预览模式');
     expect(await fileSystem.readFile(tasksPath)).toBe(before);
+  });
+
+  it('recognizes nested volume, short path and windows-style related draft paths in stable order', async () => {
+    const { projectRoot, fileSystem } = await createProjectWithTasksMarkdown(`\n# tasks\n\n- [ ] [P0] [WRITE-READY] **T002** - 起草第二章\n  - **任务类型**：正文写作\n  - **核心任务**：完成中段推进\n  - **必须读取**：\n    - \`content/volume1/chapter-001.md\`\n    - \`chapter-001.md\`\n  - **允许修改**：\n    - \`content/volume-1/chapter-001.md\`\n    - \`stories/demo/content/volume1/chapter-002.md\`\n    - \`content/chapter-001.md\`\n  - **依赖**：无\n  - **输出**：\n    - \`content/volume1/chapter-001.md\`\n    - \`chapter-001.md\`\n    - \`content/volume-1/chapter-001.md\`\n    - \`stories\\\\demo\\\\content\\\\chapter-003.md\`\n`);
+
+    const result = await finishWritingTask({
+      projectRoot,
+      fileSystem,
+      story: 'demo',
+      taskId: 'T002',
+      apply: false,
+      now: () => new Date('2026-05-04T00:00:00.000Z')
+    });
+
+    expect(result.draftPaths).toEqual([
+      'content/volume1/chapter-001.md',
+      'chapter-001.md',
+      'content/volume-1/chapter-001.md',
+      'stories/demo/content/chapter-003.md',
+      'stories/demo/content/volume1/chapter-002.md',
+      'content/chapter-001.md'
+    ]);
   });
 
   it('marks the task done and refreshes the task board when applied', async () => {
@@ -195,5 +233,33 @@ describe('finishWritingTask', () => {
 
     expect(todoAgain.changed).toBe(false);
     expect(todoAgain.updatedFiles).toEqual([]);
+  });
+
+  it('renders a single-screen finish summary with missing values shown as 无', () => {
+    const summary = renderFinishWritingTaskSummary({
+      projectRoot: '/project',
+      story: 'demo',
+      storyPath: '/project/stories/demo',
+      applied: false,
+      task: {
+        id: 'T001',
+        title: '起草第一章',
+        statusBefore: 'todo',
+        statusAfter: 'done',
+        tasksPath: '/project/stories/demo/tasks.md',
+        draftPaths: []
+      },
+      draftPaths: [],
+      verificationCommands: [],
+      updatedFiles: []
+    });
+
+    expect(summary).toContain('故事：demo');
+    expect(summary).toContain('任务：T001 起草第一章');
+    expect(summary).toContain('状态：todo -> done');
+    expect(summary).toContain('正文/草稿路径：无');
+    expect(summary).toContain('验证命令：无');
+    expect(summary).toContain('更新文件：无');
+    expect(summary).toContain('预览模式');
   });
 });

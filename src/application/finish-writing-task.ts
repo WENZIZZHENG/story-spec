@@ -53,7 +53,38 @@ export interface SetWritingTaskStatusResult {
   updatedFiles: string[];
 }
 
-const normalizeToPosix = (value: string): string => value.split(path.sep).join('/');
+const normalizeToPosix = (value: string): string => value.replace(/\\/g, '/').replace(/\/+/g, '/');
+
+const normalizeDraftPath = (value: string): string => normalizeToPosix(value.trim());
+
+const uniqueStable = (values: string[]): string[] => {
+  const seen = new Set<string>();
+  const result: string[] = [];
+
+  for (const value of values) {
+    if (seen.has(value)) {
+      continue;
+    }
+
+    seen.add(value);
+    result.push(value);
+  }
+
+  return result;
+};
+
+const isRelatedDraftPath = (value: string): boolean => {
+  const normalized = normalizeDraftPath(value);
+  if (!normalized.toLowerCase().endsWith('.md')) {
+    return false;
+  }
+
+  if (!normalized.includes('/')) {
+    return /^chapter-[^/]+\.md$/i.test(normalized);
+  }
+
+  return /(?:^|\/)content\/(?:volume-?\d+\/)?chapter-[^/]+\.md$/i.test(normalized);
+};
 
 const taskBoardOutputPath = (storyPath: string): string => path.join(storyPath, 'task-board.json');
 
@@ -99,8 +130,9 @@ const relatedDraftPaths = (task: WritingTask): string[] => [
   ...task.allowedWrites,
   ...task.requiredReads
 ]
-  .map(item => normalizeToPosix(item))
-  .filter(item => /content\/chapter-\d+\.md$/.test(item))
+  .map(item => normalizeDraftPath(item))
+  .filter(isRelatedDraftPath)
+  .filter(item => item.length > 0)
   .filter((item, index, items) => items.indexOf(item) === index);
 
 export const finishWritingTask = async (
@@ -209,6 +241,8 @@ export const renderFinishWritingTaskSummary = (result: FinishWritingTaskResult):
   `故事：${result.story}`,
   `任务：${result.task.id} ${result.task.title}`,
   `状态：${result.task.statusBefore} -> ${result.task.statusAfter}`,
-  `草稿：${result.task.draftPaths.length}`,
+  `正文/草稿路径：${result.draftPaths.length > 0 ? result.draftPaths.map(item => `\`${item}\``).join('、') : '无'}`,
+  `验证命令：${result.verificationCommands.length > 0 ? result.verificationCommands.map(item => `\`${item}\``).join('、') : '无'}`,
+  `更新文件：${result.updatedFiles.length > 0 ? result.updatedFiles.map(item => `\`${item}\``).join('、') : '无'}`,
   `模式：${result.applied ? '应用模式' : '预览模式'}`
 ].join('\n');

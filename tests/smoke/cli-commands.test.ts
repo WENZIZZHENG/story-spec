@@ -51,6 +51,7 @@ describe('CLI command modules smoke', () => {
     expect(help).toContain('handoff [options] [story]');
     expect(help).toContain('tasks:board [options] [story]');
     expect(help).toContain('tasks:set-status [options] <taskId>');
+    expect(help).toContain('task:finish [options] <taskId>');
     expect(help).toContain('validate [options]');
     expect(help).toContain('review [options]');
     expect(help).toContain('preset:list [options]');
