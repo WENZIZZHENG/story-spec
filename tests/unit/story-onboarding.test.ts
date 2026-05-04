@@ -5,7 +5,8 @@ import programmingCastingFixture from '../fixtures/co-creation/programming-casti
 import {
   createStoryIdea,
   getStoryNext,
-  renderStoryNext
+  renderStoryNext,
+  STORY_NEXT_ACTION_IDS
 } from '../../src/application/story-onboarding.js';
 import { MemoryFileSystem } from '../helpers/memory-file-system.js';
 
@@ -22,6 +23,25 @@ const createProject = async () => {
 };
 
 describe('story onboarding', () => {
+  it('publishes stable action identifiers for next JSON clients', () => {
+    expect(STORY_NEXT_ACTION_IDS).toEqual([
+      'continue_interview',
+      'review_creative_report',
+      'preview_specification',
+      'preview_plan',
+      'compare_branch',
+      'sample_author_profile',
+      'review_story',
+      'build_context_pack',
+      'validate_project',
+      'check_status',
+      'open_tasks_board',
+      'generate_tasks',
+      'generate_plan',
+      'run_command'
+    ]);
+  });
+
   it('creates only an idea draft and keeps the user premise as original text', async () => {
     const { projectRoot, fileSystem } = await createProject();
 
@@ -94,6 +114,7 @@ describe('story onboarding', () => {
 
     expect(result.stage).toBe('idea');
     expect(result.actions[0]).toMatchObject({
+      action: 'continue_interview',
       command: 'storyspec interview 法术编译纪元 --focus power --premise "异界穿越、编程施法"'
     });
     expect(result.actions.map(action => action.command)).toContain('storyspec preview specify 法术编译纪元');
@@ -153,6 +174,7 @@ describe('story onboarding', () => {
     expect(result.sourceMaterialEntrypoints).toEqual([
       expect.objectContaining({
         id: 'longform-material',
+        action: 'ingest_longform_material',
         label: '我有长文资料',
         recommendedCommand: expect.stringContaining('storyspec interview 素材入口'),
         copyableCommand: expect.stringContaining('storyspec interview 素材入口'),
@@ -160,16 +182,19 @@ describe('story onboarding', () => {
       }),
       expect.objectContaining({
         id: 'short-idea',
+        action: 'start_from_short_idea',
         label: '我只有一句灵感',
         inputGuidance: expect.stringContaining('20-200 字')
       }),
       expect.objectContaining({
         id: 'table-material',
+        action: 'ingest_table_material',
         label: '我有表格资料',
         inputGuidance: expect.stringContaining('表格会保守作为候选')
       }),
       expect.objectContaining({
         id: 'casual-chat',
+        action: 'start_casual_chat',
         label: '我想先随便聊聊',
         inputGuidance: expect.stringContaining('待澄清不是导入失败')
       })
@@ -178,6 +203,7 @@ describe('story onboarding', () => {
       entry.description.length > 0
       && entry.recommendedCommand === entry.copyableCommand
     )).toBe(true);
+    expect(result.sourceMaterialEntrypoints.map(entry => entry.inputGuidance).join('\n')).toContain('示例：');
   });
 
   it('renders next navigation as a concise default view with one primary command', async () => {
@@ -205,13 +231,17 @@ describe('story onboarding', () => {
     expect(rendered).toContain('表格会保守作为候选');
     expect(rendered).toContain('我想先随便聊聊');
     expect(rendered).toContain('待澄清不是导入失败');
-    expect(rendered).toContain('下一步复制这条：');
+    expect(rendered).toContain('可复制命令：');
     expect(rendered).toContain(result.actions[0].copyableCommand);
     expect(rendered).toContain('为什么：');
     expect(rendered).toContain('也可以从这里继续：');
     expect(rendered).toContain('storyspec next 编程施法 --verbose');
     expect(rendered).toContain('storyspec next 编程施法 --modes');
-    expect(rendered.indexOf('先选你手里的素材：')).toBeLessThan(rendered.indexOf('下一步复制这条：'));
+    expect(rendered.indexOf('先选你手里的素材：')).toBeLessThan(rendered.indexOf('可复制命令：'));
+    expect(rendered.slice(
+      rendered.indexOf('先选你手里的素材：'),
+      rendered.indexOf('可复制命令：')
+    )).not.toContain('storyspec ');
     expect(rendered.split('\n').length).toBeLessThanOrEqual(34);
     expect(rendered).not.toContain('今日创作模式');
     expect(rendered).not.toContain('最小快乐闭环');

@@ -91,7 +91,27 @@ export interface GetStoryNextInput {
   story?: string;
 }
 
+export const STORY_NEXT_ACTION_IDS = [
+  'continue_interview',
+  'review_creative_report',
+  'preview_specification',
+  'preview_plan',
+  'compare_branch',
+  'sample_author_profile',
+  'review_story',
+  'build_context_pack',
+  'validate_project',
+  'check_status',
+  'open_tasks_board',
+  'generate_tasks',
+  'generate_plan',
+  'run_command'
+] as const;
+
+export type StoryNextActionId = typeof STORY_NEXT_ACTION_IDS[number];
+
 export interface StoryNextAction {
+  action: StoryNextActionId;
   priority: number;
   command: string;
   copyableCommand: string;
@@ -155,6 +175,7 @@ export type StorySourceMaterialEntrypointId =
 
 export interface StorySourceMaterialEntrypoint {
   id: StorySourceMaterialEntrypointId;
+  action: string;
   label: string;
   description: string;
   recommendedCommand: string;
@@ -277,10 +298,12 @@ export const createStoryIdea = async (
 
 const action = (
   priority: number,
+  actionId: StoryNextActionId,
   command: string,
   reason: string,
   requiresPremise = false
 ): StoryNextAction => ({
+  action: actionId,
   priority,
   command,
   copyableCommand: command,
@@ -586,35 +609,39 @@ const buildSourceMaterialEntrypoints = (
   return [
     {
       id: 'longform-material',
+      action: 'ingest_longform_material',
       label: '我有长文资料',
       description: '适合已有设定片段、人物小传、世界观说明、旧稿摘要或混杂笔记。',
       recommendedCommand: command('world'),
       copyableCommand: command('world'),
-      inputGuidance: '长文首轮建议 500-3000 字，先粘最能代表故事方向的一段；超长资料建议分段输入，系统会先提炼候选和待澄清点。'
+      inputGuidance: '长文首轮建议 500-3000 字，先粘最能代表故事方向的一段；示例：主角小传 + 世界规则 + 第一卷冲突各一段。超长资料建议分段输入，系统会先提炼候选和待澄清点。'
     },
     {
       id: 'short-idea',
+      action: 'start_from_short_idea',
       label: '我只有一句灵感',
       description: '适合一句话脑洞、题材组合、主角钩子或一个还没有展开的场面。',
       recommendedCommand: command('protagonist'),
       copyableCommand: command('protagonist'),
-      inputGuidance: '一句灵感可以 20-200 字，先保留你的原话；信息少也没关系，后续问题会把它慢慢变成可选择的故事方向。'
+      inputGuidance: '一句灵感可以 20-200 字，先保留你的原话；示例：某类主角 + 某个舞台 + 一个关系或爽点钩子。信息少也没关系，后续问题会把它慢慢变成可选择的故事方向。'
     },
     {
       id: 'table-material',
+      action: 'ingest_table_material',
       label: '我有表格资料',
       description: '适合 Markdown 表格、角色表、势力表、章节表或资料清单。',
       recommendedCommand: command('faction'),
       copyableCommand: command('faction'),
-      inputGuidance: '表格会保守作为候选：先识别列名、未识别列和字段映射建议，未确认前不会自动写入正典或 specification。'
+      inputGuidance: '表格会保守作为候选：示例：角色、定位、关系备注、第一场景；先识别列名、未识别列和字段映射建议，未确认前不会自动写入正典或 specification。'
     },
     {
       id: 'casual-chat',
+      action: 'start_casual_chat',
       label: '我想先随便聊聊',
       description: '适合还不想整理素材，只想让系统用低负担问题陪你摸清方向。',
       recommendedCommand: command('scene'),
       copyableCommand: command('scene'),
-      inputGuidance: '可以从零散想法开始；待澄清不是导入失败，只是把不确定内容留在候选区，等你确认、改写、拒绝或稍后。'
+      inputGuidance: '可以从零散想法开始；示例：先说“我想写轻松冒险，但还没想好主角”。待澄清不是导入失败，只是把不确定内容留在候选区，等你确认、改写、拒绝或稍后。'
     }
   ];
 };
@@ -650,18 +677,18 @@ const buildActions = (
     const resumeCommand = deferredItem.resumeCommand.includes('storyspec interview')
       ? `${deferredItem.resumeCommand} --premise ${quoteCliArgument(result.ideaPremise || '一句话创意')}`
       : deferredItem.resumeCommand;
-    actions.push(action(1, resumeCommand, `${deferredItem.question} 曾选择“${deferredItem.answer}”；${deferredItem.trigger}。`, !result.ideaPremise));
+    actions.push(action(1, 'continue_interview', resumeCommand, `${deferredItem.question} 曾选择“${deferredItem.answer}”；${deferredItem.trigger}。`, !result.ideaPremise));
   }
 
   if (result.stage === 'idea') {
-    actions.push(action(1, interviewCommand, interviewReason, interviewRequiresPremise));
-    actions.push(action(2, `storyspec creative:report ${result.story}`, '查看哪些内容仍不能被当作正典。'));
-    actions.push(action(3, `storyspec preview specify ${result.story}`, '生成写入前规格预览，确认后再 apply。'));
+    actions.push(action(1, 'continue_interview', interviewCommand, interviewReason, interviewRequiresPremise));
+    actions.push(action(2, 'review_creative_report', `storyspec creative:report ${result.story}`, '查看哪些内容仍不能被当作正典。'));
+    actions.push(action(3, 'preview_specification', `storyspec preview specify ${result.story}`, '生成写入前规格预览，确认后再 apply。'));
     if (activeBranch) {
-      actions.push(action(2, activeBranch.compareCommand, '比较活跃 what-if 会长成什么小说，再决定是否 promote 或继续探索。'));
+      actions.push(action(2, 'compare_branch', activeBranch.compareCommand, '比较活跃 what-if 会长成什么小说，再决定是否 promote 或继续探索。'));
     }
     if (result.authorProfile.firstUse) {
-      actions.push(action(4, 'storyspec author-profile --init', '首次使用暂无历史画像可回填，可做 2-4 个可跳过偏好采样。'));
+      actions.push(action(4, 'sample_author_profile', 'storyspec author-profile --init', '首次使用暂无历史画像可回填，可做 2-4 个可跳过偏好采样。'));
     }
     return actions;
   }
@@ -672,6 +699,7 @@ const buildActions = (
   ) {
     actions.push(action(
       1,
+      'continue_interview',
       interviewCommand,
       recommendedEntry
         ? `推荐入口：${recommendedEntry.label}。${recommendedEntry.recommendationReason}`
@@ -679,10 +707,10 @@ const buildActions = (
       ,
       interviewRequiresPremise
     ));
-    actions.push(action(2, `storyspec creative:report ${result.story}`, '查看核心要素面板和仍不能进入正典的内容。'));
-    actions.push(action(3, `storyspec preview specify ${result.story}`, '仅生成写入前预览，处理缺口后再 apply。'));
+    actions.push(action(2, 'review_creative_report', `storyspec creative:report ${result.story}`, '查看核心要素面板和仍不能进入正典的内容。'));
+    actions.push(action(3, 'preview_specification', `storyspec preview specify ${result.story}`, '仅生成写入前预览，处理缺口后再 apply。'));
     if (activeBranch) {
-      actions.push(action(2, activeBranch.compareCommand, '比较活跃 what-if 会长成什么小说，再决定是否 promote 或继续探索。'));
+      actions.push(action(2, 'compare_branch', activeBranch.compareCommand, '比较活跃 what-if 会长成什么小说，再决定是否 promote 或继续探索。'));
     }
     return actions;
   }
@@ -690,6 +718,7 @@ const buildActions = (
   if (result.pendingQuestions.length > 0) {
     actions.push(action(
       1,
+      'continue_interview',
       buildInterviewCommand(result.story, { premise: result.ideaPremise || '一句话创意' }),
       '继续回答 required 问题或处理 AI 候选。',
       !result.ideaPremise
@@ -697,27 +726,28 @@ const buildActions = (
   }
 
   if (result.stage === 'interviewing') {
-    actions.push(action(2, `storyspec preview specify ${result.story}`, '用已确认答案生成规格预览，不直接覆盖 specification。'));
-    actions.push(action(3, `storyspec creative:report ${result.story}`, '检查用户确认、AI 候选和漂移风险。'));
+    actions.push(action(2, 'preview_specification', `storyspec preview specify ${result.story}`, '用已确认答案生成规格预览，不直接覆盖 specification。'));
+    actions.push(action(3, 'review_creative_report', `storyspec creative:report ${result.story}`, '检查用户确认、AI 候选和漂移风险。'));
   } else if (result.stage === 'specified') {
-    actions.push(action(1, `storyspec review --panel continuity`, '检查规格是否引用未确认建议或待澄清主题。'));
-    actions.push(action(2, '继续运行平台对应 plan 命令', '规格已存在，下一步应生成创作计划。'));
+    actions.push(action(1, 'review_story', `storyspec review --panel continuity`, '检查规格是否引用未确认建议或待澄清主题。'));
+    actions.push(action(2, 'generate_plan', '继续运行平台对应 plan 命令', '规格已存在，下一步应生成创作计划。'));
   } else if (result.stage === 'planned') {
     const tasksGuidance = buildMissingTasksGuidance(result.story);
-    actions.push(action(1, tasksGuidance.agentCommand, `创作计划已存在，下一步应生成 ${tasksGuidance.targetPath}。${tasksGuidance.summary}`));
-    actions.push(action(2, tasksGuidance.statusCommand, '生成 tasks 后再确认项目阶段和缺口。'));
-    actions.push(action(3, tasksGuidance.boardCommand, 'tasks.md 生成后导出本地看板，检查 WRITE-READY、PLAN-ONLY 和输出路径。'));
+    actions.push(action(1, 'generate_tasks', tasksGuidance.agentCommand, `创作计划已存在，下一步应生成 ${tasksGuidance.targetPath}。${tasksGuidance.summary}`));
+    actions.push(action(2, 'check_status', tasksGuidance.statusCommand, '生成 tasks 后再确认项目阶段和缺口。'));
+    actions.push(action(3, 'open_tasks_board', tasksGuidance.boardCommand, 'tasks.md 生成后导出本地看板，检查 WRITE-READY、PLAN-ONLY 和输出路径。'));
   } else if (result.stage === 'tasked') {
-    actions.push(action(1, `storyspec context:pack ${result.story}`, '任务已存在，先生成上下文包再写作。'));
-    actions.push(action(2, `storyspec review ${result.story}`, '开始写作前做一次 reviewer loop。'));
+    actions.push(action(1, 'build_context_pack', `storyspec context:pack ${result.story}`, '任务已存在，先生成上下文包再写作。'));
+    actions.push(action(2, 'review_story', `storyspec review ${result.story}`, '开始写作前做一次 reviewer loop。'));
   } else {
-    actions.push(action(1, `storyspec review ${result.story}`, '已有正文，优先复核连续性、风格和创作控制权。'));
-    actions.push(action(2, `storyspec validate`, '确认项目结构和写作产物仍可通过校验。'));
+    actions.push(action(1, 'review_story', `storyspec review ${result.story}`, '已有正文，优先复核连续性、风格和创作控制权。'));
+    actions.push(action(2, 'validate_project', `storyspec validate`, '确认项目结构和写作产物仍可通过校验。'));
   }
 
   if (actions.length === 0) {
     actions.push(action(
       1,
+      'continue_interview',
       buildInterviewCommand(result.story, { premise: result.ideaPremise || '一句话创意' }),
       '当前状态不完整，先回到澄清访谈。',
       !result.ideaPremise
@@ -725,7 +755,7 @@ const buildActions = (
   }
 
   if (activeBranch) {
-    actions.push(action(2, activeBranch.compareCommand, '比较活跃 what-if 会长成什么小说，再决定是否 promote 或继续探索。'));
+    actions.push(action(2, 'compare_branch', activeBranch.compareCommand, '比较活跃 what-if 会长成什么小说，再决定是否 promote 或继续探索。'));
   }
 
   return actions.sort((left, right) =>
@@ -870,11 +900,14 @@ const renderStoryNextSummary = (result: StoryNextResult): string => {
     '',
     '先选你手里的素材：',
     ...result.sourceMaterialEntrypoints.map(item =>
-      `- ${item.label}：${item.inputGuidance} 可复制：${item.copyableCommand}`
+      `- ${item.label}：${item.inputGuidance}`
     ),
     '',
-    '下一步复制这条：',
-    primaryAction ? `  ${primaryAction.copyableCommand}` : '  storyspec interview <故事名>',
+    '可复制命令：',
+    ...(primaryAction ? [`- 推荐下一步：${primaryAction.copyableCommand}`] : []),
+    ...result.sourceMaterialEntrypoints.map(item =>
+      `- ${item.label}：${item.copyableCommand}`
+    ),
     '',
     '为什么：',
     primaryAction ? `  ${primaryAction.reason}` : '  当前状态不完整，先回到澄清访谈。',

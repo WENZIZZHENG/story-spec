@@ -101,8 +101,14 @@ export function runProgram(argv: string[]): void {
     console.log('  $ storyspec apply <preview-id> --yes');
     console.log('');
     console.log(chalk.cyan('首次创作主路径:'));
+    console.log('  我有长文资料      先提炼候选和待澄清点，不自动写入正典');
+    console.log('  我只有一句灵感    保存原始灵感，再用低负担问题慢慢展开');
+    console.log('  我有表格资料      先识别列名和字段映射候选，确认后再 apply');
+    console.log('  我想先随便聊聊    选择今日模式，只给候选、回声和下一轮入口');
+    console.log('');
+    console.log(chalk.cyan('常用命令:'));
     console.log('  story:new         保存作者原始灵感，不自动扩写成正典');
-    console.log('  next              选择今天从角色、场景、设定或分支哪里继续');
+    console.log('  next              查看少命令化首屏导航，--verbose 展开完整入口卡');
     console.log('  interview         完成一轮低负担访谈，区分已确认和候选');
     console.log('  core              查看世界观、人物、舞台、能力体系等核心信息缺口');
     console.log('  ingest            吸收长文创作资料，默认先预览再决定是否写入');

@@ -815,11 +815,96 @@ const renderVolumePlanDigest = (
     const participants = item.participants.length > 0 ? item.participants.join(' / ') : '待确认';
     return `  - ${participants} [${item.status}]：${item.dynamic}；冲突：${item.conflict}`;
   }),
+  '',
+  ...renderCharacterArcTable(result.volumePlanDigest),
+  '',
+  ...renderPlotCurveTable(result.volumePlanDigest),
+  '',
+  ...renderVolumePlanMermaid(result.volumePlanDigest),
+  '',
+  ...renderRelationshipMermaid(result.volumePlanDigest),
+  '',
   '- 补齐建议：',
   ...(result.volumePlanDigest.nextActions.length > 0
     ? result.volumePlanDigest.nextActions.map(item => `  - ${item}`)
     : ['  - 暂无。'])
 ];
+
+const hasDigestGap = (digest: CreativeReportVolumePlanDigest): boolean =>
+  !digest.available
+  || digest.oneSentenceGoal.status !== 'confirmed'
+  || digest.threeActSummary.some(item => item.status === 'missing' || item.status === 'needs-confirmation')
+  || digest.chapterRhythm.some(item => item.status === 'missing' || item.status === 'needs-confirmation')
+  || digest.characterArcs.some(item => item.status === 'missing' || item.status === 'needs-confirmation')
+  || digest.plotCurve.some(item => item.status === 'missing' || item.status === 'needs-confirmation')
+  || digest.relationships.some(item => item.status === 'missing' || item.status === 'needs-confirmation');
+
+const renderVolumePlanMermaid = (digest: CreativeReportVolumePlanDigest): string[] => [
+  '卷计划视图：',
+  '```mermaid',
+  'flowchart LR',
+  '  A1["第一幕 1-3"] --> A2["第二幕 4-9"]',
+  '  A2 --> A3["第三幕 10-12"]',
+  '  A3 --> C["角色弧线"]',
+  '  A3 --> P["剧情起伏"]',
+  '  A3 --> R["人物关系"]',
+  ...(hasDigestGap(digest)
+    ? ['  R --> 缺口["待确认 / 资料不足"]']
+    : []),
+  '```'
+];
+
+const markdownCell = (value: string): string =>
+  (value || '资料不足').replace(/\|/g, '/').replace(/\r?\n/g, ' ').trim() || '资料不足';
+
+const evidenceText = (evidence: string[]): string =>
+  evidence.length > 0 ? evidence.join('；') : '资料不足';
+
+const renderCharacterArcTable = (digest: CreativeReportVolumePlanDigest): string[] => [
+  '角色弧线表：',
+  '| 角色 | 状态 | 起点 | 转折 | 终点 | 证据 |',
+  '| --- | --- | --- | --- | --- | --- |',
+  ...digest.characterArcs.map(item =>
+    `| ${markdownCell(item.character)} | ${item.status} | ${markdownCell(item.start)} | ${markdownCell(item.turn)} | ${markdownCell(item.end)} | ${markdownCell(evidenceText(item.evidence))} |`
+  )
+];
+
+const renderPlotCurveTable = (digest: CreativeReportVolumePlanDigest): string[] => [
+  '剧情起伏表：',
+  '| 章节范围 | 状态 | 张力 | 回报/释放 | 证据 |',
+  '| --- | --- | --- | --- | --- |',
+  ...digest.plotCurve.map(item =>
+    `| ${markdownCell(item.chapterRange)} | ${item.status} | ${markdownCell(item.tension)} | ${markdownCell(item.payoff)} | ${markdownCell(evidenceText(item.evidence))} |`
+  )
+];
+
+const mermaidLabel = (value: string): string =>
+  (value || '资料不足').replace(/"/g, '\\"').replace(/\r?\n/g, ' ').trim() || '资料不足';
+
+const renderRelationshipMermaid = (digest: CreativeReportVolumePlanDigest): string[] => {
+  const relationships = digest.relationships.flatMap((item, index) => {
+    if (item.participants.length === 0) {
+      return ['  缺口["人物关系待确认"]'];
+    }
+
+    const id = `Rel${index + 1}`;
+    const label = item.participants.join(' / ');
+    return [
+      `  ${id}["${mermaidLabel(label)}"]`,
+      `  ${id} --> ${id}Status["${item.status}"]`,
+      `  ${id} --> ${id}Dynamic["${mermaidLabel(item.dynamic)}"]`,
+      `  ${id} --> ${id}Conflict["冲突：${mermaidLabel(item.conflict)}"]`
+    ];
+  });
+
+  return [
+    '人物关系图：',
+    '```mermaid',
+    'graph LR',
+    ...relationships,
+    '```'
+  ];
+};
 
 export const renderCreativeReport = (result: CreativeReportResult): string => [
   'StorySpec 创作控制权报告',

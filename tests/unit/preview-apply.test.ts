@@ -311,6 +311,105 @@ describe('preview apply', () => {
     await expect(fileSystem.readFile(path.join(storyPath, 'specification.md'))).resolves.not.toContain('本文件由 preview 生成');
   });
 
+  it('keeps unconfirmed longform, table, and AI suggestions out of confirmed specification writes', async () => {
+    const projectRoot = path.join(os.tmpdir(), 'memory-novel-preview-unconfirmed-candidates');
+    const fileSystem = new MemoryFileSystem(projectRoot);
+    const storyPath = path.join(projectRoot, 'stories', 'demo');
+    await fileSystem.writeFile(path.join(storyPath, 'idea.md'), '# demo');
+    await fileSystem.writeJson(path.join(storyPath, 'clarifications.json'), {
+      schemaVersion: '1.0',
+      story: 'demo',
+      premise: '异界穿越、编程施法',
+      createdAt: '2026-05-03T00:00:00.000Z',
+      updatedAt: '2026-05-03T00:00:00.000Z',
+      questions: [
+        {
+          id: 'core.premise',
+          stage: 'specify',
+          topic: 'premise',
+          question: '故事最想保留什么？',
+          whyItMatters: '决定创作核心。',
+          type: 'textarea',
+          required: true,
+          options: [],
+          exampleAnswers: ['轻松冒险。'],
+          dependsOn: []
+        },
+        {
+          id: 'core.protagonist',
+          stage: 'specify',
+          topic: 'protagonist',
+          question: '主角是谁？',
+          whyItMatters: '决定人物弧线。',
+          type: 'textarea',
+          required: false,
+          options: [],
+          exampleAnswers: [],
+          dependsOn: []
+        }
+      ],
+      answers: [
+        {
+          questionId: 'core.premise',
+          answer: '开局是轻松冒险，编程施法只是解决问题的工具。',
+          source: 'user-explicit',
+          confidence: 1,
+          confirmed: true,
+          createdAt: '2026-05-03T00:00:00.000Z',
+          updatedAt: '2026-05-03T00:00:00.000Z'
+        },
+        {
+          questionId: 'core.protagonist',
+          answer: '长文候选：晏无已经能直接重构王国制度。',
+          source: 'user-longform',
+          confidence: 0.55,
+          confirmed: false,
+          createdAt: '2026-05-03T00:00:00.000Z',
+          updatedAt: '2026-05-03T00:00:00.000Z'
+        },
+        {
+          questionId: 'core.protagonist',
+          answer: '表格候选：莉莉丝第一章就成为最终伴侣。',
+          source: 'user-table',
+          confidence: 0.55,
+          confirmed: false,
+          createdAt: '2026-05-03T00:00:00.000Z',
+          updatedAt: '2026-05-03T00:00:00.000Z'
+        },
+        {
+          questionId: 'core.protagonist',
+          answer: 'AI 候选：瑟琳娜应当立刻继承王位。',
+          source: 'ai-suggested',
+          confidence: 0.4,
+          confirmed: false,
+          createdAt: '2026-05-03T00:00:00.000Z',
+          updatedAt: '2026-05-03T00:00:00.000Z'
+        }
+      ]
+    }, { spaces: 2 });
+
+    const preview = await createSpecifyPreview({
+      projectRoot,
+      fileSystem,
+      story: 'demo',
+      now: () => new Date('2026-05-03T12:00:00.000Z')
+    });
+    const content = await fileSystem.readFile(preview.contentPath);
+
+    expect(preview.record.writeSummary.confirmedItems.map(item => item.text).join('\n')).not.toContain('长文候选');
+    expect(preview.record.writeSummary.confirmedItems.map(item => item.text).join('\n')).not.toContain('表格候选');
+    expect(preview.record.writeSummary.confirmedItems.map(item => item.text).join('\n')).not.toContain('AI 候选');
+    await expect(fileSystem.readFile(path.join(storyPath, 'clarifications.json'))).resolves.toContain('"confirmed": false');
+    await expect(fileSystem.readFile(path.join(storyPath, 'clarifications.json'))).resolves.toContain('长文候选');
+    await expect(fileSystem.readFile(path.join(storyPath, 'clarifications.json'))).resolves.toContain('表格候选');
+    await expect(fileSystem.readFile(path.join(storyPath, 'clarifications.json'))).resolves.toContain('AI 候选');
+    expect(content).toContain('开局是轻松冒险');
+    expect(content).not.toContain('长文候选：晏无已经能直接重构王国制度');
+    expect(content).not.toContain('表格候选：莉莉丝第一章就成为最终伴侣');
+    expect(content).not.toContain('AI 候选：瑟琳娜应当立刻继承王位');
+    await expect(fileSystem.pathExists(path.join(storyPath, 'specification.md'))).resolves.toBe(false);
+  });
+
   it('blocks apply when required clarification is deferred', async () => {
     const { projectRoot, fileSystem } = await createProject('稍后决定');
 

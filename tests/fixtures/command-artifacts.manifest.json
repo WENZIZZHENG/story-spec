@@ -168,7 +168,7 @@
     },
     {
       "path": "auggie/.augment/commands/write.md",
-      "sha256": "ee99ea6e6e4a6753fea7b7f3d0597ae8bef7489c11823f4d388a2f91827f48fa",
+      "sha256": "94b098f0a30050bf653483b7fd5ba8cfa98fa49a9fa8b71c2bff44d3658b3a60",
       "commandSource": {
         "command": "write",
         "kind": "command-spec",
@@ -178,7 +178,7 @@
     },
     {
       "path": "auggie/.specify/agent-guides/story-creation-guide.md",
-      "sha256": "74e889411fa82fc297a7a77577a676d3ac942e9e6c1e3b980d76633cf6eafc7b"
+      "sha256": "377680a25ed6fca1631aa9aa66bf1b65e2ec234086fca774c529b9706eb4978b"
     },
     {
       "path": "auggie/.specify/experts/core/character.md",
@@ -775,7 +775,7 @@
     },
     {
       "path": "claude/.claude/commands/storyspec.write.md",
-      "sha256": "b868dbedd9383dd58d48be3ec869f18814295db588aa54ff1a851692310c0e1b",
+      "sha256": "b08ffe954e4bf038de2abaacffa441abb6ef0821e6606d249e4f2ee81962cead",
       "commandSource": {
         "command": "write",
         "kind": "command-spec",
@@ -785,7 +785,7 @@
     },
     {
       "path": "claude/.specify/agent-guides/story-creation-guide.md",
-      "sha256": "74e889411fa82fc297a7a77577a676d3ac942e9e6c1e3b980d76633cf6eafc7b"
+      "sha256": "377680a25ed6fca1631aa9aa66bf1b65e2ec234086fca774c529b9706eb4978b"
     },
     {
       "path": "claude/.specify/experts/core/character.md",
@@ -1386,7 +1386,7 @@
     },
     {
       "path": "codebuddy/.codebuddy/commands/write.md",
-      "sha256": "ee99ea6e6e4a6753fea7b7f3d0597ae8bef7489c11823f4d388a2f91827f48fa",
+      "sha256": "94b098f0a30050bf653483b7fd5ba8cfa98fa49a9fa8b71c2bff44d3658b3a60",
       "commandSource": {
         "command": "write",
         "kind": "command-spec",
@@ -1396,7 +1396,7 @@
     },
     {
       "path": "codebuddy/.specify/agent-guides/story-creation-guide.md",
-      "sha256": "74e889411fa82fc297a7a77577a676d3ac942e9e6c1e3b980d76633cf6eafc7b"
+      "sha256": "377680a25ed6fca1631aa9aa66bf1b65e2ec234086fca774c529b9706eb4978b"
     },
     {
       "path": "codebuddy/.specify/experts/core/character.md",
@@ -1993,7 +1993,7 @@
     },
     {
       "path": "codex/.codex/prompts/storyspec-write.md",
-      "sha256": "ee99ea6e6e4a6753fea7b7f3d0597ae8bef7489c11823f4d388a2f91827f48fa",
+      "sha256": "94b098f0a30050bf653483b7fd5ba8cfa98fa49a9fa8b71c2bff44d3658b3a60",
       "commandSource": {
         "command": "write",
         "kind": "command-spec",
@@ -2003,7 +2003,7 @@
     },
     {
       "path": "codex/.specify/agent-guides/story-creation-guide.md",
-      "sha256": "74e889411fa82fc297a7a77577a676d3ac942e9e6c1e3b980d76633cf6eafc7b"
+      "sha256": "377680a25ed6fca1631aa9aa66bf1b65e2ec234086fca774c529b9706eb4978b"
     },
     {
       "path": "codex/.specify/experts/core/character.md",
@@ -2600,7 +2600,7 @@
     },
     {
       "path": "continue-check/.continue/prompts/write.md",
-      "sha256": "8b30aee6b299a27248cb3c115e1b482e7e0c5f0dd73d8161adf43b6a57515fdd",
+      "sha256": "98520bc996b012339bef4069413b3e706104c6dbd50a4ff2dfbcb82ed42c94f4",
       "commandSource": {
         "command": "write",
         "kind": "command-spec",
@@ -2614,7 +2614,7 @@
     },
     {
       "path": "continue-check/.specify/agent-guides/story-creation-guide.md",
-      "sha256": "74e889411fa82fc297a7a77577a676d3ac942e9e6c1e3b980d76633cf6eafc7b"
+      "sha256": "377680a25ed6fca1631aa9aa66bf1b65e2ec234086fca774c529b9706eb4978b"
     },
     {
       "path": "continue-check/.specify/experts/core/character.md",
@@ -3215,7 +3215,7 @@
     },
     {
       "path": "copilot/.github/prompts/write.prompt.md",
-      "sha256": "bbbba4d32abe96e0507c4794cc4a5ff8cb732756f3393600c9a94be8d1eb4d8c",
+      "sha256": "01c1af6e2edae72a396fe2d74e8dcabc852a873a8bc5a92c9eee1957575546f9",
       "commandSource": {
         "command": "write",
         "kind": "command-spec",
@@ -3225,7 +3225,7 @@
     },
     {
       "path": "copilot/.specify/agent-guides/story-creation-guide.md",
-      "sha256": "74e889411fa82fc297a7a77577a676d3ac942e9e6c1e3b980d76633cf6eafc7b"
+      "sha256": "377680a25ed6fca1631aa9aa66bf1b65e2ec234086fca774c529b9706eb4978b"
     },
     {
       "path": "copilot/.specify/experts/core/character.md",
@@ -3826,7 +3826,7 @@
     },
     {
       "path": "cursor/.cursor/commands/write.md",
-      "sha256": "ee99ea6e6e4a6753fea7b7f3d0597ae8bef7489c11823f4d388a2f91827f48fa",
+      "sha256": "94b098f0a30050bf653483b7fd5ba8cfa98fa49a9fa8b71c2bff44d3658b3a60",
       "commandSource": {
         "command": "write",
         "kind": "command-spec",
@@ -3840,7 +3840,7 @@
     },
     {
       "path": "cursor/.specify/agent-guides/story-creation-guide.md",
-      "sha256": "74e889411fa82fc297a7a77577a676d3ac942e9e6c1e3b980d76633cf6eafc7b"
+      "sha256": "377680a25ed6fca1631aa9aa66bf1b65e2ec234086fca774c529b9706eb4978b"
     },
     {
       "path": "cursor/.specify/experts/core/character.md",
@@ -4437,7 +4437,7 @@
     },
     {
       "path": "gemini/.gemini/commands/storyspec/write.toml",
-      "sha256": "719626220a5456f479c179711646b8dc94bb98e1bc4d989464315c0455f55f46",
+      "sha256": "3ae7f28d7ca6957bcf5d7415ef1b0af247677712df90fa8f350c2fa5bc6ccf91",
       "commandSource": {
         "command": "write",
         "kind": "command-spec",
@@ -4451,7 +4451,7 @@
     },
     {
       "path": "gemini/.specify/agent-guides/story-creation-guide.md",
-      "sha256": "74e889411fa82fc297a7a77577a676d3ac942e9e6c1e3b980d76633cf6eafc7b"
+      "sha256": "377680a25ed6fca1631aa9aa66bf1b65e2ec234086fca774c529b9706eb4978b"
     },
     {
       "path": "gemini/.specify/experts/core/character.md",
@@ -4903,7 +4903,7 @@
     },
     {
       "path": "generic/.specify/agent-guides/story-creation-guide.md",
-      "sha256": "74e889411fa82fc297a7a77577a676d3ac942e9e6c1e3b980d76633cf6eafc7b"
+      "sha256": "377680a25ed6fca1631aa9aa66bf1b65e2ec234086fca774c529b9706eb4978b"
     },
     {
       "path": "generic/.specify/commands/analyze.md",
@@ -5052,7 +5052,7 @@
     },
     {
       "path": "generic/.specify/commands/write.md",
-      "sha256": "850b8872b6d7e65f36ded6389e291518f0bfedc29d43c7306fdc12093262c6bc",
+      "sha256": "1e3a352b2092769c18775c8003da60ad326905098dda768cf700ecd811f13645",
       "commandSource": {
         "command": "write",
         "kind": "command-spec",
@@ -5655,7 +5655,7 @@
     },
     {
       "path": "kilocode/.kilocode/workflows/write.md",
-      "sha256": "b868dbedd9383dd58d48be3ec869f18814295db588aa54ff1a851692310c0e1b",
+      "sha256": "b08ffe954e4bf038de2abaacffa441abb6ef0821e6606d249e4f2ee81962cead",
       "commandSource": {
         "command": "write",
         "kind": "command-spec",
@@ -5665,7 +5665,7 @@
     },
     {
       "path": "kilocode/.specify/agent-guides/story-creation-guide.md",
-      "sha256": "74e889411fa82fc297a7a77577a676d3ac942e9e6c1e3b980d76633cf6eafc7b"
+      "sha256": "377680a25ed6fca1631aa9aa66bf1b65e2ec234086fca774c529b9706eb4978b"
     },
     {
       "path": "kilocode/.specify/experts/core/character.md",
@@ -6262,7 +6262,7 @@
     },
     {
       "path": "opencode/.opencode/command/write.md",
-      "sha256": "d10cd7672dcda29b1c963bce909fd14de288eb19645e7fb752c727d5e9101637",
+      "sha256": "7dff91f4d9b506325a2740222322603376a3a1b607f01732497321e4139edb7b",
       "commandSource": {
         "command": "write",
         "kind": "command-spec",
@@ -6272,7 +6272,7 @@
     },
     {
       "path": "opencode/.specify/agent-guides/story-creation-guide.md",
-      "sha256": "74e889411fa82fc297a7a77577a676d3ac942e9e6c1e3b980d76633cf6eafc7b"
+      "sha256": "377680a25ed6fca1631aa9aa66bf1b65e2ec234086fca774c529b9706eb4978b"
     },
     {
       "path": "opencode/.specify/experts/core/character.md",
@@ -6869,7 +6869,7 @@
     },
     {
       "path": "q/.amazonq/prompts/write.md",
-      "sha256": "bbbba4d32abe96e0507c4794cc4a5ff8cb732756f3393600c9a94be8d1eb4d8c",
+      "sha256": "01c1af6e2edae72a396fe2d74e8dcabc852a873a8bc5a92c9eee1957575546f9",
       "commandSource": {
         "command": "write",
         "kind": "command-spec",
@@ -6879,7 +6879,7 @@
     },
     {
       "path": "q/.specify/agent-guides/story-creation-guide.md",
-      "sha256": "74e889411fa82fc297a7a77577a676d3ac942e9e6c1e3b980d76633cf6eafc7b"
+      "sha256": "377680a25ed6fca1631aa9aa66bf1b65e2ec234086fca774c529b9706eb4978b"
     },
     {
       "path": "q/.specify/experts/core/character.md",
@@ -7476,7 +7476,7 @@
     },
     {
       "path": "qwen/.qwen/commands/write.toml",
-      "sha256": "719626220a5456f479c179711646b8dc94bb98e1bc4d989464315c0455f55f46",
+      "sha256": "3ae7f28d7ca6957bcf5d7415ef1b0af247677712df90fa8f350c2fa5bc6ccf91",
       "commandSource": {
         "command": "write",
         "kind": "command-spec",
@@ -7486,7 +7486,7 @@
     },
     {
       "path": "qwen/.specify/agent-guides/story-creation-guide.md",
-      "sha256": "74e889411fa82fc297a7a77577a676d3ac942e9e6c1e3b980d76633cf6eafc7b"
+      "sha256": "377680a25ed6fca1631aa9aa66bf1b65e2ec234086fca774c529b9706eb4978b"
     },
     {
       "path": "qwen/.specify/experts/core/character.md",
@@ -8083,7 +8083,7 @@
     },
     {
       "path": "roocode/.roo/commands/write.md",
-      "sha256": "b868dbedd9383dd58d48be3ec869f18814295db588aa54ff1a851692310c0e1b",
+      "sha256": "b08ffe954e4bf038de2abaacffa441abb6ef0821e6606d249e4f2ee81962cead",
       "commandSource": {
         "command": "write",
         "kind": "command-spec",
@@ -8093,7 +8093,7 @@
     },
     {
       "path": "roocode/.specify/agent-guides/story-creation-guide.md",
-      "sha256": "74e889411fa82fc297a7a77577a676d3ac942e9e6c1e3b980d76633cf6eafc7b"
+      "sha256": "377680a25ed6fca1631aa9aa66bf1b65e2ec234086fca774c529b9706eb4978b"
     },
     {
       "path": "roocode/.specify/experts/core/character.md",
@@ -8545,7 +8545,7 @@
     },
     {
       "path": "windsurf/.specify/agent-guides/story-creation-guide.md",
-      "sha256": "74e889411fa82fc297a7a77577a676d3ac942e9e6c1e3b980d76633cf6eafc7b"
+      "sha256": "377680a25ed6fca1631aa9aa66bf1b65e2ec234086fca774c529b9706eb4978b"
     },
     {
       "path": "windsurf/.specify/experts/core/character.md",
@@ -9058,7 +9058,7 @@
     },
     {
       "path": "windsurf/.windsurf/workflows/write.md",
-      "sha256": "b868dbedd9383dd58d48be3ec869f18814295db588aa54ff1a851692310c0e1b",
+      "sha256": "b08ffe954e4bf038de2abaacffa441abb6ef0821e6606d249e4f2ee81962cead",
       "commandSource": {
         "command": "write",
         "kind": "command-spec",

@@ -34,7 +34,7 @@
 ```
 
 如果用户已经给出明确入口，直接沿该入口推进，不再重复选择。
-如果用户一次给出几百字设定、多个回复、会议记录或“把上面讨论整理一下”，不要强行拆成逐题问答。先把内容归纳为“作者已确认 / 候选 / 待确认”，并建议使用 `storyspec ingest <story> --text "<文本>"` 或 `storyspec co:create <story> --file notes.md` 做本地预览。
+如果用户一次给出几百字设定、多个回复、会议记录或“把上面讨论整理一下”，不要强行拆成逐题问答。先把内容归纳为“作者已确认 / 候选 / 待确认”，并建议使用 `storyspec ingest <story> --text "<文本>"` 或 `storyspec co:create <story> --file notes.md` 做本地预览。长文、表格和多回复导入都按 candidate / preview / confirm / apply 处理，待澄清不是失败，确认后再 apply 才会进入正典。
 
 ## 低负担启动问题
 
