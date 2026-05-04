@@ -140,6 +140,23 @@ export async function confirmExpertMode(): Promise<boolean> {
 }
 
 /**
+ * Prompt for the StorySpec workspace path during first-run initialization.
+ */
+export async function inputWorkspacePath(): Promise<string> {
+  const answer = await inquirer.prompt([
+    {
+      type: 'input',
+      name: 'workspacePath',
+      message: chalk.bold('请输入 StorySpec 工作区路径:'),
+      validate: (value: string) => value.trim().length > 0 || '请提供工作区路径',
+      filter: (value: string) => value.trim()
+    }
+  ]);
+
+  return answer.workspacePath;
+}
+
+/**
  * Display initialization step
  */
 export function displayStep(step: number, total: number, message: string): void {

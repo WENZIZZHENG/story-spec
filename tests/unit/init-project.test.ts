@@ -220,6 +220,29 @@ describe('initProject', () => {
     expect(result.targetAgents.map(agent => agent.id)).not.toContain('generic');
   });
 
+  it('initializes an explicit workspace path without treating separators as a project name', async () => {
+    const cwd = await makeTempDir();
+    const packageRoot = await createPackageRootFixture();
+    const workspacePath = path.join(cwd, '创作工作区', '星尘驿站');
+
+    const result = await initProject({
+      cwd,
+      packageRoot,
+      here: false,
+      workspacePath,
+      agent: 'generic',
+      method: 'three-act',
+      git: false,
+      withExperts: false,
+      fileSystem: nodeFileSystem
+    });
+
+    expect(result.projectName).toBe('星尘驿站');
+    expect(result.projectPath).toBe(workspacePath);
+    await expect(exists(path.join(workspacePath, '.specify', 'config.json'))).resolves.toBe(true);
+    await expect(exists(path.join(workspacePath, '.specify', 'commands', 'write.md'))).resolves.toBe(true);
+  });
+
   it('rejects an existing project directory', async () => {
     const cwd = await makeTempDir();
     const packageRoot = await createPackageRootFixture();
