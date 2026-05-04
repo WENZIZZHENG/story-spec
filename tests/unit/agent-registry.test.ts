@@ -53,7 +53,8 @@ describe('agent integration registry', () => {
       installTargets: [{
         dir: '.continue',
         commandsDir: 'prompts',
-        distDir: 'dist/continue-check'
+        distDir: 'dist/continue-check',
+        extraDirs: ['.continue/rules']
       }]
     });
 
@@ -92,7 +93,12 @@ describe('agent integration registry', () => {
       getAgentIntegration('generic')!,
       getAgentIntegration('copilot')!,
       getAgentIntegration('codex')!
-    ])).toEqual(['.specify/commands', '.github/prompts', '.vscode', '.codex/prompts']);
+    ])).toEqual([
+      '.specify/commands',
+      '.github/prompts',
+      '.vscode',
+      '.codex/prompts'
+    ]);
   });
 
   it('formats commands and display names from agent integrations', () => {

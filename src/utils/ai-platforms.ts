@@ -21,6 +21,7 @@ export interface AIPlatformConfig {
   commandPrefix: AgentSlashPrefix;
   initDirs?: string[];
   extraDirs?: string[];
+  extraFiles?: string[];
 }
 
 const toAIPlatformConfig = (integration: LegacyAIIntegration): AIPlatformConfig => {
@@ -34,7 +35,8 @@ const toAIPlatformConfig = (integration: LegacyAIIntegration): AIPlatformConfig 
     distDir: target.distDir,
     commandPrefix: integration.slashPrefix,
     initDirs: target.initDirs,
-    extraDirs: target.extraDirs
+    extraDirs: target.extraDirs,
+    extraFiles: target.extraFiles
   };
 };
 

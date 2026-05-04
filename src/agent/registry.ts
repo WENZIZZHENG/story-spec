@@ -50,6 +50,7 @@ export interface AgentInstallTarget {
   distDir: string;
   initDirs?: string[];
   extraDirs?: string[];
+  extraFiles?: string[];
 }
 
 export interface AgentIntegration {
@@ -137,7 +138,8 @@ export const AGENT_INTEGRATIONS = [
     installTargets: [{
       dir: '.continue',
       commandsDir: 'prompts',
-      distDir: 'dist/continue-check'
+      distDir: 'dist/continue-check',
+      extraDirs: ['.continue/rules']
     }],
     renderer: 'continue-check',
     slashPrefix: '/'
@@ -151,7 +153,8 @@ export const AGENT_INTEGRATIONS = [
     installTargets: [{
       dir: '.claude',
       commandsDir: 'commands',
-      distDir: 'dist/claude'
+      distDir: 'dist/claude',
+      extraFiles: ['CLAUDE.md']
     }],
     renderer: 'claude',
     slashPrefix: '/storyspec.',
@@ -166,7 +169,8 @@ export const AGENT_INTEGRATIONS = [
     installTargets: [{
       dir: '.cursor',
       commandsDir: 'commands',
-      distDir: 'dist/cursor'
+      distDir: 'dist/cursor',
+      extraDirs: ['.cursor/rules']
     }],
     renderer: 'cursor',
     slashPrefix: '/',
@@ -181,7 +185,8 @@ export const AGENT_INTEGRATIONS = [
     installTargets: [{
       dir: '.gemini',
       commandsDir: 'commands',
-      distDir: 'dist/gemini'
+      distDir: 'dist/gemini',
+      extraFiles: ['.gemini/GEMINI.md']
     }],
     renderer: 'gemini',
     slashPrefix: '/storyspec:',
@@ -227,7 +232,8 @@ export const AGENT_INTEGRATIONS = [
       dir: '.github',
       commandsDir: 'prompts',
       distDir: 'dist/copilot',
-      extraDirs: ['.vscode']
+      extraDirs: ['.vscode'],
+      extraFiles: ['.github/copilot-instructions.md']
     }],
     renderer: 'copilot',
     slashPrefix: '/',

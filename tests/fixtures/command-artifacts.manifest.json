@@ -177,6 +177,10 @@
       }
     },
     {
+      "path": "auggie/.specify/agent-guides/story-creation-guide.md",
+      "sha256": "436e225c9116b0e7c3f458711fd9127d28cb5892f4228a86b31f8f9edd76a9b0"
+    },
+    {
       "path": "auggie/.specify/experts/core/character.md",
       "sha256": "6a2a74bd4b42c52e15bd877fe7fe1c5ad6a32358475e797397b060a4b230cd89"
     },
@@ -298,7 +302,7 @@
     },
     {
       "path": "auggie/.specify/templates/agent/agent-contract.md",
-      "sha256": "6d877ddb32e4577ec4b124de975d2c0d29981add23163e5a07bd3ae2b2dcb577"
+      "sha256": "031b85cc61bad2a55bfe0355e19df58f2cd4be4489a9fe3368112265bcdebf10"
     },
     {
       "path": "auggie/.specify/templates/canon/contradictions.md",
@@ -377,6 +381,22 @@
       "sha256": "2dd9e0e55e5a8ebb60c912d24a465aaa668f2934a7e550b827b60fde7c773934"
     },
     {
+      "path": "auggie/.specify/templates/CLAUDE.md",
+      "sha256": "745545dc0d05b4e4c3de66a7669b622c48e9dec2be38c9fd525baf84ad9c061b"
+    },
+    {
+      "path": "auggie/.specify/templates/continue-rules/story-spec.md",
+      "sha256": "718fdccdad9556ce7513286d249489fa774b3eb86b14ed8780570566d17f0a79"
+    },
+    {
+      "path": "auggie/.specify/templates/copilot-instructions.md",
+      "sha256": "f0442c76266328bc29726e63fbe4941ce93fb4cc8a54a4f665643c003677e45d"
+    },
+    {
+      "path": "auggie/.specify/templates/cursor-rules/story-spec.mdc",
+      "sha256": "9762fbaafdeba24e0c3844aa747f9dbe9d99b01e50060a1009712246b0871505"
+    },
+    {
       "path": "auggie/.specify/templates/feedback/feedback.json",
       "sha256": "4c6e8e443a53c2172f54ac75e79463c2480878b5c59f0b2b066c330b44664186"
     },
@@ -386,7 +406,7 @@
     },
     {
       "path": "auggie/.specify/templates/GEMINI.md",
-      "sha256": "e2422f9b9f261971b4ed05ac4ead9138034bc291f2a34a40d70c51c1e984e2eb"
+      "sha256": "96947a4a3d0704eba558214a706608ad45fd035661973d4116944a51a21aa66c"
     },
     {
       "path": "auggie/.specify/templates/graph/edges.json",
@@ -502,7 +522,7 @@
     },
     {
       "path": "auggie/.specify/templates/vscode-settings.json",
-      "sha256": "875183e65cb2b8fd43111ef9f6b8e7b94fb8e3cdcfa9ae340cd9cf3eadaf06eb"
+      "sha256": "16b5aa5da697626de7956bf09c7097e14f4d1192e0ad993a199f8279b7f06312"
     },
     {
       "path": "auggie/.specify/templates/world/factions.yaml",
@@ -764,6 +784,10 @@
       }
     },
     {
+      "path": "claude/.specify/agent-guides/story-creation-guide.md",
+      "sha256": "436e225c9116b0e7c3f458711fd9127d28cb5892f4228a86b31f8f9edd76a9b0"
+    },
+    {
       "path": "claude/.specify/experts/core/character.md",
       "sha256": "6a2a74bd4b42c52e15bd877fe7fe1c5ad6a32358475e797397b060a4b230cd89"
     },
@@ -885,7 +909,7 @@
     },
     {
       "path": "claude/.specify/templates/agent/agent-contract.md",
-      "sha256": "6d877ddb32e4577ec4b124de975d2c0d29981add23163e5a07bd3ae2b2dcb577"
+      "sha256": "031b85cc61bad2a55bfe0355e19df58f2cd4be4489a9fe3368112265bcdebf10"
     },
     {
       "path": "claude/.specify/templates/canon/contradictions.md",
@@ -964,6 +988,22 @@
       "sha256": "2dd9e0e55e5a8ebb60c912d24a465aaa668f2934a7e550b827b60fde7c773934"
     },
     {
+      "path": "claude/.specify/templates/CLAUDE.md",
+      "sha256": "745545dc0d05b4e4c3de66a7669b622c48e9dec2be38c9fd525baf84ad9c061b"
+    },
+    {
+      "path": "claude/.specify/templates/continue-rules/story-spec.md",
+      "sha256": "718fdccdad9556ce7513286d249489fa774b3eb86b14ed8780570566d17f0a79"
+    },
+    {
+      "path": "claude/.specify/templates/copilot-instructions.md",
+      "sha256": "f0442c76266328bc29726e63fbe4941ce93fb4cc8a54a4f665643c003677e45d"
+    },
+    {
+      "path": "claude/.specify/templates/cursor-rules/story-spec.mdc",
+      "sha256": "9762fbaafdeba24e0c3844aa747f9dbe9d99b01e50060a1009712246b0871505"
+    },
+    {
       "path": "claude/.specify/templates/feedback/feedback.json",
       "sha256": "4c6e8e443a53c2172f54ac75e79463c2480878b5c59f0b2b066c330b44664186"
     },
@@ -973,7 +1013,7 @@
     },
     {
       "path": "claude/.specify/templates/GEMINI.md",
-      "sha256": "e2422f9b9f261971b4ed05ac4ead9138034bc291f2a34a40d70c51c1e984e2eb"
+      "sha256": "96947a4a3d0704eba558214a706608ad45fd035661973d4116944a51a21aa66c"
     },
     {
       "path": "claude/.specify/templates/graph/edges.json",
@@ -1089,7 +1129,7 @@
     },
     {
       "path": "claude/.specify/templates/vscode-settings.json",
-      "sha256": "875183e65cb2b8fd43111ef9f6b8e7b94fb8e3cdcfa9ae340cd9cf3eadaf06eb"
+      "sha256": "16b5aa5da697626de7956bf09c7097e14f4d1192e0ad993a199f8279b7f06312"
     },
     {
       "path": "claude/.specify/templates/world/factions.yaml",
@@ -1110,6 +1150,10 @@
     {
       "path": "claude/.specify/templates/writing-constitution-template.md",
       "sha256": "26784c8e78e8636b6d09105ef9f6dcd3951c111517049cfbf23503a3e1b53b64"
+    },
+    {
+      "path": "claude/CLAUDE.md",
+      "sha256": "745545dc0d05b4e4c3de66a7669b622c48e9dec2be38c9fd525baf84ad9c061b"
     },
     {
       "path": "claude/spec/checklists/README.md",
@@ -1351,6 +1395,10 @@
       }
     },
     {
+      "path": "codebuddy/.specify/agent-guides/story-creation-guide.md",
+      "sha256": "436e225c9116b0e7c3f458711fd9127d28cb5892f4228a86b31f8f9edd76a9b0"
+    },
+    {
       "path": "codebuddy/.specify/experts/core/character.md",
       "sha256": "6a2a74bd4b42c52e15bd877fe7fe1c5ad6a32358475e797397b060a4b230cd89"
     },
@@ -1472,7 +1520,7 @@
     },
     {
       "path": "codebuddy/.specify/templates/agent/agent-contract.md",
-      "sha256": "6d877ddb32e4577ec4b124de975d2c0d29981add23163e5a07bd3ae2b2dcb577"
+      "sha256": "031b85cc61bad2a55bfe0355e19df58f2cd4be4489a9fe3368112265bcdebf10"
     },
     {
       "path": "codebuddy/.specify/templates/canon/contradictions.md",
@@ -1551,6 +1599,22 @@
       "sha256": "2dd9e0e55e5a8ebb60c912d24a465aaa668f2934a7e550b827b60fde7c773934"
     },
     {
+      "path": "codebuddy/.specify/templates/CLAUDE.md",
+      "sha256": "745545dc0d05b4e4c3de66a7669b622c48e9dec2be38c9fd525baf84ad9c061b"
+    },
+    {
+      "path": "codebuddy/.specify/templates/continue-rules/story-spec.md",
+      "sha256": "718fdccdad9556ce7513286d249489fa774b3eb86b14ed8780570566d17f0a79"
+    },
+    {
+      "path": "codebuddy/.specify/templates/copilot-instructions.md",
+      "sha256": "f0442c76266328bc29726e63fbe4941ce93fb4cc8a54a4f665643c003677e45d"
+    },
+    {
+      "path": "codebuddy/.specify/templates/cursor-rules/story-spec.mdc",
+      "sha256": "9762fbaafdeba24e0c3844aa747f9dbe9d99b01e50060a1009712246b0871505"
+    },
+    {
       "path": "codebuddy/.specify/templates/feedback/feedback.json",
       "sha256": "4c6e8e443a53c2172f54ac75e79463c2480878b5c59f0b2b066c330b44664186"
     },
@@ -1560,7 +1624,7 @@
     },
     {
       "path": "codebuddy/.specify/templates/GEMINI.md",
-      "sha256": "e2422f9b9f261971b4ed05ac4ead9138034bc291f2a34a40d70c51c1e984e2eb"
+      "sha256": "96947a4a3d0704eba558214a706608ad45fd035661973d4116944a51a21aa66c"
     },
     {
       "path": "codebuddy/.specify/templates/graph/edges.json",
@@ -1676,7 +1740,7 @@
     },
     {
       "path": "codebuddy/.specify/templates/vscode-settings.json",
-      "sha256": "875183e65cb2b8fd43111ef9f6b8e7b94fb8e3cdcfa9ae340cd9cf3eadaf06eb"
+      "sha256": "16b5aa5da697626de7956bf09c7097e14f4d1192e0ad993a199f8279b7f06312"
     },
     {
       "path": "codebuddy/.specify/templates/world/factions.yaml",
@@ -1938,6 +2002,10 @@
       }
     },
     {
+      "path": "codex/.specify/agent-guides/story-creation-guide.md",
+      "sha256": "436e225c9116b0e7c3f458711fd9127d28cb5892f4228a86b31f8f9edd76a9b0"
+    },
+    {
       "path": "codex/.specify/experts/core/character.md",
       "sha256": "6a2a74bd4b42c52e15bd877fe7fe1c5ad6a32358475e797397b060a4b230cd89"
     },
@@ -2059,7 +2127,7 @@
     },
     {
       "path": "codex/.specify/templates/agent/agent-contract.md",
-      "sha256": "6d877ddb32e4577ec4b124de975d2c0d29981add23163e5a07bd3ae2b2dcb577"
+      "sha256": "031b85cc61bad2a55bfe0355e19df58f2cd4be4489a9fe3368112265bcdebf10"
     },
     {
       "path": "codex/.specify/templates/canon/contradictions.md",
@@ -2138,6 +2206,22 @@
       "sha256": "2dd9e0e55e5a8ebb60c912d24a465aaa668f2934a7e550b827b60fde7c773934"
     },
     {
+      "path": "codex/.specify/templates/CLAUDE.md",
+      "sha256": "745545dc0d05b4e4c3de66a7669b622c48e9dec2be38c9fd525baf84ad9c061b"
+    },
+    {
+      "path": "codex/.specify/templates/continue-rules/story-spec.md",
+      "sha256": "718fdccdad9556ce7513286d249489fa774b3eb86b14ed8780570566d17f0a79"
+    },
+    {
+      "path": "codex/.specify/templates/copilot-instructions.md",
+      "sha256": "f0442c76266328bc29726e63fbe4941ce93fb4cc8a54a4f665643c003677e45d"
+    },
+    {
+      "path": "codex/.specify/templates/cursor-rules/story-spec.mdc",
+      "sha256": "9762fbaafdeba24e0c3844aa747f9dbe9d99b01e50060a1009712246b0871505"
+    },
+    {
       "path": "codex/.specify/templates/feedback/feedback.json",
       "sha256": "4c6e8e443a53c2172f54ac75e79463c2480878b5c59f0b2b066c330b44664186"
     },
@@ -2147,7 +2231,7 @@
     },
     {
       "path": "codex/.specify/templates/GEMINI.md",
-      "sha256": "e2422f9b9f261971b4ed05ac4ead9138034bc291f2a34a40d70c51c1e984e2eb"
+      "sha256": "96947a4a3d0704eba558214a706608ad45fd035661973d4116944a51a21aa66c"
     },
     {
       "path": "codex/.specify/templates/graph/edges.json",
@@ -2263,7 +2347,7 @@
     },
     {
       "path": "codex/.specify/templates/vscode-settings.json",
-      "sha256": "875183e65cb2b8fd43111ef9f6b8e7b94fb8e3cdcfa9ae340cd9cf3eadaf06eb"
+      "sha256": "16b5aa5da697626de7956bf09c7097e14f4d1192e0ad993a199f8279b7f06312"
     },
     {
       "path": "codex/.specify/templates/world/factions.yaml",
@@ -2525,6 +2609,14 @@
       }
     },
     {
+      "path": "continue-check/.continue/rules/story-spec.md",
+      "sha256": "718fdccdad9556ce7513286d249489fa774b3eb86b14ed8780570566d17f0a79"
+    },
+    {
+      "path": "continue-check/.specify/agent-guides/story-creation-guide.md",
+      "sha256": "436e225c9116b0e7c3f458711fd9127d28cb5892f4228a86b31f8f9edd76a9b0"
+    },
+    {
       "path": "continue-check/.specify/experts/core/character.md",
       "sha256": "6a2a74bd4b42c52e15bd877fe7fe1c5ad6a32358475e797397b060a4b230cd89"
     },
@@ -2646,7 +2738,7 @@
     },
     {
       "path": "continue-check/.specify/templates/agent/agent-contract.md",
-      "sha256": "6d877ddb32e4577ec4b124de975d2c0d29981add23163e5a07bd3ae2b2dcb577"
+      "sha256": "031b85cc61bad2a55bfe0355e19df58f2cd4be4489a9fe3368112265bcdebf10"
     },
     {
       "path": "continue-check/.specify/templates/canon/contradictions.md",
@@ -2725,6 +2817,22 @@
       "sha256": "2dd9e0e55e5a8ebb60c912d24a465aaa668f2934a7e550b827b60fde7c773934"
     },
     {
+      "path": "continue-check/.specify/templates/CLAUDE.md",
+      "sha256": "745545dc0d05b4e4c3de66a7669b622c48e9dec2be38c9fd525baf84ad9c061b"
+    },
+    {
+      "path": "continue-check/.specify/templates/continue-rules/story-spec.md",
+      "sha256": "718fdccdad9556ce7513286d249489fa774b3eb86b14ed8780570566d17f0a79"
+    },
+    {
+      "path": "continue-check/.specify/templates/copilot-instructions.md",
+      "sha256": "f0442c76266328bc29726e63fbe4941ce93fb4cc8a54a4f665643c003677e45d"
+    },
+    {
+      "path": "continue-check/.specify/templates/cursor-rules/story-spec.mdc",
+      "sha256": "9762fbaafdeba24e0c3844aa747f9dbe9d99b01e50060a1009712246b0871505"
+    },
+    {
       "path": "continue-check/.specify/templates/feedback/feedback.json",
       "sha256": "4c6e8e443a53c2172f54ac75e79463c2480878b5c59f0b2b066c330b44664186"
     },
@@ -2734,7 +2842,7 @@
     },
     {
       "path": "continue-check/.specify/templates/GEMINI.md",
-      "sha256": "e2422f9b9f261971b4ed05ac4ead9138034bc291f2a34a40d70c51c1e984e2eb"
+      "sha256": "96947a4a3d0704eba558214a706608ad45fd035661973d4116944a51a21aa66c"
     },
     {
       "path": "continue-check/.specify/templates/graph/edges.json",
@@ -2850,7 +2958,7 @@
     },
     {
       "path": "continue-check/.specify/templates/vscode-settings.json",
-      "sha256": "875183e65cb2b8fd43111ef9f6b8e7b94fb8e3cdcfa9ae340cd9cf3eadaf06eb"
+      "sha256": "16b5aa5da697626de7956bf09c7097e14f4d1192e0ad993a199f8279b7f06312"
     },
     {
       "path": "continue-check/.specify/templates/world/factions.yaml",
@@ -2955,6 +3063,10 @@
     {
       "path": "continue-check/spec/README.md",
       "sha256": "09a7af07dc5d2743da5e86c75340fe330274d687ea6f23e0e57e922e38358e45"
+    },
+    {
+      "path": "copilot/.github/copilot-instructions.md",
+      "sha256": "f0442c76266328bc29726e63fbe4941ce93fb4cc8a54a4f665643c003677e45d"
     },
     {
       "path": "copilot/.github/prompts/analyze.prompt.md",
@@ -3112,6 +3224,10 @@
       }
     },
     {
+      "path": "copilot/.specify/agent-guides/story-creation-guide.md",
+      "sha256": "436e225c9116b0e7c3f458711fd9127d28cb5892f4228a86b31f8f9edd76a9b0"
+    },
+    {
       "path": "copilot/.specify/experts/core/character.md",
       "sha256": "6a2a74bd4b42c52e15bd877fe7fe1c5ad6a32358475e797397b060a4b230cd89"
     },
@@ -3233,7 +3349,7 @@
     },
     {
       "path": "copilot/.specify/templates/agent/agent-contract.md",
-      "sha256": "6d877ddb32e4577ec4b124de975d2c0d29981add23163e5a07bd3ae2b2dcb577"
+      "sha256": "031b85cc61bad2a55bfe0355e19df58f2cd4be4489a9fe3368112265bcdebf10"
     },
     {
       "path": "copilot/.specify/templates/canon/contradictions.md",
@@ -3312,6 +3428,22 @@
       "sha256": "2dd9e0e55e5a8ebb60c912d24a465aaa668f2934a7e550b827b60fde7c773934"
     },
     {
+      "path": "copilot/.specify/templates/CLAUDE.md",
+      "sha256": "745545dc0d05b4e4c3de66a7669b622c48e9dec2be38c9fd525baf84ad9c061b"
+    },
+    {
+      "path": "copilot/.specify/templates/continue-rules/story-spec.md",
+      "sha256": "718fdccdad9556ce7513286d249489fa774b3eb86b14ed8780570566d17f0a79"
+    },
+    {
+      "path": "copilot/.specify/templates/copilot-instructions.md",
+      "sha256": "f0442c76266328bc29726e63fbe4941ce93fb4cc8a54a4f665643c003677e45d"
+    },
+    {
+      "path": "copilot/.specify/templates/cursor-rules/story-spec.mdc",
+      "sha256": "9762fbaafdeba24e0c3844aa747f9dbe9d99b01e50060a1009712246b0871505"
+    },
+    {
       "path": "copilot/.specify/templates/feedback/feedback.json",
       "sha256": "4c6e8e443a53c2172f54ac75e79463c2480878b5c59f0b2b066c330b44664186"
     },
@@ -3321,7 +3453,7 @@
     },
     {
       "path": "copilot/.specify/templates/GEMINI.md",
-      "sha256": "e2422f9b9f261971b4ed05ac4ead9138034bc291f2a34a40d70c51c1e984e2eb"
+      "sha256": "96947a4a3d0704eba558214a706608ad45fd035661973d4116944a51a21aa66c"
     },
     {
       "path": "copilot/.specify/templates/graph/edges.json",
@@ -3437,7 +3569,7 @@
     },
     {
       "path": "copilot/.specify/templates/vscode-settings.json",
-      "sha256": "875183e65cb2b8fd43111ef9f6b8e7b94fb8e3cdcfa9ae340cd9cf3eadaf06eb"
+      "sha256": "16b5aa5da697626de7956bf09c7097e14f4d1192e0ad993a199f8279b7f06312"
     },
     {
       "path": "copilot/.specify/templates/world/factions.yaml",
@@ -3458,6 +3590,10 @@
     {
       "path": "copilot/.specify/templates/writing-constitution-template.md",
       "sha256": "26784c8e78e8636b6d09105ef9f6dcd3951c111517049cfbf23503a3e1b53b64"
+    },
+    {
+      "path": "copilot/.vscode/settings.json",
+      "sha256": "16b5aa5da697626de7956bf09c7097e14f4d1192e0ad993a199f8279b7f06312"
     },
     {
       "path": "copilot/spec/checklists/README.md",
@@ -3699,6 +3835,14 @@
       }
     },
     {
+      "path": "cursor/.cursor/rules/story-spec.mdc",
+      "sha256": "9762fbaafdeba24e0c3844aa747f9dbe9d99b01e50060a1009712246b0871505"
+    },
+    {
+      "path": "cursor/.specify/agent-guides/story-creation-guide.md",
+      "sha256": "436e225c9116b0e7c3f458711fd9127d28cb5892f4228a86b31f8f9edd76a9b0"
+    },
+    {
       "path": "cursor/.specify/experts/core/character.md",
       "sha256": "6a2a74bd4b42c52e15bd877fe7fe1c5ad6a32358475e797397b060a4b230cd89"
     },
@@ -3820,7 +3964,7 @@
     },
     {
       "path": "cursor/.specify/templates/agent/agent-contract.md",
-      "sha256": "6d877ddb32e4577ec4b124de975d2c0d29981add23163e5a07bd3ae2b2dcb577"
+      "sha256": "031b85cc61bad2a55bfe0355e19df58f2cd4be4489a9fe3368112265bcdebf10"
     },
     {
       "path": "cursor/.specify/templates/canon/contradictions.md",
@@ -3899,6 +4043,22 @@
       "sha256": "2dd9e0e55e5a8ebb60c912d24a465aaa668f2934a7e550b827b60fde7c773934"
     },
     {
+      "path": "cursor/.specify/templates/CLAUDE.md",
+      "sha256": "745545dc0d05b4e4c3de66a7669b622c48e9dec2be38c9fd525baf84ad9c061b"
+    },
+    {
+      "path": "cursor/.specify/templates/continue-rules/story-spec.md",
+      "sha256": "718fdccdad9556ce7513286d249489fa774b3eb86b14ed8780570566d17f0a79"
+    },
+    {
+      "path": "cursor/.specify/templates/copilot-instructions.md",
+      "sha256": "f0442c76266328bc29726e63fbe4941ce93fb4cc8a54a4f665643c003677e45d"
+    },
+    {
+      "path": "cursor/.specify/templates/cursor-rules/story-spec.mdc",
+      "sha256": "9762fbaafdeba24e0c3844aa747f9dbe9d99b01e50060a1009712246b0871505"
+    },
+    {
       "path": "cursor/.specify/templates/feedback/feedback.json",
       "sha256": "4c6e8e443a53c2172f54ac75e79463c2480878b5c59f0b2b066c330b44664186"
     },
@@ -3908,7 +4068,7 @@
     },
     {
       "path": "cursor/.specify/templates/GEMINI.md",
-      "sha256": "e2422f9b9f261971b4ed05ac4ead9138034bc291f2a34a40d70c51c1e984e2eb"
+      "sha256": "96947a4a3d0704eba558214a706608ad45fd035661973d4116944a51a21aa66c"
     },
     {
       "path": "cursor/.specify/templates/graph/edges.json",
@@ -4024,7 +4184,7 @@
     },
     {
       "path": "cursor/.specify/templates/vscode-settings.json",
-      "sha256": "875183e65cb2b8fd43111ef9f6b8e7b94fb8e3cdcfa9ae340cd9cf3eadaf06eb"
+      "sha256": "16b5aa5da697626de7956bf09c7097e14f4d1192e0ad993a199f8279b7f06312"
     },
     {
       "path": "cursor/.specify/templates/world/factions.yaml",
@@ -4286,6 +4446,14 @@
       }
     },
     {
+      "path": "gemini/.gemini/GEMINI.md",
+      "sha256": "96947a4a3d0704eba558214a706608ad45fd035661973d4116944a51a21aa66c"
+    },
+    {
+      "path": "gemini/.specify/agent-guides/story-creation-guide.md",
+      "sha256": "436e225c9116b0e7c3f458711fd9127d28cb5892f4228a86b31f8f9edd76a9b0"
+    },
+    {
       "path": "gemini/.specify/experts/core/character.md",
       "sha256": "6a2a74bd4b42c52e15bd877fe7fe1c5ad6a32358475e797397b060a4b230cd89"
     },
@@ -4407,7 +4575,7 @@
     },
     {
       "path": "gemini/.specify/templates/agent/agent-contract.md",
-      "sha256": "6d877ddb32e4577ec4b124de975d2c0d29981add23163e5a07bd3ae2b2dcb577"
+      "sha256": "031b85cc61bad2a55bfe0355e19df58f2cd4be4489a9fe3368112265bcdebf10"
     },
     {
       "path": "gemini/.specify/templates/canon/contradictions.md",
@@ -4486,6 +4654,22 @@
       "sha256": "2dd9e0e55e5a8ebb60c912d24a465aaa668f2934a7e550b827b60fde7c773934"
     },
     {
+      "path": "gemini/.specify/templates/CLAUDE.md",
+      "sha256": "745545dc0d05b4e4c3de66a7669b622c48e9dec2be38c9fd525baf84ad9c061b"
+    },
+    {
+      "path": "gemini/.specify/templates/continue-rules/story-spec.md",
+      "sha256": "718fdccdad9556ce7513286d249489fa774b3eb86b14ed8780570566d17f0a79"
+    },
+    {
+      "path": "gemini/.specify/templates/copilot-instructions.md",
+      "sha256": "f0442c76266328bc29726e63fbe4941ce93fb4cc8a54a4f665643c003677e45d"
+    },
+    {
+      "path": "gemini/.specify/templates/cursor-rules/story-spec.mdc",
+      "sha256": "9762fbaafdeba24e0c3844aa747f9dbe9d99b01e50060a1009712246b0871505"
+    },
+    {
       "path": "gemini/.specify/templates/feedback/feedback.json",
       "sha256": "4c6e8e443a53c2172f54ac75e79463c2480878b5c59f0b2b066c330b44664186"
     },
@@ -4495,7 +4679,7 @@
     },
     {
       "path": "gemini/.specify/templates/GEMINI.md",
-      "sha256": "e2422f9b9f261971b4ed05ac4ead9138034bc291f2a34a40d70c51c1e984e2eb"
+      "sha256": "96947a4a3d0704eba558214a706608ad45fd035661973d4116944a51a21aa66c"
     },
     {
       "path": "gemini/.specify/templates/graph/edges.json",
@@ -4611,7 +4795,7 @@
     },
     {
       "path": "gemini/.specify/templates/vscode-settings.json",
-      "sha256": "875183e65cb2b8fd43111ef9f6b8e7b94fb8e3cdcfa9ae340cd9cf3eadaf06eb"
+      "sha256": "16b5aa5da697626de7956bf09c7097e14f4d1192e0ad993a199f8279b7f06312"
     },
     {
       "path": "gemini/.specify/templates/world/factions.yaml",
@@ -4716,6 +4900,10 @@
     {
       "path": "gemini/spec/README.md",
       "sha256": "09a7af07dc5d2743da5e86c75340fe330274d687ea6f23e0e57e922e38358e45"
+    },
+    {
+      "path": "generic/.specify/agent-guides/story-creation-guide.md",
+      "sha256": "436e225c9116b0e7c3f458711fd9127d28cb5892f4228a86b31f8f9edd76a9b0"
     },
     {
       "path": "generic/.specify/commands/analyze.md",
@@ -4994,7 +5182,7 @@
     },
     {
       "path": "generic/.specify/templates/agent/agent-contract.md",
-      "sha256": "6d877ddb32e4577ec4b124de975d2c0d29981add23163e5a07bd3ae2b2dcb577"
+      "sha256": "031b85cc61bad2a55bfe0355e19df58f2cd4be4489a9fe3368112265bcdebf10"
     },
     {
       "path": "generic/.specify/templates/canon/contradictions.md",
@@ -5073,6 +5261,22 @@
       "sha256": "2dd9e0e55e5a8ebb60c912d24a465aaa668f2934a7e550b827b60fde7c773934"
     },
     {
+      "path": "generic/.specify/templates/CLAUDE.md",
+      "sha256": "745545dc0d05b4e4c3de66a7669b622c48e9dec2be38c9fd525baf84ad9c061b"
+    },
+    {
+      "path": "generic/.specify/templates/continue-rules/story-spec.md",
+      "sha256": "718fdccdad9556ce7513286d249489fa774b3eb86b14ed8780570566d17f0a79"
+    },
+    {
+      "path": "generic/.specify/templates/copilot-instructions.md",
+      "sha256": "f0442c76266328bc29726e63fbe4941ce93fb4cc8a54a4f665643c003677e45d"
+    },
+    {
+      "path": "generic/.specify/templates/cursor-rules/story-spec.mdc",
+      "sha256": "9762fbaafdeba24e0c3844aa747f9dbe9d99b01e50060a1009712246b0871505"
+    },
+    {
       "path": "generic/.specify/templates/feedback/feedback.json",
       "sha256": "4c6e8e443a53c2172f54ac75e79463c2480878b5c59f0b2b066c330b44664186"
     },
@@ -5082,7 +5286,7 @@
     },
     {
       "path": "generic/.specify/templates/GEMINI.md",
-      "sha256": "e2422f9b9f261971b4ed05ac4ead9138034bc291f2a34a40d70c51c1e984e2eb"
+      "sha256": "96947a4a3d0704eba558214a706608ad45fd035661973d4116944a51a21aa66c"
     },
     {
       "path": "generic/.specify/templates/graph/edges.json",
@@ -5198,7 +5402,7 @@
     },
     {
       "path": "generic/.specify/templates/vscode-settings.json",
-      "sha256": "875183e65cb2b8fd43111ef9f6b8e7b94fb8e3cdcfa9ae340cd9cf3eadaf06eb"
+      "sha256": "16b5aa5da697626de7956bf09c7097e14f4d1192e0ad993a199f8279b7f06312"
     },
     {
       "path": "generic/.specify/templates/world/factions.yaml",
@@ -5460,6 +5664,10 @@
       }
     },
     {
+      "path": "kilocode/.specify/agent-guides/story-creation-guide.md",
+      "sha256": "436e225c9116b0e7c3f458711fd9127d28cb5892f4228a86b31f8f9edd76a9b0"
+    },
+    {
       "path": "kilocode/.specify/experts/core/character.md",
       "sha256": "6a2a74bd4b42c52e15bd877fe7fe1c5ad6a32358475e797397b060a4b230cd89"
     },
@@ -5581,7 +5789,7 @@
     },
     {
       "path": "kilocode/.specify/templates/agent/agent-contract.md",
-      "sha256": "6d877ddb32e4577ec4b124de975d2c0d29981add23163e5a07bd3ae2b2dcb577"
+      "sha256": "031b85cc61bad2a55bfe0355e19df58f2cd4be4489a9fe3368112265bcdebf10"
     },
     {
       "path": "kilocode/.specify/templates/canon/contradictions.md",
@@ -5660,6 +5868,22 @@
       "sha256": "2dd9e0e55e5a8ebb60c912d24a465aaa668f2934a7e550b827b60fde7c773934"
     },
     {
+      "path": "kilocode/.specify/templates/CLAUDE.md",
+      "sha256": "745545dc0d05b4e4c3de66a7669b622c48e9dec2be38c9fd525baf84ad9c061b"
+    },
+    {
+      "path": "kilocode/.specify/templates/continue-rules/story-spec.md",
+      "sha256": "718fdccdad9556ce7513286d249489fa774b3eb86b14ed8780570566d17f0a79"
+    },
+    {
+      "path": "kilocode/.specify/templates/copilot-instructions.md",
+      "sha256": "f0442c76266328bc29726e63fbe4941ce93fb4cc8a54a4f665643c003677e45d"
+    },
+    {
+      "path": "kilocode/.specify/templates/cursor-rules/story-spec.mdc",
+      "sha256": "9762fbaafdeba24e0c3844aa747f9dbe9d99b01e50060a1009712246b0871505"
+    },
+    {
       "path": "kilocode/.specify/templates/feedback/feedback.json",
       "sha256": "4c6e8e443a53c2172f54ac75e79463c2480878b5c59f0b2b066c330b44664186"
     },
@@ -5669,7 +5893,7 @@
     },
     {
       "path": "kilocode/.specify/templates/GEMINI.md",
-      "sha256": "e2422f9b9f261971b4ed05ac4ead9138034bc291f2a34a40d70c51c1e984e2eb"
+      "sha256": "96947a4a3d0704eba558214a706608ad45fd035661973d4116944a51a21aa66c"
     },
     {
       "path": "kilocode/.specify/templates/graph/edges.json",
@@ -5785,7 +6009,7 @@
     },
     {
       "path": "kilocode/.specify/templates/vscode-settings.json",
-      "sha256": "875183e65cb2b8fd43111ef9f6b8e7b94fb8e3cdcfa9ae340cd9cf3eadaf06eb"
+      "sha256": "16b5aa5da697626de7956bf09c7097e14f4d1192e0ad993a199f8279b7f06312"
     },
     {
       "path": "kilocode/.specify/templates/world/factions.yaml",
@@ -6047,6 +6271,10 @@
       }
     },
     {
+      "path": "opencode/.specify/agent-guides/story-creation-guide.md",
+      "sha256": "436e225c9116b0e7c3f458711fd9127d28cb5892f4228a86b31f8f9edd76a9b0"
+    },
+    {
       "path": "opencode/.specify/experts/core/character.md",
       "sha256": "6a2a74bd4b42c52e15bd877fe7fe1c5ad6a32358475e797397b060a4b230cd89"
     },
@@ -6168,7 +6396,7 @@
     },
     {
       "path": "opencode/.specify/templates/agent/agent-contract.md",
-      "sha256": "6d877ddb32e4577ec4b124de975d2c0d29981add23163e5a07bd3ae2b2dcb577"
+      "sha256": "031b85cc61bad2a55bfe0355e19df58f2cd4be4489a9fe3368112265bcdebf10"
     },
     {
       "path": "opencode/.specify/templates/canon/contradictions.md",
@@ -6247,6 +6475,22 @@
       "sha256": "2dd9e0e55e5a8ebb60c912d24a465aaa668f2934a7e550b827b60fde7c773934"
     },
     {
+      "path": "opencode/.specify/templates/CLAUDE.md",
+      "sha256": "745545dc0d05b4e4c3de66a7669b622c48e9dec2be38c9fd525baf84ad9c061b"
+    },
+    {
+      "path": "opencode/.specify/templates/continue-rules/story-spec.md",
+      "sha256": "718fdccdad9556ce7513286d249489fa774b3eb86b14ed8780570566d17f0a79"
+    },
+    {
+      "path": "opencode/.specify/templates/copilot-instructions.md",
+      "sha256": "f0442c76266328bc29726e63fbe4941ce93fb4cc8a54a4f665643c003677e45d"
+    },
+    {
+      "path": "opencode/.specify/templates/cursor-rules/story-spec.mdc",
+      "sha256": "9762fbaafdeba24e0c3844aa747f9dbe9d99b01e50060a1009712246b0871505"
+    },
+    {
       "path": "opencode/.specify/templates/feedback/feedback.json",
       "sha256": "4c6e8e443a53c2172f54ac75e79463c2480878b5c59f0b2b066c330b44664186"
     },
@@ -6256,7 +6500,7 @@
     },
     {
       "path": "opencode/.specify/templates/GEMINI.md",
-      "sha256": "e2422f9b9f261971b4ed05ac4ead9138034bc291f2a34a40d70c51c1e984e2eb"
+      "sha256": "96947a4a3d0704eba558214a706608ad45fd035661973d4116944a51a21aa66c"
     },
     {
       "path": "opencode/.specify/templates/graph/edges.json",
@@ -6372,7 +6616,7 @@
     },
     {
       "path": "opencode/.specify/templates/vscode-settings.json",
-      "sha256": "875183e65cb2b8fd43111ef9f6b8e7b94fb8e3cdcfa9ae340cd9cf3eadaf06eb"
+      "sha256": "16b5aa5da697626de7956bf09c7097e14f4d1192e0ad993a199f8279b7f06312"
     },
     {
       "path": "opencode/.specify/templates/world/factions.yaml",
@@ -6634,6 +6878,10 @@
       }
     },
     {
+      "path": "q/.specify/agent-guides/story-creation-guide.md",
+      "sha256": "436e225c9116b0e7c3f458711fd9127d28cb5892f4228a86b31f8f9edd76a9b0"
+    },
+    {
       "path": "q/.specify/experts/core/character.md",
       "sha256": "6a2a74bd4b42c52e15bd877fe7fe1c5ad6a32358475e797397b060a4b230cd89"
     },
@@ -6755,7 +7003,7 @@
     },
     {
       "path": "q/.specify/templates/agent/agent-contract.md",
-      "sha256": "6d877ddb32e4577ec4b124de975d2c0d29981add23163e5a07bd3ae2b2dcb577"
+      "sha256": "031b85cc61bad2a55bfe0355e19df58f2cd4be4489a9fe3368112265bcdebf10"
     },
     {
       "path": "q/.specify/templates/canon/contradictions.md",
@@ -6834,6 +7082,22 @@
       "sha256": "2dd9e0e55e5a8ebb60c912d24a465aaa668f2934a7e550b827b60fde7c773934"
     },
     {
+      "path": "q/.specify/templates/CLAUDE.md",
+      "sha256": "745545dc0d05b4e4c3de66a7669b622c48e9dec2be38c9fd525baf84ad9c061b"
+    },
+    {
+      "path": "q/.specify/templates/continue-rules/story-spec.md",
+      "sha256": "718fdccdad9556ce7513286d249489fa774b3eb86b14ed8780570566d17f0a79"
+    },
+    {
+      "path": "q/.specify/templates/copilot-instructions.md",
+      "sha256": "f0442c76266328bc29726e63fbe4941ce93fb4cc8a54a4f665643c003677e45d"
+    },
+    {
+      "path": "q/.specify/templates/cursor-rules/story-spec.mdc",
+      "sha256": "9762fbaafdeba24e0c3844aa747f9dbe9d99b01e50060a1009712246b0871505"
+    },
+    {
       "path": "q/.specify/templates/feedback/feedback.json",
       "sha256": "4c6e8e443a53c2172f54ac75e79463c2480878b5c59f0b2b066c330b44664186"
     },
@@ -6843,7 +7107,7 @@
     },
     {
       "path": "q/.specify/templates/GEMINI.md",
-      "sha256": "e2422f9b9f261971b4ed05ac4ead9138034bc291f2a34a40d70c51c1e984e2eb"
+      "sha256": "96947a4a3d0704eba558214a706608ad45fd035661973d4116944a51a21aa66c"
     },
     {
       "path": "q/.specify/templates/graph/edges.json",
@@ -6959,7 +7223,7 @@
     },
     {
       "path": "q/.specify/templates/vscode-settings.json",
-      "sha256": "875183e65cb2b8fd43111ef9f6b8e7b94fb8e3cdcfa9ae340cd9cf3eadaf06eb"
+      "sha256": "16b5aa5da697626de7956bf09c7097e14f4d1192e0ad993a199f8279b7f06312"
     },
     {
       "path": "q/.specify/templates/world/factions.yaml",
@@ -7221,6 +7485,10 @@
       }
     },
     {
+      "path": "qwen/.specify/agent-guides/story-creation-guide.md",
+      "sha256": "436e225c9116b0e7c3f458711fd9127d28cb5892f4228a86b31f8f9edd76a9b0"
+    },
+    {
       "path": "qwen/.specify/experts/core/character.md",
       "sha256": "6a2a74bd4b42c52e15bd877fe7fe1c5ad6a32358475e797397b060a4b230cd89"
     },
@@ -7342,7 +7610,7 @@
     },
     {
       "path": "qwen/.specify/templates/agent/agent-contract.md",
-      "sha256": "6d877ddb32e4577ec4b124de975d2c0d29981add23163e5a07bd3ae2b2dcb577"
+      "sha256": "031b85cc61bad2a55bfe0355e19df58f2cd4be4489a9fe3368112265bcdebf10"
     },
     {
       "path": "qwen/.specify/templates/canon/contradictions.md",
@@ -7421,6 +7689,22 @@
       "sha256": "2dd9e0e55e5a8ebb60c912d24a465aaa668f2934a7e550b827b60fde7c773934"
     },
     {
+      "path": "qwen/.specify/templates/CLAUDE.md",
+      "sha256": "745545dc0d05b4e4c3de66a7669b622c48e9dec2be38c9fd525baf84ad9c061b"
+    },
+    {
+      "path": "qwen/.specify/templates/continue-rules/story-spec.md",
+      "sha256": "718fdccdad9556ce7513286d249489fa774b3eb86b14ed8780570566d17f0a79"
+    },
+    {
+      "path": "qwen/.specify/templates/copilot-instructions.md",
+      "sha256": "f0442c76266328bc29726e63fbe4941ce93fb4cc8a54a4f665643c003677e45d"
+    },
+    {
+      "path": "qwen/.specify/templates/cursor-rules/story-spec.mdc",
+      "sha256": "9762fbaafdeba24e0c3844aa747f9dbe9d99b01e50060a1009712246b0871505"
+    },
+    {
       "path": "qwen/.specify/templates/feedback/feedback.json",
       "sha256": "4c6e8e443a53c2172f54ac75e79463c2480878b5c59f0b2b066c330b44664186"
     },
@@ -7430,7 +7714,7 @@
     },
     {
       "path": "qwen/.specify/templates/GEMINI.md",
-      "sha256": "e2422f9b9f261971b4ed05ac4ead9138034bc291f2a34a40d70c51c1e984e2eb"
+      "sha256": "96947a4a3d0704eba558214a706608ad45fd035661973d4116944a51a21aa66c"
     },
     {
       "path": "qwen/.specify/templates/graph/edges.json",
@@ -7546,7 +7830,7 @@
     },
     {
       "path": "qwen/.specify/templates/vscode-settings.json",
-      "sha256": "875183e65cb2b8fd43111ef9f6b8e7b94fb8e3cdcfa9ae340cd9cf3eadaf06eb"
+      "sha256": "16b5aa5da697626de7956bf09c7097e14f4d1192e0ad993a199f8279b7f06312"
     },
     {
       "path": "qwen/.specify/templates/world/factions.yaml",
@@ -7808,6 +8092,10 @@
       }
     },
     {
+      "path": "roocode/.specify/agent-guides/story-creation-guide.md",
+      "sha256": "436e225c9116b0e7c3f458711fd9127d28cb5892f4228a86b31f8f9edd76a9b0"
+    },
+    {
       "path": "roocode/.specify/experts/core/character.md",
       "sha256": "6a2a74bd4b42c52e15bd877fe7fe1c5ad6a32358475e797397b060a4b230cd89"
     },
@@ -7929,7 +8217,7 @@
     },
     {
       "path": "roocode/.specify/templates/agent/agent-contract.md",
-      "sha256": "6d877ddb32e4577ec4b124de975d2c0d29981add23163e5a07bd3ae2b2dcb577"
+      "sha256": "031b85cc61bad2a55bfe0355e19df58f2cd4be4489a9fe3368112265bcdebf10"
     },
     {
       "path": "roocode/.specify/templates/canon/contradictions.md",
@@ -8008,6 +8296,22 @@
       "sha256": "2dd9e0e55e5a8ebb60c912d24a465aaa668f2934a7e550b827b60fde7c773934"
     },
     {
+      "path": "roocode/.specify/templates/CLAUDE.md",
+      "sha256": "745545dc0d05b4e4c3de66a7669b622c48e9dec2be38c9fd525baf84ad9c061b"
+    },
+    {
+      "path": "roocode/.specify/templates/continue-rules/story-spec.md",
+      "sha256": "718fdccdad9556ce7513286d249489fa774b3eb86b14ed8780570566d17f0a79"
+    },
+    {
+      "path": "roocode/.specify/templates/copilot-instructions.md",
+      "sha256": "f0442c76266328bc29726e63fbe4941ce93fb4cc8a54a4f665643c003677e45d"
+    },
+    {
+      "path": "roocode/.specify/templates/cursor-rules/story-spec.mdc",
+      "sha256": "9762fbaafdeba24e0c3844aa747f9dbe9d99b01e50060a1009712246b0871505"
+    },
+    {
       "path": "roocode/.specify/templates/feedback/feedback.json",
       "sha256": "4c6e8e443a53c2172f54ac75e79463c2480878b5c59f0b2b066c330b44664186"
     },
@@ -8017,7 +8321,7 @@
     },
     {
       "path": "roocode/.specify/templates/GEMINI.md",
-      "sha256": "e2422f9b9f261971b4ed05ac4ead9138034bc291f2a34a40d70c51c1e984e2eb"
+      "sha256": "96947a4a3d0704eba558214a706608ad45fd035661973d4116944a51a21aa66c"
     },
     {
       "path": "roocode/.specify/templates/graph/edges.json",
@@ -8133,7 +8437,7 @@
     },
     {
       "path": "roocode/.specify/templates/vscode-settings.json",
-      "sha256": "875183e65cb2b8fd43111ef9f6b8e7b94fb8e3cdcfa9ae340cd9cf3eadaf06eb"
+      "sha256": "16b5aa5da697626de7956bf09c7097e14f4d1192e0ad993a199f8279b7f06312"
     },
     {
       "path": "roocode/.specify/templates/world/factions.yaml",
@@ -8238,6 +8542,10 @@
     {
       "path": "roocode/spec/README.md",
       "sha256": "09a7af07dc5d2743da5e86c75340fe330274d687ea6f23e0e57e922e38358e45"
+    },
+    {
+      "path": "windsurf/.specify/agent-guides/story-creation-guide.md",
+      "sha256": "436e225c9116b0e7c3f458711fd9127d28cb5892f4228a86b31f8f9edd76a9b0"
     },
     {
       "path": "windsurf/.specify/experts/core/character.md",
@@ -8361,7 +8669,7 @@
     },
     {
       "path": "windsurf/.specify/templates/agent/agent-contract.md",
-      "sha256": "6d877ddb32e4577ec4b124de975d2c0d29981add23163e5a07bd3ae2b2dcb577"
+      "sha256": "031b85cc61bad2a55bfe0355e19df58f2cd4be4489a9fe3368112265bcdebf10"
     },
     {
       "path": "windsurf/.specify/templates/canon/contradictions.md",
@@ -8440,6 +8748,22 @@
       "sha256": "2dd9e0e55e5a8ebb60c912d24a465aaa668f2934a7e550b827b60fde7c773934"
     },
     {
+      "path": "windsurf/.specify/templates/CLAUDE.md",
+      "sha256": "745545dc0d05b4e4c3de66a7669b622c48e9dec2be38c9fd525baf84ad9c061b"
+    },
+    {
+      "path": "windsurf/.specify/templates/continue-rules/story-spec.md",
+      "sha256": "718fdccdad9556ce7513286d249489fa774b3eb86b14ed8780570566d17f0a79"
+    },
+    {
+      "path": "windsurf/.specify/templates/copilot-instructions.md",
+      "sha256": "f0442c76266328bc29726e63fbe4941ce93fb4cc8a54a4f665643c003677e45d"
+    },
+    {
+      "path": "windsurf/.specify/templates/cursor-rules/story-spec.mdc",
+      "sha256": "9762fbaafdeba24e0c3844aa747f9dbe9d99b01e50060a1009712246b0871505"
+    },
+    {
       "path": "windsurf/.specify/templates/feedback/feedback.json",
       "sha256": "4c6e8e443a53c2172f54ac75e79463c2480878b5c59f0b2b066c330b44664186"
     },
@@ -8449,7 +8773,7 @@
     },
     {
       "path": "windsurf/.specify/templates/GEMINI.md",
-      "sha256": "e2422f9b9f261971b4ed05ac4ead9138034bc291f2a34a40d70c51c1e984e2eb"
+      "sha256": "96947a4a3d0704eba558214a706608ad45fd035661973d4116944a51a21aa66c"
     },
     {
       "path": "windsurf/.specify/templates/graph/edges.json",
@@ -8565,7 +8889,7 @@
     },
     {
       "path": "windsurf/.specify/templates/vscode-settings.json",
-      "sha256": "875183e65cb2b8fd43111ef9f6b8e7b94fb8e3cdcfa9ae340cd9cf3eadaf06eb"
+      "sha256": "16b5aa5da697626de7956bf09c7097e14f4d1192e0ad993a199f8279b7f06312"
     },
     {
       "path": "windsurf/.specify/templates/world/factions.yaml",

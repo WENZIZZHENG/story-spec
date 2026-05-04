@@ -27,7 +27,8 @@ const cloneInstallTargets = (
 ): AgentInstallTarget[] => installTargets.map(target => ({
   ...target,
   initDirs: target.initDirs ? [...target.initDirs] : undefined,
-  extraDirs: target.extraDirs ? [...target.extraDirs] : undefined
+  extraDirs: target.extraDirs ? [...target.extraDirs] : undefined,
+  extraFiles: target.extraFiles ? [...target.extraFiles] : undefined
 }));
 
 const toListedAgentIntegration = (

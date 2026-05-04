@@ -1,12 +1,13 @@
 # StorySpec Gemini 入口
 
-这是 Gemini CLI 的项目级入口文件。通用规则以项目根目录的 `AGENTS.md` 和 `.specify/agent-contract.md` 为准；本文只保留 Gemini 需要的命令格式提示。
+这是 Gemini CLI 的项目级入口文件。通用规则以项目根目录的 `AGENTS.md`、`.specify/agent-contract.md` 和 `.specify/agent-guides/story-creation-guide.md` 为准；本文只保留 Gemini 需要的命令格式提示。
 
 ## 读取顺序
 
 1. 先读取项目根目录 `AGENTS.md`。
 2. 再读取 `.specify/agent-contract.md`。
-3. 按当前命令要求读取 `stories/`、`spec/knowledge/`、`spec/tracking/` 中的上下文。
+3. 如果用户提到 story-spec、小说创建、剧情设定、章节规划或如何开始，读取 `.specify/agent-guides/story-creation-guide.md`。
+4. 按当前命令要求读取 `stories/`、`spec/knowledge/`、`spec/tracking/` 中的上下文。
 
 ## Gemini 命令格式
 
@@ -33,6 +34,7 @@ Gemini 使用 `storyspec:` 命名空间：
 ## 协作边界
 
 - 用户只给出题材、风格或模糊设想时，优先进入澄清，不要直接替用户生成完整设定。
+- 用户询问 StorySpec 适不适合或怎么用时，不要只解释概念；按 `.specify/agent-guides/story-creation-guide.md` 主动带作者创建第一版 StorySpec。
 - 写正文前确认 `specification.md`、`creative-plan.md` 和 `tasks.md` 已足够明确。
 - 用户要求规划时，只更新规划与任务文件，不直接写章节正文。
 - 高风险、边界不清或可能改变核心设定的内容，先提出澄清问题。

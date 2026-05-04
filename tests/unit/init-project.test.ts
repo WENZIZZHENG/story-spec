@@ -41,10 +41,12 @@ const createPackageRootFixture = async () => {
   await mkdir(path.join(packageRoot, 'templates', 'canon'), { recursive: true });
   await mkdir(path.join(packageRoot, 'templates', 'graph'), { recursive: true });
   await mkdir(path.join(packageRoot, 'templates', 'voice'), { recursive: true });
+  await mkdir(path.join(packageRoot, 'agent-guides'), { recursive: true });
   await writeFile(
     path.join(packageRoot, 'templates', 'agent', 'agent-contract.md'),
     '# Contract {{PROJECT_NAME}}\n\n{{AGENTS_PROFILE_SECTION}}\n'
   );
+  await writeFile(path.join(packageRoot, 'agent-guides', 'story-creation-guide.md'), '# story guide');
   await writeFile(path.join(packageRoot, 'templates', 'tracking', 'plot-tracker.json'), '{}');
   await writeFile(path.join(packageRoot, 'templates', 'knowledge', 'world-setting.md'), 'updated [日期]');
   await writeFile(path.join(packageRoot, 'templates', 'world', 'rules.yaml'), 'worldFacts: []');
@@ -93,9 +95,11 @@ describe('initProject', () => {
     const projectPath = path.join(cwd, 'smoke');
     await expect(exists(path.join(projectPath, '.specify', 'config.json'))).resolves.toBe(true);
     await expect(exists(path.join(projectPath, '.specify', 'agent-contract.md'))).resolves.toBe(true);
+    await expect(exists(path.join(projectPath, '.specify', 'agent-guides', 'story-creation-guide.md'))).resolves.toBe(true);
     await expect(exists(path.join(projectPath, '.codex', 'prompts', 'novel-write.md'))).resolves.toBe(true);
     await expect(exists(path.join(projectPath, 'AGENTS.md'))).resolves.toBe(true);
     await expect(readFile(path.join(projectPath, '.specify', 'agent-contract.md'), 'utf-8')).resolves.toContain('Contract smoke');
+    await expect(readFile(path.join(projectPath, '.specify', 'agent-guides', 'story-creation-guide.md'), 'utf-8')).resolves.toContain('story guide');
     await expect(readFile(path.join(projectPath, 'AGENTS.md'), 'utf-8')).resolves.toContain('默认画像');
     await expect(exists(path.join(projectPath, 'spec', 'tracking', 'plot-tracker.json'))).resolves.toBe(true);
     await expect(exists(path.join(projectPath, 'spec', 'knowledge', 'world-setting.md'))).resolves.toBe(true);

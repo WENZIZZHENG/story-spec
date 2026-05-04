@@ -96,3 +96,19 @@ storyspec contract:sync
 ```
 
 `agent:doctor` 会检查 contract、命令目录、manifest 和 renderer 版本；`contract:sync` 用于同步 `.specify/agent-contract.md` 和 `AGENTS.md`。
+
+## 跨工具引导入口
+
+不同工具不一定读取同一个项目说明文件。StorySpec 因此采用“中心协议 + 多入口适配”：
+
+| 工具 | 入口文件 |
+| --- | --- |
+| Codex | `AGENTS.md` |
+| Claude | `CLAUDE.md` |
+| Gemini | `.gemini/GEMINI.md` |
+| Cursor | `.cursor/rules/story-spec.mdc` |
+| Continue | `.continue/rules/story-spec.md` |
+| GitHub Copilot | `.github/copilot-instructions.md` |
+| 通用 Markdown agent | `.specify/agent-guides/story-creation-guide.md` |
+
+中心协议是 `.specify/agent-guides/story-creation-guide.md`。当用户提到 story-spec、小说创建、剧情设定、章节规划或如何开始时，各入口都应引导 agent 读取该协议，先带作者创建第一版 StorySpec，而不是停留在概念解释。

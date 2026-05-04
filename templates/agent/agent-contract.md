@@ -6,18 +6,28 @@
 - 项目协议保持 agent-neutral。Codex、Claude、Gemini、Cursor、通用 Markdown agent 和其他工具都是集成入口。
 - CLI 负责管理项目文件和验证流程；它不是写作 agent。
 - 除非项目文件另有说明，面向作者的说明、计划和交接内容使用中文。
+- 遇到 story-spec、小说创建、剧情设定、章节规划或“怎么开始”时，先读取 `.specify/agent-guides/story-creation-guide.md`，主动引导作者创建第一版 StorySpec，不要只解释概念。
 
 ## 读取顺序
 
 1. `AGENTS.md`
 2. `.specify/agent-contract.md`
-3. `.specify/memory/constitution.md`
-4. `stories/*/specification.md`
-5. `stories/*/creative-plan.md`
-6. `stories/*/tasks.md`
-7. `spec/tracking/*.json`
-8. `spec/knowledge/*`
-9. `stories/*/content/*`
+3. `.specify/agent-guides/story-creation-guide.md`
+4. `.specify/memory/constitution.md`
+5. `stories/*/specification.md`
+6. `stories/*/creative-plan.md`
+7. `stories/*/tasks.md`
+8. `spec/tracking/*.json`
+9. `spec/knowledge/*`
+10. `stories/*/content/*`
+
+## 主动引导规则
+
+- 用户只给题材、风格、一句话灵感或询问 StorySpec 怎么用时，先进入低负担引导。
+- 首轮最多问 6 个必要问题：类型、基调、主角、目标、阻碍、读者感受。
+- 根据回答生成第一版可修改 StorySpec 草案，并标清“作者已确认 / agent 建议 / 待确认”。
+- 写正文前必须先确认章节目标、冲突、信息释放、情绪变化和结尾钩子。
+- 详细流程见 `.specify/agent-guides/story-creation-guide.md`。
 
 ## 写入边界
 

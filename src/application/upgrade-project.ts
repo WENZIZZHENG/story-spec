@@ -319,11 +319,7 @@ const updateCommands = async (
       emit(onEvent, { type: 'info', message: `${integration.displayName}: ${commandCount} 个文件` });
     }
 
-    if (!target.extraDirs) {
-      continue;
-    }
-
-    for (const extraDir of target.extraDirs) {
+    for (const extraDir of target.extraDirs ?? []) {
       const sourceExtraDir = path.join(sourceDir, extraDir);
       const targetExtraDir = path.join(projectPath, extraDir);
       if (!await fs.pathExists(sourceExtraDir)) {
@@ -334,6 +330,20 @@ const updateCommands = async (
         await fs.copy(sourceExtraDir, targetExtraDir, { overwrite: true });
       }
       emit(onEvent, { type: 'info', message: `${integration.displayName}: 已更新 ${extraDir}` });
+    }
+
+    for (const extraFile of target.extraFiles ?? []) {
+      const sourceExtraFile = path.join(sourceDir, extraFile);
+      const targetExtraFile = path.join(projectPath, extraFile);
+      if (!await fs.pathExists(sourceExtraFile)) {
+        continue;
+      }
+
+      if (!dryRun) {
+        await fs.ensureDir(path.dirname(targetExtraFile));
+        await fs.copy(sourceExtraFile, targetExtraFile, { overwrite: true });
+      }
+      emit(onEvent, { type: 'info', message: `${integration.displayName}: 已更新 ${extraFile}` });
     }
   }
 
@@ -524,6 +534,13 @@ const createBackup = async (
           const extraSource = path.join(plan.projectPath, extraDir);
           if (await copyIfExists(fs, extraSource, path.join(backupPath, extraDir))) {
             emit(onEvent, { type: 'info', message: `备份 ${extraDir}/` });
+          }
+        }
+
+        for (const extraFile of target.extraFiles ?? []) {
+          const extraSource = path.join(plan.projectPath, extraFile);
+          if (await copyIfExists(fs, extraSource, path.join(backupPath, extraFile))) {
+            emit(onEvent, { type: 'info', message: `备份 ${extraFile}` });
           }
         }
       }

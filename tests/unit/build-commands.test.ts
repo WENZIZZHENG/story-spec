@@ -60,6 +60,17 @@ Run {SCRIPT}
 
   await mkdir(path.join(rootDir, 'templates', 'knowledge'), { recursive: true });
   await writeFile(path.join(rootDir, 'templates', 'knowledge', 'world.md'), '# world');
+  await writeFile(path.join(rootDir, 'templates', 'CLAUDE.md'), '# claude entry');
+  await writeFile(path.join(rootDir, 'templates', 'GEMINI.md'), '# gemini entry');
+  await writeFile(path.join(rootDir, 'templates', 'copilot-instructions.md'), '# copilot instructions');
+  await writeFile(path.join(rootDir, 'templates', 'vscode-settings.json'), '{"copilot":true}');
+  await mkdir(path.join(rootDir, 'templates', 'cursor-rules'), { recursive: true });
+  await writeFile(path.join(rootDir, 'templates', 'cursor-rules', 'story-spec.mdc'), '# cursor rule');
+  await mkdir(path.join(rootDir, 'templates', 'continue-rules'), { recursive: true });
+  await writeFile(path.join(rootDir, 'templates', 'continue-rules', 'story-spec.md'), '# continue rule');
+
+  await mkdir(path.join(rootDir, 'agent-guides'), { recursive: true });
+  await writeFile(path.join(rootDir, 'agent-guides', 'story-creation-guide.md'), '# story guide');
 
   await mkdir(path.join(rootDir, 'memory'), { recursive: true });
   await writeFile(path.join(rootDir, 'memory', 'constitution.md'), '# constitution');
@@ -135,11 +146,31 @@ describe('buildCommandArtifacts', () => {
     await expect(exists(path.join(outDir, 'codex', '.specify', 'scripts', 'runtime', 'application', 'check-writing-state.js'))).resolves.toBe(true);
     await expect(exists(path.join(outDir, 'codex', '.specify', 'scripts', 'runtime', 'domain', 'story-artifact.js'))).resolves.toBe(true);
     await expect(exists(path.join(outDir, 'codex', '.specify', 'templates', 'knowledge', 'world.md'))).resolves.toBe(true);
+    await expect(exists(path.join(outDir, 'codex', '.specify', 'agent-guides', 'story-creation-guide.md'))).resolves.toBe(true);
     await expect(exists(path.join(outDir, 'codex', '.specify', 'templates', 'commands', 'plan.md'))).resolves.toBe(false);
     await expect(exists(path.join(outDir, 'codex', 'spec', 'presets', 'three-act.md'))).resolves.toBe(true);
 
     await expect(readdir(path.join(outDir, 'codex', 'spec', 'tracking'))).resolves.toEqual([]);
     await expect(readdir(path.join(outDir, 'codex', 'spec', 'knowledge'))).resolves.toEqual([]);
+  });
+
+  it('copies platform project instruction entrypoints', async () => {
+    const rootDir = await createPackageRootFixture();
+    const outDir = path.join(rootDir, 'out');
+
+    await buildCommandArtifacts({
+      rootDir,
+      outDir,
+      agents: ['claude', 'gemini', 'cursor', 'continue-check', 'copilot'],
+      scripts: ['sh']
+    });
+
+    await expect(readFile(path.join(outDir, 'claude', 'CLAUDE.md'), 'utf-8')).resolves.toContain('claude entry');
+    await expect(readFile(path.join(outDir, 'gemini', '.gemini', 'GEMINI.md'), 'utf-8')).resolves.toContain('gemini entry');
+    await expect(readFile(path.join(outDir, 'cursor', '.cursor', 'rules', 'story-spec.mdc'), 'utf-8')).resolves.toContain('cursor rule');
+    await expect(readFile(path.join(outDir, 'continue-check', '.continue', 'rules', 'story-spec.md'), 'utf-8')).resolves.toContain('continue rule');
+    await expect(readFile(path.join(outDir, 'copilot', '.github', 'copilot-instructions.md'), 'utf-8')).resolves.toContain('copilot instructions');
+    await expect(readFile(path.join(outDir, 'copilot', '.vscode', 'settings.json'), 'utf-8')).resolves.toContain('copilot');
   });
 
   it('generates generic Markdown commands under .specify/commands', async () => {

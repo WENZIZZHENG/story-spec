@@ -33,6 +33,7 @@ temp/
 /stories/
 /spec/
 /memory/
+/agent-guides/
 
 # 文档源文件（但保留模板）
 docs/
@@ -58,8 +59,16 @@ scripts/build/
 !templates/knowledge/**/*
 !templates/gemini-settings.json
 !templates/GEMINI.md
+!templates/CLAUDE.md
+!templates/copilot-instructions.md
+!templates/cursor-rules/
+!templates/cursor-rules/**/*
+!templates/continue-rules/
+!templates/continue-rules/**/*
 !memory/
 !memory/**/*
+!agent-guides/
+!agent-guides/**/*
 !scripts/bash/
 !scripts/bash/**/*
 !scripts/powershell/

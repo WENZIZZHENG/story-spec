@@ -17,6 +17,7 @@
     "requiredFiles": [
       "AGENTS.md",
       ".specify/agent-contract.md",
+      ".specify/agent-guides/story-creation-guide.md",
       ".codex/prompts/storyspec-constitution.md",
       ".codex/prompts/storyspec-write.md",
       ".specify/config.json",
@@ -31,6 +32,7 @@
     "expectedDirs": [
       ".claude/commands",
       ".cursor/commands",
+      ".cursor/rules",
       ".gemini/commands",
       ".windsurf/workflows",
       ".roo/commands",

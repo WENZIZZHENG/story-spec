@@ -12,6 +12,7 @@ StorySpec 是一个面向中文长篇小说的共创型编辑台。它不是让 
 - 作者可以确认、改写、拒绝或稍后决定。
 - AI 候选进入正典前必须经过 preview / confirm / apply 或等价确认流程。
 - Codex、Claude、Gemini、Cursor、Continue 等 agent 可以共用同一套故事资料。
+- 不同 agent 入口会共同指向 `.specify/agent-guides/story-creation-guide.md`，避免只解释 StorySpec 而不带作者进入第一轮创建。
 
 ## 安装
 

@@ -1,0 +1,26 @@
+---
+description: StorySpec 小说创建与共创引导规则
+alwaysApply: true
+---
+
+# StorySpec Cursor 规则
+
+## 必读
+
+- `AGENTS.md`
+- `.specify/agent-contract.md`
+- `.specify/agent-guides/story-creation-guide.md`
+
+## 主动引导
+
+- 用户提到 story-spec、小说创建、剧情设定、章节规划或如何开始时，不要只解释概念。
+- 先按 `.specify/agent-guides/story-creation-guide.md` 引导作者完成第一版 StorySpec。
+- 首轮最多问 6 个低负担问题；已有信息不要重复询问。
+- 生成草案时区分作者已确认、agent 建议和待确认。
+- 写正文前先确认章节目标、冲突、信息释放、情绪变化和结尾钩子。
+
+## 写入边界
+
+- 只编辑当前任务允许的文件。
+- 不把 AI 候选写入正典。
+- 边界不清时先输出 preview 或补丁式建议。

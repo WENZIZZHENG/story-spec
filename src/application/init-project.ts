@@ -226,6 +226,11 @@ const copyTemplatesAndKnowledge = async (
     await fs.copy(templatesDir, path.join(projectPath, '.specify', 'templates'));
   }
 
+  const agentGuidesDir = path.join(input.packageRoot, 'agent-guides');
+  if (await fs.pathExists(agentGuidesDir)) {
+    await fs.copy(agentGuidesDir, path.join(projectPath, '.specify', 'agent-guides'));
+  }
+
   if (await fs.pathExists(path.join(templatesDir, 'agent', 'agent-contract.md'))) {
     await writeAgentContract({
       packageRoot: input.packageRoot,
@@ -322,6 +327,7 @@ const copyPlatformExtras = async (
   fs: ProjectFileSystem,
   projectPath: string,
   targetPlatforms: AIPlatformConfig[],
+  targetAgents: readonly AgentIntegration[],
   input: InitProjectInput
 ): Promise<void> => {
   if (targetPlatforms.some(platform => platform.name === 'gemini')) {
@@ -340,7 +346,41 @@ const copyPlatformExtras = async (
     }
   }
 
+  if (targetPlatforms.some(platform => platform.name === 'claude')) {
+    const claudeMdSource = path.join(input.packageRoot, 'templates', 'CLAUDE.md');
+    const claudeMdDest = path.join(projectPath, 'CLAUDE.md');
+    if (await fs.pathExists(claudeMdSource)) {
+      await fs.copy(claudeMdSource, claudeMdDest);
+      emit(input, { type: 'info', message: '  ✓ 已复制 CLAUDE.md' });
+    }
+  }
+
+  if (targetPlatforms.some(platform => platform.name === 'cursor')) {
+    const cursorRulesSource = path.join(input.packageRoot, 'templates', 'cursor-rules');
+    const cursorRulesDest = path.join(projectPath, '.cursor', 'rules');
+    if (await fs.pathExists(cursorRulesSource)) {
+      await fs.copy(cursorRulesSource, cursorRulesDest);
+      emit(input, { type: 'info', message: '  ✓ 已复制 Cursor rules' });
+    }
+  }
+
+  if (targetAgents.some(agent => agent.id === 'continue-check')) {
+    const continueRulesSource = path.join(input.packageRoot, 'templates', 'continue-rules');
+    const continueRulesDest = path.join(projectPath, '.continue', 'rules');
+    if (await fs.pathExists(continueRulesSource)) {
+      await fs.copy(continueRulesSource, continueRulesDest);
+      emit(input, { type: 'info', message: '  ✓ 已复制 Continue rules' });
+    }
+  }
+
   if (targetPlatforms.some(platform => platform.name === 'copilot')) {
+    const copilotInstructionsSource = path.join(input.packageRoot, 'templates', 'copilot-instructions.md');
+    const copilotInstructionsDest = path.join(projectPath, '.github', 'copilot-instructions.md');
+    if (await fs.pathExists(copilotInstructionsSource)) {
+      await fs.copy(copilotInstructionsSource, copilotInstructionsDest);
+      emit(input, { type: 'info', message: '  ✓ 已复制 GitHub Copilot instructions' });
+    }
+
     const vscodeSettingsSource = path.join(input.packageRoot, 'templates', 'vscode-settings.json');
     const vscodeSettingsDest = path.join(projectPath, '.vscode', 'settings.json');
     if (await fs.pathExists(vscodeSettingsSource)) {
@@ -486,7 +526,7 @@ export async function initProject(input: InitProjectInput): Promise<InitProjectR
   await copyFallbackScripts(fs, projectPath, input.packageRoot);
   await copyTemplatesAndKnowledge(fs, projectPath, projectName, input);
   await copySpec(fs, projectPath, input.packageRoot);
-  await copyPlatformExtras(fs, projectPath, targetPlatforms, input);
+  await copyPlatformExtras(fs, projectPath, targetPlatforms, targetAgents, input);
   await installExperts(fs, projectPath, aiDirs, input);
   await installPlugins(projectPath, input);
   await initializeGit(projectPath, input);

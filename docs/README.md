@@ -12,6 +12,7 @@
 - [Agent 命令对照](agent-commands.md)
 - [Agent integrations](agent-integrations.md)
 - [Agent contract](agent-contract.md)
+- [小说创建引导协议](agent-guides/story-creation-guide.md)
 
 ## 项目维护
 

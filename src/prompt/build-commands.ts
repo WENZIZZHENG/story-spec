@@ -206,9 +206,62 @@ const copySpecSupportFiles = async (rootDir: string, baseDir: string): Promise<v
   }
 };
 
+const copyAgentGuideSupportFiles = async (rootDir: string, specDir: string): Promise<void> => {
+  await copyIfExists(
+    path.join(rootDir, 'agent-guides'),
+    path.join(specDir, 'agent-guides')
+  );
+};
+
+const copyAgentEntrypointSupportFiles = async (
+  rootDir: string,
+  baseDir: string,
+  agent: BuildCommandAgent
+): Promise<void> => {
+  if (agent === 'claude') {
+    await copyIfExists(
+      path.join(rootDir, 'templates', 'CLAUDE.md'),
+      path.join(baseDir, 'CLAUDE.md')
+    );
+  }
+
+  if (agent === 'gemini') {
+    await copyIfExists(
+      path.join(rootDir, 'templates', 'GEMINI.md'),
+      path.join(baseDir, '.gemini', 'GEMINI.md')
+    );
+  }
+
+  if (agent === 'cursor') {
+    await copyIfExists(
+      path.join(rootDir, 'templates', 'cursor-rules'),
+      path.join(baseDir, '.cursor', 'rules')
+    );
+  }
+
+  if (agent === 'continue-check') {
+    await copyIfExists(
+      path.join(rootDir, 'templates', 'continue-rules'),
+      path.join(baseDir, '.continue', 'rules')
+    );
+  }
+
+  if (agent === 'copilot') {
+    await copyIfExists(
+      path.join(rootDir, 'templates', 'copilot-instructions.md'),
+      path.join(baseDir, '.github', 'copilot-instructions.md')
+    );
+    await copyIfExists(
+      path.join(rootDir, 'templates', 'vscode-settings.json'),
+      path.join(baseDir, '.vscode', 'settings.json')
+    );
+  }
+};
+
 const copySupportFiles = async (
   rootDir: string,
   baseDir: string,
+  agent: BuildCommandAgent,
   script: ScriptVariant,
   runtimeBundle: readonly RuntimeBundleFile[]
 ): Promise<void> => {
@@ -218,6 +271,8 @@ const copySupportFiles = async (
   await copyIfExists(path.join(rootDir, 'memory'), path.join(specDir, 'memory'));
   await copyScriptSupportFiles(rootDir, specDir, script, runtimeBundle);
   await copyTemplateSupportFiles(rootDir, specDir);
+  await copyAgentGuideSupportFiles(rootDir, specDir);
+  await copyAgentEntrypointSupportFiles(rootDir, baseDir, agent);
   await copyIfExists(path.join(rootDir, 'experts'), path.join(specDir, 'experts'));
   await copySpecSupportFiles(rootDir, baseDir);
 };
@@ -262,7 +317,7 @@ export const buildCommandArtifacts = async (
     for (const script of scripts) {
       const baseDir = path.join(outDir, agent);
       await fs.ensureDir(baseDir);
-      await copySupportFiles(input.rootDir, baseDir, script, runtimeBundle);
+      await copySupportFiles(input.rootDir, baseDir, agent, script, runtimeBundle);
       variants.push({
         agent,
         script,
