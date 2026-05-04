@@ -131,6 +131,9 @@ const formatAnswerText = (value: unknown): string =>
 const line = (label: string, value: string | undefined, fallback = '[需要澄清]'): string =>
   `- ${label}：${trimText(value) || fallback}`;
 
+const fullAnswerText = (value: string | undefined, fallback = '[需要澄清]'): string =>
+  trimText(value) || fallback;
+
 const renderTripletSection = (
   title: string,
   confirmed: string | undefined,
@@ -161,6 +164,59 @@ const coreElementConfirmed = (
 
 const coreElementPending = (element?: StoryCoreElementAssessment): string | undefined =>
   element?.nextPrompt;
+
+const confirmedAnswerText = (
+  record: ClarificationRecord,
+  questionIds: readonly string[]
+): string | undefined => {
+  const answer = record.answers.find(item =>
+    questionIds.includes(item.questionId)
+    && item.confirmed
+    && hasResolvedClarificationAnswer(item.answer)
+  );
+
+  return answer ? formatAnswerText(answer.answer) : undefined;
+};
+
+const confirmedElementText = (
+  record: ClarificationRecord,
+  element: StoryCoreElementAssessment | undefined,
+  fallbackQuestionIds: readonly string[] = [],
+  fallback?: string
+): string | undefined => confirmedAnswerText(record, [
+  ...fallbackQuestionIds,
+  ...(element?.confirmedAnswerIds ?? [])
+]) ?? trimText(fallback);
+
+const renderBibleSection = (
+  title: string,
+  confirmed: string | undefined,
+  suggestion: string | undefined,
+  pending: string | undefined
+): string => [
+  `## ${title}`,
+  '',
+  `- [作者已确认] ${fullAnswerText(confirmed)}`,
+  `- [agent 建议] ${trimText(suggestion) || '暂时没有建议'}`,
+  `- [待确认] ${trimText(pending) || '[需要澄清]'}`,
+  ''
+].join('\n');
+
+const renderConfirmedEvidenceSection = (record: ClarificationRecord): string[] => {
+  const confirmed = record.answers.filter(answer =>
+    answer.confirmed
+    && hasResolvedClarificationAnswer(answer.answer)
+  );
+
+  return [
+    '## 用户已确认',
+    '',
+    ...(confirmed.length > 0
+      ? confirmed.map(answer => `- ${answer.questionId}：${formatAnswerText(answer.answer)}`)
+      : ['- 暂无。']),
+    ''
+  ];
+};
 
 const truncateSummaryText = (value: string): string =>
   value.length > 120 ? `${value.slice(0, 117)}...` : value;
@@ -236,54 +292,88 @@ const renderSpecifyContent = (
   const genreElement = findCoreElement(coreElements, 'genrePromise');
   const protagonistElement = findCoreElement(coreElements, 'protagonist');
   const partnerElement = findCoreElement(coreElements, 'partner');
-  const conflictElement = findCoreElement(coreElements, 'factionConflict')
-    ?? findCoreElement(coreElements, 'longThreat');
-  const worldElement = findCoreElement(coreElements, 'stage')
-    ?? findCoreElement(coreElements, 'power');
+  const stageElement = findCoreElement(coreElements, 'stage');
+  const powerElement = findCoreElement(coreElements, 'power');
+  const factionElement = findCoreElement(coreElements, 'factionConflict');
+  const longThreatElement = findCoreElement(coreElements, 'longThreat');
   const voiceElement = findCoreElement(coreElements, 'voice');
+  const premise = confirmedAnswerText(record, ['core.premise']) ?? record.premise;
+  const protagonist = confirmedElementText(record, protagonistElement, ['core.protagonist']);
+  const partner = confirmedElementText(record, partnerElement, ['core.partner']);
+  const stage = confirmedElementText(record, stageElement, ['core.stage']);
+  const power = confirmedElementText(record, powerElement, ['magic.rule-hardness']);
+  const faction = confirmedElementText(record, factionElement, ['core.faction-conflict']);
+  const longThreat = confirmedElementText(record, longThreatElement, ['threat.first-symptom']);
+  const voice = confirmedElementText(record, voiceElement, ['core.voice', 'style.voice']);
+  const scope = confirmedAnswerText(record, ['core.scope']);
 
   return [
     `# ${story} StorySpec v0`,
     '',
-    '## 作品定位',
-    '',
-    line('[作者已确认]', record.premise || '未记录。'),
-    line('[agent 建议]', coreElementSuggestion(genreElement), '暂时没有建议'),
-    line('[待确认]', coreElementPending(genreElement) ?? pendingQuestions[0]?.question),
-    '',
-    '## 一句话故事',
-    '',
-    line('[作者已确认]', coreElementConfirmed(genreElement, record.premise)),
-    line('[agent 建议]', coreElementSuggestion(protagonistElement), '暂时没有建议'),
-    line('[待确认]', coreElementPending(protagonistElement) ?? pendingQuestions.find(question => question.topic === 'premise')?.question),
-    '',
-    renderTripletSection(
-      '主角核心',
-      coreElementConfirmed(protagonistElement, record.premise),
+    ...renderConfirmedEvidenceSection(record),
+    renderBibleSection(
+      '类型与阅读承诺',
+      confirmedElementText(record, genreElement, ['core.premise'], premise),
+      coreElementSuggestion(genreElement),
+      coreElementPending(genreElement) ?? pendingQuestions[0]?.question
+    ),
+    renderBibleSection(
+      '世界观',
+      stage ?? power ?? premise,
+      coreElementSuggestion(stageElement) ?? coreElementSuggestion(powerElement),
+      coreElementPending(stageElement) ?? coreElementPending(powerElement)
+    ),
+    renderBibleSection(
+      '社会结构矛盾',
+      faction,
+      coreElementSuggestion(factionElement),
+      coreElementPending(factionElement)
+    ),
+    renderBibleSection(
+      '能力体系',
+      power,
+      coreElementSuggestion(powerElement),
+      coreElementPending(powerElement)
+    ),
+    renderBibleSection(
+      '主角与成长线',
+      protagonist,
       coreElementSuggestion(protagonistElement),
       coreElementPending(protagonistElement)
     ),
-    renderTripletSection(
-      '关系线',
-      coreElementConfirmed(partnerElement),
+    renderBibleSection(
+      '核心伙伴',
+      partner,
       coreElementSuggestion(partnerElement),
       coreElementPending(partnerElement)
     ),
-    renderTripletSection(
-      '关键冲突',
-      coreElementConfirmed(conflictElement),
-      coreElementSuggestion(conflictElement),
-      coreElementPending(conflictElement)
+    renderBibleSection(
+      '第一舞台',
+      stage,
+      coreElementSuggestion(stageElement),
+      coreElementPending(stageElement)
     ),
-    renderTripletSection(
-      '世界规则',
-      coreElementConfirmed(worldElement),
-      coreElementSuggestion(worldElement),
-      coreElementPending(worldElement)
+    renderBibleSection(
+      '第一卷冲突',
+      faction,
+      coreElementSuggestion(factionElement),
+      coreElementPending(factionElement)
     ),
-    renderTripletSection(
-      '文风约束',
-      coreElementConfirmed(voiceElement),
+    renderBibleSection(
+      '长线伏笔',
+      longThreat,
+      coreElementSuggestion(longThreatElement),
+      coreElementPending(longThreatElement)
+    ),
+    renderBibleSection(
+      '创作边界',
+      scope,
+      '列出第一阶段不能提前定稿的反派、真相、关系归属或身份阴谋。',
+      scope ? undefined : '继续确认哪些高影响内容不能提前定稿。'
+    ),
+    renderBibleSection(
+      '文风与不写边界',
+      voice,
       coreElementSuggestion(voiceElement),
       coreElementPending(voiceElement)
     ),
@@ -293,7 +383,7 @@ const renderSpecifyContent = (
     `- 查看创作回声：storyspec creative:report ${story}`,
     `- 预览计划：storyspec preview plan ${story}`,
     '',
-    '## [需要澄清] 细项',
+    '## 待确认',
     '',
     ...(pendingQuestions.length > 0
       ? pendingQuestions.map(question => `- [需要澄清] ${question.id}：${question.question}`)

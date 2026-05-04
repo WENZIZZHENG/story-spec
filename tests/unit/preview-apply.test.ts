@@ -62,13 +62,13 @@ describe('preview apply', () => {
     expect(preview.record.risks).toEqual([]);
     await expect(fileSystem.readFile(path.join(storyPath, 'specification.md'))).resolves.toBe('# old spec');
     await expect(fileSystem.readFile(preview.contentPath)).resolves.toContain('# demo StorySpec v0');
-    await expect(fileSystem.readFile(preview.contentPath)).resolves.toContain('## 作品定位');
-    await expect(fileSystem.readFile(preview.contentPath)).resolves.toContain('## 一句话故事');
-    await expect(fileSystem.readFile(preview.contentPath)).resolves.toContain('## 主角核心');
-    await expect(fileSystem.readFile(preview.contentPath)).resolves.toContain('## 关系线');
-    await expect(fileSystem.readFile(preview.contentPath)).resolves.toContain('## 关键冲突');
-    await expect(fileSystem.readFile(preview.contentPath)).resolves.toContain('## 世界规则');
-    await expect(fileSystem.readFile(preview.contentPath)).resolves.toContain('## 文风约束');
+    await expect(fileSystem.readFile(preview.contentPath)).resolves.toContain('## 用户已确认');
+    await expect(fileSystem.readFile(preview.contentPath)).resolves.toContain('## 类型与阅读承诺');
+    await expect(fileSystem.readFile(preview.contentPath)).resolves.toContain('## 主角与成长线');
+    await expect(fileSystem.readFile(preview.contentPath)).resolves.toContain('## 核心伙伴');
+    await expect(fileSystem.readFile(preview.contentPath)).resolves.toContain('## 第一卷冲突');
+    await expect(fileSystem.readFile(preview.contentPath)).resolves.toContain('## 世界观');
+    await expect(fileSystem.readFile(preview.contentPath)).resolves.toContain('## 文风与不写边界');
     await expect(fileSystem.readFile(preview.contentPath)).resolves.toContain('## 下一步入口');
     await expect(fileSystem.readFile(preview.contentPath)).resolves.toContain('[作者已确认]');
     await expect(fileSystem.readFile(preview.contentPath)).resolves.toContain('[agent 建议]');
@@ -105,6 +105,175 @@ describe('preview apply', () => {
     await expect(fileSystem.readFile(preview.markdownPath)).resolves.toContain('core.premise');
     await expect(fileSystem.readFile(preview.markdownPath)).resolves.toContain('### Agent 建议');
     await expect(fileSystem.readFile(preview.markdownPath)).resolves.toContain('### 待确认项');
+  });
+
+  it('keeps full confirmed answers in the specification bible structure', async () => {
+    const projectRoot = path.join(os.tmpdir(), 'memory-novel-preview-full-spec');
+    const fileSystem = new MemoryFileSystem(projectRoot);
+    const storyPath = path.join(projectRoot, 'stories', '法术程序师');
+    const longProtagonist = '晏无开朗务实，遇事先拆问题，再找主要矛盾。他尊重人，行动力强，擅长把复杂问题拆成可执行步骤；缺点是感情迟钝，容易把亲密关系也当成需要调试的问题，所以亲密关系调试盲区必须完整保留在规格里。';
+
+    await fileSystem.writeFile(path.join(storyPath, 'idea.md'), '# 法术程序师');
+    await fileSystem.writeJson(path.join(storyPath, 'clarifications.json'), {
+      schemaVersion: '1.0',
+      story: '法术程序师',
+      premise: '工科马列青年晏无穿越到剑与魔法的世界。',
+      createdAt: '2026-05-04T00:00:00.000Z',
+      updatedAt: '2026-05-04T00:00:00.000Z',
+      questions: [
+        {
+          id: 'core.protagonist',
+          stage: 'specify',
+          topic: 'protagonist',
+          question: '主角是谁？',
+          whyItMatters: '影响主角成长线。',
+          type: 'textarea',
+          required: true,
+          options: [],
+          exampleAnswers: ['晏无。', '工科青年。'],
+          dependsOn: []
+        },
+        {
+          id: 'core.partner',
+          stage: 'specify',
+          topic: 'partner',
+          question: '核心伙伴是谁？',
+          whyItMatters: '影响团队张力。',
+          type: 'textarea',
+          required: true,
+          options: [],
+          exampleAnswers: ['莉莉丝。', '瑟琳娜。'],
+          dependsOn: []
+        },
+        {
+          id: 'core.stage',
+          stage: 'specify',
+          topic: 'stage',
+          question: '第一舞台在哪里？',
+          whyItMatters: '影响世界规则。',
+          type: 'textarea',
+          required: true,
+          options: [],
+          exampleAnswers: ['学院。', '边境。'],
+          dependsOn: []
+        },
+        {
+          id: 'magic.rule-hardness',
+          stage: 'specify',
+          topic: 'magic-system',
+          question: '能力体系是什么？',
+          whyItMatters: '影响能力边界。',
+          type: 'textarea',
+          required: true,
+          options: [],
+          exampleAnswers: ['中度偏硬。', '轻量隐喻。'],
+          dependsOn: []
+        },
+        {
+          id: 'core.faction-conflict',
+          stage: 'specify',
+          topic: 'faction',
+          question: '势力冲突是什么？',
+          whyItMatters: '影响第一卷压力。',
+          type: 'textarea',
+          required: true,
+          options: [],
+          exampleAnswers: ['学院垄断。', '贵族系统。'],
+          dependsOn: []
+        },
+        {
+          id: 'core.scope',
+          stage: 'specify',
+          topic: 'scope',
+          question: '哪些不能定稿？',
+          whyItMatters: '保护作者控制权。',
+          type: 'textarea',
+          required: false,
+          options: [],
+          exampleAnswers: ['最终反派。', '感情归属。'],
+          dependsOn: []
+        }
+      ],
+      answers: [
+        {
+          questionId: 'core.protagonist',
+          answer: longProtagonist,
+          source: 'user-explicit',
+          confidence: 1,
+          confirmed: true,
+          createdAt: '2026-05-04T00:00:00.000Z',
+          updatedAt: '2026-05-04T00:00:00.000Z'
+        },
+        {
+          questionId: 'core.partner',
+          answer: '莉莉丝重新拥有名字和选择，瑟琳娜追寻真正正义，塞拉斯蒂娅从书斋学者变成实践者。',
+          source: 'user-explicit',
+          confidence: 1,
+          confirmed: true,
+          createdAt: '2026-05-04T00:00:00.000Z',
+          updatedAt: '2026-05-04T00:00:00.000Z'
+        },
+        {
+          questionId: 'core.stage',
+          answer: '魔导边境学院垄断知识解释权，普通学生、底层工作人员、老学者和制度执行者都在其中承受不同代价。',
+          source: 'user-explicit',
+          confidence: 1,
+          confirmed: true,
+          createdAt: '2026-05-04T00:00:00.000Z',
+          updatedAt: '2026-05-04T00:00:00.000Z'
+        },
+        {
+          questionId: 'magic.rule-hardness',
+          answer: '中度偏硬规则，关键事故讲清魔力流向、符文连接、术式断点、材料限制、精神力消耗和错误后果。',
+          source: 'user-explicit',
+          confidence: 1,
+          confirmed: true,
+          createdAt: '2026-05-04T00:00:00.000Z',
+          updatedAt: '2026-05-04T00:00:00.000Z'
+        },
+        {
+          questionId: 'core.faction-conflict',
+          answer: '学院高层和贵族系统垄断知识解释权，资源、许可、考试和审查共同构成第一卷的制度阻力。',
+          source: 'user-explicit',
+          confidence: 1,
+          confirmed: true,
+          createdAt: '2026-05-04T00:00:00.000Z',
+          updatedAt: '2026-05-04T00:00:00.000Z'
+        },
+        {
+          questionId: 'core.scope',
+          answer: '第一阶段不能定稿最终反派、长线文明威胁真相、感情线归属和莉莉丝身份背后的完整阴谋。',
+          source: 'user-explicit',
+          confidence: 1,
+          confirmed: true,
+          createdAt: '2026-05-04T00:00:00.000Z',
+          updatedAt: '2026-05-04T00:00:00.000Z'
+        }
+      ]
+    }, { spaces: 2 });
+
+    const preview = await createSpecifyPreview({
+      projectRoot,
+      fileSystem,
+      story: '法术程序师',
+      now: () => new Date('2026-05-04T12:00:00.000Z')
+    });
+    const content = await fileSystem.readFile(preview.contentPath);
+
+    expect(content).toContain('## 类型与阅读承诺');
+    expect(content).toContain('## 世界观');
+    expect(content).toContain('## 社会结构矛盾');
+    expect(content).toContain('## 能力体系');
+    expect(content).toContain('## 主角与成长线');
+    expect(content).toContain('## 核心伙伴');
+    expect(content).toContain('## 第一舞台');
+    expect(content).toContain('## 第一卷冲突');
+    expect(content).toContain('## 长线伏笔');
+    expect(content).toContain('## 创作边界');
+    expect(content).toContain('## 待确认');
+    expect(content).toContain(longProtagonist);
+    expect(content).toContain('亲密关系调试盲区必须完整保留在规格里');
+    expect(content).toContain('不能定稿最终反派');
   });
 
   it('applies a preview only after explicit confirmation', async () => {
