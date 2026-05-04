@@ -23,6 +23,7 @@ import { registerCoCreateCommand } from './commands/co-create.command.js';
 import { registerCreativeReportCommand } from './commands/creative-report.command.js';
 import { registerPreviewApplyCommand } from './commands/preview-apply.command.js';
 import { registerAuthorProfileCommand } from './commands/author-profile.command.js';
+import { registerMaintenanceCommand } from './commands/maintenance.command.js';
 import chalk from 'chalk';
 import path from 'path';
 import { fileURLToPath } from 'url';
@@ -80,6 +81,7 @@ export function runProgram(argv: string[]): void {
   registerCoCreateCommand(program);
   registerCreativeReportCommand(program);
   registerPreviewApplyCommand(program);
+  registerMaintenanceCommand(program);
   registerInfoCommand(program);
 
   program.on('--help', () => {
