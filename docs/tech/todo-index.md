@@ -8,7 +8,7 @@ Active。本文是 StorySpec 当前唯一的活跃待办入口。详细规则见
 
 | 路线 | 状态 | 当前优先级 | 下一步 |
 | --- | --- | --- | --- |
-| [章节生产流程优化](chapter-production-workflow-roadmap.md) | Planned | P0 | 先实现 Scene Card 路径语义校验与自动修复，再实现 `storyspec task:finish <taskId>` 章节收尾命令。 |
+| [章节生产流程优化](chapter-production-workflow-roadmap.md) | Planned | P0 | 先实现 Scene Card 路径语义校验与自动修复，再实现 `storyspec task:finish <taskId>`，随后沉淀 agent 重复流程压缩命令基线。 |
 
 ## 暂不作为活跃待办
 
