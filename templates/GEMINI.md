@@ -34,7 +34,8 @@ Gemini 使用 `storyspec:` 命名空间：
 ## 协作边界
 
 - 用户只给出题材、风格或模糊设想时，优先进入澄清，不要直接替用户生成完整设定。
-- 用户询问 StorySpec 适不适合或怎么用时，不要只解释概念；按 `.specify/agent-guides/story-creation-guide.md` 主动带作者创建第一版 StorySpec。
+- 用户询问 StorySpec 适不适合或怎么用时，不要只解释概念或先抛命令；按 `.specify/agent-guides/story-creation-guide.md` 先让作者从一句灵感、主角、世界观、一幕场景或类型方向中选择入口。
+- 第一版 StorySpec 草案必须区分作者已确认、agent 建议和待确认，并给出玩角色、写一幕、整理设定、比较分支或进入章节规划的下一步。
 - 写正文前确认 `specification.md`、`creative-plan.md` 和 `tasks.md` 已足够明确。
 - 用户要求规划时，只更新规划与任务文件，不直接写章节正文。
 - 高风险、边界不清或可能改变核心设定的内容，先提出澄清问题。

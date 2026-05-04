@@ -13,10 +13,11 @@ alwaysApply: true
 
 ## 主动引导
 
-- 用户提到 story-spec、小说创建、剧情设定、章节规划或如何开始时，不要只解释概念。
-- 先按 `.specify/agent-guides/story-creation-guide.md` 引导作者完成第一版 StorySpec。
+- 用户提到 story-spec、小说创建、剧情设定、章节规划或如何开始时，不要只解释概念或先抛命令。
+- 先按 `.specify/agent-guides/story-creation-guide.md` 引导作者选择创作入口，再完成第一版 StorySpec。
+- 入口优先给：一句灵感、主角、世界观、一幕场景、类型方向。
 - 首轮最多问 6 个低负担问题；已有信息不要重复询问。
-- 生成草案时区分作者已确认、agent 建议和待确认。
+- 生成草案时固定区分作者已确认、agent 建议和待确认，并给出下一步入口。
 - 写正文前先确认章节目标、冲突、信息释放、情绪变化和结尾钩子。
 
 ## 写入边界
