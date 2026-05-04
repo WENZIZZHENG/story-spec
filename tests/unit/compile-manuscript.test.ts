@@ -88,4 +88,27 @@ describe('compile manuscript', () => {
     ]);
     expect(result.warnings).toEqual([]);
   });
+
+  it('checks manuscript compilation without writing build outputs', async () => {
+    const fixture = await createProject();
+
+    const result = await compileManuscript({
+      ...fixture,
+      story: '001-demo',
+      withFrontmatter: true,
+      includeAppendix: true,
+      check: true
+    });
+
+    expect(result.written).toBe(false);
+    expect(result.outputPath).toContain(path.join('build', 'manuscript.md'));
+    expect(result.reportPath).toContain(path.join('build', 'reports', 'manuscript-report.json'));
+    expect(result.frontmatterPath).toContain(path.join('build', 'manuscript.frontmatter.json'));
+    expect(result.chapters.map(chapter => chapter.path)).toEqual([
+      'stories/001-demo/content/chapter-001.md'
+    ]);
+    await expect(fixture.fileSystem.pathExists(result.outputPath)).resolves.toBe(false);
+    await expect(fixture.fileSystem.pathExists(result.reportPath)).resolves.toBe(false);
+    await expect(fixture.fileSystem.pathExists(result.frontmatterPath!)).resolves.toBe(false);
+  });
 });

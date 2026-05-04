@@ -479,6 +479,9 @@ const initializeGit = async (projectPath: string, input: InitProjectInput): Prom
 # AI 缓存
 .ai-cache/
 
+# StorySpec 生成稿
+build/
+
 # 节点模块
 node_modules/
 `;

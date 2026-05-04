@@ -113,6 +113,33 @@ describe('initProject', () => {
     await expect(exists(path.join(projectPath, 'build'))).resolves.toBe(true);
   });
 
+  it('ignores generated manuscript build outputs in initialized Git projects', async () => {
+    const cwd = await makeTempDir();
+    const packageRoot = await createPackageRootFixture();
+
+    await initProject({
+      name: 'git-build-ignore',
+      cwd,
+      packageRoot,
+      here: false,
+      ai: 'codex',
+      all: false,
+      method: 'three-act',
+      git: true,
+      withExperts: false,
+      fileSystem: nodeFileSystem,
+      gitAdapter: {
+        init: async () => undefined,
+        addAll: async () => undefined,
+        commit: async () => undefined,
+        statusShort: async () => []
+      }
+    });
+
+    await expect(readFile(path.join(cwd, 'git-build-ignore', '.gitignore'), 'utf-8'))
+      .resolves.toContain('build/');
+  });
+
   it('renders configured AGENTS.md writing profiles for Codex projects', async () => {
     const cwd = await makeTempDir();
     const packageRoot = await createPackageRootFixture();

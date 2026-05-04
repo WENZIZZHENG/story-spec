@@ -21,6 +21,7 @@ export interface CompileManuscriptInput {
   withFrontmatter?: boolean;
   includeAppendix?: boolean;
   writtenOnly?: boolean;
+  check?: boolean;
   now?: () => Date;
 }
 
@@ -31,6 +32,7 @@ export interface CompileManuscriptResult {
   outputPath: string;
   frontmatterPath?: string;
   reportPath: string;
+  written: boolean;
   chapters: CompileChapter[];
   warnings: CompileWarning[];
   totalWordCount: number;
@@ -238,10 +240,15 @@ export const compileManuscript = async (
     outputPath: output,
     frontmatterPath: input.withFrontmatter ? frontmatterPath(input.projectRoot) : undefined,
     reportPath: report,
+    written: !input.check,
     chapters,
     warnings,
     totalWordCount
   };
+
+  if (input.check) {
+    return result;
+  }
 
   await input.fileSystem.ensureDir(buildDir(input.projectRoot));
   await input.fileSystem.ensureDir(reportsDir(input.projectRoot));
@@ -276,6 +283,7 @@ export const renderCompileResult = (result: CompileManuscriptResult): string => 
   '',
   `故事：${result.story}`,
   `格式：${result.format}`,
+  `写入：${result.written ? '是' : '否（check 模式）'}`,
   `输出：${toPosixPath(result.outputPath)}`,
   ...(result.frontmatterPath ? [`Frontmatter：${toPosixPath(result.frontmatterPath)}`] : []),
   `Report：${toPosixPath(result.reportPath)}`,

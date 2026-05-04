@@ -1404,6 +1404,28 @@ reveals:
     expect(writtenOnlyCompiled.chapters).toHaveLength(1);
     expect(writtenOnlyCompiled.warnings).toEqual([]);
 
+    const checkCompileResult = await execFileAsync('node', [
+      cliPath,
+      'compile',
+      '--story',
+      '001-demo',
+      '--check',
+      '--json'
+    ], { cwd: projectPath });
+    const checkedCompile = JSON.parse(checkCompileResult.stdout);
+    expect(checkedCompile.written).toBe(false);
+    await rm(path.join(projectPath, 'build'), { recursive: true, force: true });
+    await execFileAsync('node', [
+      cliPath,
+      'compile',
+      '--story',
+      '001-demo',
+      '--check',
+      '--json'
+    ], { cwd: projectPath });
+    await expect(readFile(path.join(projectPath, 'build', 'manuscript.md'), 'utf-8'))
+      .rejects.toThrow();
+
     const feedbackImportResult = await execFileAsync('node', [
       cliPath,
       'feedback:import',
