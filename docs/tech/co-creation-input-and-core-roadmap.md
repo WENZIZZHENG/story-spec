@@ -100,12 +100,13 @@ Active。
 ### P3-1 共创输入工作台交互层
 
 - 类型：CLI 交互、产品体验。
+- 状态：基础版已落地，`storyspec co:create` 可串联长文吸收、核心面板和可选 preview，默认不写入。
 - 背景/问题：当前已支持长文吸收、批量答案、核心面板和预览摘要，但仍主要依赖命令参数；对非命令行用户，完整链路还不够像“创作工作台”。
 - 已有基础：`storyspec next`、`storyspec interview`、`storyspec ingest`、`storyspec core`、`storyspec preview` 已能覆盖主要数据流。
-- 缺口：缺少一个连续入口，把“粘贴长文 -> 看拆分 -> 选择确认 -> 查看核心面板 -> 生成预览”串成低负担会话。
-- 建议方案：后续新增轻量 workbench 命令或现有 `next` 模式增强，复用已实现的本地规则和确认门禁。
-- 涉及文件/模块：`src/cli/commands/workbench.command.ts`、`src/application/co-creation-workbench.ts`、`src/application/ingest-story-input.ts`、README。
-- 验收标准：作者可以从一个入口完成长文导入、候选确认、核心缺口查看和下一步命令选择；默认不绕过确认门禁。
+- 缺口：轻量连续入口已补齐；后续可继续增强交互式选择、部分字段确认和更自然的错误提示。
+- 建议方案：基础版新增 `storyspec co:create`，复用已实现的本地规则和确认门禁；后续再评估是否增强为交互式工作台。
+- 涉及文件/模块：`src/application/co-create-workbench.ts`、`src/cli/commands/co-create.command.ts`、`src/application/ingest-story-input.ts`、README。
+- 验收标准：作者可以从一个入口完成长文导入、候选确认、核心缺口查看和下一步命令选择；默认不绕过确认门禁。基础版已通过单测和 CLI smoke。
 - 不做/边界：不在本路线第一批引入 TUI/网页 UI，不接入 LLM 自动语义理解。
 
 ### P3-2 语义识别质量增强
