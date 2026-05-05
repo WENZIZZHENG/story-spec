@@ -10,7 +10,6 @@ Active。本文是 StorySpec 当前唯一的活跃待办入口。详细规则见
 
 | 优先级 | 路线 | 状态 | 覆盖范围 | 下一步 |
 | --- | --- | --- | --- | --- |
-| P1 | [Agent、CI 与自然语言质量增强路线图](agent-ci-quality-roadmap.md) | Done | 新增 agent 准入清单、CI check manifest、Vale / textlint 可选 adapter 已完成 | 归档该路线，下一步转入体验后续增强 |
 | P2 | [体验后续增强入口路线图](experience-followup-roadmap.md) | Active | 首程、新用户、共创、创作控制权、dogfood、Worldbuilding / Workbench 后续入口 | 先做 dogfood 回归和体验证据收集 |
 
 ## 暂不作为活跃待办
@@ -30,6 +29,7 @@ Active。本文是 StorySpec 当前唯一的活跃待办入口。详细规则见
 | [archive/completed-roadmaps/command-onboarding.md](archive/completed-roadmaps/command-onboarding.md) | 输入澄清引导已实现，后续创作控制权增强已完成归档 | [todo-archive.md](todo-archive.md#命令输入澄清引导) |
 | [archive/completed-roadmaps/chapter-maintenance-automation-roadmap.md](archive/completed-roadmaps/chapter-maintenance-automation-roadmap.md) | 章节前置约束卡、任务/文档收尾提交、待办捕获和共享流程 JSON 契约已完成并归档 | [todo-archive.md](todo-archive.md#章节与维护自动化增强) |
 | [archive/completed-roadmaps/storyspec-ecosystem-roadmap.md](archive/completed-roadmaps/storyspec-ecosystem-roadmap.md) | `extension:add`、首个 `mystery` 类型 preset、reviewer 权重和生态 kind 展示口径已完成并归档 | [todo-archive.md](todo-archive.md#storyspec-生态与类型包增强) |
+| [archive/completed-roadmaps/agent-ci-quality-roadmap.md](archive/completed-roadmaps/agent-ci-quality-roadmap.md) | agent 准入清单、CI check manifest、Vale / textlint 可选 adapter 已完成并归档 | [todo-archive.md](todo-archive.md#agentci-与自然语言质量增强) |
 | `changes/*.md` | changeset 只记录已发生变化，不作为待办入口 | [todo-archive.md](todo-archive.md#changeset-记录) |
 
 ## 使用方式
