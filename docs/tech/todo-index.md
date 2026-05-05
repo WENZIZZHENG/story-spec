@@ -2,15 +2,15 @@
 
 ## 状态
 
-Idle。本文是 StorySpec 当前唯一的待办入口。详细规则见 [todo-governance.md](todo-governance.md)，已完成事项见 [todo-archive.md](todo-archive.md)。当前暂无活跃路线；新增实现任务前按影响范围转为 OpenSpec change。
+Active。本文是 StorySpec 当前唯一的待办入口。详细规则见 [todo-governance.md](todo-governance.md)，已完成事项见 [todo-archive.md](todo-archive.md)。当前活跃路线见下表；实现任一任务前按影响范围转为 OpenSpec change。
 
 ## 当前待办
 
-当前主线：暂无活跃待办。归档中保留的未来增强和章节写作前置缺口已完成复核；后续新增真实缺陷或增强证据时，再按治理规则新建专题 roadmap，并在实现前转 OpenSpec change。
+当前主线：把章节前置约束卡的使用姿态从“写中审查”调整为“写前确认、写中沉浸、写后自检”，保护章节质感，同时不降低作者确认和硬约束边界。
 
 | 优先级 | 路线 | 状态 | 覆盖范围 | 下一步 |
 | --- | --- | --- | --- | --- |
-| - | - | - | - | 暂无 |
+| P1 | [章节写中沉浸体验路线图](immersive-drafting-roadmap.md) | Active | 写中沉浸原则、约束后置自检、`/write` 和章节卡 prompt 姿态 | 转 OpenSpec `add-immersive-drafting-principle` |
 
 ## 暂不作为活跃待办
 
