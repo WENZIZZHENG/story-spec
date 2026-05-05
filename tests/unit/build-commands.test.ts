@@ -59,22 +59,26 @@ Agent: __AGENT__
 
 - 只执行状态为 \`pending\` 或用户明确指定的写作任务。
 - 如果任务标记为 [PLAN-ONLY]，停止正文写作，先提示补充规划或澄清。
-- 写章前先输出 3-6 条 scene beat 或等价方向预览，beat 只是方向预览，不是已完成正文。
+- 写章前先输出章节前置约束卡，覆盖时间点、当前能力与语言水平、情感检查点、硬约束、软约束和写后自检对照；等待作者确认约束卡或改写后再进入 beat 预览和正文。
+- 章节前置约束卡资料不足时标为待确认，不得编造角色心理、语言进度、能力数值、关系事实或世界观正典。
+- 约束卡确认后再输出 3-6 条 scene beat 或等价方向预览，beat 只是方向预览，不是已完成正文。
 - 资料不足时，先列出缺失上下文，不得编造正典事实。
 - 写作必须经过 preview / confirm / apply，不得跳过预览直接修改正文，也不得修改未授权文件。
 
 ## 阶段性反馈契约
 
-- 阶段 1 - beat 预览：先输出 3-6 条 scene beat，说明目标、冲突、人物变化、风险和缺口；JSON stage 字段只能使用 plan、write、finish，此阶段为 plan。
+- 阶段 0 - 章节前置约束卡：先输出约束卡并等待作者确认；JSON stage 字段仍使用 plan。
+- 阶段 1 - beat 预览：约束卡确认后输出 3-6 条 scene beat，说明目标、冲突、人物变化、风险和缺口；JSON stage 字段只能使用 plan、write、finish，此阶段为 plan。
 - 阶段 2 - 正文块：正文按 scene 或段落组分块输出，每块说明已完成的剧情功能和下一块目标；JSON stage 字段为 write。
-- 阶段 3 - 收尾验证：输出正文路径、字数、验证、tracking 待更新/待确认和 next action；JSON stage 字段为 finish。
+- 阶段 3 - 收尾验证：输出正文路径、字数、验证、tracking 待更新/待确认、写后自检对照和 next action；JSON stage 字段为 finish。
 
 ## 写作流程
 
 1. 将选中任务标记为 in_progress。
-2. 先输出 3-6 条 scene beat 或等价方向预览。
-3. 长章节必须分块输出。
-4. 收尾时单独给出摘要，必须包含正文路径、建议或已执行验证、tracking 待更新/待确认、next action。
+2. 先输出章节前置约束卡，并等待作者确认约束卡。
+3. 约束卡确认后输出 3-6 条 scene beat 或等价方向预览。
+4. 长章节必须分块输出。
+5. 收尾时单独给出摘要，必须包含正文路径、建议或已执行验证、tracking 待更新/待确认、写后自检对照、next action。
 Run {SCRIPT}
 `);
 
@@ -157,6 +161,9 @@ describe('buildCommandArtifacts', () => {
     expect(codexSpecPrompt).toContain('JSON stage 字段只能使用 plan、write、finish');
     expect(codexSpecPrompt).toContain('长章节必须分块输出');
     expect(codexSpecPrompt).toContain('收尾时单独给出摘要');
+    expect(codexSpecPrompt).toContain('章节前置约束卡');
+    expect(codexSpecPrompt).toContain('等待作者确认约束卡');
+    expect(codexSpecPrompt).toContain('写后自检对照');
 
     const geminiPrompt = await readFile(path.join(outDir, 'gemini', '.gemini', 'commands', 'storyspec', 'plan.toml'), 'utf-8');
     expect(geminiPrompt).toContain('description = "Plan story"');
@@ -174,6 +181,9 @@ describe('buildCommandArtifacts', () => {
     expect(geminiSpecPrompt).toContain('JSON stage 字段只能使用 plan、write、finish');
     expect(geminiSpecPrompt).toContain('长章节必须分块输出');
     expect(geminiSpecPrompt).toContain('收尾时单独给出摘要');
+    expect(geminiSpecPrompt).toContain('章节前置约束卡');
+    expect(geminiSpecPrompt).toContain('等待作者确认约束卡');
+    expect(geminiSpecPrompt).toContain('写后自检对照');
 
     await expect(exists(path.join(outDir, 'codex', '.specify', 'memory', 'constitution.md'))).resolves.toBe(true);
     await expect(exists(path.join(outDir, 'codex', '.specify', 'scripts', 'bash', 'plan-story.sh'))).resolves.toBe(true);
@@ -249,6 +259,9 @@ describe('buildCommandArtifacts', () => {
     expect(genericSpecCommand).toContain('JSON stage 字段只能使用 plan、write、finish');
     expect(genericSpecCommand).toContain('长章节必须分块输出');
     expect(genericSpecCommand).toContain('收尾时单独给出摘要');
+    expect(genericSpecCommand).toContain('章节前置约束卡');
+    expect(genericSpecCommand).toContain('等待作者确认约束卡');
+    expect(genericSpecCommand).toContain('写后自检对照');
   });
 
   it('generates read-only Continue check prompts', async () => {

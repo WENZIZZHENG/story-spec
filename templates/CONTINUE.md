@@ -36,17 +36,17 @@ bash .specify/scripts/bash/validate-local.sh
 
 1. 运行 `storyspec status`，确认当前故事和下一任务。
 2. 若已有 `stories/<故事名>/handoff.md`，先读取 handoff；没有则运行 `storyspec handoff <故事名>`。
-3. 写正文前确认章节目标、冲突、信息释放、情绪变化和结尾钩子。
+3. 写正文前先生成或确认章节前置约束卡，覆盖时间点、当前能力与语言水平、情感检查点、硬约束、软约束和写后自检对照。
 4. 如果章节卡还没有准备好，从 `.specify/templates/authoring/chapter-card.md` 复制一份到 `stories/<故事名>/chapter-cards/` 后填写。
-5. 正文完成后，按 `.specify/templates/authoring/tracking-update-checklist.md` 回填 tracking、canon、graph、knowledge 和任务状态。
+5. 正文完成后，先对照章节前置约束卡检查硬约束是否被破坏，再按 `.specify/templates/authoring/tracking-update-checklist.md` 回填 tracking、canon、graph、knowledge 和任务状态。
 6. 运行验证，并把无法自动验证的部分写进 handoff 或任务记录。
 
 ## 可复制给 Agent 的请求
 
-继续下一章前先做章节卡：
+继续下一章前先做章节前置约束卡：
 
 ```text
-继续当前故事的下一章，先不要写正文。请读取 AGENTS.md、.specify/agent-contract.md、当前故事 specification.md、creative-plan.md、tasks.md 和 handoff.md，然后基于 .specify/templates/authoring/chapter-card.md 创建下一章章节卡。
+继续当前故事的下一章，先不要写正文。请读取 AGENTS.md、.specify/agent-contract.md、当前故事 specification.md、creative-plan.md、tasks.md 和 handoff.md，然后基于 .specify/templates/authoring/chapter-card.md 创建下一章章节前置约束卡，列出时间点、当前能力与语言水平、情感检查点、硬约束、软约束和写后自检对照，等待我确认后再写正文。
 ```
 
 检查开放承诺：
