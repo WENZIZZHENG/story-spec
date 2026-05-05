@@ -8,7 +8,7 @@ Active。本文是 StorySpec 当前唯一的活跃待办入口。详细规则见
 
 | 路线 | 状态 | 优先级 | 下一步 |
 | --- | --- | --- | --- |
-| [作者首程引导与正反馈路线图](author-first-run-feedback-roadmap.md) | Planned | P0 | 先实现工作区优先初始化、原始灵感/长文资料输入向导、少命令化新手导航和章节生成阶段性正反馈。 |
+| [作者首程引导与正反馈路线图](author-first-run-feedback-roadmap.md) | Planned | P0 | 先实现工作区优先初始化、首次使用全流程图、原始灵感/长文资料输入向导、少命令化新手导航和章节生成阶段性正反馈。 |
 | [StorySpec 自用创作流程问题待办](storyspec-dogfood-friction-roadmap.md) | Planned | P0 | 先修复 `task:finish` / `tasks:set-status` 源码与 `dist` 产物漂移，再统一章节路径解析、写作阶段验证范围和 tracking evidence schema。 |
 
 ## 暂不作为活跃待办

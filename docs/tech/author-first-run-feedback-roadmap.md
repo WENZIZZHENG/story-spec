@@ -2,7 +2,7 @@
 
 ## 状态
 
-Planned。本文记录 2026-05-04 继续 dogfood StorySpec 时，用户指出的五类首程体验问题：工作区初始化、原始灵感/长文资料输入、新手命令理解、卷计划直观反馈、章节生成耗时和正反馈不足。
+Planned。本文记录 2026-05-04 继续 dogfood StorySpec 时，用户指出的五类首程体验问题：工作区初始化、原始灵感/长文资料输入、新手命令理解、卷计划直观反馈、章节生成耗时和正反馈不足。2026-05-05 继续新增首次使用“全流程图 + 当前步骤 + 下一步操作”需求。
 
 ## 当前主线
 
@@ -26,6 +26,7 @@ Planned。本文记录 2026-05-04 继续 dogfood StorySpec 时，用户指出的
 - 初始化工作区是必输项，但当前体验容易先给命令或进入创作步骤，没有先让用户指定小说工作区并自动初始化。
 - 原始灵感/长文资料引导不够具体：缺少示例、推荐字数范围、核心要点清单、表格资料说明。用户给了很多内容后，仍看到大量“待澄清”，会误以为导入失败。
 - 新用户引导不够友好：一开始就给命令，用户不一定知道自己该贴长文、写一句灵感、回答访谈，还是运行 CLI。
+- 首次使用缺少完整路线图：虽然 `init`、`story:new` 和 `next` 会提示下一步，但用户仍不清楚全流程有几步、当前处在哪一步、这一步完成后生成什么、下一步为什么是它、什么时候才进入写正文。
 - 卷计划生成后缺少直观反馈：三幕结构、12 章节奏、角色弧线、关系变化和剧情起伏都在文档里，但缺少一眼能懂的摘要视图。
 - 章节生成耗时长，正反馈不足：用户等待第一章、第二章时，很久看不到阶段性产物；工具和 agent 反复读取、验证、收尾，也放大了等待感。
 
@@ -158,6 +159,53 @@ Planned。本文记录 2026-05-04 继续 dogfood StorySpec 时，用户指出的
   - 本次第一章、第二章生成等待体验。
   - [storyspec-dogfood-friction-roadmap.md](storyspec-dogfood-friction-roadmap.md) 的 `task:finish` 和连续章节 checkpoint 任务。
 - 不做/边界：不为了快而跳过创作控制权、tracking 或验证；不承诺模型生成速度本身一定变快。
+
+### P0-5 首次使用全流程图与当前步骤提示
+
+- 类型：首程引导、CLI 导航、文档与 JSON 输出
+- 背景/问题：真实首次使用时，用户会问“全流程图是怎样的，第一步做完后下一步是什么”。当前命令已经有局部下一步提示，但缺少一张贯穿 `init -> story:new -> next/interview -> core -> preview/apply -> plan/tasks -> scene/context/draft` 的路线图；用户不知道自己现在在哪个阶段，也不知道每一步会写入哪些文件。
+- 已有基础：
+  - `storyspec init` 初始化后会输出工作区就绪和素材分流入口。
+  - `storyspec story:new` 会保存 `stories/<story>/idea.md` 并提示 `author-profile`、`interview`、`next`。
+  - `storyspec next` 已能根据故事状态推荐入口和 copyable command。
+  - `status --json` 已有 `story.stage`、`nextActions`、`creativeControl` 等结构化信息。
+- 缺口：
+  - 没有固定的“第一次使用流程图”命令或输出区块。
+  - 当前阶段没有以“第 N 步 / 共 N 步”的方式展示。
+  - 每一步缺少“操作命令 / 产物文件 / 完成后下一步 / 不会做什么”的明确说明。
+  - 文档、CLI 文案和 agent guide 对首程路线的表达不够统一。
+- 建议方案：
+  1. 设计一份首程流程模型，覆盖 8-9 个阶段：初始化工作区、保存原始灵感、选择共创入口、完成访谈、查看缺口、生成规格预览、确认应用、规划任务、创建场景/上下文/草稿。
+  2. 在 `storyspec next <story>` 的首屏增加压缩流程提示：`当前：第 2 步 / 9 步，已保存原始灵感；下一步推荐：从能力入口完成第一轮共创`。
+  3. 新增或评估 `storyspec guide [story]` / `storyspec next --flow`，专门展示完整流程图；优先复用 `next`，避免命令膨胀。
+  4. 每个阶段输出四类信息：`怎么操作`、`会生成什么`、`下一步是什么`、`不会越过哪些确认边界`。
+  5. `--json` 输出增加 `firstRunFlow` 或等价结构，包含 `steps[]`、`currentStepId`、`recommendedNextStepId`、`copyableCommand`、`writes`、`guards`，方便 agent/UI 消费。
+  6. README、`.specify/agent-guides/story-creation-guide.md` 和 Codex command prompt 同步首程路线，避免 agent 只给命令不解释路线。
+- 涉及文件/模块：
+  - `src/application/story-onboarding.ts`
+  - `src/application/get-project-status.ts`
+  - `src/cli/commands/story-onboarding.command.ts`
+  - `src/cli/commands/status.command.ts`
+  - `templates/commands/*.md`
+  - `agent-guides/story-creation-guide.md`
+  - `README.md`
+  - `tests/unit/story-onboarding.test.ts`
+  - `tests/smoke/cli-commands.test.ts`
+- 验收标准：
+  - 首次用户在 `story:new` 后运行 `storyspec next <story>`，能看到一屏内的当前步骤、下一步推荐和完整流程入口。
+  - 流程图明确展示每一步的产物，例如 `idea.md`、`clarifications.json/md`、`specification.md`、`creative-plan.md`、`tasks.md`、Scene Card、Context Pack、draft。
+  - 低信息量故事不会被引导跳到写正文；流程图中 preview / confirm / apply 边界清楚可见。
+  - `--json` 能稳定表达流程步骤，agent 不需要解析中文文本才能判断下一步。
+  - 单元或快照测试覆盖：空工作区、新建 idea 阶段、已有澄清、已有规格、已有任务但未写正文。
+- 参考资料/项目：
+  - 2026-05-05 《法术编译纪元》首次使用讨论：用户明确询问是否应在第一次使用时告诉全流程图、第一步后下一步是什么。
+  - 已归档 [story-onboarding-navigation-roadmap.md](archive/completed-roadmaps/story-onboarding-navigation-roadmap.md) 的 `story:new` / `next` 基础。
+  - 现有 `status --json` 与 `next --json` 的结构化导航能力。
+  - 不需要外部开源参考；这是 StorySpec 自身首程导航和创作控制权表达收敛。
+- 不做/边界：
+  - 不把完整流程图变成强制长教程；默认首屏仍突出下一步，完整路线可折叠或通过 `--flow` 查看。
+  - 不承诺自动完成所有步骤；高影响写入仍必须经过 preview / confirm / apply。
+  - 不新增 GUI；本任务只覆盖 CLI、人类文本、JSON 和 agent prompt。
 
 ## P1 近期增强
 
