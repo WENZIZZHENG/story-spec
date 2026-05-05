@@ -5,6 +5,7 @@ import programmingCastingFixture from '../fixtures/co-creation/programming-casti
 import {
   createStoryIdea,
   getStoryNext,
+  renderCreateStoryIdea,
   renderStoryNext,
   STORY_NEXT_ACTION_IDS
 } from '../../src/application/story-onboarding.js';
@@ -59,6 +60,44 @@ describe('story onboarding', () => {
     await expect(fileSystem.readFile(result.ideaPath)).resolves.toContain('AI 候选必须经过用户确认');
     await expect(fileSystem.pathExists(path.join(projectRoot, 'stories', '法术编译纪元', 'specification.md')))
       .resolves.toBe(false);
+  });
+
+  it('returns first-run flow logs after creating an idea draft', async () => {
+    const { projectRoot, fileSystem } = await createProject();
+
+    const result = await createStoryIdea({
+      projectRoot,
+      fileSystem,
+      name: '法术编译纪元',
+      idea: '工科青年用编程思维理解符文组合。'
+    });
+    const rendered = renderCreateStoryIdea(result);
+
+    expect(result.firstRunFlow).toMatchObject({
+      currentStepId: 'save-idea',
+      recommendedNextStepId: 'choose-entrypoint',
+      progressLog: [
+        expect.objectContaining({ kind: 'flow', label: '流程' }),
+        expect.objectContaining({
+          kind: 'artifact',
+          label: '产物',
+          paths: ['stories/法术编译纪元/idea.md']
+        }),
+        expect.objectContaining({
+          kind: 'next',
+          label: '下一步',
+          command: expect.stringContaining('storyspec interview 法术编译纪元')
+        }),
+        expect.objectContaining({
+          kind: 'guard',
+          label: '边界',
+          message: expect.stringContaining('不扩写')
+        })
+      ]
+    });
+    expect(rendered).toContain('[流程]');
+    expect(rendered).toContain('[产物]');
+    expect(rendered).toContain('[下一步]');
   });
 
   it('surfaces author profile sampling as optional context without writing it into the idea draft', async () => {
@@ -222,6 +261,27 @@ describe('story onboarding', () => {
     });
     const rendered = renderStoryNext(result);
 
+    expect(result.firstRunFlow).toMatchObject({
+      currentStepId: 'choose-entrypoint',
+      recommendedNextStepId: 'interview',
+      progressLog: [
+        expect.objectContaining({ kind: 'flow', label: '流程' }),
+        expect.objectContaining({ kind: 'artifact', label: '产物' }),
+        expect.objectContaining({
+          kind: 'next',
+          label: '下一步',
+          command: result.actions[0].copyableCommand
+        }),
+        expect.objectContaining({
+          kind: 'guard',
+          label: '边界',
+          message: expect.stringContaining('不确认候选')
+        })
+      ]
+    });
+    expect(rendered).toContain('[流程]');
+    expect(rendered).toContain('[产物]');
+    expect(rendered).toContain('[下一步]');
     expect(rendered).toContain('先选你手里的素材：');
     expect(rendered).toContain('我有长文资料');
     expect(rendered).toContain('首轮建议 500-3000 字');
@@ -246,7 +306,7 @@ describe('story onboarding', () => {
       rendered.indexOf('先选你手里的素材：'),
       rendered.indexOf('可复制命令：')
     )).not.toContain('storyspec ');
-    expect(rendered.split('\n').length).toBeLessThanOrEqual(34);
+    expect(rendered.split('\n').length).toBeLessThanOrEqual(38);
     expect(rendered).not.toContain('今日创作模式');
     expect(rendered).not.toContain('最小快乐闭环');
     expect(rendered).not.toContain('有趣选择');
