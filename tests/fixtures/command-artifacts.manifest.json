@@ -95,6 +95,16 @@
       }
     },
     {
+      "path": "auggie/.augment/commands/reference-reverse.md",
+      "sha256": "57ce0a7437a379abb327c327dcade2120a2288a2e041ebd403092797583b79b4",
+      "commandSource": {
+        "command": "reference-reverse",
+        "kind": "command-spec",
+        "sourcePath": "templates/commands/reference-reverse.command.yaml",
+        "promptPath": "templates/commands/reference-reverse.prompt.md"
+      }
+    },
+    {
       "path": "auggie/.augment/commands/relations.md",
       "sha256": "b3e1e88dd60735c3b0036f2ada0c4d9b20dcf7c089556e5890ff0b3c9e0f22d1",
       "commandSource": {
@@ -711,6 +721,16 @@
         "command": "plan",
         "kind": "legacy-template",
         "sourcePath": "templates/commands/plan.md"
+      }
+    },
+    {
+      "path": "claude/.claude/commands/storyspec.reference-reverse.md",
+      "sha256": "babde798302a119aac5c9286888831568c88efd3dea9fdcfae0340b9f07ef005",
+      "commandSource": {
+        "command": "reference-reverse",
+        "kind": "command-spec",
+        "sourcePath": "templates/commands/reference-reverse.command.yaml",
+        "promptPath": "templates/commands/reference-reverse.prompt.md"
       }
     },
     {
@@ -1337,6 +1357,16 @@
       }
     },
     {
+      "path": "codebuddy/.codebuddy/commands/reference-reverse.md",
+      "sha256": "57ce0a7437a379abb327c327dcade2120a2288a2e041ebd403092797583b79b4",
+      "commandSource": {
+        "command": "reference-reverse",
+        "kind": "command-spec",
+        "sourcePath": "templates/commands/reference-reverse.command.yaml",
+        "promptPath": "templates/commands/reference-reverse.prompt.md"
+      }
+    },
+    {
       "path": "codebuddy/.codebuddy/commands/relations.md",
       "sha256": "b3e1e88dd60735c3b0036f2ada0c4d9b20dcf7c089556e5890ff0b3c9e0f22d1",
       "commandSource": {
@@ -1956,6 +1986,16 @@
       }
     },
     {
+      "path": "codex/.codex/prompts/storyspec-reference-reverse.md",
+      "sha256": "57ce0a7437a379abb327c327dcade2120a2288a2e041ebd403092797583b79b4",
+      "commandSource": {
+        "command": "reference-reverse",
+        "kind": "command-spec",
+        "sourcePath": "templates/commands/reference-reverse.command.yaml",
+        "promptPath": "templates/commands/reference-reverse.prompt.md"
+      }
+    },
+    {
       "path": "codex/.codex/prompts/storyspec-relations.md",
       "sha256": "b3e1e88dd60735c3b0036f2ada0c4d9b20dcf7c089556e5890ff0b3c9e0f22d1",
       "commandSource": {
@@ -2572,6 +2612,16 @@
         "command": "plan",
         "kind": "legacy-template",
         "sourcePath": "templates/commands/plan.md"
+      }
+    },
+    {
+      "path": "continue-check/.continue/prompts/reference-reverse.md",
+      "sha256": "d28d76e343d6b208dc582b0236537b4da9d6e0a7306f879aaedd19eaa5e7c72c",
+      "commandSource": {
+        "command": "reference-reverse",
+        "kind": "command-spec",
+        "sourcePath": "templates/commands/reference-reverse.command.yaml",
+        "promptPath": "templates/commands/reference-reverse.prompt.md"
       }
     },
     {
@@ -3202,6 +3252,16 @@
       }
     },
     {
+      "path": "copilot/.github/prompts/reference-reverse.prompt.md",
+      "sha256": "57ce0a7437a379abb327c327dcade2120a2288a2e041ebd403092797583b79b4",
+      "commandSource": {
+        "command": "reference-reverse",
+        "kind": "command-spec",
+        "sourcePath": "templates/commands/reference-reverse.command.yaml",
+        "promptPath": "templates/commands/reference-reverse.prompt.md"
+      }
+    },
+    {
       "path": "copilot/.github/prompts/relations.prompt.md",
       "sha256": "70535a0858b027b4fbae575582d11463ba5da9d27fe54f64c86d2361c4df7181",
       "commandSource": {
@@ -3825,6 +3885,16 @@
       }
     },
     {
+      "path": "cursor/.cursor/commands/reference-reverse.md",
+      "sha256": "57ce0a7437a379abb327c327dcade2120a2288a2e041ebd403092797583b79b4",
+      "commandSource": {
+        "command": "reference-reverse",
+        "kind": "command-spec",
+        "sourcePath": "templates/commands/reference-reverse.command.yaml",
+        "promptPath": "templates/commands/reference-reverse.prompt.md"
+      }
+    },
+    {
       "path": "cursor/.cursor/commands/relations.md",
       "sha256": "b3e1e88dd60735c3b0036f2ada0c4d9b20dcf7c089556e5890ff0b3c9e0f22d1",
       "commandSource": {
@@ -4445,6 +4515,16 @@
         "command": "plan",
         "kind": "legacy-template",
         "sourcePath": "templates/commands/plan.md"
+      }
+    },
+    {
+      "path": "gemini/.gemini/commands/storyspec/reference-reverse.toml",
+      "sha256": "b684a512c85811931a2352ddb5a8de361ee448670016a907cd03b20f18595109",
+      "commandSource": {
+        "command": "reference-reverse",
+        "kind": "command-spec",
+        "sourcePath": "templates/commands/reference-reverse.command.yaml",
+        "promptPath": "templates/commands/reference-reverse.prompt.md"
       }
     },
     {
@@ -5075,6 +5155,16 @@
       }
     },
     {
+      "path": "generic/.specify/commands/reference-reverse.md",
+      "sha256": "9a0c77500f9157ba631b9538f2227b310abfe6fc3fdbd0581d86171673096b33",
+      "commandSource": {
+        "command": "reference-reverse",
+        "kind": "command-spec",
+        "sourcePath": "templates/commands/reference-reverse.command.yaml",
+        "promptPath": "templates/commands/reference-reverse.prompt.md"
+      }
+    },
+    {
       "path": "generic/.specify/commands/relations.md",
       "sha256": "278f74fec755c73554d6550b8c67f4f2c0b570609df691c00444733f4871d70c",
       "commandSource": {
@@ -5687,6 +5777,16 @@
         "command": "plan",
         "kind": "legacy-template",
         "sourcePath": "templates/commands/plan.md"
+      }
+    },
+    {
+      "path": "kilocode/.kilocode/workflows/reference-reverse.md",
+      "sha256": "babde798302a119aac5c9286888831568c88efd3dea9fdcfae0340b9f07ef005",
+      "commandSource": {
+        "command": "reference-reverse",
+        "kind": "command-spec",
+        "sourcePath": "templates/commands/reference-reverse.command.yaml",
+        "promptPath": "templates/commands/reference-reverse.prompt.md"
       }
     },
     {
@@ -6309,6 +6409,16 @@
       }
     },
     {
+      "path": "opencode/.opencode/command/reference-reverse.md",
+      "sha256": "f6037454e0ebf0cb90d04aa2a748872f4c25e78df015af04f615bfbe8d922349",
+      "commandSource": {
+        "command": "reference-reverse",
+        "kind": "command-spec",
+        "sourcePath": "templates/commands/reference-reverse.command.yaml",
+        "promptPath": "templates/commands/reference-reverse.prompt.md"
+      }
+    },
+    {
       "path": "opencode/.opencode/command/relations.md",
       "sha256": "cee8066219dc43a4f195173fab7b76a81a769912d72b0671f07231bd5994f212",
       "commandSource": {
@@ -6925,6 +7035,16 @@
         "command": "plan",
         "kind": "legacy-template",
         "sourcePath": "templates/commands/plan.md"
+      }
+    },
+    {
+      "path": "q/.amazonq/prompts/reference-reverse.md",
+      "sha256": "57ce0a7437a379abb327c327dcade2120a2288a2e041ebd403092797583b79b4",
+      "commandSource": {
+        "command": "reference-reverse",
+        "kind": "command-spec",
+        "sourcePath": "templates/commands/reference-reverse.command.yaml",
+        "promptPath": "templates/commands/reference-reverse.prompt.md"
       }
     },
     {
@@ -7547,6 +7667,16 @@
       }
     },
     {
+      "path": "qwen/.qwen/commands/reference-reverse.toml",
+      "sha256": "b684a512c85811931a2352ddb5a8de361ee448670016a907cd03b20f18595109",
+      "commandSource": {
+        "command": "reference-reverse",
+        "kind": "command-spec",
+        "sourcePath": "templates/commands/reference-reverse.command.yaml",
+        "promptPath": "templates/commands/reference-reverse.prompt.md"
+      }
+    },
+    {
       "path": "qwen/.qwen/commands/relations.toml",
       "sha256": "3548ee3f449d76c0ba263a45ac48d0466147c93527d8629d426a861669d7419f",
       "commandSource": {
@@ -8163,6 +8293,16 @@
         "command": "plan",
         "kind": "legacy-template",
         "sourcePath": "templates/commands/plan.md"
+      }
+    },
+    {
+      "path": "roocode/.roo/commands/reference-reverse.md",
+      "sha256": "babde798302a119aac5c9286888831568c88efd3dea9fdcfae0340b9f07ef005",
+      "commandSource": {
+        "command": "reference-reverse",
+        "kind": "command-spec",
+        "sourcePath": "templates/commands/reference-reverse.command.yaml",
+        "promptPath": "templates/commands/reference-reverse.prompt.md"
       }
     },
     {
@@ -9162,6 +9302,16 @@
         "command": "plan",
         "kind": "legacy-template",
         "sourcePath": "templates/commands/plan.md"
+      }
+    },
+    {
+      "path": "windsurf/.windsurf/workflows/reference-reverse.md",
+      "sha256": "babde798302a119aac5c9286888831568c88efd3dea9fdcfae0340b9f07ef005",
+      "commandSource": {
+        "command": "reference-reverse",
+        "kind": "command-spec",
+        "sourcePath": "templates/commands/reference-reverse.command.yaml",
+        "promptPath": "templates/commands/reference-reverse.prompt.md"
       }
     },
     {

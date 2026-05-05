@@ -2,7 +2,7 @@
 
 ## 状态
 
-Active。本文登记“参考作品反向拆解 / 原创化转译”的实现待办。实现前应按影响范围转为 OpenSpec change；本文不替代 OpenSpec artifacts。
+Completed。参考作品反向拆解 / 原创化转译已通过 OpenSpec `add-reference-reverse-extraction` 完成第一版 preview-only 能力；本文保留实现背景和验收口径，不再作为活跃开发入口。
 
 ## 背景和目标
 

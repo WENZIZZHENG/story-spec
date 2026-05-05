@@ -1,0 +1,23 @@
+id: reference-reverse
+title: 参考作品反向拆解
+stage: research
+description: 将作者提供的参考作品笔记拆成原创化候选预览
+arguments:
+  hint: "[故事名] [--title 参考作品名] [--file 笔记路径]"
+requiredReads:
+  - .specify/agent-contract.md
+  - .specify/memory/constitution.md
+  - .specify/memory/author-profile.json
+  - stories/*/idea.md
+  - stories/*/clarifications.md
+  - research/notes/**
+  - research/sources/**
+allowedWrites:
+  - research/notes/**
+scripts:
+  check:
+    capability: reference-reverse
+    sh: storyspec reference:reverse "$ARGUMENTS"
+    ps: storyspec reference:reverse "$ARGUMENTS"
+risk:
+  requiresTaskBoundary: false

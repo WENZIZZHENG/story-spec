@@ -25,6 +25,7 @@ import { registerCreativeReportCommand } from './commands/creative-report.comman
 import { registerPreviewApplyCommand } from './commands/preview-apply.command.js';
 import { registerAuthorProfileCommand } from './commands/author-profile.command.js';
 import { registerMaintenanceCommand } from './commands/maintenance.command.js';
+import { registerReferenceCommand } from './commands/reference.command.js';
 import chalk from 'chalk';
 import path from 'path';
 import { fileURLToPath } from 'url';
@@ -84,6 +85,7 @@ export function runProgram(argv: string[]): void {
   registerCreativeReportCommand(program);
   registerPreviewApplyCommand(program);
   registerMaintenanceCommand(program);
+  registerReferenceCommand(program);
   registerInfoCommand(program);
 
   program.on('--help', () => {
@@ -96,6 +98,7 @@ export function runProgram(argv: string[]): void {
     console.log('  $ storyspec interview 法术编译纪元 --focus protagonist --premise "异界穿越、编程施法"');
     console.log('  $ storyspec core 法术编译纪元 --missing');
     console.log('  $ storyspec ingest 法术编译纪元 --file notes.md');
+    console.log('  $ storyspec reference:reverse 法术编译纪元 --file reference-notes.md');
     console.log('  $ storyspec co:create 法术编译纪元 --file notes.md --apply-confirmed --preview specify');
     console.log('  $ storyspec creative:report 法术编译纪元');
     console.log('  $ storyspec preview specify 法术编译纪元');
@@ -113,6 +116,7 @@ export function runProgram(argv: string[]): void {
     console.log('  interview         完成一轮低负担访谈，区分已确认和候选');
     console.log('  core              查看世界观、人物、舞台、能力体系等核心信息缺口');
     console.log('  ingest            吸收长文创作资料，默认先预览再决定是否写入');
+    console.log('  reference:reverse 把参考作品读后笔记拆成原创化候选预览，不写入正典');
     console.log('  co:create         串联长文吸收、核心面板和预览，默认保留确认门禁');
     console.log('  creative:report   查看故事骨架、缺口和 AI 建议风险');
     console.log('  preview/apply     先预览 specification 或 plan，确认后再写入');

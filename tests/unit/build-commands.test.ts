@@ -289,6 +289,35 @@ describe('buildCommandArtifacts', () => {
     }
   });
 
+  it('renders the reference reverse extraction command from real templates', async () => {
+    const outDir = await makeTempDir();
+
+    await buildCommandArtifacts({
+      rootDir: packageRoot,
+      outDir,
+      agents: ['codex', 'gemini', 'generic'],
+      scripts: ['sh']
+    });
+
+    const codexPrompt = await readFile(path.join(outDir, 'codex', '.codex', 'prompts', 'storyspec-reference-reverse.md'), 'utf-8');
+    expect(codexPrompt).toContain('参考作品反向拆解');
+    expect(codexPrompt).toContain('只处理作者提供的摘要、读后笔记或本地研究资料');
+    expect(codexPrompt).toContain('原作依赖项');
+    expect(codexPrompt).toContain('高风险相似项');
+    expect(codexPrompt).toContain('可原创化结构');
+    expect(codexPrompt).toContain('不得直接照搬清单');
+    expect(codexPrompt).toContain('storyspec reference:reverse');
+
+    const geminiPrompt = await readFile(path.join(outDir, 'gemini', '.gemini', 'commands', 'storyspec', 'reference-reverse.toml'), 'utf-8');
+    expect(geminiPrompt).toContain('参考作品反向拆解');
+    expect(geminiPrompt).toContain('只处理作者提供的摘要、读后笔记或本地研究资料');
+
+    const genericCommand = await readFile(path.join(outDir, 'generic', '.specify', 'commands', 'reference-reverse.md'), 'utf-8');
+    expect(genericCommand).toContain('# 参考作品反向拆解');
+    expect(genericCommand).toContain('storyspec reference:reverse');
+    expect(genericCommand).toContain('本次为预览未写入');
+  });
+
   it('generates read-only Continue check prompts', async () => {
     const rootDir = await createPackageRootFixture();
     const outDir = path.join(rootDir, 'out');
