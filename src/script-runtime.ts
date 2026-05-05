@@ -15,6 +15,10 @@ import {
   checkWritingState,
   renderWritingStateChecklist
 } from './application/check-writing-state.js';
+import {
+  renderLocalValidation,
+  validateLocalProject
+} from './application/validate-local.js';
 import type { ProjectFileSystem } from './application/project-ports.js';
 
 interface RuntimeOptions {
@@ -24,7 +28,11 @@ interface RuntimeOptions {
   json: boolean;
 }
 
-const usage = `Usage: node dist/script-runtime.js check-writing-state [options]
+const usage = `Usage: node dist/script-runtime.js <command> [options]
+
+Commands:
+  check-writing-state    Print writing readiness checklist.
+  validate-local         Run lightweight local project validation.
 
 Options:
   --project-root <path>  Project root. Defaults to nearest .specify/config.json.
@@ -165,6 +173,25 @@ const runCheckWritingState = async (args: string[]): Promise<void> => {
   console.log(renderWritingStateChecklist(state));
 };
 
+const runValidateLocal = async (args: string[]): Promise<void> => {
+  const options = parseOptions(args);
+  const projectRoot = await resolveProjectRoot(options);
+  const result = await validateLocalProject({
+    projectRoot,
+    fileSystem: runtimeFileSystem
+  });
+
+  if (options.json) {
+    console.log(JSON.stringify(result, null, 2));
+  } else {
+    console.log(renderLocalValidation(result));
+  }
+
+  if (!result.valid) {
+    process.exitCode = 1;
+  }
+};
+
 const main = async (): Promise<void> => {
   const [command, ...args] = process.argv.slice(2);
 
@@ -175,6 +202,11 @@ const main = async (): Promise<void> => {
 
   if (command === 'check-writing-state') {
     await runCheckWritingState(args);
+    return;
+  }
+
+  if (command === 'validate-local') {
+    await runValidateLocal(args);
     return;
   }
 

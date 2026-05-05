@@ -281,6 +281,10 @@
       "sha256": "0092e8ba609d10dc3d4c4ebcac0a802771947dad88bafeed9012424c0b84aed8"
     },
     {
+      "path": "auggie/.specify/scripts/bash/validate-local.sh",
+      "sha256": "6f06bae494f0336f2c74d1689bfa9633e9f9ad36638a8e70a45b49bb76fa7163"
+    },
+    {
       "path": "auggie/.specify/scripts/build-commands.cjs",
       "sha256": "148e9aea0b947582b1475eaa53d7778dd9aafbbdf4476d6ea9b9eca684602eee"
     },
@@ -290,7 +294,7 @@
     },
     {
       "path": "auggie/.specify/scripts/runtime/application/check-writing-state.js",
-      "sha256": "1dc8556a3fc1be4769fc3f585e4ba605f43302750f28abb7be76ed9fd7f74236"
+      "sha256": "adb32d102302107fa360014a4e33dfc6e0ad9a005979677121c87a3832a371e8"
     },
     {
       "path": "auggie/.specify/scripts/runtime/domain/story-artifact.js",
@@ -298,11 +302,27 @@
     },
     {
       "path": "auggie/.specify/scripts/runtime/script-runtime.js",
-      "sha256": "d33ef7083e1a07e24cea32355c5c8671fe7ad6bc9df0036bb86da74964dd8534"
+      "sha256": "77a4a863b8382ee3472c8c46d424859234b715d8fa35f6d61208fd14f7892c8f"
     },
     {
       "path": "auggie/.specify/templates/agent/agent-contract.md",
       "sha256": "e59a517192022dd3648aaeb02533b81616bd4fd954a8e9c2ffa56f61bdecd369"
+    },
+    {
+      "path": "auggie/.specify/templates/authoring/chapter-card.md",
+      "sha256": "6744b25862eb2879ae79be9e4d998a1c792e6dee071c0c795406196120c14560"
+    },
+    {
+      "path": "auggie/.specify/templates/authoring/open-promises.md",
+      "sha256": "6987183cab416778b498cdff77d8e111ed17df9ffd29223fd0f4d3b829759321"
+    },
+    {
+      "path": "auggie/.specify/templates/authoring/story-dashboard.md",
+      "sha256": "ae94e92d611f2ad12c14e80dde3025247ec5af436c07c7ee61e3ef44002ef05c"
+    },
+    {
+      "path": "auggie/.specify/templates/authoring/tracking-update-checklist.md",
+      "sha256": "1f5b0258c06c1de49c90ed1617f85bbc2e011f2811af8b30b69c0607e3a27bd0"
     },
     {
       "path": "auggie/.specify/templates/canon/contradictions.md",
@@ -387,6 +407,10 @@
     {
       "path": "auggie/.specify/templates/continue-rules/story-spec.md",
       "sha256": "5b3983748cc3a994e30dfdd3a87ffd2bb2c22af584f8371069604b10c4016fd2"
+    },
+    {
+      "path": "auggie/.specify/templates/CONTINUE.md",
+      "sha256": "d13e5dc5c4601fe0e839b2930c9db2d114a33d3d725d927f40db7ee59e6a429a"
     },
     {
       "path": "auggie/.specify/templates/copilot-instructions.md",
@@ -888,6 +912,10 @@
       "sha256": "0092e8ba609d10dc3d4c4ebcac0a802771947dad88bafeed9012424c0b84aed8"
     },
     {
+      "path": "claude/.specify/scripts/bash/validate-local.sh",
+      "sha256": "6f06bae494f0336f2c74d1689bfa9633e9f9ad36638a8e70a45b49bb76fa7163"
+    },
+    {
       "path": "claude/.specify/scripts/build-commands.cjs",
       "sha256": "148e9aea0b947582b1475eaa53d7778dd9aafbbdf4476d6ea9b9eca684602eee"
     },
@@ -897,7 +925,7 @@
     },
     {
       "path": "claude/.specify/scripts/runtime/application/check-writing-state.js",
-      "sha256": "1dc8556a3fc1be4769fc3f585e4ba605f43302750f28abb7be76ed9fd7f74236"
+      "sha256": "adb32d102302107fa360014a4e33dfc6e0ad9a005979677121c87a3832a371e8"
     },
     {
       "path": "claude/.specify/scripts/runtime/domain/story-artifact.js",
@@ -905,11 +933,27 @@
     },
     {
       "path": "claude/.specify/scripts/runtime/script-runtime.js",
-      "sha256": "d33ef7083e1a07e24cea32355c5c8671fe7ad6bc9df0036bb86da74964dd8534"
+      "sha256": "77a4a863b8382ee3472c8c46d424859234b715d8fa35f6d61208fd14f7892c8f"
     },
     {
       "path": "claude/.specify/templates/agent/agent-contract.md",
       "sha256": "e59a517192022dd3648aaeb02533b81616bd4fd954a8e9c2ffa56f61bdecd369"
+    },
+    {
+      "path": "claude/.specify/templates/authoring/chapter-card.md",
+      "sha256": "6744b25862eb2879ae79be9e4d998a1c792e6dee071c0c795406196120c14560"
+    },
+    {
+      "path": "claude/.specify/templates/authoring/open-promises.md",
+      "sha256": "6987183cab416778b498cdff77d8e111ed17df9ffd29223fd0f4d3b829759321"
+    },
+    {
+      "path": "claude/.specify/templates/authoring/story-dashboard.md",
+      "sha256": "ae94e92d611f2ad12c14e80dde3025247ec5af436c07c7ee61e3ef44002ef05c"
+    },
+    {
+      "path": "claude/.specify/templates/authoring/tracking-update-checklist.md",
+      "sha256": "1f5b0258c06c1de49c90ed1617f85bbc2e011f2811af8b30b69c0607e3a27bd0"
     },
     {
       "path": "claude/.specify/templates/canon/contradictions.md",
@@ -994,6 +1038,10 @@
     {
       "path": "claude/.specify/templates/continue-rules/story-spec.md",
       "sha256": "5b3983748cc3a994e30dfdd3a87ffd2bb2c22af584f8371069604b10c4016fd2"
+    },
+    {
+      "path": "claude/.specify/templates/CONTINUE.md",
+      "sha256": "d13e5dc5c4601fe0e839b2930c9db2d114a33d3d725d927f40db7ee59e6a429a"
     },
     {
       "path": "claude/.specify/templates/copilot-instructions.md",
@@ -1499,6 +1547,10 @@
       "sha256": "0092e8ba609d10dc3d4c4ebcac0a802771947dad88bafeed9012424c0b84aed8"
     },
     {
+      "path": "codebuddy/.specify/scripts/bash/validate-local.sh",
+      "sha256": "6f06bae494f0336f2c74d1689bfa9633e9f9ad36638a8e70a45b49bb76fa7163"
+    },
+    {
       "path": "codebuddy/.specify/scripts/build-commands.cjs",
       "sha256": "148e9aea0b947582b1475eaa53d7778dd9aafbbdf4476d6ea9b9eca684602eee"
     },
@@ -1508,7 +1560,7 @@
     },
     {
       "path": "codebuddy/.specify/scripts/runtime/application/check-writing-state.js",
-      "sha256": "1dc8556a3fc1be4769fc3f585e4ba605f43302750f28abb7be76ed9fd7f74236"
+      "sha256": "adb32d102302107fa360014a4e33dfc6e0ad9a005979677121c87a3832a371e8"
     },
     {
       "path": "codebuddy/.specify/scripts/runtime/domain/story-artifact.js",
@@ -1516,11 +1568,27 @@
     },
     {
       "path": "codebuddy/.specify/scripts/runtime/script-runtime.js",
-      "sha256": "d33ef7083e1a07e24cea32355c5c8671fe7ad6bc9df0036bb86da74964dd8534"
+      "sha256": "77a4a863b8382ee3472c8c46d424859234b715d8fa35f6d61208fd14f7892c8f"
     },
     {
       "path": "codebuddy/.specify/templates/agent/agent-contract.md",
       "sha256": "e59a517192022dd3648aaeb02533b81616bd4fd954a8e9c2ffa56f61bdecd369"
+    },
+    {
+      "path": "codebuddy/.specify/templates/authoring/chapter-card.md",
+      "sha256": "6744b25862eb2879ae79be9e4d998a1c792e6dee071c0c795406196120c14560"
+    },
+    {
+      "path": "codebuddy/.specify/templates/authoring/open-promises.md",
+      "sha256": "6987183cab416778b498cdff77d8e111ed17df9ffd29223fd0f4d3b829759321"
+    },
+    {
+      "path": "codebuddy/.specify/templates/authoring/story-dashboard.md",
+      "sha256": "ae94e92d611f2ad12c14e80dde3025247ec5af436c07c7ee61e3ef44002ef05c"
+    },
+    {
+      "path": "codebuddy/.specify/templates/authoring/tracking-update-checklist.md",
+      "sha256": "1f5b0258c06c1de49c90ed1617f85bbc2e011f2811af8b30b69c0607e3a27bd0"
     },
     {
       "path": "codebuddy/.specify/templates/canon/contradictions.md",
@@ -1605,6 +1673,10 @@
     {
       "path": "codebuddy/.specify/templates/continue-rules/story-spec.md",
       "sha256": "5b3983748cc3a994e30dfdd3a87ffd2bb2c22af584f8371069604b10c4016fd2"
+    },
+    {
+      "path": "codebuddy/.specify/templates/CONTINUE.md",
+      "sha256": "d13e5dc5c4601fe0e839b2930c9db2d114a33d3d725d927f40db7ee59e6a429a"
     },
     {
       "path": "codebuddy/.specify/templates/copilot-instructions.md",
@@ -2106,6 +2178,10 @@
       "sha256": "0092e8ba609d10dc3d4c4ebcac0a802771947dad88bafeed9012424c0b84aed8"
     },
     {
+      "path": "codex/.specify/scripts/bash/validate-local.sh",
+      "sha256": "6f06bae494f0336f2c74d1689bfa9633e9f9ad36638a8e70a45b49bb76fa7163"
+    },
+    {
       "path": "codex/.specify/scripts/build-commands.cjs",
       "sha256": "148e9aea0b947582b1475eaa53d7778dd9aafbbdf4476d6ea9b9eca684602eee"
     },
@@ -2115,7 +2191,7 @@
     },
     {
       "path": "codex/.specify/scripts/runtime/application/check-writing-state.js",
-      "sha256": "1dc8556a3fc1be4769fc3f585e4ba605f43302750f28abb7be76ed9fd7f74236"
+      "sha256": "adb32d102302107fa360014a4e33dfc6e0ad9a005979677121c87a3832a371e8"
     },
     {
       "path": "codex/.specify/scripts/runtime/domain/story-artifact.js",
@@ -2123,11 +2199,27 @@
     },
     {
       "path": "codex/.specify/scripts/runtime/script-runtime.js",
-      "sha256": "d33ef7083e1a07e24cea32355c5c8671fe7ad6bc9df0036bb86da74964dd8534"
+      "sha256": "77a4a863b8382ee3472c8c46d424859234b715d8fa35f6d61208fd14f7892c8f"
     },
     {
       "path": "codex/.specify/templates/agent/agent-contract.md",
       "sha256": "e59a517192022dd3648aaeb02533b81616bd4fd954a8e9c2ffa56f61bdecd369"
+    },
+    {
+      "path": "codex/.specify/templates/authoring/chapter-card.md",
+      "sha256": "6744b25862eb2879ae79be9e4d998a1c792e6dee071c0c795406196120c14560"
+    },
+    {
+      "path": "codex/.specify/templates/authoring/open-promises.md",
+      "sha256": "6987183cab416778b498cdff77d8e111ed17df9ffd29223fd0f4d3b829759321"
+    },
+    {
+      "path": "codex/.specify/templates/authoring/story-dashboard.md",
+      "sha256": "ae94e92d611f2ad12c14e80dde3025247ec5af436c07c7ee61e3ef44002ef05c"
+    },
+    {
+      "path": "codex/.specify/templates/authoring/tracking-update-checklist.md",
+      "sha256": "1f5b0258c06c1de49c90ed1617f85bbc2e011f2811af8b30b69c0607e3a27bd0"
     },
     {
       "path": "codex/.specify/templates/canon/contradictions.md",
@@ -2212,6 +2304,10 @@
     {
       "path": "codex/.specify/templates/continue-rules/story-spec.md",
       "sha256": "5b3983748cc3a994e30dfdd3a87ffd2bb2c22af584f8371069604b10c4016fd2"
+    },
+    {
+      "path": "codex/.specify/templates/CONTINUE.md",
+      "sha256": "d13e5dc5c4601fe0e839b2930c9db2d114a33d3d725d927f40db7ee59e6a429a"
     },
     {
       "path": "codex/.specify/templates/copilot-instructions.md",
@@ -2717,6 +2813,10 @@
       "sha256": "0092e8ba609d10dc3d4c4ebcac0a802771947dad88bafeed9012424c0b84aed8"
     },
     {
+      "path": "continue-check/.specify/scripts/bash/validate-local.sh",
+      "sha256": "6f06bae494f0336f2c74d1689bfa9633e9f9ad36638a8e70a45b49bb76fa7163"
+    },
+    {
       "path": "continue-check/.specify/scripts/build-commands.cjs",
       "sha256": "148e9aea0b947582b1475eaa53d7778dd9aafbbdf4476d6ea9b9eca684602eee"
     },
@@ -2726,7 +2826,7 @@
     },
     {
       "path": "continue-check/.specify/scripts/runtime/application/check-writing-state.js",
-      "sha256": "1dc8556a3fc1be4769fc3f585e4ba605f43302750f28abb7be76ed9fd7f74236"
+      "sha256": "adb32d102302107fa360014a4e33dfc6e0ad9a005979677121c87a3832a371e8"
     },
     {
       "path": "continue-check/.specify/scripts/runtime/domain/story-artifact.js",
@@ -2734,11 +2834,27 @@
     },
     {
       "path": "continue-check/.specify/scripts/runtime/script-runtime.js",
-      "sha256": "d33ef7083e1a07e24cea32355c5c8671fe7ad6bc9df0036bb86da74964dd8534"
+      "sha256": "77a4a863b8382ee3472c8c46d424859234b715d8fa35f6d61208fd14f7892c8f"
     },
     {
       "path": "continue-check/.specify/templates/agent/agent-contract.md",
       "sha256": "e59a517192022dd3648aaeb02533b81616bd4fd954a8e9c2ffa56f61bdecd369"
+    },
+    {
+      "path": "continue-check/.specify/templates/authoring/chapter-card.md",
+      "sha256": "6744b25862eb2879ae79be9e4d998a1c792e6dee071c0c795406196120c14560"
+    },
+    {
+      "path": "continue-check/.specify/templates/authoring/open-promises.md",
+      "sha256": "6987183cab416778b498cdff77d8e111ed17df9ffd29223fd0f4d3b829759321"
+    },
+    {
+      "path": "continue-check/.specify/templates/authoring/story-dashboard.md",
+      "sha256": "ae94e92d611f2ad12c14e80dde3025247ec5af436c07c7ee61e3ef44002ef05c"
+    },
+    {
+      "path": "continue-check/.specify/templates/authoring/tracking-update-checklist.md",
+      "sha256": "1f5b0258c06c1de49c90ed1617f85bbc2e011f2811af8b30b69c0607e3a27bd0"
     },
     {
       "path": "continue-check/.specify/templates/canon/contradictions.md",
@@ -2823,6 +2939,10 @@
     {
       "path": "continue-check/.specify/templates/continue-rules/story-spec.md",
       "sha256": "5b3983748cc3a994e30dfdd3a87ffd2bb2c22af584f8371069604b10c4016fd2"
+    },
+    {
+      "path": "continue-check/.specify/templates/CONTINUE.md",
+      "sha256": "d13e5dc5c4601fe0e839b2930c9db2d114a33d3d725d927f40db7ee59e6a429a"
     },
     {
       "path": "continue-check/.specify/templates/copilot-instructions.md",
@@ -3328,6 +3448,10 @@
       "sha256": "0092e8ba609d10dc3d4c4ebcac0a802771947dad88bafeed9012424c0b84aed8"
     },
     {
+      "path": "copilot/.specify/scripts/bash/validate-local.sh",
+      "sha256": "6f06bae494f0336f2c74d1689bfa9633e9f9ad36638a8e70a45b49bb76fa7163"
+    },
+    {
       "path": "copilot/.specify/scripts/build-commands.cjs",
       "sha256": "148e9aea0b947582b1475eaa53d7778dd9aafbbdf4476d6ea9b9eca684602eee"
     },
@@ -3337,7 +3461,7 @@
     },
     {
       "path": "copilot/.specify/scripts/runtime/application/check-writing-state.js",
-      "sha256": "1dc8556a3fc1be4769fc3f585e4ba605f43302750f28abb7be76ed9fd7f74236"
+      "sha256": "adb32d102302107fa360014a4e33dfc6e0ad9a005979677121c87a3832a371e8"
     },
     {
       "path": "copilot/.specify/scripts/runtime/domain/story-artifact.js",
@@ -3345,11 +3469,27 @@
     },
     {
       "path": "copilot/.specify/scripts/runtime/script-runtime.js",
-      "sha256": "d33ef7083e1a07e24cea32355c5c8671fe7ad6bc9df0036bb86da74964dd8534"
+      "sha256": "77a4a863b8382ee3472c8c46d424859234b715d8fa35f6d61208fd14f7892c8f"
     },
     {
       "path": "copilot/.specify/templates/agent/agent-contract.md",
       "sha256": "e59a517192022dd3648aaeb02533b81616bd4fd954a8e9c2ffa56f61bdecd369"
+    },
+    {
+      "path": "copilot/.specify/templates/authoring/chapter-card.md",
+      "sha256": "6744b25862eb2879ae79be9e4d998a1c792e6dee071c0c795406196120c14560"
+    },
+    {
+      "path": "copilot/.specify/templates/authoring/open-promises.md",
+      "sha256": "6987183cab416778b498cdff77d8e111ed17df9ffd29223fd0f4d3b829759321"
+    },
+    {
+      "path": "copilot/.specify/templates/authoring/story-dashboard.md",
+      "sha256": "ae94e92d611f2ad12c14e80dde3025247ec5af436c07c7ee61e3ef44002ef05c"
+    },
+    {
+      "path": "copilot/.specify/templates/authoring/tracking-update-checklist.md",
+      "sha256": "1f5b0258c06c1de49c90ed1617f85bbc2e011f2811af8b30b69c0607e3a27bd0"
     },
     {
       "path": "copilot/.specify/templates/canon/contradictions.md",
@@ -3434,6 +3574,10 @@
     {
       "path": "copilot/.specify/templates/continue-rules/story-spec.md",
       "sha256": "5b3983748cc3a994e30dfdd3a87ffd2bb2c22af584f8371069604b10c4016fd2"
+    },
+    {
+      "path": "copilot/.specify/templates/CONTINUE.md",
+      "sha256": "d13e5dc5c4601fe0e839b2930c9db2d114a33d3d725d927f40db7ee59e6a429a"
     },
     {
       "path": "copilot/.specify/templates/copilot-instructions.md",
@@ -3943,6 +4087,10 @@
       "sha256": "0092e8ba609d10dc3d4c4ebcac0a802771947dad88bafeed9012424c0b84aed8"
     },
     {
+      "path": "cursor/.specify/scripts/bash/validate-local.sh",
+      "sha256": "6f06bae494f0336f2c74d1689bfa9633e9f9ad36638a8e70a45b49bb76fa7163"
+    },
+    {
       "path": "cursor/.specify/scripts/build-commands.cjs",
       "sha256": "148e9aea0b947582b1475eaa53d7778dd9aafbbdf4476d6ea9b9eca684602eee"
     },
@@ -3952,7 +4100,7 @@
     },
     {
       "path": "cursor/.specify/scripts/runtime/application/check-writing-state.js",
-      "sha256": "1dc8556a3fc1be4769fc3f585e4ba605f43302750f28abb7be76ed9fd7f74236"
+      "sha256": "adb32d102302107fa360014a4e33dfc6e0ad9a005979677121c87a3832a371e8"
     },
     {
       "path": "cursor/.specify/scripts/runtime/domain/story-artifact.js",
@@ -3960,11 +4108,27 @@
     },
     {
       "path": "cursor/.specify/scripts/runtime/script-runtime.js",
-      "sha256": "d33ef7083e1a07e24cea32355c5c8671fe7ad6bc9df0036bb86da74964dd8534"
+      "sha256": "77a4a863b8382ee3472c8c46d424859234b715d8fa35f6d61208fd14f7892c8f"
     },
     {
       "path": "cursor/.specify/templates/agent/agent-contract.md",
       "sha256": "e59a517192022dd3648aaeb02533b81616bd4fd954a8e9c2ffa56f61bdecd369"
+    },
+    {
+      "path": "cursor/.specify/templates/authoring/chapter-card.md",
+      "sha256": "6744b25862eb2879ae79be9e4d998a1c792e6dee071c0c795406196120c14560"
+    },
+    {
+      "path": "cursor/.specify/templates/authoring/open-promises.md",
+      "sha256": "6987183cab416778b498cdff77d8e111ed17df9ffd29223fd0f4d3b829759321"
+    },
+    {
+      "path": "cursor/.specify/templates/authoring/story-dashboard.md",
+      "sha256": "ae94e92d611f2ad12c14e80dde3025247ec5af436c07c7ee61e3ef44002ef05c"
+    },
+    {
+      "path": "cursor/.specify/templates/authoring/tracking-update-checklist.md",
+      "sha256": "1f5b0258c06c1de49c90ed1617f85bbc2e011f2811af8b30b69c0607e3a27bd0"
     },
     {
       "path": "cursor/.specify/templates/canon/contradictions.md",
@@ -4049,6 +4213,10 @@
     {
       "path": "cursor/.specify/templates/continue-rules/story-spec.md",
       "sha256": "5b3983748cc3a994e30dfdd3a87ffd2bb2c22af584f8371069604b10c4016fd2"
+    },
+    {
+      "path": "cursor/.specify/templates/CONTINUE.md",
+      "sha256": "d13e5dc5c4601fe0e839b2930c9db2d114a33d3d725d927f40db7ee59e6a429a"
     },
     {
       "path": "cursor/.specify/templates/copilot-instructions.md",
@@ -4554,6 +4722,10 @@
       "sha256": "0092e8ba609d10dc3d4c4ebcac0a802771947dad88bafeed9012424c0b84aed8"
     },
     {
+      "path": "gemini/.specify/scripts/bash/validate-local.sh",
+      "sha256": "6f06bae494f0336f2c74d1689bfa9633e9f9ad36638a8e70a45b49bb76fa7163"
+    },
+    {
       "path": "gemini/.specify/scripts/build-commands.cjs",
       "sha256": "148e9aea0b947582b1475eaa53d7778dd9aafbbdf4476d6ea9b9eca684602eee"
     },
@@ -4563,7 +4735,7 @@
     },
     {
       "path": "gemini/.specify/scripts/runtime/application/check-writing-state.js",
-      "sha256": "1dc8556a3fc1be4769fc3f585e4ba605f43302750f28abb7be76ed9fd7f74236"
+      "sha256": "adb32d102302107fa360014a4e33dfc6e0ad9a005979677121c87a3832a371e8"
     },
     {
       "path": "gemini/.specify/scripts/runtime/domain/story-artifact.js",
@@ -4571,11 +4743,27 @@
     },
     {
       "path": "gemini/.specify/scripts/runtime/script-runtime.js",
-      "sha256": "d33ef7083e1a07e24cea32355c5c8671fe7ad6bc9df0036bb86da74964dd8534"
+      "sha256": "77a4a863b8382ee3472c8c46d424859234b715d8fa35f6d61208fd14f7892c8f"
     },
     {
       "path": "gemini/.specify/templates/agent/agent-contract.md",
       "sha256": "e59a517192022dd3648aaeb02533b81616bd4fd954a8e9c2ffa56f61bdecd369"
+    },
+    {
+      "path": "gemini/.specify/templates/authoring/chapter-card.md",
+      "sha256": "6744b25862eb2879ae79be9e4d998a1c792e6dee071c0c795406196120c14560"
+    },
+    {
+      "path": "gemini/.specify/templates/authoring/open-promises.md",
+      "sha256": "6987183cab416778b498cdff77d8e111ed17df9ffd29223fd0f4d3b829759321"
+    },
+    {
+      "path": "gemini/.specify/templates/authoring/story-dashboard.md",
+      "sha256": "ae94e92d611f2ad12c14e80dde3025247ec5af436c07c7ee61e3ef44002ef05c"
+    },
+    {
+      "path": "gemini/.specify/templates/authoring/tracking-update-checklist.md",
+      "sha256": "1f5b0258c06c1de49c90ed1617f85bbc2e011f2811af8b30b69c0607e3a27bd0"
     },
     {
       "path": "gemini/.specify/templates/canon/contradictions.md",
@@ -4660,6 +4848,10 @@
     {
       "path": "gemini/.specify/templates/continue-rules/story-spec.md",
       "sha256": "5b3983748cc3a994e30dfdd3a87ffd2bb2c22af584f8371069604b10c4016fd2"
+    },
+    {
+      "path": "gemini/.specify/templates/CONTINUE.md",
+      "sha256": "d13e5dc5c4601fe0e839b2930c9db2d114a33d3d725d927f40db7ee59e6a429a"
     },
     {
       "path": "gemini/.specify/templates/copilot-instructions.md",
@@ -5161,6 +5353,10 @@
       "sha256": "0092e8ba609d10dc3d4c4ebcac0a802771947dad88bafeed9012424c0b84aed8"
     },
     {
+      "path": "generic/.specify/scripts/bash/validate-local.sh",
+      "sha256": "6f06bae494f0336f2c74d1689bfa9633e9f9ad36638a8e70a45b49bb76fa7163"
+    },
+    {
       "path": "generic/.specify/scripts/build-commands.cjs",
       "sha256": "148e9aea0b947582b1475eaa53d7778dd9aafbbdf4476d6ea9b9eca684602eee"
     },
@@ -5170,7 +5366,7 @@
     },
     {
       "path": "generic/.specify/scripts/runtime/application/check-writing-state.js",
-      "sha256": "1dc8556a3fc1be4769fc3f585e4ba605f43302750f28abb7be76ed9fd7f74236"
+      "sha256": "adb32d102302107fa360014a4e33dfc6e0ad9a005979677121c87a3832a371e8"
     },
     {
       "path": "generic/.specify/scripts/runtime/domain/story-artifact.js",
@@ -5178,11 +5374,27 @@
     },
     {
       "path": "generic/.specify/scripts/runtime/script-runtime.js",
-      "sha256": "d33ef7083e1a07e24cea32355c5c8671fe7ad6bc9df0036bb86da74964dd8534"
+      "sha256": "77a4a863b8382ee3472c8c46d424859234b715d8fa35f6d61208fd14f7892c8f"
     },
     {
       "path": "generic/.specify/templates/agent/agent-contract.md",
       "sha256": "e59a517192022dd3648aaeb02533b81616bd4fd954a8e9c2ffa56f61bdecd369"
+    },
+    {
+      "path": "generic/.specify/templates/authoring/chapter-card.md",
+      "sha256": "6744b25862eb2879ae79be9e4d998a1c792e6dee071c0c795406196120c14560"
+    },
+    {
+      "path": "generic/.specify/templates/authoring/open-promises.md",
+      "sha256": "6987183cab416778b498cdff77d8e111ed17df9ffd29223fd0f4d3b829759321"
+    },
+    {
+      "path": "generic/.specify/templates/authoring/story-dashboard.md",
+      "sha256": "ae94e92d611f2ad12c14e80dde3025247ec5af436c07c7ee61e3ef44002ef05c"
+    },
+    {
+      "path": "generic/.specify/templates/authoring/tracking-update-checklist.md",
+      "sha256": "1f5b0258c06c1de49c90ed1617f85bbc2e011f2811af8b30b69c0607e3a27bd0"
     },
     {
       "path": "generic/.specify/templates/canon/contradictions.md",
@@ -5267,6 +5479,10 @@
     {
       "path": "generic/.specify/templates/continue-rules/story-spec.md",
       "sha256": "5b3983748cc3a994e30dfdd3a87ffd2bb2c22af584f8371069604b10c4016fd2"
+    },
+    {
+      "path": "generic/.specify/templates/CONTINUE.md",
+      "sha256": "d13e5dc5c4601fe0e839b2930c9db2d114a33d3d725d927f40db7ee59e6a429a"
     },
     {
       "path": "generic/.specify/templates/copilot-instructions.md",
@@ -5768,6 +5984,10 @@
       "sha256": "0092e8ba609d10dc3d4c4ebcac0a802771947dad88bafeed9012424c0b84aed8"
     },
     {
+      "path": "kilocode/.specify/scripts/bash/validate-local.sh",
+      "sha256": "6f06bae494f0336f2c74d1689bfa9633e9f9ad36638a8e70a45b49bb76fa7163"
+    },
+    {
       "path": "kilocode/.specify/scripts/build-commands.cjs",
       "sha256": "148e9aea0b947582b1475eaa53d7778dd9aafbbdf4476d6ea9b9eca684602eee"
     },
@@ -5777,7 +5997,7 @@
     },
     {
       "path": "kilocode/.specify/scripts/runtime/application/check-writing-state.js",
-      "sha256": "1dc8556a3fc1be4769fc3f585e4ba605f43302750f28abb7be76ed9fd7f74236"
+      "sha256": "adb32d102302107fa360014a4e33dfc6e0ad9a005979677121c87a3832a371e8"
     },
     {
       "path": "kilocode/.specify/scripts/runtime/domain/story-artifact.js",
@@ -5785,11 +6005,27 @@
     },
     {
       "path": "kilocode/.specify/scripts/runtime/script-runtime.js",
-      "sha256": "d33ef7083e1a07e24cea32355c5c8671fe7ad6bc9df0036bb86da74964dd8534"
+      "sha256": "77a4a863b8382ee3472c8c46d424859234b715d8fa35f6d61208fd14f7892c8f"
     },
     {
       "path": "kilocode/.specify/templates/agent/agent-contract.md",
       "sha256": "e59a517192022dd3648aaeb02533b81616bd4fd954a8e9c2ffa56f61bdecd369"
+    },
+    {
+      "path": "kilocode/.specify/templates/authoring/chapter-card.md",
+      "sha256": "6744b25862eb2879ae79be9e4d998a1c792e6dee071c0c795406196120c14560"
+    },
+    {
+      "path": "kilocode/.specify/templates/authoring/open-promises.md",
+      "sha256": "6987183cab416778b498cdff77d8e111ed17df9ffd29223fd0f4d3b829759321"
+    },
+    {
+      "path": "kilocode/.specify/templates/authoring/story-dashboard.md",
+      "sha256": "ae94e92d611f2ad12c14e80dde3025247ec5af436c07c7ee61e3ef44002ef05c"
+    },
+    {
+      "path": "kilocode/.specify/templates/authoring/tracking-update-checklist.md",
+      "sha256": "1f5b0258c06c1de49c90ed1617f85bbc2e011f2811af8b30b69c0607e3a27bd0"
     },
     {
       "path": "kilocode/.specify/templates/canon/contradictions.md",
@@ -5874,6 +6110,10 @@
     {
       "path": "kilocode/.specify/templates/continue-rules/story-spec.md",
       "sha256": "5b3983748cc3a994e30dfdd3a87ffd2bb2c22af584f8371069604b10c4016fd2"
+    },
+    {
+      "path": "kilocode/.specify/templates/CONTINUE.md",
+      "sha256": "d13e5dc5c4601fe0e839b2930c9db2d114a33d3d725d927f40db7ee59e6a429a"
     },
     {
       "path": "kilocode/.specify/templates/copilot-instructions.md",
@@ -6375,6 +6615,10 @@
       "sha256": "0092e8ba609d10dc3d4c4ebcac0a802771947dad88bafeed9012424c0b84aed8"
     },
     {
+      "path": "opencode/.specify/scripts/bash/validate-local.sh",
+      "sha256": "6f06bae494f0336f2c74d1689bfa9633e9f9ad36638a8e70a45b49bb76fa7163"
+    },
+    {
       "path": "opencode/.specify/scripts/build-commands.cjs",
       "sha256": "148e9aea0b947582b1475eaa53d7778dd9aafbbdf4476d6ea9b9eca684602eee"
     },
@@ -6384,7 +6628,7 @@
     },
     {
       "path": "opencode/.specify/scripts/runtime/application/check-writing-state.js",
-      "sha256": "1dc8556a3fc1be4769fc3f585e4ba605f43302750f28abb7be76ed9fd7f74236"
+      "sha256": "adb32d102302107fa360014a4e33dfc6e0ad9a005979677121c87a3832a371e8"
     },
     {
       "path": "opencode/.specify/scripts/runtime/domain/story-artifact.js",
@@ -6392,11 +6636,27 @@
     },
     {
       "path": "opencode/.specify/scripts/runtime/script-runtime.js",
-      "sha256": "d33ef7083e1a07e24cea32355c5c8671fe7ad6bc9df0036bb86da74964dd8534"
+      "sha256": "77a4a863b8382ee3472c8c46d424859234b715d8fa35f6d61208fd14f7892c8f"
     },
     {
       "path": "opencode/.specify/templates/agent/agent-contract.md",
       "sha256": "e59a517192022dd3648aaeb02533b81616bd4fd954a8e9c2ffa56f61bdecd369"
+    },
+    {
+      "path": "opencode/.specify/templates/authoring/chapter-card.md",
+      "sha256": "6744b25862eb2879ae79be9e4d998a1c792e6dee071c0c795406196120c14560"
+    },
+    {
+      "path": "opencode/.specify/templates/authoring/open-promises.md",
+      "sha256": "6987183cab416778b498cdff77d8e111ed17df9ffd29223fd0f4d3b829759321"
+    },
+    {
+      "path": "opencode/.specify/templates/authoring/story-dashboard.md",
+      "sha256": "ae94e92d611f2ad12c14e80dde3025247ec5af436c07c7ee61e3ef44002ef05c"
+    },
+    {
+      "path": "opencode/.specify/templates/authoring/tracking-update-checklist.md",
+      "sha256": "1f5b0258c06c1de49c90ed1617f85bbc2e011f2811af8b30b69c0607e3a27bd0"
     },
     {
       "path": "opencode/.specify/templates/canon/contradictions.md",
@@ -6481,6 +6741,10 @@
     {
       "path": "opencode/.specify/templates/continue-rules/story-spec.md",
       "sha256": "5b3983748cc3a994e30dfdd3a87ffd2bb2c22af584f8371069604b10c4016fd2"
+    },
+    {
+      "path": "opencode/.specify/templates/CONTINUE.md",
+      "sha256": "d13e5dc5c4601fe0e839b2930c9db2d114a33d3d725d927f40db7ee59e6a429a"
     },
     {
       "path": "opencode/.specify/templates/copilot-instructions.md",
@@ -6982,6 +7246,10 @@
       "sha256": "0092e8ba609d10dc3d4c4ebcac0a802771947dad88bafeed9012424c0b84aed8"
     },
     {
+      "path": "q/.specify/scripts/bash/validate-local.sh",
+      "sha256": "6f06bae494f0336f2c74d1689bfa9633e9f9ad36638a8e70a45b49bb76fa7163"
+    },
+    {
       "path": "q/.specify/scripts/build-commands.cjs",
       "sha256": "148e9aea0b947582b1475eaa53d7778dd9aafbbdf4476d6ea9b9eca684602eee"
     },
@@ -6991,7 +7259,7 @@
     },
     {
       "path": "q/.specify/scripts/runtime/application/check-writing-state.js",
-      "sha256": "1dc8556a3fc1be4769fc3f585e4ba605f43302750f28abb7be76ed9fd7f74236"
+      "sha256": "adb32d102302107fa360014a4e33dfc6e0ad9a005979677121c87a3832a371e8"
     },
     {
       "path": "q/.specify/scripts/runtime/domain/story-artifact.js",
@@ -6999,11 +7267,27 @@
     },
     {
       "path": "q/.specify/scripts/runtime/script-runtime.js",
-      "sha256": "d33ef7083e1a07e24cea32355c5c8671fe7ad6bc9df0036bb86da74964dd8534"
+      "sha256": "77a4a863b8382ee3472c8c46d424859234b715d8fa35f6d61208fd14f7892c8f"
     },
     {
       "path": "q/.specify/templates/agent/agent-contract.md",
       "sha256": "e59a517192022dd3648aaeb02533b81616bd4fd954a8e9c2ffa56f61bdecd369"
+    },
+    {
+      "path": "q/.specify/templates/authoring/chapter-card.md",
+      "sha256": "6744b25862eb2879ae79be9e4d998a1c792e6dee071c0c795406196120c14560"
+    },
+    {
+      "path": "q/.specify/templates/authoring/open-promises.md",
+      "sha256": "6987183cab416778b498cdff77d8e111ed17df9ffd29223fd0f4d3b829759321"
+    },
+    {
+      "path": "q/.specify/templates/authoring/story-dashboard.md",
+      "sha256": "ae94e92d611f2ad12c14e80dde3025247ec5af436c07c7ee61e3ef44002ef05c"
+    },
+    {
+      "path": "q/.specify/templates/authoring/tracking-update-checklist.md",
+      "sha256": "1f5b0258c06c1de49c90ed1617f85bbc2e011f2811af8b30b69c0607e3a27bd0"
     },
     {
       "path": "q/.specify/templates/canon/contradictions.md",
@@ -7088,6 +7372,10 @@
     {
       "path": "q/.specify/templates/continue-rules/story-spec.md",
       "sha256": "5b3983748cc3a994e30dfdd3a87ffd2bb2c22af584f8371069604b10c4016fd2"
+    },
+    {
+      "path": "q/.specify/templates/CONTINUE.md",
+      "sha256": "d13e5dc5c4601fe0e839b2930c9db2d114a33d3d725d927f40db7ee59e6a429a"
     },
     {
       "path": "q/.specify/templates/copilot-instructions.md",
@@ -7589,6 +7877,10 @@
       "sha256": "0092e8ba609d10dc3d4c4ebcac0a802771947dad88bafeed9012424c0b84aed8"
     },
     {
+      "path": "qwen/.specify/scripts/bash/validate-local.sh",
+      "sha256": "6f06bae494f0336f2c74d1689bfa9633e9f9ad36638a8e70a45b49bb76fa7163"
+    },
+    {
       "path": "qwen/.specify/scripts/build-commands.cjs",
       "sha256": "148e9aea0b947582b1475eaa53d7778dd9aafbbdf4476d6ea9b9eca684602eee"
     },
@@ -7598,7 +7890,7 @@
     },
     {
       "path": "qwen/.specify/scripts/runtime/application/check-writing-state.js",
-      "sha256": "1dc8556a3fc1be4769fc3f585e4ba605f43302750f28abb7be76ed9fd7f74236"
+      "sha256": "adb32d102302107fa360014a4e33dfc6e0ad9a005979677121c87a3832a371e8"
     },
     {
       "path": "qwen/.specify/scripts/runtime/domain/story-artifact.js",
@@ -7606,11 +7898,27 @@
     },
     {
       "path": "qwen/.specify/scripts/runtime/script-runtime.js",
-      "sha256": "d33ef7083e1a07e24cea32355c5c8671fe7ad6bc9df0036bb86da74964dd8534"
+      "sha256": "77a4a863b8382ee3472c8c46d424859234b715d8fa35f6d61208fd14f7892c8f"
     },
     {
       "path": "qwen/.specify/templates/agent/agent-contract.md",
       "sha256": "e59a517192022dd3648aaeb02533b81616bd4fd954a8e9c2ffa56f61bdecd369"
+    },
+    {
+      "path": "qwen/.specify/templates/authoring/chapter-card.md",
+      "sha256": "6744b25862eb2879ae79be9e4d998a1c792e6dee071c0c795406196120c14560"
+    },
+    {
+      "path": "qwen/.specify/templates/authoring/open-promises.md",
+      "sha256": "6987183cab416778b498cdff77d8e111ed17df9ffd29223fd0f4d3b829759321"
+    },
+    {
+      "path": "qwen/.specify/templates/authoring/story-dashboard.md",
+      "sha256": "ae94e92d611f2ad12c14e80dde3025247ec5af436c07c7ee61e3ef44002ef05c"
+    },
+    {
+      "path": "qwen/.specify/templates/authoring/tracking-update-checklist.md",
+      "sha256": "1f5b0258c06c1de49c90ed1617f85bbc2e011f2811af8b30b69c0607e3a27bd0"
     },
     {
       "path": "qwen/.specify/templates/canon/contradictions.md",
@@ -7695,6 +8003,10 @@
     {
       "path": "qwen/.specify/templates/continue-rules/story-spec.md",
       "sha256": "5b3983748cc3a994e30dfdd3a87ffd2bb2c22af584f8371069604b10c4016fd2"
+    },
+    {
+      "path": "qwen/.specify/templates/CONTINUE.md",
+      "sha256": "d13e5dc5c4601fe0e839b2930c9db2d114a33d3d725d927f40db7ee59e6a429a"
     },
     {
       "path": "qwen/.specify/templates/copilot-instructions.md",
@@ -8196,6 +8508,10 @@
       "sha256": "0092e8ba609d10dc3d4c4ebcac0a802771947dad88bafeed9012424c0b84aed8"
     },
     {
+      "path": "roocode/.specify/scripts/bash/validate-local.sh",
+      "sha256": "6f06bae494f0336f2c74d1689bfa9633e9f9ad36638a8e70a45b49bb76fa7163"
+    },
+    {
       "path": "roocode/.specify/scripts/build-commands.cjs",
       "sha256": "148e9aea0b947582b1475eaa53d7778dd9aafbbdf4476d6ea9b9eca684602eee"
     },
@@ -8205,7 +8521,7 @@
     },
     {
       "path": "roocode/.specify/scripts/runtime/application/check-writing-state.js",
-      "sha256": "1dc8556a3fc1be4769fc3f585e4ba605f43302750f28abb7be76ed9fd7f74236"
+      "sha256": "adb32d102302107fa360014a4e33dfc6e0ad9a005979677121c87a3832a371e8"
     },
     {
       "path": "roocode/.specify/scripts/runtime/domain/story-artifact.js",
@@ -8213,11 +8529,27 @@
     },
     {
       "path": "roocode/.specify/scripts/runtime/script-runtime.js",
-      "sha256": "d33ef7083e1a07e24cea32355c5c8671fe7ad6bc9df0036bb86da74964dd8534"
+      "sha256": "77a4a863b8382ee3472c8c46d424859234b715d8fa35f6d61208fd14f7892c8f"
     },
     {
       "path": "roocode/.specify/templates/agent/agent-contract.md",
       "sha256": "e59a517192022dd3648aaeb02533b81616bd4fd954a8e9c2ffa56f61bdecd369"
+    },
+    {
+      "path": "roocode/.specify/templates/authoring/chapter-card.md",
+      "sha256": "6744b25862eb2879ae79be9e4d998a1c792e6dee071c0c795406196120c14560"
+    },
+    {
+      "path": "roocode/.specify/templates/authoring/open-promises.md",
+      "sha256": "6987183cab416778b498cdff77d8e111ed17df9ffd29223fd0f4d3b829759321"
+    },
+    {
+      "path": "roocode/.specify/templates/authoring/story-dashboard.md",
+      "sha256": "ae94e92d611f2ad12c14e80dde3025247ec5af436c07c7ee61e3ef44002ef05c"
+    },
+    {
+      "path": "roocode/.specify/templates/authoring/tracking-update-checklist.md",
+      "sha256": "1f5b0258c06c1de49c90ed1617f85bbc2e011f2811af8b30b69c0607e3a27bd0"
     },
     {
       "path": "roocode/.specify/templates/canon/contradictions.md",
@@ -8302,6 +8634,10 @@
     {
       "path": "roocode/.specify/templates/continue-rules/story-spec.md",
       "sha256": "5b3983748cc3a994e30dfdd3a87ffd2bb2c22af584f8371069604b10c4016fd2"
+    },
+    {
+      "path": "roocode/.specify/templates/CONTINUE.md",
+      "sha256": "d13e5dc5c4601fe0e839b2930c9db2d114a33d3d725d927f40db7ee59e6a429a"
     },
     {
       "path": "roocode/.specify/templates/copilot-instructions.md",
@@ -8648,6 +8984,10 @@
       "sha256": "0092e8ba609d10dc3d4c4ebcac0a802771947dad88bafeed9012424c0b84aed8"
     },
     {
+      "path": "windsurf/.specify/scripts/bash/validate-local.sh",
+      "sha256": "6f06bae494f0336f2c74d1689bfa9633e9f9ad36638a8e70a45b49bb76fa7163"
+    },
+    {
       "path": "windsurf/.specify/scripts/build-commands.cjs",
       "sha256": "148e9aea0b947582b1475eaa53d7778dd9aafbbdf4476d6ea9b9eca684602eee"
     },
@@ -8657,7 +8997,7 @@
     },
     {
       "path": "windsurf/.specify/scripts/runtime/application/check-writing-state.js",
-      "sha256": "1dc8556a3fc1be4769fc3f585e4ba605f43302750f28abb7be76ed9fd7f74236"
+      "sha256": "adb32d102302107fa360014a4e33dfc6e0ad9a005979677121c87a3832a371e8"
     },
     {
       "path": "windsurf/.specify/scripts/runtime/domain/story-artifact.js",
@@ -8665,11 +9005,27 @@
     },
     {
       "path": "windsurf/.specify/scripts/runtime/script-runtime.js",
-      "sha256": "d33ef7083e1a07e24cea32355c5c8671fe7ad6bc9df0036bb86da74964dd8534"
+      "sha256": "77a4a863b8382ee3472c8c46d424859234b715d8fa35f6d61208fd14f7892c8f"
     },
     {
       "path": "windsurf/.specify/templates/agent/agent-contract.md",
       "sha256": "e59a517192022dd3648aaeb02533b81616bd4fd954a8e9c2ffa56f61bdecd369"
+    },
+    {
+      "path": "windsurf/.specify/templates/authoring/chapter-card.md",
+      "sha256": "6744b25862eb2879ae79be9e4d998a1c792e6dee071c0c795406196120c14560"
+    },
+    {
+      "path": "windsurf/.specify/templates/authoring/open-promises.md",
+      "sha256": "6987183cab416778b498cdff77d8e111ed17df9ffd29223fd0f4d3b829759321"
+    },
+    {
+      "path": "windsurf/.specify/templates/authoring/story-dashboard.md",
+      "sha256": "ae94e92d611f2ad12c14e80dde3025247ec5af436c07c7ee61e3ef44002ef05c"
+    },
+    {
+      "path": "windsurf/.specify/templates/authoring/tracking-update-checklist.md",
+      "sha256": "1f5b0258c06c1de49c90ed1617f85bbc2e011f2811af8b30b69c0607e3a27bd0"
     },
     {
       "path": "windsurf/.specify/templates/canon/contradictions.md",
@@ -8754,6 +9110,10 @@
     {
       "path": "windsurf/.specify/templates/continue-rules/story-spec.md",
       "sha256": "5b3983748cc3a994e30dfdd3a87ffd2bb2c22af584f8371069604b10c4016fd2"
+    },
+    {
+      "path": "windsurf/.specify/templates/CONTINUE.md",
+      "sha256": "d13e5dc5c4601fe0e839b2930c9db2d114a33d3d725d927f40db7ee59e6a429a"
     },
     {
       "path": "windsurf/.specify/templates/copilot-instructions.md",

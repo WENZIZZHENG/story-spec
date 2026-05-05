@@ -125,6 +125,9 @@ describe('checkWritingState', () => {
     expect(checklist).toContain('- [!] CHK009 字数符合标准（1 章不符合）');
     expect(checklist).toContain('- [!] CHK010 tracking JSON 有效（1 个错误）');
     expect(checklist).toContain('- [x] CHK011 Scene Card 写作门禁（1/1 ready）');
+    expect(checklist).toContain('CONTINUE.md');
+    expect(checklist).toContain('storyspec handoff demo');
+    expect(checklist).toContain('.specify/scripts/powershell/validate-local.ps1');
   });
 
   it('blocks writing when no scene card exists for a write-ready story', async () => {

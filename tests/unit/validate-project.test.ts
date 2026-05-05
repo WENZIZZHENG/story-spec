@@ -459,6 +459,54 @@ describe('validateProject', () => {
     ]));
   });
 
+  it('warns when continuation kit files are missing without failing the project', async () => {
+    const projectRoot = path.join(os.tmpdir(), 'memory-novel-missing-continuation-kit');
+    const packageRoot = path.join(os.tmpdir(), 'memory-novel-missing-continuation-kit-package');
+    const fileSystem = new MemoryFileSystem(projectRoot);
+
+    await fileSystem.ensureDir(path.join(packageRoot, 'templates'));
+    await fileSystem.writeJson(path.join(projectRoot, '.specify', 'config.json'), {
+      name: 'missing-continuation-kit',
+      type: 'novel',
+      version: '1.0.0'
+    });
+    await fileSystem.writeFile(path.join(projectRoot, '.specify', 'agent-contract.md'), '# contract');
+    await fileSystem.writeFile(path.join(projectRoot, 'AGENTS.md'), '# agents');
+    await fileSystem.ensureDir(path.join(projectRoot, 'stories'));
+    await fileSystem.ensureDir(path.join(projectRoot, 'spec', 'tracking'));
+    await fileSystem.ensureDir(path.join(projectRoot, 'spec', 'world'));
+    await fileSystem.ensureDir(path.join(projectRoot, 'spec', 'canon'));
+    await fileSystem.ensureDir(path.join(projectRoot, 'spec', 'graph'));
+    await fileSystem.ensureDir(path.join(projectRoot, 'spec', 'voice'));
+
+    const result = await validateProject({
+      projectRoot,
+      packageRoot,
+      fileSystem
+    });
+
+    expect(result.valid).toBe(true);
+    expect(result.issues).toEqual(expect.arrayContaining([
+      expect.objectContaining({
+        code: 'MISSING_CONTINUATION_ENTRY',
+        severity: 'warning',
+        path: path.join(projectRoot, 'CONTINUE.md')
+      }),
+      expect.objectContaining({
+        code: 'MISSING_AUTHORING_TEMPLATE',
+        severity: 'warning',
+        path: path.join(projectRoot, '.specify', 'templates', 'authoring', 'story-dashboard.md')
+      }),
+      expect.objectContaining({
+        code: 'MISSING_LOCAL_VALIDATION_SCRIPT',
+        severity: 'warning',
+        path: path.join(projectRoot, '.specify', 'scripts', 'powershell', 'validate-local.ps1')
+      })
+    ]));
+    expect(result.issues.find(issue => issue.code === 'MISSING_CONTINUATION_ENTRY')?.message)
+      .toContain('storyspec upgrade --templates --scripts');
+  });
+
   it('reports invalid world and canon documents', async () => {
     const projectRoot = path.join(os.tmpdir(), 'memory-novel-invalid-world-canon');
     const packageRoot = path.join(os.tmpdir(), 'memory-novel-invalid-world-canon-package');

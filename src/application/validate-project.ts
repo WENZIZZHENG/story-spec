@@ -73,6 +73,9 @@ export type ProjectValidationIssueCode =
   | 'MISSING_CANON_DIR'
   | 'MISSING_GRAPH_DIR'
   | 'MISSING_VOICE_DIR'
+  | 'MISSING_CONTINUATION_ENTRY'
+  | 'MISSING_AUTHORING_TEMPLATE'
+  | 'MISSING_LOCAL_VALIDATION_SCRIPT'
   | 'MISSING_TEMPLATE'
   | 'MISSING_AGENT_CONTRACT'
   | 'MISSING_AGENTS_FILE'
@@ -400,6 +403,69 @@ const validateTemplates = async (
   };
 };
 
+const validateContinuationKit = async (
+  fs: ProjectFileSystem,
+  projectRoot: string
+): Promise<ProjectValidationIssue[]> => {
+  const upgradeHint = '请运行 storyspec upgrade --templates --scripts 补齐继续创作工具包。';
+  const expectedFiles: Array<{
+    code: Extract<ProjectValidationIssueCode, 'MISSING_CONTINUATION_ENTRY' | 'MISSING_AUTHORING_TEMPLATE' | 'MISSING_LOCAL_VALIDATION_SCRIPT'>;
+    relativePath: string;
+    label: string;
+  }> = [
+    {
+      code: 'MISSING_CONTINUATION_ENTRY',
+      relativePath: 'CONTINUE.md',
+      label: '继续创作入口'
+    },
+    {
+      code: 'MISSING_AUTHORING_TEMPLATE',
+      relativePath: path.join('.specify', 'templates', 'authoring', 'story-dashboard.md'),
+      label: '故事面板模板'
+    },
+    {
+      code: 'MISSING_AUTHORING_TEMPLATE',
+      relativePath: path.join('.specify', 'templates', 'authoring', 'open-promises.md'),
+      label: '开放承诺模板'
+    },
+    {
+      code: 'MISSING_AUTHORING_TEMPLATE',
+      relativePath: path.join('.specify', 'templates', 'authoring', 'tracking-update-checklist.md'),
+      label: '追踪回填清单模板'
+    },
+    {
+      code: 'MISSING_AUTHORING_TEMPLATE',
+      relativePath: path.join('.specify', 'templates', 'authoring', 'chapter-card.md'),
+      label: '章节卡模板'
+    },
+    {
+      code: 'MISSING_LOCAL_VALIDATION_SCRIPT',
+      relativePath: path.join('.specify', 'scripts', 'powershell', 'validate-local.ps1'),
+      label: 'PowerShell 本地验证脚本'
+    },
+    {
+      code: 'MISSING_LOCAL_VALIDATION_SCRIPT',
+      relativePath: path.join('.specify', 'scripts', 'bash', 'validate-local.sh'),
+      label: 'Bash 本地验证脚本'
+    }
+  ];
+  const issues: ProjectValidationIssue[] = [];
+
+  for (const file of expectedFiles) {
+    const filePath = path.join(projectRoot, file.relativePath);
+    if (!await fs.pathExists(filePath)) {
+      issues.push(createIssue(
+        file.code,
+        filePath,
+        `缺少${file.label}：${file.relativePath}。${upgradeHint}`,
+        'warning'
+      ));
+    }
+  }
+
+  return issues;
+};
+
 const validateClarificationRecords = async (
   fs: ProjectFileSystem,
   artifactScan: Awaited<ReturnType<typeof scanStoryArtifacts>>
@@ -693,6 +759,7 @@ export const validateProject = async (input: ValidateProjectInput): Promise<Proj
     ...presetResult.issues
       .filter(issue => issue.code !== 'NO_ACTIVE_PRESET')
       .map(toPresetProjectIssue),
+    ...await validateContinuationKit(fs, projectRoot),
     ...taskIssues,
     ...writingRuleResult.issues.map(toProjectIssue),
     ...agentContractResult.issues,

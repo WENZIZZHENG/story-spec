@@ -38,6 +38,15 @@ const createPackageRootFixture = async () => {
   await mkdir(path.join(packageRoot, 'scripts', 'powershell'), { recursive: true });
   await writeFile(path.join(packageRoot, 'scripts', 'bash', 'check-writing-state.sh'), '#!/usr/bin/env bash');
   await writeFile(path.join(packageRoot, 'scripts', 'powershell', 'check-writing-state.ps1'), 'Write-Output ok');
+  await writeFile(path.join(packageRoot, 'scripts', 'bash', 'validate-local.sh'), '#!/usr/bin/env bash\necho new validate');
+  await writeFile(path.join(packageRoot, 'scripts', 'powershell', 'validate-local.ps1'), 'Write-Output new validate');
+
+  await mkdir(path.join(packageRoot, 'templates', 'authoring'), { recursive: true });
+  await writeFile(path.join(packageRoot, 'templates', 'CONTINUE.md'), '# 继续创作入口\n\n运行 storyspec status。');
+  await writeFile(path.join(packageRoot, 'templates', 'authoring', 'story-dashboard.md'), '# 新故事面板模板');
+  await writeFile(path.join(packageRoot, 'templates', 'authoring', 'open-promises.md'), '# 新开放承诺模板');
+  await writeFile(path.join(packageRoot, 'templates', 'authoring', 'tracking-update-checklist.md'), '# 新追踪回填清单模板');
+  await writeFile(path.join(packageRoot, 'templates', 'authoring', 'chapter-card.md'), '# 新章节卡模板');
 
   await mkdir(path.join(packageRoot, 'spec', 'presets', 'three-act'), { recursive: true });
   await mkdir(path.join(packageRoot, 'spec', 'tracking'), { recursive: true });
@@ -66,13 +75,18 @@ const createProjectFixture = async () => {
 
   await mkdir(path.join(projectPath, '.specify', 'scripts'), { recursive: true });
   await writeFile(path.join(projectPath, '.specify', 'scripts', 'old.txt'), 'old script');
+  await writeFile(path.join(projectPath, 'CONTINUE.md'), 'old continue');
+  await mkdir(path.join(projectPath, '.specify', 'templates', 'authoring'), { recursive: true });
+  await writeFile(path.join(projectPath, '.specify', 'templates', 'authoring', 'story-dashboard.md'), 'old dashboard');
   await mkdir(path.join(projectPath, '.specify', 'memory'), { recursive: true });
   await writeFile(path.join(projectPath, '.specify', 'memory', 'old.md'), 'old memory');
 
   await mkdir(path.join(projectPath, 'spec', 'tracking'), { recursive: true });
   await mkdir(path.join(projectPath, 'spec', 'knowledge'), { recursive: true });
+  await mkdir(path.join(projectPath, 'stories', 'demo'), { recursive: true });
   await writeFile(path.join(projectPath, 'spec', 'tracking', 'plot-tracker.json'), '{"user":true}');
   await writeFile(path.join(projectPath, 'spec', 'knowledge', 'world.md'), 'user knowledge');
+  await writeFile(path.join(projectPath, 'stories', 'demo', 'story-dashboard.md'), 'user story dashboard');
 
   return projectPath;
 };
@@ -210,6 +224,49 @@ describe('upgradeProject', () => {
     expect(result.stats.memory).toBe(1);
     await expect(readFile(path.join(projectPath, '.specify', 'memory', 'author-profile.json'), 'utf8'))
       .resolves.toContain('"schemaVersion":"1.0"');
+  });
+
+  it('refreshes continuation templates and local validation scripts without touching story data', async () => {
+    const packageRoot = await createPackageRootFixture();
+    const projectPath = await createProjectFixture();
+
+    const result = await upgradeProject({
+      projectPath,
+      packageRoot,
+      updateContent: {
+        commands: false,
+        scripts: true,
+        templates: true,
+        memory: false,
+        spec: false,
+        experts: false
+      },
+      fileSystem: nodeFileSystem,
+      dryRun: false,
+      backup: false
+    });
+
+    expect(result.stats.templates).toBeGreaterThanOrEqual(5);
+    expect(result.stats.scripts).toBeGreaterThanOrEqual(4);
+    await expect(readFile(path.join(projectPath, 'CONTINUE.md'), 'utf8')).resolves.toContain('storyspec status');
+    await expect(readFile(path.join(projectPath, '.specify', 'templates', 'authoring', 'story-dashboard.md'), 'utf8'))
+      .resolves.toBe('# 新故事面板模板');
+    await expect(readFile(path.join(projectPath, '.specify', 'templates', 'authoring', 'open-promises.md'), 'utf8'))
+      .resolves.toBe('# 新开放承诺模板');
+    await expect(readFile(path.join(projectPath, '.specify', 'templates', 'authoring', 'tracking-update-checklist.md'), 'utf8'))
+      .resolves.toBe('# 新追踪回填清单模板');
+    await expect(readFile(path.join(projectPath, '.specify', 'templates', 'authoring', 'chapter-card.md'), 'utf8'))
+      .resolves.toBe('# 新章节卡模板');
+    await expect(readFile(path.join(projectPath, '.specify', 'scripts', 'powershell', 'validate-local.ps1'), 'utf8'))
+      .resolves.toContain('new validate');
+    await expect(readFile(path.join(projectPath, '.specify', 'scripts', 'bash', 'validate-local.sh'), 'utf8'))
+      .resolves.toContain('new validate');
+    await expect(readFile(path.join(projectPath, 'stories', 'demo', 'story-dashboard.md'), 'utf8'))
+      .resolves.toBe('user story dashboard');
+    await expect(readFile(path.join(projectPath, 'spec', 'tracking', 'plot-tracker.json'), 'utf8'))
+      .resolves.toBe('{"user":true}');
+    await expect(readFile(path.join(projectPath, 'spec', 'knowledge', 'world.md'), 'utf8'))
+      .resolves.toBe('user knowledge');
   });
 
   it('can add generic agent commands to an existing project', async () => {

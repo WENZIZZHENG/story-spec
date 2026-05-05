@@ -403,6 +403,11 @@ const updateTemplates = async (
 
   if (!dryRun) {
     await fs.copy(templatesSource, templatesDest, { overwrite: true });
+
+    const continuationSource = path.join(templatesSource, 'CONTINUE.md');
+    if (await fs.pathExists(continuationSource)) {
+      await fs.copy(continuationSource, path.join(projectPath, 'CONTINUE.md'), { overwrite: true });
+    }
   }
 
   const templateCount = await countFiles(fs, templatesSource, file =>

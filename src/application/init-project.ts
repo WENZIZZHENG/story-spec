@@ -235,9 +235,22 @@ const copyFallbackScripts = async (
   const scriptsDir = path.join(packageRoot, 'scripts');
   const scriptsDest = path.join(projectPath, '.specify', 'scripts');
 
-  if (await fs.pathExists(scriptsDir) && !await fs.pathExists(scriptsDest)) {
-    await fs.copy(scriptsDir, scriptsDest);
+  if (await fs.pathExists(scriptsDir)) {
+    await fs.copy(scriptsDir, scriptsDest, { overwrite: false });
     await ensureBashExecutable(fs, path.join(scriptsDest, 'bash'));
+  }
+};
+
+const copyContinuationEntry = async (
+  fs: ProjectFileSystem,
+  projectPath: string,
+  packageRoot: string
+): Promise<void> => {
+  const source = path.join(packageRoot, 'templates', 'CONTINUE.md');
+  const dest = path.join(projectPath, 'CONTINUE.md');
+
+  if (await fs.pathExists(source) && !await fs.pathExists(dest)) {
+    await fs.copy(source, dest, { overwrite: false });
   }
 };
 
@@ -251,6 +264,8 @@ const copyTemplatesAndKnowledge = async (
   if (await fs.pathExists(templatesDir)) {
     await fs.copy(templatesDir, path.join(projectPath, '.specify', 'templates'));
   }
+
+  await copyContinuationEntry(fs, projectPath, input.packageRoot);
 
   const agentGuidesDir = path.join(input.packageRoot, 'agent-guides');
   if (await fs.pathExists(agentGuidesDir)) {

@@ -398,5 +398,23 @@ export const renderWritingStateChecklist = (state: WritingStateResult): string =
     lines.push('', '- [ ] 运行 /analyze 进行综合验证');
   }
 
+  lines.push(
+    '',
+    '## 继续入口',
+    '',
+    '- [ ] 先读 `CONTINUE.md` 选择继续创作、章节卡、追踪回填或验证入口。'
+  );
+
+  if (state.story) {
+    lines.push(`- [ ] 需要交接时运行 \`storyspec handoff ${state.story.name}\` 刷新断点上下文包。`);
+  } else {
+    lines.push('- [ ] 需要交接时运行 `storyspec handoff <故事名>` 刷新断点上下文包。');
+  }
+
+  lines.push(
+    '- [ ] 正式校验运行 `storyspec validate`。',
+    '- [ ] CLI 不可用时运行 `.specify/scripts/powershell/validate-local.ps1` 或 `.specify/scripts/bash/validate-local.sh`。'
+  );
+
   return lines.join('\n');
 };

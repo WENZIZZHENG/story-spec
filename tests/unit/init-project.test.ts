@@ -46,6 +46,12 @@ const createPackageRootFixture = async () => {
     path.join(packageRoot, 'templates', 'agent', 'agent-contract.md'),
     '# Contract {{PROJECT_NAME}}\n\n{{AGENTS_PROFILE_SECTION}}\n'
   );
+  await mkdir(path.join(packageRoot, 'templates', 'authoring'), { recursive: true });
+  await writeFile(path.join(packageRoot, 'templates', 'CONTINUE.md'), '# 继续创作入口\n\n运行 storyspec status。');
+  await writeFile(path.join(packageRoot, 'templates', 'authoring', 'story-dashboard.md'), '# 故事面板模板');
+  await writeFile(path.join(packageRoot, 'templates', 'authoring', 'open-promises.md'), '# 开放承诺模板');
+  await writeFile(path.join(packageRoot, 'templates', 'authoring', 'tracking-update-checklist.md'), '# 追踪回填清单模板');
+  await writeFile(path.join(packageRoot, 'templates', 'authoring', 'chapter-card.md'), '# 章节卡模板');
   await writeFile(path.join(packageRoot, 'agent-guides', 'story-creation-guide.md'), '# story guide');
   await writeFile(path.join(packageRoot, 'templates', 'tracking', 'plot-tracker.json'), '{}');
   await writeFile(path.join(packageRoot, 'templates', 'knowledge', 'world-setting.md'), 'updated [日期]');
@@ -55,6 +61,10 @@ const createPackageRootFixture = async () => {
   await writeFile(path.join(packageRoot, 'templates', 'voice', 'character-voices.yaml'), 'voiceFingerprints: []');
   await mkdir(path.join(packageRoot, 'memory'), { recursive: true });
   await writeFile(path.join(packageRoot, 'memory', 'author-profile.json'), '{"schemaVersion":"1.0","updatedAt":"","notes":[],"entries":[]}');
+  await mkdir(path.join(packageRoot, 'scripts', 'powershell'), { recursive: true });
+  await mkdir(path.join(packageRoot, 'scripts', 'bash'), { recursive: true });
+  await writeFile(path.join(packageRoot, 'scripts', 'powershell', 'validate-local.ps1'), 'Write-Output ok');
+  await writeFile(path.join(packageRoot, 'scripts', 'bash', 'validate-local.sh'), '#!/usr/bin/env bash\necho ok');
 
   await mkdir(path.join(packageRoot, 'spec', 'presets', 'three-act'), { recursive: true });
   await writeFile(path.join(packageRoot, 'spec', 'config.json'), '{}');
@@ -96,6 +106,14 @@ describe('initProject', () => {
     await expect(exists(path.join(projectPath, '.specify', 'config.json'))).resolves.toBe(true);
     await expect(exists(path.join(projectPath, '.specify', 'agent-contract.md'))).resolves.toBe(true);
     await expect(exists(path.join(projectPath, '.specify', 'agent-guides', 'story-creation-guide.md'))).resolves.toBe(true);
+    await expect(exists(path.join(projectPath, 'CONTINUE.md'))).resolves.toBe(true);
+    await expect(readFile(path.join(projectPath, 'CONTINUE.md'), 'utf-8')).resolves.toContain('storyspec status');
+    await expect(exists(path.join(projectPath, '.specify', 'templates', 'authoring', 'story-dashboard.md'))).resolves.toBe(true);
+    await expect(exists(path.join(projectPath, '.specify', 'templates', 'authoring', 'open-promises.md'))).resolves.toBe(true);
+    await expect(exists(path.join(projectPath, '.specify', 'templates', 'authoring', 'tracking-update-checklist.md'))).resolves.toBe(true);
+    await expect(exists(path.join(projectPath, '.specify', 'templates', 'authoring', 'chapter-card.md'))).resolves.toBe(true);
+    await expect(exists(path.join(projectPath, '.specify', 'scripts', 'powershell', 'validate-local.ps1'))).resolves.toBe(true);
+    await expect(exists(path.join(projectPath, '.specify', 'scripts', 'bash', 'validate-local.sh'))).resolves.toBe(true);
     await expect(exists(path.join(projectPath, '.codex', 'prompts', 'novel-write.md'))).resolves.toBe(true);
     await expect(exists(path.join(projectPath, 'AGENTS.md'))).resolves.toBe(true);
     await expect(readFile(path.join(projectPath, '.specify', 'agent-contract.md'), 'utf-8')).resolves.toContain('Contract smoke');
