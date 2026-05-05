@@ -957,7 +957,35 @@ reveals:
     const next = JSON.parse(nextResult.stdout);
 
     expect(next.stage).toBe('idea');
+    expect(next.actions[0].action).toBe('continue_interview');
+    expect(next.actions.map((action: { action: string }) => action.action)).not.toContain('run_command');
     expect(next.actions[0].command).toBe('storyspec interview 法术编译纪元 --focus power --premise "异界穿越、轻松冒险、编程施法"');
+
+    const statusResult = await execFileAsync('node', [
+      cliPath,
+      'status',
+      '--json'
+    ], { cwd: projectPath });
+    const status = JSON.parse(statusResult.stdout);
+
+    expect(status.navigationEntries.map((entry: { action: string }) => entry.action)).toEqual([
+      'ingest_longform_material',
+      'start_from_short_idea',
+      'ingest_table_material',
+      'start_casual_chat'
+    ]);
+    expect(status.navigationEntries).toEqual(expect.arrayContaining([
+      expect.objectContaining({
+        action: 'ingest_longform_material',
+        copyableCommand: expect.stringMatching(/^storyspec ingest /)
+      }),
+      expect.objectContaining({
+        action: 'ingest_table_material',
+        copyableCommand: expect.stringMatching(/^storyspec ingest /)
+      })
+    ]));
+    expect(status.navigationEntries.map((entry: { copyableCommand: string }) => entry.copyableCommand).join('\n'))
+      .not.toContain('storyspec next 法术编译纪元\nstoryspec next 法术编译纪元');
 
     await execFileAsync('node', [
       cliPath,

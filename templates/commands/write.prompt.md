@@ -20,6 +20,12 @@
 - 资料不足时，先列出缺失上下文，不得编造正典事实。
 - 写作必须经过 preview / confirm / apply，不得跳过预览直接修改正文，也不得修改未授权文件。
 
+## 阶段性反馈契约
+
+- 阶段 1 - beat 预览：先输出 3-6 条 scene beat，说明目标、冲突、人物变化、场景限制、风险和缺口；JSON stage 字段只能使用 plan、write、finish，此阶段为 plan。
+- 阶段 2 - 正文块：正文按 scene、自然段组或目标字数分块输出，每块说明已完成的剧情功能和下一块目标；JSON stage 字段为 write。
+- 阶段 3 - 收尾验证：正文结束后输出正文路径、字数、建议或已执行验证、tracking 待更新/待确认和 next action；JSON stage 字段为 finish。
+
 ## 写作流程
 
 1. 将选中任务标记为 `in_progress`。

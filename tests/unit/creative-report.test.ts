@@ -151,6 +151,24 @@ describe('creative report', () => {
     expect(rendered).toContain('第7章 [candidate]');
     expect(rendered).toContain('莉安 [needs-confirmation]');
     expect(rendered).toContain('晏无 / 莉安 [candidate]');
+    expect(rendered).toContain('卷计划视图：');
+    expect(rendered).toContain('```mermaid');
+    expect(rendered).toContain('flowchart LR');
+    expect(rendered).toContain('A1["第一幕 1-3"] --> A2["第二幕 4-9"]');
+    expect(rendered).toContain('A2 --> A3["第三幕 10-12"]');
+    expect(rendered).toContain('A3 --> C["角色弧线"]');
+    expect(rendered).toContain('A3 --> P["剧情起伏"]');
+    expect(rendered).toContain('A3 --> R["人物关系"]');
+    expect(rendered).toContain('角色弧线表：');
+    expect(rendered).toContain('| 角色 | 状态 | 起点 | 转折 | 终点 | 证据 |');
+    expect(rendered).toContain('| 晏无 | confirmed | 把施法当工程问题 | 承认异界规则也有政治代价 | 愿意为公开修复方案承担风险 | stories/volume-demo/creative-plan.md#晏无 |');
+    expect(rendered).toContain('剧情起伏表：');
+    expect(rendered).toContain('| 章节范围 | 状态 | 张力 | 回报/释放 | 证据 |');
+    expect(rendered).toContain('| 10-12 | confirmed | 城区核心失控达到峰值 | 稳定核心但留下长线威胁 | 资料不足 |');
+    expect(rendered).toContain('人物关系图：');
+    expect(rendered).toContain('graph LR');
+    expect(rendered).toContain('Rel1["晏无 / 莉安"]');
+    expect(rendered).toContain('Rel1 --> Rel1Status["candidate"]');
     expect(rendered).not.toContain('莉安 [confirmed]');
     expect(rendered.length).toBeLessThan(9000);
   });
@@ -207,6 +225,12 @@ describe('creative report', () => {
     expect(rendered).toContain('第一卷一句话目标 [missing]：待确认');
     expect(rendered).toContain('人物关系概况');
     expect(rendered).toContain('资料不足');
+    expect(rendered).toContain('卷计划视图：');
+    expect(rendered).toContain('缺口["待确认 / 资料不足"]');
+    expect(rendered).toContain('角色弧线表：');
+    expect(rendered).toContain('| 核心角色 | missing | 资料不足 | 资料不足 | 资料不足 | 资料不足 |');
+    expect(rendered).toContain('人物关系图：');
+    expect(rendered).toContain('缺口["人物关系待确认"]');
     expect(rendered).not.toContain('自动补全');
   });
 

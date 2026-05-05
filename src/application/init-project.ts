@@ -22,6 +22,7 @@ export type InitProjectEvent =
 
 export interface InitProjectInput {
   name?: string;
+  workspacePath?: string;
   cwd: string;
   packageRoot: string;
   here: boolean;
@@ -96,6 +97,19 @@ const resolveProjectTarget = async (input: InitProjectInput): Promise<{ projectN
   const fs = input.fileSystem;
   if (input.here) {
     const projectPath = input.cwd;
+    return {
+      projectName: path.basename(projectPath),
+      projectPath
+    };
+  }
+
+  if (input.workspacePath) {
+    const projectPath = path.resolve(input.cwd, input.workspacePath);
+    if (await fs.pathExists(projectPath)) {
+      throw new InitProjectError(`项目目录 "${projectPath}" 已存在`, 'PROJECT_EXISTS');
+    }
+
+    await fs.ensureDir(projectPath);
     return {
       projectName: path.basename(projectPath),
       projectPath

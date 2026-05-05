@@ -248,6 +248,12 @@ describe('getProjectStatus', () => {
       hasTasks: false
     });
     expect(status.story?.creativeGaps).toContain('主角欲望、核心伙伴、第一舞台和第一卷冲突仍未确认');
+    expect(status.navigationEntries?.map(entry => entry.action)).toEqual([
+      'ingest_longform_material',
+      'start_from_short_idea',
+      'ingest_table_material',
+      'start_casual_chat'
+    ]);
     expect(status.nextActions).toContain('继续创作访谈：运行 `storyspec next idea-demo` 查看推荐入口');
     expect(status.nextActions).toContain('或直接运行 `storyspec interview idea-demo --premise "<一句话创意>"` 补齐第一版 StorySpec');
     expect(status.nextActions).not.toContain('先补齐 `stories/*/specification.md`');
@@ -256,6 +262,54 @@ describe('getProjectStatus', () => {
     expect(output).toContain('创作阶段：idea');
     expect(output).toContain('还需要补齐：');
     expect(output).toContain('主角欲望、核心伙伴、第一舞台和第一卷冲突仍未确认');
+  });
+
+  it('maps first-run status entries to stable actions and concrete copyable commands', async () => {
+    const projectRoot = path.join(os.tmpdir(), 'memory-novel-status-actions');
+    const fileSystem = new MemoryFileSystem(projectRoot);
+    const storyPath = path.join(projectRoot, 'stories', 'space opera');
+
+    await fileSystem.ensureDir(path.join(projectRoot, '.specify'));
+    await fileSystem.writeJson(path.join(projectRoot, '.specify', 'config.json'), {
+      name: 'status-actions',
+      version: '1.0.0'
+    });
+    await fileSystem.writeFile(path.join(storyPath, 'idea.md'), '# space opera');
+
+    const status = await getProjectStatus({
+      projectRoot,
+      fileSystem,
+      git: {
+        init: async () => undefined,
+        addAll: async () => undefined,
+        commit: async () => undefined,
+        statusShort: async () => []
+      }
+    });
+    const jsonRoundTrip = JSON.parse(JSON.stringify(status)) as typeof status;
+
+    expect(jsonRoundTrip.navigationEntries).toEqual([
+      expect.objectContaining({
+        action: 'ingest_longform_material',
+        copyableCommand: 'storyspec ingest "space opera" --text "<长文资料>"'
+      }),
+      expect.objectContaining({
+        action: 'start_from_short_idea',
+        copyableCommand: 'storyspec interview "space opera" --premise "<一句话创意>"'
+      }),
+      expect.objectContaining({
+        action: 'ingest_table_material',
+        copyableCommand: 'storyspec ingest "space opera" --text "<Markdown 表格资料>"'
+      }),
+      expect.objectContaining({
+        action: 'start_casual_chat',
+        copyableCommand: 'storyspec next "space opera" --modes'
+      })
+    ]);
+    expect(jsonRoundTrip.navigationEntries
+      .filter(entry => entry.action === 'ingest_longform_material' || entry.action === 'ingest_table_material')
+      .every(entry => entry.copyableCommand.startsWith('storyspec ingest '))).toBe(true);
+    expect(jsonRoundTrip.nextActions.join('\n')).toContain('storyspec next "space opera"');
   });
 
   it('guides empty projects to save an idea instead of starting from slash specify', async () => {
@@ -281,6 +335,12 @@ describe('getProjectStatus', () => {
     const output = renderProjectStatus(status);
 
     expect(status.story).toBeNull();
+    expect(status.navigationEntries?.map(entry => entry.action)).toEqual([
+      'ingest_longform_material',
+      'start_from_short_idea',
+      'ingest_table_material',
+      'start_casual_chat'
+    ]);
     expect(status.nextActions).toContain('先保存一句灵感：`storyspec story:new <故事名> --idea "<一句话创意>"`');
     expect(status.nextActions).toContain('然后运行 `storyspec next <故事名>` 选择角色、场景、设定或分支入口');
     expect(output).toContain('当前故事：尚未创建故事');

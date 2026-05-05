@@ -1,0 +1,64 @@
+{
+  "story": "法术编译纪元",
+  "taskId": "T001",
+  "chapter": 1,
+  "canonBoundary": "作者画像只作为偏好；Scene Card、clarifications 与当前任务优先。未确认候选只进入反馈和待办，不写入正文或正典。",
+  "humanSummary": [
+    "阶段 1：先给 3 条 scene beat，等待作者确认方向。",
+    "阶段 2：正文只推进第一块草稿，并说明下一块目标。",
+    "阶段 3：收尾只列路径、验证、tracking 待办和 next action。"
+  ],
+  "stages": [
+    {
+      "stage": "plan",
+      "sceneBeats": [
+        {
+          "goal": "晏无醒来并确认法术槽存在。",
+          "conflict": "本地佣兵把符文失控当成邪术。",
+          "characterChange": "从只想自保转为先调查局势。",
+          "sceneLimit": "不提前解释完整力量体系。",
+          "riskOrGap": "村庄政治关系仍待作者确认。"
+        },
+        {
+          "goal": "用一次低风险试验展示法术编程。",
+          "conflict": "符文顺序错误导致可预测副作用。",
+          "characterChange": "晏无把异世界施法当作可调试系统。",
+          "sceneLimit": "只演示单符到短序列。",
+          "riskOrGap": "不能把 AI 候选角色关系写成正典。"
+        },
+        {
+          "goal": "让瑟琳娜以观察者身份出场。",
+          "conflict": "她怀疑晏无会扰乱秩序。",
+          "characterChange": "双方从误判走向暂时合作。",
+          "sceneLimit": "不急着推进恋爱结论。",
+          "riskOrGap": "瑟琳娜家族细节需要后续确认。"
+        }
+      ]
+    },
+    {
+      "stage": "write",
+      "blocks": [
+        {
+          "targetPath": "stories/法术编译纪元/content/volume1/chapter-001.md",
+          "progress": "剧情功能：完成穿越醒来、首次调试和群众现场冲突的第一块草稿。",
+          "nextTarget": "进入村口冲突处理，并让瑟琳娜观察晏无的处事方法。"
+        }
+      ]
+    },
+    {
+      "stage": "finish",
+      "draftPath": "stories/法术编译纪元/content/volume1/chapter-001.md",
+      "wordCount": 0,
+      "verification": [
+        "未确认候选未进入 specification、canon 或正式正文。",
+        "需要作者确认村庄政治关系和瑟琳娜家族细节。",
+        "正文路径和 tracking 更新应在作者确认后 apply。"
+      ],
+      "trackingTodo": [
+        "补 Scene Card evidencePath。",
+        "确认 relationshipArcs 初始状态。"
+      ],
+      "nextAction": "等待作者确认 beat 预览或正文块后再 apply。"
+    }
+  ]
+}

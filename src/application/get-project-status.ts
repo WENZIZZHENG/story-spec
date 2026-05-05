@@ -23,6 +23,7 @@ import {
   type CreationEchoSummary
 } from './creation-echo.js';
 import { buildMissingTasksGuidance } from './workbench-utils.js';
+import { quoteCliArgument } from './story-idea.js';
 
 export interface StorySummary {
   name: string;
@@ -78,6 +79,7 @@ export interface ProjectStatus {
   tracking: TrackingSummary[];
   blockers: ArtifactIssue[];
   git: GitSummary;
+  navigationEntries: ProjectNavigationEntry[];
   nextActions: string[];
 }
 
@@ -87,6 +89,13 @@ export interface GetProjectStatusInput {
   projectRoot: string;
   fileSystem: ProjectFileSystem;
   git: GitAdapter;
+}
+
+export interface ProjectNavigationEntry {
+  action: string;
+  label: string;
+  description: string;
+  copyableCommand: string;
 }
 
 const readJsonSafe = async (fs: ProjectFileSystem, filePath: string): Promise<Record<string, unknown>> => {
@@ -348,8 +357,14 @@ const detectConfiguredAI = async (
   return configuredAI;
 };
 
-const buildNextActions = (status: Omit<ProjectStatus, 'nextActions'>): string[] => {
+type ProjectStatusBase = Omit<ProjectStatus, 'navigationEntries' | 'nextActions'>;
+
+const storyCliArgument = (storyName: string): string =>
+  /[\s"'`|&;<>()[\]{}$\\]/.test(storyName) ? quoteCliArgument(storyName) : storyName;
+
+const buildNextActions = (status: ProjectStatusBase): string[] => {
   const actions: string[] = [];
+  const storyArg = status.story ? storyCliArgument(status.story.name) : '<故事名>';
 
   if (status.configuredAI.length === 0) {
     actions.push('运行 `storyspec upgrade` 或重新执行 `storyspec init --ai <platform>` 补齐 AI 平台命令');
@@ -367,14 +382,14 @@ const buildNextActions = (status: Omit<ProjectStatus, 'nextActions'>): string[] 
     actions.push('先保存一句灵感：`storyspec story:new <故事名> --idea "<一句话创意>"`');
     actions.push('然后运行 `storyspec next <故事名>` 选择角色、场景、设定或分支入口');
   } else if (status.story.stage === 'idea' || status.story.stage === 'interviewing') {
-    actions.push(`继续创作访谈：运行 \`storyspec next ${status.story.name}\` 查看推荐入口`);
-    actions.push(`或直接运行 \`storyspec interview ${status.story.name} --premise "<一句话创意>"\` 补齐第一版 StorySpec`);
+    actions.push(`继续创作访谈：运行 \`storyspec next ${storyArg}\` 查看推荐入口`);
+    actions.push(`或直接运行 \`storyspec interview ${storyArg} --premise "<一句话创意>"\` 补齐第一版 StorySpec`);
   } else if (status.story.creativeControl.pendingDecisions > 0) {
     actions.push(`先确认 ${status.story.creativeControl.pendingDecisions} 个创作决策，再进入下一轮写入`);
   } else if (!status.story.hasSpecification) {
-    actions.push(`生成规格预览：\`storyspec preview specify ${status.story.name}\`，确认后再 apply`);
+    actions.push(`生成规格预览：\`storyspec preview specify ${storyArg}\`，确认后再 apply`);
   } else if (!status.story.hasCreativePlan) {
-    actions.push(`生成计划预览：\`storyspec preview plan ${status.story.name}\`，确认后再 apply`);
+    actions.push(`生成计划预览：\`storyspec preview plan ${storyArg}\`，确认后再 apply`);
   } else if (!status.story.hasTasks) {
     const tasksGuidance = buildMissingTasksGuidance(status.story.name);
     actions.push(`生成任务清单：在 agent 中执行 \`${tasksGuidance.agentCommand}\`，写入 \`${tasksGuidance.targetPath}\``);
@@ -399,6 +414,56 @@ const buildNextActions = (status: Omit<ProjectStatus, 'nextActions'>): string[] 
   }
 
   return actions;
+};
+
+const buildNavigationEntries = (
+  status: ProjectStatusBase
+): ProjectNavigationEntry[] => {
+  const isFirstRun = !status.story || status.story.stage === 'idea' || status.story.stage === 'interviewing';
+  if (!isFirstRun) {
+    return [];
+  }
+
+  const storyArg = status.story ? storyCliArgument(status.story.name) : '<故事名>';
+  const longformCommand = status.story
+    ? `storyspec ingest ${storyArg} --text "<长文资料>"`
+    : 'storyspec story:new <故事名> --idea "<先贴最核心的一段资料>"';
+  const ideaCommand = status.story
+    ? `storyspec interview ${storyArg} --premise "<一句话创意>"`
+    : 'storyspec story:new <故事名> --idea "<一句话创意>"';
+  const tableCommand = status.story
+    ? `storyspec ingest ${storyArg} --text "<Markdown 表格资料>"`
+    : 'storyspec story:new <故事名> --idea "<表格资料摘要>"';
+  const chatCommand = status.story
+    ? `storyspec next ${storyArg} --modes`
+    : 'storyspec story:new <故事名> --idea "<一句话创意>"';
+
+  return [
+    {
+      action: 'ingest_longform_material',
+      label: '我有长文资料',
+      description: '粘贴设定片段、人物小传、世界观说明或旧稿摘要，先提炼候选和待澄清点。',
+      copyableCommand: longformCommand
+    },
+    {
+      action: 'start_from_short_idea',
+      label: '我只有一句灵感',
+      description: '保存 20-200 字脑洞，再用低负担问题慢慢长成可选择的故事方向。',
+      copyableCommand: ideaCommand
+    },
+    {
+      action: 'ingest_table_material',
+      label: '我有表格资料',
+      description: '先识别列名、未识别列和字段映射候选，未确认前不写入正典。',
+      copyableCommand: tableCommand
+    },
+    {
+      action: 'start_casual_chat',
+      label: '我想先随便聊聊',
+      description: '从零散想法开始，只给候选、回声和下一轮入口，不自动定稿。',
+      copyableCommand: chatCommand
+    }
+  ];
 };
 
 export const getProjectStatus = async (input: GetProjectStatusInput): Promise<ProjectStatus> => {
@@ -428,8 +493,11 @@ export const getProjectStatus = async (input: GetProjectStatusInput): Promise<Pr
     git: await readGitSummary(git, projectRoot)
   };
 
+  const navigationEntries = buildNavigationEntries(baseStatus);
+
   return {
     ...baseStatus,
+    navigationEntries,
     nextActions: buildNextActions(baseStatus)
   };
 };
@@ -498,6 +566,18 @@ export const renderProjectStatus = (status: ProjectStatus): string => {
     }
   } else {
     lines.push('当前故事：尚未创建故事');
+  }
+
+  if (status.navigationEntries.length > 0) {
+    lines.push('');
+    lines.push('创作入口：');
+    for (const entry of status.navigationEntries) {
+      lines.push(`- ${entry.label}：${entry.description}`);
+    }
+    lines.push('可复制命令：');
+    for (const entry of status.navigationEntries) {
+      lines.push(`- ${entry.label}：${entry.copyableCommand}`);
+    }
   }
 
   lines.push('');
