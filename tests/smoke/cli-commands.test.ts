@@ -517,6 +517,66 @@ describe('CLI command modules smoke', () => {
     await expect(readFile(boardPath, 'utf-8')).rejects.toThrow();
   });
 
+  it('creates a local commit from task finish when requested', async () => {
+    const cwd = await makeTempDir();
+    await execFileAsync('node', [
+      cliPath,
+      'init',
+      'smoke',
+      '--ai',
+      'codex',
+      '--method',
+      'three-act',
+      '--no-git'
+    ], { cwd });
+
+    const projectPath = path.join(cwd, 'smoke');
+    const storyPath = path.join(projectPath, 'stories', '001-demo');
+    await mkdir(path.join(storyPath, 'content'), { recursive: true });
+    await writeFile(path.join(storyPath, 'specification.md'), '# spec');
+    await writeFile(path.join(storyPath, 'creative-plan.md'), '# plan');
+    await writeFile(path.join(storyPath, 'content', 'chapter-001.md'), '# chapter-001');
+    await writeFile(path.join(storyPath, 'tasks.md'), `- [ ] [P0] [WRITE-READY] **T001** - 起草第一章
+  - **允许修改**：
+    - \`content/chapter-001.md\`
+  - **输出**：\`content/chapter-001.md\`
+`);
+
+    await execFileAsync('git', ['init'], { cwd: projectPath });
+    await execFileAsync('git', ['config', 'user.email', 'storyspec@example.test'], { cwd: projectPath });
+    await execFileAsync('git', ['config', 'user.name', 'StorySpec Test'], { cwd: projectPath });
+    await execFileAsync('git', ['add', '.'], { cwd: projectPath });
+    await execFileAsync('git', ['commit', '-m', '初始化测试项目'], { cwd: projectPath });
+
+    const { stdout } = await execFileAsync('node', [
+      cliPath,
+      'task:finish',
+      'T001',
+      '001-demo',
+      '--apply',
+      '--commit',
+      '--message',
+      '完成测试任务',
+      '--json'
+    ], { cwd: projectPath });
+    const result = JSON.parse(stdout);
+
+    expect(result).toMatchObject({
+      applied: true,
+      blocked: false,
+      commit: {
+        requested: true,
+        created: true,
+        message: '完成测试任务'
+      }
+    });
+
+    const log = await execFileAsync('git', ['log', '-1', '--pretty=%s'], { cwd: projectPath });
+    expect(log.stdout.trim()).toBe('完成测试任务');
+    const status = await execFileAsync('git', ['status', '--short'], { cwd: projectPath });
+    expect(status.stdout.trim()).toBe('');
+  });
+
   it('generates a JSON handoff package', async () => {
     const cwd = await makeTempDir();
     await execFileAsync('node', [

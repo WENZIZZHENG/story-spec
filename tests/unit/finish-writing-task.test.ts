@@ -6,7 +6,27 @@ import {
   renderFinishWritingTaskSummary,
   setWritingTaskStatus
 } from '../../src/application/finish-writing-task.js';
+import type { GitAdapter } from '../../src/application/project-ports.js';
 import { MemoryFileSystem } from '../helpers/memory-file-system.js';
+
+const createFakeGitAdapter = (status: string[] = []) => {
+  const calls: { addAll: string[]; commit: Array<{ projectPath: string; message: string }> } = {
+    addAll: [],
+    commit: []
+  };
+  const adapter: GitAdapter = {
+    init: async () => undefined,
+    addAll: async projectPath => {
+      calls.addAll.push(projectPath);
+    },
+    commit: async (projectPath, message) => {
+      calls.commit.push({ projectPath, message });
+    },
+    statusShort: async () => status
+  };
+
+  return { adapter, calls };
+};
 
 const createProject = async () => {
   const projectRoot = path.join(os.tmpdir(), 'memory-novel-finish-writing-task');
@@ -157,6 +177,72 @@ describe('finishWritingTask', () => {
     const board = await fileSystem.readJson<any>(path.join(storyPath, 'task-board.json'));
     expect(board.summary).toMatchObject({ total: 1, todo: 0, done: 1 });
     expect(board.tasks[0]).toMatchObject({ id: 'T001', status: 'done' });
+  });
+
+  it('commits the applied task finish with a default commit message when only updated files changed', async () => {
+    const { projectRoot, fileSystem, storyPath, tasksPath } = await createProject();
+    const boardPath = path.join(storyPath, 'task-board.json');
+    const { adapter, calls } = createFakeGitAdapter([
+      'M stories/demo/tasks.md',
+      '?? stories/demo/task-board.json'
+    ]);
+
+    const result = await finishWritingTask({
+      projectRoot,
+      fileSystem,
+      gitAdapter: adapter,
+      story: 'demo',
+      taskId: 'T001',
+      apply: true,
+      commit: true,
+      now: () => new Date('2026-05-04T00:00:00.000Z')
+    });
+
+    expect(result.updatedFiles).toEqual([tasksPath, boardPath]);
+    expect(result.commit).toEqual({
+      requested: true,
+      created: true,
+      message: '完成写作任务：T001 起草第一章'
+    });
+    expect(calls.addAll).toEqual([projectRoot]);
+    expect(calls.commit).toEqual([
+      {
+        projectPath: projectRoot,
+        message: '完成写作任务：T001 起草第一章'
+      }
+    ]);
+  });
+
+  it('skips commit when git status contains unrelated changes', async () => {
+    const { projectRoot, fileSystem, storyPath, tasksPath } = await createProject();
+    const boardPath = path.join(storyPath, 'task-board.json');
+    const { adapter, calls } = createFakeGitAdapter([
+      'M stories/demo/tasks.md',
+      '?? stories/demo/task-board.json',
+      'M README.md'
+    ]);
+
+    const result = await finishWritingTask({
+      projectRoot,
+      fileSystem,
+      gitAdapter: adapter,
+      story: 'demo',
+      taskId: 'T001',
+      apply: true,
+      commit: true,
+      commitMessage: '自定义收尾提交',
+      now: () => new Date('2026-05-04T00:00:00.000Z')
+    });
+
+    expect(result.updatedFiles).toEqual([tasksPath, boardPath]);
+    expect(result.commit).toEqual({
+      requested: true,
+      created: false,
+      message: '自定义收尾提交',
+      skippedReason: '存在 unrelated change：README.md'
+    });
+    expect(calls.addAll).toEqual([]);
+    expect(calls.commit).toEqual([]);
   });
 
   it('blocks apply without changing task files when the related draft is missing', async () => {

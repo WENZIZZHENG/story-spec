@@ -1,5 +1,5 @@
 import path from 'node:path';
-import type { ProjectFileSystem } from './project-ports.js';
+import type { GitAdapter, ProjectFileSystem } from './project-ports.js';
 import { exportTaskBoard } from './export-task-board.js';
 import { parseWritingTasksFromMarkdown, type WritingTask } from '../domain/story-artifact.js';
 import { selectStoryProject } from './workbench-utils.js';
@@ -7,9 +7,12 @@ import { selectStoryProject } from './workbench-utils.js';
 export interface FinishWritingTaskInput {
   projectRoot: string;
   fileSystem: ProjectFileSystem;
+  gitAdapter?: GitAdapter;
   story?: string;
   taskId: string;
   apply?: boolean;
+  commit?: boolean;
+  commitMessage?: string;
   now?: () => Date;
 }
 
@@ -32,6 +35,13 @@ export interface FinishWritingTaskCheck {
   paths?: string[];
 }
 
+export interface FinishWritingTaskCommitResult {
+  requested: boolean;
+  created: boolean;
+  message?: string;
+  skippedReason?: string;
+}
+
 export interface FinishWritingTaskResult {
   projectRoot: string;
   story: string;
@@ -45,6 +55,7 @@ export interface FinishWritingTaskResult {
   nextActions: string[];
   verificationCommands: string[];
   updatedFiles: string[];
+  commit?: FinishWritingTaskCommitResult;
 }
 
 export interface SetWritingTaskStatusInput {
@@ -160,6 +171,99 @@ const resolveStoryRelativePath = (storyPath: string, value: string): string => {
   return path.join(storyPath, ...relative.split('/'));
 };
 
+const stripOuterQuotes = (value: string): string => value.replace(/^"(.+)"$/, '$1');
+
+const gitStatusPath = (line: string): string | undefined => {
+  const match = line.trim().match(/^(?:[ MADRCU?!]{1,2})\s+(.+)$/);
+  if (!match) {
+    return undefined;
+  }
+
+  const statusPath = match[1].includes(' -> ')
+    ? match[1].split(' -> ').at(-1) ?? match[1]
+    : match[1];
+
+  return normalizeToPosix(stripOuterQuotes(statusPath.trim())).replace(/^\.\//, '');
+};
+
+const updatedFilesAsGitRelative = (projectRoot: string, updatedFiles: string[]): Set<string> => new Set(
+  updatedFiles.map(file => normalizeToPosix(path.relative(projectRoot, file)))
+);
+
+const defaultFinishCommitMessage = (task: WritingTask): string => `完成写作任务：${task.id} ${task.title}`;
+
+const createSkippedCommitResult = (
+  requested: boolean,
+  skippedReason: string,
+  message?: string
+): FinishWritingTaskCommitResult => ({
+  requested,
+  created: false,
+  ...(message ? { message } : {}),
+  skippedReason
+});
+
+const createFinishCommit = async (
+  input: FinishWritingTaskInput,
+  task: WritingTask,
+  updatedFiles: string[],
+  blocked: boolean
+): Promise<FinishWritingTaskCommitResult | undefined> => {
+  const requested = Boolean(input.commit);
+  if (!requested) {
+    return undefined;
+  }
+
+  const message = input.commitMessage?.trim() || defaultFinishCommitMessage(task);
+  if (!input.apply) {
+    return createSkippedCommitResult(requested, '需要同时使用 --apply', message);
+  }
+
+  if (blocked) {
+    return createSkippedCommitResult(requested, '任务收尾被阻断', message);
+  }
+
+  if (updatedFiles.length === 0) {
+    return createSkippedCommitResult(requested, '没有本次收尾产生的文件变更', message);
+  }
+
+  if (!input.gitAdapter) {
+    return createSkippedCommitResult(requested, '缺少 Git adapter，无法创建本地 commit', message);
+  }
+
+  try {
+    const changedFiles = uniqueStable(
+      (await input.gitAdapter.statusShort(input.projectRoot))
+        .map(gitStatusPath)
+        .filter((file): file is string => Boolean(file))
+    );
+    if (changedFiles.length === 0) {
+      return createSkippedCommitResult(requested, 'Git 工作区没有可提交改动', message);
+    }
+
+    const updatedFileSet = updatedFilesAsGitRelative(input.projectRoot, updatedFiles);
+    const unrelatedFiles = changedFiles.filter(file => !updatedFileSet.has(file));
+    if (unrelatedFiles.length > 0) {
+      return createSkippedCommitResult(
+        requested,
+        `存在 unrelated change：${unrelatedFiles.join('、')}`,
+        message
+      );
+    }
+
+    await input.gitAdapter.addAll(input.projectRoot);
+    await input.gitAdapter.commit(input.projectRoot, message);
+    return {
+      requested,
+      created: true,
+      message
+    };
+  } catch (error) {
+    const errorMessage = error instanceof Error ? error.message : String(error);
+    return createSkippedCommitResult(requested, `Git 不可用或提交失败：${errorMessage}`, message);
+  }
+};
+
 const checkRelatedDraftsExist = async (
   fileSystem: ProjectFileSystem,
   storyPath: string,
@@ -252,6 +356,7 @@ export const finishWritingTask = async (
       updatedFiles.push(...statusResult.updatedFiles);
     }
   }
+  const commit = await createFinishCommit(input, task, updatedFiles, blocked);
 
   return {
     projectRoot: input.projectRoot,
@@ -272,7 +377,8 @@ export const finishWritingTask = async (
     blockedReasons,
     nextActions,
     verificationCommands,
-    updatedFiles
+    updatedFiles,
+    ...(commit ? { commit } : {})
   };
 };
 
@@ -339,5 +445,8 @@ export const renderFinishWritingTaskSummary = (result: FinishWritingTaskResult):
   ] : []),
   `验证命令：${result.verificationCommands.length > 0 ? result.verificationCommands.map(item => `\`${item}\``).join('、') : '无'}`,
   `更新文件：${result.updatedFiles.length > 0 ? result.updatedFiles.map(item => `\`${item}\``).join('、') : '无'}`,
+  ...(result.commit ? [
+    `Commit：${result.commit.created ? `已创建 ${result.commit.message}` : `未创建（${result.commit.skippedReason ?? '未知原因'}）`}`
+  ] : []),
   `模式：${result.applied ? '应用模式' : '预览模式'}`
 ].join('\n');

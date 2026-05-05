@@ -12,6 +12,7 @@ import {
   type SetWritingTaskStatusResult
 } from '../../application/finish-writing-task.js';
 import type { WritingTask } from '../../domain/story-artifact.js';
+import { commandGitAdapter } from '../../infrastructure/command-git-adapter.js';
 import { nodeFileSystem } from '../../infrastructure/node-file-system.js';
 import { ensureProjectRoot } from '../../utils/project.js';
 
@@ -117,6 +118,8 @@ export const registerTasksBoardCommand = (program: Command): void => {
     .argument('<taskId>', '要完成的任务 ID，例如 T001')
     .argument('[story]', '故事目录名或路径，默认使用最近更新的 stories/*')
     .option('--apply', '应用状态更新并刷新 task-board.json；默认只预览')
+    .option('--commit', '在 --apply 成功且工作区安全时创建本地 commit')
+    .option('--message <commit_message>', '覆盖 --commit 使用的 commit message')
     .option('--json', '输出 JSON，便于自动化读取')
     .description('预览或应用单个写作任务的收尾状态更新')
     .action(async (taskId, story, options) => {
@@ -125,9 +128,12 @@ export const registerTasksBoardCommand = (program: Command): void => {
         const result = await finishWritingTask({
           projectRoot,
           fileSystem: nodeFileSystem,
+          gitAdapter: commandGitAdapter,
           story,
           taskId: taskId.toUpperCase(),
-          apply: Boolean(options.apply)
+          apply: Boolean(options.apply),
+          commit: Boolean(options.commit),
+          commitMessage: options.message
         });
 
         console.log(options.json
