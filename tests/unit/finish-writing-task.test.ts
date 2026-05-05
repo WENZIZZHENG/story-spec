@@ -159,6 +159,49 @@ describe('finishWritingTask', () => {
     expect(board.tasks[0]).toMatchObject({ id: 'T001', status: 'done' });
   });
 
+  it('blocks apply without changing task files when the related draft is missing', async () => {
+    const { projectRoot, fileSystem, storyPath, tasksPath } = await createProjectWithTasksMarkdown(`# tasks
+
+- [ ] [P0] [WRITE-READY] **T003** - 起草缺失章节
+  - **任务类型**：正文写作
+  - **核心任务**：完成缺失章节
+  - **允许修改**：
+    - \`content/chapter-404.md\`
+  - **输出**：\`content/chapter-404.md\`
+`);
+    const before = await fileSystem.readFile(tasksPath);
+
+    const result = await finishWritingTask({
+      projectRoot,
+      fileSystem,
+      story: 'demo',
+      taskId: 'T003',
+      apply: true,
+      now: () => new Date('2026-05-05T00:00:00.000Z')
+    });
+
+    expect(result).toMatchObject({
+      applied: false,
+      blocked: true,
+      task: {
+        statusBefore: 'todo',
+        statusAfter: 'todo'
+      },
+      blockedReasons: ['关联正文缺失：content/chapter-404.md'],
+      updatedFiles: []
+    });
+    expect(result.checks).toEqual([
+      expect.objectContaining({
+        id: 'related-drafts-exist',
+        status: 'failed',
+        paths: ['content/chapter-404.md']
+      })
+    ]);
+    expect(result.nextActions).toContain('先补写缺失正文，再重新运行 task:finish --apply');
+    expect(await fileSystem.readFile(tasksPath)).toBe(before);
+    expect(await fileSystem.pathExists(path.join(storyPath, 'task-board.json'))).toBe(false);
+  });
+
   it('does not rewrite tasks markdown or task board when the task is already done', async () => {
     const { projectRoot, fileSystem, storyPath, tasksPath } = await createProject();
 
@@ -241,6 +284,7 @@ describe('finishWritingTask', () => {
       story: 'demo',
       storyPath: '/project/stories/demo',
       applied: false,
+      blocked: false,
       task: {
         id: 'T001',
         title: '起草第一章',
@@ -250,6 +294,9 @@ describe('finishWritingTask', () => {
         draftPaths: []
       },
       draftPaths: [],
+      checks: [],
+      blockedReasons: [],
+      nextActions: [],
       verificationCommands: [],
       updatedFiles: []
     });
@@ -258,6 +305,7 @@ describe('finishWritingTask', () => {
     expect(summary).toContain('任务：T001 起草第一章');
     expect(summary).toContain('状态：todo -> done');
     expect(summary).toContain('正文/草稿路径：无');
+    expect(summary).toContain('门禁状态：通过');
     expect(summary).toContain('验证命令：无');
     expect(summary).toContain('更新文件：无');
     expect(summary).toContain('预览模式');

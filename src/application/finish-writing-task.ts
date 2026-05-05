@@ -22,13 +22,27 @@ export interface FinishWritingTaskTaskResult {
   draftPaths: string[];
 }
 
+export type FinishWritingTaskCheckStatus = 'passed' | 'failed' | 'skipped';
+
+export interface FinishWritingTaskCheck {
+  id: string;
+  label: string;
+  status: FinishWritingTaskCheckStatus;
+  message: string;
+  paths?: string[];
+}
+
 export interface FinishWritingTaskResult {
   projectRoot: string;
   story: string;
   storyPath: string;
   applied: boolean;
+  blocked: boolean;
   task: FinishWritingTaskTaskResult;
   draftPaths: string[];
+  checks: FinishWritingTaskCheck[];
+  blockedReasons: string[];
+  nextActions: string[];
   verificationCommands: string[];
   updatedFiles: string[];
 }
@@ -135,6 +149,58 @@ const relatedDraftPaths = (task: WritingTask): string[] => [
   .filter(item => item.length > 0)
   .filter((item, index, items) => items.indexOf(item) === index);
 
+const resolveStoryRelativePath = (storyPath: string, value: string): string => {
+  const normalized = normalizeDraftPath(value);
+  const storyName = path.basename(storyPath);
+  const storyPrefixed = `stories/${storyName}/`;
+  const relative = normalized.startsWith(storyPrefixed)
+    ? normalized.slice(storyPrefixed.length)
+    : normalized;
+
+  return path.join(storyPath, ...relative.split('/'));
+};
+
+const checkRelatedDraftsExist = async (
+  fileSystem: ProjectFileSystem,
+  storyPath: string,
+  draftPaths: string[]
+): Promise<FinishWritingTaskCheck> => {
+  if (draftPaths.length === 0) {
+    return {
+      id: 'related-drafts-exist',
+      label: '关联正文存在',
+      status: 'skipped',
+      message: '当前任务没有可识别的正文路径'
+    };
+  }
+
+  const missingPaths: string[] = [];
+  for (const draftPath of draftPaths) {
+    const absolutePath = resolveStoryRelativePath(storyPath, draftPath);
+    if (!await fileSystem.pathExists(absolutePath)) {
+      missingPaths.push(draftPath);
+    }
+  }
+
+  if (missingPaths.length > 0) {
+    return {
+      id: 'related-drafts-exist',
+      label: '关联正文存在',
+      status: 'failed',
+      message: `缺少关联正文：${missingPaths.join('、')}`,
+      paths: missingPaths
+    };
+  }
+
+  return {
+    id: 'related-drafts-exist',
+    label: '关联正文存在',
+    status: 'passed',
+    message: '关联正文路径均存在',
+    paths: draftPaths
+  };
+};
+
 export const finishWritingTask = async (
   input: FinishWritingTaskInput
 ): Promise<FinishWritingTaskResult> => {
@@ -158,33 +224,53 @@ export const finishWritingTask = async (
   ];
 
   const updatedFiles: string[] = [];
+  const checks: FinishWritingTaskCheck[] = [];
+  const blockedReasons: string[] = [];
+  const nextActions: string[] = [];
+  let applied = Boolean(input.apply);
+  let blocked = false;
 
   if (input.apply) {
-    const statusResult = await setWritingTaskStatus({
-      projectRoot: input.projectRoot,
-      fileSystem: input.fileSystem,
-      story: input.story,
-      taskId: input.taskId,
-      status: 'done',
-      now: input.now
-    });
-    updatedFiles.push(...statusResult.updatedFiles);
+    const relatedDraftsCheck = await checkRelatedDraftsExist(input.fileSystem, storyPath, draftPaths);
+    checks.push(relatedDraftsCheck);
+
+    if (relatedDraftsCheck.status === 'failed') {
+      blocked = true;
+      applied = false;
+      const missingPaths = relatedDraftsCheck.paths ?? [];
+      blockedReasons.push(...missingPaths.map(item => `关联正文缺失：${item}`));
+      nextActions.push('先补写缺失正文，再重新运行 task:finish --apply');
+    } else {
+      const statusResult = await setWritingTaskStatus({
+        projectRoot: input.projectRoot,
+        fileSystem: input.fileSystem,
+        story: input.story,
+        taskId: input.taskId,
+        status: 'done',
+        now: input.now
+      });
+      updatedFiles.push(...statusResult.updatedFiles);
+    }
   }
 
   return {
     projectRoot: input.projectRoot,
     story: path.basename(storyPath),
     storyPath,
-    applied: Boolean(input.apply),
+    applied,
+    blocked,
     task: {
       id: task.id,
       title: task.title,
       statusBefore: task.status,
-      statusAfter: task.status === 'todo' ? 'done' : task.status,
+      statusAfter: !blocked && task.status === 'todo' ? 'done' : task.status,
       tasksPath,
       draftPaths
     },
     draftPaths,
+    checks,
+    blockedReasons,
+    nextActions,
     verificationCommands,
     updatedFiles
   };
@@ -242,6 +328,15 @@ export const renderFinishWritingTaskSummary = (result: FinishWritingTaskResult):
   `任务：${result.task.id} ${result.task.title}`,
   `状态：${result.task.statusBefore} -> ${result.task.statusAfter}`,
   `正文/草稿路径：${result.draftPaths.length > 0 ? result.draftPaths.map(item => `\`${item}\``).join('、') : '无'}`,
+  `门禁状态：${result.blocked ? '阻断' : '通过'}`,
+  ...(result.blockedReasons.length > 0 ? [
+    '阻断原因：',
+    ...result.blockedReasons.map(item => `- ${item}`)
+  ] : []),
+  ...(result.nextActions.length > 0 ? [
+    '下一步：',
+    ...result.nextActions.map(item => `- ${item}`)
+  ] : []),
   `验证命令：${result.verificationCommands.length > 0 ? result.verificationCommands.map(item => `\`${item}\``).join('、') : '无'}`,
   `更新文件：${result.updatedFiles.length > 0 ? result.updatedFiles.map(item => `\`${item}\``).join('、') : '无'}`,
   `模式：${result.applied ? '应用模式' : '预览模式'}`

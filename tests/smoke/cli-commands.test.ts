@@ -472,6 +472,51 @@ describe('CLI command modules smoke', () => {
     await expect(readFile(boardPath, 'utf-8')).resolves.toBe(boardAfterFirstRun);
   });
 
+  it('blocks task finish apply when the related chapter file is missing', async () => {
+    const cwd = await makeTempDir();
+    await execFileAsync('node', [
+      cliPath,
+      'init',
+      'smoke',
+      '--ai',
+      'codex',
+      '--method',
+      'three-act',
+      '--no-git'
+    ], { cwd });
+
+    const projectPath = path.join(cwd, 'smoke');
+    const storyPath = path.join(projectPath, 'stories', '001-demo');
+    const tasksPath = path.join(storyPath, 'tasks.md');
+    const boardPath = path.join(storyPath, 'task-board.json');
+    await mkdir(storyPath, { recursive: true });
+    await writeFile(tasksPath, `- [ ] [P0] [WRITE-READY] **T404** - 起草缺失章节
+  - **允许修改**：
+    - \`content/chapter-404.md\`
+  - **输出**：\`content/chapter-404.md\`
+`);
+    const before = await readFile(tasksPath, 'utf-8');
+
+    const { stdout } = await execFileAsync('node', [
+      cliPath,
+      'task:finish',
+      'T404',
+      '001-demo',
+      '--apply',
+      '--json'
+    ], { cwd: projectPath });
+    const result = JSON.parse(stdout);
+
+    expect(result).toMatchObject({
+      applied: false,
+      blocked: true,
+      blockedReasons: ['关联正文缺失：content/chapter-404.md'],
+      updatedFiles: []
+    });
+    await expect(readFile(tasksPath, 'utf-8')).resolves.toBe(before);
+    await expect(readFile(boardPath, 'utf-8')).rejects.toThrow();
+  });
+
   it('generates a JSON handoff package', async () => {
     const cwd = await makeTempDir();
     await execFileAsync('node', [
