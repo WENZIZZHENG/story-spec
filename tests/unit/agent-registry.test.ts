@@ -1,5 +1,9 @@
 import { describe, expect, it } from 'vitest';
 import {
+  AGENT_INTEGRATION_ACCEPTANCE_CHECKS,
+  validateAgentIntegrationAcceptance
+} from '../../src/agent/acceptance.js';
+import {
   AGENT_INTEGRATION_IDS,
   AGENT_INTEGRATIONS,
   formatAgentCommand,
@@ -112,5 +116,25 @@ describe('agent integration registry', () => {
       getAgentIntegration('codex')!,
       getAgentIntegration('q')!
     ])).toBe('Generic Markdown Agent、Codex CLI、Amazon Q Developer');
+  });
+
+  it('keeps every agent integration within the acceptance scaffold', () => {
+    expect(AGENT_INTEGRATION_ACCEPTANCE_CHECKS.map(check => check.id)).toEqual([
+      'registry.identity',
+      'metadata.required-fields',
+      'install-target.safe-relative-paths',
+      'renderer.registered',
+      'command-surface.slash-prefix',
+      'legacy.compatibility'
+    ]);
+
+    const issues = AGENT_INTEGRATIONS.flatMap(integration =>
+      validateAgentIntegrationAcceptance(integration, {
+        rendererIds: AGENT_INTEGRATION_IDS,
+        legacyIds: LEGACY_AI_INTEGRATION_IDS
+      }).map(issue => `${integration.id}:${issue.checkId}:${issue.message}`)
+    );
+
+    expect(issues).toEqual([]);
   });
 });

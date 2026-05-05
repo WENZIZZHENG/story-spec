@@ -19,7 +19,7 @@ StorySpec 已完成 agent-neutral 基座，支持多种 agent integration 和 Ma
 
 ### P0-1 新 agent integration / renderer 增强批次
 
-- [ ] 状态：Active
+- [x] 状态：完成（2026-05-05）。已新增 agent integration 准入清单和可复用 acceptance 检查器；当前 registry 全量通过 metadata、install target、renderer、slashPrefix 和 legacy 映射检查。文档见 `docs/tech/agent-integration-acceptance.md`，验证见 OpenSpec `openspec/changes/define-agent-integration-acceptance` 和 changeset `changes/2026-05-05-agent-integration-acceptance.md`。
 - 类型：agent integration、命令渲染、兼容性
 - 背景/问题：Agent-neutral 路线完成后，后续新增 agent integration 或命令渲染能力需要独立增强批次推进。
 - 已有基础：`src/agent/registry.ts`、renderer、`templates/commands/*.md`、命令 manifest、smoke。
