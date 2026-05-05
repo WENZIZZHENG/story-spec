@@ -406,7 +406,12 @@ const updateTemplates = async (
 
     const continuationSource = path.join(templatesSource, 'CONTINUE.md');
     if (await fs.pathExists(continuationSource)) {
-      await fs.copy(continuationSource, path.join(projectPath, 'CONTINUE.md'), { overwrite: true });
+      const continuationDest = path.join(projectPath, 'CONTINUE.md');
+      if (await fs.pathExists(continuationDest)) {
+        emit(onEvent, { type: 'info', message: '保留现有 CONTINUE.md；通用模板已刷新到 .specify/templates/CONTINUE.md' });
+      } else {
+        await fs.copy(continuationSource, continuationDest, { overwrite: false });
+      }
     }
   }
 

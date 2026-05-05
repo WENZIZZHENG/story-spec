@@ -75,7 +75,7 @@ const createProjectFixture = async () => {
 
   await mkdir(path.join(projectPath, '.specify', 'scripts'), { recursive: true });
   await writeFile(path.join(projectPath, '.specify', 'scripts', 'old.txt'), 'old script');
-  await writeFile(path.join(projectPath, 'CONTINUE.md'), 'old continue');
+  await writeFile(path.join(projectPath, 'CONTINUE.md'), 'story-specific continue\n\n下一步：创建第四章章节卡。');
   await mkdir(path.join(projectPath, '.specify', 'templates', 'authoring'), { recursive: true });
   await writeFile(path.join(projectPath, '.specify', 'templates', 'authoring', 'story-dashboard.md'), 'old dashboard');
   await mkdir(path.join(projectPath, '.specify', 'memory'), { recursive: true });
@@ -248,7 +248,9 @@ describe('upgradeProject', () => {
 
     expect(result.stats.templates).toBeGreaterThanOrEqual(5);
     expect(result.stats.scripts).toBeGreaterThanOrEqual(4);
-    await expect(readFile(path.join(projectPath, 'CONTINUE.md'), 'utf8')).resolves.toContain('storyspec status');
+    await expect(readFile(path.join(projectPath, 'CONTINUE.md'), 'utf8')).resolves.toContain('下一步：创建第四章章节卡。');
+    await expect(readFile(path.join(projectPath, '.specify', 'templates', 'CONTINUE.md'), 'utf8'))
+      .resolves.toContain('storyspec status');
     await expect(readFile(path.join(projectPath, '.specify', 'templates', 'authoring', 'story-dashboard.md'), 'utf8'))
       .resolves.toBe('# 新故事面板模板');
     await expect(readFile(path.join(projectPath, '.specify', 'templates', 'authoring', 'open-promises.md'), 'utf8'))

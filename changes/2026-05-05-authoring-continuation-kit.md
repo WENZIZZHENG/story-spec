@@ -8,7 +8,7 @@ scope: cli,templates,scripts,validation,tests,openspec,todo
 ## CLI 行为
 
 - `storyspec init` 会从模板源复制根目录 `CONTINUE.md`，让新项目拥有项目级继续创作入口。
-- `storyspec upgrade --templates --scripts` 会刷新根目录 `CONTINUE.md`、`.specify/templates/authoring/*` 和 `.specify/scripts/*/validate-local.*`。
+- `storyspec upgrade --templates --scripts` 会刷新 `.specify/templates/CONTINUE.md`、`.specify/templates/authoring/*` 和 `.specify/scripts/*/validate-local.*`；根目录已有 `CONTINUE.md` 时保留故事级入口，缺失时才安装通用入口。
 - `storyspec validate` 会对缺失继续创作工具包的旧项目给出 warning，并提示运行 `storyspec upgrade --templates --scripts`；这些 warning 不会单独让项目失败。
 - 写作状态 checklist 增加 `CONTINUE.md`、`storyspec handoff`、`storyspec validate` 和本地验证脚本入口。
 
