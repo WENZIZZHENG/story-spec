@@ -15,8 +15,10 @@ import {
   detectCreativeIntentDrift,
   type CreativeIntentDriftIssue
 } from './detect-creative-intent-drift.js';
+import { loadActivePreset } from './manage-presets.js';
 
 export type ReviewerId = 'worldbuilding' | 'voice' | 'continuity' | 'editor' | 'reader' | (string & {});
+export type ReviewerWeightSource = 'project' | 'preset' | 'default';
 
 export interface ReviewFinding {
   reviewerId: ReviewerId;
@@ -32,6 +34,8 @@ export interface ReviewerReport {
   id: ReviewerId;
   title: string;
   score: number;
+  weight: number;
+  weightSource: ReviewerWeightSource;
   findings: ReviewFinding[];
 }
 
@@ -162,7 +166,73 @@ const toFinding = (
   suggestedAction: suggestAction(issue)
 });
 
-const scoreReviewer = (findings: readonly ReviewFinding[]): number => {
+interface ReviewerWeight {
+  value: number;
+  source: ReviewerWeightSource;
+}
+
+const isRecord = (value: unknown): value is Record<string, unknown> =>
+  typeof value === 'object' && value !== null && !Array.isArray(value);
+
+const toReviewerWeights = (value: unknown): Record<string, number> => {
+  if (!isRecord(value)) {
+    return {};
+  }
+
+  const weights: Record<string, number> = {};
+  for (const [id, weight] of Object.entries(value)) {
+    const parsed = Number(weight);
+    if (Number.isFinite(parsed)) {
+      weights[id] = parsed;
+    }
+  }
+
+  return weights;
+};
+
+const loadProjectReviewerWeights = async (
+  input: ReviewProjectInput
+): Promise<Record<string, number>> => {
+  const configPath = path.join(input.projectRoot, 'spec', 'reviewer-config.json');
+  if (!await input.fileSystem.pathExists(configPath)) {
+    return {};
+  }
+
+  const config = await input.fileSystem.readJson<unknown>(configPath);
+  return isRecord(config) ? toReviewerWeights(config.reviewerWeights) : {};
+};
+
+const loadPresetReviewerWeights = async (
+  input: ReviewProjectInput
+): Promise<Record<string, number>> => {
+  const active = await loadActivePreset(input.projectRoot, input.fileSystem);
+  return active.manifest?.reviewerWeights ?? {};
+};
+
+const loadReviewerWeights = async (
+  input: ReviewProjectInput
+): Promise<Map<string, ReviewerWeight>> => {
+  const projectWeights = await loadProjectReviewerWeights(input);
+  const presetWeights = await loadPresetReviewerWeights(input);
+  const weights = new Map<string, ReviewerWeight>();
+
+  for (const [id, value] of Object.entries(presetWeights)) {
+    weights.set(id, { value, source: 'preset' });
+  }
+
+  for (const [id, value] of Object.entries(projectWeights)) {
+    weights.set(id, { value, source: 'project' });
+  }
+
+  return weights;
+};
+
+const getReviewerWeight = (
+  weights: ReadonlyMap<string, ReviewerWeight>,
+  id: string
+): ReviewerWeight => weights.get(id) ?? { value: 1, source: 'default' };
+
+const scoreReviewer = (findings: readonly ReviewFinding[], weight = 1): number => {
   const penalty = findings.reduce((total, finding) => {
     if (finding.severity === 'error') {
       return total + 18;
@@ -175,7 +245,7 @@ const scoreReviewer = (findings: readonly ReviewFinding[]): number => {
     return total + 3;
   }, 0);
 
-  return Math.max(0, 100 - penalty);
+  return Math.max(0, 100 - (penalty * weight));
 };
 
 const createTaskDraft = (finding: ReviewFinding): ReviewTaskDraft => ({
@@ -229,6 +299,7 @@ const belongsToChapter = (finding: ReviewFinding, chapterPaths?: Set<string>): b
 
 export const reviewProject = async (input: ReviewProjectInput): Promise<ReviewProjectResult> => {
   const panel = new Set((input.panel && input.panel.length > 0 ? input.panel : DEFAULT_PANEL).map(id => id.trim()));
+  const reviewerWeights = await loadReviewerWeights(input);
   const validation = await validateProject(input);
   const artifactScan = await scanStoryArtifacts({ projectRoot: input.projectRoot, fileSystem: input.fileSystem });
   const chapterPaths = await collectChapterPaths(input);
@@ -259,10 +330,13 @@ export const reviewProject = async (input: ReviewProjectInput): Promise<ReviewPr
 
   const reviewers = [...panel].map(id => {
     const findings = allFindings.filter(finding => finding.reviewerId === id);
+    const weight = getReviewerWeight(reviewerWeights, id);
     return {
       id,
       title: REVIEWER_TITLES[id] ?? id,
-      score: scoreReviewer(findings),
+      score: scoreReviewer(findings, weight.value),
+      weight: weight.value,
+      weightSource: weight.source,
       findings
     };
   });
@@ -283,7 +357,7 @@ export const renderReviewReport = (result: ReviewProjectResult): string => [
   `任务草稿：${result.taskDrafts.length}`,
   '',
   ...result.reviewers.flatMap(reviewer => [
-    `## ${reviewer.title}（${reviewer.score}/100）`,
+    `## ${reviewer.title}（${reviewer.score}/100，权重 ${reviewer.weight}，来源 ${reviewer.weightSource}）`,
     ...(
       reviewer.findings.length > 0
         ? reviewer.findings.map(finding =>

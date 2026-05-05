@@ -53,7 +53,7 @@ StorySpec 已有插件安装底座、preset 命令、genre preset 第一版和 r
 
 ### P1-2 Reviewer 权重接入
 
-- [ ] 状态：Active
+- [x] 状态：完成（2026-05-05）。`storyspec review` 已读取项目级 `spec/reviewer-config.json` 和 active preset manifest 的 `reviewerWeights`；项目级配置优先于 preset，未配置时默认权重为 1。review JSON 每个 reviewer 输出 `weight` 和 `weightSource`，文本报告也显示来源。验证见 OpenSpec `openspec/changes/apply-reviewer-weights` 和 changeset `changes/2026-05-05-reviewer-weights.md`。
 - 类型：reviewer loop、配置、类型适配
 - 背景/问题：第一版 reviewer loop 已完成，但归档记录保留了 reviewer 权重接入，便于不同类型故事调整检查重点。
 - 已有基础：`storyspec review`、reviewer loop、genre preset 记录、创作控制权规则。

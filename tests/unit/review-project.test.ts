@@ -187,4 +187,73 @@ describe('reviewProject', () => {
       })
     ]));
   });
+
+  it('applies project reviewer weights before preset defaults', async () => {
+    const fixture = await createReviewFixture();
+    await fixture.fileSystem.writeJson(path.join(fixture.projectRoot, 'spec', 'reviewer-config.json'), {
+      presetId: 'custom',
+      reviewerWeights: {
+        worldbuilding: 2,
+        voice: 0.5
+      }
+    }, { spaces: 2 });
+
+    const result = await reviewProject({
+      ...fixture,
+      panel: ['worldbuilding', 'voice']
+    });
+
+    const worldbuilding = result.reviewers.find(reviewer => reviewer.id === 'worldbuilding');
+    const voice = result.reviewers.find(reviewer => reviewer.id === 'voice');
+
+    expect(worldbuilding).toMatchObject({
+      weight: 2,
+      weightSource: 'project',
+      score: 72
+    });
+    expect(voice).toMatchObject({
+      weight: 0.5,
+      weightSource: 'project',
+      score: 80
+    });
+  });
+
+  it('uses active preset reviewer weights and defaults missing reviewers', async () => {
+    const fixture = await createReviewFixture();
+    await fixture.fileSystem.writeJson(path.join(fixture.projectRoot, 'spec', 'presets', 'current-preset.json'), {
+      id: 'mystery',
+      manifestPath: '.specify/presets/mystery/preset.yaml'
+    }, { spaces: 2 });
+    await fixture.fileSystem.writeFile(path.join(fixture.projectRoot, '.specify', 'presets', 'mystery', 'preset.yaml'), `id: mystery
+name: 推理悬疑
+version: "1.0.0"
+description: preset
+genre: mystery
+requiredWorldFacts: []
+characterRoles: []
+pacingTemplates: []
+commonMistakes: []
+reviewerWeights:
+  worldbuilding: 1.5
+validateRules: []
+`);
+
+    const result = await reviewProject({
+      ...fixture,
+      panel: ['worldbuilding', 'voice']
+    });
+
+    const worldbuilding = result.reviewers.find(reviewer => reviewer.id === 'worldbuilding');
+    const voice = result.reviewers.find(reviewer => reviewer.id === 'voice');
+
+    expect(worldbuilding).toMatchObject({
+      weight: 1.5,
+      weightSource: 'preset',
+      score: 79
+    });
+    expect(voice).toMatchObject({
+      weight: 1,
+      weightSource: 'default'
+    });
+  });
 });

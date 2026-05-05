@@ -10,7 +10,7 @@ Active。本文是 StorySpec 当前唯一的活跃待办入口。详细规则见
 
 | 优先级 | 路线 | 状态 | 覆盖范围 | 下一步 |
 | --- | --- | --- | --- | --- |
-| P1 | [StorySpec 生态与类型包增强路线图](storyspec-ecosystem-roadmap.md) | Active | 已完成 `extension:add` 和首个 `mystery` 类型 preset；剩余 reviewer 权重、生态诊断文案 | 将 reviewer 权重接入转为 OpenSpec |
+| P1 | [StorySpec 生态与类型包增强路线图](storyspec-ecosystem-roadmap.md) | Active | 已完成 `extension:add`、首个 `mystery` 类型 preset 和 reviewer 权重；剩余生态诊断文案 | 将生态 kind 展示口径统一转为 OpenSpec |
 | P1 | [Agent、CI 与自然语言质量增强路线图](agent-ci-quality-roadmap.md) | Active | 新 agent integration / renderer、CI 化质量检查、Vale / textlint 可选 adapter | 先补新增 agent 的准入清单或 CI check 设计 |
 | P2 | [体验后续增强入口路线图](experience-followup-roadmap.md) | Active | 首程、新用户、共创、创作控制权、dogfood、Worldbuilding / Workbench 后续入口 | 先做 dogfood 回归和体验证据收集 |
 

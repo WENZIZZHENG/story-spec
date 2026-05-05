@@ -1048,6 +1048,10 @@ describe('CLI command modules smoke', () => {
       'voice',
       'editor'
     ]);
+    expect(review.reviewers.every((reviewer: { weight: number; weightSource: string }) => (
+      reviewer.weight === 1
+      && reviewer.weightSource === 'default'
+    ))).toBe(true);
     expect(review.chapter).toBe('001');
     expect(review.findings.every((finding: {
       path: string;
