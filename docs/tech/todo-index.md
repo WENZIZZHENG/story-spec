@@ -10,7 +10,7 @@ Active。本文是 StorySpec 当前唯一的活跃待办入口。详细规则见
 
 | 优先级 | 路线 | 状态 | 覆盖范围 | 下一步 |
 | --- | --- | --- | --- | --- |
-| P2 | [体验后续增强入口路线图](experience-followup-roadmap.md) | Active | 首程、新用户、共创、创作控制权、dogfood、Worldbuilding / Workbench 后续入口 | 继续 P0-1 dogfood 回归和章节生产问题再收集 |
+| P2 | [体验后续增强入口路线图](experience-followup-roadmap.md) | Active | 首程、新用户、共创、创作控制权、dogfood、Worldbuilding / Workbench 后续入口 | 继续 P1-1 首程体验增强 discovery |
 
 ## 暂不作为活跃待办
 
