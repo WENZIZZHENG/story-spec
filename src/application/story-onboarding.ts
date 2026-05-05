@@ -81,6 +81,7 @@ export interface CreateStoryIdeaResult {
   ideaPath: string;
   idea: string;
   nextCommands: string[];
+  firstRunFlow: StoryFirstRunFlow;
   markdown: string;
   authorProfile: AuthorProfileSummary;
 }
@@ -188,6 +189,45 @@ export interface StoryMinimumFunLoop {
   planGate: string;
 }
 
+export type StoryFirstRunStepId =
+  | 'init-workspace'
+  | 'save-idea'
+  | 'choose-entrypoint'
+  | 'interview'
+  | 'review-core'
+  | 'preview-spec'
+  | 'apply-spec'
+  | 'plan-and-tasks'
+  | 'write-draft';
+
+export type StoryProgressLogKind = 'flow' | 'artifact' | 'next' | 'guard';
+
+export interface StoryFirstRunStep {
+  id: StoryFirstRunStepId;
+  index: number;
+  label: string;
+  description: string;
+  command?: string;
+  writes: string[];
+  guard: string;
+}
+
+export interface StoryProgressLogEntry {
+  kind: StoryProgressLogKind;
+  label: string;
+  message: string;
+  command?: string;
+  paths?: string[];
+}
+
+export interface StoryFirstRunFlow {
+  totalSteps: number;
+  currentStepId: StoryFirstRunStepId;
+  recommendedNextStepId: StoryFirstRunStepId;
+  steps: StoryFirstRunStep[];
+  progressLog: StoryProgressLogEntry[];
+}
+
 export interface StoryNextResult {
   projectRoot: string;
   story: string;
@@ -207,6 +247,7 @@ export interface StoryNextResult {
   authorProfile: AuthorProfileSummary;
   ideaPremise: string;
   actions: StoryNextAction[];
+  firstRunFlow: StoryFirstRunFlow;
 }
 
 export interface RenderStoryNextOptions {
@@ -253,6 +294,223 @@ const renderIdeaMarkdown = (
   ''
 ].join('\n');
 
+const buildFirstRunSteps = (story: string): StoryFirstRunStep[] => [
+  {
+    id: 'init-workspace',
+    index: 1,
+    label: '初始化工作区',
+    description: '创建 StorySpec 项目骨架和 agent 入口。',
+    command: 'storyspec init --workspace <path> --agent codex',
+    writes: ['.specify/', 'spec/', 'AGENTS.md'],
+    guard: '只初始化项目结构，不生成故事正典。'
+  },
+  {
+    id: 'save-idea',
+    index: 2,
+    label: '保存原始灵感',
+    description: '把作者原文保存成创意草稿。',
+    command: `storyspec story:new ${story} --idea "<一句话创意>"`,
+    writes: [`stories/${story}/idea.md`],
+    guard: '只记录作者原文，不扩写成完整设定。'
+  },
+  {
+    id: 'choose-entrypoint',
+    index: 3,
+    label: '选择共创入口',
+    description: '根据已有素材推荐主角、能力、舞台、场景等入口。',
+    command: `storyspec next ${story}`,
+    writes: [],
+    guard: '只导航，不确认候选。'
+  },
+  {
+    id: 'interview',
+    index: 4,
+    label: '完成一轮访谈',
+    description: '把关键选择写入澄清记录，区分确认、候选和稍后。',
+    command: `storyspec interview ${story}`,
+    writes: [`stories/${story}/clarifications.json`, `stories/${story}/clarifications.md`],
+    guard: 'AI 候选仍需作者确认。'
+  },
+  {
+    id: 'review-core',
+    index: 5,
+    label: '查看核心缺口',
+    description: '确认主角、伙伴、舞台、能力边界和第一卷冲突是否足够。',
+    command: `storyspec core ${story} --missing`,
+    writes: [],
+    guard: '缺口是继续共创提示，不是失败。'
+  },
+  {
+    id: 'preview-spec',
+    index: 6,
+    label: '生成规格预览',
+    description: '把已确认资料整理成写入前预览。',
+    command: `storyspec preview specify ${story}`,
+    writes: ['.specify/previews/'],
+    guard: '预览不会覆盖正式 specification。'
+  },
+  {
+    id: 'apply-spec',
+    index: 7,
+    label: '确认并应用规格',
+    description: '作者确认后才写入正式规格。',
+    command: 'storyspec apply <preview-id> --yes',
+    writes: [`stories/${story}/specification.md`],
+    guard: '必须显式 apply，不能静默写入正典。'
+  },
+  {
+    id: 'plan-and-tasks',
+    index: 8,
+    label: '规划章节和任务',
+    description: '生成创作计划和可执行写作任务。',
+    command: `storyspec preview plan ${story}`,
+    writes: [`stories/${story}/creative-plan.md`, `stories/${story}/tasks.md`],
+    guard: '核心要素不足时应回到访谈。'
+  },
+  {
+    id: 'write-draft',
+    index: 9,
+    label: '创建场景和草稿',
+    description: '建 Scene Card、Context Pack，再写章节草稿。',
+    command: `storyspec draft:new ${story} --chapter 001`,
+    writes: [`stories/${story}/content/`],
+    guard: '写正文前必须明确章节目标、冲突和边界。'
+  }
+];
+
+const buildFirstRunFlow = (input: {
+  story: string;
+  currentStepId: StoryFirstRunStepId;
+  recommendedNextStepId: StoryFirstRunStepId;
+  artifactMessage: string;
+  artifactPaths: string[];
+  nextMessage: string;
+  nextCommand?: string;
+}): StoryFirstRunFlow => {
+  const steps = buildFirstRunSteps(input.story);
+  const currentStep = steps.find(step => step.id === input.currentStepId) ?? steps[0];
+
+  return {
+    totalSteps: steps.length,
+    currentStepId: input.currentStepId,
+    recommendedNextStepId: input.recommendedNextStepId,
+    steps,
+    progressLog: [
+      {
+        kind: 'flow',
+        label: '流程',
+        message: `当前：第 ${currentStep.index} 步 / ${steps.length} 步，${currentStep.label}`
+      },
+      {
+        kind: 'artifact',
+        label: '产物',
+        message: input.artifactMessage,
+        paths: input.artifactPaths
+      },
+      {
+        kind: 'next',
+        label: '下一步',
+        message: input.nextMessage,
+        command: input.nextCommand
+      },
+      {
+        kind: 'guard',
+        label: '边界',
+        message: currentStep.guard
+      }
+    ]
+  };
+};
+
+const flowStepForStage = (stage: StoryMaturityStage): StoryFirstRunStepId => {
+  switch (stage) {
+    case 'idea':
+      return 'choose-entrypoint';
+    case 'interviewing':
+      return 'review-core';
+    case 'specified':
+      return 'preview-spec';
+    case 'planned':
+      return 'plan-and-tasks';
+    case 'tasked':
+    case 'drafting':
+    case 'revising':
+      return 'write-draft';
+    default:
+      return 'choose-entrypoint';
+  }
+};
+
+const recommendedStepForStage = (
+  stage: StoryMaturityStage,
+  primaryAction?: StoryNextAction
+): StoryFirstRunStepId => {
+  if (primaryAction?.action === 'continue_interview') {
+    return 'interview';
+  }
+  if (primaryAction?.action === 'preview_specification') {
+    return 'preview-spec';
+  }
+  if (primaryAction?.action === 'preview_plan' || primaryAction?.action === 'generate_plan' || primaryAction?.action === 'generate_tasks') {
+    return 'plan-and-tasks';
+  }
+  if (primaryAction?.action === 'build_context_pack') {
+    return 'write-draft';
+  }
+
+  switch (stage) {
+    case 'idea':
+      return 'interview';
+    case 'interviewing':
+      return 'preview-spec';
+    case 'specified':
+      return 'plan-and-tasks';
+    case 'planned':
+      return 'plan-and-tasks';
+    case 'tasked':
+    case 'drafting':
+    case 'revising':
+      return 'write-draft';
+    default:
+      return 'interview';
+  }
+};
+
+const storyRelativeArtifactsForStage = (
+  story: string,
+  stage: StoryMaturityStage
+): string[] => {
+  const root = `stories/${story}`;
+
+  if (stage === 'idea') {
+    return [`${root}/idea.md`];
+  }
+  if (stage === 'interviewing') {
+    return [`${root}/clarifications.json`, `${root}/clarifications.md`];
+  }
+  if (stage === 'specified') {
+    return [`${root}/specification.md`];
+  }
+  if (stage === 'planned') {
+    return [`${root}/creative-plan.md`];
+  }
+  if (stage === 'tasked') {
+    return [`${root}/tasks.md`];
+  }
+
+  return [`${root}/content/`];
+};
+
+const renderFirstRunFlow = (flow: StoryFirstRunFlow): string[] =>
+  flow.progressLog.map(item => {
+    const detail = item.command
+      ? `${item.message}：${item.command}`
+      : item.paths && item.paths.length > 0
+        ? `${item.message}：${item.paths.join(' / ')}`
+        : item.message;
+    return `[${item.label}] ${detail}`;
+  });
+
 export const createStoryIdea = async (
   input: CreateStoryIdeaInput
 ): Promise<CreateStoryIdeaResult> => {
@@ -282,6 +540,15 @@ export const createStoryIdea = async (
     buildInterviewCommand(story, { premise: idea || '一句话创意' }),
     `storyspec next ${story}`
   ];
+  const firstRunFlow = buildFirstRunFlow({
+    story,
+    currentStepId: 'save-idea',
+    recommendedNextStepId: 'choose-entrypoint',
+    artifactMessage: '已生成',
+    artifactPaths: [`stories/${story}/idea.md`],
+    nextMessage: '先选择共创入口或直接完成第一轮访谈',
+    nextCommand: nextCommands.find(command => command.startsWith('storyspec interview')) ?? `storyspec next ${story}`
+  });
   await input.fileSystem.ensureDir(storyPath);
   await input.fileSystem.writeFile(ideaPath, markdown);
 
@@ -291,6 +558,7 @@ export const createStoryIdea = async (
     ideaPath,
     idea,
     nextCommands,
+    firstRunFlow,
     markdown,
     authorProfile: authorProfile.summary
   };
@@ -657,8 +925,10 @@ const buildMinimumFunLoop = (): StoryMinimumFunLoop => ({
   planGate: '核心要素不足时不生成完整 creative-plan，只给候选、回声和下一轮入口。'
 });
 
+type StoryNextActionContext = Omit<StoryNextResult, 'actions' | 'firstRunFlow'>;
+
 const buildActions = (
-  result: Omit<StoryNextResult, 'actions'>
+  result: StoryNextActionContext
 ): StoryNextAction[] => {
   const actions: StoryNextAction[] = [];
   const planBlockingElements = getPlanBlockingCoreElements(result.coreElements);
@@ -861,9 +1131,21 @@ export const getStoryNext = async (
     ideaPremise
   };
 
+  const actions = buildActions(base);
+  const primaryAction = actions[0];
+
   return {
     ...base,
-    actions: buildActions(base)
+    actions,
+    firstRunFlow: buildFirstRunFlow({
+      story: story.name,
+      currentStepId: flowStepForStage(story.stage),
+      recommendedNextStepId: recommendedStepForStage(story.stage, primaryAction),
+      artifactMessage: '当前可用',
+      artifactPaths: storyRelativeArtifactsForStage(story.name, story.stage),
+      nextMessage: primaryAction?.reason ?? '继续按当前阶段补齐故事资料',
+      nextCommand: primaryAction?.copyableCommand
+    })
   };
 };
 
@@ -872,6 +1154,8 @@ export const renderCreateStoryIdea = (result: CreateStoryIdeaResult): string => 
   '',
   `故事：${result.story}`,
   `创意草稿：${result.ideaPath}`,
+  '',
+  ...renderFirstRunFlow(result.firstRunFlow),
   '',
   '下一步：',
   ...result.nextCommands.map(command => `- ${command}`),
@@ -897,6 +1181,8 @@ const renderStoryNextSummary = (result: StoryNextResult): string => {
     '',
     `故事：${result.story}`,
     `阶段：${result.stage}`,
+    '',
+    ...renderFirstRunFlow(result.firstRunFlow),
     '',
     '先选你手里的素材：',
     ...result.sourceMaterialEntrypoints.map(item =>
