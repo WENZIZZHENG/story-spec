@@ -24,6 +24,7 @@ import {
   displayProjectBanner,
   displayStep,
   isInteractive,
+  promptWorkspacePath,
   selectAIAssistant,
   selectScriptType,
   selectWritingMethod
@@ -35,6 +36,7 @@ interface InitCommandContext {
 
 export interface RenderInitSuccessNextStepsInput {
   projectName: string;
+  projectPath: string;
   targetAgents: Array<{
     displayName: string;
     commandSurface: string;
@@ -54,15 +56,14 @@ export const renderInitSuccessNextSteps = (input: RenderInitSuccessNextStepsInpu
     chalk.gray('─────────────────────────────')
   ];
 
-  if (!input.here) {
-    lines.push(`  1. ${chalk.white(`cd ${input.projectName}`)} - 进入项目目录`);
-  }
+  lines.push(`  1. ${chalk.white(`工作区已就绪：${input.projectPath}`)}`);
 
   lines.push(`  2. ${chalk.white(`在 ${input.selectedAgentDisplayName} 中打开项目`)}`);
   lines.push(`  3. ${chalk.white('保存一句灵感:')}`);
   lines.push(`     ${chalk.cyan('storyspec story:new 故事名 --idea "一句话创意"')}`);
-  lines.push(`  4. ${chalk.white('查看今天最适合的下一步:')}`);
+  lines.push(`  4. ${chalk.white('先看素材分流:')}`);
   lines.push(`     ${chalk.cyan('storyspec next 故事名')}`);
+  lines.push(chalk.gray('     它会把内容分成长文资料 / 一句话灵感 / 表格资料 / 随便聊聊。'));
   lines.push(`  5. ${chalk.white('完成一轮访谈后预览规格:')}`);
   lines.push(`     ${chalk.cyan('storyspec creative:report 故事名')}`);
   lines.push(`     ${chalk.cyan('storyspec preview specify 故事名')}`);
@@ -86,6 +87,7 @@ export function registerInitCommand(program: Command, context: InitCommandContex
   program
     .command('init')
     .argument('[name]', '小说项目名称')
+    .option('--workspace <path>', '直接指定小说工作区路径')
     .option('--here', '在当前目录初始化')
     .option('--ai <type>', `选择 AI 助手: ${AI_PLATFORM_OPTIONS}`)
     .option('--all', '为所有支持的 AI 助手生成配置')
@@ -98,18 +100,32 @@ export function registerInitCommand(program: Command, context: InitCommandContex
     .option('--agents-profile <profiles>', '配置 AGENTS.md 写作边界画像，逗号分隔：adult,slow-burn,adventure,romance,multi-thread')
     .description('初始化一个新的小说项目')
     .action(async (name, options) => {
+      let targetName = name;
       // 如果是交互式终端且没有明确指定参数，显示交互选择
       const shouldShowInteractive = isInteractive() && !options.all && !options.allAgents;
+      const needsWorkspaceSelection = shouldShowInteractive && !options.workspace && !options.here && !targetName;
       const needsAISelection = shouldShowInteractive && !options.ai && !options.agent;
       const needsMethodSelection = shouldShowInteractive && !options.method;
       const needsExpertConfirm = shouldShowInteractive && !options.withExperts;
 
-      if (needsAISelection || needsMethodSelection || needsExpertConfirm) {
+      if (needsWorkspaceSelection || needsAISelection || needsMethodSelection || needsExpertConfirm) {
         // 显示项目横幅
         displayProjectBanner();
 
         let stepCount = 0;
-        const totalSteps = 4;
+        const totalSteps =
+          (needsWorkspaceSelection ? 1 : 0)
+          + (needsAISelection ? 1 : 0)
+          + (needsMethodSelection ? 1 : 0)
+          + 1
+          + (needsExpertConfirm ? 1 : 0);
+
+        if (needsWorkspaceSelection) {
+          stepCount++;
+          displayStep(stepCount, totalSteps, '选择工作区路径');
+          targetName = await promptWorkspacePath();
+          console.log('');
+        }
 
         // 交互式选择 AI 助手
         if (needsAISelection) {
@@ -190,7 +206,7 @@ export function registerInitCommand(program: Command, context: InitCommandContex
 
       try {
         const result = await initProject({
-          name,
+          name: options.workspace ?? targetName,
           cwd: process.cwd(),
           packageRoot,
           here: !!options.here,
@@ -220,6 +236,7 @@ export function registerInitCommand(program: Command, context: InitCommandContex
 
         console.log(renderInitSuccessNextSteps({
           projectName,
+          projectPath: result.projectPath,
           targetAgents,
           here: !!options.here,
           all: !!options.all,

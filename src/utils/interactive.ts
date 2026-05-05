@@ -140,6 +140,22 @@ export async function confirmExpertMode(): Promise<boolean> {
 }
 
 /**
+ * Prompt for a StorySpec workspace path
+ */
+export async function promptWorkspacePath(): Promise<string> {
+  const answer = await inquirer.prompt([
+    {
+      type: 'input',
+      name: 'workspace',
+      message: chalk.bold('小说工作区放在哪里？'),
+      validate: (value: string) => value.trim().length > 0 || '请输入工作区路径'
+    }
+  ]);
+
+  return String(answer.workspace).trim();
+}
+
+/**
  * Display initialization step
  */
 export function displayStep(step: number, total: number, message: string): void {

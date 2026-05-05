@@ -205,12 +205,17 @@ describe('story onboarding', () => {
     expect(rendered).toContain('表格会保守作为候选');
     expect(rendered).toContain('我想先随便聊聊');
     expect(rendered).toContain('待澄清不是导入失败');
+    expect(rendered).toContain('长文资料');
+    expect(rendered).toContain('一句灵感');
+    expect(rendered).toContain('表格资料');
+    expect(rendered).toContain('随便聊聊');
     expect(rendered).toContain('下一步复制这条：');
     expect(rendered).toContain(result.actions[0].copyableCommand);
     expect(rendered).toContain('为什么：');
     expect(rendered).toContain('也可以从这里继续：');
     expect(rendered).toContain('storyspec next 编程施法 --verbose');
     expect(rendered).toContain('storyspec next 编程施法 --modes');
+    expect(rendered).toContain('storyspec interview 编程施法');
     expect(rendered.indexOf('先选你手里的素材：')).toBeLessThan(rendered.indexOf('下一步复制这条：'));
     expect(rendered.split('\n').length).toBeLessThanOrEqual(34);
     expect(rendered).not.toContain('今日创作模式');

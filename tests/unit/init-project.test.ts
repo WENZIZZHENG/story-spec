@@ -241,4 +241,27 @@ describe('initProject', () => {
       code: 'PROJECT_EXISTS'
     } satisfies Partial<InitProjectError>);
   });
+
+  it('accepts an absolute workspace path and returns the resolved project path', async () => {
+    const cwd = await makeTempDir();
+    const packageRoot = await createPackageRootFixture();
+    const workspacePath = path.join(cwd, '小说工作区');
+
+    const result = await initProject({
+      name: workspacePath,
+      cwd,
+      packageRoot,
+      here: false,
+      ai: 'codex',
+      all: false,
+      method: 'three-act',
+      git: false,
+      withExperts: false,
+      fileSystem: nodeFileSystem
+    });
+
+    expect(result.projectPath).toBe(workspacePath);
+    expect(result.projectName).toBe('小说工作区');
+    await expect(exists(path.join(workspacePath, '.specify', 'config.json'))).resolves.toBe(true);
+  });
 });

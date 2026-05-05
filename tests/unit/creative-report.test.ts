@@ -141,6 +141,13 @@ describe('creative report', () => {
     ]));
     expect(rendered).toContain('第一卷一屏摘要');
     expect(rendered).toContain('第一卷一句话目标 [confirmed]');
+    expect(rendered).toContain('三幕结构摘要');
+    expect(rendered).toContain('12 章节奏/章节功能表');
+    expect(rendered).toContain('核心角色弧线');
+    expect(rendered).toContain('剧情起伏');
+    expect(rendered).toContain('人物关系概况');
+    expect(rendered).toContain('卷计划视图');
+    expect(rendered).toContain('flowchart LR');
     expect(rendered).toContain('第7章 [candidate]');
     expect(rendered).toContain('莉安 [needs-confirmation]');
     expect(rendered).toContain('晏无 / 莉安 [candidate]');

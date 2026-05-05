@@ -870,7 +870,7 @@ const renderStoryNextSummary = (result: StoryNextResult): string => {
     '',
     '先选你手里的素材：',
     ...result.sourceMaterialEntrypoints.map(item =>
-      `- ${item.label}：${item.inputGuidance} 可复制：${item.copyableCommand}`
+      `- ${item.label}（${item.id === 'longform-material' ? '长文资料' : item.id === 'short-idea' ? '一句灵感' : item.id === 'table-material' ? '表格资料' : '随便聊聊'}）：${item.inputGuidance} 可复制：${item.copyableCommand}`
     ),
     '',
     '下一步复制这条：',

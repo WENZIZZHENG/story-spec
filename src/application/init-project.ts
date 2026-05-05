@@ -103,17 +103,29 @@ const resolveProjectTarget = async (input: InitProjectInput): Promise<{ projectN
   }
 
   if (!input.name) {
-    throw new InitProjectError('请提供项目名称或使用 --here 参数', 'MISSING_NAME');
+    throw new InitProjectError('请提供项目名称、工作区路径，或使用 --here 参数', 'MISSING_NAME');
   }
 
-  const projectPath = path.join(input.cwd, input.name);
+  const trimmedName = input.name.trim();
+  const projectPath = path.isAbsolute(trimmedName) || trimmedName.includes(path.sep) || trimmedName.includes('/')
+    ? path.resolve(input.cwd, trimmedName)
+    : path.join(input.cwd, trimmedName);
+  const configPath = path.join(projectPath, '.specify', 'config.json');
   if (await fs.pathExists(projectPath)) {
-    throw new InitProjectError(`项目目录 "${input.name}" 已存在`, 'PROJECT_EXISTS');
+    if (await fs.pathExists(configPath)) {
+      throw new InitProjectError(`工作区 "${projectPath}" 已经是 StorySpec 项目`, 'PROJECT_EXISTS');
+    }
+
+    throw new InitProjectError(`工作区 "${projectPath}" 已存在`, 'PROJECT_EXISTS');
+  }
+
+  if (await fs.pathExists(configPath)) {
+    throw new InitProjectError(`工作区 "${projectPath}" 已经是 StorySpec 项目`, 'PROJECT_EXISTS');
   }
 
   await fs.ensureDir(projectPath);
   return {
-    projectName: input.name,
+    projectName: path.basename(projectPath),
     projectPath
   };
 };
