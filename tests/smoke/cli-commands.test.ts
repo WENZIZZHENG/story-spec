@@ -688,6 +688,72 @@ describe('CLI command modules smoke', () => {
     expect(status.stdout.trim()).toBe('');
   });
 
+  it('captures todo notes into a roadmap from the CLI', async () => {
+    const cwd = await makeTempDir();
+    await execFileAsync('node', [
+      cliPath,
+      'init',
+      'smoke',
+      '--ai',
+      'codex',
+      '--method',
+      'three-act',
+      '--no-git'
+    ], { cwd });
+
+    const projectPath = path.join(cwd, 'smoke');
+    await mkdir(path.join(projectPath, 'docs', 'tech'), { recursive: true });
+    await writeFile(path.join(projectPath, 'docs', 'tech', 'todo-index.md'), `# 待办统一入口
+
+## 当前待办
+
+| 优先级 | 路线 | 状态 | 覆盖范围 | 下一步 |
+| --- | --- | --- | --- | --- |
+`);
+    await writeFile(path.join(projectPath, 'capture-notes.md'), '补齐协作入口\n保留作者确认');
+
+    const preview = await execFileAsync('node', [
+      cliPath,
+      'todo:capture',
+      '--topic',
+      'collaboration flow',
+      '--from',
+      'capture-notes.md',
+      '--json'
+    ], { cwd: projectPath });
+    const previewResult = JSON.parse(preview.stdout);
+    expect(previewResult).toMatchObject({
+      mode: 'preview',
+      blocked: false,
+      roadmapPath: 'docs/tech/collaboration-flow-roadmap.md',
+      updatedFiles: []
+    });
+    await expect(readFile(path.join(projectPath, 'docs', 'tech', 'collaboration-flow-roadmap.md'), 'utf-8')).rejects.toThrow();
+
+    const apply = await execFileAsync('node', [
+      cliPath,
+      'todo:capture',
+      '--topic',
+      'collaboration flow',
+      '--from',
+      'capture-notes.md',
+      '--apply',
+      '--json'
+    ], { cwd: projectPath });
+    const applyResult = JSON.parse(apply.stdout);
+
+    expect(applyResult).toMatchObject({
+      mode: 'apply',
+      blocked: false,
+      updatedFiles: [
+        path.join(projectPath, 'docs', 'tech', 'collaboration-flow-roadmap.md'),
+        path.join(projectPath, 'docs', 'tech', 'todo-index.md')
+      ]
+    });
+    await expect(readFile(path.join(projectPath, 'docs', 'tech', 'collaboration-flow-roadmap.md'), 'utf-8')).resolves.toContain('# collaboration flow 路线图');
+    await expect(readFile(path.join(projectPath, 'docs', 'tech', 'todo-index.md'), 'utf-8')).resolves.toContain('[collaboration flow 路线图](collaboration-flow-roadmap.md)');
+  });
+
   it('generates a JSON handoff package', async () => {
     const cwd = await makeTempDir();
     await execFileAsync('node', [

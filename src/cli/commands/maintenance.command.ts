@@ -6,6 +6,10 @@ import {
   renderDocsFinishSummary
 } from '../../application/finish-docs-change.js';
 import {
+  captureTodo,
+  renderTodoCaptureSummary
+} from '../../application/capture-todo.js';
+import {
   getMaintenanceContext,
   renderMaintenanceContext
 } from '../../application/maintenance-context.js';
@@ -73,6 +77,41 @@ export const registerMaintenanceCommand = (program: Command): void => {
         }
 
         console.error(chalk.red('文档收尾预览失败'), error instanceof Error ? error.message : error);
+        process.exit(1);
+      }
+    });
+
+  program
+    .command('todo:capture')
+    .requiredOption('--topic <name>', '待办路线主题')
+    .option('--from <path>', '从本地 Markdown / 文本文件读取 notes')
+    .option('--notes <text>', '直接传入 notes 文本')
+    .option('--apply', '写入 roadmap 并更新 todo-index；默认只预览')
+    .option('--json', '输出 JSON，便于自动化读取')
+    .description('把讨论 notes 转成符合治理规则的待办路线草案')
+    .action(async (options) => {
+      try {
+        const projectRoot = await ensureProjectRoot();
+        const result = await captureTodo({
+          projectRoot,
+          fileSystem: nodeFileSystem,
+          topic: options.topic,
+          from: options.from,
+          notes: options.notes,
+          apply: Boolean(options.apply)
+        });
+
+        console.log(options.json
+          ? JSON.stringify(result, null, 2)
+          : renderTodoCaptureSummary(result));
+      } catch (error: any) {
+        if (error.message === 'NOT_IN_PROJECT') {
+          console.log(chalk.red('\n当前目录不是 story-spec 项目'));
+          console.log(chalk.gray('请在项目根目录运行此命令，或使用 storyspec init 创建新项目\n'));
+          process.exit(1);
+        }
+
+        console.error(chalk.red('待办捕获失败'), error instanceof Error ? error.message : error);
         process.exit(1);
       }
     });
