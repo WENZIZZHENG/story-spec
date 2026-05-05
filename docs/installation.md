@@ -56,13 +56,15 @@ storyspec --help
 
 ```bash
 # 创建名为"我的小说"的项目
-storyspec init 我的小说
+storyspec init --workspace 我的小说
 
 # 指定 AI 助手类型
-storyspec init 我的小说 --agent claude
-storyspec init 我的小说 --agent cursor
-storyspec init 我的小说 --agent gemini
+storyspec init --workspace 我的小说 --agent claude
+storyspec init --workspace 我的小说 --agent cursor
+storyspec init --workspace 我的小说 --agent gemini
 ```
+
+`--workspace` 会显式指定 StorySpec 工作区路径；初始化成功后，CLI 会先显示“工作区已就绪”，再引导你保存一句灵感并运行 `storyspec next` 查看素材分流入口。
 
 ### 在现有目录初始化
 
@@ -79,7 +81,7 @@ storyspec init --here --agent claude
 ### 不使用 Git（如果没有安装 Git）
 
 ```bash
-storyspec init 我的小说 --no-git
+storyspec init --workspace 我的小说 --no-git
 ```
 
 ## AI 助手配置
@@ -179,7 +181,7 @@ export PATH="$PATH:$(npm config get prefix)/bin"
 如果没有安装 Git 或不需要版本控制：
 
 ```bash
-storyspec init 我的小说 --no-git
+storyspec init --workspace 我的小说 --no-git
 ```
 
 ### Q: 中文目录名有问题
@@ -187,9 +189,9 @@ storyspec init 我的小说 --no-git
 在某些系统上，中文目录名可能导致问题。建议使用英文或拼音：
 
 ```bash
-storyspec init my-novel
+storyspec init --workspace my-novel
 # 或
-storyspec init wo-de-xiao-shuo
+storyspec init --workspace wo-de-xiao-shuo
 ```
 
 ### Q: AI 助手无法识别斜杠命令

@@ -102,7 +102,7 @@ StorySpec 的早期目标不是马上生成完整 `creative-plan.md`，而是先
   -> 核心要素不足时阻止完整 plan
 ```
 
-`storyspec creative:report 编程施法` 会告诉你已经创造出了什么、哪些仍是候选、下一轮最值得玩哪里。
+`storyspec creative:report 编程施法` 会告诉你已经创造出了什么、哪些仍是候选、下一轮最值得玩哪里；如果已有卷计划摘要，还会展示三幕结构、章节节奏、人物弧线、张力曲线和人物关系视图。
 
 ## 候选不是正典
 
@@ -142,7 +142,7 @@ storyspec clarification:rollback --story 编程施法 --question magic.rule-hard
 下面是一条更完整的新故事路径。重点是：先建项目，再保存灵感，然后进入共创访谈；规格和创作计划都先预览，确认后再写入。
 
 ```bash
-storyspec init my-novel --agent codex
+storyspec init --workspace my-novel --agent codex
 cd my-novel
 storyspec author-profile --init --answers "genre=18+ 玄幻、异界穿越、轻松冒险;pacing=慢热共创，先玩关键选择;boundary=建设流和思想改造只是支撑工具"
 storyspec story:new 法术编译纪元 --idea "异界穿越、轻松冒险、编程施法、慢热感情、文明级威胁。建设流和思想改造只是支撑工具。"
@@ -254,7 +254,7 @@ init -> story:new -> next -> interview/clarify 或 ingest/co:create -> core/crea
 | `storyspec core` | 查看核心创意、主角、伙伴、第一舞台、能力体系和创作边界；加 `--missing` 只看缺口 |
 | `storyspec ingest` | 吸收自然语言长文，拆成核心澄清项预览；加 `--apply-confirmed` 才写入 |
 | `storyspec co:create` | 连续共创入口：长文吸收、核心面板和可选 preview 串在一起；默认只预览 |
-| `storyspec creative:report` | 查看作者已经创建的小说骨架、创作回声、未决项回流、待澄清问题和 AI 建议风险 |
+| `storyspec creative:report` | 查看作者已经创建的小说骨架、创作回声、卷计划视图、未决项回流、待澄清问题和 AI 建议风险 |
 | `storyspec preview specify` | 生成规格写入预览 |
 | `storyspec apply` | 确认无 blocking 风险后写入正式规格 |
 | `storyspec preview plan` | 生成 `creative-plan.md` 写入预览，不直接替作者定稿 |
@@ -310,7 +310,7 @@ StorySpec 有两类入口，容易混淆：
 | `storyspec core [story]` | 查看故事核心信息面板；支持 `--missing` 和 `--json` |
 | `storyspec ingest [story]` | 从 `--text` 或 `--file` 吸收长文创作资料，默认预览；支持 `--apply-confirmed` 和 `--json` |
 | `storyspec co:create [story]` | 把长文吸收、核心缺口查看和 `preview specify/plan` 串成一个低摩擦入口；支持 `--text`、`--file`、`--apply-confirmed`、`--preview specify|plan|both` |
-| `storyspec creative:report [story]` | 查看作者确认、创作回声、待澄清、AI 建议和漂移风险 |
+| `storyspec creative:report [story]` | 查看作者确认、创作回声、卷计划视图、待澄清、AI 建议和漂移风险 |
 | `storyspec clarification:rollback --story <story> [--question <id>]` | 把最近一次确认或指定问题退回候选，保留原答案和证据，不修改正文或正典文件 |
 | `storyspec preview specify [story]` | 生成 StorySpec v0 规格草案，不直接写入正式规格 |
 | `storyspec preview plan [story]` | 生成创作计划 v0 草案，不直接写入 `creative-plan.md` |
@@ -320,7 +320,7 @@ StorySpec 有两类入口，容易混淆：
 
 `storyspec next [story] --modes` 会单独展示“今日创作模式”：我想玩角色、我想写一幕、我想整理设定、我想比较分支、我只想随便聊聊。它们默认映射到 `storyspec interview <story> --focus <entry> --max-questions 2 --no-write`，只给少量候选和一句创作回声，不写入文件，不生成完整大纲。作者仍可以确认、改写、拒绝或稍后决定；核心要素不足时，`preview plan` 仍会被门禁阻止。
 
-`storyspec creative:report [story]` 和 `storyspec status` 会展示“创作回声”：当前风味、成熟度、已长出的关键部件、还差的关键部件和下一轮创作回声。它只回顾已确认或部分确认的创作积累，不把未确认 AI 候选说成正典。
+`storyspec creative:report [story]` 和 `storyspec status` 会展示“创作回声”：当前风味、成熟度、已长出的关键部件、还差的关键部件和下一轮创作回声。`creative:report` 还会在可用时渲染卷计划摘要和 Mermaid 视图，帮助作者检查三幕结构、章节节奏、人物弧线、张力曲线和人物关系。它只回顾已确认或部分确认的创作积累，不把未确认 AI 候选说成正典。
 
 当作者回答“稍后决定”“不知道”“给我示例”等内容时，StorySpec 会把它们作为未决项记录在澄清 Markdown、`storyspec next` 和 `storyspec creative:report` 中，并给出回流条件、证据位置和继续访谈命令；它不会强制打断写作，只在相关上下文重新出现。
 
@@ -435,19 +435,19 @@ StorySpec 有两类入口，容易混淆：
 storyspec init --here --agent generic
 
 # 生成所有 agent integration 的命令入口
-storyspec init my-novel --all-agents
+storyspec init --workspace my-novel --all-agents
 
 # 指定写作方法
-storyspec init my-novel --method snowflake --agent claude
+storyspec init --workspace my-novel --method snowflake --agent claude
 
 # 初始化时安装插件
-storyspec init my-novel --plugins authentic-voice,genre-knowledge
+storyspec init --workspace my-novel --plugins authentic-voice,genre-knowledge
 
 # 为 Codex 生成更具体的 AGENTS.md 写作边界
-storyspec init my-novel --agent codex --agents-profile adult,slow-burn,adventure
+storyspec init --workspace my-novel --agent codex --agents-profile adult,slow-burn,adventure
 
 # 跳过 Git 初始化
-storyspec init my-novel --no-git
+storyspec init --workspace my-novel --no-git
 ```
 
 ## 项目目录

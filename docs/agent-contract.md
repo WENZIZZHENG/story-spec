@@ -57,6 +57,17 @@ storyspec handoff --target-agent continue-check
 
 当目标是 `continue-check` 这类只读 agent 时，handoff 会要求它只做检查和补丁式建议，不直接写正文、tracking 或任务文件。
 
+## 结构化导航
+
+首程导航除了人类可读文本，也提供结构化字段：
+
+```bash
+storyspec status --json
+storyspec codex-status --json
+```
+
+JSON 中的 `navigationEntries` 使用稳定 `action` 枚举和 `copyableCommand`，用于区分长文资料、一句灵感、表格资料和随便聊聊等入口。Agent 或 UI 应优先读取这些字段，不依赖中文显示文案做解析。
+
 ## 同步
 
 ```bash

@@ -7,15 +7,17 @@ StorySpec 的核心是小说项目协议、命令语义和 agent contract。Code
 新项目优先使用 `--agent`：
 
 ```bash
-storyspec init my-novel --agent generic
-storyspec init my-novel --agent codex
-storyspec init my-novel --all-agents
+storyspec init --workspace my-novel --agent generic
+storyspec init --workspace my-novel --agent codex
+storyspec init --workspace my-novel --all-agents
 ```
+
+`--workspace` 是新手路径的推荐写法：初始化输出会先确认工作区位置，再引导作者进入 `storyspec story:new`、`storyspec next` 和素材分流。
 
 旧 `--ai <id>` 和 `--all` 仍处于兼容期：
 
 ```bash
-storyspec init my-novel --ai codex
+storyspec init --workspace my-novel --ai codex
 storyspec upgrade --all
 ```
 
@@ -72,7 +74,7 @@ storyspec agent:list --json
 用法：
 
 ```bash
-storyspec init my-novel --agent continue-check
+storyspec init --workspace my-novel --agent continue-check
 storyspec handoff --target-agent continue-check
 ```
 

@@ -29,7 +29,7 @@ storyspec preview specify -> storyspec apply
 | `storyspec ingest [story]` | 从 `--text` 或 `--file` 吸收长文创作资料；默认只预览，`--apply-confirmed` 只写入明确字段 |
 | `storyspec co:create [story]` | 把长文吸收、核心缺口和可选 preview 串起来；适合一次粘贴多条回复或几百字设定 |
 | `storyspec core [story]` | 查看核心信息面板；`--missing` 只显示缺口，`--json` 保留 `sourceLabel` |
-| `storyspec creative:report [story]` | 查看已确认、创作回声、未决项回流、待澄清、AI 候选和偏离风险 |
+| `storyspec creative:report [story]` | 查看已确认、创作回声、卷计划视图、未决项回流、待澄清、AI 候选和偏离风险 |
 | `storyspec preview specify [story]` | 预览规格写入内容 |
 | `storyspec apply <preview-id> --yes` | 明确确认后写入 preview |
 
@@ -44,6 +44,8 @@ storyspec preview specify -> storyspec apply
 | `/tasks` | 拆分写作任务 | `tasks.md` |
 | `/write` | 写章节草稿或正文 | `stories/*/content/` |
 | `/analyze` | 检查结构、连续性和质量 | 分析报告或任务建议 |
+
+`/write` 的正文执行默认分三阶段反馈：先输出 3-6 条 scene beat 预览（JSON `stage=plan`），再按 scene、自然段组或目标字数分块输出正文（`stage=write`），最后给出正文路径、字数、验证和 tracking 待确认项（`stage=finish`）。写作入口仍需要 Scene Card、任务边界和 preview / confirm / apply 门禁。
 
 辅助命令：
 
@@ -72,10 +74,10 @@ storyspec preview specify -> storyspec apply
 
 | 命令 | 用途 |
 | --- | --- |
-| `storyspec creative:report [story]` | 显示当前风味、最有生命力的核心部件、关键缺口和下一轮创作回声 |
+| `storyspec creative:report [story]` | 显示当前风味、最有生命力的核心部件、关键缺口、下一轮创作回声和卷计划视图 |
 | `storyspec status` | 在项目状态里回答“当前故事长成了什么”，不只显示文件是否存在 |
 
-创作回声是给作者看的成果摘要，不是宣传文案。它只引用已确认或部分确认的核心要素，同时保留缺口，避免把未确认候选说成已经完成。
+创作回声是给作者看的成果摘要，不是宣传文案。它只引用已确认或部分确认的核心要素，同时保留缺口，避免把未确认候选说成已经完成。`creative:report` 在卷计划摘要可用时还会渲染三幕结构、章节节奏、人物弧线、张力曲线和人物关系 Mermaid 视图，用来检查计划是否能支撑下一轮写作。
 
 ## 未决项回流
 
@@ -119,6 +121,8 @@ storyspec preview specify -> storyspec apply
 | `storyspec agent:doctor` | 检查 agent 配置 |
 | `storyspec contract:sync` | 同步 `AGENTS.md` 和 `.specify/agent-contract.md` |
 | `storyspec upgrade` | 更新已有项目的命令、脚本或模板 |
+
+`storyspec status --json` 和兼容入口 `storyspec codex-status --json` 会输出稳定的 `navigationEntries` 数组。每个入口包含 `action`、`label`、`description` 和 `copyableCommand`，方便 agent 或 UI 不解析中文文案也能区分“长文资料 / 一句灵感 / 表格资料 / 随便聊聊”四类首程入口。
 
 更多 CLI 子命令可运行：
 
