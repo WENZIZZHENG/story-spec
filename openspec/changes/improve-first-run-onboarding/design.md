@@ -6,7 +6,7 @@
 
 参考材料：
 
-- `docs/tech/author-first-run-feedback-roadmap.md`
+- `docs/tech/archive/completed-roadmaps/author-first-run-feedback-roadmap.md`
 - `docs/tech/low-burden-co-creation.md`
 - `agent-guides/story-creation-guide.md`
 

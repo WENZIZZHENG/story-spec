@@ -2,7 +2,7 @@
 
 ## 状态
 
-Planned。本文记录 2026-05-04 继续 dogfood StorySpec 时，用户指出的五类首程体验问题：工作区初始化、原始灵感/长文资料输入、新手命令理解、卷计划直观反馈、章节生成耗时和正反馈不足。2026-05-05 继续新增首次使用“全流程图 + 当前步骤 + 下一步操作”需求。
+Completed。本文记录 2026-05-04 继续 dogfood StorySpec 时，用户指出的五类首程体验问题：工作区初始化、原始灵感/长文资料输入、新手命令理解、卷计划直观反馈、章节生成耗时和正反馈不足。2026-05-05 已通过 `improve-first-run-onboarding` 与 `improve-writing-feedback-loop` 收口首程引导、流程图、素材分流、章节阶段性反馈和结构视图。
 
 ## 当前主线
 
@@ -157,7 +157,7 @@ Planned。本文记录 2026-05-04 继续 dogfood StorySpec 时，用户指出的
   - 中断后能从最近 checkpoint 继续，不必重写整章。
 - 参考资料/项目：
   - 本次第一章、第二章生成等待体验。
-  - [storyspec-dogfood-friction-roadmap.md](storyspec-dogfood-friction-roadmap.md) 的 `task:finish` 和连续章节 checkpoint 任务。
+- [storyspec-dogfood-friction-roadmap.md](storyspec-dogfood-friction-roadmap.md) 的 `task:finish` 和连续章节 checkpoint 任务。
 - 不做/边界：不为了快而跳过创作控制权、tracking 或验证；不承诺模型生成速度本身一定变快。
 
 ### P0-5 首次使用全流程图与当前步骤提示

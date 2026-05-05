@@ -1,6 +1,6 @@
 ## 1. 共享契约
 
-- [ ] 1.1 冻结 `task:finish`、`tasks:set-status`、related draft 路径、验证 scope / severity、tracking evidence 的对外行为，确保后续实现只在这组契约内展开。
+- [x] 1.1 冻结 `task:finish`、`tasks:set-status`、related draft 路径、验证 scope / severity、tracking evidence 的对外行为，确保后续实现只在这组契约内展开。
 - [x] 1.2 明确 `completedNodes` 必须继续保持字符串数组，并把 `evidence` 视为旁路字段而不是类型替换。
 
 ## 2. CLI 与 finish 流程
@@ -41,4 +41,4 @@
 
 - [x] 4.1 跑 `npm run build`、`node dist/cli.js --help`、相关 smoke 测试和 manifest 检查，确认 CLI 产物没有漂移。
 - [x] 4.2 跑 OpenSpec 校验，确认本 change 的 proposal、design、tasks 和 specs 彼此一致。
-- [ ] 4.3 用一轮端到端 dogfood 样例复核 finish 收尾报告、验证噪音分层和 tracking 回写闭环。
+- [x] 4.3 用一轮端到端 dogfood 样例复核 finish 收尾报告、验证噪音分层和 tracking 回写闭环。

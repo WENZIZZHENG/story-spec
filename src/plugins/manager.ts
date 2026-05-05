@@ -19,6 +19,7 @@ import type { CommandSource } from '../prompt/command-source.js';
 import { renderCommandForPlatform } from '../prompt/platform-renderers/index.js';
 import { AI_PLATFORMS, type AIPlatformId } from '../utils/ai-platforms.js';
 import { logger } from '../utils/logger.js';
+import { getVersion } from '../version.js';
 
 export type PluginInstallOperationKind =
   | 'copy-plugin'
@@ -82,6 +83,76 @@ export class PluginInstallConflictError extends Error {
     this.name = 'PluginInstallConflictError';
   }
 }
+
+export class PluginDependencyError extends Error {
+  constructor(readonly requiredVersion: string, readonly currentVersion: string) {
+    super(`插件需要 StorySpec ${requiredVersion}，当前版本为 ${currentVersion}。`);
+    this.name = 'PluginDependencyError';
+  }
+}
+
+const parseVersion = (value: string): [number, number, number] | null => {
+  const match = value.trim().match(/^v?(\d+)(?:\.(\d+))?(?:\.(\d+))?/);
+  if (!match) {
+    return null;
+  }
+
+  return [
+    Number(match[1] ?? 0),
+    Number(match[2] ?? 0),
+    Number(match[3] ?? 0)
+  ];
+};
+
+const compareVersions = (left: string, right: string): number | null => {
+  const leftVersion = parseVersion(left);
+  const rightVersion = parseVersion(right);
+  if (!leftVersion || !rightVersion) {
+    return null;
+  }
+
+  for (let index = 0; index < 3; index += 1) {
+    const delta = leftVersion[index] - rightVersion[index];
+    if (delta !== 0) {
+      return delta > 0 ? 1 : -1;
+    }
+  }
+
+  return 0;
+};
+
+const satisfiesVersionRange = (currentVersion: string, range: string): boolean => {
+  const normalizedRange = range.trim();
+  const match = normalizedRange.match(/^(>=|>|<=|<|=|\^|~)?\s*v?(\d+(?:\.\d+){0,2})$/);
+  if (!match) {
+    throw new Error(`不支持的 StorySpec 版本依赖表达式: ${range}`);
+  }
+
+  const operator = match[1] ?? '=';
+  const requiredVersion = match[2];
+  const comparison = compareVersions(currentVersion, requiredVersion);
+  if (comparison === null) {
+    throw new Error(`无法比较 StorySpec 版本: ${currentVersion} 与 ${range}`);
+  }
+
+  if (operator === '>=') return comparison >= 0;
+  if (operator === '>') return comparison > 0;
+  if (operator === '<=') return comparison <= 0;
+  if (operator === '<') return comparison < 0;
+  if (operator === '=') return comparison === 0;
+
+  const current = parseVersion(currentVersion);
+  const required = parseVersion(requiredVersion);
+  if (!current || !required) {
+    return false;
+  }
+
+  if (operator === '^') {
+    return current[0] === required[0] && comparison >= 0;
+  }
+
+  return current[0] === required[0] && current[1] === required[1] && comparison >= 0;
+};
 
 export class PluginManager {
   private pluginsDir: string
@@ -261,11 +332,12 @@ export class PluginManager {
 
     // 检查核心版本依赖
     if (config.dependencies.core) {
-      // 这里简化处理，实际应该比较版本号
-      // 可以使用 semver 库进行版本比较
       const requiredVersion = config.dependencies.core
+      const currentVersion = getVersion()
       logger.debug(`需要核心版本: ${requiredVersion}`)
-      // TODO: 实现版本比较逻辑
+      if (!satisfiesVersionRange(currentVersion, requiredVersion)) {
+        throw new PluginDependencyError(requiredVersion, currentVersion)
+      }
     }
 
     return true
@@ -506,6 +578,7 @@ export class PluginManager {
 
   async planInstallPlugin(pluginName: string, sourcePath: string): Promise<PluginInstallPlan> {
     const manifest = await this.loadManifestFromSource(sourcePath)
+    this.checkDependencies(manifest)
     const agentImpacts = await this.createAgentImpacts(pluginName, sourcePath, manifest.commands)
     const operations: PluginInstallOperation[] = [
       await this.createOperation({
@@ -709,6 +782,38 @@ export class PluginManager {
     return configs
   }
 
+  async resolvePluginSource(pluginNameOrSource: string, packageRoot: string): Promise<string> {
+    if (/^https?:\/\//i.test(pluginNameOrSource)) {
+      throw new Error('网络插件安装尚未支持；请先下载插件到本地目录，或使用 file:// 本地 URL。')
+    }
+
+    if (/^file:\/\//i.test(pluginNameOrSource)) {
+      const fileUrlPath = decodeURIComponent(new URL(pluginNameOrSource).pathname)
+      const localPath = process.platform === 'win32' && fileUrlPath.startsWith('/')
+        ? fileUrlPath.slice(1)
+        : fileUrlPath
+      if (!await fs.pathExists(localPath)) {
+        throw new Error(`插件源不存在: ${localPath}`)
+      }
+      return path.resolve(localPath)
+    }
+
+    if (path.isAbsolute(pluginNameOrSource) || pluginNameOrSource.includes('/') || pluginNameOrSource.includes('\\')) {
+      const localPath = path.resolve(pluginNameOrSource)
+      if (!await fs.pathExists(localPath)) {
+        throw new Error(`插件源不存在: ${localPath}`)
+      }
+      return localPath
+    }
+
+    const bundledPath = path.join(packageRoot, 'plugins', pluginNameOrSource)
+    if (await fs.pathExists(bundledPath)) {
+      return bundledPath
+    }
+
+    throw new Error(`插件 ${pluginNameOrSource} 未找到`)
+  }
+
   /**
    * 安装插件（从模板或远程）
    */
@@ -716,17 +821,14 @@ export class PluginManager {
     try {
       logger.info(`安装插件: ${pluginName}`)
 
-      // 如果提供了源路径，从源复制
-      if (source) {
-        const plan = await this.planInstallPlugin(pluginName, source)
-        await this.applyInstallPlan(plan, options)
-        if (plan.manifest.installation?.message) {
-          console.log(plan.manifest.installation.message)
-        }
-      } else {
-        // TODO: 实现从远程仓库或注册中心安装
-        logger.warn('远程安装功能尚未实现')
-        return
+      if (!source) {
+        throw new Error('缺少插件源；请提供内置插件名、本地目录或 file:// 本地 URL。')
+      }
+
+      const plan = await this.planInstallPlugin(pluginName, source)
+      await this.applyInstallPlan(plan, options)
+      if (plan.manifest.installation?.message) {
+        console.log(plan.manifest.installation.message)
       }
 
       logger.success(`插件 ${pluginName} 安装成功`)

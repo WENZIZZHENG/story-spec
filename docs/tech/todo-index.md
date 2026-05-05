@@ -2,19 +2,18 @@
 
 ## 状态
 
-Active。本文是 StorySpec 当前唯一的活跃待办入口。详细规则见 [todo-governance.md](todo-governance.md)，已完成事项见 [todo-archive.md](todo-archive.md)。当前有 2 条活跃路线；新增长期增强时先在本文登记。
+Active。本文是 StorySpec 当前唯一的活跃待办入口。详细规则见 [todo-governance.md](todo-governance.md)，已完成事项见 [todo-archive.md](todo-archive.md)。当前无活跃路线；新增长期增强时先在本文登记。
 
 ## 当前待办
 
-| 路线 | 状态 | 优先级 | 下一步 |
-| --- | --- | --- | --- |
-| [作者首程引导与正反馈路线图](author-first-run-feedback-roadmap.md) | Planned | P0 | 先实现工作区优先初始化、首次使用全流程图、日志式流程反馈、原始灵感/长文资料输入向导、少命令化新手导航和章节生成阶段性正反馈。 |
-| [StorySpec 自用创作流程问题待办](storyspec-dogfood-friction-roadmap.md) | Planned | P0 | 先修复 `task:finish` / `tasks:set-status` 源码与 `dist` 产物漂移，再统一章节路径解析、写作阶段验证范围和 tracking evidence schema。 |
+当前无活跃路线。新增长期增强时，先按 [todo-governance.md](todo-governance.md) 建立专题 roadmap，再登记到本文。
 
 ## 暂不作为活跃待办
 
 | 文件 | 原因 | 归档入口 |
 | --- | --- | --- |
+| [archive/completed-roadmaps/author-first-run-feedback-roadmap.md](archive/completed-roadmaps/author-first-run-feedback-roadmap.md) | 作者首程引导、素材分流、流程图、阶段性写作反馈和结构视图已完成并归档 | [todo-archive.md](todo-archive.md#作者首程引导与正反馈) |
+| [archive/completed-roadmaps/storyspec-dogfood-friction-roadmap.md](archive/completed-roadmaps/storyspec-dogfood-friction-roadmap.md) | 自用创作流程 P0 闭环、tracking evidence、验证分层和源码 TODO 收口已完成并归档 | [todo-archive.md](todo-archive.md#自用创作流程问题收口) |
 | [archive/completed-roadmaps/chapter-production-workflow-roadmap.md](archive/completed-roadmaps/chapter-production-workflow-roadmap.md) | 章节生产流程优化 P0-P2 已完成并归档 | [todo-archive.md](todo-archive.md#章节生产流程优化) |
 | [archive/completed-roadmaps/new-user-story-creation-dogfood-roadmap.md](archive/completed-roadmaps/new-user-story-creation-dogfood-roadmap.md) | 新用户小说创建端到端体验 P0-P2 已完成并归档 | [todo-archive.md](todo-archive.md#新用户小说创建端到端体验) |
 | [archive/completed-roadmaps/co-creation-input-and-core-roadmap.md](archive/completed-roadmaps/co-creation-input-and-core-roadmap.md) | 共创输入与核心信息面板 P0-P3 已完成并归档 | [todo-archive.md](todo-archive.md#共创输入与核心信息面板) |

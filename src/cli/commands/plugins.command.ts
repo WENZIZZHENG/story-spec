@@ -1,6 +1,5 @@
 import type { Command } from '@commander-js/extra-typings';
 import chalk from 'chalk';
-import fs from 'fs-extra';
 import ora from 'ora';
 import path from 'path';
 import { PluginManager, type PluginInstallPlan } from '../../plugins/manager.js';
@@ -138,21 +137,9 @@ export function registerPluginsCommand(program: Command, context: { packageRoot:
         console.log(chalk.gray(`项目版本: ${projectInfo.version}`));
         console.log(chalk.gray(`AI 配置: ${projectInfo.installedAI.join(', ') || '无'}\n`));
 
-        // 2. 查找插件
-              const builtinPluginPath = path.join(packageRoot, 'plugins', name);
-
-        if (!await fs.pathExists(builtinPluginPath)) {
-          console.log(chalk.red(`❌ 插件 ${name} 未找到\n`));
-          console.log(chalk.gray('可用插件:'));
-          console.log(chalk.gray('  - translate (翻译出海插件)'));
-          console.log(chalk.gray('  - authentic-voice (真实人声插件)'));
-          console.log(chalk.gray('  - book-analysis (拆书分析插件)'));
-          console.log(chalk.gray('  - genre-knowledge (类型知识库插件)'));
-          process.exit(1);
-        }
-
         const pluginManager = new PluginManager(projectPath);
-        const installPlan = await pluginManager.planInstallPlugin(name, builtinPluginPath);
+        const pluginSourcePath = await pluginManager.resolvePluginSource(name, packageRoot);
+        const installPlan = await pluginManager.planInstallPlugin(path.basename(pluginSourcePath), pluginSourcePath);
         const pluginConfig = installPlan.manifest;
 
         // 4. 显示插件信息

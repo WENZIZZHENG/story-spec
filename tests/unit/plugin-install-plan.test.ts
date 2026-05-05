@@ -276,4 +276,40 @@ describe('PluginManager install plan', () => {
     await expect(readFile(path.join(projectRoot, '.specify', 'commands', 'spec-command.md'), 'utf-8'))
       .resolves.toContain('- `stories/*/tasks.md`');
   });
+
+  it('rejects plugins that require a newer core version', async () => {
+    const projectRoot = await createProjectRoot();
+    const sourcePath = await makeTempDir();
+    const manager = new PluginManager(projectRoot);
+
+    await writeFixtureFile(sourcePath, 'config.yaml', `name: future-plugin
+version: 1.0.0
+description: Future plugin
+type: feature
+dependencies:
+  core: ">=99.0.0"
+`);
+
+    await expect(manager.planInstallPlugin('future-plugin', sourcePath)).rejects.toThrow(/需要 StorySpec >=99\.0\.0/);
+  });
+
+  it('resolves bundled, local path and file URL plugin sources', async () => {
+    const projectRoot = await createProjectRoot();
+    const sourcePath = await createPluginSource();
+    const packageRoot = await makeTempDir();
+    await mkdir(path.join(packageRoot, 'plugins'), { recursive: true });
+    await mkdir(path.join(packageRoot, 'plugins', 'bundled-plugin'), { recursive: true });
+    await writeFixtureFile(packageRoot, 'plugins/bundled-plugin/config.yaml', `name: bundled-plugin
+version: 1.0.0
+description: Bundled plugin
+type: feature
+`);
+    const manager = new PluginManager(projectRoot);
+
+    await expect(manager.resolvePluginSource('bundled-plugin', packageRoot)).resolves.toBe(path.join(packageRoot, 'plugins', 'bundled-plugin'));
+    await expect(manager.resolvePluginSource(sourcePath, packageRoot)).resolves.toBe(sourcePath);
+    await expect(manager.resolvePluginSource(new URL(`file:///${sourcePath.replace(/\\/g, '/')}`).href, packageRoot))
+      .resolves.toBe(sourcePath);
+    await expect(manager.resolvePluginSource('https://example.com/plugin.git', packageRoot)).rejects.toThrow(/网络插件安装尚未支持/);
+  });
 });

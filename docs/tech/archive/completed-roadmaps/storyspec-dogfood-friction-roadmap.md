@@ -2,7 +2,7 @@
 
 ## 状态
 
-Planned。本文记录 2026-05-04 使用 StorySpec 创作《法术编译纪元》第一卷时暴露的问题，并把它们整理成后续可直接进入 SDD / OpenSpec 的开发路线。
+Completed。本文记录 2026-05-04 使用 StorySpec 创作《法术编译纪元》第一卷时暴露的问题，并把它们整理成后续可直接进入 SDD / OpenSpec 的开发路线。2026-05-05 已通过 `fix-storyspec-dogfood-friction` 与 `finish-source-todo-features` 收口任务收尾、章节路径、验证分层、tracking evidence 和源码 TODO 功能。
 
 ## 当前主线
 

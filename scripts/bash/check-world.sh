@@ -73,6 +73,50 @@ warn() {
     ISSUES+=("警告|$msg")
 }
 
+extract_defined_locations() {
+    if [ ! -f "$LOCATIONS" ]; then
+        return
+    fi
+
+    grep '^##[[:space:]]' "$LOCATIONS" 2>/dev/null | \
+        sed 's/^##[[:space:]]*//' | \
+        sed 's/[[:space:]]*$//' | \
+        sed 's/[（(].*$//' | \
+        sed '/^$/d' | \
+        sort -u
+}
+
+find_explicit_location_references() {
+    if [ ! -d "$CONTENT_DIR" ]; then
+        return
+    fi
+
+    find "$CONTENT_DIR" -type f -name '*.md' -print0 2>/dev/null | \
+        xargs -0 grep -hEo '(@地点:|@地点：|地点：|地点:|位置：|位置:)[[:space:]]*[^[:space:]，,。；;、）)】\]]+' 2>/dev/null | \
+        sed -E 's/^(@地点:|@地点：|地点：|地点:|位置：|位置:)[[:space:]]*//' | \
+        sed 's/[[:space:]]*$//' | \
+        sed '/^$/d' | \
+        sort -u
+}
+
+collect_undefined_location_references() {
+    local defined_locations
+    local referenced_locations
+    defined_locations=$(extract_defined_locations)
+    referenced_locations=$(find_explicit_location_references)
+
+    if [ -z "$referenced_locations" ]; then
+        return
+    fi
+
+    while IFS= read -r location_ref; do
+        [ -n "$location_ref" ] || continue
+        if ! printf '%s\n' "$defined_locations" | grep -Fxq "$location_ref"; then
+            echo "$location_ref"
+        fi
+    done <<< "$referenced_locations"
+}
+
 # 检查设定文件完整性
 check_setting_files() {
     if [ "$CHECKLIST_MODE" = false ]; then
@@ -139,13 +183,14 @@ check_geography() {
 
         # 检查内容中提到的地点是否在定义中
         if [ -d "$CONTENT_DIR" ]; then
-            # 这里简化处理，实际应该用更复杂的匹配逻辑
+            local undefined_location_names
+            undefined_location_names=$(collect_undefined_location_references)
             local undefined_locations=0
+            if [ -n "$undefined_location_names" ]; then
+                undefined_locations=$(printf '%s\n' "$undefined_location_names" | sed '/^$/d' | wc -l | tr -d ' ')
+            fi
 
-            # TODO: 实现更智能的地点匹配逻辑
-            # 目前只做基本的文件检查
-
-            check "地点引用检查" "[ $undefined_locations -eq 0 ]" "发现未定义的地点引用"
+            check "地点引用检查" "[ $undefined_locations -eq 0 ]" "发现未定义地点引用: $(printf '%s' "$undefined_location_names" | paste -sd '、' -)"
         fi
     else
         warn "地点描述文件不存在"
@@ -294,6 +339,14 @@ EOF
         echo "- [x] CHK007 地点定义完整（已定义 ${location_count} 个地点）"
     else
         echo "- [ ] CHK007 地点定义完整"
+    fi
+
+    local undefined_location_names
+    undefined_location_names=$(collect_undefined_location_references)
+    if [ -n "$undefined_location_names" ]; then
+        echo "- [ ] CHK007A 地点引用均已定义（未定义地点引用：$(printf '%s' "$undefined_location_names" | paste -sd '、' -)）"
+    else
+        echo "- [x] CHK007A 地点引用均已定义"
     fi
 
     cat <<EOF
