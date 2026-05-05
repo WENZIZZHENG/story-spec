@@ -10,7 +10,7 @@ Active。本文是 StorySpec 当前唯一的活跃待办入口。详细规则见
 
 | 优先级 | 路线 | 状态 | 覆盖范围 | 下一步 |
 | --- | --- | --- | --- | --- |
-| P0 | [章节与维护自动化增强路线图](chapter-maintenance-automation-roadmap.md) | Active | 已完成 `task:finish --commit`、验证失败阻断和章节前置约束卡；剩余 `docs:finish --commit`、`todo:capture`、共享流程 JSON 契约 | 优先将 `docs:finish --commit` 或 `todo:capture` 转为 OpenSpec |
+| P0 | [章节与维护自动化增强路线图](chapter-maintenance-automation-roadmap.md) | Active | 已完成 `task:finish --commit`、验证失败阻断、章节前置约束卡和 `docs:finish --commit`；剩余 `todo:capture`、共享流程 JSON 契约 | 优先将 `todo:capture` 转为 OpenSpec |
 | P1 | [StorySpec 生态与类型包增强路线图](storyspec-ecosystem-roadmap.md) | Active | `extension:add`、新增类型 preset、reviewer 权重、生态诊断文案 | 先确定 `extension:add` 与类型 preset 的推进顺序 |
 | P1 | [Agent、CI 与自然语言质量增强路线图](agent-ci-quality-roadmap.md) | Active | 新 agent integration / renderer、CI 化质量检查、Vale / textlint 可选 adapter | 先补新增 agent 的准入清单或 CI check 设计 |
 | P2 | [体验后续增强入口路线图](experience-followup-roadmap.md) | Active | 首程、新用户、共创、创作控制权、dogfood、Worldbuilding / Workbench 后续入口 | 先做 dogfood 回归和体验证据收集 |

@@ -12,7 +12,7 @@ export const commandGitAdapter: GitAdapter = {
     execSync(`git commit -m ${JSON.stringify(message)}`, { cwd: projectPath, stdio: 'ignore' });
   },
   statusShort: async projectPath => {
-    const output = execSync('git status --short', {
+    const output = execSync('git status --short --untracked-files=all', {
       cwd: projectPath,
       encoding: 'utf-8',
       stdio: ['ignore', 'pipe', 'ignore']

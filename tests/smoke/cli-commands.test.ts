@@ -639,6 +639,55 @@ describe('CLI command modules smoke', () => {
     expect(status.stdout.trim()).toBe('');
   });
 
+  it('creates a local commit from docs finish when requested', async () => {
+    const cwd = await makeTempDir();
+    await execFileAsync('node', [
+      cliPath,
+      'init',
+      'smoke',
+      '--ai',
+      'codex',
+      '--method',
+      'three-act',
+      '--no-git'
+    ], { cwd });
+
+    const projectPath = path.join(cwd, 'smoke');
+    await execFileAsync('git', ['init'], { cwd: projectPath });
+    await execFileAsync('git', ['config', 'user.email', 'storyspec@example.test'], { cwd: projectPath });
+    await execFileAsync('git', ['config', 'user.name', 'StorySpec Test'], { cwd: projectPath });
+    await execFileAsync('git', ['add', '.'], { cwd: projectPath });
+    await execFileAsync('git', ['commit', '-m', '初始化测试项目'], { cwd: projectPath });
+
+    await mkdir(path.join(projectPath, 'docs'), { recursive: true });
+    await writeFile(path.join(projectPath, 'docs', 'maintenance-note.md'), '# 维护记录\n\n已补齐文档收尾流程。\n');
+
+    const { stdout } = await execFileAsync('node', [
+      cliPath,
+      'docs:finish',
+      '--commit',
+      '--message',
+      '记录文档收尾',
+      '--json'
+    ], { cwd: projectPath });
+    const result = JSON.parse(stdout);
+
+    expect(result).toMatchObject({
+      mode: 'commit',
+      blocked: false,
+      commit: {
+        requested: true,
+        created: true,
+        message: '记录文档收尾'
+      }
+    });
+
+    const log = await execFileAsync('git', ['log', '-1', '--pretty=%s'], { cwd: projectPath });
+    expect(log.stdout.trim()).toBe('记录文档收尾');
+    const status = await execFileAsync('git', ['status', '--short'], { cwd: projectPath });
+    expect(status.stdout.trim()).toBe('');
+  });
+
   it('generates a JSON handoff package', async () => {
     const cwd = await makeTempDir();
     await execFileAsync('node', [
