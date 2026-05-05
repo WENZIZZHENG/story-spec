@@ -33,6 +33,7 @@ describe('CLI command modules smoke', () => {
     expect(help).toContain('agent:doctor [options]');
     expect(help).toContain('contract:print [options]');
     expect(help).toContain('contract:sync [options]');
+    expect(help).toContain('ci:check [options]');
     expect(help).toContain('interview [options] [story]');
     expect(help).toContain('clarify [options] [story]');
     expect(help).toContain('story:new [options] <name>');
@@ -472,6 +473,36 @@ describe('CLI command modules smoke', () => {
       updatedFiles: []
     });
     await expect(readFile(boardPath, 'utf-8')).resolves.toBe(boardAfterFirstRun);
+  });
+
+  it('reports local CI quality checks as JSON', async () => {
+    const { stdout } = await execFileAsync('node', [
+      cliPath,
+      'ci:check',
+      '--json'
+    ], { cwd: repoRoot });
+
+    const result = JSON.parse(stdout);
+    expect(result.valid).toBe(true);
+    expect(result.checks.map((check: { checkId: string }) => check.checkId)).toEqual([
+      'changes.records',
+      'command.manifest',
+      'agent.acceptance',
+      'todo.boundary'
+    ]);
+    expect(result.checks.every((check: {
+      status: string;
+      command: string;
+      files: string[];
+      message: string;
+      suggestedAction: string;
+    }) => (
+      check.status === 'pass'
+      && typeof check.command === 'string'
+      && check.files.length > 0
+      && typeof check.message === 'string'
+      && typeof check.suggestedAction === 'string'
+    ))).toBe(true);
   });
 
   it('previews extension installation through the plugin install plan', async () => {

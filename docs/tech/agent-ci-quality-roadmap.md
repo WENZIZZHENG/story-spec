@@ -37,7 +37,7 @@ StorySpec 已完成 agent-neutral 基座，支持多种 agent integration 和 Ma
 
 ### P1-1 Markdown 命令和检查能力 CI 化
 
-- [ ] 状态：Active
+- [x] 状态：完成（2026-05-05）。已新增只读 `storyspec ci:check`，输出本地 CI 质量检查清单；JSON 包含 `checkId`、`status`、`command`、`files`、`message`、`suggestedAction`。第一版覆盖 changeset、command manifest、agent acceptance 和 todo 边界，不运行 LLM、不联网、不修改文件。验证见 OpenSpec `openspec/changes/add-ci-quality-checks-manifest` 和 changeset `changes/2026-05-05-ci-quality-checks.md`。
 - 类型：CI、质量检查、命令协议
 - 背景/问题：归档路线借鉴 Continue 的 Markdown check 形态，提出命令/检查/分析能力未来可被普通 Markdown 表达并在 CI 中运行。
 - 已有基础：Markdown command templates、`validate`、`check:command-manifest`、`check:changes`。

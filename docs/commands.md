@@ -116,6 +116,7 @@ storyspec preview specify -> storyspec apply
 | --- | --- |
 | `storyspec status` | 查看项目是否可继续写，并回顾当前故事长成了什么 |
 | `storyspec validate` | 校验项目结构、tracking、任务和模板 |
+| `storyspec ci:check` | 输出本地 CI 质量检查清单；只读，不运行外部命令 |
 | `storyspec agent:list` | 查看支持的 agent integration |
 | `storyspec agent:add <id>` | 给项目添加 agent integration |
 | `storyspec agent:doctor` | 检查 agent 配置 |

@@ -3,6 +3,7 @@ import { registerAgentCommand } from './commands/agent.command.js';
 import { registerInitCommand } from './commands/init.command.js';
 import { registerCheckStatusCommand } from './commands/check-status.command.js';
 import { registerContractCommand } from './commands/contract.command.js';
+import { registerCiCommand } from './commands/ci.command.js';
 import { registerHandoffCommand } from './commands/handoff.command.js';
 import { registerInfoCommand } from './commands/info.command.js';
 import { registerInterviewCommand } from './commands/interview.command.js';
@@ -61,6 +62,7 @@ export function runProgram(argv: string[]): void {
   registerInitCommand(program, { packageRoot });
   registerAgentCommand(program, { packageRoot });
   registerContractCommand(program, { packageRoot });
+  registerCiCommand(program);
   registerInterviewCommand(program);
   registerCheckStatusCommand(program);
   registerHandoffCommand(program);
