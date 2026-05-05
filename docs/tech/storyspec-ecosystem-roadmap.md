@@ -1,0 +1,80 @@
+# StorySpec 生态与类型包增强路线图
+
+## 状态
+
+Active。本文登记插件、extension、preset、reviewer 权重和类型包相关的未来增强。实现前应按影响范围转为 OpenSpec change。
+
+## 背景和目标
+
+StorySpec 已有插件安装底座、preset 命令、genre preset 第一版和 reviewer loop。归档记录中仍保留类型 preset 扩展、reviewer 权重接入和 `extension:add` 薄 alias 等未来能力。目标是把这些生态增强集中成一条可排期路线。
+
+## 非目标
+
+- 不引入远程 marketplace。
+- 不让 preset 覆盖作者已有正文、世界观或正典。
+- 不把 alias 做成独立实现；必须复用现有 install plan。
+- 不在 README 中承诺尚未实现的类型包。
+
+## P0 安装入口一致性
+
+### P0-1 `extension:add` 薄 alias
+
+- [ ] 状态：Active
+- 类型：CLI 入口、插件安装、安全预览
+- 背景/问题：ADR 已允许未来新增 `extension:add <name>` 作为 `plugins:add` 的语义化薄 alias，但要求复用同一个 install plan 和 dry-run renderer。
+- 已有基础：`plugins:add --dry-run`、`PluginManifest.kind`、插件安装计划和冲突路径诊断。
+- 缺口：缺少 Commander 子命令、help 文档、错误提示一致性和 smoke 覆盖。
+- 建议方案：新增 `extension:add <name>`，内部调用现有插件安装逻辑；只在展示层强调 kind 为 extension。
+- 涉及文件/模块：`src/cli/commands/plugins.command.ts`、插件安装应用服务、`docs/commands.md`、`README.md`、`tests/unit/`、`tests/smoke/`。
+- 参考资料：`docs/tech/archive/decisions/plugin-entrypoint-decision.md`。
+- 验收标准：`extension:add --dry-run` 输出 manifest kind、agent impact、冲突路径和最终来源诊断；行为与 `plugins:add` 保持一致；不存在重复安装逻辑。
+- 不做/边界：不新增 marketplace、远程索引或独立 extension registry。
+
+## P1 类型包和 reviewer
+
+### P1-1 新增类型 preset 包扩展批次
+
+- [ ] 状态：Active
+- 类型：preset、题材知识、模板
+- 背景/问题：Worldbuilding 路线归档后明确提到后续可新增 `court-intrigue`、`urban-fantasy`、`mystery`、`romance-slow-burn` 等类型包。
+- 已有基础：`preset:list`、`preset:add`、`preset:doctor`、`spec/presets/`、genre preset manifest。
+- 缺口：缺少新类型包的最小字段、安装验收、示例边界和不污染作者正典的规则。
+- 建议方案：先选一个类型包作为垂直切片，定义 preset manifest、clarification questions、world / rhythm / style defaults，再扩展其他类型。
+- 涉及文件/模块：`spec/presets/`、`templates/clarification/`、`src/application/manage-presets.ts`、`tests/unit/manage-presets.test.ts`、文档。
+- 参考资料：`docs/tech/archive/full-refactor/full-refactor-worldbuilding.md`、`docs/tech/archive/completed-roadmaps/worldbuilding-quality-roadmap.md`。
+- 验收标准：至少一个新增类型包可被 `preset:list` 发现、`preset:add` 安装、`preset:doctor` 校验；不会覆盖项目已有作者内容；文档写明适用和不适用场景。
+- 不做/边界：不把类型包变成自动剧情生成器。
+
+### P1-2 Reviewer 权重接入
+
+- [ ] 状态：Active
+- 类型：reviewer loop、配置、类型适配
+- 背景/问题：第一版 reviewer loop 已完成，但归档记录保留了 reviewer 权重接入，便于不同类型故事调整检查重点。
+- 已有基础：`storyspec review`、reviewer loop、genre preset 记录、创作控制权规则。
+- 缺口：缺少权重配置 schema、默认权重、preset 覆盖策略和 explain 输出。
+- 建议方案：新增 reviewer weight config，允许 preset 提供建议权重；review 输出中展示权重来源和影响。
+- 涉及文件/模块：`src/application/review*`、`spec/presets/`、`templates/`、`tests/unit/review-project.test.ts`。
+- 参考资料：`docs/tech/archive/completed-roadmaps/worldbuilding-quality-roadmap.md`。
+- 验收标准：reviewer 可以读取项目或 preset 权重；JSON 输出包含权重来源；未配置时保持当前默认行为。
+- 不做/边界：权重只影响检查优先级和展示，不自动修改正文。
+
+## P2 生态诊断与文档
+
+### P2-1 插件、preset、extension 展示口径统一
+
+- [ ] 状态：Active
+- 类型：文档、CLI 诊断、用户体验
+- 背景/问题：生态包已有多种 kind，未来新增 alias 和类型包后，需要避免用户混淆“插件包 / preset 包 / extension 包”。
+- 已有基础：`PluginManifest.kind`、`plugins:add --dry-run`、`preset:*` 命令。
+- 缺口：缺少统一展示文案、错误提示和 docs 导航。
+- 建议方案：统一 dry-run renderer 的 kind 文案；在 `docs/commands.md` 和 README 中只写真实可用入口；未来 alias 未实现前继续标为待办。
+- 涉及文件/模块：插件安装 renderer、`docs/commands.md`、`README.md`、`tests/unit/plugin-install-plan.test.ts`。
+- 参考资料：`docs/tech/archive/decisions/plugin-entrypoint-decision.md`。
+- 验收标准：用户能从 help 和 dry-run 判断包类型、安装影响、冲突路径和来源；未实现 alias 不出现在可用命令表中。
+- 不做/边界：不引入外部包发现服务。
+
+## 完成同步
+
+- CLI 行为变化新增 changeset。
+- 新增 preset 或插件产物时补单测、smoke 和文档。
+- 完成后更新本文状态并归档到 `todo-archive.md`。

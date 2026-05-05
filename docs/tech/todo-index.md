@@ -2,11 +2,18 @@
 
 ## 状态
 
-Active。本文是 StorySpec 当前唯一的活跃待办入口。详细规则见 [todo-governance.md](todo-governance.md)，已完成事项见 [todo-archive.md](todo-archive.md)。当前无活跃路线；新增长期增强时先在本文登记。
+Active。本文是 StorySpec 当前唯一的活跃待办入口。详细规则见 [todo-governance.md](todo-governance.md)，已完成事项见 [todo-archive.md](todo-archive.md)。当前活跃路线见下表；实现任一任务前按影响范围转为 OpenSpec change。
 
 ## 当前待办
 
-当前无活跃路线。新增长期增强时，先按 [todo-governance.md](todo-governance.md) 建立专题 roadmap，再登记到本文。
+当前主线：把归档中保留的未来增强全部显式登记为活跃待办，并按“章节/维护自动化、生态扩展、agent/CI/质量、体验后续入口”分流推进。
+
+| 优先级 | 路线 | 状态 | 覆盖范围 | 下一步 |
+| --- | --- | --- | --- | --- |
+| P0 | [章节与维护自动化增强路线图](chapter-maintenance-automation-roadmap.md) | Active | `task:finish --commit`、验证失败阻断、`todo:capture`、`docs:finish --commit`、共享失败门禁 | 优先将 `task:finish` 失败门禁转为 OpenSpec |
+| P1 | [StorySpec 生态与类型包增强路线图](storyspec-ecosystem-roadmap.md) | Active | `extension:add`、新增类型 preset、reviewer 权重、生态诊断文案 | 先确定 `extension:add` 与类型 preset 的推进顺序 |
+| P1 | [Agent、CI 与自然语言质量增强路线图](agent-ci-quality-roadmap.md) | Active | 新 agent integration / renderer、CI 化质量检查、Vale / textlint 可选 adapter | 先补新增 agent 的准入清单或 CI check 设计 |
+| P2 | [体验后续增强入口路线图](experience-followup-roadmap.md) | Active | 首程、新用户、共创、创作控制权、dogfood、Worldbuilding / Workbench 后续入口 | 先做 dogfood 回归和体验证据收集 |
 
 ## 暂不作为活跃待办
 

@@ -1,0 +1,121 @@
+# 体验后续增强入口路线图
+
+## 状态
+
+Active。本文把归档中只留下方向、尚未登记为活跃待办的体验增强入口统一转为活跃 discovery 路线。每个任务的第一步是形成更具体的 OpenSpec change 或专题 roadmap，而不是直接实现。
+
+## 背景和目标
+
+当前 `todo-index.md` 曾显示无活跃路线，但多个归档条目仍写着“新增首程体验增强”“共创体验增强”“dogfood 回归”“创作控制权增强”等后续入口。目标是把这些入口显式登记为活跃，避免未来增强散落在归档文件里。
+
+## 非目标
+
+- 不把已完成路线重新打开。
+- 不承诺 GUI、自动迁移或外部平台能力。
+- 不把 discovery 任务写成已确定实现方案。
+- 不覆盖作者确认、preview / confirm / apply 和来源追踪边界。
+
+## P0 回归与体验证据
+
+### P0-1 Dogfood 回归和章节生产问题再收集
+
+- [ ] 状态：Active
+- 类型：dogfood、测试、路线分流
+- 背景/问题：归档记录允许新增 dogfood 回归或章节生产增强时回到待办入口；当前需要把这一入口显式登记。
+- 已有基础：`docs/tech/archive/completed-roadmaps/storyspec-dogfood-friction-roadmap.md`、`chapter-production-workflow-roadmap.md`、smoke 和 unit tests。
+- 缺口：缺少新一轮 dogfood 问题的收集模板、优先级规则和分流到 OpenSpec 的判断。
+- 建议方案：先建立 dogfood 回归记录格式，覆盖首程、章节写作、任务收尾、validate 噪音和生成产物一致性；发现具体缺陷后拆成独立 OpenSpec。
+- 涉及文件/模块：`docs/tech/`、`tests/fixtures/`、`tests/smoke/`、相关 CLI 模块。
+- 参考资料：`docs/tech/archive/completed-roadmaps/storyspec-dogfood-friction-roadmap.md`、`docs/tech/archive/completed-roadmaps/chapter-production-workflow-roadmap.md`。
+- 验收标准：新问题能被记录为“证据、影响、复现、候选路线、建议验证”；不再只留在聊天记录或归档备注。
+- 不做/边界：本任务不直接修复具体 bug。
+
+## P1 作者首程与新用户体验
+
+### P1-1 首程体验增强 discovery
+
+- [ ] 状态：Active
+- 类型：用户体验、文档、CLI 导航
+- 背景/问题：作者首程引导已完成一轮，但归档中保留“新增首程体验增强时回到 todo-index”的入口。
+- 已有基础：`story:new`、`next`、`interview`、`creative:report`、`preview/apply`、quickstart。
+- 缺口：缺少下一轮首程体验的具体痛点、用户路径证据和成功指标。
+- 建议方案：收集首次创建故事、长文导入、低负担访谈、首次预览写入四类体验证据，再决定是否拆出专题路线。
+- 涉及文件/模块：`src/cli/commands/story-onboarding.command.ts`、`src/application/story-onboarding.ts`、`docs/quickstart.md`、`README.md`、smoke。
+- 参考资料：`docs/tech/archive/completed-roadmaps/author-first-run-feedback-roadmap.md`、`new-user-story-creation-dogfood-roadmap.md`。
+- 验收标准：输出下一轮首程体验问题清单，包含复现路径、用户感知、影响模块和是否进入 OpenSpec。
+- 不做/边界：不把 quickstart 写成未实现能力宣传。
+
+### P1-2 新用户小说创建体验增强
+
+- [ ] 状态：Active
+- 类型：新用户体验、CLI 导航、文档
+- 背景/问题：新用户小说创建端到端体验 P0-P2 已完成，但后续增强入口仍应活跃登记。
+- 已有基础：`story:new -> next -> interview -> creative:report -> preview specify -> apply` 主路径。
+- 缺口：缺少新用户在“只有一句灵感 / 有长文资料 / 想随便聊聊 / 有表格资料”四种入口下的下一轮优化证据。
+- 建议方案：用 fixture 或手工走查记录每种入口的输出密度、下一步可执行性和作者控制权提示，再转具体 OpenSpec。
+- 涉及文件/模块：`src/application/get-next-action.ts`、`src/application/story-onboarding.ts`、`docs/quickstart.md`、`tests/smoke/`。
+- 参考资料：`docs/tech/archive/completed-roadmaps/new-user-story-creation-dogfood-roadmap.md`。
+- 验收标准：每种入口都有明确“当前可用 / 缺口 / 建议下一步 / 不做”的记录。
+- 不做/边界：不新增 GUI。
+
+## P2 共创和创作控制权
+
+### P2-1 共创体验下一轮增强
+
+- [ ] 状态：Active
+- 类型：共创体验、访谈、创作乐趣
+- 背景/问题：F0-F21 已完成，但归档记录保留新体验优化入口。
+- 已有基础：共创访谈、核心要素、入口卡、分支、创作回声、低负担模式。
+- 缺口：缺少下一轮“更有趣、更可控、更低负担”的具体问题和优先级。
+- 建议方案：围绕选择后果、入口卡、势力入口、未决项回流和首轮样例做体验验收复盘；产出新专题路线或关闭无收益项。
+- 涉及文件/模块：`src/application/interview-story.ts`、`src/application/co-create-workbench.ts`、`templates/clarification/`、`docs/creative-control.md`、tests。
+- 参考资料：`docs/tech/archive/completed-roadmaps/story-co-creation-*.md`。
+- 验收标准：列出下一轮共创体验候选增强，每项有用户收益、涉及模块、验收方式和边界。
+- 不做/边界：不替作者决定正典事实。
+
+### P2-2 共创输入与核心信息面板增强
+
+- [ ] 状态：Active
+- 类型：共创输入、核心面板、长文吸收
+- 背景/问题：共创输入与核心信息面板 P0-P3 已完成，后续增强入口需要活跃登记。
+- 已有基础：`core`、`ingest`、`co:create`、来源状态标记、无标题长文候选识别。
+- 缺口：缺少下一轮对长文、表格、核心要素缺口和中文别名体验的改进证据。
+- 建议方案：采集不同资料形态的输入样例，检查 core 面板是否能清楚区分 confirmed / partial / missing / suggested / deferred。
+- 涉及文件/模块：`src/application/ingest-story-input.ts`、`src/application/story-core-summary.ts`、`src/application/co-create-workbench.ts`、tests。
+- 参考资料：`docs/tech/archive/completed-roadmaps/co-creation-input-and-core-roadmap.md`。
+- 验收标准：输出可转 OpenSpec 的增强清单，至少覆盖输入识别、来源状态、面板解释和 preview 写入边界。
+- 不做/边界：不自动把 suggested 内容写入正典。
+
+### P2-3 创作控制权下一轮增强
+
+- [ ] 状态：Active
+- 类型：创作控制权、来源追踪、确认门禁
+- 背景/问题：D0-D10 已完成，但归档入口允许新增强路线回到 todo-index。
+- 已有基础：澄清记录、preview/confirm/apply、成熟度模型、来源追踪、漂移检测、文档教程。
+- 缺口：缺少下一轮控制权体验的具体痛点，例如未确认候选展示、回滚、漂移解释或 handoff 摘要可读性。
+- 建议方案：复盘 creative:report、next、clarification rollback、preview/apply 的用户输出，收集哪些地方仍可能让 AI 过早定案。
+- 涉及文件/模块：`src/application/manage-clarifications.ts`、`src/application/preview-apply.ts`、`src/application/detect-creative-intent-drift.ts`、templates、docs。
+- 参考资料：`docs/tech/archive/completed-roadmaps/creative-control-roadmap.md`。
+- 验收标准：每个候选增强说明它保护哪类作者控制权、需要读写哪些文件、如何验证不污染正典。
+- 不做/边界：不降低确认门禁。
+
+## P3 世界观与工作台体验
+
+### P3-1 Worldbuilding / Workbench 后续增强 discovery
+
+- [ ] 状态：Active
+- 类型：世界观、工作台、体验研究
+- 背景/问题：Worldbuilding 第一版和 Workbench 基座已完成，归档记录保留后续增强入口。
+- 已有基础：World Bible、Canon Ledger、Entity Graph、Scene Cards、VoiceFingerprint、Reviewer Loop、Workbench commands。
+- 缺口：缺少下一轮世界观和工作台增强的优先级，尤其是类型包、reviewer 权重、lint 外部工具已拆到其他路线后，剩余体验问题需要重新确认。
+- 建议方案：先做 discovery，区分应进入 `storyspec-ecosystem-roadmap.md`、`agent-ci-quality-roadmap.md` 还是新建独立 Workbench 路线。
+- 涉及文件/模块：`src/application/*world*`、`src/application/*graph*`、`src/application/*scene*`、`src/application/*voice*`、`src/application/review*`。
+- 参考资料：`docs/tech/archive/completed-roadmaps/worldbuilding-quality-roadmap.md`、`docs/tech/archive/full-refactor/full-refactor-workbench.md`。
+- 验收标准：形成一份分流表，明确哪些进入现有活跃路线，哪些需要新 OpenSpec，哪些关闭。
+- 不做/边界：不自动重写世界观或正文。
+
+## 完成同步
+
+- discovery 任务产出具体实现时，先转 OpenSpec change。
+- 若拆出新专题路线，更新 `todo-index.md`。
+- 若确认无收益，记录关闭原因并从活跃路线移除或归档。
