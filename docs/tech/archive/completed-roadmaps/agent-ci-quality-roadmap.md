@@ -2,7 +2,7 @@
 
 ## 状态
 
-Active。本文登记新增 agent integration / renderer、CI 化质量检查和 Vale / textlint 等自然语言 lint 接入的未来增强。
+Completed。本文归档 agent integration 准入清单、CI 化质量检查和 Vale / textlint 可选 adapter 增强；后续新增 agent、CI 或自然语言质量增强时，应回到 [todo-index.md](../../todo-index.md) 新建专题路线。
 
 ## 背景和目标
 

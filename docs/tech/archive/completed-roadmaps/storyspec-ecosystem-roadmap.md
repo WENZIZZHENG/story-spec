@@ -2,7 +2,7 @@
 
 ## 状态
 
-Active。本文登记插件、extension、preset、reviewer 权重和类型包相关的未来增强。实现前应按影响范围转为 OpenSpec change。
+Completed。本文归档插件、extension、preset、reviewer 权重和类型包相关增强；后续生态增强应回到 [todo-index.md](../../todo-index.md) 新建专题路线，且实现前按影响范围转为 OpenSpec change。
 
 ## 背景和目标
 

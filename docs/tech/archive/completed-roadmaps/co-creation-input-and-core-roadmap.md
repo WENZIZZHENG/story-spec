@@ -2,7 +2,7 @@
 
 ## 状态
 
-Active。
+Completed。本文归档共创输入与核心信息面板 P0-P3 已落地能力；后续共创输入增强应回到 [todo-index.md](../../todo-index.md) 新建专题路线。
 
 ## 当前主线
 
