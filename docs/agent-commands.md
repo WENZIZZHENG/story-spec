@@ -12,13 +12,13 @@ StorySpec 的命令语义是统一的，但不同 agent 的斜杠命令格式不
 | Cursor | `/命令名` | `/write` | `.cursor/commands/` |
 | Windsurf | `/命令名` | `/write` | `.windsurf/workflows/` |
 | Roo Code | `/命令名` | `/write` | `.roo/commands/` |
-| GitHub Copilot | `/命令名` | `/write` | `.github/prompts/` |
+| GitHub Copilot | prompt 文件 | `write.md` | `.github/prompts/` |
 | Qwen Code | `/命令名` | `/write` | `.qwen/commands/` |
-| OpenCode | `/命令名` | `/write` | `.opencode/commands/` |
+| OpenCode | `/命令名` | `/write` | `.opencode/command/` |
 | Kilo Code | `/命令名` | `/write` | `.kilocode/workflows/` |
 | Auggie CLI | `/命令名` | `/write` | `.auggie/commands/` |
 | CodeBuddy | `/命令名` | `/write` | `.codebuddy/commands/` |
-| Amazon Q | `/命令名` | `/write` | `.amazonq/commands/` |
+| Amazon Q | prompt 文件 | `write.md` | `.amazonq/prompts/` |
 
 ## 常用命令
 
@@ -37,12 +37,14 @@ StorySpec 的命令语义是统一的，但不同 agent 的斜杠命令格式不
 ## 初始化
 
 ```bash
-storyspec init 我的小说 --agent codex
-storyspec init 我的小说 --agent gemini
-storyspec init 我的小说 --all-agents
+storyspec init --workspace 我的小说 --agent codex
+storyspec init --workspace 我的小说 --agent gemini
+storyspec init --workspace 我的小说 --all-agents
 ```
 
 旧入口 `--ai` 和 `--all` 仍处于兼容期，但新文档建议使用 `--agent` 和 `--all-agents`。
+
+Copilot 和 Amazon Q 当前安装的是 prompt 文件入口，不承诺 slash command 语义；使用时打开对应 prompt 文件或按工具支持的 prompt 调用方式执行。
 
 ## Gemini 说明
 

@@ -146,7 +146,7 @@ storyspec check
 这会检查：
 - Node.js 版本
 - Git 是否安装
-- AI 助手工具状态
+- AI 助手工具状态，包括 Claude CLI、Cursor、Gemini CLI、Codex CLI 和 Roo Code
 
 ## 常见问题
 

@@ -45,9 +45,12 @@ storyspec upgrade --agent gemini --commands
 
 ```bash
 storyspec status
+storyspec status --json
 storyspec validate
 storyspec agent:doctor
 ```
+
+`storyspec status --json` 和兼容入口 `storyspec codex-status --json` 会输出稳定的 `navigationEntries`，可用于检查升级后的首程导航、素材分流和可复制命令是否仍能被 agent/UI 读取。
 
 如果项目使用 Git：
 

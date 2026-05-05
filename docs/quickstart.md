@@ -13,13 +13,13 @@ npm install -g story-spec-cn
 ### 步骤 2：初始化项目
 
 ```bash
-storyspec init --workspace 我的第一本小说 --agent claude
+storyspec init --workspace 我的第一本小说 --agent codex
 cd 我的第一本小说
 ```
 
 ### 步骤 3：在 AI 助手中打开项目
 
-在 Claude、Cursor 或其他 AI 助手中打开项目目录。
+在 Codex 或其他 AI 助手中打开项目目录。本文示例使用 Codex 的 `/storyspec-...` 前缀；如果你选择 Claude 或 Gemini，请按 [Agent 命令对照](agent-commands.md) 换成 `/storyspec.命令名` 或 `/storyspec:命令名`。
 
 ### 步骤 4：创建新故事创意草稿
 
@@ -97,7 +97,7 @@ storyspec draft:new 法术编译纪元 --chapter 001
 
 ```bash
 # 创建项目
-storyspec init 都市修仙者 --agent claude
+storyspec init --workspace 都市修仙者 --agent codex
 
 # 进入项目目录
 cd 都市修仙者
@@ -114,7 +114,7 @@ cd 都市修仙者
 
 接下来:
   1. cd 都市修仙者 - 进入项目目录
-  2. 在 Claude 中打开项目
+  2. 在 Codex 中打开项目
   3. 先保存一句灵感，不急着生成完整大纲:
      storyspec story:new 故事名 --idea "一句话创意"
   4. 选择今天的创作入口:
@@ -173,7 +173,7 @@ AI 只会在 `apply --yes` 且无 blocking 风险时写入 `stories/都市修仙
 - 字数：每章3000-4000字
 ```
 
-AI 会创建 `memory/writing-constitution.md` 文件，记录你的创作偏好。
+AI 会创建或更新 `.specify/memory/constitution.md` 文件，记录你的创作偏好。
 
 ### 第 6 步：规划章节结构（agent 内部命令）
 
@@ -226,7 +226,7 @@ storyspec tasks:board 都市修仙者
 /storyspec-write 开始写作第一章
 ```
 
-AI 会根据大纲和风格设定，生成第一章内容：
+AI 会先给出 3-6 条 scene beat 预览，确认方向、冲突、人物变化和风险；确认后再按正文块推进，并在收尾时汇总正文路径、字数、验证和 tracking 待确认项。下面是一段示例正文片段：
 
 ```markdown
 # 第一章 996的尽头是修仙
@@ -325,7 +325,7 @@ storyspec preview specify 重生之都市仙尊
 
 ### 1. 保持风格一致性
 
-每次使用 `/storyspec-write` 前，AI 都会参考 `memory/writing-constitution.md`，确保风格统一。
+每次使用 `/storyspec-write` 前，AI 都会参考 `.specify/memory/constitution.md`、作者画像、故事规格、创作计划、任务清单和 Scene Card，确保风格和任务边界一致。
 
 ### 2. 灵活调整大纲
 
