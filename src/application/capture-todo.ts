@@ -1,5 +1,6 @@
 import path from 'node:path';
 import type { ProjectFileSystem } from './project-ports.js';
+import type { FlowCommandCheck, FlowCommandCommit } from './flow-command-result.js';
 
 export interface CaptureTodoInput {
   projectRoot: string;
@@ -18,6 +19,8 @@ export interface CaptureTodoResult {
   blocked: boolean;
   blockedReasons: string[];
   nextActions: string[];
+  checks: FlowCommandCheck[];
+  commit: FlowCommandCommit;
   roadmapPath: string;
   indexPath: string;
   wouldWrite: string[];
@@ -187,6 +190,11 @@ const blockedResult = (
   blocked: true,
   blockedReasons: reasons,
   nextActions: ['修复阻断原因后重新运行 todo:capture'],
+  checks: [],
+  commit: {
+    requested: false,
+    created: false
+  },
   roadmapPath,
   indexPath,
   wouldWrite: [],
@@ -234,6 +242,11 @@ export const captureTodo = async (input: CaptureTodoInput): Promise<CaptureTodoR
       blocked: false,
       blockedReasons: [],
       nextActions: ['确认草案后运行 todo:capture --apply 写入路线'],
+      checks: [],
+      commit: {
+        requested: false,
+        created: false
+      },
       roadmapPath,
       indexPath,
       wouldWrite,
@@ -255,6 +268,11 @@ export const captureTodo = async (input: CaptureTodoInput): Promise<CaptureTodoR
     blocked: false,
     blockedReasons: [],
     nextActions: ['人工校准 roadmap 草案，并把首个任务转为 OpenSpec change'],
+    checks: [],
+    commit: {
+      requested: false,
+      created: false
+    },
     roadmapPath,
     indexPath,
     wouldWrite,

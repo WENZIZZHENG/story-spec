@@ -1,5 +1,6 @@
 import path from 'node:path';
 import type { GitAdapter, ProjectFileSystem, VerificationRunner } from './project-ports.js';
+import type { FlowCommandCommit, FlowCommandMode } from './flow-command-result.js';
 import { exportTaskBoard } from './export-task-board.js';
 import { parseWritingTasksFromMarkdown, type WritingTask } from '../domain/story-artifact.js';
 import { selectStoryProject } from './workbench-utils.js';
@@ -38,15 +39,11 @@ export interface FinishWritingTaskCheck {
   exitCode?: number;
 }
 
-export interface FinishWritingTaskCommitResult {
-  requested: boolean;
-  created: boolean;
-  message?: string;
-  skippedReason?: string;
-}
+export type FinishWritingTaskCommitResult = FlowCommandCommit;
 
 export interface FinishWritingTaskResult {
   projectRoot: string;
+  mode: FlowCommandMode;
   story: string;
   storyPath: string;
   applied: boolean;
@@ -57,8 +54,9 @@ export interface FinishWritingTaskResult {
   blockedReasons: string[];
   nextActions: string[];
   verificationCommands: string[];
+  wouldWrite: string[];
   updatedFiles: string[];
-  commit?: FinishWritingTaskCommitResult;
+  commit: FinishWritingTaskCommitResult;
 }
 
 export interface SetWritingTaskStatusInput {
@@ -260,10 +258,13 @@ const createFinishCommit = async (
   task: WritingTask,
   updatedFiles: string[],
   blocked: boolean
-): Promise<FinishWritingTaskCommitResult | undefined> => {
+): Promise<FinishWritingTaskCommitResult> => {
   const requested = Boolean(input.commit);
   if (!requested) {
-    return undefined;
+    return {
+      requested: false,
+      created: false
+    };
   }
 
   const message = input.commitMessage?.trim() || defaultFinishCommitMessage(task);
@@ -420,9 +421,13 @@ export const finishWritingTask = async (
     }
   }
   const commit = await createFinishCommit(input, task, updatedFiles, blocked);
+  const wouldWrite = input.apply
+    ? [tasksPath, taskBoardOutputPath(storyPath)]
+    : [];
 
   return {
     projectRoot: input.projectRoot,
+    mode: input.apply ? 'apply' : 'preview',
     story: path.basename(storyPath),
     storyPath,
     applied,
@@ -440,8 +445,9 @@ export const finishWritingTask = async (
     blockedReasons,
     nextActions,
     verificationCommands,
+    wouldWrite,
     updatedFiles,
-    ...(commit ? { commit } : {})
+    commit
   };
 };
 
@@ -508,7 +514,7 @@ export const renderFinishWritingTaskSummary = (result: FinishWritingTaskResult):
   ] : []),
   `验证命令：${result.verificationCommands.length > 0 ? result.verificationCommands.map(item => `\`${item}\``).join('、') : '无'}`,
   `更新文件：${result.updatedFiles.length > 0 ? result.updatedFiles.map(item => `\`${item}\``).join('、') : '无'}`,
-  ...(result.commit ? [
+  ...(result.commit?.requested ? [
     `Commit：${result.commit.created ? `已创建 ${result.commit.message}` : `未创建（${result.commit.skippedReason ?? '未知原因'}）`}`
   ] : []),
   `模式：${result.applied ? '应用模式' : '预览模式'}`

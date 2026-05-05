@@ -1,5 +1,6 @@
 import path from 'node:path';
 import type { GitAdapter, VerificationRunner } from './project-ports.js';
+import type { FlowCommandCommit, FlowCommandMode } from './flow-command-result.js';
 
 export interface DocsFinishCheck {
   name: string;
@@ -20,24 +21,21 @@ export interface DocsFinishInput {
 
 export interface DocsFinishPreview {
   projectRoot: string;
-  mode: 'preview' | 'commit';
+  mode: FlowCommandMode;
   writesFiles: false;
   placeholderPatterns: string[];
   checks: DocsFinishCheck[];
   commitCommand?: string;
-  blocked?: boolean;
-  blockedReasons?: string[];
-  nextActions?: string[];
+  blocked: boolean;
+  blockedReasons: string[];
+  nextActions: string[];
+  wouldWrite: string[];
+  updatedFiles: string[];
   changedFiles?: string[];
-  commit?: DocsFinishCommitResult;
+  commit: DocsFinishCommitResult;
 }
 
-export interface DocsFinishCommitResult {
-  requested: boolean;
-  created: boolean;
-  message?: string;
-  skippedReason?: string;
-}
+export type DocsFinishCommitResult = FlowCommandCommit;
 
 const PLACEHOLDER_PATTERNS = ['TBD', 'TODO', '待定'];
 const PLACEHOLDER_SCAN_COMMAND = "Select-String -Path docs\\**\\*.md,changes\\*.md -Pattern 'TBD|TODO|待定' -CaseSensitive";
@@ -60,6 +58,16 @@ export const createDocsFinishPreview = (input: DocsFinishInput): DocsFinishPrevi
   writesFiles: false,
   placeholderPatterns: PLACEHOLDER_PATTERNS,
   checks: docsFinishChecks().map(({ name, command }) => ({ name, command })),
+  blocked: false,
+  blockedReasons: [],
+  nextActions: [],
+  wouldWrite: [],
+  updatedFiles: [],
+  commit: {
+    requested: false,
+    created: false,
+    ...(input.message ? { message: input.message } : {})
+  },
   commitCommand: input.message
     ? `git commit -m "${escapeCommitMessage(input.message)}"`
     : undefined
@@ -219,9 +227,6 @@ export const finishDocsChange = async (input: DocsFinishInput): Promise<DocsFini
   if (!input.commit) {
     return {
       ...createDocsFinishPreview({ projectRoot: input.projectRoot, message }),
-      blocked: false,
-      blockedReasons: [],
-      nextActions: [],
       changedFiles: [],
       commit: {
         requested: false,
@@ -243,6 +248,8 @@ export const finishDocsChange = async (input: DocsFinishInput): Promise<DocsFini
       blocked,
       blockedReasons,
       nextActions,
+      wouldWrite: [],
+      updatedFiles: [],
       changedFiles: [],
       commit: createSkippedCommitResult(true, '文档收尾检查被阻断', message)
     };
@@ -259,6 +266,8 @@ export const finishDocsChange = async (input: DocsFinishInput): Promise<DocsFini
       blocked: false,
       blockedReasons: [],
       nextActions: ['确认当前目录是 Git 仓库，并重新运行 docs:finish --commit'],
+      wouldWrite: [],
+      updatedFiles: [],
       changedFiles,
       commit: createSkippedCommitResult(true, skippedReason, message)
     };
@@ -274,6 +283,8 @@ export const finishDocsChange = async (input: DocsFinishInput): Promise<DocsFini
       blocked: false,
       blockedReasons: [],
       nextActions: [],
+      wouldWrite: [],
+      updatedFiles: [],
       changedFiles,
       commit: createSkippedCommitResult(true, 'Git 工作区没有可提交改动', message)
     };
@@ -290,6 +301,8 @@ export const finishDocsChange = async (input: DocsFinishInput): Promise<DocsFini
       blocked: false,
       blockedReasons: [],
       nextActions: ['先拆分或提交非文档-only change，再重新运行 docs:finish --commit'],
+      wouldWrite: [],
+      updatedFiles: [],
       changedFiles,
       commit: createSkippedCommitResult(
         true,
@@ -309,6 +322,8 @@ export const finishDocsChange = async (input: DocsFinishInput): Promise<DocsFini
       blocked: false,
       blockedReasons: [],
       nextActions: ['为 docs:finish 注入 Git adapter 后重试'],
+      wouldWrite: [],
+      updatedFiles: [],
       changedFiles,
       commit: createSkippedCommitResult(true, '缺少 Git adapter，无法创建本地 commit', message)
     };
@@ -326,6 +341,8 @@ export const finishDocsChange = async (input: DocsFinishInput): Promise<DocsFini
       blocked: false,
       blockedReasons: [],
       nextActions: [],
+      wouldWrite: [],
+      updatedFiles: [],
       changedFiles,
       commit: {
         requested: true,
@@ -344,6 +361,8 @@ export const finishDocsChange = async (input: DocsFinishInput): Promise<DocsFini
       blocked: false,
       blockedReasons: [],
       nextActions: ['修复 Git 提交失败后重试'],
+      wouldWrite: [],
+      updatedFiles: [],
       changedFiles,
       commit: createSkippedCommitResult(true, `Git 不可用或提交失败：${errorMessage}`, message)
     };
@@ -363,7 +382,7 @@ export const renderDocsFinishSummary = (result: DocsFinishPreview): string => [
   '',
   `模式：${result.mode === 'commit' ? '提交模式' : '预览模式'}`,
   '写入文件：否',
-  ...(typeof result.blocked === 'boolean' ? [`门禁状态：${result.blocked ? '阻断' : '通过'}`] : []),
+  `门禁状态：${result.blocked ? '阻断' : '通过'}`,
   '',
   result.mode === 'commit' ? '检查结果：' : '建议检查：',
   ...result.checks.map(renderCheckLine),
@@ -377,11 +396,11 @@ export const renderDocsFinishSummary = (result: DocsFinishPreview): string => [
     'Git 变更：',
     ...result.changedFiles.map(file => `- ${file}`)
   ] : []),
-  ...(result.commit ? [
+  ...(result.commit.requested ? [
     '',
     `Commit：${result.commit.created ? `已创建 ${result.commit.message}` : `未创建（${result.commit.skippedReason ?? '未请求'}）`}`
   ] : result.commitCommand ? ['', '建议提交：', `- ${result.commitCommand}`] : []),
-  ...(result.nextActions && result.nextActions.length > 0 ? [
+  ...(result.nextActions.length > 0 ? [
     '',
     '下一步：',
     ...result.nextActions.map(action => `- ${action}`)
