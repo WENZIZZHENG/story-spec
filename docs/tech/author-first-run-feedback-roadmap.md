@@ -26,7 +26,7 @@ Planned。本文记录 2026-05-04 继续 dogfood StorySpec 时，用户指出的
 - 初始化工作区是必输项，但当前体验容易先给命令或进入创作步骤，没有先让用户指定小说工作区并自动初始化。
 - 原始灵感/长文资料引导不够具体：缺少示例、推荐字数范围、核心要点清单、表格资料说明。用户给了很多内容后，仍看到大量“待澄清”，会误以为导入失败。
 - 新用户引导不够友好：一开始就给命令，用户不一定知道自己该贴长文、写一句灵感、回答访谈，还是运行 CLI。
-- 首次使用缺少完整路线图：虽然 `init`、`story:new` 和 `next` 会提示下一步，但用户仍不清楚全流程有几步、当前处在哪一步、这一步完成后生成什么、下一步为什么是它、什么时候才进入写正文。
+- 首次使用缺少完整路线图：虽然 `init`、`story:new` 和 `next` 会提示下一步，但用户仍不清楚全流程有几步、当前处在哪一步、这一步完成后生成什么、下一步为什么是它、什么时候才进入写正文。用户进一步提出希望像控制台打印日志一样，持续看到对应的流程图、产物、下一步和故事结构反馈。
 - 卷计划生成后缺少直观反馈：三幕结构、12 章节奏、角色弧线、关系变化和剧情起伏都在文档里，但缺少一眼能懂的摘要视图。
 - 章节生成耗时长，正反馈不足：用户等待第一章、第二章时，很久看不到阶段性产物；工具和 agent 反复读取、验证、收尾，也放大了等待感。
 
@@ -163,7 +163,7 @@ Planned。本文记录 2026-05-04 继续 dogfood StorySpec 时，用户指出的
 ### P0-5 首次使用全流程图与当前步骤提示
 
 - 类型：首程引导、CLI 导航、文档与 JSON 输出
-- 背景/问题：真实首次使用时，用户会问“全流程图是怎样的，第一步做完后下一步是什么”。当前命令已经有局部下一步提示，但缺少一张贯穿 `init -> story:new -> next/interview -> core -> preview/apply -> plan/tasks -> scene/context/draft` 的路线图；用户不知道自己现在在哪个阶段，也不知道每一步会写入哪些文件。
+- 背景/问题：真实首次使用时，用户会问“全流程图是怎样的，第一步做完后下一步是什么”。当前命令已经有局部下一步提示，但缺少一张贯穿 `init -> story:new -> next/interview -> core -> preview/apply -> plan/tasks -> scene/context/draft` 的路线图；用户不知道自己现在在哪个阶段，也不知道每一步会写入哪些文件。用户还希望像控制台日志一样持续看到“当前流程、产物、下一步”，让命令运行过程不只是打印结果，而是给作者稳定的方向感。
 - 已有基础：
   - `storyspec init` 初始化后会输出工作区就绪和素材分流入口。
   - `storyspec story:new` 会保存 `stories/<story>/idea.md` 并提示 `author-profile`、`interview`、`next`。
@@ -173,14 +173,19 @@ Planned。本文记录 2026-05-04 继续 dogfood StorySpec 时，用户指出的
   - 没有固定的“第一次使用流程图”命令或输出区块。
   - 当前阶段没有以“第 N 步 / 共 N 步”的方式展示。
   - 每一步缺少“操作命令 / 产物文件 / 完成后下一步 / 不会做什么”的明确说明。
+  - 缺少统一的流程日志格式，不能在关键命令后稳定打印 `[流程]`、`[产物]`、`[下一步]` 这类低噪声反馈。
   - 文档、CLI 文案和 agent guide 对首程路线的表达不够统一。
 - 建议方案：
   1. 设计一份首程流程模型，覆盖 8-9 个阶段：初始化工作区、保存原始灵感、选择共创入口、完成访谈、查看缺口、生成规格预览、确认应用、规划任务、创建场景/上下文/草稿。
   2. 在 `storyspec next <story>` 的首屏增加压缩流程提示：`当前：第 2 步 / 9 步，已保存原始灵感；下一步推荐：从能力入口完成第一轮共创`。
   3. 新增或评估 `storyspec guide [story]` / `storyspec next --flow`，专门展示完整流程图；优先复用 `next`，避免命令膨胀。
   4. 每个阶段输出四类信息：`怎么操作`、`会生成什么`、`下一步是什么`、`不会越过哪些确认边界`。
-  5. `--json` 输出增加 `firstRunFlow` 或等价结构，包含 `steps[]`、`currentStepId`、`recommendedNextStepId`、`copyableCommand`、`writes`、`guards`，方便 agent/UI 消费。
-  6. README、`.specify/agent-guides/story-creation-guide.md` 和 Codex command prompt 同步首程路线，避免 agent 只给命令不解释路线。
+  5. 设计低噪声流程日志块，例如：
+     - `[流程] 当前：第 4 步 / 9 步，正在完成能力入口访谈`
+     - `[产物] 将生成：clarifications.json / clarifications.md`
+     - `[下一步] 完成后建议：storyspec core <story> --missing`
+  6. `--json` 输出增加 `firstRunFlow` 或等价结构，包含 `steps[]`、`currentStepId`、`recommendedNextStepId`、`copyableCommand`、`writes`、`guards`、`progressLog[]`，方便 agent/UI 消费。
+  7. README、`.specify/agent-guides/story-creation-guide.md` 和 Codex command prompt 同步首程路线，避免 agent 只给命令不解释路线。
 - 涉及文件/模块：
   - `src/application/story-onboarding.ts`
   - `src/application/get-project-status.ts`
@@ -193,17 +198,20 @@ Planned。本文记录 2026-05-04 继续 dogfood StorySpec 时，用户指出的
   - `tests/smoke/cli-commands.test.ts`
 - 验收标准：
   - 首次用户在 `story:new` 后运行 `storyspec next <story>`，能看到一屏内的当前步骤、下一步推荐和完整流程入口。
+  - `story:new`、`next`、`interview`、`core`、`preview`、`apply` 等首程关键命令至少能输出或通过 JSON 提供一组统一流程日志：当前阶段、产物、下一步。
   - 流程图明确展示每一步的产物，例如 `idea.md`、`clarifications.json/md`、`specification.md`、`creative-plan.md`、`tasks.md`、Scene Card、Context Pack、draft。
   - 低信息量故事不会被引导跳到写正文；流程图中 preview / confirm / apply 边界清楚可见。
   - `--json` 能稳定表达流程步骤，agent 不需要解析中文文本才能判断下一步。
   - 单元或快照测试覆盖：空工作区、新建 idea 阶段、已有澄清、已有规格、已有任务但未写正文。
 - 参考资料/项目：
   - 2026-05-05 《法术编译纪元》首次使用讨论：用户明确询问是否应在第一次使用时告诉全流程图、第一步后下一步是什么。
+  - 2026-05-05 继续讨论：用户提出希望像控制台打印日志一样，打印对应流程图和下一步反馈。
   - 已归档 [story-onboarding-navigation-roadmap.md](archive/completed-roadmaps/story-onboarding-navigation-roadmap.md) 的 `story:new` / `next` 基础。
   - 现有 `status --json` 与 `next --json` 的结构化导航能力。
   - 不需要外部开源参考；这是 StorySpec 自身首程导航和创作控制权表达收敛。
 - 不做/边界：
   - 不把完整流程图变成强制长教程；默认首屏仍突出下一步，完整路线可折叠或通过 `--flow` 查看。
+  - 不把流程日志做成长篇刷屏；默认一屏内可读，详细流程通过显式参数展开。
   - 不承诺自动完成所有步骤；高影响写入仍必须经过 preview / confirm / apply。
   - 不新增 GUI；本任务只覆盖 CLI、人类文本、JSON 和 agent prompt。
 
@@ -241,18 +249,23 @@ Planned。本文记录 2026-05-04 继续 dogfood StorySpec 时，用户指出的
 ### P1-2 剧情起伏、人物关系和角色弧线视图
 
 - 类型：可视化摘要、叙事追踪、Markdown/Mermaid 输出
-- 背景/问题：作者希望更直觉地感受故事走势和人物关系。纯列表能表达信息，但不如关系图、曲线和角色线清楚。
+- 背景/问题：作者希望更直觉地感受故事走势和人物关系。纯列表能表达信息，但不如关系图、曲线和角色线清楚。2026-05-05 讨论中进一步确认：这些视图不应只作为长报告存在，也可以在关键节点像控制台日志一样打印“故事结构快照”，给作者看到故事正在长成什么样。
 - 已有基础：
   - `spec/tracking/tension-curve.json`
   - `spec/tracking/relationships.json`
   - Entity Graph / Scene Card / Canon Ledger
   - `tension:chart`、`graph:impact`
-- 缺口：缺少把这些结构聚合成“作者可读视图”的命令或报告区块。
+- 缺口：
+  - 缺少把这些结构聚合成“作者可读视图”的命令或报告区块。
+  - 缺少关键节点输出策略：什么时候打印剧情起伏、人物关系、角色弧线，什么时候只提示资料不足和下一步。
+  - 缺少资料不足时的安全降级文案，容易为了图好看而脑补未确认关系。
 - 建议方案：
   1. 增加 `storyspec story:map <story>` 或在 `creative:report` 中增加视图区块。
   2. 输出 Mermaid 关系图：主角、重要伙伴、阵营、冲突关系。
   3. 输出剧情起伏表：章节、张力、主要矛盾、情感推进、伏笔/回收。
   4. 输出角色弧线表：起点、转折、阶段性选择、卷末状态。
+  5. 在关键节点打印结构快照：访谈后只打印已确认能力/人物缺口；计划预览后打印三幕和章节起伏；章节完成后打印本章关系变化、伏笔推进和下一章压力。
+  6. 对资料不足场景输出缺口图示而非脑补图，例如：`[人物关系] 暂无足够确认资料；缺口：核心伙伴未确认、主要势力未确认；下一步：storyspec interview <story> --focus partner`。
 - 涉及文件/模块：
   - `src/application/creative-report.ts`
   - `src/application/manage-relationships*`
@@ -263,9 +276,12 @@ Planned。本文记录 2026-05-04 继续 dogfood StorySpec 时，用户指出的
 - 验收标准：
   - 对有计划和 tracking 的故事，能输出至少一种关系图和一种节奏/起伏表。
   - 对资料不足的故事，视图显示缺口，不自动脑补。
+  - `creative:report`、`preview plan` 或章节收尾报告至少一个关键节点能输出“故事结构快照”，并明确标注 confirmed / candidate / missing。
+  - CLI 人类输出保持一屏内可读；复杂 Mermaid 或完整结构图通过显式参数或 Markdown 文件展开。
   - Markdown 输出可直接复制到支持 Mermaid 的环境中查看。
 - 参考资料/项目：
   - 本仓库已有 Entity Graph、tension tracking 和 relationship tracking。
+  - 2026-05-05 《法术编译纪元》体验讨论：用户提出像日志一样打印故事情节起伏、人物关系等图示，以增强创作反馈。
   - 后续进入设计时可调研写作软件/大纲工具的关系图呈现方式；本任务先不引入 GUI 依赖。
 - 不做/边界：不把视图作为唯一正典来源；正典仍来自确认文件和 evidence。
 
