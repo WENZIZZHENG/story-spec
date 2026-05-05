@@ -37,7 +37,7 @@ StorySpec 已有插件安装底座、preset 命令、genre preset 第一版和 r
 
 ### P1-1 新增类型 preset 包扩展批次
 
-- [ ] 状态：Active
+- [x] 状态：完成（2026-05-05）。首个新增类型 preset 垂直切片选择 `mystery`，已提供 manifest、README、命令增强提示、world 模板和 reviewer config；`preset:list` 可发现，`preset:add mystery` 可安装，`preset:doctor` 和 `validate` 可通过。验证见 OpenSpec `openspec/changes/add-first-genre-preset-slice` 和 changeset `changes/2026-05-05-mystery-genre-preset.md`。
 - 类型：preset、题材知识、模板
 - 背景/问题：Worldbuilding 路线归档后明确提到后续可新增 `court-intrigue`、`urban-fantasy`、`mystery`、`romance-slow-burn` 等类型包。
 - 已有基础：`preset:list`、`preset:add`、`preset:doctor`、`spec/presets/`、genre preset manifest。

@@ -1,0 +1,78 @@
+id: mystery
+name: 推理悬疑
+version: "1.0.0"
+description: 面向推理、悬疑、案件调查故事的线索公平性、误导回收和揭示节奏模板。
+genre: mystery
+priority: 230
+requiredWorldFacts:
+  - id: world.mystery.clue-logic
+    title: 线索逻辑
+    type: rule
+    storyFunction: 记录关键线索、可见证据、错误解释和最终真相之间的推理链。
+    constraints:
+      - 关键真相必须至少有一个读者可见的早期线索。
+      - 线索可以被误读，但不能只在结尾凭空补充。
+      - 每个线索都要标记它支持的真相或误导方向。
+  - id: world.mystery.fair-play-boundary
+    title: 公平性边界
+    type: rule
+    storyFunction: 限制作者临时作弊，保证读者有机会回看并理解真相。
+    constraints:
+      - 真相揭示不能依赖未展示的专业知识或隐藏证据。
+      - 侦探的关键推断必须能被正文中已有信息支撑。
+      - 误导线索必须有合理回收，不能只负责拖延。
+  - id: world.mystery.suspect-relationships
+    title: 嫌疑关系
+    type: relationship
+    storyFunction: 组织嫌疑人、受害者、调查者和真相守门人的动机、机会与隐瞒。
+    constraints:
+      - 每个核心嫌疑人必须有动机、机会或隐瞒中的至少一项。
+      - 角色说谎要有自保、情感、利益或恐惧原因。
+      - 真凶不能只靠“他很坏”成立。
+characterRoles:
+  - id: role.investigator
+    name: 调查者
+    function: 追踪线索、提出假设，并在揭示前承担误判风险。
+    required: true
+  - id: role.suspect
+    name: 核心嫌疑人
+    function: 提供动机、机会、谎言或遮掩，推动调查分叉。
+    required: true
+  - id: role.victim
+    name: 受害者或缺席核心
+    function: 通过过去关系、遗留物和他人叙述形成案件中心。
+    required: true
+  - id: role.truth-keeper
+    name: 真相守门人
+    function: 掌握部分事实或关键误解，但不能替作者直接公布答案。
+    required: false
+pacingTemplates:
+  - id: pacing.clue-ladder
+    name: 线索阶梯
+    description: 每轮调查至少包含发现、解释、误判或反证、下一步问题四个动作。
+  - id: pacing.reveal-turn
+    name: 揭示反转
+    description: 反转必须同时改写旧线索含义，并推动新的选择或危险。
+  - id: pacing.final-deduction
+    name: 最终推理
+    description: 结尾揭示按证据、动机、机会、误导回收、情感代价的顺序展开。
+commonMistakes:
+  - id: mistake.hidden-proof
+    description: 关键证据直到结尾才第一次出现，读者无法参与推理。
+    suggestedAction: 把证据提前放进 Scene Card reveals，并允许角色先给出错误解释。
+  - id: mistake.random-killer
+    description: 真凶与前文关系稀薄，动机和机会没有铺垫。
+    suggestedAction: 为真凶补充可追踪的动机、机会和至少一次行为异常。
+  - id: mistake.unpaid-misdirection
+    description: 误导线索只负责混淆，没有解释它为何存在。
+    suggestedAction: 在揭示阶段说明误导线索的真实来源、角色目的或偶然条件。
+reviewerWeights:
+  worldbuilding: 1.1
+  continuity: 1.5
+  editor: 1.2
+  voice: 1
+  reader: 1.4
+validateRules:
+  - id: required-mystery-world-facts
+    type: world-required
+    description: validate 必须检查线索逻辑、公平性边界和嫌疑关系是否存在。

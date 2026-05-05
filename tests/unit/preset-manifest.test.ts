@@ -1,4 +1,6 @@
 import { describe, expect, it } from 'vitest';
+import { readFile } from 'node:fs/promises';
+import path from 'node:path';
 import { parsePresetManifest } from '../../src/domain/preset-manifest.js';
 
 const VALID_PRESET = `id: xuanhuan-cultivation
@@ -58,5 +60,23 @@ describe('PresetManifest', () => {
       expect.objectContaining({ code: 'MISSING_PRESET_FIELD', path: 'preset.name' }),
       expect.objectContaining({ code: 'MISSING_PRESET_FIELD', path: 'preset.requiredWorldFacts[0].constraints' })
     ]));
+  });
+
+  it('parses the built-in mystery preset with clue fairness constraints', async () => {
+    const manifestPath = path.join(process.cwd(), 'presets', 'mystery', 'preset.yaml');
+    const result = parsePresetManifest(await readFile(manifestPath, 'utf-8'), manifestPath);
+
+    expect(result.issues).toEqual([]);
+    expect(result.manifest).toMatchObject({
+      id: 'mystery',
+      genre: 'mystery'
+    });
+    expect(result.manifest?.requiredWorldFacts.map(fact => fact.id)).toEqual(expect.arrayContaining([
+      'world.mystery.clue-logic',
+      'world.mystery.fair-play-boundary',
+      'world.mystery.suspect-relationships'
+    ]));
+    expect(result.manifest?.reviewerWeights.continuity).toBeGreaterThan(1);
+    expect(result.manifest?.reviewerWeights.reader).toBeGreaterThan(1);
   });
 });

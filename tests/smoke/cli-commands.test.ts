@@ -1084,20 +1084,22 @@ describe('CLI command modules smoke', () => {
     ], { cwd: repoRoot });
     const list = JSON.parse(listResult.stdout);
 
-    expect(list.presets.map((preset: { id: string }) => preset.id)).toContain('xuanhuan-cultivation');
+    const presetIds = list.presets.map((preset: { id: string }) => preset.id);
+    expect(presetIds).toContain('xuanhuan-cultivation');
+    expect(presetIds).toContain('mystery');
 
     const addResult = await execFileAsync('node', [
       cliPath,
       'preset:add',
-      'xuanhuan-cultivation',
+      'mystery',
       '--json'
     ], { cwd: projectPath });
     const installed = JSON.parse(addResult.stdout);
 
-    expect(installed.preset.id).toBe('xuanhuan-cultivation');
-    expect(installed.targetDir).toContain(path.join('.specify', 'presets', 'xuanhuan-cultivation'));
+    expect(installed.preset.id).toBe('mystery');
+    expect(installed.targetDir).toContain(path.join('.specify', 'presets', 'mystery'));
     await expect(readFile(path.join(projectPath, 'spec', 'presets', 'current-preset.json'), 'utf-8'))
-      .resolves.toContain('xuanhuan-cultivation');
+      .resolves.toContain('mystery');
 
     const doctorResult = await execFileAsync('node', [
       cliPath,
@@ -1106,7 +1108,7 @@ describe('CLI command modules smoke', () => {
     ], { cwd: projectPath });
     const doctor = JSON.parse(doctorResult.stdout);
 
-    expect(doctor.activePreset.id).toBe('xuanhuan-cultivation');
+    expect(doctor.activePreset.id).toBe('mystery');
     expect(doctor.issues).toEqual([]);
 
     const validateResult = await execFileAsync('node', [
@@ -1117,7 +1119,7 @@ describe('CLI command modules smoke', () => {
     const validation = JSON.parse(validateResult.stdout);
 
     expect(validation.valid).toBe(true);
-    expect(validation.summary.activePreset).toBe('xuanhuan-cultivation');
+    expect(validation.summary.activePreset).toBe('mystery');
     expect(validation.issues).toEqual([]);
   });
 

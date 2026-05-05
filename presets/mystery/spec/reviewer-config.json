@@ -1,0 +1,16 @@
+{
+  "presetId": "mystery",
+  "reviewerWeights": {
+    "worldbuilding": 1.1,
+    "continuity": 1.5,
+    "editor": 1.2,
+    "voice": 1,
+    "reader": 1.4
+  },
+  "focus": [
+    "关键线索是否提前可见",
+    "误导线索是否有回收原因",
+    "嫌疑关系是否支撑动机和机会",
+    "最终揭示是否由已有证据支撑"
+  ]
+}

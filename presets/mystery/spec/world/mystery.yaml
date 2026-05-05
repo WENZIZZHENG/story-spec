@@ -1,0 +1,70 @@
+worldFacts:
+  - id: world.mystery.clue-logic
+    title: 线索逻辑
+    type: rule
+    summary: 记录关键线索、误导解释和最终真相之间的推理链。
+    storyFunction: 让读者能追踪案件从表象到真相的变化。
+    constraints:
+      - 关键真相必须至少有一个读者可见的早期线索。
+      - 线索可以被误读，但不能只在结尾凭空补充。
+      - 每个线索都要标记它支持的真相或误导方向。
+    pressure: 线索逻辑迫使角色在不完整信息里判断，也迫使作者提前埋下可回看的证据。
+    beneficiaries:
+      - 认真观察的读者
+      - 会记录证据的调查者
+    costs:
+      - 依赖直觉硬猜的角色
+      - 想临时改真相的叙事
+    violationConsequence: 关键证据凭空出现会破坏公平性，导致揭示像作者强行宣布答案。
+    sceneEvidencePaths:
+      - spec/presets/current-preset.json
+      - stories/demo/scenes/scene-001.yaml
+    sourcePaths:
+      - spec/presets/current-preset.json
+    status: draft
+  - id: world.mystery.fair-play-boundary
+    title: 公平性边界
+    type: rule
+    summary: 记录读者已知、角色已知和作者暂不揭示的信息边界。
+    storyFunction: 防止真相依赖未展示证据，保证反转能被回看验证。
+    constraints:
+      - 真相揭示不能依赖未展示的专业知识或隐藏证据。
+      - 侦探的关键推断必须能被正文中已有信息支撑。
+      - 误导线索必须有合理回收，不能只负责拖延。
+    pressure: 公平性边界让悬疑张力来自解释竞争，而不是作者藏牌。
+    beneficiaries:
+      - 读者
+      - 可信的调查者
+    costs:
+      - 突然出现的万能证据
+      - 只为反转而反转的设计
+    violationConsequence: 如果越过边界，最终推理会失去可信度，读者无法接受答案。
+    sceneEvidencePaths:
+      - spec/presets/current-preset.json
+      - stories/demo/scenes/scene-001.yaml
+    sourcePaths:
+      - spec/presets/current-preset.json
+    status: draft
+  - id: world.mystery.suspect-relationships
+    title: 嫌疑关系
+    type: relationship
+    summary: 记录嫌疑人、受害者、调查者和真相守门人的关系网。
+    storyFunction: 为动机、机会、谎言和保护行为提供可追踪原因。
+    constraints:
+      - 每个核心嫌疑人必须有动机、机会或隐瞒中的至少一项。
+      - 角色说谎要有自保、情感、利益或恐惧原因。
+      - 真凶不能只靠“他很坏”成立。
+    pressure: 嫌疑关系让调查不断触碰人际债务、秘密和利益交换。
+    beneficiaries:
+      - 有秘密可隐藏的人
+      - 能操纵关系的人
+    costs:
+      - 被误解的无辜者
+      - 被旧关系拖住的调查者
+    violationConsequence: 嫌疑关系缺失会让案件像谜题说明书，而不是人物驱动的故事。
+    sceneEvidencePaths:
+      - spec/presets/current-preset.json
+      - stories/demo/scenes/scene-001.yaml
+    sourcePaths:
+      - spec/presets/current-preset.json
+    status: draft
