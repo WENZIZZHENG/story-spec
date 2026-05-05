@@ -327,20 +327,20 @@ export const inspectPreset = async (input: Omit<PresetInput, 'packageRoot'>): Pr
 };
 
 export const renderPresetList = (result: PresetInspectionResult): string => [
-  'Genre Presets',
+  'Genre Preset 类型包',
   '',
   `Presets：${result.presets.length}`,
   `Issues：${result.issues.length}`,
   '',
   ...(result.presets.length > 0
-    ? result.presets.map(preset => `- ${preset.id}：${preset.name}（${preset.genre}）`)
+    ? result.presets.map(preset => `- ${preset.id}：${preset.name}（类型包 / ${preset.genre}）`)
     : ['- 暂无内置 preset'])
 ].join('\n').trimEnd();
 
 export const renderPresetDoctor = (result: PresetDoctorResult): string => [
   'Genre Preset Doctor',
   '',
-  `当前 preset：${result.activePreset ? `${result.activePreset.id} ${result.activePreset.name}` : '未启用'}`,
+  `当前类型包：${result.activePreset ? `${result.activePreset.id} ${result.activePreset.name}（${result.activePreset.genre}）` : '未启用'}`,
   `Issues：${result.issues.length}`,
   '',
   ...(result.issues.length > 0

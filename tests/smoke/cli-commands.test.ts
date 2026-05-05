@@ -171,9 +171,9 @@ describe('CLI command modules smoke', () => {
     ], { cwd: projectPath });
 
     expect(stdout).toContain('预览模式');
-    expect(stdout).toContain('Manifest kind: extension');
+    expect(stdout).toContain('包类型: 扩展包 (extension)');
     expect(stdout).toContain('plugins/translate');
-    expect(stdout).toContain('Agent integration 影响');
+    expect(stdout).toContain('安装影响');
     expect(stdout).toContain('Codex CLI (codex)');
     expect(stdout).toContain('.codex/prompts/storyspec-translate.md');
     expect(stdout).toContain('Generic Markdown Agent (generic)');
@@ -496,9 +496,9 @@ describe('CLI command modules smoke', () => {
     ], { cwd: projectPath });
 
     expect(stdout).toContain('StorySpec 扩展安装');
-    expect(stdout).toContain('Manifest kind: extension');
+    expect(stdout).toContain('包类型: 扩展包 (extension)');
     expect(stdout).toContain('plugins/translate');
-    expect(stdout).toContain('Agent integration 影响');
+    expect(stdout).toContain('安装影响');
 
     const help = await execFileAsync('node', [
       cliPath,

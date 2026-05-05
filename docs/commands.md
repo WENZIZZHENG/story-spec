@@ -121,9 +121,9 @@ storyspec preview specify -> storyspec apply
 | `storyspec agent:doctor` | 检查 agent 配置 |
 | `storyspec contract:sync` | 同步 `AGENTS.md` 和 `.specify/agent-contract.md` |
 | `storyspec upgrade` | 更新已有项目的命令、脚本或模板 |
-| `storyspec plugins:add <name>` | 安装通用生态包，dry-run 会显示 manifest kind、写入路径和 agent impact |
+| `storyspec plugins:add <name>` | 安装通用生态包，dry-run 会显示包类型、写入路径、安装影响和冲突 |
 | `storyspec extension:add <name>` | 安装 extension 扩展包；复用 `plugins:add` 的安装计划和安全预览 |
-| `storyspec preset:list` | 列出内置 genre preset，目前包含 `xuanhuan-cultivation` 和 `mystery` |
+| `storyspec preset:list` | 列出内置 genre preset 类型包，目前包含 `xuanhuan-cultivation` 和 `mystery` |
 | `storyspec preset:add mystery` | 安装推理悬疑类型包，补充线索公平性、嫌疑关系和揭示节奏模板 |
 | `storyspec preset:doctor` | 检查当前项目启用的 genre preset 和必填 WorldFact |
 

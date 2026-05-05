@@ -71,7 +71,7 @@ StorySpec 已有插件安装底座、preset 命令、genre preset 第一版和 r
 
 ### P2-1 插件、preset、extension 展示口径统一
 
-- [ ] 状态：Active
+- [x] 状态：完成（2026-05-05）。插件/extension dry-run 和安装摘要已显示中文包类型与 raw kind，例如 `包类型: 扩展包 (extension)`；安装影响文案统一展示写入、agent integration 和冲突诊断。`preset:list` / `preset:doctor` 文本输出已标明 genre preset 是“类型包”。验证见 OpenSpec `openspec/changes/align-ecosystem-kind-copy` 和 changeset `changes/2026-05-05-ecosystem-kind-copy.md`。
 - 类型：文档、CLI 诊断、用户体验
 - 背景/问题：生态包已有多种 kind，未来新增 alias 和类型包后，需要避免用户混淆“插件包 / preset 包 / extension 包”。
 - 已有基础：`PluginManifest.kind`、`plugins:add --dry-run`、`preset:*` 命令。

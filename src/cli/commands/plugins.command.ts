@@ -2,15 +2,26 @@ import type { Command } from '@commander-js/extra-typings';
 import chalk from 'chalk';
 import ora from 'ora';
 import path from 'path';
+import type { PluginKind } from '../../domain/plugin-manifest.js';
 import { PluginManager, type PluginInstallPlan } from '../../plugins/manager.js';
 import { ensureProjectRoot, getProjectInfo } from '../../utils/project.js';
 
 const formatProjectRelativePath = (projectPath: string, targetPath: string): string =>
   path.relative(projectPath, targetPath).replace(/\\/g, '/');
 
+const ECOSYSTEM_KIND_LABELS: Record<PluginKind, string> = {
+  extension: '扩展包',
+  preset: '预设包',
+  'style-pack': '风格包',
+  'market-bridge': '市场桥接包'
+};
+
+const formatPackageKind = (kind: string): string =>
+  `${ECOSYSTEM_KIND_LABELS[kind as PluginKind] ?? '生态包'} (${kind})`;
+
 const renderInstallPlan = (projectPath: string, plan: PluginInstallPlan): void => {
   console.log(chalk.yellow('\n预览模式：不会写入任何文件\n'));
-  console.log(chalk.gray(`Manifest kind: ${plan.manifest.kind}`));
+  console.log(chalk.gray(`包类型: ${formatPackageKind(plan.manifest.kind)}`));
   console.log('');
   console.log(chalk.cyan('将写入:'));
 
@@ -21,7 +32,7 @@ const renderInstallPlan = (projectPath: string, plan: PluginInstallPlan): void =
     console.log(`  [${label}] ${formatProjectRelativePath(projectPath, operation.targetPath)}`);
   }
 
-  console.log(chalk.cyan('\nAgent integration 影响:'));
+  console.log(chalk.cyan('\n安装影响:'));
   for (const impact of plan.agentImpacts) {
     const installedLabel = impact.installed ? chalk.green('已安装') : chalk.gray('未安装，跳过');
     console.log(`  ${impact.displayName} (${impact.agent}) - ${installedLabel}`);
@@ -51,7 +62,7 @@ const renderInstallPlan = (projectPath: string, plan: PluginInstallPlan): void =
 const renderPackageSummary = (pluginConfig: PluginInstallPlan['manifest'], name: string): void => {
   console.log(chalk.cyan(`准备安装: ${pluginConfig.description || name}`));
   console.log(chalk.gray(`版本: ${pluginConfig.version}`));
-  console.log(chalk.gray(`Manifest kind: ${pluginConfig.kind}`));
+  console.log(chalk.gray(`包类型: ${formatPackageKind(pluginConfig.kind)}`));
 
   if (pluginConfig.commands && pluginConfig.commands.length > 0) {
     console.log(chalk.gray(`命令数量: ${pluginConfig.commands.length}`));

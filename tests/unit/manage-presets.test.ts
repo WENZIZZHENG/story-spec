@@ -4,7 +4,9 @@ import { describe, expect, it } from 'vitest';
 import {
   addPreset,
   inspectPreset,
-  listPresets
+  listPresets,
+  renderPresetDoctor,
+  renderPresetList
 } from '../../src/application/manage-presets.js';
 import { MemoryFileSystem } from '../helpers/memory-file-system.js';
 
@@ -62,6 +64,8 @@ describe('manage presets', () => {
 
     const list = await listPresets(fixture);
     expect(list.presets.map(preset => preset.id)).toEqual(['xuanhuan-cultivation']);
+    expect(renderPresetList(list)).toContain('Genre Preset 类型包');
+    expect(renderPresetList(list)).toContain('xuanhuan-cultivation：玄幻修炼（类型包 / xuanhuan）');
 
     const result = await addPreset({
       ...fixture,
@@ -79,6 +83,7 @@ describe('manage presets', () => {
     });
     expect(doctor.activePreset?.id).toBe('xuanhuan-cultivation');
     expect(doctor.issues).toEqual([]);
+    expect(renderPresetDoctor(doctor)).toContain('当前类型包：xuanhuan-cultivation 玄幻修炼（xuanhuan）');
   });
 
   it('reports missing required WorldFact for active presets', async () => {
