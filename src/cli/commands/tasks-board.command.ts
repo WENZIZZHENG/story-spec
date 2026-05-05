@@ -13,6 +13,7 @@ import {
 } from '../../application/finish-writing-task.js';
 import type { WritingTask } from '../../domain/story-artifact.js';
 import { commandGitAdapter } from '../../infrastructure/command-git-adapter.js';
+import { commandVerificationRunner } from '../../infrastructure/command-verification-runner.js';
 import { nodeFileSystem } from '../../infrastructure/node-file-system.js';
 import { ensureProjectRoot } from '../../utils/project.js';
 
@@ -129,6 +130,7 @@ export const registerTasksBoardCommand = (program: Command): void => {
           projectRoot,
           fileSystem: nodeFileSystem,
           gitAdapter: commandGitAdapter,
+          verificationRunner: commandVerificationRunner,
           story,
           taskId: taskId.toUpperCase(),
           apply: Boolean(options.apply),

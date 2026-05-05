@@ -24,6 +24,16 @@ export interface GitAdapter {
   statusShort(projectPath: string): Promise<string[]>;
 }
 
+export interface VerificationCommandResult {
+  exitCode: number;
+  stdout?: string;
+  stderr?: string;
+}
+
+export interface VerificationRunner {
+  run(projectPath: string, command: string): Promise<VerificationCommandResult>;
+}
+
 export interface PluginInstaller {
   install(projectPath: string, pluginName: string, sourcePath: string): Promise<void>;
 }

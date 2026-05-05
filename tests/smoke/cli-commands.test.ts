@@ -517,6 +517,68 @@ describe('CLI command modules smoke', () => {
     await expect(readFile(boardPath, 'utf-8')).rejects.toThrow();
   });
 
+  it('blocks task finish apply when finish verification fails', async () => {
+    const cwd = await makeTempDir();
+    await execFileAsync('node', [
+      cliPath,
+      'init',
+      'smoke',
+      '--ai',
+      'codex',
+      '--method',
+      'three-act',
+      '--no-git'
+    ], { cwd });
+
+    const projectPath = path.join(cwd, 'smoke');
+    const storyPath = path.join(projectPath, 'stories', '001-demo');
+    const tasksPath = path.join(storyPath, 'tasks.md');
+    const boardPath = path.join(storyPath, 'task-board.json');
+    await mkdir(path.join(storyPath, 'content'), { recursive: true });
+    await mkdir(path.join(projectPath, 'spec', 'style'), { recursive: true });
+    await writeFile(path.join(storyPath, 'specification.md'), '# spec');
+    await writeFile(path.join(storyPath, 'creative-plan.md'), '# plan');
+    await writeFile(path.join(projectPath, 'spec', 'style', 'rules.yaml'), `rules:
+  - id: style.test-error
+    pattern: 禁止词
+    severity: error
+    suggestion: 删除测试禁用词
+`);
+    await writeFile(path.join(storyPath, 'content', 'chapter-001.md'), '# 第一章\n\n这里包含禁止词。');
+    await writeFile(tasksPath, `- [ ] [P0] [WRITE-READY] **T001** - 起草第一章
+  - **允许修改**：
+    - \`content/chapter-001.md\`
+  - **输出**：\`content/chapter-001.md\`
+`);
+    const before = await readFile(tasksPath, 'utf-8');
+
+    const { stdout } = await execFileAsync('node', [
+      cliPath,
+      'task:finish',
+      'T001',
+      '001-demo',
+      '--apply',
+      '--json'
+    ], { cwd: projectPath });
+    const result = JSON.parse(stdout);
+
+    expect(result).toMatchObject({
+      applied: false,
+      blocked: true,
+      blockedReasons: ['验证命令失败：storyspec style:lint 001-demo'],
+      updatedFiles: []
+    });
+    expect(result.checks).toEqual(expect.arrayContaining([
+      expect.objectContaining({
+        id: 'verification:storyspec-style-lint-001-demo',
+        status: 'failed',
+        command: 'storyspec style:lint 001-demo'
+      })
+    ]));
+    await expect(readFile(tasksPath, 'utf-8')).resolves.toBe(before);
+    await expect(readFile(boardPath, 'utf-8')).rejects.toThrow();
+  });
+
   it('creates a local commit from task finish when requested', async () => {
     const cwd = await makeTempDir();
     await execFileAsync('node', [

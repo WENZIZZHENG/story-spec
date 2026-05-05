@@ -1,5 +1,5 @@
 import path from 'node:path';
-import type { GitAdapter, ProjectFileSystem } from './project-ports.js';
+import type { GitAdapter, ProjectFileSystem, VerificationRunner } from './project-ports.js';
 import { exportTaskBoard } from './export-task-board.js';
 import { parseWritingTasksFromMarkdown, type WritingTask } from '../domain/story-artifact.js';
 import { selectStoryProject } from './workbench-utils.js';
@@ -8,6 +8,7 @@ export interface FinishWritingTaskInput {
   projectRoot: string;
   fileSystem: ProjectFileSystem;
   gitAdapter?: GitAdapter;
+  verificationRunner?: VerificationRunner;
   story?: string;
   taskId: string;
   apply?: boolean;
@@ -33,6 +34,8 @@ export interface FinishWritingTaskCheck {
   status: FinishWritingTaskCheckStatus;
   message: string;
   paths?: string[];
+  command?: string;
+  exitCode?: number;
 }
 
 export interface FinishWritingTaskCommitResult {
@@ -192,6 +195,55 @@ const updatedFilesAsGitRelative = (projectRoot: string, updatedFiles: string[]):
 
 const defaultFinishCommitMessage = (task: WritingTask): string => `完成写作任务：${task.id} ${task.title}`;
 
+const verificationCheckId = (command: string): string => `verification:${command
+  .toLowerCase()
+  .replace(/[^a-z0-9]+/g, '-')
+  .replace(/^-|-$/g, '')}`;
+
+const compactVerificationOutput = (stdout?: string, stderr?: string): string => {
+  const output = [stdout, stderr]
+    .filter((item): item is string => Boolean(item?.trim()))
+    .join('\n')
+    .trim();
+
+  if (!output) {
+    return '验证命令返回失败';
+  }
+
+  return output.length > 200 ? `${output.slice(0, 200)}...` : output;
+};
+
+const runFinishVerificationChecks = async (
+  input: FinishWritingTaskInput,
+  verificationCommands: string[]
+): Promise<FinishWritingTaskCheck[]> => {
+  if (!input.verificationRunner) {
+    return [];
+  }
+
+  const checks: FinishWritingTaskCheck[] = [];
+  for (const command of verificationCommands) {
+    const result = await input.verificationRunner.run(input.projectRoot, command);
+    const check: FinishWritingTaskCheck = {
+      id: verificationCheckId(command),
+      label: '收尾验证',
+      status: result.exitCode === 0 ? 'passed' : 'failed',
+      message: result.exitCode === 0
+        ? '验证命令通过'
+        : compactVerificationOutput(result.stdout, result.stderr),
+      command,
+      exitCode: result.exitCode
+    };
+    checks.push(check);
+
+    if (check.status === 'failed') {
+      break;
+    }
+  }
+
+  return checks;
+};
+
 const createSkippedCommitResult = (
   requested: boolean,
   skippedReason: string,
@@ -345,15 +397,26 @@ export const finishWritingTask = async (
       blockedReasons.push(...missingPaths.map(item => `关联正文缺失：${item}`));
       nextActions.push('先补写缺失正文，再重新运行 task:finish --apply');
     } else {
-      const statusResult = await setWritingTaskStatus({
-        projectRoot: input.projectRoot,
-        fileSystem: input.fileSystem,
-        story: input.story,
-        taskId: input.taskId,
-        status: 'done',
-        now: input.now
-      });
-      updatedFiles.push(...statusResult.updatedFiles);
+      const verificationChecks = await runFinishVerificationChecks(input, verificationCommands);
+      checks.push(...verificationChecks);
+      const failedVerificationCheck = verificationChecks.find(check => check.status === 'failed');
+
+      if (failedVerificationCheck) {
+        blocked = true;
+        applied = false;
+        blockedReasons.push(`验证命令失败：${failedVerificationCheck.command}`);
+        nextActions.push('修复验证失败后，再重新运行 task:finish --apply');
+      } else {
+        const statusResult = await setWritingTaskStatus({
+          projectRoot: input.projectRoot,
+          fileSystem: input.fileSystem,
+          story: input.story,
+          taskId: input.taskId,
+          status: 'done',
+          now: input.now
+        });
+        updatedFiles.push(...statusResult.updatedFiles);
+      }
     }
   }
   const commit = await createFinishCommit(input, task, updatedFiles, blocked);

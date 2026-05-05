@@ -6,7 +6,7 @@ import {
   renderFinishWritingTaskSummary,
   setWritingTaskStatus
 } from '../../src/application/finish-writing-task.js';
-import type { GitAdapter } from '../../src/application/project-ports.js';
+import type { GitAdapter, VerificationRunner } from '../../src/application/project-ports.js';
 import { MemoryFileSystem } from '../helpers/memory-file-system.js';
 
 const createFakeGitAdapter = (status: string[] = []) => {
@@ -26,6 +26,20 @@ const createFakeGitAdapter = (status: string[] = []) => {
   };
 
   return { adapter, calls };
+};
+
+const createFakeVerificationRunner = (
+  results: Record<string, { exitCode: number; stdout?: string; stderr?: string }> = {}
+) => {
+  const commands: string[] = [];
+  const runner: VerificationRunner = {
+    run: async (_projectRoot, command) => {
+      commands.push(command);
+      return results[command] ?? { exitCode: 0, stdout: '', stderr: '' };
+    }
+  };
+
+  return { runner, commands };
 };
 
 const createProject = async () => {
@@ -241,6 +255,66 @@ describe('finishWritingTask', () => {
       message: '自定义收尾提交',
       skippedReason: '存在 unrelated change：README.md'
     });
+    expect(calls.addAll).toEqual([]);
+    expect(calls.commit).toEqual([]);
+  });
+
+  it('blocks apply without changing task files when a verification command fails', async () => {
+    const { projectRoot, fileSystem, storyPath, tasksPath } = await createProject();
+    const { runner, commands } = createFakeVerificationRunner({
+      'storyspec style:lint demo': {
+        exitCode: 1,
+        stdout: '发现 1 个 style finding',
+        stderr: ''
+      }
+    });
+    const { adapter, calls } = createFakeGitAdapter([
+      'M stories/demo/tasks.md',
+      '?? stories/demo/task-board.json'
+    ]);
+    const before = await fileSystem.readFile(tasksPath);
+
+    const result = await finishWritingTask({
+      projectRoot,
+      fileSystem,
+      gitAdapter: adapter,
+      verificationRunner: runner,
+      story: 'demo',
+      taskId: 'T001',
+      apply: true,
+      commit: true,
+      now: () => new Date('2026-05-05T00:00:00.000Z')
+    });
+
+    expect(result).toMatchObject({
+      applied: false,
+      blocked: true,
+      blockedReasons: ['验证命令失败：storyspec style:lint demo'],
+      updatedFiles: [],
+      commit: {
+        requested: true,
+        created: false,
+        message: '完成写作任务：T001 起草第一章',
+        skippedReason: '任务收尾被阻断'
+      }
+    });
+    expect(result.checks).toEqual([
+      expect.objectContaining({ id: 'related-drafts-exist', status: 'passed' }),
+      expect.objectContaining({ id: 'verification:storyspec-validate', status: 'passed' }),
+      expect.objectContaining({
+        id: 'verification:storyspec-style-lint-demo',
+        status: 'failed',
+        command: 'storyspec style:lint demo',
+        exitCode: 1,
+        message: '发现 1 个 style finding'
+      })
+    ]);
+    expect(commands).toEqual([
+      'storyspec validate',
+      'storyspec style:lint demo'
+    ]);
+    expect(await fileSystem.readFile(tasksPath)).toBe(before);
+    expect(await fileSystem.pathExists(path.join(storyPath, 'task-board.json'))).toBe(false);
     expect(calls.addAll).toEqual([]);
     expect(calls.commit).toEqual([]);
   });
