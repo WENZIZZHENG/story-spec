@@ -245,15 +245,16 @@ export interface StyleRule {
   enabled?: boolean;
 }
 
-export interface StyleLintFinding {
-  severity: StyleLintSeverity;
-  code: StyleIssueCode;
-  ruleId: string;
-  path: string;
-  evidence: string;
-  message: string;
-  suggestion: string;
-}
+  export interface StyleLintFinding {
+    severity: StyleLintSeverity;
+    code: StyleIssueCode;
+    ruleId: string;
+    path: string;
+    evidence: string;
+    message: string;
+    suggestion: string;
+    source?: string;
+  }
 
 export interface CompileChapter {
   path: string;

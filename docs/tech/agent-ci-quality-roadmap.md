@@ -55,7 +55,7 @@ StorySpec 已完成 agent-neutral 基座，支持多种 agent integration 和 Ma
 
 ### P2-1 Vale / textlint 可选 adapter
 
-- [ ] 状态：Active
+- [x] 状态：完成（2026-05-05）。`style:lint` 已支持可选 prose lint adapter 配置，读取 `spec/style/adapters.json` 并输出 `adapters` 状态；CLI 默认不执行外部工具，未配置 runner 时安全 skipped。应用层可注入 runner 合并 `vale` / `textlint` finding，并保留 `source` 字段。验证见 OpenSpec `openspec/changes/add-optional-prose-lint-adapters` 和 changeset `changes/2026-05-05-optional-prose-lint-adapters.md`。
 - 类型：自然语言 lint、外部工具适配、风格质量
 - 背景/问题：Workbench 路线已实现第一版 style lint，但明确保留未来接入 Vale / textlint 的设计空间。
 - 已有基础：`style:lint`、`style:explain`、本地 style 规则、`tests/unit/manage-style.test.ts`。

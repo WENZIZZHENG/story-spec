@@ -19,6 +19,7 @@ export interface StyleInput {
 export interface StyleLintInput extends StyleInput {
   story?: string;
   chapter?: string;
+  adapterRunner?: ProseLintAdapterRunner;
 }
 
 export interface StyleLintResult {
@@ -26,6 +27,7 @@ export interface StyleLintResult {
   scannedFiles: string[];
   ruleFiles: string[];
   rules: StyleRule[];
+  adapters: ProseLintAdapterStatus[];
   findings: StyleLintFinding[];
   summary: {
     error: number;
@@ -40,6 +42,29 @@ export interface StyleExplainResult {
   rule?: StyleRule;
   ruleFiles: string[];
 }
+
+export interface ProseLintAdapterConfig {
+  id: 'vale' | 'textlint' | (string & {});
+  enabled: boolean;
+}
+
+export interface ProseLintAdapterStatus {
+  id: string;
+  source: string;
+  status: 'pass' | 'skipped' | 'failed';
+  message: string;
+}
+
+export interface ProseLintAdapterRunnerInput {
+  adapter: ProseLintAdapterConfig;
+  projectRoot: string;
+  files: string[];
+  fileSystem: ProjectFileSystem;
+}
+
+export type ProseLintAdapterRunner = (
+  input: ProseLintAdapterRunnerInput
+) => Promise<StyleLintFinding[]>;
 
 const DEFAULT_RULES: StyleRule[] = [
   {
@@ -59,6 +84,7 @@ const DEFAULT_RULES: StyleRule[] = [
 ];
 
 const styleDir = (projectRoot: string): string => path.join(projectRoot, 'spec', 'style');
+const adaptersConfigPath = (projectRoot: string): string => path.join(styleDir(projectRoot), 'adapters.json');
 
 const isRecord = (value: unknown): value is Record<string, unknown> =>
   typeof value === 'object' && value !== null && !Array.isArray(value);
@@ -195,6 +221,31 @@ const readStyleRules = async (
   };
 };
 
+const readProseLintAdapters = async (
+  input: StyleInput
+): Promise<ProseLintAdapterConfig[]> => {
+  const configPath = adaptersConfigPath(input.projectRoot);
+  if (!await input.fileSystem.pathExists(configPath)) {
+    return [];
+  }
+
+  const document = await input.fileSystem.readJson<unknown>(configPath);
+  if (!isRecord(document) || !Array.isArray(document.adapters)) {
+    return [];
+  }
+
+  return document.adapters.flatMap(adapter => {
+    if (!isRecord(adapter) || !isNonEmptyString(adapter.id)) {
+      return [];
+    }
+
+    return [{
+      id: adapter.id.trim() as ProseLintAdapterConfig['id'],
+      enabled: adapter.enabled !== false
+    }];
+  });
+};
+
 const normalizeChapter = (chapter?: string): string | undefined => {
   if (!chapter) {
     return undefined;
@@ -291,12 +342,72 @@ const lintFile = async (
         path: `${relativePath(projectRoot, filePath)}:${index + 1}`,
         evidence: line.trim().slice(0, 180),
         message: rule.description,
-        suggestion: rule.suggestion
+        suggestion: rule.suggestion,
+        source: 'built-in'
       });
     });
   }
 
   return findings;
+};
+
+const runProseLintAdapters = async (
+  input: StyleLintInput,
+  files: string[]
+): Promise<{ statuses: ProseLintAdapterStatus[]; findings: StyleLintFinding[] }> => {
+  const adapters = await readProseLintAdapters(input);
+  const statuses: ProseLintAdapterStatus[] = [];
+  const findings: StyleLintFinding[] = [];
+
+  for (const adapter of adapters) {
+    if (!adapter.enabled) {
+      statuses.push({
+        id: adapter.id,
+        source: adapter.id,
+        status: 'skipped',
+        message: 'adapter 已禁用'
+      });
+      continue;
+    }
+
+    if (!input.adapterRunner) {
+      statuses.push({
+        id: adapter.id,
+        source: adapter.id,
+        status: 'skipped',
+        message: '未配置外部 prose lint runner'
+      });
+      continue;
+    }
+
+    try {
+      const adapterFindings = await input.adapterRunner({
+        adapter,
+        projectRoot: input.projectRoot,
+        files,
+        fileSystem: input.fileSystem
+      });
+      findings.push(...adapterFindings.map(finding => ({
+        ...finding,
+        source: finding.source ?? adapter.id
+      })));
+      statuses.push({
+        id: adapter.id,
+        source: adapter.id,
+        status: 'pass',
+        message: `adapter 返回 ${adapterFindings.length} 个 finding`
+      });
+    } catch (error) {
+      statuses.push({
+        id: adapter.id,
+        source: adapter.id,
+        status: 'failed',
+        message: error instanceof Error ? error.message : String(error)
+      });
+    }
+  }
+
+  return { statuses, findings };
 };
 
 const summarize = (findings: readonly StyleLintFinding[]): StyleLintResult['summary'] => ({
@@ -315,13 +426,15 @@ export const lintStyle = async (
   const lintFindings = (await Promise.all(files.map(file =>
     lintFile(input.fileSystem, input.projectRoot, file, ruleResult.rules)
   ))).flat();
-  const findings = [...ruleResult.findings, ...lintFindings];
+  const adapterResult = await runProseLintAdapters(input, files);
+  const findings = [...ruleResult.findings, ...lintFindings, ...adapterResult.findings];
 
   return {
     projectRoot: input.projectRoot,
     scannedFiles: files,
     ruleFiles: ruleResult.ruleFiles,
     rules: ruleResult.rules,
+    adapters: adapterResult.statuses,
     findings,
     summary: summarize(findings)
   };
@@ -346,6 +459,7 @@ export const renderStyleLint = (result: StyleLintResult): string => [
   `规则：${result.rules.length}`,
   `Findings：${result.findings.length}`,
   `Error/Warning/Info：${result.summary.error}/${result.summary.warning}/${result.summary.info}`,
+  `Adapters：${result.adapters.length > 0 ? result.adapters.map(adapter => `${adapter.id}:${adapter.status}`).join(', ') : '无'}`,
   '',
   ...(result.findings.length > 0
     ? result.findings.map(item => `- [${item.severity}] ${item.ruleId}: ${toPosixPath(item.path)} - ${item.evidence}；建议：${item.suggestion}`)

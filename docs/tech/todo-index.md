@@ -10,7 +10,7 @@ Active。本文是 StorySpec 当前唯一的活跃待办入口。详细规则见
 
 | 优先级 | 路线 | 状态 | 覆盖范围 | 下一步 |
 | --- | --- | --- | --- | --- |
-| P1 | [Agent、CI 与自然语言质量增强路线图](agent-ci-quality-roadmap.md) | Active | 已完成新增 agent 准入清单和 CI check manifest；剩余 Vale / textlint 可选 adapter | 将可选 prose lint adapter 转为 OpenSpec |
+| P1 | [Agent、CI 与自然语言质量增强路线图](agent-ci-quality-roadmap.md) | Done | 新增 agent 准入清单、CI check manifest、Vale / textlint 可选 adapter 已完成 | 归档该路线，下一步转入体验后续增强 |
 | P2 | [体验后续增强入口路线图](experience-followup-roadmap.md) | Active | 首程、新用户、共创、创作控制权、dogfood、Worldbuilding / Workbench 后续入口 | 先做 dogfood 回归和体验证据收集 |
 
 ## 暂不作为活跃待办

@@ -147,6 +147,7 @@ storyspec <command> --help
 - 想写正文：先确认 `specification.md`、`creative-plan.md`、`tasks.md`。
 - 想让另一个 agent 接手：先运行 `storyspec status` 和 `storyspec context:pack`。
 - 出现设定冲突：优先更新 `spec/world/`、`spec/canon/`、`spec/tracking/`，再继续写。
+- 想接入 Vale 或 textlint：在 `spec/style/adapters.json` 声明可选 adapter；未配置外部 runner 时 `style:lint` 会安全跳过，只保留内置 lint。
 
 ## 相关文档
 

@@ -1820,9 +1820,11 @@ reveals:
       '--json'
     ], { cwd: projectPath });
     const style = JSON.parse(styleResult.stdout);
+    expect(style.adapters).toEqual([]);
     expect(style.findings).toEqual(expect.arrayContaining([
       expect.objectContaining({
         ruleId: 'style.ai-empty-abstract',
+        source: 'built-in',
         evidence: expect.stringContaining('一种无法言说的感觉')
       })
     ]));

@@ -71,4 +71,74 @@ describe('manage style', () => {
       severity: 'warning'
     });
   });
+
+  it('skips configured prose lint adapters when no runner is available', async () => {
+    const fixture = await createProject();
+    await fixture.fileSystem.writeJson(path.join(fixture.projectRoot, 'spec', 'style', 'adapters.json'), {
+      adapters: [
+        { id: 'vale', enabled: true }
+      ]
+    }, { spaces: 2 });
+
+    const result = await lintStyle({
+      ...fixture,
+      story: '001-demo',
+      chapter: '001'
+    });
+
+    expect(result.adapters).toEqual([
+      expect.objectContaining({
+        id: 'vale',
+        source: 'vale',
+        status: 'skipped',
+        message: expect.stringContaining('runner')
+      })
+    ]);
+    expect(result.findings).toEqual(expect.arrayContaining([
+      expect.objectContaining({
+        source: 'built-in',
+        ruleId: 'style.ai-empty-abstract'
+      })
+    ]));
+  });
+
+  it('merges prose lint adapter findings with source labels', async () => {
+    const fixture = await createProject();
+    await fixture.fileSystem.writeJson(path.join(fixture.projectRoot, 'spec', 'style', 'adapters.json'), {
+      adapters: [
+        { id: 'textlint', enabled: true }
+      ]
+    }, { spaces: 2 });
+
+    const result = await lintStyle({
+      ...fixture,
+      story: '001-demo',
+      chapter: '001',
+      adapterRunner: async ({ adapter, files }) => [{
+        severity: 'warning',
+        code: 'STYLE_RULE_MATCH',
+        ruleId: `${adapter.id}.sentence-length`,
+        path: `${path.relative(fixture.projectRoot, files[0]).replace(/\\/g, '/')}:1`,
+        evidence: 'adapter evidence',
+        message: '外部 prose lint finding',
+        suggestion: '拆短句子',
+        source: adapter.id
+      }]
+    });
+
+    expect(result.adapters).toEqual([
+      expect.objectContaining({
+        id: 'textlint',
+        source: 'textlint',
+        status: 'pass'
+      })
+    ]);
+    expect(result.findings).toEqual(expect.arrayContaining([
+      expect.objectContaining({
+        ruleId: 'textlint.sentence-length',
+        source: 'textlint',
+        suggestion: '拆短句子'
+      })
+    ]));
+  });
 });
