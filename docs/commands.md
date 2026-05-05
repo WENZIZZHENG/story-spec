@@ -121,6 +121,8 @@ storyspec preview specify -> storyspec apply
 | `storyspec agent:doctor` | 检查 agent 配置 |
 | `storyspec contract:sync` | 同步 `AGENTS.md` 和 `.specify/agent-contract.md` |
 | `storyspec upgrade` | 更新已有项目的命令、脚本或模板 |
+| `storyspec plugins:add <name>` | 安装通用生态包，dry-run 会显示 manifest kind、写入路径和 agent impact |
+| `storyspec extension:add <name>` | 安装 extension 扩展包；复用 `plugins:add` 的安装计划和安全预览 |
 
 `storyspec status --json` 和兼容入口 `storyspec codex-status --json` 会输出稳定的 `navigationEntries` 数组。每个入口包含 `action`、`label`、`description` 和 `copyableCommand`，方便 agent 或 UI 不解析中文文案也能区分“长文资料 / 一句灵感 / 表格资料 / 随便聊聊”四类首程入口。
 

@@ -10,6 +10,8 @@ const formatProjectRelativePath = (projectPath: string, targetPath: string): str
 
 const renderInstallPlan = (projectPath: string, plan: PluginInstallPlan): void => {
   console.log(chalk.yellow('\n预览模式：不会写入任何文件\n'));
+  console.log(chalk.gray(`Manifest kind: ${plan.manifest.kind}`));
+  console.log('');
   console.log(chalk.cyan('将写入:'));
 
   for (const operation of plan.operations.filter(operation =>
@@ -43,6 +45,98 @@ const renderInstallPlan = (projectPath: string, plan: PluginInstallPlan): void =
     console.log(chalk.red(`\n发现 ${plan.conflicts.length} 个冲突；安装时默认会阻止覆盖，可使用 --force 覆盖。`));
   } else {
     console.log(chalk.green('\n未发现冲突。'));
+  }
+};
+
+const renderPackageSummary = (pluginConfig: PluginInstallPlan['manifest'], name: string): void => {
+  console.log(chalk.cyan(`准备安装: ${pluginConfig.description || name}`));
+  console.log(chalk.gray(`版本: ${pluginConfig.version}`));
+  console.log(chalk.gray(`Manifest kind: ${pluginConfig.kind}`));
+
+  if (pluginConfig.commands && pluginConfig.commands.length > 0) {
+    console.log(chalk.gray(`命令数量: ${pluginConfig.commands.length}`));
+  }
+
+  if (pluginConfig.experts && pluginConfig.experts.length > 0) {
+    console.log(chalk.gray(`专家模式: ${pluginConfig.experts.length} 个`));
+  }
+};
+
+const runPackageAdd = async (
+  input: {
+    name: string;
+    options: { dryRun?: boolean; force?: boolean };
+    packageRoot: string;
+    heading: string;
+    spinnerText: string;
+    successText: string;
+    failureTitle: string;
+  }
+): Promise<void> => {
+  try {
+    const projectPath = await ensureProjectRoot();
+    const projectInfo = await getProjectInfo(projectPath);
+
+    if (!projectInfo) {
+      console.log(chalk.red('❌ 无法读取项目信息'));
+      process.exit(1);
+    }
+
+    console.log(chalk.cyan(`\n📦 ${input.heading}\n`));
+    console.log(chalk.gray(`项目版本: ${projectInfo.version}`));
+    console.log(chalk.gray(`AI 配置: ${projectInfo.installedAI.join(', ') || '无'}\n`));
+
+    const pluginManager = new PluginManager(projectPath);
+    const pluginSourcePath = await pluginManager.resolvePluginSource(input.name, input.packageRoot);
+    const installPlan = await pluginManager.planInstallPlugin(path.basename(pluginSourcePath), pluginSourcePath);
+    const pluginConfig = installPlan.manifest;
+
+    renderPackageSummary(pluginConfig, input.name);
+
+    if (projectInfo.installedAI.length > 0) {
+      console.log(chalk.gray(`目标 AI: ${projectInfo.installedAI.join(', ')}\n`));
+    } else {
+      console.log(chalk.yellow('\n⚠️  未检测到 AI 配置目录'));
+      console.log(chalk.gray('   生态包将被复制，但命令不会被注入到任何 AI 平台\n'));
+    }
+
+    if (input.options.dryRun) {
+      renderInstallPlan(projectPath, installPlan);
+      console.log('');
+      return;
+    }
+
+    const spinner = ora(input.spinnerText).start();
+
+    await pluginManager.applyInstallPlan(installPlan, { force: input.options.force });
+    spinner.succeed(chalk.green(`${input.successText}\n`));
+
+    if (pluginConfig.commands && pluginConfig.commands.length > 0) {
+      console.log(chalk.cyan('可用命令:'));
+      for (const cmd of pluginConfig.commands) {
+        console.log(chalk.gray(`  /${cmd.id} - ${cmd.description || ''}`));
+      }
+    }
+
+    if (pluginConfig.experts && pluginConfig.experts.length > 0) {
+      console.log(chalk.cyan('\n专家模式:'));
+      for (const expert of pluginConfig.experts) {
+        console.log(chalk.gray(`  /expert ${expert.id} - ${expert.title || ''}`));
+      }
+    }
+
+    console.log('');
+  } catch (error: any) {
+    if (error.message === 'NOT_IN_PROJECT') {
+      console.log(chalk.red('\n❌ 当前目录不是 story-spec 项目'));
+      console.log(chalk.gray('   请在项目根目录运行此命令，或使用 storyspec init 创建新项目\n'));
+      process.exit(1);
+    }
+
+    console.log(chalk.red(`\n❌ ${input.failureTitle}`));
+    console.error(chalk.gray(error.message || error));
+    console.log('');
+    process.exit(1);
   }
 };
 
@@ -123,84 +217,32 @@ export function registerPluginsCommand(program: Command, context: { packageRoot:
     .option('--dry-run', '预览将写入的文件，不实际安装')
     .option('--force', '允许覆盖冲突文件')
     .action(async (name, options) => {
-      try {
-        // 1. 检测项目
-        const projectPath = await ensureProjectRoot();
-        const projectInfo = await getProjectInfo(projectPath);
+      await runPackageAdd({
+        name,
+        options,
+        packageRoot,
+        heading: 'StorySpec 插件安装',
+        spinnerText: '正在安装插件...',
+        successText: '插件安装成功！',
+        failureTitle: '安装插件失败'
+      });
+    });
 
-        if (!projectInfo) {
-          console.log(chalk.red('❌ 无法读取项目信息'));
-          process.exit(1);
-        }
-
-        console.log(chalk.cyan('\n📦 StorySpec 插件安装\n'));
-        console.log(chalk.gray(`项目版本: ${projectInfo.version}`));
-        console.log(chalk.gray(`AI 配置: ${projectInfo.installedAI.join(', ') || '无'}\n`));
-
-        const pluginManager = new PluginManager(projectPath);
-        const pluginSourcePath = await pluginManager.resolvePluginSource(name, packageRoot);
-        const installPlan = await pluginManager.planInstallPlugin(path.basename(pluginSourcePath), pluginSourcePath);
-        const pluginConfig = installPlan.manifest;
-
-        // 4. 显示插件信息
-        console.log(chalk.cyan(`准备安装: ${pluginConfig.description || name}`));
-        console.log(chalk.gray(`版本: ${pluginConfig.version}`));
-
-        if (pluginConfig.commands && pluginConfig.commands.length > 0) {
-          console.log(chalk.gray(`命令数量: ${pluginConfig.commands.length}`));
-        }
-
-        if (pluginConfig.experts && pluginConfig.experts.length > 0) {
-          console.log(chalk.gray(`专家模式: ${pluginConfig.experts.length} 个`));
-        }
-
-        if (projectInfo.installedAI.length > 0) {
-          console.log(chalk.gray(`目标 AI: ${projectInfo.installedAI.join(', ')}\n`));
-        } else {
-          console.log(chalk.yellow('\n⚠️  未检测到 AI 配置目录'));
-          console.log(chalk.gray('   插件将被复制，但命令不会被注入到任何 AI 平台\n'));
-        }
-
-        if (options.dryRun) {
-          renderInstallPlan(projectPath, installPlan);
-          console.log('');
-          return;
-        }
-
-        // 5. 安装插件
-        const spinner = ora('正在安装插件...').start();
-
-        await pluginManager.applyInstallPlan(installPlan, { force: options.force });
-        spinner.succeed(chalk.green('插件安装成功！\n'));
-
-        // 6. 显示后续步骤
-        if (pluginConfig.commands && pluginConfig.commands.length > 0) {
-          console.log(chalk.cyan('可用命令:'));
-          for (const cmd of pluginConfig.commands) {
-            console.log(chalk.gray(`  /${cmd.id} - ${cmd.description || ''}`));
-          }
-        }
-
-        if (pluginConfig.experts && pluginConfig.experts.length > 0) {
-          console.log(chalk.cyan('\n专家模式:'));
-          for (const expert of pluginConfig.experts) {
-            console.log(chalk.gray(`  /expert ${expert.id} - ${expert.title || ''}`));
-          }
-        }
-
-        console.log('');
-      } catch (error: any) {
-        if (error.message === 'NOT_IN_PROJECT') {
-          console.log(chalk.red('\n❌ 当前目录不是 story-spec 项目'));
-          console.log(chalk.gray('   请在项目根目录运行此命令，或使用 storyspec init 创建新项目\n'));
-          process.exit(1);
-        }
-
-        console.log(chalk.red('\n❌ 安装插件失败'));
-        console.error(chalk.gray(error.message || error));
-        console.log('');
-        process.exit(1);
-      }
+  program
+    .command('extension:add <name>')
+    .description('安装 extension 扩展包（plugins:add 的语义化别名）')
+    .option('--dry-run', '预览将写入的文件，不实际安装')
+    .option('--force', '允许覆盖冲突文件')
+    .action(async (name, options) => {
+      await runPackageAdd({
+        name,
+        options,
+        packageRoot,
+        heading: 'StorySpec 扩展安装',
+        spinnerText: '正在安装扩展...',
+        successText: '扩展安装成功！',
+        failureTitle: '安装扩展失败'
+      });
     });
 
   program

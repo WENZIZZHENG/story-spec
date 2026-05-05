@@ -46,6 +46,7 @@ describe('CLI command modules smoke', () => {
     expect(help).toContain('preview');
     expect(help).toContain('apply [options] <previewId>');
     expect(help).toContain('plugins:add [options] <name>');
+    expect(help).toContain('extension:add [options] <name>');
     expect(help).toContain('upgrade [options]');
     expect(help).toContain('status [options]');
     expect(help).toContain('handoff [options] [story]');
@@ -170,6 +171,7 @@ describe('CLI command modules smoke', () => {
     ], { cwd: projectPath });
 
     expect(stdout).toContain('预览模式');
+    expect(stdout).toContain('Manifest kind: extension');
     expect(stdout).toContain('plugins/translate');
     expect(stdout).toContain('Agent integration 影响');
     expect(stdout).toContain('Codex CLI (codex)');
@@ -470,6 +472,41 @@ describe('CLI command modules smoke', () => {
       updatedFiles: []
     });
     await expect(readFile(boardPath, 'utf-8')).resolves.toBe(boardAfterFirstRun);
+  });
+
+  it('previews extension installation through the plugin install plan', async () => {
+    const cwd = await makeTempDir();
+    await execFileAsync('node', [
+      cliPath,
+      'init',
+      'smoke',
+      '--ai',
+      'codex',
+      '--method',
+      'three-act',
+      '--no-git'
+    ], { cwd });
+
+    const projectPath = path.join(cwd, 'smoke');
+    const { stdout } = await execFileAsync('node', [
+      cliPath,
+      'extension:add',
+      'translate',
+      '--dry-run'
+    ], { cwd: projectPath });
+
+    expect(stdout).toContain('StorySpec 扩展安装');
+    expect(stdout).toContain('Manifest kind: extension');
+    expect(stdout).toContain('plugins/translate');
+    expect(stdout).toContain('Agent integration 影响');
+
+    const help = await execFileAsync('node', [
+      cliPath,
+      'extension:add',
+      '--help'
+    ], { cwd: projectPath });
+    expect(help.stdout).toContain('--dry-run');
+    expect(help.stdout).toContain('--force');
   });
 
   it('blocks task finish apply when the related chapter file is missing', async () => {

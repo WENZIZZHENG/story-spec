@@ -19,7 +19,7 @@ StorySpec 已有插件安装底座、preset 命令、genre preset 第一版和 r
 
 ### P0-1 `extension:add` 薄 alias
 
-- [ ] 状态：Active
+- [x] 状态：完成（2026-05-05）。`extension:add <name>` 已作为 `plugins:add` 的语义化薄 alias 接入，复用同一个 resolve / install plan / dry-run renderer / apply 行为；dry-run 输出 manifest kind、写入路径、agent impact 和冲突诊断。验证见 OpenSpec `openspec/changes/add-extension-add-alias` 和 changeset `changes/2026-05-05-extension-add-alias.md`。
 - 类型：CLI 入口、插件安装、安全预览
 - 背景/问题：ADR 已允许未来新增 `extension:add <name>` 作为 `plugins:add` 的语义化薄 alias，但要求复用同一个 install plan 和 dry-run renderer。
 - 已有基础：`plugins:add --dry-run`、`PluginManifest.kind`、插件安装计划和冲突路径诊断。
