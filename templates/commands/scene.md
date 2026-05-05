@@ -38,11 +38,12 @@ scripts:
 3. 写正文前必须确认 `plotThread`、`readerPromise`、`relationshipChange`、`worldReveal`、`emotionalBeat`、`endingHook`、`successCriteria`；缺任一项时只补卡或输出 preview。
 4. 写正文前必须输出章节前置约束卡，覆盖时间点、当前能力与语言水平、情感检查点、硬约束、软约束和写后自检对照，并等待作者确认约束卡。
 5. 约束卡资料不足时标为待确认，不得编造角色心理、语言进度、能力数值、关系事实或世界观正典。
-6. `entities` 必须引用 Entity Graph 中的显式 entity；不能用 AI 推断当作已确认事实。
-7. `worldElements` 与 `canonFacts` 只引用已存在或待人工确认的条目。
-8. 写正文时只写 `draftPath` 指向的章节，不改其他章节。
-9. 涉及对白的 scene 必须读取相关 VoiceFingerprint，检查禁用词、称呼和冲突表达。
-10. review 模式只输出问题、依据路径和建议动作，不自动覆盖正文。
+6. 写中沉浸原则：约束卡用于写前确认和写后自检，不作为正文生成时逐句审查器；正文阶段优先身体感、感官、动作、当下反应和句子质感。
+7. `entities` 必须引用 Entity Graph 中的显式 entity；不能用 AI 推断当作已确认事实。
+8. `worldElements` 与 `canonFacts` 只引用已存在或待人工确认的条目。
+9. 写正文时只写 `draftPath` 指向的章节，不改其他章节。
+10. 涉及对白的 scene 必须读取相关 VoiceFingerprint，检查禁用词、称呼和冲突表达。
+11. review 模式只输出问题、依据路径和建议动作，不自动覆盖正文。
 
 ## 完成报告
 

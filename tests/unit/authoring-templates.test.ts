@@ -20,5 +20,9 @@ describe('authoring templates', () => {
     expect(template).toContain('## 写后自检对照');
     expect(template).toContain('内心独白措辞不超出当前语言水平');
     expect(template).toContain('资料不足时标为待确认');
+    expect(template).toContain('## 写中沉浸原则');
+    expect(template).toContain('约束卡用于写前确认和写后自检');
+    expect(template).toContain('不作为正文生成时逐句审查器');
+    expect(template).toContain('正文阶段优先身体感、感官、动作、当下反应和句子质感');
   });
 });

@@ -4,6 +4,7 @@ import path from 'node:path';
 import { afterEach, describe, expect, it } from 'vitest';
 import { buildCommandArtifacts } from '../../src/prompt/build-commands.js';
 
+const packageRoot = process.cwd();
 const tempDirs: string[] = [];
 
 const exists = async (targetPath: string) => {
@@ -262,6 +263,30 @@ describe('buildCommandArtifacts', () => {
     expect(genericSpecCommand).toContain('章节前置约束卡');
     expect(genericSpecCommand).toContain('等待作者确认约束卡');
     expect(genericSpecCommand).toContain('写后自检对照');
+  });
+
+  it('renders immersive drafting guidance from the real write command templates', async () => {
+    const outDir = await makeTempDir();
+
+    await buildCommandArtifacts({
+      rootDir: packageRoot,
+      outDir,
+      agents: ['codex', 'gemini', 'generic'],
+      scripts: ['sh']
+    });
+
+    const renderedCommands = [
+      await readFile(path.join(outDir, 'codex', '.codex', 'prompts', 'storyspec-write.md'), 'utf-8'),
+      await readFile(path.join(outDir, 'gemini', '.gemini', 'commands', 'storyspec', 'write.toml'), 'utf-8'),
+      await readFile(path.join(outDir, 'generic', '.specify', 'commands', 'write.md'), 'utf-8')
+    ];
+
+    for (const command of renderedCommands) {
+      expect(command).toContain('写中沉浸原则');
+      expect(command).toContain('约束卡用于写前确认和写后自检');
+      expect(command).toContain('不作为正文生成时逐句审查器');
+      expect(command).toContain('正文阶段优先身体感、感官、动作、当下反应和句子质感');
+    }
   });
 
   it('generates read-only Continue check prompts', async () => {

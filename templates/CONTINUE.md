@@ -37,9 +37,10 @@ bash .specify/scripts/bash/validate-local.sh
 1. 运行 `storyspec status`，确认当前故事和下一任务。
 2. 若已有 `stories/<故事名>/handoff.md`，先读取 handoff；没有则运行 `storyspec handoff <故事名>`。
 3. 写正文前先生成或确认章节前置约束卡，覆盖时间点、当前能力与语言水平、情感检查点、硬约束、软约束和写后自检对照。
-4. 如果章节卡还没有准备好，从 `.specify/templates/authoring/chapter-card.md` 复制一份到 `stories/<故事名>/chapter-cards/` 后填写。
-5. 正文完成后，先对照章节前置约束卡检查硬约束是否被破坏，再按 `.specify/templates/authoring/tracking-update-checklist.md` 回填 tracking、canon、graph、knowledge 和任务状态。
-6. 运行验证，并把无法自动验证的部分写进 handoff 或任务记录。
+4. 写中沉浸原则：约束卡用于写前确认和写后自检，不作为正文生成时逐句审查器；正文阶段优先身体感、感官、动作、当下反应和句子质感。
+5. 如果章节卡还没有准备好，从 `.specify/templates/authoring/chapter-card.md` 复制一份到 `stories/<故事名>/chapter-cards/` 后填写。
+6. 正文完成后，先对照章节前置约束卡检查硬约束是否被破坏，再按 `.specify/templates/authoring/tracking-update-checklist.md` 回填 tracking、canon、graph、knowledge 和任务状态。
+7. 运行验证，并把无法自动验证的部分写进 handoff 或任务记录。
 
 ## 可复制给 Agent 的请求
 

@@ -2,7 +2,7 @@
 
 ## 状态
 
-Active。本文登记“写中沉浸原则与约束后置自检”的实现待办。实现前应按影响范围转为 OpenSpec change；本文不替代 OpenSpec artifacts。
+Completed。写中沉浸原则与约束后置自检已通过 OpenSpec `add-immersive-drafting-principle` 完成；本文保留实现背景和验收口径，不再作为活跃开发入口。
 
 ## 背景和目标
 

@@ -6,11 +6,10 @@ Active。本文是 StorySpec 当前唯一的待办入口。详细规则见 [todo
 
 ## 当前待办
 
-当前主线：补齐两条创作体验缺口：一是把章节前置约束卡的使用姿态调整为“写前确认、写中沉浸、写后自检”；二是把参考作品的喜欢与不适，安全转译成原创候选而不是照搬原作世界观。
+当前主线：补齐参考作品反向拆解体验，把作者对参考作品的喜欢与不适，安全转译成原创候选而不是照搬原作世界观。
 
 | 优先级 | 路线 | 状态 | 覆盖范围 | 下一步 |
 | --- | --- | --- | --- | --- |
-| P1 | [章节写中沉浸体验路线图](immersive-drafting-roadmap.md) | Active | 写中沉浸原则、约束后置自检、`/write` 和章节卡 prompt 姿态 | 转 OpenSpec `add-immersive-drafting-principle` |
 | P1 | [参考作品反向拆解路线图](reference-reverse-roadmap.md) | Active | 参考作品反向拆解、精神内核提取、原创化转译、版权/同人边界 | 转 OpenSpec `add-reference-reverse-extraction` |
 
 ## 暂不作为活跃待办
@@ -18,6 +17,7 @@ Active。本文是 StorySpec 当前唯一的待办入口。详细规则见 [todo
 | 文件 | 原因 | 归档入口 |
 | --- | --- | --- |
 | [experience-followup-roadmap.md](experience-followup-roadmap.md) | 体验后续增强入口 P0-P3 discovery 已完成并关闭，未产出需立即实现的 OpenSpec change | [todo-archive.md](todo-archive.md#体验后续增强入口复核) |
+| [archive/completed-roadmaps/immersive-drafting-roadmap.md](archive/completed-roadmaps/immersive-drafting-roadmap.md) | 写中沉浸原则、约束后置自检、`/write` 和章节卡 prompt 姿态已完成并归档 | [todo-archive.md](todo-archive.md#章节写中沉浸体验) |
 | [archive/completed-roadmaps/author-first-run-feedback-roadmap.md](archive/completed-roadmaps/author-first-run-feedback-roadmap.md) | 作者首程引导、素材分流、流程图、阶段性写作反馈和结构视图已完成并归档 | [todo-archive.md](todo-archive.md#作者首程引导与正反馈) |
 | [archive/completed-roadmaps/storyspec-dogfood-friction-roadmap.md](archive/completed-roadmaps/storyspec-dogfood-friction-roadmap.md) | 自用创作流程 P0 闭环、tracking evidence、验证分层和源码 TODO 收口已完成并归档 | [todo-archive.md](todo-archive.md#自用创作流程问题收口) |
 | [archive/completed-roadmaps/chapter-production-workflow-roadmap.md](archive/completed-roadmaps/chapter-production-workflow-roadmap.md) | 章节生产流程优化 P0-P2 已完成并归档 | [todo-archive.md](todo-archive.md#章节生产流程优化) |
