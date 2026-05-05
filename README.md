@@ -339,13 +339,14 @@ StorySpec 有两类入口，容易混淆：
 | `storyspec scene:init <story>` | 为故事创建 Scene Card 模板 |
 | `storyspec scene:list` / `storyspec scene:check` / `storyspec scene:compile` | 管理和检查场景卡 |
 | `storyspec voice:list` / `storyspec voice:check` / `storyspec voice:sample` | 管理角色声音指纹 |
-| `storyspec preset:list` / `storyspec preset:add <id>` / `storyspec preset:doctor` | 管理 Genre Preset |
+| `storyspec preset:list` / `storyspec preset:add <id>` / `storyspec preset:doctor` | 管理 Genre Preset 类型包 |
 
 当前内置 preset：
 
 | Preset | 用途 |
 | --- | --- |
 | `xuanhuan-cultivation` | 面向玄幻、修仙、升级流的世界观字段、节奏模板和审稿权重 |
+| `mystery` | 面向推理悬疑的线索公平性、嫌疑关系、揭示节奏模板和审稿权重 |
 
 ### 写作工作台
 
@@ -416,6 +417,7 @@ StorySpec 有两类入口，容易混淆：
 | `storyspec plugins` | 显示插件帮助 |
 | `storyspec plugins:list` | 列出已安装插件 |
 | `storyspec plugins:add <name>` | 安装内置插件 |
+| `storyspec extension:add <name>` | 安装 extension 扩展包；复用 `plugins:add` 的安装计划和安全预览 |
 | `storyspec plugins:remove <name>` | 移除插件 |
 
 内置插件：
