@@ -6,12 +6,12 @@ Active。本文是 StorySpec 当前唯一的待办入口。详细规则见 [todo
 
 ## 当前待办
 
-当前主线：近期先补齐规划阶段的“多大纲候选”体验，让作者能保留当前正式大纲，同时新增、比较和选择候选大纲，确认后再提升为正式计划；中期保留 App 化、多用户账号和项目隔离路线，等 P1 收口后按 OpenSpec 分阶段推进。
+当前主线：近期先补齐规划阶段的“多大纲候选”体验；App 化路线已收敛为“本机 Web 工作台”第一阶段，先实现 `storyspec app`、项目选择/创建、最近项目、状态 API 和工作台首屏，再推进云端多用户账号与项目隔离。
 
 | 优先级 | 路线 | 状态 | 覆盖范围 | 下一步 |
 | --- | --- | --- | --- | --- |
 | P1 | [多大纲候选与提升路线图](outline-candidates-roadmap.md) | Active | 候选大纲库、保留当前大纲、候选比较、提升为正式 `creative-plan.md` 的确认门禁 | 转 OpenSpec `add-outline-candidates` |
-| P2 | [单人 App 与多用户项目隔离路线图](app-multiuser-roadmap.md) | Planned | 单人 App 工作台、多用户账号、项目隔离、AI job 与部署成本边界 | 转 OpenSpec `add-single-user-app-workbench` 后分阶段推进 |
+| P1 | [单人 App 与多用户项目隔离路线图](app-multiuser-roadmap.md) | Active | 第一阶段本机 Web 工作台：`storyspec app`、项目选择/创建、最近项目、状态 API、工作台首屏；后续再做多用户账号、项目隔离、AI job 与部署成本边界 | 正在转 OpenSpec `add-local-single-user-app-workbench` |
 
 ## 暂不作为活跃待办
 

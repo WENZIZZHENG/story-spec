@@ -43,6 +43,16 @@ storyspec next 编程施法
 storyspec next 编程施法 --modes
 ```
 
+## 实验性本机工作台
+
+StorySpec 正在加入本机 Web 工作台地基。当前版本提供实验性本机服务入口：
+
+```bash
+storyspec app
+```
+
+它会启动只绑定 `127.0.0.1` 的本机服务，并提供 health、最近项目、打开/创建项目和当前项目状态 API。当前它还不是完整浏览器 UI，正式创作流程仍以 CLI 和 agent 命令为准；自动化检查可用 `storyspec app --json --no-open` 查看启动预览。
+
 它会问你今天想怎么玩：
 
 - 我想玩角色

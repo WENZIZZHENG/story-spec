@@ -1,5 +1,6 @@
 import { Command } from '@commander-js/extra-typings';
 import { registerAgentCommand } from './commands/agent.command.js';
+import { registerAppCommand } from './commands/app.command.js';
 import { registerInitCommand } from './commands/init.command.js';
 import { registerCheckStatusCommand } from './commands/check-status.command.js';
 import { registerContractCommand } from './commands/contract.command.js';
@@ -61,6 +62,7 @@ export function runProgram(argv: string[]): void {
     .helpOption('-h, --help', '显示帮助信息');
 
   registerInitCommand(program, { packageRoot });
+  registerAppCommand(program, { packageRoot });
   registerAgentCommand(program, { packageRoot });
   registerContractCommand(program, { packageRoot });
   registerCiCommand(program);

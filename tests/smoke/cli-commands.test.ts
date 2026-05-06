@@ -28,6 +28,7 @@ describe('CLI command modules smoke', () => {
     ]);
 
     expect(help).toContain('init [options] [name]');
+    expect(help).toContain('app [options]');
     expect(help).toContain('agent:list [options]');
     expect(help).toContain('agent:add [options] <id>');
     expect(help).toContain('agent:doctor [options]');
