@@ -473,4 +473,134 @@ describe('local app server core', () => {
       }
     });
   });
+
+  it('routes chapter draft, scene card, and review operations through the current project with dry-run publishing', async () => {
+    const fs = new MemoryFileSystem('D:\\workspace');
+    const projectRoot = path.resolve('D:\\workspace\\spell-era');
+    await fs.ensureDir(path.join(projectRoot, '.specify'));
+    await fs.writeJson(path.join(projectRoot, '.specify', 'config.json'), {
+      name: '法术编译纪元'
+    });
+    const core = createLocalAppServerCore({
+      token: 'secret',
+      fileSystem: fs,
+      recentProjects: createMemoryRecentProjectStore(),
+      projectStatus: async input => ({ projectRoot: input.projectRoot }),
+      createChapterDraft: async input => ({
+        projectRoot: input.projectRoot,
+        story: input.story,
+        chapter: input.chapter,
+        basedOn: input.basedOn,
+        contextPack: input.contextPack,
+        record: { id: 'chapter-001.v1', status: 'draft', path: 'stories/法术编译纪元/drafts/chapter-001.v1.md' }
+      }),
+      listChapterDrafts: async input => ({
+        projectRoot: input.projectRoot,
+        story: input.story,
+        chapter: input.chapter,
+        records: [{ id: 'chapter-001.v1', status: 'draft' }]
+      }),
+      promoteChapterDraft: async input => ({
+        projectRoot: input.projectRoot,
+        story: input.story,
+        draftId: input.draftId,
+        yes: input.yes,
+        dryRun: input.yes !== true,
+        targetPath: path.join(input.projectRoot, 'stories', '法术编译纪元', 'content', 'chapter-001.md')
+      }),
+      createChapterSceneCard: async input => ({
+        projectRoot: input.projectRoot,
+        story: input.story,
+        sceneId: input.sceneId,
+        outputPath: path.join(input.projectRoot, 'stories', '法术编译纪元', 'scenes', `${input.sceneId}.yaml`)
+      }),
+      reviewChapter: async input => ({
+        projectRoot: input.projectRoot,
+        chapter: input.chapter,
+        panel: input.panel,
+        findings: [{ code: 'CHAPTER_TOO_SHORT', severity: 'warning' }],
+        taskDrafts: [{ task_title: '[warning] 修复 CHAPTER_TOO_SHORT' }],
+        reviewers: [{ id: 'editor', score: 92 }]
+      })
+    });
+
+    await expect(core.createChapterDraft({
+      token: 'secret',
+      story: '法术编译纪元',
+      chapter: '001'
+    })).resolves.toEqual({
+      status: 403,
+      body: {
+        blocked: true,
+        blockedReasons: ['项目尚未在本次 App 会话中打开']
+      }
+    });
+
+    await core.openProject({ token: 'secret', projectRoot });
+
+    await expect(core.createChapterDraft({
+      token: 'secret',
+      story: '法术编译纪元',
+      chapter: '001',
+      basedOn: 'stories/法术编译纪元/content/chapter-001.md',
+      contextPack: '.specify/context-packs/write-001.json'
+    })).resolves.toMatchObject({
+      status: 200,
+      body: {
+        projectRoot,
+        story: '法术编译纪元',
+        chapter: '001',
+        contextPack: '.specify/context-packs/write-001.json',
+        record: { id: 'chapter-001.v1', status: 'draft' }
+      }
+    });
+    await expect(core.listChapterDrafts({
+      token: 'secret',
+      story: '法术编译纪元',
+      chapter: '001'
+    })).resolves.toMatchObject({
+      status: 200,
+      body: {
+        projectRoot,
+        records: [{ id: 'chapter-001.v1', status: 'draft' }]
+      }
+    });
+    await expect(core.promoteChapterDraft({
+      token: 'secret',
+      story: '法术编译纪元',
+      draftId: 'chapter-001.v1'
+    })).resolves.toMatchObject({
+      status: 200,
+      body: {
+        projectRoot,
+        draftId: 'chapter-001.v1',
+        dryRun: true
+      }
+    });
+    await expect(core.createChapterSceneCard({
+      token: 'secret',
+      story: '法术编译纪元',
+      sceneId: 'scene-001'
+    })).resolves.toMatchObject({
+      status: 200,
+      body: {
+        projectRoot,
+        sceneId: 'scene-001'
+      }
+    });
+    await expect(core.reviewChapter({
+      token: 'secret',
+      chapter: '001',
+      panel: ['editor']
+    })).resolves.toMatchObject({
+      status: 200,
+      body: {
+        projectRoot,
+        chapter: '001',
+        panel: ['editor'],
+        findings: [{ code: 'CHAPTER_TOO_SHORT', severity: 'warning' }],
+        taskDrafts: [{ task_title: '[warning] 修复 CHAPTER_TOO_SHORT' }]
+      }
+    });
+  });
 });

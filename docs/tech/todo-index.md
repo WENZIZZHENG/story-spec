@@ -2,15 +2,21 @@
 
 ## 状态
 
-Active。本文是 StorySpec 当前唯一的待办入口。详细规则见 [todo-governance.md](todo-governance.md)，已完成事项见 [todo-archive.md](todo-archive.md)。当前活跃路线见下表；实现任一任务前按影响范围转为 OpenSpec change。
+Active。本文是 StorySpec 当前唯一的待办入口。详细规则见 [todo-governance.md](todo-governance.md)，已完成事项见 [todo-archive.md](todo-archive.md)。当前暂无 Active 开发路线；新增或恢复任一任务前按影响范围转为 OpenSpec change。
 
 ## 当前待办
 
-当前主线：规划阶段“多大纲候选”体验已完成；App 化路线已收敛为“本机 Web 工作台”第一阶段。`storyspec app` 地基、零依赖工作台 shell、创作入口、核心缺口、多大纲候选和只读任务板已完成，下一步把章节草稿入口和写后自检接入页面；云端多用户账号与项目隔离仍排在本机工作台之后。
+当前主线：规划阶段“多大纲候选”体验已完成；App 化路线选择的“本机 Web 工作台”第一阶段也已完成。`storyspec app` 已覆盖本机服务地基、零依赖工作台 shell、创作入口、核心缺口、多大纲候选、只读任务板、章节草稿入口和写后自检。云端多用户账号与项目隔离仍排在本机工作台之后，当前为 Planned 中期路线，不作为本轮 Active 开发项。
 
 | 优先级 | 路线 | 状态 | 覆盖范围 | 下一步 |
 | --- | --- | --- | --- | --- |
-| P1 | [单人 App 与多用户项目隔离路线图](app-multiuser-roadmap.md) | Active | 第一阶段本机 Web 工作台：`storyspec app` 地基、工作台 shell、创作入口、核心缺口、多大纲候选和只读任务板已完成；下一步补章节草稿入口和写后自检 | 继续拆分 OpenSpec，优先 `add-local-app-chapter-entry` |
+| - | - | - | 当前无 Active 开发项 | 如要继续 App 中期路线，先新建 OpenSpec，例如 `add-multiuser-project-isolation` |
+
+## Planned 后续路线
+
+| 优先级 | 路线 | 状态 | 覆盖范围 | 激活条件 |
+| --- | --- | --- | --- | --- |
+| P2 | [单人 App 与多用户项目隔离路线图](app-multiuser-roadmap.md) | Planned | 多用户账号、项目隔离、部署与 AI 成本边界；本机 Web 工作台第一阶段已完成 | 用户明确要求继续多用户/云端/自托管账号路线，并先完成 OpenSpec-first 设计 |
 
 ## 暂不作为活跃待办
 

@@ -281,4 +281,105 @@ describe('local app command', () => {
       body: { projectRoot, write: false }
     });
   });
+
+  it('starts the workbench with chapter services wired into the app core', async () => {
+    const fileSystem = new MemoryFileSystem('D:\\workspace');
+    const projectRoot = path.resolve('D:\\workspace\\spell-era');
+    await fileSystem.ensureDir(path.join(projectRoot, '.specify'));
+    await fileSystem.writeJson(path.join(projectRoot, '.specify', 'config.json'), {
+      name: '法术编译纪元'
+    });
+    const result = await startLocalAppWorkbench({
+      host: '127.0.0.1',
+      port: 0,
+      project: projectRoot,
+      token: 'secret-token',
+      fileSystem,
+      recentProjects: createMemoryRecentProjectStore(),
+      projectStatus: async input => ({ projectRoot: input.projectRoot }),
+      createChapterDraft: async input => ({
+        projectRoot: input.projectRoot,
+        story: input.story,
+        chapter: input.chapter,
+        record: { id: 'chapter-001.v1', status: 'draft' }
+      }),
+      listChapterDrafts: async input => ({
+        projectRoot: input.projectRoot,
+        story: input.story,
+        chapter: input.chapter,
+        records: [{ id: 'chapter-001.v1', status: 'draft' }]
+      }),
+      promoteChapterDraft: async input => ({
+        projectRoot: input.projectRoot,
+        story: input.story,
+        draftId: input.draftId,
+        dryRun: input.yes !== true
+      }),
+      createChapterSceneCard: async input => ({
+        projectRoot: input.projectRoot,
+        story: input.story,
+        sceneId: input.sceneId,
+        outputPath: path.join(input.projectRoot, 'stories', '法术编译纪元', 'scenes', `${input.sceneId}.yaml`)
+      }),
+      reviewChapter: async input => ({
+        projectRoot: input.projectRoot,
+        chapter: input.chapter,
+        panel: input.panel,
+        findings: [{ code: 'CHAPTER_TOO_SHORT' }],
+        taskDrafts: [{ task_title: '[warning] 修复 CHAPTER_TOO_SHORT' }],
+        reviewers: [{ id: 'editor', score: 92 }]
+      }),
+      startServer: async ({ core }) => ({
+        url: 'http://127.0.0.1:43127',
+        close: async () => undefined,
+        core
+      })
+    });
+
+    await expect(result.core.createChapterDraft({
+      token: 'secret-token',
+      story: '法术编译纪元',
+      chapter: '001'
+    })).resolves.toMatchObject({
+      status: 200,
+      body: { projectRoot, record: { id: 'chapter-001.v1', status: 'draft' } }
+    });
+    await expect(result.core.listChapterDrafts({
+      token: 'secret-token',
+      story: '法术编译纪元',
+      chapter: '001'
+    })).resolves.toMatchObject({
+      status: 200,
+      body: { projectRoot, records: [{ id: 'chapter-001.v1' }] }
+    });
+    await expect(result.core.promoteChapterDraft({
+      token: 'secret-token',
+      story: '法术编译纪元',
+      draftId: 'chapter-001.v1'
+    })).resolves.toMatchObject({
+      status: 200,
+      body: { projectRoot, dryRun: true }
+    });
+    await expect(result.core.createChapterSceneCard({
+      token: 'secret-token',
+      story: '法术编译纪元',
+      sceneId: 'scene-001'
+    })).resolves.toMatchObject({
+      status: 200,
+      body: { projectRoot, sceneId: 'scene-001' }
+    });
+    await expect(result.core.reviewChapter({
+      token: 'secret-token',
+      chapter: '001',
+      panel: ['editor']
+    })).resolves.toMatchObject({
+      status: 200,
+      body: {
+        projectRoot,
+        chapter: '001',
+        panel: ['editor'],
+        findings: [{ code: 'CHAPTER_TOO_SHORT' }]
+      }
+    });
+  });
 });

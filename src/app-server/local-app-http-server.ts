@@ -56,6 +56,34 @@ interface LocalAppHttpCore {
     token: string;
     story?: string;
   }): Promise<{ status: number; body: unknown }>;
+  createChapterDraft(request: {
+    token: string;
+    story?: string;
+    chapter: string;
+    basedOn?: string;
+    contextPack?: string;
+  }): Promise<{ status: number; body: unknown }>;
+  listChapterDrafts(request: {
+    token: string;
+    story?: string;
+    chapter?: string;
+  }): Promise<{ status: number; body: unknown }>;
+  promoteChapterDraft(request: {
+    token: string;
+    story?: string;
+    draftId: string;
+    yes?: boolean;
+  }): Promise<{ status: number; body: unknown }>;
+  createChapterSceneCard(request: {
+    token: string;
+    story: string;
+    sceneId?: string;
+  }): Promise<{ status: number; body: unknown }>;
+  reviewChapter(request: {
+    token: string;
+    chapter?: string;
+    panel?: string[];
+  }): Promise<{ status: number; body: unknown }>;
 }
 
 export interface StartLocalAppHttpServerInput {
@@ -277,6 +305,80 @@ export const startLocalAppHttpServer = async (
         const result = await input.core.getTaskBoard({
           token: getToken(request),
           story: story ?? undefined
+        });
+        sendJson(response, result.status, result.body);
+        return;
+      }
+
+      if (request.method === 'POST' && url.pathname === '/api/chapters/drafts/create') {
+        const body = await readBody(request) as {
+          story?: unknown;
+          chapter?: unknown;
+          basedOn?: unknown;
+          contextPack?: unknown;
+        };
+        const result = await input.core.createChapterDraft({
+          token: getToken(request),
+          story: body.story === undefined ? undefined : String(body.story),
+          chapter: String(body.chapter ?? ''),
+          basedOn: body.basedOn === undefined ? undefined : String(body.basedOn),
+          contextPack: body.contextPack === undefined ? undefined : String(body.contextPack)
+        });
+        sendJson(response, result.status, result.body);
+        return;
+      }
+
+      if (request.method === 'GET' && url.pathname === '/api/chapters/drafts/list') {
+        const story = url.searchParams.get('story');
+        const chapter = url.searchParams.get('chapter');
+        const result = await input.core.listChapterDrafts({
+          token: getToken(request),
+          story: story ?? undefined,
+          chapter: chapter ?? undefined
+        });
+        sendJson(response, result.status, result.body);
+        return;
+      }
+
+      if (request.method === 'POST' && url.pathname === '/api/chapters/drafts/promote') {
+        const body = await readBody(request) as {
+          story?: unknown;
+          draftId?: unknown;
+          yes?: unknown;
+        };
+        const result = await input.core.promoteChapterDraft({
+          token: getToken(request),
+          story: body.story === undefined ? undefined : String(body.story),
+          draftId: String(body.draftId ?? ''),
+          yes: body.yes === true
+        });
+        sendJson(response, result.status, result.body);
+        return;
+      }
+
+      if (request.method === 'POST' && url.pathname === '/api/chapters/scene/init') {
+        const body = await readBody(request) as {
+          story?: unknown;
+          sceneId?: unknown;
+        };
+        const result = await input.core.createChapterSceneCard({
+          token: getToken(request),
+          story: String(body.story ?? ''),
+          sceneId: body.sceneId === undefined ? undefined : String(body.sceneId)
+        });
+        sendJson(response, result.status, result.body);
+        return;
+      }
+
+      if (request.method === 'POST' && url.pathname === '/api/chapters/review') {
+        const body = await readBody(request) as {
+          chapter?: unknown;
+          panel?: unknown;
+        };
+        const result = await input.core.reviewChapter({
+          token: getToken(request),
+          chapter: body.chapter === undefined ? undefined : String(body.chapter),
+          panel: Array.isArray(body.panel) ? body.panel.map(item => String(item)) : undefined
         });
         sendJson(response, result.status, result.body);
         return;

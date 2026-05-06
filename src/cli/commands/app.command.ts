@@ -14,6 +14,13 @@ import {
   promoteOutlineCandidate
 } from '../../application/manage-outline-candidates.js';
 import { exportTaskBoard } from '../../application/export-task-board.js';
+import {
+  createDraft,
+  listDrafts,
+  promoteDraft
+} from '../../application/manage-drafts.js';
+import { createInitialSceneCard } from '../../application/create-scene-card.js';
+import { reviewProject } from '../../application/review-project.js';
 import type { LocalAppServerResponse } from '../../app-server/local-app-server.js';
 import { createLocalAppServerCore } from '../../app-server/local-app-server.js';
 import type { LocalAppHttpServer, StartLocalAppHttpServerInput } from '../../app-server/local-app-http-server.js';
@@ -48,6 +55,7 @@ export interface StartLocalAppWorkbenchInput<TProjectStatus = unknown> {
   host: string;
   port: number;
   token: string;
+  packageRoot?: string;
   project?: string;
   fileSystem: ProjectFileSystem;
   recentProjects: RecentProjectStore;
@@ -60,6 +68,11 @@ export interface StartLocalAppWorkbenchInput<TProjectStatus = unknown> {
   compareOutlineCandidates?: Parameters<typeof createLocalAppServerCore<TProjectStatus>>[0]['compareOutlineCandidates'];
   promoteOutlineCandidate?: Parameters<typeof createLocalAppServerCore<TProjectStatus>>[0]['promoteOutlineCandidate'];
   taskBoard?: Parameters<typeof createLocalAppServerCore<TProjectStatus>>[0]['taskBoard'];
+  createChapterDraft?: Parameters<typeof createLocalAppServerCore<TProjectStatus>>[0]['createChapterDraft'];
+  listChapterDrafts?: Parameters<typeof createLocalAppServerCore<TProjectStatus>>[0]['listChapterDrafts'];
+  promoteChapterDraft?: Parameters<typeof createLocalAppServerCore<TProjectStatus>>[0]['promoteChapterDraft'];
+  createChapterSceneCard?: Parameters<typeof createLocalAppServerCore<TProjectStatus>>[0]['createChapterSceneCard'];
+  reviewChapter?: Parameters<typeof createLocalAppServerCore<TProjectStatus>>[0]['reviewChapter'];
   startServer?: (input: StartLocalAppHttpServerInput) => Promise<LocalAppWorkbenchServer>;
 }
 
@@ -107,6 +120,7 @@ export const startLocalAppWorkbench = async <TProjectStatus>(
 ): Promise<StartLocalAppWorkbenchResult<TProjectStatus>> => {
   const core = createLocalAppServerCore({
     token: input.token,
+    packageRoot: input.packageRoot,
     fileSystem: input.fileSystem,
     recentProjects: input.recentProjects,
     projectStatus: input.projectStatus,
@@ -117,7 +131,12 @@ export const startLocalAppWorkbench = async <TProjectStatus>(
     createOutlineCandidate: input.createOutlineCandidate,
     compareOutlineCandidates: input.compareOutlineCandidates,
     promoteOutlineCandidate: input.promoteOutlineCandidate,
-    taskBoard: input.taskBoard
+    taskBoard: input.taskBoard,
+    createChapterDraft: input.createChapterDraft,
+    listChapterDrafts: input.listChapterDrafts,
+    promoteChapterDraft: input.promoteChapterDraft,
+    createChapterSceneCard: input.createChapterSceneCard,
+    reviewChapter: input.reviewChapter
   });
   const startServer = input.startServer ?? startLocalAppHttpServer;
   const server = await startServer({
@@ -154,7 +173,7 @@ export const startLocalAppWorkbench = async <TProjectStatus>(
   };
 };
 
-export function registerAppCommand(program: Command, _context: AppCommandContext): void {
+export function registerAppCommand(program: Command, context: AppCommandContext): void {
   program
     .command('app')
     .description('启动本机 Web 工作台')
@@ -186,6 +205,7 @@ export function registerAppCommand(program: Command, _context: AppCommandContext
       const result = await startLocalAppWorkbench({
         host,
         port,
+        packageRoot: context.packageRoot,
         project: options.project,
         token,
         fileSystem: nodeFileSystem,
@@ -205,7 +225,12 @@ export function registerAppCommand(program: Command, _context: AppCommandContext
         createOutlineCandidate: input => createOutlineCandidate(input),
         compareOutlineCandidates: input => compareOutlineCandidates(input),
         promoteOutlineCandidate: input => promoteOutlineCandidate(input),
-        taskBoard: input => exportTaskBoard(input)
+        taskBoard: input => exportTaskBoard(input),
+        createChapterDraft: input => createDraft(input),
+        listChapterDrafts: input => listDrafts(input),
+        promoteChapterDraft: input => promoteDraft(input),
+        createChapterSceneCard: input => createInitialSceneCard(input),
+        reviewChapter: input => reviewProject(input)
       });
       const server = result.server;
 

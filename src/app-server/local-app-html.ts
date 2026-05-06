@@ -636,6 +636,81 @@ export const renderLocalAppHtml = (input: RenderLocalAppHtmlInput): string => {
             <div class="result-box" id="task-board-result">读取后会显示任务总数、待办、完成、writeReady 和 planOnly。</div>
           </section>
         </div>
+        <div class="panel-body gate" aria-labelledby="chapter-entry-title">
+          <section class="section-block">
+            <div class="dossier-title">
+              <h2 id="chapter-entry-title">章节入口</h2>
+              <button class="secondary" id="refresh-chapter-drafts" type="button">草稿列表</button>
+            </div>
+            <p class="muted">章节草稿是候选文件；发布预览默认 dry-run，不覆盖正式正文。正文仍在草稿文件或 agent 写作流程里完成。</p>
+            <div class="field">
+              <label for="chapter-story-name">故事名（可选）</label>
+              <input id="chapter-story-name" name="story" autocomplete="off" placeholder="留空则使用最近故事">
+            </div>
+            <div class="field">
+              <label for="chapter-id">章节</label>
+              <input id="chapter-id" name="chapter" autocomplete="off" placeholder="001 或 chapter-001">
+            </div>
+            <div class="error" id="chapter-draft-list-error" role="status" aria-live="polite"></div>
+            <div class="result-box" id="chapter-draft-list-result">读取后会列出章节草稿记录。</div>
+          </section>
+
+          <form class="section-block" id="chapter-draft-form">
+            <h3>创建草稿</h3>
+            <div class="field">
+              <label for="chapter-based-on">基于文件（可选）</label>
+              <input id="chapter-based-on" name="basedOn" autocomplete="off" placeholder="stories/法术编译纪元/content/chapter-001.md">
+            </div>
+            <div class="field">
+              <label for="chapter-context-pack">Context Pack（可选）</label>
+              <input id="chapter-context-pack" name="contextPack" autocomplete="off" placeholder=".specify/context-packs/write-001.json">
+            </div>
+            <div class="error" id="chapter-draft-error" role="status" aria-live="polite"></div>
+            <div class="button-row">
+              <button type="submit">创建章节草稿</button>
+            </div>
+            <div class="result-box" id="chapter-draft-result">创建草稿不会覆盖 content 正文。</div>
+          </form>
+
+          <form class="section-block" id="chapter-promote-form">
+            <h3>发布预览</h3>
+            <div class="field">
+              <label for="chapter-draft-id">Draft ID</label>
+              <input id="chapter-draft-id" name="draftId" autocomplete="off" placeholder="chapter-001.v1">
+            </div>
+            <div class="error" id="chapter-promote-error" role="status" aria-live="polite"></div>
+            <div class="button-row">
+              <button type="submit">查看 dry-run</button>
+            </div>
+            <div class="result-box" id="chapter-promote-result">默认 dry-run，不发布到正式 content。</div>
+          </form>
+
+          <form class="section-block" id="chapter-scene-form">
+            <h3>Scene Card 初始化</h3>
+            <div class="field">
+              <label for="chapter-scene-id">Scene ID</label>
+              <input id="chapter-scene-id" name="sceneId" autocomplete="off" placeholder="scene-001">
+            </div>
+            <div class="error" id="chapter-scene-error" role="status" aria-live="polite"></div>
+            <div class="button-row">
+              <button type="submit">初始化 Scene Card</button>
+            </div>
+            <div class="result-box" id="chapter-scene-result">Scene Card 只是写作门禁和上下文卡，不自动确认新增事实。</div>
+          </form>
+
+          <form class="section-block" id="chapter-review-form">
+            <h3>写后自检</h3>
+            <div class="field">
+              <label for="chapter-review-panel">审稿人（可选，逗号分隔）</label>
+              <input id="chapter-review-panel" name="panel" autocomplete="off" placeholder="editor,continuity,voice">
+            </div>
+            <div class="error" id="chapter-review-error" role="status" aria-live="polite"></div>
+            <div class="button-row">
+              <button type="submit">运行章节自检</button>
+            </div>
+            <div class="result-box" id="chapter-review-result">自检只读输出 findings 和任务草稿，不改 tasks.md。</div>
+          </form>
+        </div>
       </aside>
     </main>
   </div>
@@ -669,6 +744,16 @@ export const renderLocalAppHtml = (input: RenderLocalAppHtmlInput): string => {
     const outlineCompareResult = document.querySelector("#outline-compare-result");
     const outlinePromoteResult = document.querySelector("#outline-promote-result");
     const taskBoardResult = document.querySelector("#task-board-result");
+    const chapterDraftListError = document.querySelector("#chapter-draft-list-error");
+    const chapterDraftError = document.querySelector("#chapter-draft-error");
+    const chapterPromoteError = document.querySelector("#chapter-promote-error");
+    const chapterSceneError = document.querySelector("#chapter-scene-error");
+    const chapterReviewError = document.querySelector("#chapter-review-error");
+    const chapterDraftListResult = document.querySelector("#chapter-draft-list-result");
+    const chapterDraftResult = document.querySelector("#chapter-draft-result");
+    const chapterPromoteResult = document.querySelector("#chapter-promote-result");
+    const chapterSceneResult = document.querySelector("#chapter-scene-result");
+    const chapterReviewResult = document.querySelector("#chapter-review-result");
 
     const api = async (url, options = {}) => {
       const response = await fetch(url, {
@@ -709,6 +794,18 @@ export const renderLocalAppHtml = (input: RenderLocalAppHtmlInput): string => {
     };
 
     const outlineStoryValue = () => document.querySelector("#outline-story-name").value || undefined;
+
+    const chapterStoryValue = () => document.querySelector("#chapter-story-name").value || undefined;
+    const chapterValue = () => document.querySelector("#chapter-id").value || undefined;
+    const chapterDraftQuery = () => {
+      const params = new URLSearchParams();
+      const story = chapterStoryValue();
+      const chapter = chapterValue();
+      if (story) params.set("story", story);
+      if (chapter) params.set("chapter", chapter);
+      const query = params.toString();
+      return query ? "?" + query : "";
+    };
 
     const escapeHtml = value => String(value)
       .replaceAll("&", "&amp;")
@@ -1007,6 +1104,106 @@ export const renderLocalAppHtml = (input: RenderLocalAppHtmlInput): string => {
         \`;
       } catch (error) {
         taskBoardError.textContent = error.message;
+      }
+    });
+
+    const loadChapterDrafts = async () => {
+      chapterDraftListError.textContent = "";
+      try {
+        const result = await api("/api/chapters/drafts/list" + chapterDraftQuery(), { method: "GET" });
+        const records = result.records || [];
+        chapterDraftListResult.innerHTML = records.length
+          ? '<ul class="fact-list">' + records.map(record => '<li><strong>' + escapeHtml(record.id) + '</strong>：' + escapeHtml(record.status) + ' · v' + escapeHtml(record.version || "") + '<br><span class="muted">' + escapeHtml(record.path || "") + '</span></li>').join("") + '</ul>'
+          : '<div class="empty">暂无章节草稿。</div>';
+      } catch (error) {
+        chapterDraftListError.textContent = error.message;
+      }
+    };
+
+    document.querySelector("#refresh-chapter-drafts").addEventListener("click", loadChapterDrafts);
+
+    document.querySelector("#chapter-draft-form").addEventListener("submit", async event => {
+      event.preventDefault();
+      chapterDraftError.textContent = "";
+      const form = new FormData(event.currentTarget);
+      try {
+        const result = await api("/api/chapters/drafts/create", {
+          method: "POST",
+          body: JSON.stringify({
+            story: chapterStoryValue(),
+            chapter: chapterValue(),
+            basedOn: String(form.get("basedOn") || "") || undefined,
+            contextPack: String(form.get("contextPack") || "") || undefined
+          })
+        });
+        chapterDraftResult.innerHTML = '<p><strong>' + escapeHtml(result.record?.id || "draft") + '</strong> · ' + escapeHtml(result.record?.status || "draft") + '</p><p class="muted">' + escapeHtml(result.record?.path || result.draftPath || "") + '</p><div class="command">storyspec context:pack ' + escapeHtml(result.story || chapterStoryValue() || "<story>") + ' --chapter ' + escapeHtml(result.record?.chapter || chapterValue() || "<chapter>") + '</div>';
+        await loadChapterDrafts();
+      } catch (error) {
+        chapterDraftError.textContent = error.message;
+      }
+    });
+
+    document.querySelector("#chapter-promote-form").addEventListener("submit", async event => {
+      event.preventDefault();
+      chapterPromoteError.textContent = "";
+      const form = new FormData(event.currentTarget);
+      try {
+        const result = await api("/api/chapters/drafts/promote", {
+          method: "POST",
+          body: JSON.stringify({
+            story: chapterStoryValue(),
+            draftId: String(form.get("draftId") || ""),
+            yes: false
+          })
+        });
+        chapterPromoteResult.innerHTML = '<p><strong>' + (result.dryRun ? "dry-run 预览" : "已发布") + '</strong> · ' + escapeHtml(result.record?.id || result.draftId || "") + '</p><p class="muted">目标：' + escapeHtml(result.targetPath || "content/<chapter>.md") + '</p>';
+      } catch (error) {
+        chapterPromoteError.textContent = error.message;
+      }
+    });
+
+    document.querySelector("#chapter-scene-form").addEventListener("submit", async event => {
+      event.preventDefault();
+      chapterSceneError.textContent = "";
+      const form = new FormData(event.currentTarget);
+      try {
+        const result = await api("/api/chapters/scene/init", {
+          method: "POST",
+          body: JSON.stringify({
+            story: chapterStoryValue(),
+            sceneId: String(form.get("sceneId") || "") || undefined
+          })
+        });
+        chapterSceneResult.innerHTML = '<p><strong>' + escapeHtml(result.sceneId || "scene") + '</strong></p><p class="muted">' + escapeHtml(result.outputPath || "") + '</p><p class="muted">候选上下文：' + escapeHtml(result.contextItems?.length || 0) + '</p>';
+      } catch (error) {
+        chapterSceneError.textContent = error.message;
+      }
+    });
+
+    document.querySelector("#chapter-review-form").addEventListener("submit", async event => {
+      event.preventDefault();
+      chapterReviewError.textContent = "";
+      const form = new FormData(event.currentTarget);
+      const panel = String(form.get("panel") || "").split(",").map(item => item.trim()).filter(Boolean);
+      try {
+        const result = await api("/api/chapters/review", {
+          method: "POST",
+          body: JSON.stringify({
+            chapter: chapterValue(),
+            panel: panel.length ? panel : undefined
+          })
+        });
+        const reviewers = result.reviewers || [];
+        chapterReviewResult.innerHTML = \`
+          <div class="metric-grid">
+            <div class="metric"><span class="metric-value">\${(result.findings || []).length}</span><span class="metric-label">Findings</span></div>
+            <div class="metric"><span class="metric-value">\${(result.taskDrafts || []).length}</span><span class="metric-label">任务草稿</span></div>
+            <div class="metric"><span class="metric-value">\${reviewers.length}</span><span class="metric-label">审稿人</span></div>
+          </div>
+          <ul class="fact-list">\${reviewers.map(reviewer => '<li><strong>' + escapeHtml(reviewer.title || reviewer.id) + '</strong>：' + escapeHtml(reviewer.score ?? "") + '/100</li>').join("") || '<li>暂无 reviewer 结果。</li>'}</ul>
+        \`;
+      } catch (error) {
+        chapterReviewError.textContent = error.message;
       }
     });
 

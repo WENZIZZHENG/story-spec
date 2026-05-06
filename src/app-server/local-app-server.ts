@@ -33,6 +33,22 @@ import {
   exportTaskBoard,
   type ExportTaskBoardInput
 } from '../application/export-task-board.js';
+import {
+  createDraft as createDraftApplication,
+  listDrafts as listDraftsApplication,
+  promoteDraft as promoteDraftApplication,
+  type CreateDraftInput,
+  type ListDraftsInput,
+  type PromoteDraftInput
+} from '../application/manage-drafts.js';
+import {
+  createInitialSceneCard,
+  type CreateInitialSceneCardInput
+} from '../application/create-scene-card.js';
+import {
+  reviewProject,
+  type ReviewProjectInput
+} from '../application/review-project.js';
 
 export interface LocalAppServerResponse<TBody = unknown> {
   status: number;
@@ -50,6 +66,7 @@ export interface LocalAppProjectStatusInput {
 
 export interface CreateLocalAppServerCoreInput<TProjectStatus> {
   token: string;
+  packageRoot?: string;
   fileSystem: ProjectFileSystem;
   recentProjects: RecentProjectStore;
   host?: string;
@@ -63,6 +80,11 @@ export interface CreateLocalAppServerCoreInput<TProjectStatus> {
   compareOutlineCandidates?(request: LocalAppCompareOutlineCandidatesRequest): Promise<unknown>;
   promoteOutlineCandidate?(request: LocalAppPromoteOutlineCandidateRequest): Promise<unknown>;
   taskBoard?(request: LocalAppTaskBoardRequest): Promise<unknown>;
+  createChapterDraft?(request: LocalAppCreateChapterDraftRequest): Promise<unknown>;
+  listChapterDrafts?(request: LocalAppListChapterDraftsRequest): Promise<unknown>;
+  promoteChapterDraft?(request: LocalAppPromoteChapterDraftRequest): Promise<unknown>;
+  createChapterSceneCard?(request: LocalAppCreateChapterSceneCardRequest): Promise<unknown>;
+  reviewChapter?(request: LocalAppReviewChapterRequest): Promise<unknown>;
 }
 
 export interface OpenProjectRequest {
@@ -205,6 +227,79 @@ export interface LocalAppTaskBoardRequest {
 export interface TaskBoardRequest {
   token: string;
   story?: string;
+}
+
+export interface LocalAppCreateChapterDraftRequest {
+  projectRoot: string;
+  fileSystem: ProjectFileSystem;
+  story?: string;
+  chapter: string;
+  basedOn?: string;
+  contextPack?: string;
+}
+
+export interface CreateChapterDraftRequest {
+  token: string;
+  story?: string;
+  chapter: string;
+  basedOn?: string;
+  contextPack?: string;
+}
+
+export interface LocalAppListChapterDraftsRequest {
+  projectRoot: string;
+  fileSystem: ProjectFileSystem;
+  story?: string;
+  chapter?: string;
+}
+
+export interface ListChapterDraftsRequest {
+  token: string;
+  story?: string;
+  chapter?: string;
+}
+
+export interface LocalAppPromoteChapterDraftRequest {
+  projectRoot: string;
+  fileSystem: ProjectFileSystem;
+  story?: string;
+  draftId: string;
+  yes?: boolean;
+}
+
+export interface PromoteChapterDraftRequest {
+  token: string;
+  story?: string;
+  draftId: string;
+  yes?: boolean;
+}
+
+export interface LocalAppCreateChapterSceneCardRequest {
+  projectRoot: string;
+  packageRoot: string;
+  fileSystem: ProjectFileSystem;
+  story: string;
+  sceneId?: string;
+}
+
+export interface CreateChapterSceneCardRequest {
+  token: string;
+  story: string;
+  sceneId?: string;
+}
+
+export interface LocalAppReviewChapterRequest {
+  projectRoot: string;
+  packageRoot?: string;
+  fileSystem: ProjectFileSystem;
+  chapter?: string;
+  panel?: string[];
+}
+
+export interface ReviewChapterRequest {
+  token: string;
+  chapter?: string;
+  panel?: string[];
 }
 
 const unauthorized = (): LocalAppServerResponse<LocalAppBlockedBody> => ({
@@ -624,6 +719,172 @@ export const createLocalAppServerCore = <TProjectStatus>(
             story: request.story,
             write: false
           } satisfies ExportTaskBoardInput);
+
+        return { status: 200, body };
+      } catch (error) {
+        return badRequest(error);
+      }
+    },
+
+    async createChapterDraft(request: CreateChapterDraftRequest): Promise<LocalAppServerResponse<unknown | LocalAppBlockedBody>> {
+      if (!hasToken(request.token)) {
+        return unauthorized();
+      }
+
+      const projectRoot = currentAllowedProject();
+      if (!projectRoot) {
+        return forbiddenProject();
+      }
+
+      try {
+        const body = input.createChapterDraft
+          ? await input.createChapterDraft({
+            projectRoot,
+            fileSystem: input.fileSystem,
+            story: request.story,
+            chapter: request.chapter,
+            basedOn: request.basedOn,
+            contextPack: request.contextPack
+          })
+          : await createDraftApplication({
+            projectRoot,
+            fileSystem: input.fileSystem,
+            story: request.story,
+            chapter: request.chapter,
+            basedOn: request.basedOn,
+            contextPack: request.contextPack
+          } satisfies CreateDraftInput);
+
+        return { status: 200, body };
+      } catch (error) {
+        return badRequest(error);
+      }
+    },
+
+    async listChapterDrafts(request: ListChapterDraftsRequest): Promise<LocalAppServerResponse<unknown | LocalAppBlockedBody>> {
+      if (!hasToken(request.token)) {
+        return unauthorized();
+      }
+
+      const projectRoot = currentAllowedProject();
+      if (!projectRoot) {
+        return forbiddenProject();
+      }
+
+      try {
+        const body = input.listChapterDrafts
+          ? await input.listChapterDrafts({
+            projectRoot,
+            fileSystem: input.fileSystem,
+            story: request.story,
+            chapter: request.chapter
+          })
+          : await listDraftsApplication({
+            projectRoot,
+            fileSystem: input.fileSystem,
+            story: request.story,
+            chapter: request.chapter
+          } satisfies ListDraftsInput);
+
+        return { status: 200, body };
+      } catch (error) {
+        return badRequest(error);
+      }
+    },
+
+    async promoteChapterDraft(request: PromoteChapterDraftRequest): Promise<LocalAppServerResponse<unknown | LocalAppBlockedBody>> {
+      if (!hasToken(request.token)) {
+        return unauthorized();
+      }
+
+      const projectRoot = currentAllowedProject();
+      if (!projectRoot) {
+        return forbiddenProject();
+      }
+
+      try {
+        const body = input.promoteChapterDraft
+          ? await input.promoteChapterDraft({
+            projectRoot,
+            fileSystem: input.fileSystem,
+            story: request.story,
+            draftId: request.draftId,
+            yes: request.yes === true
+          })
+          : await promoteDraftApplication({
+            projectRoot,
+            fileSystem: input.fileSystem,
+            story: request.story,
+            draftId: request.draftId,
+            yes: request.yes === true
+          } satisfies PromoteDraftInput);
+
+        return { status: 200, body };
+      } catch (error) {
+        return badRequest(error);
+      }
+    },
+
+    async createChapterSceneCard(request: CreateChapterSceneCardRequest): Promise<LocalAppServerResponse<unknown | LocalAppBlockedBody>> {
+      if (!hasToken(request.token)) {
+        return unauthorized();
+      }
+
+      const projectRoot = currentAllowedProject();
+      if (!projectRoot) {
+        return forbiddenProject();
+      }
+
+      try {
+        const packageRoot = input.packageRoot ?? process.cwd();
+        const body = input.createChapterSceneCard
+          ? await input.createChapterSceneCard({
+            projectRoot,
+            packageRoot,
+            fileSystem: input.fileSystem,
+            story: request.story,
+            sceneId: request.sceneId
+          })
+          : await createInitialSceneCard({
+            projectRoot,
+            packageRoot,
+            fileSystem: input.fileSystem,
+            story: request.story,
+            id: request.sceneId
+          } satisfies CreateInitialSceneCardInput);
+
+        return { status: 200, body };
+      } catch (error) {
+        return badRequest(error);
+      }
+    },
+
+    async reviewChapter(request: ReviewChapterRequest): Promise<LocalAppServerResponse<unknown | LocalAppBlockedBody>> {
+      if (!hasToken(request.token)) {
+        return unauthorized();
+      }
+
+      const projectRoot = currentAllowedProject();
+      if (!projectRoot) {
+        return forbiddenProject();
+      }
+
+      try {
+        const body = input.reviewChapter
+          ? await input.reviewChapter({
+            projectRoot,
+            packageRoot: input.packageRoot,
+            fileSystem: input.fileSystem,
+            chapter: request.chapter,
+            panel: request.panel
+          })
+          : await reviewProject({
+            projectRoot,
+            packageRoot: input.packageRoot,
+            fileSystem: input.fileSystem,
+            chapter: request.chapter,
+            panel: request.panel
+          } satisfies ReviewProjectInput);
 
         return { status: 200, body };
       } catch (error) {

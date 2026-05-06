@@ -357,4 +357,153 @@ describe('local app http server', () => {
       await server.close();
     }
   });
+
+  it('routes chapter draft, scene card, and review APIs through the current app session', async () => {
+    const projectRoot = await makeTempDir();
+    await mkdir(path.join(projectRoot, '.specify'), { recursive: true });
+    await writeFile(path.join(projectRoot, '.specify', 'config.json'), JSON.stringify({
+      name: '法术编译纪元'
+    }));
+    const core = createLocalAppServerCore({
+      token: 'secret',
+      fileSystem: nodeFileSystem,
+      recentProjects: createMemoryRecentProjectStore(),
+      projectStatus: async input => ({
+        projectRoot: input.projectRoot,
+        projectName: '法术编译纪元'
+      }),
+      createChapterDraft: async input => ({
+        projectRoot: input.projectRoot,
+        story: input.story,
+        chapter: input.chapter,
+        contextPack: input.contextPack,
+        record: { id: 'chapter-001.v1', status: 'draft', path: 'stories/法术编译纪元/drafts/chapter-001.v1.md' }
+      }),
+      listChapterDrafts: async input => ({
+        projectRoot: input.projectRoot,
+        story: input.story,
+        chapter: input.chapter,
+        records: [{ id: 'chapter-001.v1', status: 'draft' }]
+      }),
+      promoteChapterDraft: async input => ({
+        projectRoot: input.projectRoot,
+        story: input.story,
+        draftId: input.draftId,
+        dryRun: input.yes !== true,
+        targetPath: path.join(input.projectRoot, 'stories', '法术编译纪元', 'content', 'chapter-001.md')
+      }),
+      createChapterSceneCard: async input => ({
+        projectRoot: input.projectRoot,
+        story: input.story,
+        sceneId: input.sceneId,
+        outputPath: path.join(input.projectRoot, 'stories', '法术编译纪元', 'scenes', `${input.sceneId}.yaml`)
+      }),
+      reviewChapter: async input => ({
+        projectRoot: input.projectRoot,
+        chapter: input.chapter,
+        panel: input.panel,
+        findings: [{ code: 'CHAPTER_TOO_SHORT', severity: 'warning' }],
+        taskDrafts: [{ task_title: '[warning] 修复 CHAPTER_TOO_SHORT' }],
+        reviewers: [{ id: 'editor', score: 92 }]
+      })
+    });
+    const server = await startLocalAppHttpServer({
+      host: '127.0.0.1',
+      port: 0,
+      core,
+      token: 'secret'
+    });
+
+    try {
+      const unauthorized = await fetch(`${server.url}/api/chapters/drafts/list`);
+      expect(unauthorized.status).toBe(401);
+
+      await fetch(`${server.url}/api/projects/open`, {
+        method: 'POST',
+        headers: {
+          'content-type': 'application/json',
+          'x-storyspec-app-token': 'secret'
+        },
+        body: JSON.stringify({ projectRoot })
+      });
+
+      const created = await fetch(`${server.url}/api/chapters/drafts/create`, {
+        method: 'POST',
+        headers: {
+          'content-type': 'application/json',
+          'x-storyspec-app-token': 'secret'
+        },
+        body: JSON.stringify({
+          story: '法术编译纪元',
+          chapter: '001',
+          contextPack: '.specify/context-packs/write-001.json'
+        })
+      });
+      await expect(created.json()).resolves.toMatchObject({
+        projectRoot,
+        story: '法术编译纪元',
+        chapter: '001',
+        record: { id: 'chapter-001.v1', status: 'draft' }
+      });
+
+      const list = await fetch(`${server.url}/api/chapters/drafts/list?story=${encodeURIComponent('法术编译纪元')}&chapter=001`, {
+        headers: { 'x-storyspec-app-token': 'secret' }
+      });
+      await expect(list.json()).resolves.toMatchObject({
+        records: [{ id: 'chapter-001.v1', status: 'draft' }]
+      });
+
+      const promote = await fetch(`${server.url}/api/chapters/drafts/promote`, {
+        method: 'POST',
+        headers: {
+          'content-type': 'application/json',
+          'x-storyspec-app-token': 'secret'
+        },
+        body: JSON.stringify({
+          story: '法术编译纪元',
+          draftId: 'chapter-001.v1'
+        })
+      });
+      await expect(promote.json()).resolves.toMatchObject({
+        draftId: 'chapter-001.v1',
+        dryRun: true
+      });
+
+      const scene = await fetch(`${server.url}/api/chapters/scene/init`, {
+        method: 'POST',
+        headers: {
+          'content-type': 'application/json',
+          'x-storyspec-app-token': 'secret'
+        },
+        body: JSON.stringify({
+          story: '法术编译纪元',
+          sceneId: 'scene-001'
+        })
+      });
+      await expect(scene.json()).resolves.toMatchObject({
+        story: '法术编译纪元',
+        sceneId: 'scene-001'
+      });
+
+      const review = await fetch(`${server.url}/api/chapters/review`, {
+        method: 'POST',
+        headers: {
+          'content-type': 'application/json',
+          'x-storyspec-app-token': 'secret'
+        },
+        body: JSON.stringify({
+          chapter: '001',
+          panel: ['editor']
+        })
+      });
+      await expect(review.json()).resolves.toMatchObject({
+        chapter: '001',
+        panel: ['editor'],
+        findings: [{ code: 'CHAPTER_TOO_SHORT', severity: 'warning' }],
+        taskDrafts: [{ task_title: '[warning] 修复 CHAPTER_TOO_SHORT' }]
+      });
+    } finally {
+      await server.close();
+    }
+  });
 });

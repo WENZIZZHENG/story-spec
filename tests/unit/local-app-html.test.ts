@@ -88,4 +88,31 @@ describe('local app html', () => {
     expect(html).toContain('id="outline-promote-result"');
     expect(html).toContain('id="task-board-result"');
   });
+
+  it('renders chapter draft entry, scene card initialization, and post-write review controls without a rich text editor', () => {
+    const html = renderLocalAppHtml({
+      token: 'secret-token'
+    });
+
+    expect(html).toContain('章节入口');
+    expect(html).toContain('章节草稿');
+    expect(html).toContain('创建草稿');
+    expect(html).toContain('草稿列表');
+    expect(html).toContain('发布预览');
+    expect(html).toContain('默认 dry-run');
+    expect(html).toContain('Scene Card 初始化');
+    expect(html).toContain('写后自检');
+    expect(html).toContain('/api/chapters/drafts/create');
+    expect(html).toContain('/api/chapters/drafts/list');
+    expect(html).toContain('/api/chapters/drafts/promote');
+    expect(html).toContain('/api/chapters/scene/init');
+    expect(html).toContain('/api/chapters/review');
+    expect(html).toContain('id="chapter-draft-result"');
+    expect(html).toContain('id="chapter-draft-list-result"');
+    expect(html).toContain('id="chapter-promote-result"');
+    expect(html).toContain('id="chapter-scene-result"');
+    expect(html).toContain('id="chapter-review-result"');
+    expect(html.toLowerCase()).not.toContain('contenteditable');
+    expect(html.toLowerCase()).not.toContain('rich text');
+  });
 });
