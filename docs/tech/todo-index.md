@@ -2,15 +2,15 @@
 
 ## 状态
 
-Active。本文是 StorySpec 当前唯一的待办入口。详细规则见 [todo-governance.md](todo-governance.md)，已完成事项见 [todo-archive.md](todo-archive.md)。当前暂无活跃路线；新增待办前按治理规则建立专题 roadmap，并在实现前转为 OpenSpec change。
+Active。本文是 StorySpec 当前唯一的待办入口。详细规则见 [todo-governance.md](todo-governance.md)，已完成事项见 [todo-archive.md](todo-archive.md)。当前活跃路线见下表；实现任一任务前按影响范围转为 OpenSpec change。
 
 ## 当前待办
 
-当前主线：暂无活跃待办。最近两条创作体验缺口已完成并归档；新增长期路线时先登记到本文，再按影响范围转 OpenSpec。
+当前主线：补齐规划阶段的“多大纲候选”体验，让作者能保留当前正式大纲，同时新增、比较和选择候选大纲，确认后再提升为正式计划。
 
 | 优先级 | 路线 | 状态 | 覆盖范围 | 下一步 |
 | --- | --- | --- | --- | --- |
-| 暂无 | - | - | - | - |
+| P1 | [多大纲候选与提升路线图](outline-candidates-roadmap.md) | Active | 候选大纲库、保留当前大纲、候选比较、提升为正式 `creative-plan.md` 的确认门禁 | 转 OpenSpec `add-outline-candidates` |
 
 ## 暂不作为活跃待办
 
