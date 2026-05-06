@@ -331,4 +331,146 @@ describe('local app server core', () => {
       }
     });
   });
+
+  it('routes outline candidate operations through the current project and keeps promote dry-run by default', async () => {
+    const fs = new MemoryFileSystem('D:\\workspace');
+    const projectRoot = path.resolve('D:\\workspace\\spell-era');
+    await fs.ensureDir(path.join(projectRoot, '.specify'));
+    await fs.writeJson(path.join(projectRoot, '.specify', 'config.json'), {
+      name: '法术编译纪元'
+    });
+    const core = createLocalAppServerCore({
+      token: 'secret',
+      fileSystem: fs,
+      recentProjects: createMemoryRecentProjectStore(),
+      projectStatus: async input => ({ projectRoot: input.projectRoot }),
+      listOutlineCandidates: async input => ({
+        projectRoot: input.projectRoot,
+        story: input.story,
+        outlines: [{ id: 'academy', title: '学院线加强版', status: 'candidate' }]
+      }),
+      createOutlineCandidate: async input => ({
+        projectRoot: input.projectRoot,
+        story: input.story,
+        outline: { id: 'border', title: input.title, status: 'candidate' },
+        text: input.text
+      }),
+      compareOutlineCandidates: async input => ({
+        projectRoot: input.projectRoot,
+        story: input.story,
+        left: { id: input.leftId },
+        right: { id: input.rightId },
+        dimensions: [{ dimension: '主线目标', left: '学院', right: '边境', changed: true }]
+      }),
+      promoteOutlineCandidate: async input => ({
+        projectRoot: input.projectRoot,
+        story: input.story,
+        outline: { id: input.outlineId },
+        dryRun: input.yes !== true,
+        reminders: ['重新检查 tasks、Scene Card 和 Context Pack。']
+      })
+    });
+
+    await expect(core.listOutlineCandidates({
+      token: 'secret',
+      story: '法术编译纪元'
+    })).resolves.toEqual({
+      status: 403,
+      body: {
+        blocked: true,
+        blockedReasons: ['项目尚未在本次 App 会话中打开']
+      }
+    });
+
+    await core.openProject({ token: 'secret', projectRoot });
+
+    await expect(core.listOutlineCandidates({
+      token: 'secret',
+      story: '法术编译纪元'
+    })).resolves.toMatchObject({
+      status: 200,
+      body: {
+        projectRoot,
+        outlines: [{ id: 'academy', title: '学院线加强版', status: 'candidate' }]
+      }
+    });
+    await expect(core.createOutlineCandidate({
+      token: 'secret',
+      story: '法术编译纪元',
+      title: '边境冒险版',
+      text: '主线目标：边境冒险'
+    })).resolves.toMatchObject({
+      status: 200,
+      body: {
+        projectRoot,
+        outline: { id: 'border', title: '边境冒险版', status: 'candidate' }
+      }
+    });
+    await expect(core.compareOutlineCandidates({
+      token: 'secret',
+      story: '法术编译纪元',
+      leftId: 'academy',
+      rightId: 'border'
+    })).resolves.toMatchObject({
+      status: 200,
+      body: {
+        projectRoot,
+        dimensions: [{ dimension: '主线目标', changed: true }]
+      }
+    });
+    await expect(core.promoteOutlineCandidate({
+      token: 'secret',
+      story: '法术编译纪元',
+      outlineId: 'border'
+    })).resolves.toMatchObject({
+      status: 200,
+      body: {
+        projectRoot,
+        dryRun: true,
+        reminders: ['重新检查 tasks、Scene Card 和 Context Pack。']
+      }
+    });
+  });
+
+  it('returns a read-only task board for the current project', async () => {
+    const fs = new MemoryFileSystem('D:\\workspace');
+    const projectRoot = path.resolve('D:\\workspace\\spell-era');
+    await fs.ensureDir(path.join(projectRoot, '.specify'));
+    await fs.writeJson(path.join(projectRoot, '.specify', 'config.json'), {
+      name: '法术编译纪元'
+    });
+    const core = createLocalAppServerCore({
+      token: 'secret',
+      fileSystem: fs,
+      recentProjects: createMemoryRecentProjectStore(),
+      projectStatus: async input => ({ projectRoot: input.projectRoot }),
+      taskBoard: async input => ({
+        projectRoot: input.projectRoot,
+        story: input.story,
+        write: input.write,
+        board: {
+          summary: { total: 2, todo: 1, done: 1, writeReady: 1, planOnly: 1 },
+          tasks: [{ id: 'T1', title: '写第一章', status: 'todo' }]
+        }
+      })
+    });
+
+    await core.openProject({ token: 'secret', projectRoot });
+
+    await expect(core.getTaskBoard({
+      token: 'secret',
+      story: '法术编译纪元'
+    })).resolves.toEqual({
+      status: 200,
+      body: {
+        projectRoot,
+        story: '法术编译纪元',
+        write: false,
+        board: {
+          summary: { total: 2, todo: 1, done: 1, writeReady: 1, planOnly: 1 },
+          tasks: [{ id: 'T1', title: '写第一章', status: 'todo' }]
+        }
+      }
+    });
+  });
 });

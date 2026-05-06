@@ -30,6 +30,32 @@ interface LocalAppHttpCore {
     token: string;
     story?: string;
   }): Promise<{ status: number; body: unknown }>;
+  listOutlineCandidates(request: {
+    token: string;
+    story?: string;
+  }): Promise<{ status: number; body: unknown }>;
+  createOutlineCandidate(request: {
+    token: string;
+    story?: string;
+    title: string;
+    text?: string;
+  }): Promise<{ status: number; body: unknown }>;
+  compareOutlineCandidates(request: {
+    token: string;
+    story?: string;
+    leftId: string;
+    rightId: string;
+  }): Promise<{ status: number; body: unknown }>;
+  promoteOutlineCandidate(request: {
+    token: string;
+    story?: string;
+    outlineId: string;
+    yes?: boolean;
+  }): Promise<{ status: number; body: unknown }>;
+  getTaskBoard(request: {
+    token: string;
+    story?: string;
+  }): Promise<{ status: number; body: unknown }>;
 }
 
 export interface StartLocalAppHttpServerInput {
@@ -181,6 +207,74 @@ export const startLocalAppHttpServer = async (
       if (request.method === 'GET' && url.pathname === '/api/stories/core/missing') {
         const story = url.searchParams.get('story');
         const result = await input.core.getStoryCoreMissing({
+          token: getToken(request),
+          story: story ?? undefined
+        });
+        sendJson(response, result.status, result.body);
+        return;
+      }
+
+      if (request.method === 'GET' && url.pathname === '/api/outlines/list') {
+        const story = url.searchParams.get('story');
+        const result = await input.core.listOutlineCandidates({
+          token: getToken(request),
+          story: story ?? undefined
+        });
+        sendJson(response, result.status, result.body);
+        return;
+      }
+
+      if (request.method === 'POST' && url.pathname === '/api/outlines/create') {
+        const body = await readBody(request) as {
+          story?: unknown;
+          title?: unknown;
+          text?: unknown;
+        };
+        const result = await input.core.createOutlineCandidate({
+          token: getToken(request),
+          story: body.story === undefined ? undefined : String(body.story),
+          title: String(body.title ?? ''),
+          text: body.text === undefined ? undefined : String(body.text)
+        });
+        sendJson(response, result.status, result.body);
+        return;
+      }
+
+      if (request.method === 'POST' && url.pathname === '/api/outlines/compare') {
+        const body = await readBody(request) as {
+          story?: unknown;
+          leftId?: unknown;
+          rightId?: unknown;
+        };
+        const result = await input.core.compareOutlineCandidates({
+          token: getToken(request),
+          story: body.story === undefined ? undefined : String(body.story),
+          leftId: String(body.leftId ?? ''),
+          rightId: String(body.rightId ?? '')
+        });
+        sendJson(response, result.status, result.body);
+        return;
+      }
+
+      if (request.method === 'POST' && url.pathname === '/api/outlines/promote') {
+        const body = await readBody(request) as {
+          story?: unknown;
+          outlineId?: unknown;
+          yes?: unknown;
+        };
+        const result = await input.core.promoteOutlineCandidate({
+          token: getToken(request),
+          story: body.story === undefined ? undefined : String(body.story),
+          outlineId: String(body.outlineId ?? ''),
+          yes: body.yes === true
+        });
+        sendJson(response, result.status, result.body);
+        return;
+      }
+
+      if (request.method === 'GET' && url.pathname === '/api/tasks/board') {
+        const story = url.searchParams.get('story');
+        const result = await input.core.getTaskBoard({
           token: getToken(request),
           story: story ?? undefined
         });

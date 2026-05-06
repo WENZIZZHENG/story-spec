@@ -188,4 +188,97 @@ describe('local app command', () => {
       }
     });
   });
+
+  it('starts the workbench with outline and task board services wired into the app core', async () => {
+    const fileSystem = new MemoryFileSystem('D:\\workspace');
+    const projectRoot = path.resolve('D:\\workspace\\spell-era');
+    await fileSystem.ensureDir(path.join(projectRoot, '.specify'));
+    await fileSystem.writeJson(path.join(projectRoot, '.specify', 'config.json'), {
+      name: '法术编译纪元'
+    });
+    const result = await startLocalAppWorkbench({
+      host: '127.0.0.1',
+      port: 0,
+      project: projectRoot,
+      token: 'secret-token',
+      fileSystem,
+      recentProjects: createMemoryRecentProjectStore(),
+      projectStatus: async input => ({ projectRoot: input.projectRoot }),
+      listOutlineCandidates: async input => ({
+        projectRoot: input.projectRoot,
+        story: input.story,
+        outlines: [{ id: 'academy', title: '学院线加强版' }]
+      }),
+      createOutlineCandidate: async input => ({
+        projectRoot: input.projectRoot,
+        story: input.story,
+        outline: { id: 'border', title: input.title }
+      }),
+      compareOutlineCandidates: async input => ({
+        projectRoot: input.projectRoot,
+        story: input.story,
+        left: { id: input.leftId },
+        right: { id: input.rightId },
+        dimensions: [{ dimension: '主线目标', changed: true }]
+      }),
+      promoteOutlineCandidate: async input => ({
+        projectRoot: input.projectRoot,
+        story: input.story,
+        outline: { id: input.outlineId },
+        dryRun: input.yes !== true
+      }),
+      taskBoard: async input => ({
+        projectRoot: input.projectRoot,
+        story: input.story,
+        write: input.write,
+        board: { summary: { total: 1 }, tasks: [] }
+      }),
+      startServer: async ({ core }) => ({
+        url: 'http://127.0.0.1:43127',
+        close: async () => undefined,
+        core
+      })
+    });
+
+    await expect(result.core.listOutlineCandidates({
+      token: 'secret-token',
+      story: '法术编译纪元'
+    })).resolves.toMatchObject({
+      status: 200,
+      body: { projectRoot, outlines: [{ id: 'academy' }] }
+    });
+    await expect(result.core.createOutlineCandidate({
+      token: 'secret-token',
+      story: '法术编译纪元',
+      title: '边境冒险版',
+      text: '主线目标：边境冒险'
+    })).resolves.toMatchObject({
+      status: 200,
+      body: { projectRoot, outline: { id: 'border', title: '边境冒险版' } }
+    });
+    await expect(result.core.compareOutlineCandidates({
+      token: 'secret-token',
+      story: '法术编译纪元',
+      leftId: 'academy',
+      rightId: 'border'
+    })).resolves.toMatchObject({
+      status: 200,
+      body: { projectRoot, dimensions: [{ dimension: '主线目标', changed: true }] }
+    });
+    await expect(result.core.promoteOutlineCandidate({
+      token: 'secret-token',
+      story: '法术编译纪元',
+      outlineId: 'border'
+    })).resolves.toMatchObject({
+      status: 200,
+      body: { projectRoot, dryRun: true }
+    });
+    await expect(result.core.getTaskBoard({
+      token: 'secret-token',
+      story: '法术编译纪元'
+    })).resolves.toMatchObject({
+      status: 200,
+      body: { projectRoot, write: false }
+    });
+  });
 });

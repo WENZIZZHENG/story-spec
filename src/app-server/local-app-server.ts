@@ -19,6 +19,20 @@ import {
   createStoryCoreSummary,
   type StoryCoreSummaryInput
 } from '../application/story-core-summary.js';
+import {
+  compareOutlineCandidates as compareOutlineCandidatesApplication,
+  createOutlineCandidate as createOutlineCandidateApplication,
+  listOutlineCandidates as listOutlineCandidatesApplication,
+  promoteOutlineCandidate as promoteOutlineCandidateApplication,
+  type CompareOutlineCandidatesInput,
+  type CreateOutlineCandidateInput,
+  type ListOutlineCandidatesInput,
+  type PromoteOutlineCandidateInput
+} from '../application/manage-outline-candidates.js';
+import {
+  exportTaskBoard,
+  type ExportTaskBoardInput
+} from '../application/export-task-board.js';
 
 export interface LocalAppServerResponse<TBody = unknown> {
   status: number;
@@ -44,6 +58,11 @@ export interface CreateLocalAppServerCoreInput<TProjectStatus> {
   createStoryIdea?(request: LocalAppCreateStoryIdeaRequest): Promise<unknown>;
   ingestStoryInput?(request: LocalAppIngestStoryInputRequest): Promise<unknown>;
   storyCoreSummary?(request: LocalAppStoryCoreSummaryRequest): Promise<unknown>;
+  listOutlineCandidates?(request: LocalAppListOutlineCandidatesRequest): Promise<unknown>;
+  createOutlineCandidate?(request: LocalAppCreateOutlineCandidateRequest): Promise<unknown>;
+  compareOutlineCandidates?(request: LocalAppCompareOutlineCandidatesRequest): Promise<unknown>;
+  promoteOutlineCandidate?(request: LocalAppPromoteOutlineCandidateRequest): Promise<unknown>;
+  taskBoard?(request: LocalAppTaskBoardRequest): Promise<unknown>;
 }
 
 export interface OpenProjectRequest {
@@ -116,6 +135,74 @@ export interface LocalAppStoryCoreSummaryRequest {
 }
 
 export interface StoryCoreMissingRequest {
+  token: string;
+  story?: string;
+}
+
+export interface LocalAppListOutlineCandidatesRequest {
+  projectRoot: string;
+  fileSystem: ProjectFileSystem;
+  story?: string;
+}
+
+export interface ListOutlineCandidatesRequest {
+  token: string;
+  story?: string;
+}
+
+export interface LocalAppCreateOutlineCandidateRequest {
+  projectRoot: string;
+  fileSystem: ProjectFileSystem;
+  story?: string;
+  title: string;
+  text?: string;
+}
+
+export interface CreateOutlineCandidateRequest {
+  token: string;
+  story?: string;
+  title: string;
+  text?: string;
+}
+
+export interface LocalAppCompareOutlineCandidatesRequest {
+  projectRoot: string;
+  fileSystem: ProjectFileSystem;
+  story?: string;
+  leftId: string;
+  rightId: string;
+}
+
+export interface CompareOutlineCandidatesRequest {
+  token: string;
+  story?: string;
+  leftId: string;
+  rightId: string;
+}
+
+export interface LocalAppPromoteOutlineCandidateRequest {
+  projectRoot: string;
+  fileSystem: ProjectFileSystem;
+  story?: string;
+  outlineId: string;
+  yes?: boolean;
+}
+
+export interface PromoteOutlineCandidateRequest {
+  token: string;
+  story?: string;
+  outlineId: string;
+  yes?: boolean;
+}
+
+export interface LocalAppTaskBoardRequest {
+  projectRoot: string;
+  fileSystem: ProjectFileSystem;
+  story?: string;
+  write: boolean;
+}
+
+export interface TaskBoardRequest {
   token: string;
   story?: string;
 }
@@ -380,6 +467,165 @@ export const createLocalAppServerCore = <TProjectStatus>(
           status: 200,
           body
         };
+      } catch (error) {
+        return badRequest(error);
+      }
+    },
+
+    async listOutlineCandidates(request: ListOutlineCandidatesRequest): Promise<LocalAppServerResponse<unknown | LocalAppBlockedBody>> {
+      if (!hasToken(request.token)) {
+        return unauthorized();
+      }
+
+      const projectRoot = currentAllowedProject();
+      if (!projectRoot) {
+        return forbiddenProject();
+      }
+
+      try {
+        const body = input.listOutlineCandidates
+          ? await input.listOutlineCandidates({
+            projectRoot,
+            fileSystem: input.fileSystem,
+            story: request.story
+          })
+          : await listOutlineCandidatesApplication({
+            projectRoot,
+            fileSystem: input.fileSystem,
+            story: request.story
+          } satisfies ListOutlineCandidatesInput);
+
+        return { status: 200, body };
+      } catch (error) {
+        return badRequest(error);
+      }
+    },
+
+    async createOutlineCandidate(request: CreateOutlineCandidateRequest): Promise<LocalAppServerResponse<unknown | LocalAppBlockedBody>> {
+      if (!hasToken(request.token)) {
+        return unauthorized();
+      }
+
+      const projectRoot = currentAllowedProject();
+      if (!projectRoot) {
+        return forbiddenProject();
+      }
+
+      try {
+        const body = input.createOutlineCandidate
+          ? await input.createOutlineCandidate({
+            projectRoot,
+            fileSystem: input.fileSystem,
+            story: request.story,
+            title: request.title,
+            text: request.text
+          })
+          : await createOutlineCandidateApplication({
+            projectRoot,
+            fileSystem: input.fileSystem,
+            story: request.story,
+            title: request.title,
+            text: request.text
+          } satisfies CreateOutlineCandidateInput);
+
+        return { status: 200, body };
+      } catch (error) {
+        return badRequest(error);
+      }
+    },
+
+    async compareOutlineCandidates(request: CompareOutlineCandidatesRequest): Promise<LocalAppServerResponse<unknown | LocalAppBlockedBody>> {
+      if (!hasToken(request.token)) {
+        return unauthorized();
+      }
+
+      const projectRoot = currentAllowedProject();
+      if (!projectRoot) {
+        return forbiddenProject();
+      }
+
+      try {
+        const body = input.compareOutlineCandidates
+          ? await input.compareOutlineCandidates({
+            projectRoot,
+            fileSystem: input.fileSystem,
+            story: request.story,
+            leftId: request.leftId,
+            rightId: request.rightId
+          })
+          : await compareOutlineCandidatesApplication({
+            projectRoot,
+            fileSystem: input.fileSystem,
+            story: request.story,
+            leftId: request.leftId,
+            rightId: request.rightId
+          } satisfies CompareOutlineCandidatesInput);
+
+        return { status: 200, body };
+      } catch (error) {
+        return badRequest(error);
+      }
+    },
+
+    async promoteOutlineCandidate(request: PromoteOutlineCandidateRequest): Promise<LocalAppServerResponse<unknown | LocalAppBlockedBody>> {
+      if (!hasToken(request.token)) {
+        return unauthorized();
+      }
+
+      const projectRoot = currentAllowedProject();
+      if (!projectRoot) {
+        return forbiddenProject();
+      }
+
+      try {
+        const body = input.promoteOutlineCandidate
+          ? await input.promoteOutlineCandidate({
+            projectRoot,
+            fileSystem: input.fileSystem,
+            story: request.story,
+            outlineId: request.outlineId,
+            yes: request.yes === true
+          })
+          : await promoteOutlineCandidateApplication({
+            projectRoot,
+            fileSystem: input.fileSystem,
+            story: request.story,
+            outlineId: request.outlineId,
+            yes: request.yes === true
+          } satisfies PromoteOutlineCandidateInput);
+
+        return { status: 200, body };
+      } catch (error) {
+        return badRequest(error);
+      }
+    },
+
+    async getTaskBoard(request: TaskBoardRequest): Promise<LocalAppServerResponse<unknown | LocalAppBlockedBody>> {
+      if (!hasToken(request.token)) {
+        return unauthorized();
+      }
+
+      const projectRoot = currentAllowedProject();
+      if (!projectRoot) {
+        return forbiddenProject();
+      }
+
+      try {
+        const body = input.taskBoard
+          ? await input.taskBoard({
+            projectRoot,
+            fileSystem: input.fileSystem,
+            story: request.story,
+            write: false
+          })
+          : await exportTaskBoard({
+            projectRoot,
+            fileSystem: input.fileSystem,
+            story: request.story,
+            write: false
+          } satisfies ExportTaskBoardInput);
+
+        return { status: 200, body };
       } catch (error) {
         return badRequest(error);
       }

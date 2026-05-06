@@ -218,4 +218,143 @@ describe('local app http server', () => {
       await server.close();
     }
   });
+
+  it('routes outline and task board APIs through the current app session', async () => {
+    const projectRoot = await makeTempDir();
+    await mkdir(path.join(projectRoot, '.specify'), { recursive: true });
+    await writeFile(path.join(projectRoot, '.specify', 'config.json'), JSON.stringify({
+      name: '法术编译纪元'
+    }));
+    const core = createLocalAppServerCore({
+      token: 'secret',
+      fileSystem: nodeFileSystem,
+      recentProjects: createMemoryRecentProjectStore(),
+      projectStatus: async input => ({
+        projectRoot: input.projectRoot,
+        projectName: '法术编译纪元'
+      }),
+      listOutlineCandidates: async input => ({
+        projectRoot: input.projectRoot,
+        story: input.story,
+        outlines: [{ id: 'academy', title: '学院线加强版', status: 'candidate' }]
+      }),
+      createOutlineCandidate: async input => ({
+        projectRoot: input.projectRoot,
+        story: input.story,
+        outline: { id: 'border', title: input.title, status: 'candidate' },
+        text: input.text
+      }),
+      compareOutlineCandidates: async input => ({
+        projectRoot: input.projectRoot,
+        story: input.story,
+        left: { id: input.leftId },
+        right: { id: input.rightId },
+        dimensions: [{ dimension: '主线目标', left: '学院', right: '边境', changed: true }]
+      }),
+      promoteOutlineCandidate: async input => ({
+        projectRoot: input.projectRoot,
+        story: input.story,
+        outline: { id: input.outlineId },
+        dryRun: input.yes !== true,
+        reminders: ['重新检查 tasks、Scene Card 和 Context Pack。']
+      }),
+      taskBoard: async input => ({
+        projectRoot: input.projectRoot,
+        story: input.story,
+        write: input.write,
+        board: {
+          summary: { total: 2, todo: 1, done: 1, writeReady: 1, planOnly: 1 },
+          tasks: [{ id: 'T1', title: '写第一章', status: 'todo' }]
+        }
+      })
+    });
+    const server = await startLocalAppHttpServer({
+      host: '127.0.0.1',
+      port: 0,
+      core,
+      token: 'secret'
+    });
+
+    try {
+      const unauthorized = await fetch(`${server.url}/api/outlines/list`);
+      expect(unauthorized.status).toBe(401);
+
+      await fetch(`${server.url}/api/projects/open`, {
+        method: 'POST',
+        headers: {
+          'content-type': 'application/json',
+          'x-storyspec-app-token': 'secret'
+        },
+        body: JSON.stringify({ projectRoot })
+      });
+
+      const list = await fetch(`${server.url}/api/outlines/list?story=${encodeURIComponent('法术编译纪元')}`, {
+        headers: { 'x-storyspec-app-token': 'secret' }
+      });
+      await expect(list.json()).resolves.toMatchObject({
+        outlines: [{ id: 'academy', title: '学院线加强版' }]
+      });
+
+      const created = await fetch(`${server.url}/api/outlines/create`, {
+        method: 'POST',
+        headers: {
+          'content-type': 'application/json',
+          'x-storyspec-app-token': 'secret'
+        },
+        body: JSON.stringify({
+          story: '法术编译纪元',
+          title: '边境冒险版',
+          text: '主线目标：边境冒险'
+        })
+      });
+      await expect(created.json()).resolves.toMatchObject({
+        outline: { id: 'border', title: '边境冒险版', status: 'candidate' }
+      });
+
+      const compare = await fetch(`${server.url}/api/outlines/compare`, {
+        method: 'POST',
+        headers: {
+          'content-type': 'application/json',
+          'x-storyspec-app-token': 'secret'
+        },
+        body: JSON.stringify({
+          story: '法术编译纪元',
+          leftId: 'academy',
+          rightId: 'border'
+        })
+      });
+      await expect(compare.json()).resolves.toMatchObject({
+        dimensions: [{ dimension: '主线目标', changed: true }]
+      });
+
+      const promote = await fetch(`${server.url}/api/outlines/promote`, {
+        method: 'POST',
+        headers: {
+          'content-type': 'application/json',
+          'x-storyspec-app-token': 'secret'
+        },
+        body: JSON.stringify({
+          story: '法术编译纪元',
+          outlineId: 'border'
+        })
+      });
+      await expect(promote.json()).resolves.toMatchObject({
+        dryRun: true,
+        reminders: ['重新检查 tasks、Scene Card 和 Context Pack。']
+      });
+
+      const board = await fetch(`${server.url}/api/tasks/board?story=${encodeURIComponent('法术编译纪元')}`, {
+        headers: { 'x-storyspec-app-token': 'secret' }
+      });
+      await expect(board.json()).resolves.toMatchObject({
+        write: false,
+        board: {
+          summary: { total: 2, writeReady: 1, planOnly: 1 },
+          tasks: [{ id: 'T1', title: '写第一章' }]
+        }
+      });
+    } finally {
+      await server.close();
+    }
+  });
 });

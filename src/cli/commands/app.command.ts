@@ -7,6 +7,13 @@ import { createJsonRecentProjectStore } from '../../application/local-app-projec
 import { createStoryIdea } from '../../application/story-onboarding.js';
 import { ingestStoryInput } from '../../application/ingest-story-input.js';
 import { createStoryCoreSummary } from '../../application/story-core-summary.js';
+import {
+  compareOutlineCandidates,
+  createOutlineCandidate,
+  listOutlineCandidates,
+  promoteOutlineCandidate
+} from '../../application/manage-outline-candidates.js';
+import { exportTaskBoard } from '../../application/export-task-board.js';
 import type { LocalAppServerResponse } from '../../app-server/local-app-server.js';
 import { createLocalAppServerCore } from '../../app-server/local-app-server.js';
 import type { LocalAppHttpServer, StartLocalAppHttpServerInput } from '../../app-server/local-app-http-server.js';
@@ -48,6 +55,11 @@ export interface StartLocalAppWorkbenchInput<TProjectStatus = unknown> {
   createStoryIdea?: Parameters<typeof createLocalAppServerCore<TProjectStatus>>[0]['createStoryIdea'];
   ingestStoryInput?: Parameters<typeof createLocalAppServerCore<TProjectStatus>>[0]['ingestStoryInput'];
   storyCoreSummary?: Parameters<typeof createLocalAppServerCore<TProjectStatus>>[0]['storyCoreSummary'];
+  listOutlineCandidates?: Parameters<typeof createLocalAppServerCore<TProjectStatus>>[0]['listOutlineCandidates'];
+  createOutlineCandidate?: Parameters<typeof createLocalAppServerCore<TProjectStatus>>[0]['createOutlineCandidate'];
+  compareOutlineCandidates?: Parameters<typeof createLocalAppServerCore<TProjectStatus>>[0]['compareOutlineCandidates'];
+  promoteOutlineCandidate?: Parameters<typeof createLocalAppServerCore<TProjectStatus>>[0]['promoteOutlineCandidate'];
+  taskBoard?: Parameters<typeof createLocalAppServerCore<TProjectStatus>>[0]['taskBoard'];
   startServer?: (input: StartLocalAppHttpServerInput) => Promise<LocalAppWorkbenchServer>;
 }
 
@@ -100,7 +112,12 @@ export const startLocalAppWorkbench = async <TProjectStatus>(
     projectStatus: input.projectStatus,
     createStoryIdea: input.createStoryIdea,
     ingestStoryInput: input.ingestStoryInput,
-    storyCoreSummary: input.storyCoreSummary
+    storyCoreSummary: input.storyCoreSummary,
+    listOutlineCandidates: input.listOutlineCandidates,
+    createOutlineCandidate: input.createOutlineCandidate,
+    compareOutlineCandidates: input.compareOutlineCandidates,
+    promoteOutlineCandidate: input.promoteOutlineCandidate,
+    taskBoard: input.taskBoard
   });
   const startServer = input.startServer ?? startLocalAppHttpServer;
   const server = await startServer({
@@ -183,7 +200,12 @@ export function registerAppCommand(program: Command, _context: AppCommandContext
         }),
         createStoryIdea: input => createStoryIdea(input),
         ingestStoryInput: input => ingestStoryInput(input),
-        storyCoreSummary: input => createStoryCoreSummary(input)
+        storyCoreSummary: input => createStoryCoreSummary(input),
+        listOutlineCandidates: input => listOutlineCandidates(input),
+        createOutlineCandidate: input => createOutlineCandidate(input),
+        compareOutlineCandidates: input => compareOutlineCandidates(input),
+        promoteOutlineCandidate: input => promoteOutlineCandidate(input),
+        taskBoard: input => exportTaskBoard(input)
       });
       const server = result.server;
 

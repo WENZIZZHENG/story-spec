@@ -565,6 +565,77 @@ export const renderLocalAppHtml = (input: RenderLocalAppHtmlInput): string => {
         <div class="panel-body gate" id="confirm-lane">
           <div class="empty">打开项目后，这里会显示下一步建议、待确认决策、tracking 和 Git 状态。</div>
         </div>
+        <div class="panel-body gate" aria-labelledby="planning-panel-title">
+          <section class="section-block">
+            <div class="dossier-title">
+              <h2 id="planning-panel-title">规划面板</h2>
+              <button class="secondary" id="refresh-outlines" type="button">刷新候选</button>
+            </div>
+            <p class="muted">候选大纲不是正典；提升默认 dry-run，只展示覆盖正式计划前需要检查什么。</p>
+            <div class="field">
+              <label for="outline-story-name">故事名（可选）</label>
+              <input id="outline-story-name" name="story" autocomplete="off" placeholder="留空则使用最近故事">
+            </div>
+            <div class="error" id="outline-list-error" role="status" aria-live="polite"></div>
+            <div class="result-box" id="outline-list-result">读取后会列出候选大纲。</div>
+          </section>
+
+          <form class="section-block" id="outline-create-form">
+            <h3>创建候选</h3>
+            <div class="field">
+              <label for="outline-title">候选标题</label>
+              <input id="outline-title" name="title" autocomplete="off" placeholder="学院线加强版">
+            </div>
+            <div class="field">
+              <label for="outline-text">候选大纲文本</label>
+              <textarea id="outline-text" name="text" placeholder="主线目标、人物弧线、节奏、风险、读者承诺。"></textarea>
+            </div>
+            <div class="error" id="outline-create-error" role="status" aria-live="polite"></div>
+            <div class="button-row">
+              <button type="submit">保存候选大纲</button>
+            </div>
+          </form>
+
+          <form class="section-block" id="outline-compare-form">
+            <h3>比较候选</h3>
+            <div class="field">
+              <label for="outline-left-id">左侧候选 ID</label>
+              <input id="outline-left-id" name="leftId" autocomplete="off" placeholder="academy">
+            </div>
+            <div class="field">
+              <label for="outline-right-id">右侧候选 ID</label>
+              <input id="outline-right-id" name="rightId" autocomplete="off" placeholder="border">
+            </div>
+            <div class="error" id="outline-compare-error" role="status" aria-live="polite"></div>
+            <div class="button-row">
+              <button type="submit">比较</button>
+            </div>
+            <div class="result-box" id="outline-compare-result">比较会展示主线目标、人物弧线、节奏、风险和读者承诺。</div>
+          </form>
+
+          <form class="section-block" id="outline-promote-form">
+            <h3>提升预览</h3>
+            <div class="field">
+              <label for="outline-promote-id">候选 ID</label>
+              <input id="outline-promote-id" name="outlineId" autocomplete="off" placeholder="border">
+            </div>
+            <div class="error" id="outline-promote-error" role="status" aria-live="polite"></div>
+            <div class="button-row">
+              <button type="submit">查看 dry-run</button>
+            </div>
+            <div class="result-box" id="outline-promote-result">默认 dry-run，不覆盖正式 creative-plan.md。</div>
+          </form>
+
+          <section class="section-block">
+            <div class="dossier-title">
+              <h3>任务板</h3>
+              <button class="secondary" id="refresh-task-board" type="button">读取只读任务板</button>
+            </div>
+            <p class="muted">任务板只读展示，不修改 tasks.md。</p>
+            <div class="error" id="task-board-error" role="status" aria-live="polite"></div>
+            <div class="result-box" id="task-board-result">读取后会显示任务总数、待办、完成、writeReady 和 planOnly。</div>
+          </section>
+        </div>
       </aside>
     </main>
   </div>
@@ -589,6 +660,15 @@ export const renderLocalAppHtml = (input: RenderLocalAppHtmlInput): string => {
     const storyIntakeResult = document.querySelector("#story-intake-result");
     const sourceIntakeResult = document.querySelector("#source-intake-result");
     const coreGapsResult = document.querySelector("#core-gaps-result");
+    const outlineListError = document.querySelector("#outline-list-error");
+    const outlineCreateError = document.querySelector("#outline-create-error");
+    const outlineCompareError = document.querySelector("#outline-compare-error");
+    const outlinePromoteError = document.querySelector("#outline-promote-error");
+    const taskBoardError = document.querySelector("#task-board-error");
+    const outlineListResult = document.querySelector("#outline-list-result");
+    const outlineCompareResult = document.querySelector("#outline-compare-result");
+    const outlinePromoteResult = document.querySelector("#outline-promote-result");
+    const taskBoardResult = document.querySelector("#task-board-result");
 
     const api = async (url, options = {}) => {
       const response = await fetch(url, {
@@ -622,6 +702,13 @@ export const renderLocalAppHtml = (input: RenderLocalAppHtmlInput): string => {
       if (!items || items.length === 0) return '<li>暂无。</li>';
       return items.map(item => '<li><strong>' + escapeHtml(item.label || item.questionId || "候选") + '</strong>：' + escapeHtml(item.answer || item.summary || "") + '</li>').join("");
     };
+
+    const outlineStoryQuery = () => {
+      const story = document.querySelector("#outline-story-name").value;
+      return story ? "?story=" + encodeURIComponent(story) : "";
+    };
+
+    const outlineStoryValue = () => document.querySelector("#outline-story-name").value || undefined;
 
     const escapeHtml = value => String(value)
       .replaceAll("&", "&amp;")
@@ -829,6 +916,97 @@ export const renderLocalAppHtml = (input: RenderLocalAppHtmlInput): string => {
           : '<div class="empty">暂无需要补齐的核心信息。</div>';
       } catch (error) {
         coreGapsError.textContent = error.message;
+      }
+    });
+
+    const loadOutlines = async () => {
+      outlineListError.textContent = "";
+      try {
+        const result = await api("/api/outlines/list" + outlineStoryQuery(), { method: "GET" });
+        outlineListResult.innerHTML = result.outlines && result.outlines.length
+          ? '<ul class="fact-list">' + result.outlines.map(outline => '<li><strong>' + escapeHtml(outline.id) + '</strong>：' + escapeHtml(outline.title) + ' · ' + escapeHtml(outline.status) + ' · ' + escapeHtml(outline.source || "unknown") + '<br><span class="muted">' + escapeHtml(outline.summary || outline.updatedAt || "") + '</span></li>').join("") + '</ul>'
+          : '<div class="empty">暂无候选大纲。</div>';
+      } catch (error) {
+        outlineListError.textContent = error.message;
+      }
+    };
+
+    document.querySelector("#refresh-outlines").addEventListener("click", loadOutlines);
+
+    document.querySelector("#outline-create-form").addEventListener("submit", async event => {
+      event.preventDefault();
+      outlineCreateError.textContent = "";
+      const form = new FormData(event.currentTarget);
+      try {
+        const result = await api("/api/outlines/create", {
+          method: "POST",
+          body: JSON.stringify({
+            story: outlineStoryValue(),
+            title: String(form.get("title") || ""),
+            text: String(form.get("text") || "")
+          })
+        });
+        outlineListResult.innerHTML = '<div class="empty">已保存候选大纲：' + escapeHtml(result.outline?.id || result.outline?.title || "candidate") + '</div>';
+        await loadOutlines();
+      } catch (error) {
+        outlineCreateError.textContent = error.message;
+      }
+    });
+
+    document.querySelector("#outline-compare-form").addEventListener("submit", async event => {
+      event.preventDefault();
+      outlineCompareError.textContent = "";
+      const form = new FormData(event.currentTarget);
+      try {
+        const result = await api("/api/outlines/compare", {
+          method: "POST",
+          body: JSON.stringify({
+            story: outlineStoryValue(),
+            leftId: String(form.get("leftId") || ""),
+            rightId: String(form.get("rightId") || "")
+          })
+        });
+        outlineCompareResult.innerHTML = '<ul class="fact-list">' + (result.dimensions || []).map(item => '<li><strong>' + escapeHtml(item.dimension) + '</strong>：' + (item.changed ? "有变化" : "无变化") + '<br><span class="muted">左：' + escapeHtml(item.left) + '</span><br><span class="muted">右：' + escapeHtml(item.right) + '</span></li>').join("") + '</ul>';
+      } catch (error) {
+        outlineCompareError.textContent = error.message;
+      }
+    });
+
+    document.querySelector("#outline-promote-form").addEventListener("submit", async event => {
+      event.preventDefault();
+      outlinePromoteError.textContent = "";
+      const form = new FormData(event.currentTarget);
+      try {
+        const result = await api("/api/outlines/promote", {
+          method: "POST",
+          body: JSON.stringify({
+            story: outlineStoryValue(),
+            outlineId: String(form.get("outlineId") || ""),
+            yes: false
+          })
+        });
+        outlinePromoteResult.innerHTML = '<p><strong>' + (result.dryRun ? "dry-run 预览" : "已提升") + '</strong></p><p class="muted">目标：' + escapeHtml(result.targetPlanPath || "creative-plan.md") + '</p><ul class="fact-list">' + listItems(result.reminders, "暂无提醒。") + '</ul>';
+      } catch (error) {
+        outlinePromoteError.textContent = error.message;
+      }
+    });
+
+    document.querySelector("#refresh-task-board").addEventListener("click", async () => {
+      taskBoardError.textContent = "";
+      try {
+        const result = await api("/api/tasks/board" + outlineStoryQuery(), { method: "GET" });
+        const summary = result.board?.summary || {};
+        const tasks = result.board?.tasks || [];
+        taskBoardResult.innerHTML = \`
+          <div class="metric-grid">
+            <div class="metric"><span class="metric-value">\${summary.total || 0}</span><span class="metric-label">任务总数</span></div>
+            <div class="metric"><span class="metric-value">\${summary.writeReady || 0}</span><span class="metric-label">writeReady</span></div>
+            <div class="metric"><span class="metric-value">\${summary.planOnly || 0}</span><span class="metric-label">planOnly</span></div>
+          </div>
+          <ul class="fact-list">\${tasks.slice(0, 5).map(task => '<li><strong>' + escapeHtml(task.id) + '</strong>：' + escapeHtml(task.title) + ' · ' + escapeHtml(task.status) + '</li>').join("") || '<li>暂无任务。</li>'}</ul>
+        \`;
+      } catch (error) {
+        taskBoardError.textContent = error.message;
       }
     });
 

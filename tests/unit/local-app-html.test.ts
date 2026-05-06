@@ -64,4 +64,28 @@ describe('local app html', () => {
     expect(html).toContain('id="source-intake-result"');
     expect(html).toContain('id="core-gaps-result"');
   });
+
+  it('renders outline planning and read-only task board controls', () => {
+    const html = renderLocalAppHtml({
+      token: 'secret-token'
+    });
+
+    expect(html).toContain('规划面板');
+    expect(html).toContain('候选大纲');
+    expect(html).toContain('创建候选');
+    expect(html).toContain('比较候选');
+    expect(html).toContain('提升预览');
+    expect(html).toContain('默认 dry-run');
+    expect(html).toContain('任务板');
+    expect(html).toContain('只读');
+    expect(html).toContain('/api/outlines/list');
+    expect(html).toContain('/api/outlines/create');
+    expect(html).toContain('/api/outlines/compare');
+    expect(html).toContain('/api/outlines/promote');
+    expect(html).toContain('/api/tasks/board');
+    expect(html).toContain('id="outline-list-result"');
+    expect(html).toContain('id="outline-compare-result"');
+    expect(html).toContain('id="outline-promote-result"');
+    expect(html).toContain('id="task-board-result"');
+  });
 });
