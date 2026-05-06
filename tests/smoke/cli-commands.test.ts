@@ -65,6 +65,9 @@ describe('CLI command modules smoke', () => {
     expect(help).toContain('narrative:test [options] [story]');
     expect(help).toContain('dialogue:extract [options] [story]');
     expect(help).toContain('branch:create [options] <title>');
+    expect(help).toContain('outline:fork [options] <story>');
+    expect(help).toContain('outline:new [options] <story>');
+    expect(help).toContain('outline:promote [options] <story> <outlineId>');
     expect(help).toContain('author-profile [options]');
     expect(help).toContain('promise:check [options]');
     expect(help).toContain('tension:chart [options]');
@@ -1726,6 +1729,124 @@ reveals:
     const tension = JSON.parse(tensionResult.stdout);
 
     expect(tension.markdown).toContain('| Chapter | Scene | Tension | Emotion | Info | Payoff |');
+  });
+
+  it('manages outline candidates through preview-first CLI commands', async () => {
+    const cwd = await makeTempDir();
+    await execFileAsync('node', [
+      cliPath,
+      'init',
+      'smoke',
+      '--agent',
+      'generic',
+      '--method',
+      'three-act',
+      '--no-git'
+    ], { cwd });
+
+    const projectPath = path.join(cwd, 'smoke');
+    const storyPath = path.join(projectPath, 'stories', '001-demo');
+    const planPath = path.join(storyPath, 'creative-plan.md');
+    await mkdir(storyPath, { recursive: true });
+    await writeFile(planPath, [
+      '# 当前正式大纲',
+      '',
+      '## 主线目标',
+      '学院线：晏无先理解学院如何垄断符文知识。',
+      '',
+      '## 读者承诺',
+      '读者会看到知识垄断被一点点撬开。'
+    ].join('\n'));
+    await writeFile(path.join(storyPath, 'tasks.md'), '# tasks');
+
+    const forkResult = await execFileAsync('node', [
+      cliPath,
+      'outline:fork',
+      '001-demo',
+      '--from',
+      'current',
+      '--title',
+      '学院线加强版',
+      '--json'
+    ], { cwd: projectPath });
+    const forked = JSON.parse(forkResult.stdout);
+
+    expect(forked.outline).toMatchObject({
+      title: '学院线加强版',
+      status: 'candidate',
+      source: 'current-plan'
+    });
+    await expect(readFile(planPath, 'utf-8')).resolves.toContain('当前正式大纲');
+
+    const newResult = await execFileAsync('node', [
+      cliPath,
+      'outline:new',
+      '001-demo',
+      '--title',
+      '边境冒险版',
+      '--text',
+      '# 边境冒险版\n\n## 主线目标\n边境线：晏无先救矿村。\n\n## 读者承诺\n读者会先得到冒险和解谜回报。',
+      '--json'
+    ], { cwd: projectPath });
+    const created = JSON.parse(newResult.stdout);
+
+    const listResult = await execFileAsync('node', [
+      cliPath,
+      'outline:list',
+      '001-demo',
+      '--json'
+    ], { cwd: projectPath });
+    const list = JSON.parse(listResult.stdout);
+
+    expect(list.outlines.map((outline: { title: string }) => outline.title)).toEqual(expect.arrayContaining([
+      '学院线加强版',
+      '边境冒险版'
+    ]));
+
+    const compareResult = await execFileAsync('node', [
+      cliPath,
+      'outline:compare',
+      '001-demo',
+      forked.outline.id,
+      created.outline.id,
+      '--json'
+    ], { cwd: projectPath });
+    const compare = JSON.parse(compareResult.stdout);
+
+    expect(compare.dimensions).toEqual(expect.arrayContaining([
+      expect.objectContaining({
+        dimension: '主线目标',
+        left: expect.stringContaining('学院线'),
+        right: expect.stringContaining('边境线')
+      })
+    ]));
+
+    const promotePreviewResult = await execFileAsync('node', [
+      cliPath,
+      'outline:promote',
+      '001-demo',
+      created.outline.id,
+      '--json'
+    ], { cwd: projectPath });
+    const promotePreview = JSON.parse(promotePreviewResult.stdout);
+
+    expect(promotePreview.dryRun).toBe(true);
+    await expect(readFile(planPath, 'utf-8')).resolves.toContain('当前正式大纲');
+
+    const promoteApplyResult = await execFileAsync('node', [
+      cliPath,
+      'outline:promote',
+      '001-demo',
+      created.outline.id,
+      '--yes',
+      '--json'
+    ], { cwd: projectPath });
+    const promoted = JSON.parse(promoteApplyResult.stdout);
+
+    expect(promoted.dryRun).toBe(false);
+    expect(promoted.outline.status).toBe('promoted');
+    await expect(readFile(planPath, 'utf-8')).resolves.toContain('边境冒险版');
+    await expect(readFile(path.join(storyPath, 'tasks.md'), 'utf-8')).resolves.toBe('# tasks');
   });
 
   it('runs research, style, compile, and feedback commands as JSON', async () => {

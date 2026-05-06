@@ -2,7 +2,7 @@
 
 ## 状态
 
-Active。本文登记“保留当前正式大纲，同时新增多个候选大纲并供作者选择”的实现待办。实现前应按影响范围转为 OpenSpec change；本文不替代 OpenSpec artifacts。
+Completed。本文登记“保留当前正式大纲，同时新增多个候选大纲并供作者选择”的已完成路线。实现主记录见 `openspec/changes/add-outline-candidates`，用户可见变更见 `changes/2026-05-06-outline-candidates.md`。
 
 ## 背景和目标
 

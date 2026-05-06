@@ -6,18 +6,18 @@ Active。本文是 StorySpec 当前唯一的待办入口。详细规则见 [todo
 
 ## 当前待办
 
-当前主线：近期先补齐规划阶段的“多大纲候选”体验；App 化路线已收敛为“本机 Web 工作台”第一阶段，先实现 `storyspec app`、项目选择/创建、最近项目、状态 API 和工作台首屏，再推进云端多用户账号与项目隔离。
+当前主线：规划阶段“多大纲候选”体验已完成；App 化路线已收敛为“本机 Web 工作台”第一阶段，先在 `storyspec app` 地基上继续补工作台 UI 与核心创作入口，再推进云端多用户账号与项目隔离。
 
 | 优先级 | 路线 | 状态 | 覆盖范围 | 下一步 |
 | --- | --- | --- | --- | --- |
-| P1 | [多大纲候选与提升路线图](outline-candidates-roadmap.md) | Active | 候选大纲库、保留当前大纲、候选比较、提升为正式 `creative-plan.md` 的确认门禁 | 转 OpenSpec `add-outline-candidates` |
-| P1 | [单人 App 与多用户项目隔离路线图](app-multiuser-roadmap.md) | Active | 第一阶段本机 Web 工作台：`storyspec app`、项目选择/创建、最近项目、状态 API、工作台首屏；后续再做多用户账号、项目隔离、AI job 与部署成本边界 | 正在转 OpenSpec `add-local-single-user-app-workbench` |
+| P1 | [单人 App 与多用户项目隔离路线图](app-multiuser-roadmap.md) | Active | 第一阶段本机 Web 工作台：`storyspec app` 地基已完成；下一步补项目选择/工作台首屏 UI、核心创作入口和确认队列 | 继续拆分 OpenSpec，优先 `add-local-app-shell-ui` |
 
 ## 暂不作为活跃待办
 
 | 文件 | 原因 | 归档入口 |
 | --- | --- | --- |
 | [experience-followup-roadmap.md](experience-followup-roadmap.md) | 体验后续增强入口 P0-P3 discovery 已完成并关闭，未产出需立即实现的 OpenSpec change | [todo-archive.md](todo-archive.md#体验后续增强入口复核) |
+| [archive/completed-roadmaps/outline-candidates-roadmap.md](archive/completed-roadmaps/outline-candidates-roadmap.md) | 多大纲候选库、候选比较和 `outline:promote --yes` 提升门禁已完成并归档 | [todo-archive.md](todo-archive.md#多大纲候选与提升) |
 | [archive/completed-roadmaps/immersive-drafting-roadmap.md](archive/completed-roadmaps/immersive-drafting-roadmap.md) | 写中沉浸原则、约束后置自检、`/write` 和章节卡 prompt 姿态已完成并归档 | [todo-archive.md](todo-archive.md#章节写中沉浸体验) |
 | [archive/completed-roadmaps/reference-reverse-roadmap.md](archive/completed-roadmaps/reference-reverse-roadmap.md) | 参考作品反向拆解、精神内核提取、原创化转译、版权/同人边界已完成第一版 preview-only 能力并归档 | [todo-archive.md](todo-archive.md#参考作品反向拆解) |
 | [archive/completed-roadmaps/author-first-run-feedback-roadmap.md](archive/completed-roadmaps/author-first-run-feedback-roadmap.md) | 作者首程引导、素材分流、流程图、阶段性写作反馈和结构视图已完成并归档 | [todo-archive.md](todo-archive.md#作者首程引导与正反馈) |

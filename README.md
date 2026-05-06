@@ -173,6 +173,13 @@ storyspec apply PREVIEW_ID --yes
 storyspec preview plan 法术编译纪元
 # 核心要素成熟后再应用；探索性草案可显式加 --draft
 storyspec apply PLAN_PREVIEW_ID --yes
+storyspec outline:fork 法术编译纪元 --from current --title "学院线加强版"
+storyspec outline:new 法术编译纪元 --title "边境冒险版" --file border-outline.md
+storyspec outline:list 法术编译纪元
+storyspec outline:compare 法术编译纪元 学院线加强版 边境冒险版
+storyspec outline:promote 法术编译纪元 边境冒险版
+# 确认后才覆盖正式 creative-plan.md
+storyspec outline:promote 法术编译纪元 边境冒险版 --yes
 
 在 agent 中执行 /storyspec-tasks，生成 stories/法术编译纪元/tasks.md
 storyspec tasks:board 法术编译纪元
@@ -194,6 +201,7 @@ storyspec validate
 | `.specify/previews/` | 存放待确认的规格预览 |
 | `stories/<story>/specification.md` | 通过 `storyspec apply` 后才写入的正式规格 |
 | `stories/<story>/creative-plan.md` | 通过 `storyspec preview plan` 并确认后才写入的创作计划 |
+| `stories/<story>/outlines/<outline-id>/` | 候选大纲库；`outline:promote --yes` 前不覆盖正式创作计划 |
 | `stories/<story>/tasks.md` | 在 agent 中执行 `/storyspec-tasks` 后生成的可执行任务清单 |
 | `.specify/context-packs/` | `storyspec context:pack` 生成的写作上下文包 |
 
@@ -270,6 +278,7 @@ init -> story:new -> next -> interview/clarify 或 ingest/co:create -> core/crea
 | `storyspec apply` | 确认无 blocking 风险后写入正式规格 |
 | `storyspec preview plan` | 生成 `creative-plan.md` 写入预览，不直接替作者定稿 |
 | `storyspec apply` | 确认无 blocking 风险后写入正式规格或创作计划；探索性计划可显式加 `--draft` |
+| `storyspec outline:fork` / `outline:new` / `outline:list` / `outline:compare` / `outline:promote` | 保留多个候选大纲，比较后再显式提升为正式 `creative-plan.md` |
 | `/storyspec-tasks` | 在 agent 中把 `creative-plan.md` 拆成 `stories/<story>/tasks.md` |
 | `storyspec tasks:board` | 终端检查任务看板、WRITE-READY、PLAN-ONLY 和输出路径 |
 | `storyspec scene:init` / `storyspec context:pack` | 补 Scene Card 并生成写作上下文包 |
@@ -327,6 +336,10 @@ StorySpec 有两类入口，容易混淆：
 | `storyspec preview specify [story]` | 生成 StorySpec v0 规格草案，不直接写入正式规格 |
 | `storyspec preview plan [story]` | 生成创作计划 v0 草案，不直接写入 `creative-plan.md` |
 | `storyspec apply <preview-id>` | 默认 dry-run；加 `--yes` 后才应用无 blocking 风险的预览；计划草案可显式加 `--draft` |
+| `storyspec outline:fork <story> --from current --title <title>` | 从当前正式 `creative-plan.md` 复制候选，不覆盖正式大纲 |
+| `storyspec outline:new <story> --title <title> --text/--file` | 从作者文本或本地文件保存候选大纲，不进入正典 |
+| `storyspec outline:list <story>` / `storyspec outline:compare <story> <a> <b>` | 列出和比较候选的大纲目标、人物弧线、节奏、风险和读者承诺 |
+| `storyspec outline:promote <story> <outline-id>` | 默认 dry-run；加 `--yes` 后才用候选覆盖正式 `creative-plan.md` |
 
 `storyspec next [story]` 默认是新手视图：当前阶段、一条最推荐的可复制命令、为什么推荐、2 个可选入口和当前 Top 缺口。加 `--verbose` 后会显示五种创作模式：`discover`、`co-create`、`plan`、`write`、`reflect`，并给出主角、伙伴、世界、舞台、能力、势力、冲突、场景、结尾/反转、分支/what-if 等入口。主角、伙伴、舞台、能力、势力和冲突已升级为可测试入口卡：每张卡包含开场问题、有趣选择、候选产物、成熟度影响、正典边界和自然下一步；`next` 会按当前成熟度和灵感文本推荐最适合的入口。入口输出默认是候选，不会绕过确认门禁。
 
@@ -517,6 +530,7 @@ my-novel/
         |-- task-board.json
         |-- handoff.md
         |-- branches/
+        |-- outlines/
         |-- content/
         |-- dialogue/
         |-- drafts/
@@ -533,6 +547,7 @@ my-novel/
 - `style:lint` 只输出 findings 和建议，不自动改正文。
 - `feedback:to-tasks` 只生成待确认任务草稿，不直接写入 `tasks.md`。
 - `compile` 当前支持 Markdown manuscript，输出只写入 `build/`。
+- `outline:promote` 默认 dry-run，只有 `--yes` 才覆盖正式 `creative-plan.md`；它不会自动修改正文、`tasks.md`、Scene Card、Context Pack、tracking 或 canon。
 - `draft:promote` 和 `branch:promote` 默认偏预览，需要显式确认才会发布或推进。
 - `clarifications.json` 中 `source: ai-suggested` 或 `confirmed: false` 的内容不得静默进入 specification、tasks 或正文。
 - `storyspec review` 会把未确认 AI 建议提前落入正文或任务的情况标为 continuity finding。
