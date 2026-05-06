@@ -45,6 +45,7 @@ stories/
 .claude/
 .codex/
 .playwright-mcp/
+.superpowers/
 
 # Local development worktrees
 .worktrees/
