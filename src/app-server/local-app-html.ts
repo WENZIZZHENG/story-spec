@@ -57,13 +57,15 @@ export const renderLocalAppHtml = (input: RenderLocalAppHtmlInput): string => {
 
     button,
     input,
-    select {
+    select,
+    textarea {
       font: inherit;
     }
 
     button:focus-visible,
     input:focus-visible,
-    select:focus-visible {
+    select:focus-visible,
+    textarea:focus-visible {
       outline: 3px solid rgba(122, 91, 43, 0.35);
       outline-offset: 2px;
       position: relative;
@@ -192,13 +194,19 @@ export const renderLocalAppHtml = (input: RenderLocalAppHtmlInput): string => {
     }
 
     input,
-    select {
+    select,
+    textarea {
       width: 100%;
       border: 1px solid var(--line);
       border-radius: 6px;
       background: #fffdf8;
       color: var(--ink);
       padding: 9px 10px;
+    }
+
+    textarea {
+      min-height: 112px;
+      resize: vertical;
     }
 
     .button-row {
@@ -375,6 +383,28 @@ export const renderLocalAppHtml = (input: RenderLocalAppHtmlInput): string => {
       overflow-wrap: anywhere;
     }
 
+    .checkbox-line {
+      display: flex;
+      gap: 8px;
+      align-items: flex-start;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .checkbox-line input {
+      width: auto;
+      margin-top: 3px;
+    }
+
+    .result-box {
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      padding: 10px;
+      background: #fffdf8;
+      min-height: 42px;
+      font-size: 13px;
+    }
+
     @media (max-width: 1080px) {
       .workspace-grid {
         grid-template-columns: 1fr;
@@ -463,12 +493,67 @@ export const renderLocalAppHtml = (input: RenderLocalAppHtmlInput): string => {
           <h2 id="story-dossier-title">故事档案</h2>
           <button class="secondary" id="refresh-status" type="button">读取状态</button>
         </div>
-        <div class="panel-body">
+        <div class="panel-body stack">
           <div class="empty" id="status-empty">
             <strong>尚未打开项目</strong>
             <p class="muted">选择一个 StorySpec 项目，或创建新项目。首屏会展示故事阶段、创作回声、缺口和文件状态。</p>
           </div>
           <div id="status-content" hidden></div>
+
+          <section class="section-block" aria-labelledby="intake-title">
+            <h2 id="intake-title">创作入口</h2>
+            <form class="stack" id="story-idea-form">
+              <h3>一句灵感</h3>
+              <div class="field">
+                <label for="story-idea-name">故事名</label>
+                <input id="story-idea-name" name="name" autocomplete="off" placeholder="法术编译纪元">
+              </div>
+              <div class="field">
+                <label for="story-idea-text">原始灵感</label>
+                <textarea id="story-idea-text" name="idea" placeholder="主角是谁，在哪里遇到什么变化。"></textarea>
+              </div>
+              <div class="error" id="story-idea-error" role="status" aria-live="polite"></div>
+              <div class="button-row">
+                <button type="submit">保存灵感</button>
+              </div>
+              <div class="result-box" id="story-intake-result">打开项目后，可以先保存作者原始灵感，不扩写成正典。</div>
+            </form>
+
+            <form class="stack" id="source-intake-form">
+              <h3>长文资料</h3>
+              <p class="muted">默认只预览：先拆成明确表达、保留候选和仍需确认，不自动进入正典。</p>
+              <div class="field">
+                <label for="source-story-name">故事名（可选）</label>
+                <input id="source-story-name" name="story" autocomplete="off" placeholder="留空则使用最近故事">
+              </div>
+              <div class="field">
+                <label for="source-text">资料文本</label>
+                <textarea id="source-text" name="text" placeholder="粘贴设定片段、人物小传、旧稿摘要或 Markdown 表格。"></textarea>
+              </div>
+              <label class="checkbox-line" for="source-apply-confirmed">
+                <input id="source-apply-confirmed" name="applyConfirmed" type="checkbox">
+                <span>写入明确表达字段；AI 候选和关键词归类仍保留为候选。</span>
+              </label>
+              <div class="error" id="source-intake-error" role="status" aria-live="polite"></div>
+              <div class="button-row">
+                <button type="submit">吸收资料</button>
+              </div>
+              <div class="result-box" id="source-intake-result">结果会显示素材类型、建议写入、保留候选和仍需确认。</div>
+            </form>
+
+            <section class="stack" aria-labelledby="core-gaps-title">
+              <div class="dossier-title">
+                <h3 id="core-gaps-title">核心缺口</h3>
+                <button class="secondary" id="refresh-core-gaps" type="button">刷新缺口</button>
+              </div>
+              <div class="field">
+                <label for="core-gaps-story">故事名（可选）</label>
+                <input id="core-gaps-story" name="story" autocomplete="off" placeholder="留空则使用最近故事">
+              </div>
+              <div class="error" id="core-gaps-error" role="status" aria-live="polite"></div>
+              <div class="result-box" id="core-gaps-result">读取后会列出缺失或未完成的核心信息。</div>
+            </section>
+          </section>
         </div>
       </section>
 
@@ -498,6 +583,12 @@ export const renderLocalAppHtml = (input: RenderLocalAppHtmlInput): string => {
     const confirmLane = document.querySelector("#confirm-lane");
     const openError = document.querySelector("#open-project-error");
     const createError = document.querySelector("#create-project-error");
+    const storyIdeaError = document.querySelector("#story-idea-error");
+    const sourceIntakeError = document.querySelector("#source-intake-error");
+    const coreGapsError = document.querySelector("#core-gaps-error");
+    const storyIntakeResult = document.querySelector("#story-intake-result");
+    const sourceIntakeResult = document.querySelector("#source-intake-result");
+    const coreGapsResult = document.querySelector("#core-gaps-result");
 
     const api = async (url, options = {}) => {
       const response = await fetch(url, {
@@ -520,6 +611,16 @@ export const renderLocalAppHtml = (input: RenderLocalAppHtmlInput): string => {
     const listItems = (items, fallback) => {
       if (!items || items.length === 0) return "<li>" + fallback + "</li>";
       return items.map(item => "<li>" + escapeHtml(String(item)) + "</li>").join("");
+    };
+
+    const commandBlocks = commands => {
+      if (!commands || commands.length === 0) return '<div class="command">storyspec next &lt;故事名&gt;</div>';
+      return commands.map(command => '<div class="command">' + escapeHtml(command) + '</div>').join("");
+    };
+
+    const renderIngestItems = items => {
+      if (!items || items.length === 0) return '<li>暂无。</li>';
+      return items.map(item => '<li><strong>' + escapeHtml(item.label || item.questionId || "候选") + '</strong>：' + escapeHtml(item.answer || item.summary || "") + '</li>').join("");
     };
 
     const escapeHtml = value => String(value)
@@ -670,6 +771,64 @@ export const renderLocalAppHtml = (input: RenderLocalAppHtmlInput): string => {
         await loadStatus();
       } catch (error) {
         createError.textContent = error.message;
+      }
+    });
+
+    document.querySelector("#story-idea-form").addEventListener("submit", async event => {
+      event.preventDefault();
+      storyIdeaError.textContent = "";
+      const form = new FormData(event.currentTarget);
+      try {
+        const result = await api("/api/stories/create", {
+          method: "POST",
+          body: JSON.stringify({
+            name: String(form.get("name") || ""),
+            idea: String(form.get("idea") || "")
+          })
+        });
+        storyIntakeResult.innerHTML = '<strong>' + escapeHtml(result.story || "故事") + '</strong><p class="muted">' + escapeHtml(result.ideaPath || "已保存灵感") + '</p>' + commandBlocks(result.nextCommands);
+        await loadStatus();
+      } catch (error) {
+        storyIdeaError.textContent = error.message;
+      }
+    });
+
+    document.querySelector("#source-intake-form").addEventListener("submit", async event => {
+      event.preventDefault();
+      sourceIntakeError.textContent = "";
+      const form = new FormData(event.currentTarget);
+      try {
+        const result = await api("/api/stories/ingest", {
+          method: "POST",
+          body: JSON.stringify({
+            story: String(form.get("story") || "") || undefined,
+            text: String(form.get("text") || ""),
+            applyConfirmed: form.get("applyConfirmed") === "on"
+          })
+        });
+        sourceIntakeResult.innerHTML = \`
+          <p><strong>\${escapeHtml(result.inputProfile?.label || "资料预览")}</strong> · 写入状态：\${result.written ? "已写入明确表达字段" : "预览未写入"}</p>
+          <div class="section-block"><h3>建议写入</h3><ul class="fact-list">\${renderIngestItems(result.confirmedItems)}</ul></div>
+          <div class="section-block"><h3>保留候选</h3><ul class="fact-list">\${renderIngestItems(result.candidateItems)}</ul></div>
+          <div class="section-block"><h3>仍需确认</h3><ul class="fact-list">\${listItems(result.pendingQuestions, "暂无。")}</ul></div>
+        \`;
+        await loadStatus();
+      } catch (error) {
+        sourceIntakeError.textContent = error.message;
+      }
+    });
+
+    document.querySelector("#refresh-core-gaps").addEventListener("click", async () => {
+      coreGapsError.textContent = "";
+      const story = document.querySelector("#core-gaps-story").value;
+      try {
+        const query = story ? "?story=" + encodeURIComponent(story) : "";
+        const result = await api("/api/stories/core/missing" + query, { method: "GET" });
+        coreGapsResult.innerHTML = result.items && result.items.length
+          ? '<ul class="fact-list">' + result.items.map(item => '<li><strong>' + escapeHtml(item.label) + '</strong>：' + escapeHtml(item.status) + ' [' + escapeHtml(item.sourceLabel || "未标注") + ']。' + escapeHtml(item.summary || "") + (item.nextPrompt ? '<br><span class="muted">下一步：' + escapeHtml(item.nextPrompt) + '</span>' : '') + '</li>').join("") + '</ul>'
+          : '<div class="empty">暂无需要补齐的核心信息。</div>';
+      } catch (error) {
+        coreGapsError.textContent = error.message;
       }
     });
 

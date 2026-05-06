@@ -111,4 +111,81 @@ describe('local app command', () => {
       openProjectBlockedReasons: result.openProjectBlockedReasons
     })).toContain('启动项目未打开');
   });
+
+  it('starts the workbench with story intake services wired into the app core', async () => {
+    const fileSystem = new MemoryFileSystem('D:\\workspace');
+    const projectRoot = path.resolve('D:\\workspace\\spell-era');
+    await fileSystem.ensureDir(path.join(projectRoot, '.specify'));
+    await fileSystem.writeJson(path.join(projectRoot, '.specify', 'config.json'), {
+      name: '法术编译纪元'
+    });
+    const result = await startLocalAppWorkbench({
+      host: '127.0.0.1',
+      port: 0,
+      project: projectRoot,
+      token: 'secret-token',
+      fileSystem,
+      recentProjects: createMemoryRecentProjectStore(),
+      projectStatus: async input => ({ projectRoot: input.projectRoot }),
+      createStoryIdea: async input => ({
+        projectRoot: input.projectRoot,
+        story: input.name,
+        idea: input.idea,
+        nextCommands: [`storyspec next ${input.name}`]
+      }),
+      ingestStoryInput: async input => ({
+        projectRoot: input.projectRoot,
+        story: input.story,
+        written: input.applyConfirmed === true,
+        candidateItems: [{ answer: input.text }]
+      }),
+      storyCoreSummary: async input => ({
+        projectRoot: input.projectRoot,
+        story: input.story,
+        missingOnly: input.missingOnly,
+        items: [{ label: '核心伙伴', status: 'missing' }]
+      }),
+      startServer: async ({ core }) => ({
+        url: 'http://127.0.0.1:43127',
+        close: async () => undefined,
+        core
+      })
+    });
+
+    await expect(result.core.createStoryIdea({
+      token: 'secret-token',
+      name: '法术编译纪元',
+      idea: '工科青年调试符文。'
+    })).resolves.toMatchObject({
+      status: 200,
+      body: {
+        projectRoot,
+        story: '法术编译纪元',
+        idea: '工科青年调试符文。'
+      }
+    });
+    await expect(result.core.ingestStoryInput({
+      token: 'secret-token',
+      story: '法术编译纪元',
+      text: '核心创意：工科青年调试符文。'
+    })).resolves.toMatchObject({
+      status: 200,
+      body: {
+        projectRoot,
+        story: '法术编译纪元',
+        written: false
+      }
+    });
+    await expect(result.core.getStoryCoreMissing({
+      token: 'secret-token',
+      story: '法术编译纪元'
+    })).resolves.toMatchObject({
+      status: 200,
+      body: {
+        projectRoot,
+        story: '法术编译纪元',
+        missingOnly: true
+      }
+    });
+  });
 });

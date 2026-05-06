@@ -15,6 +15,21 @@ interface LocalAppHttpCore {
     withExperts: boolean;
   }): Promise<{ status: number; body: unknown }>;
   getCurrentProjectStatus(request: { token: string }): Promise<{ status: number; body: unknown }>;
+  createStoryIdea(request: {
+    token: string;
+    name: string;
+    idea?: string;
+  }): Promise<{ status: number; body: unknown }>;
+  ingestStoryInput(request: {
+    token: string;
+    story?: string;
+    text?: string;
+    applyConfirmed?: boolean;
+  }): Promise<{ status: number; body: unknown }>;
+  getStoryCoreMissing(request: {
+    token: string;
+    story?: string;
+  }): Promise<{ status: number; body: unknown }>;
 }
 
 export interface StartLocalAppHttpServerInput {
@@ -128,6 +143,46 @@ export const startLocalAppHttpServer = async (
       if (request.method === 'GET' && url.pathname === '/api/projects/current/status') {
         const result = await input.core.getCurrentProjectStatus({
           token: getToken(request)
+        });
+        sendJson(response, result.status, result.body);
+        return;
+      }
+
+      if (request.method === 'POST' && url.pathname === '/api/stories/create') {
+        const body = await readBody(request) as {
+          name?: unknown;
+          idea?: unknown;
+        };
+        const result = await input.core.createStoryIdea({
+          token: getToken(request),
+          name: String(body.name ?? ''),
+          idea: body.idea === undefined ? undefined : String(body.idea)
+        });
+        sendJson(response, result.status, result.body);
+        return;
+      }
+
+      if (request.method === 'POST' && url.pathname === '/api/stories/ingest') {
+        const body = await readBody(request) as {
+          story?: unknown;
+          text?: unknown;
+          applyConfirmed?: unknown;
+        };
+        const result = await input.core.ingestStoryInput({
+          token: getToken(request),
+          story: body.story === undefined ? undefined : String(body.story),
+          text: body.text === undefined ? undefined : String(body.text),
+          applyConfirmed: body.applyConfirmed === true
+        });
+        sendJson(response, result.status, result.body);
+        return;
+      }
+
+      if (request.method === 'GET' && url.pathname === '/api/stories/core/missing') {
+        const story = url.searchParams.get('story');
+        const result = await input.core.getStoryCoreMissing({
+          token: getToken(request),
+          story: story ?? undefined
         });
         sendJson(response, result.status, result.body);
         return;

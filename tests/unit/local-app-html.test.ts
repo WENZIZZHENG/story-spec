@@ -45,4 +45,23 @@ describe('local app html', () => {
     expect(html).toContain('尚未打开项目');
     expect(html).toContain('选择一个 StorySpec 项目，或创建新项目。');
   });
+
+  it('renders story intake, source preview, and core gap controls', () => {
+    const html = renderLocalAppHtml({
+      token: 'secret-token'
+    });
+
+    expect(html).toContain('创作入口');
+    expect(html).toContain('一句灵感');
+    expect(html).toContain('长文资料');
+    expect(html).toContain('默认只预览');
+    expect(html).toContain('写入明确表达字段');
+    expect(html).toContain('核心缺口');
+    expect(html).toContain('/api/stories/create');
+    expect(html).toContain('/api/stories/ingest');
+    expect(html).toContain('/api/stories/core/missing');
+    expect(html).toContain('id="story-intake-result"');
+    expect(html).toContain('id="source-intake-result"');
+    expect(html).toContain('id="core-gaps-result"');
+  });
 });

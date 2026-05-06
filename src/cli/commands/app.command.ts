@@ -4,6 +4,9 @@ import crypto from 'node:crypto';
 import type { LocalAppProject, RecentProjectStore } from '../../application/local-app-projects.js';
 import { getProjectStatus } from '../../application/get-project-status.js';
 import { createJsonRecentProjectStore } from '../../application/local-app-projects.js';
+import { createStoryIdea } from '../../application/story-onboarding.js';
+import { ingestStoryInput } from '../../application/ingest-story-input.js';
+import { createStoryCoreSummary } from '../../application/story-core-summary.js';
 import type { LocalAppServerResponse } from '../../app-server/local-app-server.js';
 import { createLocalAppServerCore } from '../../app-server/local-app-server.js';
 import type { LocalAppHttpServer, StartLocalAppHttpServerInput } from '../../app-server/local-app-http-server.js';
@@ -42,6 +45,9 @@ export interface StartLocalAppWorkbenchInput<TProjectStatus = unknown> {
   fileSystem: ProjectFileSystem;
   recentProjects: RecentProjectStore;
   projectStatus(input: { projectRoot: string }): Promise<TProjectStatus>;
+  createStoryIdea?: Parameters<typeof createLocalAppServerCore<TProjectStatus>>[0]['createStoryIdea'];
+  ingestStoryInput?: Parameters<typeof createLocalAppServerCore<TProjectStatus>>[0]['ingestStoryInput'];
+  storyCoreSummary?: Parameters<typeof createLocalAppServerCore<TProjectStatus>>[0]['storyCoreSummary'];
   startServer?: (input: StartLocalAppHttpServerInput) => Promise<LocalAppWorkbenchServer>;
 }
 
@@ -91,7 +97,10 @@ export const startLocalAppWorkbench = async <TProjectStatus>(
     token: input.token,
     fileSystem: input.fileSystem,
     recentProjects: input.recentProjects,
-    projectStatus: input.projectStatus
+    projectStatus: input.projectStatus,
+    createStoryIdea: input.createStoryIdea,
+    ingestStoryInput: input.ingestStoryInput,
+    storyCoreSummary: input.storyCoreSummary
   });
   const startServer = input.startServer ?? startLocalAppHttpServer;
   const server = await startServer({
@@ -171,7 +180,10 @@ export function registerAppCommand(program: Command, _context: AppCommandContext
           projectRoot: input.projectRoot,
           fileSystem: nodeFileSystem,
           git: commandGitAdapter
-        })
+        }),
+        createStoryIdea: input => createStoryIdea(input),
+        ingestStoryInput: input => ingestStoryInput(input),
+        storyCoreSummary: input => createStoryCoreSummary(input)
       });
       const server = result.server;
 

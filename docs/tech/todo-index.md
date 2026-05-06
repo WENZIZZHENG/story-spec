@@ -6,11 +6,11 @@ Active。本文是 StorySpec 当前唯一的待办入口。详细规则见 [todo
 
 ## 当前待办
 
-当前主线：规划阶段“多大纲候选”体验已完成；App 化路线已收敛为“本机 Web 工作台”第一阶段。`storyspec app` 地基和零依赖工作台 shell 已完成，下一步把一句灵感、长文吸收、核心缺口和创作控制权摘要接入页面；云端多用户账号与项目隔离仍排在本机工作台之后。
+当前主线：规划阶段“多大纲候选”体验已完成；App 化路线已收敛为“本机 Web 工作台”第一阶段。`storyspec app` 地基、零依赖工作台 shell、创作入口和核心缺口已完成，下一步把多大纲候选、任务板和确认队列接入页面；云端多用户账号与项目隔离仍排在本机工作台之后。
 
 | 优先级 | 路线 | 状态 | 覆盖范围 | 下一步 |
 | --- | --- | --- | --- | --- |
-| P1 | [单人 App 与多用户项目隔离路线图](app-multiuser-roadmap.md) | Active | 第一阶段本机 Web 工作台：`storyspec app` 地基和工作台 shell 已完成；下一步补核心创作入口、确认队列、大纲/任务视图和章节入口 | 继续拆分 OpenSpec，优先 `add-local-app-intake-and-core` |
+| P1 | [单人 App 与多用户项目隔离路线图](app-multiuser-roadmap.md) | Active | 第一阶段本机 Web 工作台：`storyspec app` 地基、工作台 shell、创作入口和核心缺口已完成；下一步补多大纲候选、任务板、确认队列和章节入口 | 继续拆分 OpenSpec，优先 `add-local-app-outline-task-views` |
 
 ## 暂不作为活跃待办
 

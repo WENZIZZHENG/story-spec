@@ -185,4 +185,150 @@ describe('local app server core', () => {
       }
     });
   });
+
+  it('creates a story idea only inside the current opened project', async () => {
+    const fs = new MemoryFileSystem('D:\\workspace');
+    const projectRoot = path.resolve('D:\\workspace\\spell-era');
+    await fs.ensureDir(path.join(projectRoot, '.specify'));
+    await fs.writeJson(path.join(projectRoot, '.specify', 'config.json'), {
+      name: '法术编译纪元'
+    });
+    const core = createLocalAppServerCore({
+      token: 'secret',
+      fileSystem: fs,
+      recentProjects: createMemoryRecentProjectStore(),
+      projectStatus: async input => ({ projectRoot: input.projectRoot }),
+      createStoryIdea: async input => ({
+        projectRoot: input.projectRoot,
+        story: input.name,
+        idea: input.idea,
+        ideaPath: path.join(input.projectRoot, 'stories', input.name, 'idea.md'),
+        nextCommands: [`storyspec next ${input.name}`]
+      })
+    });
+
+    await expect(core.createStoryIdea({
+      token: 'secret',
+      name: '法术编译纪元',
+      idea: '工科青年穿越异界，用编程思维理解符文。'
+    })).resolves.toEqual({
+      status: 403,
+      body: {
+        blocked: true,
+        blockedReasons: ['项目尚未在本次 App 会话中打开']
+      }
+    });
+
+    await core.openProject({ token: 'secret', projectRoot });
+
+    await expect(core.createStoryIdea({
+      token: 'secret',
+      name: '法术编译纪元',
+      idea: '工科青年穿越异界，用编程思维理解符文。'
+    })).resolves.toEqual({
+      status: 200,
+      body: {
+        projectRoot,
+        story: '法术编译纪元',
+        idea: '工科青年穿越异界，用编程思维理解符文。',
+        ideaPath: path.join(projectRoot, 'stories', '法术编译纪元', 'idea.md'),
+        nextCommands: ['storyspec next 法术编译纪元']
+      }
+    });
+  });
+
+  it('previews source material through the current project and keeps applyConfirmed false by default', async () => {
+    const fs = new MemoryFileSystem('D:\\workspace');
+    const projectRoot = path.resolve('D:\\workspace\\spell-era');
+    await fs.ensureDir(path.join(projectRoot, '.specify'));
+    await fs.writeJson(path.join(projectRoot, '.specify', 'config.json'), {
+      name: '法术编译纪元'
+    });
+    const core = createLocalAppServerCore({
+      token: 'secret',
+      fileSystem: fs,
+      recentProjects: createMemoryRecentProjectStore(),
+      projectStatus: async input => ({ projectRoot: input.projectRoot }),
+      ingestStoryInput: async input => ({
+        projectRoot: input.projectRoot,
+        story: input.story,
+        ingestedTextLength: input.text?.length ?? 0,
+        inputProfile: { id: 'short-idea', label: '一句灵感' },
+        confirmedItems: [],
+        candidateItems: [{ questionId: 'core.premise', label: '核心创意', answer: input.text }],
+        pendingQuestions: ['主角：未确认。'],
+        written: input.applyConfirmed
+      })
+    });
+
+    await core.openProject({ token: 'secret', projectRoot });
+
+    await expect(core.ingestStoryInput({
+      token: 'secret',
+      story: '法术编译纪元',
+      text: '一个工科青年把符文看成可调试的程序。'
+    })).resolves.toEqual({
+      status: 200,
+      body: {
+        projectRoot,
+        story: '法术编译纪元',
+        ingestedTextLength: 18,
+        inputProfile: { id: 'short-idea', label: '一句灵感' },
+        confirmedItems: [],
+        candidateItems: [{ questionId: 'core.premise', label: '核心创意', answer: '一个工科青年把符文看成可调试的程序。' }],
+        pendingQuestions: ['主角：未确认。'],
+        written: false
+      }
+    });
+  });
+
+  it('returns missing core items for the current project story', async () => {
+    const fs = new MemoryFileSystem('D:\\workspace');
+    const projectRoot = path.resolve('D:\\workspace\\spell-era');
+    await fs.ensureDir(path.join(projectRoot, '.specify'));
+    await fs.writeJson(path.join(projectRoot, '.specify', 'config.json'), {
+      name: '法术编译纪元'
+    });
+    const core = createLocalAppServerCore({
+      token: 'secret',
+      fileSystem: fs,
+      recentProjects: createMemoryRecentProjectStore(),
+      projectStatus: async input => ({ projectRoot: input.projectRoot }),
+      storyCoreSummary: async input => ({
+        projectRoot: input.projectRoot,
+        story: input.story,
+        missingOnly: input.missingOnly,
+        items: [{
+          id: 'core.partner',
+          label: '核心伙伴',
+          status: 'missing',
+          sourceLabel: '待澄清',
+          summary: '还没确认核心伙伴。',
+          nextPrompt: '继续确认核心伙伴。'
+        }]
+      })
+    });
+
+    await core.openProject({ token: 'secret', projectRoot });
+
+    await expect(core.getStoryCoreMissing({
+      token: 'secret',
+      story: '法术编译纪元'
+    })).resolves.toEqual({
+      status: 200,
+      body: {
+        projectRoot,
+        story: '法术编译纪元',
+        missingOnly: true,
+        items: [{
+          id: 'core.partner',
+          label: '核心伙伴',
+          status: 'missing',
+          sourceLabel: '待澄清',
+          summary: '还没确认核心伙伴。',
+          nextPrompt: '继续确认核心伙伴。'
+        }]
+      }
+    });
+  });
 });

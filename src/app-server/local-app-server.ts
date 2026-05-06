@@ -7,6 +7,18 @@ import {
 } from '../application/local-app-projects.js';
 import type { InitProjectInput } from '../application/init-project.js';
 import type { ProjectFileSystem } from '../application/project-ports.js';
+import {
+  createStoryIdea as createStoryIdeaApplication,
+  type CreateStoryIdeaInput
+} from '../application/story-onboarding.js';
+import {
+  ingestStoryInput as ingestStoryInputApplication,
+  type IngestStoryInput
+} from '../application/ingest-story-input.js';
+import {
+  createStoryCoreSummary,
+  type StoryCoreSummaryInput
+} from '../application/story-core-summary.js';
 
 export interface LocalAppServerResponse<TBody = unknown> {
   status: number;
@@ -29,6 +41,9 @@ export interface CreateLocalAppServerCoreInput<TProjectStatus> {
   host?: string;
   projectStatus(input: LocalAppProjectStatusInput): Promise<TProjectStatus>;
   createProject?(request: LocalAppCreateProjectRequest): Promise<LocalAppProjectResult>;
+  createStoryIdea?(request: LocalAppCreateStoryIdeaRequest): Promise<unknown>;
+  ingestStoryInput?(request: LocalAppIngestStoryInputRequest): Promise<unknown>;
+  storyCoreSummary?(request: LocalAppStoryCoreSummaryRequest): Promise<unknown>;
 }
 
 export interface OpenProjectRequest {
@@ -65,6 +80,46 @@ export interface CreateProjectRequest extends LocalAppCreateProjectRequest {
   initProject?: (input: InitProjectInput) => Promise<unknown>;
 }
 
+export interface LocalAppCreateStoryIdeaRequest {
+  projectRoot: string;
+  fileSystem: ProjectFileSystem;
+  name: string;
+  idea?: string;
+}
+
+export interface CreateStoryIdeaRequest {
+  token: string;
+  name: string;
+  idea?: string;
+}
+
+export interface LocalAppIngestStoryInputRequest {
+  projectRoot: string;
+  fileSystem: ProjectFileSystem;
+  story?: string;
+  text?: string;
+  applyConfirmed?: boolean;
+}
+
+export interface IngestStoryInputRequest {
+  token: string;
+  story?: string;
+  text?: string;
+  applyConfirmed?: boolean;
+}
+
+export interface LocalAppStoryCoreSummaryRequest {
+  projectRoot: string;
+  fileSystem: ProjectFileSystem;
+  story?: string;
+  missingOnly: boolean;
+}
+
+export interface StoryCoreMissingRequest {
+  token: string;
+  story?: string;
+}
+
 const unauthorized = (): LocalAppServerResponse<LocalAppBlockedBody> => ({
   status: 401,
   body: {
@@ -78,6 +133,14 @@ const forbiddenProject = (): LocalAppServerResponse<LocalAppBlockedBody> => ({
   body: {
     blocked: true,
     blockedReasons: ['项目尚未在本次 App 会话中打开']
+  }
+});
+
+const badRequest = (error: unknown): LocalAppServerResponse<LocalAppBlockedBody> => ({
+  status: 400,
+  body: {
+    blocked: true,
+    blockedReasons: [error instanceof Error ? error.message : String(error)]
   }
 });
 
@@ -96,6 +159,10 @@ export const createLocalAppServerCore = <TProjectStatus>(
     return resolved;
   };
   const isAllowed = (projectRoot: string): boolean => allowedProjects.has(path.resolve(projectRoot));
+  const currentAllowedProject = (): string | undefined =>
+    currentProjectRoot && isAllowed(currentProjectRoot)
+      ? currentProjectRoot
+      : undefined;
 
   return {
     health() {
@@ -203,14 +270,119 @@ export const createLocalAppServerCore = <TProjectStatus>(
         return unauthorized();
       }
 
-      if (!currentProjectRoot || !isAllowed(currentProjectRoot)) {
+      const projectRoot = currentAllowedProject();
+      if (!projectRoot) {
         return forbiddenProject();
       }
 
       return {
         status: 200,
-        body: await input.projectStatus({ projectRoot: currentProjectRoot })
+        body: await input.projectStatus({ projectRoot })
       };
+    },
+
+    async createStoryIdea(request: CreateStoryIdeaRequest): Promise<LocalAppServerResponse<unknown | LocalAppBlockedBody>> {
+      if (!hasToken(request.token)) {
+        return unauthorized();
+      }
+
+      const projectRoot = currentAllowedProject();
+      if (!projectRoot) {
+        return forbiddenProject();
+      }
+
+      try {
+        const body = input.createStoryIdea
+          ? await input.createStoryIdea({
+            projectRoot,
+            fileSystem: input.fileSystem,
+            name: request.name,
+            idea: request.idea
+          })
+          : await createStoryIdeaApplication({
+            projectRoot,
+            fileSystem: input.fileSystem,
+            name: request.name,
+            idea: request.idea
+          } satisfies CreateStoryIdeaInput);
+
+        return {
+          status: 200,
+          body
+        };
+      } catch (error) {
+        return badRequest(error);
+      }
+    },
+
+    async ingestStoryInput(request: IngestStoryInputRequest): Promise<LocalAppServerResponse<unknown | LocalAppBlockedBody>> {
+      if (!hasToken(request.token)) {
+        return unauthorized();
+      }
+
+      const projectRoot = currentAllowedProject();
+      if (!projectRoot) {
+        return forbiddenProject();
+      }
+
+      try {
+        const body = input.ingestStoryInput
+          ? await input.ingestStoryInput({
+            projectRoot,
+            fileSystem: input.fileSystem,
+            story: request.story,
+            text: request.text,
+            applyConfirmed: request.applyConfirmed === true
+          })
+          : await ingestStoryInputApplication({
+            projectRoot,
+            fileSystem: input.fileSystem,
+            story: request.story,
+            text: request.text,
+            applyConfirmed: request.applyConfirmed === true
+          } satisfies IngestStoryInput);
+
+        return {
+          status: 200,
+          body
+        };
+      } catch (error) {
+        return badRequest(error);
+      }
+    },
+
+    async getStoryCoreMissing(request: StoryCoreMissingRequest): Promise<LocalAppServerResponse<unknown | LocalAppBlockedBody>> {
+      if (!hasToken(request.token)) {
+        return unauthorized();
+      }
+
+      const projectRoot = currentAllowedProject();
+      if (!projectRoot) {
+        return forbiddenProject();
+      }
+
+      try {
+        const body = input.storyCoreSummary
+          ? await input.storyCoreSummary({
+            projectRoot,
+            fileSystem: input.fileSystem,
+            story: request.story,
+            missingOnly: true
+          })
+          : await createStoryCoreSummary({
+            projectRoot,
+            fileSystem: input.fileSystem,
+            story: request.story,
+            missingOnly: true
+          } satisfies StoryCoreSummaryInput);
+
+        return {
+          status: 200,
+          body
+        };
+      } catch (error) {
+        return badRequest(error);
+      }
     }
   };
 };
