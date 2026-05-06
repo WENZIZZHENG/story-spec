@@ -1,13 +1,17 @@
 import type { Command } from '@commander-js/extra-typings';
 import chalk from 'chalk';
 import crypto from 'node:crypto';
+import type { LocalAppProject, RecentProjectStore } from '../../application/local-app-projects.js';
 import { getProjectStatus } from '../../application/get-project-status.js';
 import { createJsonRecentProjectStore } from '../../application/local-app-projects.js';
+import type { LocalAppServerResponse } from '../../app-server/local-app-server.js';
 import { createLocalAppServerCore } from '../../app-server/local-app-server.js';
+import type { LocalAppHttpServer, StartLocalAppHttpServerInput } from '../../app-server/local-app-http-server.js';
 import { startLocalAppHttpServer } from '../../app-server/local-app-http-server.js';
 import { commandGitAdapter } from '../../infrastructure/command-git-adapter.js';
 import { getLocalAppRecentProjectsPath } from '../../infrastructure/local-app-config.js';
 import { nodeFileSystem } from '../../infrastructure/node-file-system.js';
+import type { ProjectFileSystem } from '../../application/project-ports.js';
 
 interface AppCommandContext {
   packageRoot: string;
@@ -22,6 +26,30 @@ export interface LocalAppStartPreviewInput {
 export interface LocalAppStartedInput {
   url: string;
   tokenRequired: boolean;
+  openedProject?: LocalAppProject;
+  openProjectBlockedReasons?: string[];
+}
+
+export interface LocalAppWorkbenchServer extends LocalAppHttpServer {
+  core?: ReturnType<typeof createLocalAppServerCore>;
+}
+
+export interface StartLocalAppWorkbenchInput<TProjectStatus = unknown> {
+  host: string;
+  port: number;
+  token: string;
+  project?: string;
+  fileSystem: ProjectFileSystem;
+  recentProjects: RecentProjectStore;
+  projectStatus(input: { projectRoot: string }): Promise<TProjectStatus>;
+  startServer?: (input: StartLocalAppHttpServerInput) => Promise<LocalAppWorkbenchServer>;
+}
+
+export interface StartLocalAppWorkbenchResult<TProjectStatus = unknown> {
+  server: LocalAppWorkbenchServer;
+  core: ReturnType<typeof createLocalAppServerCore<TProjectStatus>>;
+  openedProject?: LocalAppProject;
+  openProjectBlockedReasons?: string[];
 }
 
 export const renderLocalAppStartPreview = (input: LocalAppStartPreviewInput): string => {
@@ -43,11 +71,61 @@ export const renderLocalAppStarted = (input: LocalAppStartedInput): string => {
     '',
     `地址：${chalk.cyan(input.url)}`,
     `访问控制：${input.tokenRequired ? '需要本机 session token' : '未启用 token'}`,
+    input.openedProject
+      ? `已打开项目：${chalk.cyan(input.openedProject.name)}`
+      : undefined,
+    input.openProjectBlockedReasons?.length
+      ? chalk.yellow(`启动项目未打开：${input.openProjectBlockedReasons.join('；')}`)
+      : undefined,
     '',
     chalk.gray('按 Ctrl+C 停止本机服务。')
-  ];
+  ].filter((line): line is string => line !== undefined);
 
   return lines.join('\n');
+};
+
+export const startLocalAppWorkbench = async <TProjectStatus>(
+  input: StartLocalAppWorkbenchInput<TProjectStatus>
+): Promise<StartLocalAppWorkbenchResult<TProjectStatus>> => {
+  const core = createLocalAppServerCore({
+    token: input.token,
+    fileSystem: input.fileSystem,
+    recentProjects: input.recentProjects,
+    projectStatus: input.projectStatus
+  });
+  const startServer = input.startServer ?? startLocalAppHttpServer;
+  const server = await startServer({
+    host: input.host,
+    port: input.port,
+    core,
+    token: input.token
+  });
+  let openedProject: LocalAppProject | undefined;
+  let openProjectBlockedReasons: string[] | undefined;
+
+  if (input.project?.trim()) {
+    const result = await core.openProject({
+      token: input.token,
+      projectRoot: input.project
+    }) as LocalAppServerResponse<{
+      blocked?: boolean;
+      blockedReasons?: string[];
+      project?: LocalAppProject;
+    }>;
+
+    if (result.status === 200 && result.body.project) {
+      openedProject = result.body.project;
+    } else {
+      openProjectBlockedReasons = result.body.blockedReasons ?? ['启动项目未能打开'];
+    }
+  }
+
+  return {
+    server,
+    core,
+    openedProject,
+    openProjectBlockedReasons
+  };
 };
 
 export function registerAppCommand(program: Command, _context: AppCommandContext): void {
@@ -79,25 +157,23 @@ export function registerAppCommand(program: Command, _context: AppCommandContext
       }
 
       const token = crypto.randomBytes(24).toString('hex');
-      const recentProjects = createJsonRecentProjectStore({
-        fileSystem: nodeFileSystem,
-        storePath: getLocalAppRecentProjectsPath()
-      });
-      const core = createLocalAppServerCore({
+      const result = await startLocalAppWorkbench({
+        host,
+        port,
+        project: options.project,
         token,
         fileSystem: nodeFileSystem,
-        recentProjects,
+        recentProjects: createJsonRecentProjectStore({
+          fileSystem: nodeFileSystem,
+          storePath: getLocalAppRecentProjectsPath()
+        }),
         projectStatus: input => getProjectStatus({
           projectRoot: input.projectRoot,
           fileSystem: nodeFileSystem,
           git: commandGitAdapter
         })
       });
-      const server = await startLocalAppHttpServer({
-        host,
-        port,
-        core
-      });
+      const server = result.server;
 
       if (options.json) {
         console.log(JSON.stringify({
@@ -108,12 +184,16 @@ export function registerAppCommand(program: Command, _context: AppCommandContext
           project: options.project,
           openBrowser: options.open !== false,
           tokenRequired,
-          status: 'started'
+          status: 'started',
+          openedProject: result.openedProject,
+          openProjectBlockedReasons: result.openProjectBlockedReasons
         }, null, 2));
       } else {
         console.log(renderLocalAppStarted({
           url: server.url,
-          tokenRequired
+          tokenRequired,
+          openedProject: result.openedProject,
+          openProjectBlockedReasons: result.openProjectBlockedReasons
         }));
       }
 

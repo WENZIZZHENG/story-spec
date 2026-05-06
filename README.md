@@ -45,13 +45,13 @@ storyspec next 编程施法 --modes
 
 ## 实验性本机工作台
 
-StorySpec 正在加入本机 Web 工作台地基。当前版本提供实验性本机服务入口：
+StorySpec 正在加入本机 Web 工作台。当前版本提供实验性本机页面入口：
 
 ```bash
 storyspec app
 ```
 
-它会启动只绑定 `127.0.0.1` 的本机服务，并提供 health、最近项目、打开/创建项目和当前项目状态 API。当前它还不是完整浏览器 UI，正式创作流程仍以 CLI 和 agent 命令为准；自动化检查可用 `storyspec app --json --no-open` 查看启动预览。
+它会启动只绑定 `127.0.0.1` 的本机服务，并在浏览器里打开一个零依赖工作台页面。页面包含项目抽屉、最近项目、打开/创建项目、故事档案、当前项目状态和确认通道；`storyspec app --project <path>` 可以在启动后预打开一个 StorySpec 项目。当前页面仍不是完整 React/Vite 前端，也不包含账号、云端、多用户或富文本编辑器；正式创作流程仍以 CLI 和 agent 命令为准。自动化检查可用 `storyspec app --json --no-open` 查看启动预览。
 
 它会问你今天想怎么玩：
 
@@ -315,6 +315,7 @@ StorySpec 有两类入口，容易混淆：
 | `storyspec init [name]` | 初始化小说项目 |
 | `storyspec upgrade` | 升级现有项目的命令、脚本、规范或模板 |
 | `storyspec check` | 检查 Node.js、Git 和常见 AI CLI |
+| `storyspec app [--project <path>]` | 启动实验性本机 Web 工作台，打开或创建项目并查看当前状态；仍不包含账号、云端或富文本编辑器 |
 | `storyspec status` | 汇总项目、当前故事长成了什么、tracking、Git 状态和下一步 |
 | `storyspec next [story]` | 根据故事状态给出精简下一步建议；`--verbose` 展开完整工作台，`--modes` 查看低负担模式 |
 | `storyspec validate` | 校验项目结构、任务、tracking、world/canon、模板和写作规则 |

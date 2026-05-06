@@ -1,0 +1,695 @@
+export interface RenderLocalAppHtmlInput {
+  token: string;
+}
+
+const escapeHtml = (value: string): string => value
+  .replace(/&/g, '&amp;')
+  .replace(/</g, '&lt;')
+  .replace(/>/g, '&gt;')
+  .replace(/"/g, '&quot;')
+  .replace(/'/g, '&#39;');
+
+export const renderLocalAppHtml = (input: RenderLocalAppHtmlInput): string => {
+  const token = escapeHtml(input.token);
+
+  return `<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>StorySpec 本机工作台</title>
+  <meta name="description" content="StorySpec 本机项目选择和写作状态工作台">
+  <style>
+    :root {
+      color-scheme: light;
+      --paper: #f7f2e8;
+      --panel: #fffaf0;
+      --panel-strong: #f0e5d2;
+      --ink: #231f1a;
+      --muted: #6f6659;
+      --line: #d8cbb7;
+      --accent: #5d4a2f;
+      --accent-ink: #fffaf0;
+      --warn: #8d3d2f;
+      --ok: #315d4d;
+      --focus: #7a5b2b;
+      --radius: 8px;
+      --z-focus: 10;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      min-height: 100%;
+      background: var(--paper);
+    }
+
+    body {
+      margin: 0;
+      min-height: 100dvh;
+      color: var(--ink);
+      background: var(--paper);
+      font-family: ui-serif, Georgia, "Noto Serif SC", "Songti SC", serif;
+      line-height: 1.5;
+    }
+
+    button,
+    input,
+    select {
+      font: inherit;
+    }
+
+    button:focus-visible,
+    input:focus-visible,
+    select:focus-visible {
+      outline: 3px solid rgba(122, 91, 43, 0.35);
+      outline-offset: 2px;
+      position: relative;
+      z-index: var(--z-focus);
+    }
+
+    .skip-link {
+      position: absolute;
+      left: 16px;
+      top: -48px;
+      background: var(--ink);
+      color: var(--accent-ink);
+      padding: 8px 12px;
+      border-radius: 4px;
+    }
+
+    .skip-link:focus {
+      top: 16px;
+    }
+
+    .shell {
+      width: min(1480px, calc(100% - 32px));
+      margin: 0 auto;
+      padding: 20px 0 28px;
+    }
+
+    .topbar {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 16px;
+      align-items: end;
+      padding: 14px 0 18px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    h1,
+    h2,
+    h3,
+    p {
+      margin: 0;
+    }
+
+    h1 {
+      font-size: clamp(28px, 4vw, 46px);
+      line-height: 1.05;
+      text-wrap: balance;
+      letter-spacing: 0;
+    }
+
+    h2 {
+      font-size: 18px;
+      text-wrap: balance;
+      letter-spacing: 0;
+    }
+
+    h3 {
+      font-size: 15px;
+      text-wrap: balance;
+      letter-spacing: 0;
+    }
+
+    .subtitle,
+    .muted {
+      color: var(--muted);
+      text-wrap: pretty;
+    }
+
+    .subtitle {
+      max-width: 72ch;
+      margin-top: 6px;
+      font-size: 15px;
+    }
+
+    .status-pill {
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      padding: 6px 10px;
+      color: var(--muted);
+      font-size: 13px;
+      white-space: nowrap;
+      background: rgba(255, 250, 240, 0.72);
+    }
+
+    .workspace-grid {
+      display: grid;
+      grid-template-columns: minmax(280px, 0.92fr) minmax(380px, 1.5fr) minmax(300px, 1fr);
+      gap: 14px;
+      align-items: start;
+      padding-top: 16px;
+    }
+
+    .panel {
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: rgba(255, 250, 240, 0.78);
+      min-width: 0;
+    }
+
+    .panel-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      padding: 12px 14px;
+      border-bottom: 1px solid var(--line);
+      background: rgba(240, 229, 210, 0.55);
+    }
+
+    .panel-body {
+      padding: 14px;
+    }
+
+    .stack {
+      display: grid;
+      gap: 12px;
+    }
+
+    .field {
+      display: grid;
+      gap: 6px;
+    }
+
+    label {
+      font-size: 13px;
+      color: var(--muted);
+    }
+
+    input,
+    select {
+      width: 100%;
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      background: #fffdf8;
+      color: var(--ink);
+      padding: 9px 10px;
+    }
+
+    .button-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      align-items: center;
+    }
+
+    button {
+      min-height: 40px;
+      border: 1px solid var(--accent);
+      border-radius: 6px;
+      background: var(--accent);
+      color: var(--accent-ink);
+      padding: 8px 12px;
+      cursor: pointer;
+      transition: transform 160ms ease-out, background-color 160ms ease-out;
+    }
+
+    button:hover {
+      background: #493a26;
+    }
+
+    button:active {
+      transform: translateY(1px);
+    }
+
+    .secondary {
+      background: transparent;
+      color: var(--accent);
+    }
+
+    .secondary:hover {
+      background: rgba(93, 74, 47, 0.08);
+    }
+
+    .error {
+      min-height: 20px;
+      color: var(--warn);
+      font-size: 13px;
+    }
+
+    .recent-list,
+    .next-list,
+    .fact-list {
+      display: grid;
+      gap: 8px;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .recent-item {
+      display: grid;
+      gap: 3px;
+      width: 100%;
+      text-align: left;
+      border: 1px solid var(--line);
+      background: #fffdf8;
+      color: var(--ink);
+      border-radius: 6px;
+      padding: 10px;
+    }
+
+    .recent-item:hover {
+      background: #f8efe0;
+    }
+
+    .item-title {
+      font-weight: 700;
+    }
+
+    .item-path,
+    .mono {
+      font-family: ui-monospace, "SFMono-Regular", Consolas, monospace;
+      font-size: 12px;
+      color: var(--muted);
+      overflow-wrap: anywhere;
+    }
+
+    .empty {
+      border: 1px dashed var(--line);
+      border-radius: 6px;
+      padding: 12px;
+      background: rgba(255, 253, 248, 0.62);
+    }
+
+    .dossier-title {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      align-items: baseline;
+      justify-content: space-between;
+      padding-bottom: 12px;
+      border-bottom: 1px solid var(--line);
+      margin-bottom: 12px;
+    }
+
+    .stage {
+      color: var(--ok);
+      font-variant-numeric: tabular-nums;
+    }
+
+    .metric-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 8px;
+      margin: 12px 0;
+    }
+
+    .metric {
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      padding: 10px;
+      background: #fffdf8;
+    }
+
+    .metric-value {
+      display: block;
+      font-size: 22px;
+      font-variant-numeric: tabular-nums;
+      line-height: 1.1;
+    }
+
+    .metric-label {
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .section-block {
+      display: grid;
+      gap: 8px;
+      padding: 12px 0;
+      border-top: 1px solid var(--line);
+    }
+
+    .section-block:first-child {
+      border-top: 0;
+      padding-top: 0;
+    }
+
+    .fact-list li,
+    .next-list li {
+      border-left: 3px solid var(--line);
+      padding-left: 10px;
+      text-wrap: pretty;
+    }
+
+    .gate {
+      display: grid;
+      gap: 10px;
+    }
+
+    .gate-line {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 8px 0;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .gate-line strong {
+      font-variant-numeric: tabular-nums;
+    }
+
+    .command {
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      padding: 10px;
+      background: #fffdf8;
+      font-family: ui-monospace, "SFMono-Regular", Consolas, monospace;
+      font-size: 12px;
+      overflow-wrap: anywhere;
+    }
+
+    @media (max-width: 1080px) {
+      .workspace-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .shell {
+        width: min(100% - 20px, 1480px);
+        padding-top: 12px;
+      }
+
+      .topbar {
+        grid-template-columns: 1fr;
+      }
+
+      .metric-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <a class="skip-link" href="#main">跳到工作台内容</a>
+  <div class="shell">
+    <header class="topbar">
+      <div>
+        <h1>StorySpec 本机工作台</h1>
+        <p class="subtitle">编辑台 / 档案控制台：打开本机项目，查看当前故事长成了什么，再决定下一步写入前确认。</p>
+      </div>
+      <div class="status-pill" id="service-status">本机服务检查中</div>
+    </header>
+
+    <main id="main" class="workspace-grid">
+      <aside class="panel" aria-labelledby="project-drawer-title">
+        <div class="panel-header">
+          <h2 id="project-drawer-title">项目抽屉</h2>
+          <button class="secondary" id="refresh-recent" type="button">刷新</button>
+        </div>
+        <div class="panel-body stack">
+          <section class="stack" aria-labelledby="recent-title">
+            <h3 id="recent-title">最近项目</h3>
+            <div class="empty" id="recent-empty">暂无最近项目。选择一个 StorySpec 项目，或创建新项目。</div>
+            <ul class="recent-list" id="recent-projects"></ul>
+          </section>
+
+          <form class="stack" id="open-project-form">
+            <h3>打开项目</h3>
+            <div class="field">
+              <label for="open-project-root">项目根目录</label>
+              <input id="open-project-root" name="projectRoot" autocomplete="off" placeholder="D:\\project\\my-story">
+            </div>
+            <div class="error" id="open-project-error" role="status" aria-live="polite"></div>
+            <div class="button-row">
+              <button type="submit">打开</button>
+            </div>
+          </form>
+
+          <form class="stack" id="create-project-form">
+            <h3>创建项目</h3>
+            <div class="field">
+              <label for="create-project-name">故事项目名</label>
+              <input id="create-project-name" name="name" autocomplete="off" placeholder="法术编译纪元">
+            </div>
+            <div class="field">
+              <label for="create-workspace-path">保存位置</label>
+              <input id="create-workspace-path" name="workspacePath" autocomplete="off" placeholder="D:\\project\\novels\\spell-era">
+            </div>
+            <div class="field">
+              <label for="create-method">写作方法</label>
+              <select id="create-method" name="method">
+                <option value="three-act">three-act</option>
+                <option value="snowflake">snowflake</option>
+              </select>
+            </div>
+            <div class="error" id="create-project-error" role="status" aria-live="polite"></div>
+            <div class="button-row">
+              <button type="submit">创建并打开</button>
+            </div>
+          </form>
+        </div>
+      </aside>
+
+      <section class="panel" aria-labelledby="story-dossier-title">
+        <div class="panel-header">
+          <h2 id="story-dossier-title">故事档案</h2>
+          <button class="secondary" id="refresh-status" type="button">读取状态</button>
+        </div>
+        <div class="panel-body">
+          <div class="empty" id="status-empty">
+            <strong>尚未打开项目</strong>
+            <p class="muted">选择一个 StorySpec 项目，或创建新项目。首屏会展示故事阶段、创作回声、缺口和文件状态。</p>
+          </div>
+          <div id="status-content" hidden></div>
+        </div>
+      </section>
+
+      <aside class="panel" aria-labelledby="confirm-lane-title">
+        <div class="panel-header">
+          <h2 id="confirm-lane-title">确认通道</h2>
+          <span class="muted">preview / confirm / apply</span>
+        </div>
+        <div class="panel-body gate" id="confirm-lane">
+          <div class="empty">打开项目后，这里会显示下一步建议、待确认决策、tracking 和 Git 状态。</div>
+        </div>
+      </aside>
+    </main>
+  </div>
+
+  <script>
+    window.__STORYSPEC_APP__ = { token: "${token}" };
+  </script>
+  <script>
+    const token = window.__STORYSPEC_APP__.token;
+    const headers = { "content-type": "application/json", "x-storyspec-app-token": token };
+    const serviceStatus = document.querySelector("#service-status");
+    const recentList = document.querySelector("#recent-projects");
+    const recentEmpty = document.querySelector("#recent-empty");
+    const statusEmpty = document.querySelector("#status-empty");
+    const statusContent = document.querySelector("#status-content");
+    const confirmLane = document.querySelector("#confirm-lane");
+    const openError = document.querySelector("#open-project-error");
+    const createError = document.querySelector("#create-project-error");
+
+    const api = async (url, options = {}) => {
+      const response = await fetch(url, {
+        ...options,
+        headers: { ...headers, ...(options.headers || {}) }
+      });
+      const body = await response.json().catch(() => ({}));
+      if (!response.ok) {
+        const reasons = body.blockedReasons || body.blocked?.blockedReasons || ["请求失败"];
+        throw new Error(reasons.join("；"));
+      }
+      return body;
+    };
+
+    const text = (value, fallback = "未记录") => {
+      if (value === undefined || value === null || value === "") return fallback;
+      return String(value);
+    };
+
+    const listItems = (items, fallback) => {
+      if (!items || items.length === 0) return "<li>" + fallback + "</li>";
+      return items.map(item => "<li>" + escapeHtml(String(item)) + "</li>").join("");
+    };
+
+    const escapeHtml = value => String(value)
+      .replaceAll("&", "&amp;")
+      .replaceAll("<", "&lt;")
+      .replaceAll(">", "&gt;")
+      .replaceAll('"', "&quot;")
+      .replaceAll("'", "&#39;");
+
+    const renderRecent = projects => {
+      recentList.innerHTML = "";
+      recentEmpty.hidden = projects.length > 0;
+      projects.forEach(project => {
+        const li = document.createElement("li");
+        const button = document.createElement("button");
+        button.type = "button";
+        button.className = "recent-item";
+        button.innerHTML = '<span class="item-title">' + escapeHtml(project.name) + '</span><span class="item-path">' + escapeHtml(project.path) + '</span><span class="muted">' + escapeHtml(project.lastOpenedAt || "") + '</span>';
+        button.addEventListener("click", () => openProject(project.path));
+        li.appendChild(button);
+        recentList.appendChild(li);
+      });
+    };
+
+    const renderStatus = status => {
+      statusEmpty.hidden = true;
+      statusContent.hidden = false;
+      const story = status.story;
+      const storyHtml = story ? \`
+        <div class="dossier-title">
+          <div>
+            <h2>\${escapeHtml(story.name)}</h2>
+            <p class="muted">\${escapeHtml(status.projectName)} · \${escapeHtml(status.projectRoot)}</p>
+          </div>
+          <strong class="stage">\${escapeHtml(story.stage)}</strong>
+        </div>
+        <div class="metric-grid">
+          <div class="metric"><span class="metric-value">\${story.contentFiles}</span><span class="metric-label">正文文件</span></div>
+          <div class="metric"><span class="metric-value">\${story.contentChars}</span><span class="metric-label">正文字符</span></div>
+          <div class="metric"><span class="metric-value">\${story.creativeControl.pendingDecisions}</span><span class="metric-label">待确认</span></div>
+        </div>
+        <div class="section-block">
+          <h3>当前故事长成了什么</h3>
+          <p>\${escapeHtml(story.creationEcho.flavor)}</p>
+          <p class="muted">\${escapeHtml(story.creationEcho.maturityNote)}</p>
+        </div>
+        <div class="section-block">
+          <h3>已长出的关键部件</h3>
+          <ul class="fact-list">\${listItems(story.creationEcho.strongestParts, "暂无明显积累。")}</ul>
+        </div>
+        <div class="section-block">
+          <h3>还差的关键部件</h3>
+          <ul class="fact-list">\${listItems(story.creationEcho.missingPieces, "暂无明显缺口。")}</ul>
+        </div>
+      \` : \`
+        <div class="dossier-title">
+          <div>
+            <h2>\${escapeHtml(status.projectName)}</h2>
+            <p class="muted">\${escapeHtml(status.projectRoot)}</p>
+          </div>
+          <strong class="stage">no story</strong>
+        </div>
+        <div class="empty">这个项目还没有故事。先保存一句灵感，再进入低负担共创。</div>
+      \`;
+      statusContent.innerHTML = storyHtml;
+      renderConfirmLane(status);
+    };
+
+    const renderConfirmLane = status => {
+      const story = status.story;
+      const gateRows = story ? \`
+        <div class="gate-line"><span>已确认决策</span><strong>\${story.creativeControl.confirmedDecisions}</strong></div>
+        <div class="gate-line"><span>待确认决策</span><strong>\${story.creativeControl.pendingDecisions}</strong></div>
+        <div class="gate-line"><span>AI 建议未确认</span><strong>\${story.creativeControl.unconfirmedAiSuggestions}</strong></div>
+      \` : "";
+      confirmLane.innerHTML = \`
+        \${gateRows}
+        <section class="section-block">
+          <h3>下一步建议</h3>
+          <ul class="next-list">\${listItems(status.nextActions, "暂无建议。")}</ul>
+        </section>
+        <section class="section-block">
+          <h3>可复制入口</h3>
+          \${status.navigationEntries && status.navigationEntries.length
+            ? status.navigationEntries.map(entry => '<div class="command">' + escapeHtml(entry.copyableCommand) + '</div>').join("")
+            : '<div class="command">storyspec status</div>'}
+        </section>
+        <section class="section-block">
+          <h3>项目健康</h3>
+          <p>Tracking：\${status.tracking.every(item => item.valid) ? "可读取" : "存在错误"}</p>
+          <p>Git：\${status.git.available ? (status.git.dirty ? status.git.changedFiles + " 个改动" : "干净") : "不可用"}</p>
+        </section>
+      \`;
+    };
+
+    const loadRecent = async () => {
+      const projects = await api("/api/projects/recent");
+      renderRecent(projects);
+    };
+
+    const loadStatus = async () => {
+      try {
+        const status = await api("/api/projects/current/status", { method: "GET" });
+        renderStatus(status);
+      } catch (error) {
+        statusContent.hidden = true;
+        statusEmpty.hidden = false;
+        confirmLane.innerHTML = '<div class="empty">' + escapeHtml(error.message) + '</div>';
+      }
+    };
+
+    const openProject = async projectRoot => {
+      openError.textContent = "";
+      try {
+        await api("/api/projects/open", {
+          method: "POST",
+          body: JSON.stringify({ projectRoot })
+        });
+        await loadRecent();
+        await loadStatus();
+      } catch (error) {
+        openError.textContent = error.message;
+      }
+    };
+
+    document.querySelector("#open-project-form").addEventListener("submit", async event => {
+      event.preventDefault();
+      const form = new FormData(event.currentTarget);
+      await openProject(String(form.get("projectRoot") || ""));
+    });
+
+    document.querySelector("#create-project-form").addEventListener("submit", async event => {
+      event.preventDefault();
+      createError.textContent = "";
+      const form = new FormData(event.currentTarget);
+      try {
+        await api("/api/projects/create", {
+          method: "POST",
+          body: JSON.stringify({
+            name: String(form.get("name") || ""),
+            workspacePath: String(form.get("workspacePath") || ""),
+            method: String(form.get("method") || "three-act"),
+            git: false,
+            withExperts: false
+          })
+        });
+        await loadRecent();
+        await loadStatus();
+      } catch (error) {
+        createError.textContent = error.message;
+      }
+    });
+
+    document.querySelector("#refresh-recent").addEventListener("click", loadRecent);
+    document.querySelector("#refresh-status").addEventListener("click", loadStatus);
+
+    (async () => {
+      try {
+        const health = await fetch("/api/app/health").then(response => response.json());
+        serviceStatus.textContent = health.ok ? "本机服务就绪" : "本机服务异常";
+      } catch {
+        serviceStatus.textContent = "本机服务异常";
+      }
+      await loadRecent().catch(error => {
+        recentEmpty.textContent = error.message;
+        recentEmpty.hidden = false;
+      });
+      await loadStatus();
+    })();
+  </script>
+</body>
+</html>`;
+};

@@ -20,6 +20,38 @@ afterEach(async () => {
 });
 
 describe('local app http server', () => {
+  it('serves the local workbench shell at the root path without weakening API token checks', async () => {
+    const core = createLocalAppServerCore({
+      token: 'secret',
+      fileSystem: nodeFileSystem,
+      recentProjects: createMemoryRecentProjectStore(),
+      projectStatus: async input => ({
+        projectRoot: input.projectRoot,
+        projectName: '法术编译纪元'
+      })
+    });
+    const server = await startLocalAppHttpServer({
+      host: '127.0.0.1',
+      port: 0,
+      core,
+      token: 'secret'
+    });
+
+    try {
+      const shell = await fetch(`${server.url}/`);
+      const html = await shell.text();
+      expect(shell.status).toBe(200);
+      expect(shell.headers.get('content-type')).toContain('text/html');
+      expect(html).toContain('StorySpec 本机工作台');
+      expect(html).toContain('secret');
+
+      const unauthorized = await fetch(`${server.url}/api/projects/recent`);
+      expect(unauthorized.status).toBe(401);
+    } finally {
+      await server.close();
+    }
+  });
+
   it('serves health, enforces token, opens a project, and returns current status', async () => {
     const projectRoot = await makeTempDir();
     await mkdir(path.join(projectRoot, '.specify'), { recursive: true });
@@ -39,7 +71,8 @@ describe('local app http server', () => {
     const server = await startLocalAppHttpServer({
       host: '127.0.0.1',
       port: 0,
-      core
+      core,
+      token: 'secret'
     });
 
     try {

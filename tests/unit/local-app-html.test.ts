@@ -1,0 +1,48 @@
+import { describe, expect, it } from 'vitest';
+import { renderLocalAppHtml } from '../../src/app-server/local-app-html.js';
+
+describe('local app html', () => {
+  it('renders a restrained editor desk workbench shell with token-backed API wiring', () => {
+    const html = renderLocalAppHtml({
+      token: 'secret-token'
+    });
+
+    expect(html).toContain('<!doctype html>');
+    expect(html).toContain('StorySpec 本机工作台');
+    expect(html).toContain('项目抽屉');
+    expect(html).toContain('故事档案');
+    expect(html).toContain('确认通道');
+    expect(html).toContain('最近项目');
+    expect(html).toContain('打开项目');
+    expect(html).toContain('创建项目');
+    expect(html).toContain('下一步建议');
+    expect(html).toContain('secret-token');
+    expect(html).toContain("x-storyspec-app-token");
+  });
+
+  it('keeps the shell away from marketing hero and generic AI gradient styling', () => {
+    const html = renderLocalAppHtml({
+      token: 'secret-token'
+    }).toLowerCase();
+
+    expect(html).not.toContain('hero');
+    expect(html).not.toContain('linear-gradient');
+    expect(html).not.toContain('glassmorphism');
+    expect(html).not.toContain('backdrop-filter');
+    expect(html).not.toContain('purple');
+    expect(html).not.toContain('blueviolet');
+  });
+
+  it('renders accessible forms, inline errors, and empty status state', () => {
+    const html = renderLocalAppHtml({
+      token: 'secret-token'
+    });
+
+    expect(html).toContain('<label for="open-project-root">项目根目录</label>');
+    expect(html).toContain('<label for="create-project-name">故事项目名</label>');
+    expect(html).toContain('id="open-project-error"');
+    expect(html).toContain('id="create-project-error"');
+    expect(html).toContain('尚未打开项目');
+    expect(html).toContain('选择一个 StorySpec 项目，或创建新项目。');
+  });
+});

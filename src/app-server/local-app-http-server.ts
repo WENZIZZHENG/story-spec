@@ -1,5 +1,6 @@
 import http from 'node:http';
 import type { AddressInfo } from 'node:net';
+import { renderLocalAppHtml } from './local-app-html.js';
 
 interface LocalAppHttpCore {
   health(): unknown;
@@ -20,6 +21,7 @@ export interface StartLocalAppHttpServerInput {
   host: string;
   port: number;
   core: LocalAppHttpCore;
+  token: string;
 }
 
 export interface LocalAppHttpServer {
@@ -55,6 +57,16 @@ const sendJson = (
   response.end(JSON.stringify(body));
 };
 
+const sendHtml = (
+  response: http.ServerResponse,
+  body: string
+): void => {
+  response.writeHead(200, {
+    'content-type': 'text/html; charset=utf-8'
+  });
+  response.end(body);
+};
+
 const getToken = (request: http.IncomingMessage): string =>
   String(request.headers['x-storyspec-app-token'] ?? '');
 
@@ -65,6 +77,11 @@ export const startLocalAppHttpServer = async (
     const url = new URL(request.url ?? '/', `http://${input.host}`);
 
     try {
+      if (request.method === 'GET' && url.pathname === '/') {
+        sendHtml(response, renderLocalAppHtml({ token: input.token }));
+        return;
+      }
+
       if (request.method === 'GET' && url.pathname === '/api/app/health') {
         sendJson(response, 200, input.core.health());
         return;

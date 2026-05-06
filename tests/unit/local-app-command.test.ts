@@ -1,5 +1,13 @@
+import path from 'node:path';
 import { describe, expect, it } from 'vitest';
-import { renderLocalAppStartPreview, renderLocalAppStarted } from '../../src/cli/commands/app.command.js';
+import { createMemoryRecentProjectStore } from '../../src/application/local-app-projects.js';
+import type { ProjectFileSystem } from '../../src/application/project-ports.js';
+import {
+  renderLocalAppStartPreview,
+  renderLocalAppStarted,
+  startLocalAppWorkbench
+} from '../../src/cli/commands/app.command.js';
+import { MemoryFileSystem } from '../helpers/memory-file-system.js';
 
 describe('local app command', () => {
   it('renders a start preview with loopback host and token requirement', () => {
@@ -24,5 +32,83 @@ describe('local app command', () => {
       url: 'http://127.0.0.1:43127',
       tokenRequired: true
     })).toContain('Ctrl+C');
+  });
+
+  it('starts the workbench and pre-opens a valid startup project without exposing the token in output', async () => {
+    const fileSystem = new MemoryFileSystem('D:\\workspace');
+    const projectRoot = path.resolve('D:\\workspace\\spell-era');
+    await fileSystem.ensureDir(path.join(projectRoot, '.specify'));
+    await fileSystem.writeJson(path.join(projectRoot, '.specify', 'config.json'), {
+      name: '法术编译纪元'
+    });
+    const recentProjects = createMemoryRecentProjectStore();
+
+    const result = await startLocalAppWorkbench({
+      host: '127.0.0.1',
+      port: 0,
+      project: projectRoot,
+      token: 'secret-token',
+      fileSystem,
+      recentProjects,
+      projectStatus: async input => ({
+        projectRoot: input.projectRoot,
+        projectName: '法术编译纪元'
+      }),
+      startServer: async ({ core }) => ({
+        url: 'http://127.0.0.1:43127',
+        close: async () => undefined,
+        core
+      })
+    });
+
+    expect(result.openedProject).toMatchObject({
+      name: '法术编译纪元',
+      path: projectRoot
+    });
+    await expect(result.core.getCurrentProjectStatus({ token: 'secret-token' })).resolves.toEqual({
+      status: 200,
+      body: {
+        projectRoot,
+        projectName: '法术编译纪元'
+      }
+    });
+    expect(renderLocalAppStarted({
+      url: result.server.url,
+      tokenRequired: true,
+      openedProject: result.openedProject
+    })).toContain('已打开项目：法术编译纪元');
+    expect(renderLocalAppStarted({
+      url: result.server.url,
+      tokenRequired: true,
+      openedProject: result.openedProject
+    })).not.toContain('secret-token');
+  });
+
+  it('keeps the service available when the startup project cannot be opened', async () => {
+    const fileSystem: ProjectFileSystem = new MemoryFileSystem('D:\\workspace');
+
+    const result = await startLocalAppWorkbench({
+      host: '127.0.0.1',
+      port: 0,
+      project: 'D:\\workspace\\missing',
+      token: 'secret-token',
+      fileSystem,
+      recentProjects: createMemoryRecentProjectStore(),
+      projectStatus: async input => ({ projectRoot: input.projectRoot }),
+      startServer: async ({ core }) => ({
+        url: 'http://127.0.0.1:43127',
+        close: async () => undefined,
+        core
+      })
+    });
+
+    expect(result.openProjectBlockedReasons).toEqual([
+      '缺少 .specify/config.json，所选目录不是 StorySpec 项目根目录'
+    ]);
+    expect(renderLocalAppStarted({
+      url: result.server.url,
+      tokenRequired: true,
+      openProjectBlockedReasons: result.openProjectBlockedReasons
+    })).toContain('启动项目未打开');
   });
 });
