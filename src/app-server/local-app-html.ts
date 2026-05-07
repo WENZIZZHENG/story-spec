@@ -500,6 +500,19 @@ export const renderLocalAppHtml = (input: RenderLocalAppHtmlInput): string => {
           </div>
           <div id="status-content" hidden></div>
 
+          <section class="section-block" aria-labelledby="resume-lane-title">
+            <div class="dossier-title">
+              <h2 id="resume-lane-title">继续创作</h2>
+              <button class="secondary" id="refresh-resume" type="button">刷新回流</button>
+            </div>
+            <div class="result-box" id="resume-lane">打开项目后，会显示当前状态、推荐下一步和写入边界。</div>
+            <div class="command" id="resume-action-command">storyspec status</div>
+            <div class="section-block">
+              <h3>状态词</h3>
+              <div class="result-box" id="resume-glossary">candidate / preview / apply / dry-run / blocked / read-only / active / planned</div>
+            </div>
+          </section>
+
           <section class="section-block" aria-labelledby="intake-title">
             <h2 id="intake-title">创作入口</h2>
             <form class="stack" id="story-idea-form">
@@ -731,6 +744,9 @@ export const renderLocalAppHtml = (input: RenderLocalAppHtmlInput): string => {
     const recentEmpty = document.querySelector("#recent-empty");
     const statusEmpty = document.querySelector("#status-empty");
     const statusContent = document.querySelector("#status-content");
+    const resumeLane = document.querySelector("#resume-lane");
+    const resumeActionCommand = document.querySelector("#resume-action-command");
+    const resumeGlossary = document.querySelector("#resume-glossary");
     const confirmLane = document.querySelector("#confirm-lane");
     const openError = document.querySelector("#open-project-error");
     const createError = document.querySelector("#create-project-error");
@@ -907,6 +923,38 @@ export const renderLocalAppHtml = (input: RenderLocalAppHtmlInput): string => {
       \`;
     };
 
+    const renderResumeLane = resume => {
+      const glossary = resume.statusGlossary || [];
+      resumeLane.innerHTML = \`
+        <p><strong>\${escapeHtml(resume.stateLabel || "继续创作")}</strong></p>
+        <p class="muted">\${escapeHtml(resume.projectName || "")}\${resume.storyName ? " · " + escapeHtml(resume.storyName) : ""}</p>
+        <div class="section-block">
+          <h3>\${escapeHtml(resume.primaryAction?.label || "下一步")}</h3>
+          <p>\${escapeHtml(resume.primaryAction?.reason || "读取当前状态后继续。")}</p>
+          <p class="muted">写入模式：\${escapeHtml(resume.primaryAction?.writeMode || "read-only")} · \${resume.primaryAction?.writesFiles ? "会写入文件" : "不写入文件"}</p>
+          <p class="muted">\${escapeHtml(resume.primaryAction?.boundary || "")}</p>
+        </div>
+        <div class="section-block">
+          <h3>写入边界</h3>
+          <ul class="fact-list">\${listItems(resume.boundaries, "不会绕过 preview / confirm / apply。")}</ul>
+        </div>
+      \`;
+      resumeActionCommand.textContent = resume.primaryAction?.copyableCommand || "storyspec status";
+      resumeGlossary.innerHTML = glossary.length
+        ? '<ul class="fact-list">' + glossary.map(item => '<li><strong>' + escapeHtml(item.term) + '</strong>：' + escapeHtml(item.meaning) + '</li>').join("") + '</ul>'
+        : 'candidate / preview / apply / dry-run / blocked / read-only / active / planned';
+    };
+
+    const loadResume = async () => {
+      try {
+        const resume = await api("/api/projects/current/resume", { method: "GET" });
+        renderResumeLane(resume);
+      } catch (error) {
+        resumeLane.innerHTML = '<div class="empty">' + escapeHtml(error.message) + '</div>';
+        resumeActionCommand.textContent = "storyspec status";
+      }
+    };
+
     const loadRecent = async () => {
       const projects = await api("/api/projects/recent");
       renderRecent(projects);
@@ -920,6 +968,7 @@ export const renderLocalAppHtml = (input: RenderLocalAppHtmlInput): string => {
         statusContent.hidden = true;
         statusEmpty.hidden = false;
         confirmLane.innerHTML = '<div class="empty">' + escapeHtml(error.message) + '</div>';
+        await loadResume();
       }
     };
 
@@ -932,6 +981,7 @@ export const renderLocalAppHtml = (input: RenderLocalAppHtmlInput): string => {
         });
         await loadRecent();
         await loadStatus();
+        await loadResume();
       } catch (error) {
         openError.textContent = error.message;
       }
@@ -960,6 +1010,7 @@ export const renderLocalAppHtml = (input: RenderLocalAppHtmlInput): string => {
         });
         await loadRecent();
         await loadStatus();
+        await loadResume();
       } catch (error) {
         createError.textContent = error.message;
       }
@@ -979,6 +1030,7 @@ export const renderLocalAppHtml = (input: RenderLocalAppHtmlInput): string => {
         });
         storyIntakeResult.innerHTML = '<strong>' + escapeHtml(result.story || "故事") + '</strong><p class="muted">' + escapeHtml(result.ideaPath || "已保存灵感") + '</p>' + commandBlocks(result.nextCommands);
         await loadStatus();
+        await loadResume();
       } catch (error) {
         storyIdeaError.textContent = error.message;
       }
@@ -1004,6 +1056,7 @@ export const renderLocalAppHtml = (input: RenderLocalAppHtmlInput): string => {
           <div class="section-block"><h3>仍需确认</h3><ul class="fact-list">\${listItems(result.pendingQuestions, "暂无。")}</ul></div>
         \`;
         await loadStatus();
+        await loadResume();
       } catch (error) {
         sourceIntakeError.textContent = error.message;
       }
@@ -1239,6 +1292,7 @@ export const renderLocalAppHtml = (input: RenderLocalAppHtmlInput): string => {
 
     document.querySelector("#refresh-recent").addEventListener("click", loadRecent);
     document.querySelector("#refresh-status").addEventListener("click", loadStatus);
+    document.querySelector("#refresh-resume").addEventListener("click", loadResume);
 
     (async () => {
       try {
@@ -1252,6 +1306,7 @@ export const renderLocalAppHtml = (input: RenderLocalAppHtmlInput): string => {
         recentEmpty.hidden = false;
       });
       await loadStatus();
+      await loadResume();
     })();
   </script>
 </body>

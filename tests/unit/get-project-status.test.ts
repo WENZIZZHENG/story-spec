@@ -310,6 +310,26 @@ describe('getProjectStatus', () => {
       .filter(entry => entry.action === 'ingest_longform_material' || entry.action === 'ingest_table_material')
       .every(entry => entry.copyableCommand.startsWith('storyspec ingest '))).toBe(true);
     expect(jsonRoundTrip.nextActions.join('\n')).toContain('storyspec next "space opera"');
+    expect(jsonRoundTrip.resume).toMatchObject({
+      stateLabel: '共创澄清中',
+      primaryAction: {
+        label: '继续创作访谈',
+        copyableCommand: 'storyspec next "space opera"',
+        writeMode: 'read-only',
+        writesFiles: false
+      }
+    });
+    expect(jsonRoundTrip.resume.statusGlossary).toEqual(expect.arrayContaining([
+      expect.objectContaining({ term: 'candidate' }),
+      expect.objectContaining({ term: 'preview' }),
+      expect.objectContaining({ term: 'apply' }),
+      expect.objectContaining({ term: 'dry-run' }),
+      expect.objectContaining({ term: 'blocked' }),
+      expect.objectContaining({ term: 'read-only' }),
+      expect.objectContaining({ term: 'active' }),
+      expect.objectContaining({ term: 'planned' })
+    ]));
+    expect(jsonRoundTrip.resume.boundaries).toContain('不会绕过 preview / confirm / apply。');
   });
 
   it('guides empty projects to save an idea instead of starting from slash specify', async () => {
@@ -335,6 +355,15 @@ describe('getProjectStatus', () => {
     const output = renderProjectStatus(status);
 
     expect(status.story).toBeNull();
+    expect(status.resume).toMatchObject({
+      stateLabel: '尚未创建故事',
+      primaryAction: {
+        label: '保存一句灵感',
+        copyableCommand: 'storyspec story:new <故事名> --idea "<一句话创意>"',
+        writeMode: 'apply',
+        writesFiles: true
+      }
+    });
     expect(status.navigationEntries?.map(entry => entry.action)).toEqual([
       'ingest_longform_material',
       'start_from_short_idea',

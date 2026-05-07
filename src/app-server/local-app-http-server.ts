@@ -15,6 +15,7 @@ interface LocalAppHttpCore {
     withExperts: boolean;
   }): Promise<{ status: number; body: unknown }>;
   getCurrentProjectStatus(request: { token: string }): Promise<{ status: number; body: unknown }>;
+  getCurrentProjectResume(request: { token: string }): Promise<{ status: number; body: unknown }>;
   createStoryIdea(request: {
     token: string;
     name: string;
@@ -201,6 +202,14 @@ export const startLocalAppHttpServer = async (
 
       if (request.method === 'GET' && url.pathname === '/api/projects/current/status') {
         const result = await input.core.getCurrentProjectStatus({
+          token: getToken(request)
+        });
+        sendJson(response, result.status, result.body);
+        return;
+      }
+
+      if (request.method === 'GET' && url.pathname === '/api/projects/current/resume') {
+        const result = await input.core.getCurrentProjectResume({
           token: getToken(request)
         });
         sendJson(response, result.status, result.body);

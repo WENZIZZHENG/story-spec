@@ -81,6 +81,7 @@ export interface ProjectStatus {
   git: GitSummary;
   navigationEntries: ProjectNavigationEntry[];
   nextActions: string[];
+  resume: ProjectResumeSummary;
 }
 
 export type CodexStatus = ProjectStatus;
@@ -96,6 +97,34 @@ export interface ProjectNavigationEntry {
   label: string;
   description: string;
   copyableCommand: string;
+}
+
+export type ProjectResumeWriteMode = 'candidate' | 'preview' | 'apply' | 'dry-run' | 'blocked' | 'read-only';
+
+export interface ProjectResumeAction {
+  label: string;
+  reason: string;
+  copyableCommand: string;
+  writesFiles: boolean;
+  writeMode: ProjectResumeWriteMode;
+  boundary: string;
+}
+
+export interface ProjectStatusGlossaryEntry {
+  term: string;
+  meaning: string;
+}
+
+export interface ProjectResumeSummary {
+  projectRoot: string;
+  projectName: string;
+  storyName?: string;
+  stage?: StoryMaturityStage;
+  stateLabel: string;
+  primaryAction: ProjectResumeAction;
+  statusGlossary: ProjectStatusGlossaryEntry[];
+  recentProjectHint: string;
+  boundaries: string[];
 }
 
 const readJsonSafe = async (fs: ProjectFileSystem, filePath: string): Promise<Record<string, unknown>> => {
@@ -357,7 +386,7 @@ const detectConfiguredAI = async (
   return configuredAI;
 };
 
-type ProjectStatusBase = Omit<ProjectStatus, 'navigationEntries' | 'nextActions'>;
+type ProjectStatusBase = Omit<ProjectStatus, 'navigationEntries' | 'nextActions' | 'resume'>;
 
 const storyCliArgument = (storyName: string): string =>
   /[\s"'`|&;<>()[\]{}$\\]/.test(storyName) ? quoteCliArgument(storyName) : storyName;
@@ -466,6 +495,174 @@ const buildNavigationEntries = (
   ];
 };
 
+const statusGlossary = (): ProjectStatusGlossaryEntry[] => [
+  {
+    term: 'candidate',
+    meaning: '候选内容，只能用于讨论和比较；作者确认前不是正典。'
+  },
+  {
+    term: 'preview',
+    meaning: '写入前预览，只展示将生成或覆盖什么，不直接改正式文件。'
+  },
+  {
+    term: 'apply',
+    meaning: '作者显式确认后的写入动作，会把已确认内容落到对应文件。'
+  },
+  {
+    term: 'dry-run',
+    meaning: '演练模式，只展示将发生的改动，不执行覆盖或发布。'
+  },
+  {
+    term: 'blocked',
+    meaning: '缺少必要输入或存在风险，当前不能继续自动推进。'
+  },
+  {
+    term: 'read-only',
+    meaning: '只读检查、导航或看板，不写入项目文件。'
+  },
+  {
+    term: 'active',
+    meaning: '当前可以继续处理的阶段或路线。'
+  },
+  {
+    term: 'planned',
+    meaning: '已经登记但尚未激活的后续路线，需要单独确认后再开发。'
+  }
+];
+
+const resumeBoundaries = (): string[] => [
+  '不会绕过 preview / confirm / apply。',
+  '不会把 AI 候选静默写入 specification、creative-plan、tasks、正文、tracking 或 canon。',
+  'App 会记住最近项目，但不做云端同步或多用户共享。'
+];
+
+const stateLabelForStage = (stage?: StoryMaturityStage): string => {
+  switch (stage) {
+    case undefined:
+      return '尚未创建故事';
+    case 'idea':
+    case 'interviewing':
+      return '共创澄清中';
+    case 'specified':
+      return '规格已确认，等待规划';
+    case 'planned':
+      return '创作计划已生成，等待任务拆分';
+    case 'tasked':
+      return '任务已生成，准备写作';
+    case 'drafting':
+      return '章节草稿推进中';
+    case 'revising':
+      return '复核修订中';
+    default:
+      return '继续创作';
+  }
+};
+
+const buildResumePrimaryAction = (status: ProjectStatusBase): ProjectResumeAction => {
+  if (!status.story) {
+    return {
+      label: '保存一句灵感',
+      reason: '当前项目还没有故事，先保存作者原始想法，再进入低负担共创。',
+      copyableCommand: 'storyspec story:new <故事名> --idea "<一句话创意>"',
+      writesFiles: true,
+      writeMode: 'apply',
+      boundary: '只保存作者明确输入的一句话灵感，不生成正典设定。'
+    };
+  }
+
+  const storyArg = storyCliArgument(status.story.name);
+
+  if (status.story.stage === 'idea' || status.story.stage === 'interviewing') {
+    return {
+      label: '继续创作访谈',
+      reason: '当前最重要的是把灵感转成作者确认的主角、伙伴、舞台、能力和冲突选择。',
+      copyableCommand: `storyspec next ${storyArg}`,
+      writesFiles: false,
+      writeMode: 'read-only',
+      boundary: '`storyspec next` 只导航；真正写入澄清记录需要作者进入 interview 并确认。'
+    };
+  }
+
+  if (status.story.creativeControl.pendingDecisions > 0) {
+    return {
+      label: '处理待确认决策',
+      reason: `还有 ${status.story.creativeControl.pendingDecisions} 个创作决策未确认，先处理它们再写入后续产物。`,
+      copyableCommand: `storyspec creative:report ${storyArg}`,
+      writesFiles: false,
+      writeMode: 'read-only',
+      boundary: '报告只读展示确认状态，不会把候选变成正典。'
+    };
+  }
+
+  if (!status.story.hasSpecification) {
+    return {
+      label: '生成规格预览',
+      reason: '故事核心已可整理，但正式 specification 必须先预览再 apply。',
+      copyableCommand: `storyspec preview specify ${storyArg}`,
+      writesFiles: false,
+      writeMode: 'preview',
+      boundary: '预览写入 .specify/previews/，确认前不覆盖正式 specification。'
+    };
+  }
+
+  if (!status.story.hasCreativePlan) {
+    return {
+      label: '生成计划预览',
+      reason: '规格已存在，下一步是生成创作计划预览。',
+      copyableCommand: `storyspec preview plan ${storyArg}`,
+      writesFiles: false,
+      writeMode: 'preview',
+      boundary: '计划预览不会覆盖 creative-plan.md，必须 apply 后才写入。'
+    };
+  }
+
+  if (!status.story.hasTasks) {
+    const tasksGuidance = buildMissingTasksGuidance(status.story.name);
+    return {
+      label: '生成任务清单',
+      reason: '创作计划已存在，接下来需要拆成可执行写作任务。',
+      copyableCommand: tasksGuidance.agentCommand,
+      writesFiles: true,
+      writeMode: 'apply',
+      boundary: '任务由 agent 写入 tasks.md；生成后应运行任务看板检查。'
+    };
+  }
+
+  if (status.story.nextTask !== '暂无未完成任务') {
+    return {
+      label: '继续下一项写作任务',
+      reason: status.story.nextTask,
+      copyableCommand: `storyspec context:pack ${storyArg}`,
+      writesFiles: false,
+      writeMode: 'read-only',
+      boundary: '先生成上下文包；正文写入仍由草稿和写作入口控制。'
+    };
+  }
+
+  return {
+    label: '阶段复核',
+    reason: '任务清单暂无未完成项，适合做阶段复核或校验。',
+    copyableCommand: 'storyspec validate',
+    writesFiles: false,
+    writeMode: 'read-only',
+    boundary: '校验只读检查项目结构和规则。'
+  };
+};
+
+const buildResumeSummary = (status: ProjectStatusBase): ProjectResumeSummary => ({
+  projectRoot: status.projectRoot,
+  projectName: status.projectName,
+  ...(status.story ? {
+    storyName: status.story.name,
+    stage: status.story.stage
+  } : {}),
+  stateLabel: stateLabelForStage(status.story?.stage),
+  primaryAction: buildResumePrimaryAction(status),
+  statusGlossary: statusGlossary(),
+  recentProjectHint: '本机 App 会在本机配置中记住最近项目，重新打开后可从最近项目回到当前状态。',
+  boundaries: resumeBoundaries()
+});
+
 export const getProjectStatus = async (input: GetProjectStatusInput): Promise<ProjectStatus> => {
   const { projectRoot, fileSystem: fs, git } = input;
   const artifactScan = await scanStoryArtifacts({ projectRoot, fileSystem: fs });
@@ -498,7 +695,8 @@ export const getProjectStatus = async (input: GetProjectStatusInput): Promise<Pr
   return {
     ...baseStatus,
     navigationEntries,
-    nextActions: buildNextActions(baseStatus)
+    nextActions: buildNextActions(baseStatus),
+    resume: buildResumeSummary(baseStatus)
   };
 };
 

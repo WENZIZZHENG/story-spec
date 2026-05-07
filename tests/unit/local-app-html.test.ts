@@ -12,10 +12,15 @@ describe('local app html', () => {
     expect(html).toContain('项目抽屉');
     expect(html).toContain('故事档案');
     expect(html).toContain('确认通道');
+    expect(html).toContain('继续创作');
+    expect(html).toContain('状态词');
     expect(html).toContain('最近项目');
     expect(html).toContain('打开项目');
     expect(html).toContain('创建项目');
     expect(html).toContain('下一步建议');
+    expect(html).toContain('/api/projects/current/resume');
+    expect(html).toContain('id="resume-lane"');
+    expect(html).toContain('id="resume-action-command"');
     expect(html).toContain('secret-token');
     expect(html).toContain("x-storyspec-app-token");
   });

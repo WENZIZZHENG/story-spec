@@ -107,6 +107,10 @@ export interface CurrentProjectStatusRequest {
   token: string;
 }
 
+export interface CurrentProjectResumeRequest {
+  token: string;
+}
+
 export interface ListRecentProjectsRequest {
   token: string;
 }
@@ -478,6 +482,25 @@ export const createLocalAppServerCore = <TProjectStatus>(
       return {
         status: 200,
         body: await input.projectStatus({ projectRoot })
+      };
+    },
+
+    async getCurrentProjectResume(request: CurrentProjectResumeRequest): Promise<LocalAppServerResponse<unknown | LocalAppBlockedBody>> {
+      if (!hasToken(request.token)) {
+        return unauthorized();
+      }
+
+      const projectRoot = currentAllowedProject();
+      if (!projectRoot) {
+        return forbiddenProject();
+      }
+
+      const status = await input.projectStatus({ projectRoot });
+      const resume = (status as { resume?: unknown }).resume;
+
+      return {
+        status: 200,
+        body: resume ?? {}
       };
     },
 

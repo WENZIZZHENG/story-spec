@@ -106,6 +106,74 @@ describe('local app server core', () => {
     });
   });
 
+  it('returns the current project resume lane with token and opened-project checks', async () => {
+    const fs = new MemoryFileSystem('D:\\workspace');
+    const projectRoot = path.resolve('D:\\workspace\\spell-era');
+    await fs.ensureDir(path.join(projectRoot, '.specify'));
+    await fs.writeJson(path.join(projectRoot, '.specify', 'config.json'), {
+      name: '法术编译纪元'
+    });
+    const core = createLocalAppServerCore({
+      token: 'secret',
+      fileSystem: fs,
+      recentProjects: createMemoryRecentProjectStore(),
+      projectStatus: async input => ({
+        projectRoot: input.projectRoot,
+        projectName: '法术编译纪元',
+        resume: {
+          projectRoot: input.projectRoot,
+          projectName: '法术编译纪元',
+          storyName: '编程施法',
+          stage: 'idea',
+          stateLabel: '共创澄清中',
+          primaryAction: {
+            label: '继续创作访谈',
+            reason: '先确认主角和舞台。',
+            copyableCommand: 'storyspec next 编程施法',
+            writesFiles: false,
+            writeMode: 'read-only',
+            boundary: '只导航，不写入。'
+          },
+          statusGlossary: [{ term: 'preview', meaning: '写入前预览。' }],
+          recentProjectHint: '会记住最近项目。',
+          boundaries: ['不会绕过 preview / confirm / apply。']
+        }
+      })
+    });
+
+    await expect(core.getCurrentProjectResume({ token: 'wrong' })).resolves.toEqual({
+      status: 401,
+      body: {
+        blocked: true,
+        blockedReasons: ['缺少或无效的本机 App session token']
+      }
+    });
+    await expect(core.getCurrentProjectResume({ token: 'secret' })).resolves.toEqual({
+      status: 403,
+      body: {
+        blocked: true,
+        blockedReasons: ['项目尚未在本次 App 会话中打开']
+      }
+    });
+
+    await core.openProject({ token: 'secret', projectRoot });
+
+    await expect(core.getCurrentProjectResume({ token: 'secret' })).resolves.toMatchObject({
+      status: 200,
+      body: {
+        projectRoot,
+        projectName: '法术编译纪元',
+        storyName: '编程施法',
+        stateLabel: '共创澄清中',
+        primaryAction: {
+          copyableCommand: 'storyspec next 编程施法',
+          writeMode: 'read-only'
+        },
+        boundaries: ['不会绕过 preview / confirm / apply。']
+      }
+    });
+  });
+
   it('lists recent projects only with a valid token', async () => {
     const store = createMemoryRecentProjectStore();
     await store.record({

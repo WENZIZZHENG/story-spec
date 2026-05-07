@@ -110,6 +110,82 @@ describe('local app http server', () => {
     }
   });
 
+  it('serves the current project resume lane through a token-protected endpoint', async () => {
+    const projectRoot = await makeTempDir();
+    await mkdir(path.join(projectRoot, '.specify'), { recursive: true });
+    await writeFile(path.join(projectRoot, '.specify', 'config.json'), JSON.stringify({
+      name: '法术编译纪元'
+    }));
+    const core = createLocalAppServerCore({
+      token: 'secret',
+      fileSystem: nodeFileSystem,
+      recentProjects: createMemoryRecentProjectStore(),
+      projectStatus: async input => ({
+        projectRoot: input.projectRoot,
+        projectName: '法术编译纪元',
+        resume: {
+          projectRoot: input.projectRoot,
+          projectName: '法术编译纪元',
+          storyName: '编程施法',
+          stage: 'idea',
+          stateLabel: '共创澄清中',
+          primaryAction: {
+            label: '继续创作访谈',
+            reason: '先确认主角和舞台。',
+            copyableCommand: 'storyspec next 编程施法',
+            writesFiles: false,
+            writeMode: 'read-only',
+            boundary: '只导航，不写入。'
+          },
+          statusGlossary: [{ term: 'preview', meaning: '写入前预览。' }],
+          recentProjectHint: '会记住最近项目。',
+          boundaries: ['不会绕过 preview / confirm / apply。']
+        }
+      })
+    });
+    const server = await startLocalAppHttpServer({
+      host: '127.0.0.1',
+      port: 0,
+      core,
+      token: 'secret'
+    });
+
+    try {
+      const unauthorized = await fetch(`${server.url}/api/projects/current/resume`);
+      expect(unauthorized.status).toBe(401);
+
+      await fetch(`${server.url}/api/projects/open`, {
+        method: 'POST',
+        headers: {
+          'content-type': 'application/json',
+          'x-storyspec-app-token': 'secret'
+        },
+        body: JSON.stringify({ projectRoot })
+      });
+
+      const resume = await fetch(`${server.url}/api/projects/current/resume`, {
+        headers: {
+          'x-storyspec-app-token': 'secret'
+        }
+      });
+
+      expect(resume.status).toBe(200);
+      await expect(resume.json()).resolves.toMatchObject({
+        projectRoot,
+        projectName: '法术编译纪元',
+        storyName: '编程施法',
+        stateLabel: '共创澄清中',
+        primaryAction: {
+          copyableCommand: 'storyspec next 编程施法',
+          writeMode: 'read-only'
+        },
+        boundaries: ['不会绕过 preview / confirm / apply。']
+      });
+    } finally {
+      await server.close();
+    }
+  });
+
   it('routes story intake APIs through the current app session with token checks', async () => {
     const projectRoot = await makeTempDir();
     await mkdir(path.join(projectRoot, '.specify'), { recursive: true });
