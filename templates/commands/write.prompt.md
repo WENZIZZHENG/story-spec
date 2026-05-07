@@ -20,6 +20,9 @@
 - 写中沉浸原则：约束卡用于写前确认和写后自检，不作为正文生成时逐句审查器；正文阶段优先身体感、感官、动作、当下反应和句子质感。
 - 章节前置约束卡资料不足时标为待确认，不得编造角色心理、语言进度、能力数值、关系事实或世界观正典。
 - 约束卡确认后再输出 3-6 条 scene beat 或等价方向预览，beat 只是方向预览，不是已完成正文。
+- beat 预览确认后必须先输出阶段 1.5 - 章节小样：800-1500 字左右，像缩略正文而不是纯大纲，用于确认读感、情绪顺序、人物反应、冲突推进、尺度边界和文风方向。
+- 小样默认不写入正式正文、不更新 tracking、不进入 canon；作者可以确认、要求改写小样、补充约束或退回 beat。
+- 只有作者确认或改写小样后，才进入完整章节分块生成；完整正文以确认后的小样为依据，但仍服从 Scene Card、任务边界、约束卡和写后自检。
 - 资料不足时，先列出缺失上下文，不得编造正典事实。
 - 写作必须经过 preview / confirm / apply，不得跳过预览直接修改正文，也不得修改未授权文件。
 
@@ -27,6 +30,7 @@
 
 - 阶段 0 - 章节前置约束卡：先输出约束卡并等待作者确认；JSON stage 字段仍使用 plan。
 - 阶段 1 - beat 预览：约束卡确认后输出 3-6 条 scene beat，说明目标、冲突、人物变化、场景限制、风险和缺口；JSON stage 字段只能使用 plan、write、finish，此阶段为 plan。
+- 阶段 1.5 - 章节小样：beat 确认后输出 800-1500 字左右的精简预览稿，像缩略正文而不是纯大纲；小样默认不写入正式正文、不更新 tracking、不进入 canon；JSON stage 字段仍使用 plan。
 - 阶段 2 - 正文块：进入写中沉浸，正文按 scene、自然段组或目标字数分块输出，每块说明已完成的剧情功能和下一块目标；JSON stage 字段为 write。
 - 阶段 3 - 收尾验证：正文结束后回到约束卡，输出正文路径、字数、建议或已执行验证、tracking 待更新/待确认、写后自检对照和 next action；JSON stage 字段为 finish。
 
@@ -37,14 +41,16 @@
 3. 先按 Scene Card 确认 sceneGoal、conflict、outcome、plotThread、readerPromise、relationshipChange、worldReveal、emotionalBeat、endingHook、successCriteria；未通过时停止正文写作。
 4. 先输出章节前置约束卡，确认本章时间点、当前能力与语言水平、情感检查点、硬约束、软约束和写后自检对照，并等待作者确认约束卡。
 5. 约束卡确认后输出 3-6 条 scene beat 或等价方向预览，确认本次章节的目标、冲突、人物变化、场景限制和字数要求。
-6. 正文按分块推进，长章节必须拆成多个阶段块输出；写中不要逐句背约束卡，先让身体感、感官、动作、当下反应和句子质感成立。
-7. 写入 `stories/*/content/**` 中的目标章节文件。
-8. 更新相关 `spec/tracking/**`，至少覆盖角色状态、关系变化、剧情进度和时间线。
-9. 写完后只生成待确认 canon fact 或 propagation debt；不要自动重写既有正文。
-10. 如 scene draftPath 或 graph evidencePaths 发生变化，只更新显式引用和 `spec/graph/indexes.json`，不要用 AI 推断补 graph facts。
-11. 涉及角色对白时，先读取相关 `spec/voice/**`，按 VoiceFingerprint 控制句长、称呼、禁用词和冲突表达。
-12. 收尾时单独给出摘要，必须包含正文路径、建议或已执行验证、tracking 待更新/待确认、写后自检对照、next action。
-13. 将任务状态更新为 `completed`，记录完成时间、章节路径和字数。
+6. beat 确认后输出章节小样预览，像缩略正文而不是纯大纲；小样默认不写入正式正文、不更新 tracking、不进入 canon。
+7. 只有作者确认或改写小样后，才进入完整章节分块生成。
+8. 正文按分块推进，长章节必须拆成多个阶段块输出；写中不要逐句背约束卡，先让身体感、感官、动作、当下反应和句子质感成立。
+9. 写入 `stories/*/content/**` 中的目标章节文件。
+10. 更新相关 `spec/tracking/**`，至少覆盖角色状态、关系变化、剧情进度和时间线。
+11. 写完后只生成待确认 canon fact 或 propagation debt；不要自动重写既有正文。
+12. 如 scene draftPath 或 graph evidencePaths 发生变化，只更新显式引用和 `spec/graph/indexes.json`，不要用 AI 推断补 graph facts。
+13. 涉及角色对白时，先读取相关 `spec/voice/**`，按 VoiceFingerprint 控制句长、称呼、禁用词和冲突表达。
+14. 收尾时单独给出摘要，必须包含正文路径、建议或已执行验证、tracking 待更新/待确认、写后自检对照、next action。
+15. 将任务状态更新为 `completed`，记录完成时间、章节路径和字数。
 
 ## 写作要求
 

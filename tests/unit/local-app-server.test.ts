@@ -603,4 +603,72 @@ describe('local app server core', () => {
       }
     });
   });
+
+  it('returns a read-only chapter writing lane for the current project', async () => {
+    const fs = new MemoryFileSystem('D:\\workspace');
+    const projectRoot = path.resolve('D:\\workspace\\spell-era');
+    const storyPath = path.join(projectRoot, 'stories', '法术编译纪元');
+    await fs.ensureDir(path.join(projectRoot, '.specify'));
+    await fs.writeJson(path.join(projectRoot, '.specify', 'config.json'), {
+      name: '法术编译纪元'
+    });
+    await fs.ensureDir(storyPath);
+    await fs.writeFile(path.join(storyPath, 'creative-plan.md'), '# 创作计划');
+    await fs.writeFile(path.join(storyPath, 'tasks.md'), [
+      '# Tasks',
+      '',
+      '- [ ] [WRITE-READY] T001 - 写第一章',
+      '  - **必须读取**：`stories/法术编译纪元/scenes/chapter-001.yaml`',
+      '  - **允许修改**：`stories/法术编译纪元/drafts/chapter-001.v1.md`',
+      '  - **输出**：`stories/法术编译纪元/drafts/chapter-001.v1.md`'
+    ].join('\n'));
+    await fs.ensureDir(path.join(storyPath, 'scenes'));
+    await fs.writeFile(path.join(storyPath, 'scenes', 'chapter-001.yaml'), 'id: chapter-001');
+    const core = createLocalAppServerCore({
+      token: 'secret',
+      fileSystem: fs,
+      recentProjects: createMemoryRecentProjectStore(),
+      projectStatus: async input => ({ projectRoot: input.projectRoot })
+    });
+
+    await expect(core.getChapterWritingLane({
+      token: 'secret',
+      story: '法术编译纪元',
+      chapter: '001'
+    })).resolves.toEqual({
+      status: 403,
+      body: {
+        blocked: true,
+        blockedReasons: ['项目尚未在本次 App 会话中打开']
+      }
+    });
+
+    await core.openProject({ token: 'secret', projectRoot });
+
+    await expect(core.getChapterWritingLane({
+      token: 'secret',
+      story: '法术编译纪元',
+      chapter: '001'
+    })).resolves.toMatchObject({
+      status: 200,
+      body: {
+        story: '法术编译纪元',
+        chapter: 'chapter-001',
+        currentStep: 'sample',
+        boundaries: [
+          '写作通道只读展示，不自动修改正文。',
+          '章节小样默认不写入 content、tracking、canon 或 tasks。',
+          '完整正文仍需作者确认小样后再分块生成。'
+        ],
+        lane: [
+          { id: 'outline', status: 'ready' },
+          { id: 'tasks', status: 'ready' },
+          { id: 'scene', status: 'ready' },
+          { id: 'sample', status: 'ready' },
+          { id: 'draft', status: 'blocked' },
+          { id: 'review', status: 'blocked' }
+        ]
+      }
+    });
+  });
 });

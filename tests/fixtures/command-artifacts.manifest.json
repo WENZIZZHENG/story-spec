@@ -96,7 +96,7 @@
     },
     {
       "path": "auggie/.augment/commands/reference-reverse.md",
-      "sha256": "57ce0a7437a379abb327c327dcade2120a2288a2e041ebd403092797583b79b4",
+      "sha256": "5512c441cedad7a6e00e41187d74dbe3944b46c2db4c3b8d8195680074d7f8b4",
       "commandSource": {
         "command": "reference-reverse",
         "kind": "command-spec",
@@ -178,7 +178,7 @@
     },
     {
       "path": "auggie/.augment/commands/write.md",
-      "sha256": "5fcab2915cabe7a67f28fb2d965c866519e2ee339c1e0ee18180d6d2d8ec7226",
+      "sha256": "ce2ac5c510e0932b05196d78b76fdaa5dfa5046880bf4305cc20306ad8b3baa7",
       "commandSource": {
         "command": "write",
         "kind": "command-spec",
@@ -188,7 +188,7 @@
     },
     {
       "path": "auggie/.specify/agent-guides/story-creation-guide.md",
-      "sha256": "de0fd5bfde07c5b46bb70e656d6ecb1afde7449f5e77a97b70bf2230756eb082"
+      "sha256": "8eb20a058a60a7a5f186f430e5bbb91836a91a58be257ce914bcc65c7e8e1ace"
     },
     {
       "path": "auggie/.specify/experts/core/character.md",
@@ -303,12 +303,24 @@
       "sha256": "06255c106d3ee5a1a5c84afcc056a370589bc3bc8577d7e42a7934bfc7b9bede"
     },
     {
+      "path": "auggie/.specify/scripts/runtime/application/check-writing-state.js",
+      "sha256": "adb32d102302107fa360014a4e33dfc6e0ad9a005979677121c87a3832a371e8"
+    },
+    {
+      "path": "auggie/.specify/scripts/runtime/domain/story-artifact.js",
+      "sha256": "010032f357a3154a9e939db41baa9b47bf72d20a7b4d3c1dba65c25c2af2d603"
+    },
+    {
+      "path": "auggie/.specify/scripts/runtime/script-runtime.js",
+      "sha256": "77a4a863b8382ee3472c8c46d424859234b715d8fa35f6d61208fd14f7892c8f"
+    },
+    {
       "path": "auggie/.specify/templates/agent/agent-contract.md",
       "sha256": "e59a517192022dd3648aaeb02533b81616bd4fd954a8e9c2ffa56f61bdecd369"
     },
     {
       "path": "auggie/.specify/templates/authoring/chapter-card.md",
-      "sha256": "761062e1f3f692cba2217a493190317d65b55b19d9697e0eeed3501edcd142fa"
+      "sha256": "f480d2c6db9f92d3ef03923f6ac86506537baf8b8ba7685e5201ff7c26fdfe05"
     },
     {
       "path": "auggie/.specify/templates/authoring/open-promises.md",
@@ -408,7 +420,7 @@
     },
     {
       "path": "auggie/.specify/templates/CONTINUE.md",
-      "sha256": "479b2810c4531573bf629c8fc16b002933fb4b1c21484bbba1f0b0b9708df91c"
+      "sha256": "8a51a436a4b2a01fd48d84e7583699dcd805817cbf52aba66b1f4a2e17e43ab6"
     },
     {
       "path": "auggie/.specify/templates/copilot-instructions.md",
@@ -725,7 +737,7 @@
     },
     {
       "path": "claude/.claude/commands/storyspec.reference-reverse.md",
-      "sha256": "babde798302a119aac5c9286888831568c88efd3dea9fdcfae0340b9f07ef005",
+      "sha256": "e5b6f2452cb098653e65c9fc7546cee89501f347150ba3c9be08e322879caf04",
       "commandSource": {
         "command": "reference-reverse",
         "kind": "command-spec",
@@ -807,7 +819,7 @@
     },
     {
       "path": "claude/.claude/commands/storyspec.write.md",
-      "sha256": "222ef90c5496432850b60296eeb64cd2c81feebbdca28a92a2ed3b4b11a90818",
+      "sha256": "9adc5709265163cdb4d945aced926c6422b70d15a6c7440c303694589acbc1d4",
       "commandSource": {
         "command": "write",
         "kind": "command-spec",
@@ -817,7 +829,7 @@
     },
     {
       "path": "claude/.specify/agent-guides/story-creation-guide.md",
-      "sha256": "de0fd5bfde07c5b46bb70e656d6ecb1afde7449f5e77a97b70bf2230756eb082"
+      "sha256": "8eb20a058a60a7a5f186f430e5bbb91836a91a58be257ce914bcc65c7e8e1ace"
     },
     {
       "path": "claude/.specify/experts/core/character.md",
@@ -932,12 +944,24 @@
       "sha256": "06255c106d3ee5a1a5c84afcc056a370589bc3bc8577d7e42a7934bfc7b9bede"
     },
     {
+      "path": "claude/.specify/scripts/runtime/application/check-writing-state.js",
+      "sha256": "adb32d102302107fa360014a4e33dfc6e0ad9a005979677121c87a3832a371e8"
+    },
+    {
+      "path": "claude/.specify/scripts/runtime/domain/story-artifact.js",
+      "sha256": "010032f357a3154a9e939db41baa9b47bf72d20a7b4d3c1dba65c25c2af2d603"
+    },
+    {
+      "path": "claude/.specify/scripts/runtime/script-runtime.js",
+      "sha256": "77a4a863b8382ee3472c8c46d424859234b715d8fa35f6d61208fd14f7892c8f"
+    },
+    {
       "path": "claude/.specify/templates/agent/agent-contract.md",
       "sha256": "e59a517192022dd3648aaeb02533b81616bd4fd954a8e9c2ffa56f61bdecd369"
     },
     {
       "path": "claude/.specify/templates/authoring/chapter-card.md",
-      "sha256": "761062e1f3f692cba2217a493190317d65b55b19d9697e0eeed3501edcd142fa"
+      "sha256": "f480d2c6db9f92d3ef03923f6ac86506537baf8b8ba7685e5201ff7c26fdfe05"
     },
     {
       "path": "claude/.specify/templates/authoring/open-promises.md",
@@ -1037,7 +1061,7 @@
     },
     {
       "path": "claude/.specify/templates/CONTINUE.md",
-      "sha256": "479b2810c4531573bf629c8fc16b002933fb4b1c21484bbba1f0b0b9708df91c"
+      "sha256": "8a51a436a4b2a01fd48d84e7583699dcd805817cbf52aba66b1f4a2e17e43ab6"
     },
     {
       "path": "claude/.specify/templates/copilot-instructions.md",
@@ -1358,7 +1382,7 @@
     },
     {
       "path": "codebuddy/.codebuddy/commands/reference-reverse.md",
-      "sha256": "57ce0a7437a379abb327c327dcade2120a2288a2e041ebd403092797583b79b4",
+      "sha256": "5512c441cedad7a6e00e41187d74dbe3944b46c2db4c3b8d8195680074d7f8b4",
       "commandSource": {
         "command": "reference-reverse",
         "kind": "command-spec",
@@ -1440,7 +1464,7 @@
     },
     {
       "path": "codebuddy/.codebuddy/commands/write.md",
-      "sha256": "5fcab2915cabe7a67f28fb2d965c866519e2ee339c1e0ee18180d6d2d8ec7226",
+      "sha256": "ce2ac5c510e0932b05196d78b76fdaa5dfa5046880bf4305cc20306ad8b3baa7",
       "commandSource": {
         "command": "write",
         "kind": "command-spec",
@@ -1450,7 +1474,7 @@
     },
     {
       "path": "codebuddy/.specify/agent-guides/story-creation-guide.md",
-      "sha256": "de0fd5bfde07c5b46bb70e656d6ecb1afde7449f5e77a97b70bf2230756eb082"
+      "sha256": "8eb20a058a60a7a5f186f430e5bbb91836a91a58be257ce914bcc65c7e8e1ace"
     },
     {
       "path": "codebuddy/.specify/experts/core/character.md",
@@ -1565,12 +1589,24 @@
       "sha256": "06255c106d3ee5a1a5c84afcc056a370589bc3bc8577d7e42a7934bfc7b9bede"
     },
     {
+      "path": "codebuddy/.specify/scripts/runtime/application/check-writing-state.js",
+      "sha256": "adb32d102302107fa360014a4e33dfc6e0ad9a005979677121c87a3832a371e8"
+    },
+    {
+      "path": "codebuddy/.specify/scripts/runtime/domain/story-artifact.js",
+      "sha256": "010032f357a3154a9e939db41baa9b47bf72d20a7b4d3c1dba65c25c2af2d603"
+    },
+    {
+      "path": "codebuddy/.specify/scripts/runtime/script-runtime.js",
+      "sha256": "77a4a863b8382ee3472c8c46d424859234b715d8fa35f6d61208fd14f7892c8f"
+    },
+    {
       "path": "codebuddy/.specify/templates/agent/agent-contract.md",
       "sha256": "e59a517192022dd3648aaeb02533b81616bd4fd954a8e9c2ffa56f61bdecd369"
     },
     {
       "path": "codebuddy/.specify/templates/authoring/chapter-card.md",
-      "sha256": "761062e1f3f692cba2217a493190317d65b55b19d9697e0eeed3501edcd142fa"
+      "sha256": "f480d2c6db9f92d3ef03923f6ac86506537baf8b8ba7685e5201ff7c26fdfe05"
     },
     {
       "path": "codebuddy/.specify/templates/authoring/open-promises.md",
@@ -1670,7 +1706,7 @@
     },
     {
       "path": "codebuddy/.specify/templates/CONTINUE.md",
-      "sha256": "479b2810c4531573bf629c8fc16b002933fb4b1c21484bbba1f0b0b9708df91c"
+      "sha256": "8a51a436a4b2a01fd48d84e7583699dcd805817cbf52aba66b1f4a2e17e43ab6"
     },
     {
       "path": "codebuddy/.specify/templates/copilot-instructions.md",
@@ -1987,7 +2023,7 @@
     },
     {
       "path": "codex/.codex/prompts/storyspec-reference-reverse.md",
-      "sha256": "57ce0a7437a379abb327c327dcade2120a2288a2e041ebd403092797583b79b4",
+      "sha256": "5512c441cedad7a6e00e41187d74dbe3944b46c2db4c3b8d8195680074d7f8b4",
       "commandSource": {
         "command": "reference-reverse",
         "kind": "command-spec",
@@ -2069,7 +2105,7 @@
     },
     {
       "path": "codex/.codex/prompts/storyspec-write.md",
-      "sha256": "5fcab2915cabe7a67f28fb2d965c866519e2ee339c1e0ee18180d6d2d8ec7226",
+      "sha256": "ce2ac5c510e0932b05196d78b76fdaa5dfa5046880bf4305cc20306ad8b3baa7",
       "commandSource": {
         "command": "write",
         "kind": "command-spec",
@@ -2079,7 +2115,7 @@
     },
     {
       "path": "codex/.specify/agent-guides/story-creation-guide.md",
-      "sha256": "de0fd5bfde07c5b46bb70e656d6ecb1afde7449f5e77a97b70bf2230756eb082"
+      "sha256": "8eb20a058a60a7a5f186f430e5bbb91836a91a58be257ce914bcc65c7e8e1ace"
     },
     {
       "path": "codex/.specify/experts/core/character.md",
@@ -2194,12 +2230,24 @@
       "sha256": "06255c106d3ee5a1a5c84afcc056a370589bc3bc8577d7e42a7934bfc7b9bede"
     },
     {
+      "path": "codex/.specify/scripts/runtime/application/check-writing-state.js",
+      "sha256": "adb32d102302107fa360014a4e33dfc6e0ad9a005979677121c87a3832a371e8"
+    },
+    {
+      "path": "codex/.specify/scripts/runtime/domain/story-artifact.js",
+      "sha256": "010032f357a3154a9e939db41baa9b47bf72d20a7b4d3c1dba65c25c2af2d603"
+    },
+    {
+      "path": "codex/.specify/scripts/runtime/script-runtime.js",
+      "sha256": "77a4a863b8382ee3472c8c46d424859234b715d8fa35f6d61208fd14f7892c8f"
+    },
+    {
       "path": "codex/.specify/templates/agent/agent-contract.md",
       "sha256": "e59a517192022dd3648aaeb02533b81616bd4fd954a8e9c2ffa56f61bdecd369"
     },
     {
       "path": "codex/.specify/templates/authoring/chapter-card.md",
-      "sha256": "761062e1f3f692cba2217a493190317d65b55b19d9697e0eeed3501edcd142fa"
+      "sha256": "f480d2c6db9f92d3ef03923f6ac86506537baf8b8ba7685e5201ff7c26fdfe05"
     },
     {
       "path": "codex/.specify/templates/authoring/open-promises.md",
@@ -2299,7 +2347,7 @@
     },
     {
       "path": "codex/.specify/templates/CONTINUE.md",
-      "sha256": "479b2810c4531573bf629c8fc16b002933fb4b1c21484bbba1f0b0b9708df91c"
+      "sha256": "8a51a436a4b2a01fd48d84e7583699dcd805817cbf52aba66b1f4a2e17e43ab6"
     },
     {
       "path": "codex/.specify/templates/copilot-instructions.md",
@@ -2616,7 +2664,7 @@
     },
     {
       "path": "continue-check/.continue/prompts/reference-reverse.md",
-      "sha256": "d28d76e343d6b208dc582b0236537b4da9d6e0a7306f879aaedd19eaa5e7c72c",
+      "sha256": "f52e1b34e30c3640896cfe9c3ead188e72e65608e44f1e7e3182cb02e6290914",
       "commandSource": {
         "command": "reference-reverse",
         "kind": "command-spec",
@@ -2698,7 +2746,7 @@
     },
     {
       "path": "continue-check/.continue/prompts/write.md",
-      "sha256": "e2b39d6fbd49aa4e5075f91f16767d43fd2dd945d74f8165fd8a1637d239c8a6",
+      "sha256": "664f6781608ca6e8c94f167a32e2d6ed4946c2e0aacc45380795d75238ca119a",
       "commandSource": {
         "command": "write",
         "kind": "command-spec",
@@ -2712,7 +2760,7 @@
     },
     {
       "path": "continue-check/.specify/agent-guides/story-creation-guide.md",
-      "sha256": "de0fd5bfde07c5b46bb70e656d6ecb1afde7449f5e77a97b70bf2230756eb082"
+      "sha256": "8eb20a058a60a7a5f186f430e5bbb91836a91a58be257ce914bcc65c7e8e1ace"
     },
     {
       "path": "continue-check/.specify/experts/core/character.md",
@@ -2827,12 +2875,24 @@
       "sha256": "06255c106d3ee5a1a5c84afcc056a370589bc3bc8577d7e42a7934bfc7b9bede"
     },
     {
+      "path": "continue-check/.specify/scripts/runtime/application/check-writing-state.js",
+      "sha256": "adb32d102302107fa360014a4e33dfc6e0ad9a005979677121c87a3832a371e8"
+    },
+    {
+      "path": "continue-check/.specify/scripts/runtime/domain/story-artifact.js",
+      "sha256": "010032f357a3154a9e939db41baa9b47bf72d20a7b4d3c1dba65c25c2af2d603"
+    },
+    {
+      "path": "continue-check/.specify/scripts/runtime/script-runtime.js",
+      "sha256": "77a4a863b8382ee3472c8c46d424859234b715d8fa35f6d61208fd14f7892c8f"
+    },
+    {
       "path": "continue-check/.specify/templates/agent/agent-contract.md",
       "sha256": "e59a517192022dd3648aaeb02533b81616bd4fd954a8e9c2ffa56f61bdecd369"
     },
     {
       "path": "continue-check/.specify/templates/authoring/chapter-card.md",
-      "sha256": "761062e1f3f692cba2217a493190317d65b55b19d9697e0eeed3501edcd142fa"
+      "sha256": "f480d2c6db9f92d3ef03923f6ac86506537baf8b8ba7685e5201ff7c26fdfe05"
     },
     {
       "path": "continue-check/.specify/templates/authoring/open-promises.md",
@@ -2932,7 +2992,7 @@
     },
     {
       "path": "continue-check/.specify/templates/CONTINUE.md",
-      "sha256": "479b2810c4531573bf629c8fc16b002933fb4b1c21484bbba1f0b0b9708df91c"
+      "sha256": "8a51a436a4b2a01fd48d84e7583699dcd805817cbf52aba66b1f4a2e17e43ab6"
     },
     {
       "path": "continue-check/.specify/templates/copilot-instructions.md",
@@ -3253,7 +3313,7 @@
     },
     {
       "path": "copilot/.github/prompts/reference-reverse.prompt.md",
-      "sha256": "57ce0a7437a379abb327c327dcade2120a2288a2e041ebd403092797583b79b4",
+      "sha256": "5512c441cedad7a6e00e41187d74dbe3944b46c2db4c3b8d8195680074d7f8b4",
       "commandSource": {
         "command": "reference-reverse",
         "kind": "command-spec",
@@ -3335,7 +3395,7 @@
     },
     {
       "path": "copilot/.github/prompts/write.prompt.md",
-      "sha256": "9abdd7cad4080b85604fce472cec55631a8f018b5c318ce9d08efdebe39a822c",
+      "sha256": "b39a10fefcffce33d6dcde8f974cbb28a0405289d357de919ff91435614e62a4",
       "commandSource": {
         "command": "write",
         "kind": "command-spec",
@@ -3345,7 +3405,7 @@
     },
     {
       "path": "copilot/.specify/agent-guides/story-creation-guide.md",
-      "sha256": "de0fd5bfde07c5b46bb70e656d6ecb1afde7449f5e77a97b70bf2230756eb082"
+      "sha256": "8eb20a058a60a7a5f186f430e5bbb91836a91a58be257ce914bcc65c7e8e1ace"
     },
     {
       "path": "copilot/.specify/experts/core/character.md",
@@ -3460,12 +3520,24 @@
       "sha256": "06255c106d3ee5a1a5c84afcc056a370589bc3bc8577d7e42a7934bfc7b9bede"
     },
     {
+      "path": "copilot/.specify/scripts/runtime/application/check-writing-state.js",
+      "sha256": "adb32d102302107fa360014a4e33dfc6e0ad9a005979677121c87a3832a371e8"
+    },
+    {
+      "path": "copilot/.specify/scripts/runtime/domain/story-artifact.js",
+      "sha256": "010032f357a3154a9e939db41baa9b47bf72d20a7b4d3c1dba65c25c2af2d603"
+    },
+    {
+      "path": "copilot/.specify/scripts/runtime/script-runtime.js",
+      "sha256": "77a4a863b8382ee3472c8c46d424859234b715d8fa35f6d61208fd14f7892c8f"
+    },
+    {
       "path": "copilot/.specify/templates/agent/agent-contract.md",
       "sha256": "e59a517192022dd3648aaeb02533b81616bd4fd954a8e9c2ffa56f61bdecd369"
     },
     {
       "path": "copilot/.specify/templates/authoring/chapter-card.md",
-      "sha256": "761062e1f3f692cba2217a493190317d65b55b19d9697e0eeed3501edcd142fa"
+      "sha256": "f480d2c6db9f92d3ef03923f6ac86506537baf8b8ba7685e5201ff7c26fdfe05"
     },
     {
       "path": "copilot/.specify/templates/authoring/open-promises.md",
@@ -3565,7 +3637,7 @@
     },
     {
       "path": "copilot/.specify/templates/CONTINUE.md",
-      "sha256": "479b2810c4531573bf629c8fc16b002933fb4b1c21484bbba1f0b0b9708df91c"
+      "sha256": "8a51a436a4b2a01fd48d84e7583699dcd805817cbf52aba66b1f4a2e17e43ab6"
     },
     {
       "path": "copilot/.specify/templates/copilot-instructions.md",
@@ -3886,7 +3958,7 @@
     },
     {
       "path": "cursor/.cursor/commands/reference-reverse.md",
-      "sha256": "57ce0a7437a379abb327c327dcade2120a2288a2e041ebd403092797583b79b4",
+      "sha256": "5512c441cedad7a6e00e41187d74dbe3944b46c2db4c3b8d8195680074d7f8b4",
       "commandSource": {
         "command": "reference-reverse",
         "kind": "command-spec",
@@ -3968,7 +4040,7 @@
     },
     {
       "path": "cursor/.cursor/commands/write.md",
-      "sha256": "5fcab2915cabe7a67f28fb2d965c866519e2ee339c1e0ee18180d6d2d8ec7226",
+      "sha256": "ce2ac5c510e0932b05196d78b76fdaa5dfa5046880bf4305cc20306ad8b3baa7",
       "commandSource": {
         "command": "write",
         "kind": "command-spec",
@@ -3982,7 +4054,7 @@
     },
     {
       "path": "cursor/.specify/agent-guides/story-creation-guide.md",
-      "sha256": "de0fd5bfde07c5b46bb70e656d6ecb1afde7449f5e77a97b70bf2230756eb082"
+      "sha256": "8eb20a058a60a7a5f186f430e5bbb91836a91a58be257ce914bcc65c7e8e1ace"
     },
     {
       "path": "cursor/.specify/experts/core/character.md",
@@ -4097,12 +4169,24 @@
       "sha256": "06255c106d3ee5a1a5c84afcc056a370589bc3bc8577d7e42a7934bfc7b9bede"
     },
     {
+      "path": "cursor/.specify/scripts/runtime/application/check-writing-state.js",
+      "sha256": "adb32d102302107fa360014a4e33dfc6e0ad9a005979677121c87a3832a371e8"
+    },
+    {
+      "path": "cursor/.specify/scripts/runtime/domain/story-artifact.js",
+      "sha256": "010032f357a3154a9e939db41baa9b47bf72d20a7b4d3c1dba65c25c2af2d603"
+    },
+    {
+      "path": "cursor/.specify/scripts/runtime/script-runtime.js",
+      "sha256": "77a4a863b8382ee3472c8c46d424859234b715d8fa35f6d61208fd14f7892c8f"
+    },
+    {
       "path": "cursor/.specify/templates/agent/agent-contract.md",
       "sha256": "e59a517192022dd3648aaeb02533b81616bd4fd954a8e9c2ffa56f61bdecd369"
     },
     {
       "path": "cursor/.specify/templates/authoring/chapter-card.md",
-      "sha256": "761062e1f3f692cba2217a493190317d65b55b19d9697e0eeed3501edcd142fa"
+      "sha256": "f480d2c6db9f92d3ef03923f6ac86506537baf8b8ba7685e5201ff7c26fdfe05"
     },
     {
       "path": "cursor/.specify/templates/authoring/open-promises.md",
@@ -4202,7 +4286,7 @@
     },
     {
       "path": "cursor/.specify/templates/CONTINUE.md",
-      "sha256": "479b2810c4531573bf629c8fc16b002933fb4b1c21484bbba1f0b0b9708df91c"
+      "sha256": "8a51a436a4b2a01fd48d84e7583699dcd805817cbf52aba66b1f4a2e17e43ab6"
     },
     {
       "path": "cursor/.specify/templates/copilot-instructions.md",
@@ -4519,7 +4603,7 @@
     },
     {
       "path": "gemini/.gemini/commands/storyspec/reference-reverse.toml",
-      "sha256": "b684a512c85811931a2352ddb5a8de361ee448670016a907cd03b20f18595109",
+      "sha256": "e3e4db7f6394e87203d6c192249278e7926460c10fd9455aaa0b925fdf76083c",
       "commandSource": {
         "command": "reference-reverse",
         "kind": "command-spec",
@@ -4601,7 +4685,7 @@
     },
     {
       "path": "gemini/.gemini/commands/storyspec/write.toml",
-      "sha256": "f5e9d2911ed32c7361d8d86a8cc78b9dbab01c067a2999306e74cb1cd86aa85c",
+      "sha256": "ba48a7d3737debdc13b9d0cacd0c1a6233add09a09860c2f433e2ba60844eca2",
       "commandSource": {
         "command": "write",
         "kind": "command-spec",
@@ -4615,7 +4699,7 @@
     },
     {
       "path": "gemini/.specify/agent-guides/story-creation-guide.md",
-      "sha256": "de0fd5bfde07c5b46bb70e656d6ecb1afde7449f5e77a97b70bf2230756eb082"
+      "sha256": "8eb20a058a60a7a5f186f430e5bbb91836a91a58be257ce914bcc65c7e8e1ace"
     },
     {
       "path": "gemini/.specify/experts/core/character.md",
@@ -4730,12 +4814,24 @@
       "sha256": "06255c106d3ee5a1a5c84afcc056a370589bc3bc8577d7e42a7934bfc7b9bede"
     },
     {
+      "path": "gemini/.specify/scripts/runtime/application/check-writing-state.js",
+      "sha256": "adb32d102302107fa360014a4e33dfc6e0ad9a005979677121c87a3832a371e8"
+    },
+    {
+      "path": "gemini/.specify/scripts/runtime/domain/story-artifact.js",
+      "sha256": "010032f357a3154a9e939db41baa9b47bf72d20a7b4d3c1dba65c25c2af2d603"
+    },
+    {
+      "path": "gemini/.specify/scripts/runtime/script-runtime.js",
+      "sha256": "77a4a863b8382ee3472c8c46d424859234b715d8fa35f6d61208fd14f7892c8f"
+    },
+    {
       "path": "gemini/.specify/templates/agent/agent-contract.md",
       "sha256": "e59a517192022dd3648aaeb02533b81616bd4fd954a8e9c2ffa56f61bdecd369"
     },
     {
       "path": "gemini/.specify/templates/authoring/chapter-card.md",
-      "sha256": "761062e1f3f692cba2217a493190317d65b55b19d9697e0eeed3501edcd142fa"
+      "sha256": "f480d2c6db9f92d3ef03923f6ac86506537baf8b8ba7685e5201ff7c26fdfe05"
     },
     {
       "path": "gemini/.specify/templates/authoring/open-promises.md",
@@ -4835,7 +4931,7 @@
     },
     {
       "path": "gemini/.specify/templates/CONTINUE.md",
-      "sha256": "479b2810c4531573bf629c8fc16b002933fb4b1c21484bbba1f0b0b9708df91c"
+      "sha256": "8a51a436a4b2a01fd48d84e7583699dcd805817cbf52aba66b1f4a2e17e43ab6"
     },
     {
       "path": "gemini/.specify/templates/copilot-instructions.md",
@@ -5079,7 +5175,7 @@
     },
     {
       "path": "generic/.specify/agent-guides/story-creation-guide.md",
-      "sha256": "de0fd5bfde07c5b46bb70e656d6ecb1afde7449f5e77a97b70bf2230756eb082"
+      "sha256": "8eb20a058a60a7a5f186f430e5bbb91836a91a58be257ce914bcc65c7e8e1ace"
     },
     {
       "path": "generic/.specify/commands/analyze.md",
@@ -5156,7 +5252,7 @@
     },
     {
       "path": "generic/.specify/commands/reference-reverse.md",
-      "sha256": "9a0c77500f9157ba631b9538f2227b310abfe6fc3fdbd0581d86171673096b33",
+      "sha256": "9ff418285eb99f80118d729a22754be63d16868b263d25dcb22801b521890492",
       "commandSource": {
         "command": "reference-reverse",
         "kind": "command-spec",
@@ -5238,7 +5334,7 @@
     },
     {
       "path": "generic/.specify/commands/write.md",
-      "sha256": "56c787305b0b3457602de82bd2ed85298f99fac398f52ec242baff10b6435cf3",
+      "sha256": "3372d650a2d7644b3dedbade0ca05c3f97924a97fd4f6c80fca8c119930d2727",
       "commandSource": {
         "command": "write",
         "kind": "command-spec",
@@ -5359,12 +5455,24 @@
       "sha256": "06255c106d3ee5a1a5c84afcc056a370589bc3bc8577d7e42a7934bfc7b9bede"
     },
     {
+      "path": "generic/.specify/scripts/runtime/application/check-writing-state.js",
+      "sha256": "adb32d102302107fa360014a4e33dfc6e0ad9a005979677121c87a3832a371e8"
+    },
+    {
+      "path": "generic/.specify/scripts/runtime/domain/story-artifact.js",
+      "sha256": "010032f357a3154a9e939db41baa9b47bf72d20a7b4d3c1dba65c25c2af2d603"
+    },
+    {
+      "path": "generic/.specify/scripts/runtime/script-runtime.js",
+      "sha256": "77a4a863b8382ee3472c8c46d424859234b715d8fa35f6d61208fd14f7892c8f"
+    },
+    {
       "path": "generic/.specify/templates/agent/agent-contract.md",
       "sha256": "e59a517192022dd3648aaeb02533b81616bd4fd954a8e9c2ffa56f61bdecd369"
     },
     {
       "path": "generic/.specify/templates/authoring/chapter-card.md",
-      "sha256": "761062e1f3f692cba2217a493190317d65b55b19d9697e0eeed3501edcd142fa"
+      "sha256": "f480d2c6db9f92d3ef03923f6ac86506537baf8b8ba7685e5201ff7c26fdfe05"
     },
     {
       "path": "generic/.specify/templates/authoring/open-promises.md",
@@ -5464,7 +5572,7 @@
     },
     {
       "path": "generic/.specify/templates/CONTINUE.md",
-      "sha256": "479b2810c4531573bf629c8fc16b002933fb4b1c21484bbba1f0b0b9708df91c"
+      "sha256": "8a51a436a4b2a01fd48d84e7583699dcd805817cbf52aba66b1f4a2e17e43ab6"
     },
     {
       "path": "generic/.specify/templates/copilot-instructions.md",
@@ -5781,7 +5889,7 @@
     },
     {
       "path": "kilocode/.kilocode/workflows/reference-reverse.md",
-      "sha256": "babde798302a119aac5c9286888831568c88efd3dea9fdcfae0340b9f07ef005",
+      "sha256": "e5b6f2452cb098653e65c9fc7546cee89501f347150ba3c9be08e322879caf04",
       "commandSource": {
         "command": "reference-reverse",
         "kind": "command-spec",
@@ -5863,7 +5971,7 @@
     },
     {
       "path": "kilocode/.kilocode/workflows/write.md",
-      "sha256": "222ef90c5496432850b60296eeb64cd2c81feebbdca28a92a2ed3b4b11a90818",
+      "sha256": "9adc5709265163cdb4d945aced926c6422b70d15a6c7440c303694589acbc1d4",
       "commandSource": {
         "command": "write",
         "kind": "command-spec",
@@ -5873,7 +5981,7 @@
     },
     {
       "path": "kilocode/.specify/agent-guides/story-creation-guide.md",
-      "sha256": "de0fd5bfde07c5b46bb70e656d6ecb1afde7449f5e77a97b70bf2230756eb082"
+      "sha256": "8eb20a058a60a7a5f186f430e5bbb91836a91a58be257ce914bcc65c7e8e1ace"
     },
     {
       "path": "kilocode/.specify/experts/core/character.md",
@@ -5988,12 +6096,24 @@
       "sha256": "06255c106d3ee5a1a5c84afcc056a370589bc3bc8577d7e42a7934bfc7b9bede"
     },
     {
+      "path": "kilocode/.specify/scripts/runtime/application/check-writing-state.js",
+      "sha256": "adb32d102302107fa360014a4e33dfc6e0ad9a005979677121c87a3832a371e8"
+    },
+    {
+      "path": "kilocode/.specify/scripts/runtime/domain/story-artifact.js",
+      "sha256": "010032f357a3154a9e939db41baa9b47bf72d20a7b4d3c1dba65c25c2af2d603"
+    },
+    {
+      "path": "kilocode/.specify/scripts/runtime/script-runtime.js",
+      "sha256": "77a4a863b8382ee3472c8c46d424859234b715d8fa35f6d61208fd14f7892c8f"
+    },
+    {
       "path": "kilocode/.specify/templates/agent/agent-contract.md",
       "sha256": "e59a517192022dd3648aaeb02533b81616bd4fd954a8e9c2ffa56f61bdecd369"
     },
     {
       "path": "kilocode/.specify/templates/authoring/chapter-card.md",
-      "sha256": "761062e1f3f692cba2217a493190317d65b55b19d9697e0eeed3501edcd142fa"
+      "sha256": "f480d2c6db9f92d3ef03923f6ac86506537baf8b8ba7685e5201ff7c26fdfe05"
     },
     {
       "path": "kilocode/.specify/templates/authoring/open-promises.md",
@@ -6093,7 +6213,7 @@
     },
     {
       "path": "kilocode/.specify/templates/CONTINUE.md",
-      "sha256": "479b2810c4531573bf629c8fc16b002933fb4b1c21484bbba1f0b0b9708df91c"
+      "sha256": "8a51a436a4b2a01fd48d84e7583699dcd805817cbf52aba66b1f4a2e17e43ab6"
     },
     {
       "path": "kilocode/.specify/templates/copilot-instructions.md",
@@ -6410,7 +6530,7 @@
     },
     {
       "path": "opencode/.opencode/command/reference-reverse.md",
-      "sha256": "f6037454e0ebf0cb90d04aa2a748872f4c25e78df015af04f615bfbe8d922349",
+      "sha256": "3f98bc37fdf4d6986e554e49848231bd98cb9ae20a20ceb2703fa16a7262a934",
       "commandSource": {
         "command": "reference-reverse",
         "kind": "command-spec",
@@ -6492,7 +6612,7 @@
     },
     {
       "path": "opencode/.opencode/command/write.md",
-      "sha256": "8c33f0b7015a429897153b0496b4b04d48461231aee2f301d65865e0044a23bc",
+      "sha256": "5eb910eb34549c9637a3198ab0e63600035665a7c846228f445003376f6fb9ff",
       "commandSource": {
         "command": "write",
         "kind": "command-spec",
@@ -6502,7 +6622,7 @@
     },
     {
       "path": "opencode/.specify/agent-guides/story-creation-guide.md",
-      "sha256": "de0fd5bfde07c5b46bb70e656d6ecb1afde7449f5e77a97b70bf2230756eb082"
+      "sha256": "8eb20a058a60a7a5f186f430e5bbb91836a91a58be257ce914bcc65c7e8e1ace"
     },
     {
       "path": "opencode/.specify/experts/core/character.md",
@@ -6617,12 +6737,24 @@
       "sha256": "06255c106d3ee5a1a5c84afcc056a370589bc3bc8577d7e42a7934bfc7b9bede"
     },
     {
+      "path": "opencode/.specify/scripts/runtime/application/check-writing-state.js",
+      "sha256": "adb32d102302107fa360014a4e33dfc6e0ad9a005979677121c87a3832a371e8"
+    },
+    {
+      "path": "opencode/.specify/scripts/runtime/domain/story-artifact.js",
+      "sha256": "010032f357a3154a9e939db41baa9b47bf72d20a7b4d3c1dba65c25c2af2d603"
+    },
+    {
+      "path": "opencode/.specify/scripts/runtime/script-runtime.js",
+      "sha256": "77a4a863b8382ee3472c8c46d424859234b715d8fa35f6d61208fd14f7892c8f"
+    },
+    {
       "path": "opencode/.specify/templates/agent/agent-contract.md",
       "sha256": "e59a517192022dd3648aaeb02533b81616bd4fd954a8e9c2ffa56f61bdecd369"
     },
     {
       "path": "opencode/.specify/templates/authoring/chapter-card.md",
-      "sha256": "761062e1f3f692cba2217a493190317d65b55b19d9697e0eeed3501edcd142fa"
+      "sha256": "f480d2c6db9f92d3ef03923f6ac86506537baf8b8ba7685e5201ff7c26fdfe05"
     },
     {
       "path": "opencode/.specify/templates/authoring/open-promises.md",
@@ -6722,7 +6854,7 @@
     },
     {
       "path": "opencode/.specify/templates/CONTINUE.md",
-      "sha256": "479b2810c4531573bf629c8fc16b002933fb4b1c21484bbba1f0b0b9708df91c"
+      "sha256": "8a51a436a4b2a01fd48d84e7583699dcd805817cbf52aba66b1f4a2e17e43ab6"
     },
     {
       "path": "opencode/.specify/templates/copilot-instructions.md",
@@ -7039,7 +7171,7 @@
     },
     {
       "path": "q/.amazonq/prompts/reference-reverse.md",
-      "sha256": "57ce0a7437a379abb327c327dcade2120a2288a2e041ebd403092797583b79b4",
+      "sha256": "5512c441cedad7a6e00e41187d74dbe3944b46c2db4c3b8d8195680074d7f8b4",
       "commandSource": {
         "command": "reference-reverse",
         "kind": "command-spec",
@@ -7121,7 +7253,7 @@
     },
     {
       "path": "q/.amazonq/prompts/write.md",
-      "sha256": "9abdd7cad4080b85604fce472cec55631a8f018b5c318ce9d08efdebe39a822c",
+      "sha256": "b39a10fefcffce33d6dcde8f974cbb28a0405289d357de919ff91435614e62a4",
       "commandSource": {
         "command": "write",
         "kind": "command-spec",
@@ -7131,7 +7263,7 @@
     },
     {
       "path": "q/.specify/agent-guides/story-creation-guide.md",
-      "sha256": "de0fd5bfde07c5b46bb70e656d6ecb1afde7449f5e77a97b70bf2230756eb082"
+      "sha256": "8eb20a058a60a7a5f186f430e5bbb91836a91a58be257ce914bcc65c7e8e1ace"
     },
     {
       "path": "q/.specify/experts/core/character.md",
@@ -7246,12 +7378,24 @@
       "sha256": "06255c106d3ee5a1a5c84afcc056a370589bc3bc8577d7e42a7934bfc7b9bede"
     },
     {
+      "path": "q/.specify/scripts/runtime/application/check-writing-state.js",
+      "sha256": "adb32d102302107fa360014a4e33dfc6e0ad9a005979677121c87a3832a371e8"
+    },
+    {
+      "path": "q/.specify/scripts/runtime/domain/story-artifact.js",
+      "sha256": "010032f357a3154a9e939db41baa9b47bf72d20a7b4d3c1dba65c25c2af2d603"
+    },
+    {
+      "path": "q/.specify/scripts/runtime/script-runtime.js",
+      "sha256": "77a4a863b8382ee3472c8c46d424859234b715d8fa35f6d61208fd14f7892c8f"
+    },
+    {
       "path": "q/.specify/templates/agent/agent-contract.md",
       "sha256": "e59a517192022dd3648aaeb02533b81616bd4fd954a8e9c2ffa56f61bdecd369"
     },
     {
       "path": "q/.specify/templates/authoring/chapter-card.md",
-      "sha256": "761062e1f3f692cba2217a493190317d65b55b19d9697e0eeed3501edcd142fa"
+      "sha256": "f480d2c6db9f92d3ef03923f6ac86506537baf8b8ba7685e5201ff7c26fdfe05"
     },
     {
       "path": "q/.specify/templates/authoring/open-promises.md",
@@ -7351,7 +7495,7 @@
     },
     {
       "path": "q/.specify/templates/CONTINUE.md",
-      "sha256": "479b2810c4531573bf629c8fc16b002933fb4b1c21484bbba1f0b0b9708df91c"
+      "sha256": "8a51a436a4b2a01fd48d84e7583699dcd805817cbf52aba66b1f4a2e17e43ab6"
     },
     {
       "path": "q/.specify/templates/copilot-instructions.md",
@@ -7668,7 +7812,7 @@
     },
     {
       "path": "qwen/.qwen/commands/reference-reverse.toml",
-      "sha256": "b684a512c85811931a2352ddb5a8de361ee448670016a907cd03b20f18595109",
+      "sha256": "e3e4db7f6394e87203d6c192249278e7926460c10fd9455aaa0b925fdf76083c",
       "commandSource": {
         "command": "reference-reverse",
         "kind": "command-spec",
@@ -7750,7 +7894,7 @@
     },
     {
       "path": "qwen/.qwen/commands/write.toml",
-      "sha256": "f5e9d2911ed32c7361d8d86a8cc78b9dbab01c067a2999306e74cb1cd86aa85c",
+      "sha256": "ba48a7d3737debdc13b9d0cacd0c1a6233add09a09860c2f433e2ba60844eca2",
       "commandSource": {
         "command": "write",
         "kind": "command-spec",
@@ -7760,7 +7904,7 @@
     },
     {
       "path": "qwen/.specify/agent-guides/story-creation-guide.md",
-      "sha256": "de0fd5bfde07c5b46bb70e656d6ecb1afde7449f5e77a97b70bf2230756eb082"
+      "sha256": "8eb20a058a60a7a5f186f430e5bbb91836a91a58be257ce914bcc65c7e8e1ace"
     },
     {
       "path": "qwen/.specify/experts/core/character.md",
@@ -7875,12 +8019,24 @@
       "sha256": "06255c106d3ee5a1a5c84afcc056a370589bc3bc8577d7e42a7934bfc7b9bede"
     },
     {
+      "path": "qwen/.specify/scripts/runtime/application/check-writing-state.js",
+      "sha256": "adb32d102302107fa360014a4e33dfc6e0ad9a005979677121c87a3832a371e8"
+    },
+    {
+      "path": "qwen/.specify/scripts/runtime/domain/story-artifact.js",
+      "sha256": "010032f357a3154a9e939db41baa9b47bf72d20a7b4d3c1dba65c25c2af2d603"
+    },
+    {
+      "path": "qwen/.specify/scripts/runtime/script-runtime.js",
+      "sha256": "77a4a863b8382ee3472c8c46d424859234b715d8fa35f6d61208fd14f7892c8f"
+    },
+    {
       "path": "qwen/.specify/templates/agent/agent-contract.md",
       "sha256": "e59a517192022dd3648aaeb02533b81616bd4fd954a8e9c2ffa56f61bdecd369"
     },
     {
       "path": "qwen/.specify/templates/authoring/chapter-card.md",
-      "sha256": "761062e1f3f692cba2217a493190317d65b55b19d9697e0eeed3501edcd142fa"
+      "sha256": "f480d2c6db9f92d3ef03923f6ac86506537baf8b8ba7685e5201ff7c26fdfe05"
     },
     {
       "path": "qwen/.specify/templates/authoring/open-promises.md",
@@ -7980,7 +8136,7 @@
     },
     {
       "path": "qwen/.specify/templates/CONTINUE.md",
-      "sha256": "479b2810c4531573bf629c8fc16b002933fb4b1c21484bbba1f0b0b9708df91c"
+      "sha256": "8a51a436a4b2a01fd48d84e7583699dcd805817cbf52aba66b1f4a2e17e43ab6"
     },
     {
       "path": "qwen/.specify/templates/copilot-instructions.md",
@@ -8297,7 +8453,7 @@
     },
     {
       "path": "roocode/.roo/commands/reference-reverse.md",
-      "sha256": "babde798302a119aac5c9286888831568c88efd3dea9fdcfae0340b9f07ef005",
+      "sha256": "e5b6f2452cb098653e65c9fc7546cee89501f347150ba3c9be08e322879caf04",
       "commandSource": {
         "command": "reference-reverse",
         "kind": "command-spec",
@@ -8379,7 +8535,7 @@
     },
     {
       "path": "roocode/.roo/commands/write.md",
-      "sha256": "222ef90c5496432850b60296eeb64cd2c81feebbdca28a92a2ed3b4b11a90818",
+      "sha256": "9adc5709265163cdb4d945aced926c6422b70d15a6c7440c303694589acbc1d4",
       "commandSource": {
         "command": "write",
         "kind": "command-spec",
@@ -8389,7 +8545,7 @@
     },
     {
       "path": "roocode/.specify/agent-guides/story-creation-guide.md",
-      "sha256": "de0fd5bfde07c5b46bb70e656d6ecb1afde7449f5e77a97b70bf2230756eb082"
+      "sha256": "8eb20a058a60a7a5f186f430e5bbb91836a91a58be257ce914bcc65c7e8e1ace"
     },
     {
       "path": "roocode/.specify/experts/core/character.md",
@@ -8504,12 +8660,24 @@
       "sha256": "06255c106d3ee5a1a5c84afcc056a370589bc3bc8577d7e42a7934bfc7b9bede"
     },
     {
+      "path": "roocode/.specify/scripts/runtime/application/check-writing-state.js",
+      "sha256": "adb32d102302107fa360014a4e33dfc6e0ad9a005979677121c87a3832a371e8"
+    },
+    {
+      "path": "roocode/.specify/scripts/runtime/domain/story-artifact.js",
+      "sha256": "010032f357a3154a9e939db41baa9b47bf72d20a7b4d3c1dba65c25c2af2d603"
+    },
+    {
+      "path": "roocode/.specify/scripts/runtime/script-runtime.js",
+      "sha256": "77a4a863b8382ee3472c8c46d424859234b715d8fa35f6d61208fd14f7892c8f"
+    },
+    {
       "path": "roocode/.specify/templates/agent/agent-contract.md",
       "sha256": "e59a517192022dd3648aaeb02533b81616bd4fd954a8e9c2ffa56f61bdecd369"
     },
     {
       "path": "roocode/.specify/templates/authoring/chapter-card.md",
-      "sha256": "761062e1f3f692cba2217a493190317d65b55b19d9697e0eeed3501edcd142fa"
+      "sha256": "f480d2c6db9f92d3ef03923f6ac86506537baf8b8ba7685e5201ff7c26fdfe05"
     },
     {
       "path": "roocode/.specify/templates/authoring/open-promises.md",
@@ -8609,7 +8777,7 @@
     },
     {
       "path": "roocode/.specify/templates/CONTINUE.md",
-      "sha256": "479b2810c4531573bf629c8fc16b002933fb4b1c21484bbba1f0b0b9708df91c"
+      "sha256": "8a51a436a4b2a01fd48d84e7583699dcd805817cbf52aba66b1f4a2e17e43ab6"
     },
     {
       "path": "roocode/.specify/templates/copilot-instructions.md",
@@ -8853,7 +9021,7 @@
     },
     {
       "path": "windsurf/.specify/agent-guides/story-creation-guide.md",
-      "sha256": "de0fd5bfde07c5b46bb70e656d6ecb1afde7449f5e77a97b70bf2230756eb082"
+      "sha256": "8eb20a058a60a7a5f186f430e5bbb91836a91a58be257ce914bcc65c7e8e1ace"
     },
     {
       "path": "windsurf/.specify/experts/core/character.md",
@@ -8968,12 +9136,24 @@
       "sha256": "06255c106d3ee5a1a5c84afcc056a370589bc3bc8577d7e42a7934bfc7b9bede"
     },
     {
+      "path": "windsurf/.specify/scripts/runtime/application/check-writing-state.js",
+      "sha256": "adb32d102302107fa360014a4e33dfc6e0ad9a005979677121c87a3832a371e8"
+    },
+    {
+      "path": "windsurf/.specify/scripts/runtime/domain/story-artifact.js",
+      "sha256": "010032f357a3154a9e939db41baa9b47bf72d20a7b4d3c1dba65c25c2af2d603"
+    },
+    {
+      "path": "windsurf/.specify/scripts/runtime/script-runtime.js",
+      "sha256": "77a4a863b8382ee3472c8c46d424859234b715d8fa35f6d61208fd14f7892c8f"
+    },
+    {
       "path": "windsurf/.specify/templates/agent/agent-contract.md",
       "sha256": "e59a517192022dd3648aaeb02533b81616bd4fd954a8e9c2ffa56f61bdecd369"
     },
     {
       "path": "windsurf/.specify/templates/authoring/chapter-card.md",
-      "sha256": "761062e1f3f692cba2217a493190317d65b55b19d9697e0eeed3501edcd142fa"
+      "sha256": "f480d2c6db9f92d3ef03923f6ac86506537baf8b8ba7685e5201ff7c26fdfe05"
     },
     {
       "path": "windsurf/.specify/templates/authoring/open-promises.md",
@@ -9073,7 +9253,7 @@
     },
     {
       "path": "windsurf/.specify/templates/CONTINUE.md",
-      "sha256": "479b2810c4531573bf629c8fc16b002933fb4b1c21484bbba1f0b0b9708df91c"
+      "sha256": "8a51a436a4b2a01fd48d84e7583699dcd805817cbf52aba66b1f4a2e17e43ab6"
     },
     {
       "path": "windsurf/.specify/templates/copilot-instructions.md",
@@ -9306,7 +9486,7 @@
     },
     {
       "path": "windsurf/.windsurf/workflows/reference-reverse.md",
-      "sha256": "babde798302a119aac5c9286888831568c88efd3dea9fdcfae0340b9f07ef005",
+      "sha256": "e5b6f2452cb098653e65c9fc7546cee89501f347150ba3c9be08e322879caf04",
       "commandSource": {
         "command": "reference-reverse",
         "kind": "command-spec",
@@ -9388,7 +9568,7 @@
     },
     {
       "path": "windsurf/.windsurf/workflows/write.md",
-      "sha256": "222ef90c5496432850b60296eeb64cd2c81feebbdca28a92a2ed3b4b11a90818",
+      "sha256": "9adc5709265163cdb4d945aced926c6422b70d15a6c7440c303694589acbc1d4",
       "commandSource": {
         "command": "write",
         "kind": "command-spec",

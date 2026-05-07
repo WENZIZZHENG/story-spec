@@ -84,6 +84,11 @@ interface LocalAppHttpCore {
     chapter?: string;
     panel?: string[];
   }): Promise<{ status: number; body: unknown }>;
+  getChapterWritingLane(request: {
+    token: string;
+    story?: string;
+    chapter?: string;
+  }): Promise<{ status: number; body: unknown }>;
 }
 
 export interface StartLocalAppHttpServerInput {
@@ -379,6 +384,18 @@ export const startLocalAppHttpServer = async (
           token: getToken(request),
           chapter: body.chapter === undefined ? undefined : String(body.chapter),
           panel: Array.isArray(body.panel) ? body.panel.map(item => String(item)) : undefined
+        });
+        sendJson(response, result.status, result.body);
+        return;
+      }
+
+      if (request.method === 'GET' && url.pathname === '/api/chapters/lane') {
+        const story = url.searchParams.get('story');
+        const chapter = url.searchParams.get('chapter');
+        const result = await input.core.getChapterWritingLane({
+          token: getToken(request),
+          story: story ?? undefined,
+          chapter: chapter ?? undefined
         });
         sendJson(response, result.status, result.body);
         return;

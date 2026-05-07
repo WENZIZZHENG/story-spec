@@ -53,7 +53,7 @@ storyspec app
 
 它会启动只绑定 `127.0.0.1` 的本机服务，并在浏览器里打开一个零依赖工作台页面。页面包含项目抽屉、最近项目、打开/创建项目、故事档案、创作入口、规划面板、章节入口、当前项目状态和确认通道；`storyspec app --project <path>` 可以在启动后预打开一个 StorySpec 项目。
 
-当前页面已经可以保存一句灵感、吸收长文资料预览、查看核心缺口、管理候选大纲、读取只读任务板、创建章节草稿、列出草稿、查看草稿发布 dry-run、初始化 Scene Card，并运行章节级写后自检。长文资料默认只预览，不自动写入正典；只有显式勾选“写入明确表达字段”时，才复用现有 `applyConfirmed` 语义写入作者明确表达的字段，AI 候选仍保留为候选。候选大纲提升和草稿发布默认 dry-run，不覆盖正式 `creative-plan.md` 或 `content/<chapter>.md`，也不自动改正文、tracking、tasks 或 canon。它仍不是完整 React/Vite 前端，也不包含账号、云端、多用户或富文本编辑器；正文写作本身仍在草稿文件、CLI 和 agent 命令中完成。自动化检查可用 `storyspec app --json --no-open` 查看启动预览。
+当前页面已经可以保存一句灵感、吸收长文资料预览、查看核心缺口、管理候选大纲、读取只读任务板、查看章节写作通道、创建章节草稿、列出草稿、查看草稿发布 dry-run、初始化 Scene Card，并运行章节级写后自检。章节写作通道按 `outline -> tasks -> scene -> sample -> draft -> review` 展示当前阶段、下一步、阻断原因和只读边界。长文资料默认只预览，不自动写入正典；只有显式勾选“写入明确表达字段”时，才复用现有 `applyConfirmed` 语义写入作者明确表达的字段，AI 候选仍保留为候选。候选大纲提升和草稿发布默认 dry-run，不覆盖正式 `creative-plan.md` 或 `content/<chapter>.md`，章节小样也默认不写入正文、tracking、tasks 或 canon。它仍不是完整 React/Vite 前端，也不包含账号、云端、多用户或富文本编辑器；正文写作本身仍在草稿文件、CLI 和 agent 命令中完成。自动化检查可用 `storyspec app --json --no-open` 查看启动预览。
 
 它会问你今天想怎么玩：
 
@@ -260,7 +260,7 @@ storyspec interview 王国异常日志 --premise "主角团队用日志、断点
 ## 流程总览
 
 ```text
-init -> story:new -> next -> interview/clarify 或 ingest/co:create -> core/creative:report -> preview specify -> apply -> preview plan -> apply -> /storyspec-tasks -> tasks:board -> scene:init -> context:pack -> draft:new/write -> review -> validate
+init -> story:new -> next -> interview/clarify 或 ingest/co:create -> core/creative:report -> preview specify -> apply -> preview plan -> apply -> /storyspec-tasks -> tasks:board -> scene:init -> context:pack -> 写作通道/sample -> draft:new/write -> review -> validate
 ```
 
 每一步的职责不同：
@@ -284,7 +284,8 @@ init -> story:new -> next -> interview/clarify 或 ingest/co:create -> core/crea
 | `/storyspec-tasks` | 在 agent 中把 `creative-plan.md` 拆成 `stories/<story>/tasks.md` |
 | `storyspec tasks:board` | 终端检查任务看板、WRITE-READY、PLAN-ONLY 和输出路径 |
 | `storyspec scene:init` / `storyspec context:pack` | 补 Scene Card 并生成写作上下文包 |
-| `storyspec draft:new` / `/storyspec-write` | 创建草稿或在 agent 中按任务和 Scene Card 写正文 |
+| `storyspec app` 写作通道 | 只读展示 `outline -> tasks -> scene -> sample -> draft -> review`，提示当前卡点、下一步和写入边界 |
+| `storyspec draft:new` / `/storyspec-write` | 创建草稿或在 agent 中按任务和 Scene Card 写正文；`/storyspec-write` 会先走约束卡、beat、章节小样，再进入完整正文 |
 | `/review` / `storyspec validate` | 检查漂移、结构、任务和写作规则 |
 
 ## 两类命令
@@ -317,7 +318,7 @@ StorySpec 有两类入口，容易混淆：
 | `storyspec init [name]` | 初始化小说项目 |
 | `storyspec upgrade` | 升级现有项目的命令、脚本、规范或模板 |
 | `storyspec check` | 检查 Node.js、Git 和常见 AI CLI |
-| `storyspec app [--project <path>]` | 启动实验性本机 Web 工作台，打开或创建项目，管理素材、候选大纲、任务板和章节草稿入口；仍不包含账号、云端或富文本编辑器 |
+| `storyspec app [--project <path>]` | 启动实验性本机 Web 工作台，打开或创建项目，管理素材、候选大纲、任务板、章节写作通道和章节草稿入口；仍不包含账号、云端或富文本编辑器 |
 | `storyspec status` | 汇总项目、当前故事长成了什么、tracking、Git 状态和下一步 |
 | `storyspec next [story]` | 根据故事状态给出精简下一步建议；`--verbose` 展开完整工作台，`--modes` 查看低负担模式 |
 | `storyspec validate` | 校验项目结构、任务、tracking、world/canon、模板和写作规则 |
@@ -393,6 +394,8 @@ StorySpec 有两类入口，容易混淆：
 | `storyspec review` | 运行 reviewer loop，输出结构化 findings 和任务草稿 |
 | `storyspec handoff [story]` | 生成断点续写上下文包 |
 | `storyspec tasks:board [story]` | 把 `tasks.md` 导出为本地任务看板和 GitHub issue 草稿 |
+
+`/storyspec-write` 的章节写作顺序是：章节前置约束卡 -> beat 预览 -> 章节小样 -> 完整正文块 -> 写后自检。章节小样是 800-1500 字左右的精简预览稿，像缩略正文而不是纯大纲；它只用于确认读感、情绪顺序、人物反应、冲突推进、尺度边界和文风方向，默认不写入正式正文、不更新 tracking、不进入 canon。只有作者确认或改写小样后，才进入完整章节分块生成。
 
 ### 资料、文风、编译和反馈
 

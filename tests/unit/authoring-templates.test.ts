@@ -24,5 +24,9 @@ describe('authoring templates', () => {
     expect(template).toContain('约束卡用于写前确认和写后自检');
     expect(template).toContain('不作为正文生成时逐句审查器');
     expect(template).toContain('正文阶段优先身体感、感官、动作、当下反应和句子质感');
+    expect(template).toContain('## 章节小样预览');
+    expect(template).toContain('像缩略正文而不是纯大纲');
+    expect(template).toContain('小样默认不写入正式正文、不更新 tracking、不进入 canon');
+    expect(template).toContain('只有作者确认或改写小样后，才进入完整章节分块生成');
   });
 });

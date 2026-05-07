@@ -506,4 +506,62 @@ describe('local app http server', () => {
       await server.close();
     }
   });
+
+  it('serves the chapter writing lane through a token-protected endpoint', async () => {
+    const projectRoot = await makeTempDir();
+    await mkdir(path.join(projectRoot, '.specify'), { recursive: true });
+    await writeFile(path.join(projectRoot, '.specify', 'config.json'), JSON.stringify({
+      name: '法术编译纪元'
+    }));
+    const core = createLocalAppServerCore({
+      token: 'secret',
+      fileSystem: nodeFileSystem,
+      recentProjects: createMemoryRecentProjectStore(),
+      projectStatus: async input => ({
+        projectRoot: input.projectRoot,
+        projectName: '法术编译纪元'
+      }),
+      chapterWritingLane: async input => ({
+        projectRoot: input.projectRoot,
+        story: input.story,
+        chapter: input.chapter,
+        currentStep: 'sample',
+        lane: [{ id: 'sample', status: 'ready' }],
+        boundaries: ['章节小样默认不写入 content、tracking、canon 或 tasks。']
+      })
+    });
+    const server = await startLocalAppHttpServer({
+      host: '127.0.0.1',
+      port: 0,
+      core,
+      token: 'secret'
+    });
+
+    try {
+      const unauthorized = await fetch(`${server.url}/api/chapters/lane`);
+      expect(unauthorized.status).toBe(401);
+
+      await fetch(`${server.url}/api/projects/open`, {
+        method: 'POST',
+        headers: {
+          'content-type': 'application/json',
+          'x-storyspec-app-token': 'secret'
+        },
+        body: JSON.stringify({ projectRoot })
+      });
+
+      const lane = await fetch(`${server.url}/api/chapters/lane?story=${encodeURIComponent('法术编译纪元')}&chapter=001`, {
+        headers: { 'x-storyspec-app-token': 'secret' }
+      });
+      await expect(lane.json()).resolves.toMatchObject({
+        story: '法术编译纪元',
+        chapter: '001',
+        currentStep: 'sample',
+        lane: [{ id: 'sample', status: 'ready' }],
+        boundaries: ['章节小样默认不写入 content、tracking、canon 或 tasks。']
+      });
+    } finally {
+      await server.close();
+    }
+  });
 });

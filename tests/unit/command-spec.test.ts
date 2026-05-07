@@ -124,6 +124,7 @@ risk:
 
     expect(files).toEqual([
       'analyze.command.yaml',
+      'reference-reverse.command.yaml',
       'write.command.yaml'
     ]);
 

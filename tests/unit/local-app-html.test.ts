@@ -95,6 +95,9 @@ describe('local app html', () => {
     });
 
     expect(html).toContain('章节入口');
+    expect(html).toContain('写作通道');
+    expect(html).toContain('outline -> tasks -> scene -> sample -> draft -> review');
+    expect(html).toContain('章节小样');
     expect(html).toContain('章节草稿');
     expect(html).toContain('创建草稿');
     expect(html).toContain('草稿列表');
@@ -103,10 +106,12 @@ describe('local app html', () => {
     expect(html).toContain('Scene Card 初始化');
     expect(html).toContain('写后自检');
     expect(html).toContain('/api/chapters/drafts/create');
+    expect(html).toContain('/api/chapters/lane');
     expect(html).toContain('/api/chapters/drafts/list');
     expect(html).toContain('/api/chapters/drafts/promote');
     expect(html).toContain('/api/chapters/scene/init');
     expect(html).toContain('/api/chapters/review');
+    expect(html).toContain('id="chapter-lane-result"');
     expect(html).toContain('id="chapter-draft-result"');
     expect(html).toContain('id="chapter-draft-list-result"');
     expect(html).toContain('id="chapter-promote-result"');

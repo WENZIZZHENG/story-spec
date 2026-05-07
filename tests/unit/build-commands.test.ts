@@ -63,6 +63,9 @@ Agent: __AGENT__
 - 写章前先输出章节前置约束卡，覆盖时间点、当前能力与语言水平、情感检查点、硬约束、软约束和写后自检对照；等待作者确认约束卡或改写后再进入 beat 预览和正文。
 - 章节前置约束卡资料不足时标为待确认，不得编造角色心理、语言进度、能力数值、关系事实或世界观正典。
 - 约束卡确认后再输出 3-6 条 scene beat 或等价方向预览，beat 只是方向预览，不是已完成正文。
+- beat 预览确认后必须输出阶段 1.5 - 章节小样：800-1500 字左右，像缩略正文而不是纯大纲。
+- 小样默认不写入正式正文、不更新 tracking、不进入 canon。
+- 只有作者确认或改写小样后，才进入完整章节分块生成。
 - 资料不足时，先列出缺失上下文，不得编造正典事实。
 - 写作必须经过 preview / confirm / apply，不得跳过预览直接修改正文，也不得修改未授权文件。
 
@@ -70,6 +73,7 @@ Agent: __AGENT__
 
 - 阶段 0 - 章节前置约束卡：先输出约束卡并等待作者确认；JSON stage 字段仍使用 plan。
 - 阶段 1 - beat 预览：约束卡确认后输出 3-6 条 scene beat，说明目标、冲突、人物变化、风险和缺口；JSON stage 字段只能使用 plan、write、finish，此阶段为 plan。
+- 阶段 1.5 - 章节小样：beat 确认后输出精简预览稿，像缩略正文而不是纯大纲；JSON stage 字段仍使用 plan。
 - 阶段 2 - 正文块：正文按 scene 或段落组分块输出，每块说明已完成的剧情功能和下一块目标；JSON stage 字段为 write。
 - 阶段 3 - 收尾验证：输出正文路径、字数、验证、tracking 待更新/待确认、写后自检对照和 next action；JSON stage 字段为 finish。
 
@@ -78,8 +82,9 @@ Agent: __AGENT__
 1. 将选中任务标记为 in_progress。
 2. 先输出章节前置约束卡，并等待作者确认约束卡。
 3. 约束卡确认后输出 3-6 条 scene beat 或等价方向预览。
-4. 长章节必须分块输出。
-5. 收尾时单独给出摘要，必须包含正文路径、建议或已执行验证、tracking 待更新/待确认、写后自检对照、next action。
+4. beat 确认后输出章节小样，等待作者确认或改写。
+5. 长章节必须分块输出。
+6. 收尾时单独给出摘要，必须包含正文路径、建议或已执行验证、tracking 待更新/待确认、写后自检对照、next action。
 Run {SCRIPT}
 `);
 
@@ -157,8 +162,11 @@ describe('buildCommandArtifacts', () => {
     expect(codexSpecPrompt).toContain('任务边界');
     expect(codexSpecPrompt).toContain('3-6 条 scene beat');
     expect(codexSpecPrompt).toContain('阶段 1 - beat 预览');
+    expect(codexSpecPrompt).toContain('阶段 1.5 - 章节小样');
     expect(codexSpecPrompt).toContain('阶段 2 - 正文块');
     expect(codexSpecPrompt).toContain('阶段 3 - 收尾验证');
+    expect(codexSpecPrompt).toContain('小样默认不写入正式正文、不更新 tracking、不进入 canon');
+    expect(codexSpecPrompt).toContain('只有作者确认或改写小样后，才进入完整章节分块生成');
     expect(codexSpecPrompt).toContain('JSON stage 字段只能使用 plan、write、finish');
     expect(codexSpecPrompt).toContain('长章节必须分块输出');
     expect(codexSpecPrompt).toContain('收尾时单独给出摘要');
@@ -177,8 +185,11 @@ describe('buildCommandArtifacts', () => {
     expect(geminiSpecPrompt).toContain('任务边界');
     expect(geminiSpecPrompt).toContain('3-6 条 scene beat');
     expect(geminiSpecPrompt).toContain('阶段 1 - beat 预览');
+    expect(geminiSpecPrompt).toContain('阶段 1.5 - 章节小样');
     expect(geminiSpecPrompt).toContain('阶段 2 - 正文块');
     expect(geminiSpecPrompt).toContain('阶段 3 - 收尾验证');
+    expect(geminiSpecPrompt).toContain('小样默认不写入正式正文、不更新 tracking、不进入 canon');
+    expect(geminiSpecPrompt).toContain('只有作者确认或改写小样后，才进入完整章节分块生成');
     expect(geminiSpecPrompt).toContain('JSON stage 字段只能使用 plan、write、finish');
     expect(geminiSpecPrompt).toContain('长章节必须分块输出');
     expect(geminiSpecPrompt).toContain('收尾时单独给出摘要');
@@ -255,8 +266,11 @@ describe('buildCommandArtifacts', () => {
     expect(genericSpecCommand).toContain('任务边界');
     expect(genericSpecCommand).toContain('3-6 条 scene beat');
     expect(genericSpecCommand).toContain('阶段 1 - beat 预览');
+    expect(genericSpecCommand).toContain('阶段 1.5 - 章节小样');
     expect(genericSpecCommand).toContain('阶段 2 - 正文块');
     expect(genericSpecCommand).toContain('阶段 3 - 收尾验证');
+    expect(genericSpecCommand).toContain('小样默认不写入正式正文、不更新 tracking、不进入 canon');
+    expect(genericSpecCommand).toContain('只有作者确认或改写小样后，才进入完整章节分块生成');
     expect(genericSpecCommand).toContain('JSON stage 字段只能使用 plan、write、finish');
     expect(genericSpecCommand).toContain('长章节必须分块输出');
     expect(genericSpecCommand).toContain('收尾时单独给出摘要');
@@ -286,6 +300,9 @@ describe('buildCommandArtifacts', () => {
       expect(command).toContain('约束卡用于写前确认和写后自检');
       expect(command).toContain('不作为正文生成时逐句审查器');
       expect(command).toContain('正文阶段优先身体感、感官、动作、当下反应和句子质感');
+      expect(command).toContain('阶段 1.5 - 章节小样');
+      expect(command).toContain('像缩略正文而不是纯大纲');
+      expect(command).toContain('小样默认不写入正式正文、不更新 tracking、不进入 canon');
     }
   });
 

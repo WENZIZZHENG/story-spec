@@ -21,6 +21,7 @@ import {
 } from '../../application/manage-drafts.js';
 import { createInitialSceneCard } from '../../application/create-scene-card.js';
 import { reviewProject } from '../../application/review-project.js';
+import { getChapterWritingLane } from '../../application/chapter-writing-lane.js';
 import type { LocalAppServerResponse } from '../../app-server/local-app-server.js';
 import { createLocalAppServerCore } from '../../app-server/local-app-server.js';
 import type { LocalAppHttpServer, StartLocalAppHttpServerInput } from '../../app-server/local-app-http-server.js';
@@ -73,6 +74,7 @@ export interface StartLocalAppWorkbenchInput<TProjectStatus = unknown> {
   promoteChapterDraft?: Parameters<typeof createLocalAppServerCore<TProjectStatus>>[0]['promoteChapterDraft'];
   createChapterSceneCard?: Parameters<typeof createLocalAppServerCore<TProjectStatus>>[0]['createChapterSceneCard'];
   reviewChapter?: Parameters<typeof createLocalAppServerCore<TProjectStatus>>[0]['reviewChapter'];
+  chapterWritingLane?: Parameters<typeof createLocalAppServerCore<TProjectStatus>>[0]['chapterWritingLane'];
   startServer?: (input: StartLocalAppHttpServerInput) => Promise<LocalAppWorkbenchServer>;
 }
 
@@ -136,7 +138,8 @@ export const startLocalAppWorkbench = async <TProjectStatus>(
     listChapterDrafts: input.listChapterDrafts,
     promoteChapterDraft: input.promoteChapterDraft,
     createChapterSceneCard: input.createChapterSceneCard,
-    reviewChapter: input.reviewChapter
+    reviewChapter: input.reviewChapter,
+    chapterWritingLane: input.chapterWritingLane
   });
   const startServer = input.startServer ?? startLocalAppHttpServer;
   const server = await startServer({
@@ -230,7 +233,8 @@ export function registerAppCommand(program: Command, context: AppCommandContext)
         listChapterDrafts: input => listDrafts(input),
         promoteChapterDraft: input => promoteDraft(input),
         createChapterSceneCard: input => createInitialSceneCard(input),
-        reviewChapter: input => reviewProject(input)
+        reviewChapter: input => reviewProject(input),
+        chapterWritingLane: input => getChapterWritingLane(input)
       });
       const server = result.server;
 

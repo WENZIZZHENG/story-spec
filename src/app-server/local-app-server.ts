@@ -49,6 +49,10 @@ import {
   reviewProject,
   type ReviewProjectInput
 } from '../application/review-project.js';
+import {
+  getChapterWritingLane as getChapterWritingLaneApplication,
+  type GetChapterWritingLaneInput
+} from '../application/chapter-writing-lane.js';
 
 export interface LocalAppServerResponse<TBody = unknown> {
   status: number;
@@ -85,6 +89,7 @@ export interface CreateLocalAppServerCoreInput<TProjectStatus> {
   promoteChapterDraft?(request: LocalAppPromoteChapterDraftRequest): Promise<unknown>;
   createChapterSceneCard?(request: LocalAppCreateChapterSceneCardRequest): Promise<unknown>;
   reviewChapter?(request: LocalAppReviewChapterRequest): Promise<unknown>;
+  chapterWritingLane?(request: LocalAppChapterWritingLaneRequest): Promise<unknown>;
 }
 
 export interface OpenProjectRequest {
@@ -300,6 +305,19 @@ export interface ReviewChapterRequest {
   token: string;
   chapter?: string;
   panel?: string[];
+}
+
+export interface LocalAppChapterWritingLaneRequest {
+  projectRoot: string;
+  fileSystem: ProjectFileSystem;
+  story?: string;
+  chapter?: string;
+}
+
+export interface ChapterWritingLaneRequest {
+  token: string;
+  story?: string;
+  chapter?: string;
 }
 
 const unauthorized = (): LocalAppServerResponse<LocalAppBlockedBody> => ({
@@ -885,6 +903,39 @@ export const createLocalAppServerCore = <TProjectStatus>(
             chapter: request.chapter,
             panel: request.panel
           } satisfies ReviewProjectInput);
+
+        return { status: 200, body };
+      } catch (error) {
+        return badRequest(error);
+      }
+    },
+
+    async getChapterWritingLane(request: ChapterWritingLaneRequest): Promise<LocalAppServerResponse<unknown | LocalAppBlockedBody>> {
+      if (!hasToken(request.token)) {
+        return unauthorized();
+      }
+
+      const projectRoot = currentAllowedProject();
+      if (!projectRoot) {
+        return forbiddenProject();
+      }
+
+      try {
+        const body = input.chapterWritingLane
+          ? await input.chapterWritingLane({
+            projectRoot,
+            fileSystem: input.fileSystem,
+            story: request.story,
+            chapter: request.chapter
+          })
+          : await getChapterWritingLaneApplication({
+            projectRoot,
+            fileSystem: input.fileSystem,
+            story: request.story,
+            chapter: request.chapter,
+            taskBoard: input.taskBoard,
+            listChapterDrafts: input.listChapterDrafts
+          } satisfies GetChapterWritingLaneInput);
 
         return { status: 200, body };
       } catch (error) {

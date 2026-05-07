@@ -640,7 +640,10 @@ export const renderLocalAppHtml = (input: RenderLocalAppHtmlInput): string => {
           <section class="section-block">
             <div class="dossier-title">
               <h2 id="chapter-entry-title">章节入口</h2>
-              <button class="secondary" id="refresh-chapter-drafts" type="button">草稿列表</button>
+              <div class="button-row">
+                <button class="secondary" id="refresh-chapter-lane" type="button">写作通道</button>
+                <button class="secondary" id="refresh-chapter-drafts" type="button">草稿列表</button>
+              </div>
             </div>
             <p class="muted">章节草稿是候选文件；发布预览默认 dry-run，不覆盖正式正文。正文仍在草稿文件或 agent 写作流程里完成。</p>
             <div class="field">
@@ -651,6 +654,8 @@ export const renderLocalAppHtml = (input: RenderLocalAppHtmlInput): string => {
               <label for="chapter-id">章节</label>
               <input id="chapter-id" name="chapter" autocomplete="off" placeholder="001 或 chapter-001">
             </div>
+            <div class="error" id="chapter-lane-error" role="status" aria-live="polite"></div>
+            <div class="result-box" id="chapter-lane-result">写作通道按 outline -> tasks -> scene -> sample -> draft -> review 展示当前卡点；章节小样只做确认预览，不写入正文、tracking、canon 或 tasks。</div>
             <div class="error" id="chapter-draft-list-error" role="status" aria-live="polite"></div>
             <div class="result-box" id="chapter-draft-list-result">读取后会列出章节草稿记录。</div>
           </section>
@@ -744,11 +749,13 @@ export const renderLocalAppHtml = (input: RenderLocalAppHtmlInput): string => {
     const outlineCompareResult = document.querySelector("#outline-compare-result");
     const outlinePromoteResult = document.querySelector("#outline-promote-result");
     const taskBoardResult = document.querySelector("#task-board-result");
+    const chapterLaneError = document.querySelector("#chapter-lane-error");
     const chapterDraftListError = document.querySelector("#chapter-draft-list-error");
     const chapterDraftError = document.querySelector("#chapter-draft-error");
     const chapterPromoteError = document.querySelector("#chapter-promote-error");
     const chapterSceneError = document.querySelector("#chapter-scene-error");
     const chapterReviewError = document.querySelector("#chapter-review-error");
+    const chapterLaneResult = document.querySelector("#chapter-lane-result");
     const chapterDraftListResult = document.querySelector("#chapter-draft-list-result");
     const chapterDraftResult = document.querySelector("#chapter-draft-result");
     const chapterPromoteResult = document.querySelector("#chapter-promote-result");
@@ -1107,6 +1114,28 @@ export const renderLocalAppHtml = (input: RenderLocalAppHtmlInput): string => {
       }
     });
 
+    const renderChapterLane = result => {
+      const lane = result.lane || [];
+      const boundaries = result.boundaries || [];
+      chapterLaneResult.innerHTML = \`
+        <p><strong>当前阶段：\${escapeHtml(result.currentStep || "sample")}</strong></p>
+        <p class="muted">写作通道：outline -> tasks -> scene -> sample -> draft -> review</p>
+        <ul class="fact-list">\${lane.map(step => '<li><strong>' + escapeHtml(step.id || step.label || "step") + '</strong>：' + escapeHtml(step.status || "unknown") + '<br><span class="muted">' + escapeHtml(step.summary || "") + '</span>' + (step.nextAction ? '<br><span class="muted">下一步：' + escapeHtml(step.nextAction) + '</span>' : '') + (step.commands && step.commands.length ? '<br>' + step.commands.map(command => '<div class="command">' + escapeHtml(command) + '</div>').join("") : '') + '</li>').join("") || '<li>暂无通道状态。</li>'}</ul>
+        <div class="section-block"><h3>章节小样</h3><p class="muted">阶段 1.5 会先生成像缩略正文而不是纯大纲的小样；完整正文仍需作者确认小样后再扩写。</p></div>
+        <div class="section-block"><h3>写入边界</h3><ul class="fact-list">\${listItems(boundaries, "写作通道只读展示，不自动修改正文。")}</ul></div>
+      \`;
+    };
+
+    const loadChapterLane = async () => {
+      chapterLaneError.textContent = "";
+      try {
+        const result = await api("/api/chapters/lane" + chapterDraftQuery(), { method: "GET" });
+        renderChapterLane(result);
+      } catch (error) {
+        chapterLaneError.textContent = error.message;
+      }
+    };
+
     const loadChapterDrafts = async () => {
       chapterDraftListError.textContent = "";
       try {
@@ -1120,6 +1149,7 @@ export const renderLocalAppHtml = (input: RenderLocalAppHtmlInput): string => {
       }
     };
 
+    document.querySelector("#refresh-chapter-lane").addEventListener("click", loadChapterLane);
     document.querySelector("#refresh-chapter-drafts").addEventListener("click", loadChapterDrafts);
 
     document.querySelector("#chapter-draft-form").addEventListener("submit", async event => {
