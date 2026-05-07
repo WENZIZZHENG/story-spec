@@ -96,7 +96,7 @@
     },
     {
       "path": "auggie/.augment/commands/reference-reverse.md",
-      "sha256": "5512c441cedad7a6e00e41187d74dbe3944b46c2db4c3b8d8195680074d7f8b4",
+      "sha256": "cfd04bf92fed721d24fe12733826398dff012dd89cf3b6b2b8981db4d86ad0b9",
       "commandSource": {
         "command": "reference-reverse",
         "kind": "command-spec",
@@ -737,7 +737,7 @@
     },
     {
       "path": "claude/.claude/commands/storyspec.reference-reverse.md",
-      "sha256": "e5b6f2452cb098653e65c9fc7546cee89501f347150ba3c9be08e322879caf04",
+      "sha256": "1e700af4b1502e802ec3970f5a808961f4347aeee03155bef5029645b3b58bc9",
       "commandSource": {
         "command": "reference-reverse",
         "kind": "command-spec",
@@ -1382,7 +1382,7 @@
     },
     {
       "path": "codebuddy/.codebuddy/commands/reference-reverse.md",
-      "sha256": "5512c441cedad7a6e00e41187d74dbe3944b46c2db4c3b8d8195680074d7f8b4",
+      "sha256": "cfd04bf92fed721d24fe12733826398dff012dd89cf3b6b2b8981db4d86ad0b9",
       "commandSource": {
         "command": "reference-reverse",
         "kind": "command-spec",
@@ -2023,7 +2023,7 @@
     },
     {
       "path": "codex/.codex/prompts/storyspec-reference-reverse.md",
-      "sha256": "5512c441cedad7a6e00e41187d74dbe3944b46c2db4c3b8d8195680074d7f8b4",
+      "sha256": "cfd04bf92fed721d24fe12733826398dff012dd89cf3b6b2b8981db4d86ad0b9",
       "commandSource": {
         "command": "reference-reverse",
         "kind": "command-spec",
@@ -2664,7 +2664,7 @@
     },
     {
       "path": "continue-check/.continue/prompts/reference-reverse.md",
-      "sha256": "f52e1b34e30c3640896cfe9c3ead188e72e65608e44f1e7e3182cb02e6290914",
+      "sha256": "1716bb2e65325cd3a3eb94b51883e55004597187bf304c62be6c79bbce6ed8e3",
       "commandSource": {
         "command": "reference-reverse",
         "kind": "command-spec",
@@ -3313,7 +3313,7 @@
     },
     {
       "path": "copilot/.github/prompts/reference-reverse.prompt.md",
-      "sha256": "5512c441cedad7a6e00e41187d74dbe3944b46c2db4c3b8d8195680074d7f8b4",
+      "sha256": "cfd04bf92fed721d24fe12733826398dff012dd89cf3b6b2b8981db4d86ad0b9",
       "commandSource": {
         "command": "reference-reverse",
         "kind": "command-spec",
@@ -3958,7 +3958,7 @@
     },
     {
       "path": "cursor/.cursor/commands/reference-reverse.md",
-      "sha256": "5512c441cedad7a6e00e41187d74dbe3944b46c2db4c3b8d8195680074d7f8b4",
+      "sha256": "cfd04bf92fed721d24fe12733826398dff012dd89cf3b6b2b8981db4d86ad0b9",
       "commandSource": {
         "command": "reference-reverse",
         "kind": "command-spec",
@@ -4603,7 +4603,7 @@
     },
     {
       "path": "gemini/.gemini/commands/storyspec/reference-reverse.toml",
-      "sha256": "e3e4db7f6394e87203d6c192249278e7926460c10fd9455aaa0b925fdf76083c",
+      "sha256": "7cf751f18dc42f9f35e8bedc4e123751eb1d118d6c867d884cb93d196208dd1f",
       "commandSource": {
         "command": "reference-reverse",
         "kind": "command-spec",
@@ -5252,7 +5252,7 @@
     },
     {
       "path": "generic/.specify/commands/reference-reverse.md",
-      "sha256": "9ff418285eb99f80118d729a22754be63d16868b263d25dcb22801b521890492",
+      "sha256": "5bcc8f00ad75280d5f73e4ca71fa3f3b9ecd623d3c4357c1ecb1d99183422aee",
       "commandSource": {
         "command": "reference-reverse",
         "kind": "command-spec",
@@ -5889,7 +5889,7 @@
     },
     {
       "path": "kilocode/.kilocode/workflows/reference-reverse.md",
-      "sha256": "e5b6f2452cb098653e65c9fc7546cee89501f347150ba3c9be08e322879caf04",
+      "sha256": "1e700af4b1502e802ec3970f5a808961f4347aeee03155bef5029645b3b58bc9",
       "commandSource": {
         "command": "reference-reverse",
         "kind": "command-spec",
@@ -6530,7 +6530,7 @@
     },
     {
       "path": "opencode/.opencode/command/reference-reverse.md",
-      "sha256": "3f98bc37fdf4d6986e554e49848231bd98cb9ae20a20ceb2703fa16a7262a934",
+      "sha256": "685eb35ae0d9bf1ef86ad66fc92b6112c8ca5fd2438292ea11a0ae18d8ad2cce",
       "commandSource": {
         "command": "reference-reverse",
         "kind": "command-spec",
@@ -7171,7 +7171,7 @@
     },
     {
       "path": "q/.amazonq/prompts/reference-reverse.md",
-      "sha256": "5512c441cedad7a6e00e41187d74dbe3944b46c2db4c3b8d8195680074d7f8b4",
+      "sha256": "cfd04bf92fed721d24fe12733826398dff012dd89cf3b6b2b8981db4d86ad0b9",
       "commandSource": {
         "command": "reference-reverse",
         "kind": "command-spec",
@@ -7812,7 +7812,7 @@
     },
     {
       "path": "qwen/.qwen/commands/reference-reverse.toml",
-      "sha256": "e3e4db7f6394e87203d6c192249278e7926460c10fd9455aaa0b925fdf76083c",
+      "sha256": "7cf751f18dc42f9f35e8bedc4e123751eb1d118d6c867d884cb93d196208dd1f",
       "commandSource": {
         "command": "reference-reverse",
         "kind": "command-spec",
@@ -8453,7 +8453,7 @@
     },
     {
       "path": "roocode/.roo/commands/reference-reverse.md",
-      "sha256": "e5b6f2452cb098653e65c9fc7546cee89501f347150ba3c9be08e322879caf04",
+      "sha256": "1e700af4b1502e802ec3970f5a808961f4347aeee03155bef5029645b3b58bc9",
       "commandSource": {
         "command": "reference-reverse",
         "kind": "command-spec",
@@ -9486,7 +9486,7 @@
     },
     {
       "path": "windsurf/.windsurf/workflows/reference-reverse.md",
-      "sha256": "e5b6f2452cb098653e65c9fc7546cee89501f347150ba3c9be08e322879caf04",
+      "sha256": "1e700af4b1502e802ec3970f5a808961f4347aeee03155bef5029645b3b58bc9",
       "commandSource": {
         "command": "reference-reverse",
         "kind": "command-spec",

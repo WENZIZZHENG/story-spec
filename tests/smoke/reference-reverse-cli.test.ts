@@ -72,7 +72,21 @@ describe('reference reverse CLI smoke', () => {
     expect(parsed.highRiskSimilarities).toEqual(expect.arrayContaining([
       expect.objectContaining({ label: '直接续写或修复原作结局' })
     ]));
+    expect(parsed.appealSignals).toEqual(expect.arrayContaining([
+      expect.objectContaining({ label: '底层进入规则核心' }),
+      expect.objectContaining({ label: '规则化神秘系统' })
+    ]));
     expect(parsed.translatableStructures.map((item: { label: string }) => item.label)).toContain('知识垄断与解释权');
+    expect(parsed.readerPromises).toEqual(expect.arrayContaining([
+      expect.objectContaining({ label: '解释权成长' }),
+      expect.objectContaining({ label: '公共危机兑现' })
+    ]));
+    expect(parsed.repairDirections).toEqual(expect.arrayContaining([
+      expect.objectContaining({ label: '拒绝突兀身份奖励' })
+    ]));
+    expect(parsed.originalizationGuides).toEqual(expect.arrayContaining([
+      expect.objectContaining({ sourceStructure: '符文调试爽点' })
+    ]));
     expect(parsed.doNotCopy).toContain('不要生成未授权的原作续写正文。');
     await expect(readFile(path.join(projectPath, 'stories', '新法术公共设施', 'specification.md'), 'utf-8'))
       .rejects.toThrow();
@@ -114,6 +128,10 @@ describe('reference reverse CLI smoke', () => {
 
     expect(result.stdout).toContain('StorySpec 参考作品反向拆解预览');
     expect(result.stdout).toContain('预览未写入');
+    expect(result.stdout).toContain('结构吸引力');
+    expect(result.stdout).toContain('读者承诺');
+    expect(result.stdout).toContain('修复方向');
+    expect(result.stdout).toContain('原创化指南');
     expect(result.stdout).toContain('不得直接照搬');
     expect(result.stdout).toContain('不要生成未授权的原作续写正文');
   });

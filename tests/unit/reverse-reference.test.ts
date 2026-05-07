@@ -64,11 +64,51 @@ describe('reverseReferenceNotes', () => {
         evidence: expect.stringContaining('不要续写原作结局')
       })
     ]));
+    expect(result.appealSignals).toEqual(expect.arrayContaining([
+      expect.objectContaining({
+        label: '底层进入规则核心',
+        evidence: expect.stringContaining('底层矿村少年')
+      }),
+      expect.objectContaining({
+        label: '规则化神秘系统',
+        reason: expect.stringContaining('喜欢')
+      })
+    ]));
     expect(result.translatableStructures.map(item => item.label)).toEqual(expect.arrayContaining([
       '知识垄断与解释权',
       '阶层压迫',
       '规则化能力爽点',
       '未完成承诺或不适点修复'
+    ]));
+    expect(result.readerPromises).toEqual(expect.arrayContaining([
+      expect.objectContaining({
+        label: '解释权成长',
+        promise: expect.stringContaining('底层角色')
+      }),
+      expect.objectContaining({
+        label: '公共危机兑现',
+        promise: expect.stringContaining('魔力枯竭')
+      })
+    ]));
+    expect(result.repairDirections).toEqual(expect.arrayContaining([
+      expect.objectContaining({
+        label: '拒绝强行献祭',
+        avoid: expect.stringContaining('关系')
+      }),
+      expect.objectContaining({
+        label: '断更或原作结局转译',
+        direction: expect.stringContaining('原创问题意识')
+      })
+    ]));
+    expect(result.originalizationGuides).toEqual(expect.arrayContaining([
+      expect.objectContaining({
+        sourceStructure: '符文调试爽点',
+        originalMove: expect.stringContaining('重新命名')
+      }),
+      expect.objectContaining({
+        sourceStructure: '师徒信任慢热',
+        boundary: expect.stringContaining('不沿用原作角色')
+      })
     ]));
     expect(result.newStoryCandidates).toEqual(expect.arrayContaining([
       expect.objectContaining({
@@ -88,6 +128,10 @@ describe('reverseReferenceNotes', () => {
     expect(rendered).toContain('预览未写入');
     expect(rendered).toContain('原作依赖项');
     expect(rendered).toContain('可原创化结构');
+    expect(rendered).toContain('结构吸引力');
+    expect(rendered).toContain('读者承诺');
+    expect(rendered).toContain('修复方向');
+    expect(rendered).toContain('原创化指南');
     await expect(fileSystem.pathExists(path.join(storyPath, 'specification.md'))).resolves.toBe(false);
     await expect(fileSystem.pathExists(path.join(projectRoot, 'spec', 'world', 'world.yaml'))).resolves.toBe(false);
   });

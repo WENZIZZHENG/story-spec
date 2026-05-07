@@ -53,6 +53,25 @@ export interface ReferenceReverseCandidate {
   sourceReason: string;
 }
 
+export interface ReferenceReaderPromise {
+  label: string;
+  promise: string;
+  sourceReason: string;
+}
+
+export interface ReferenceRepairDirection {
+  label: string;
+  direction: string;
+  avoid: string;
+  sourceReason: string;
+}
+
+export interface ReferenceOriginalizationGuide {
+  sourceStructure: string;
+  originalMove: string;
+  boundary: string;
+}
+
 export interface ReferenceReverseResult {
   projectRoot: string;
   story: string;
@@ -61,8 +80,12 @@ export interface ReferenceReverseResult {
   mode: ReferenceReverseMode;
   written: false;
   originalDependencies: ReferenceDependency[];
+  appealSignals: ReferenceReverseFinding[];
   highRiskSimilarities: ReferenceReverseFinding[];
   translatableStructures: ReferenceReverseFinding[];
+  readerPromises: ReferenceReaderPromise[];
+  repairDirections: ReferenceRepairDirection[];
+  originalizationGuides: ReferenceOriginalizationGuide[];
   newStoryCandidates: ReferenceReverseCandidate[];
   doNotCopy: string[];
 }
@@ -222,6 +245,38 @@ const extractHighRiskSimilarities = (sentences: readonly string[]): ReferenceRev
   )
 ];
 
+const appealDefinitions: readonly { label: string; pattern: RegExp; reason: string }[] = [
+  {
+    label: '底层进入规则核心',
+    pattern: /底层|矿村|平民|边缘|解释权|贵族学院|规则核心/,
+    reason: '作者喜欢底层角色从被压迫位置逐步理解规则、取得解释权的成长快感。'
+  },
+  {
+    label: '规则化神秘系统',
+    pattern: /符文|调试|规则|可调试|拆成|魔法/,
+    reason: '作者喜欢把神秘或魔法系统拆成可观察、可验证、可修复规则的阅读爽点。'
+  },
+  {
+    label: '慢热信任关系',
+    pattern: /师徒|信任|慢热|伙伴|女主|关系/,
+    reason: '作者喜欢关系从防备、合作到互相选择的渐进张力。'
+  },
+  {
+    label: '世界危机承诺',
+    pattern: /魔力枯竭|危机|公共|设施|资源|枯竭/,
+    reason: '作者喜欢个人成长与世界系统失灵互相扣合，而不是只停留在升级。'
+  }
+];
+
+const extractAppealSignals = (sentences: readonly string[]): ReferenceReverseFinding[] => {
+  const findings = appealDefinitions.flatMap(definition => {
+    const evidence = findSentence(sentences, definition.pattern);
+    return buildFinding(definition.label, evidence, definition.reason);
+  });
+
+  return uniqueByKey(findings, item => item.label);
+};
+
 const structureDefinitions: readonly { label: string; pattern: RegExp; reason: string }[] = [
   {
     label: '知识垄断与解释权',
@@ -293,6 +348,107 @@ const buildNewStoryCandidates = (text: string): ReferenceReverseCandidate[] => {
   return candidates;
 };
 
+const buildReaderPromises = (text: string): ReferenceReaderPromise[] => {
+  const promises: ReferenceReaderPromise[] = [
+    {
+      label: '解释权成长',
+      promise: '让底层角色用原创方法逐步理解世界规则、获得解释权，并付出与身份处境相称的代价。',
+      sourceReason: '来自底层矿村、贵族学院压迫、知识垄断和解释权吸引力。'
+    },
+    {
+      label: '规则可验证',
+      promise: '让能力体系有清晰边界、失败后果和调试过程，读者能跟着主角理解问题怎样被拆开。',
+      sourceReason: '来自符文调试和把神秘魔法拆成可调试规则的爽点。'
+    },
+    {
+      label: '关系慢热兑现',
+      promise: '让重要关系通过选择、边界和共同承担逐步升温，避免用突兀牺牲替代情感推进。',
+      sourceReason: '来自师徒信任慢热和对强行献祭的不适。'
+    },
+    {
+      label: '公共危机兑现',
+      promise: '让魔力枯竭或等价公共危机持续影响日常生活、权力结构和章节任务，而不是只做背景装饰。',
+      sourceReason: '来自魔力枯竭危机和边境公共设施新故事愿望。'
+    }
+  ];
+
+  if (!/师徒|信任|慢热|献祭|关系/.test(text)) {
+    return promises.filter(item => item.label !== '关系慢热兑现');
+  }
+
+  return promises;
+};
+
+const buildRepairDirections = (text: string): ReferenceRepairDirection[] => {
+  const directions: ReferenceRepairDirection[] = [];
+
+  if (/献祭|强行|关系变成|女主/.test(text)) {
+    directions.push({
+      label: '拒绝强行献祭',
+      direction: '把关系冲突改成双方有选择权、有边界确认、有共同代价的原创推进。',
+      avoid: '不要把原作关系线、角色身份或牺牲桥段搬进新故事。',
+      sourceReason: '来自作者对后期关系强行献祭的不适。'
+    });
+  }
+
+  if (/太监|续写|原作结局|后续|想修复|修复/.test(text)) {
+    directions.push({
+      label: '断更或原作结局转译',
+      direction: '把未完成或想修复的遗憾转成原创问题意识，例如“承诺必须兑现”“危机必须影响制度”。',
+      avoid: '不要续写原作结局，不接续原作时间线，不复用原作关键反转。',
+      sourceReason: '来自作者不想续写原作、而想做新故事的表达。'
+    });
+  }
+
+  if (/继承|王座|血脉|突然/.test(text)) {
+    directions.push({
+      label: '拒绝突兀身份奖励',
+      direction: '把主角的阶段胜利绑定到技能、选择和关系后果，而不是突然继承原作权位或血脉。',
+      avoid: '不要保留参考作品的王座、血脉、组织名或继承桥段。',
+      sourceReason: '来自作者对突然继承灰塔王座的不适。'
+    });
+  }
+
+  return directions.length > 0
+    ? directions
+    : [{
+      label: '不适点转成边界',
+      direction: '把作者不想要的情节处理方式写成新故事的创作边界，再用原创设定兑现相反承诺。',
+      avoid: '不要为了修复参考作品而复制参考作品的角色、设定或剧情线。',
+      sourceReason: '来自作者提供的喜欢点和不适点。'
+    }];
+};
+
+const buildOriginalizationGuides = (text: string): ReferenceOriginalizationGuide[] => {
+  const guides: ReferenceOriginalizationGuide[] = [
+    {
+      sourceStructure: '符文调试爽点',
+      originalMove: '保留“观察异常 -> 建立假设 -> 小规模验证 -> 付出代价修复”的问题解决节奏，并重新命名能力、材料、限制和失败后果。',
+      boundary: '不沿用第七符文、灰塔术语、原作魔法规则或原句表达。'
+    },
+    {
+      sourceStructure: '知识垄断与解释权',
+      originalMove: '把“谁有资格解释世界规则”改写成原创制度，例如维修许可、审计权限、学院执照或公共设施维护权。',
+      boundary: '不沿用原作学院、教团、贵族组织或具体剧情线。'
+    },
+    {
+      sourceStructure: '师徒信任慢热',
+      originalMove: '保留互相试探、共同解决问题、边界逐步打开的关系功能，重建原创身份、目标和冲突来源。',
+      boundary: '不沿用原作角色、师徒桥段、献祭转折或关系结局。'
+    }
+  ];
+
+  if (/公共|设施|魔力枯竭|资源|危机/.test(text)) {
+    guides.push({
+      sourceStructure: '公共危机压力',
+      originalMove: '把危机落到普通人的生活成本、维护失败、权力租金和章节任务上，让世界压力持续推动剧情。',
+      boundary: '不复刻参考作品的危机名词、解决仪式或最终反转。'
+    });
+  }
+
+  return guides;
+};
+
 export const reverseReferenceNotes = async (
   input: ReverseReferenceInput
 ): Promise<ReferenceReverseResult> => {
@@ -313,8 +469,12 @@ export const reverseReferenceNotes = async (
     mode: input.mode ?? 'original',
     written: false,
     originalDependencies: extractOriginalDependencies(sentences),
+    appealSignals: extractAppealSignals(sentences),
     highRiskSimilarities: extractHighRiskSimilarities(sentences),
     translatableStructures: extractTranslatableStructures(sentences),
+    readerPromises: buildReaderPromises(text),
+    repairDirections: buildRepairDirections(text),
+    originalizationGuides: buildOriginalizationGuides(text),
     newStoryCandidates: buildNewStoryCandidates(text),
     doNotCopy: [...DO_NOT_COPY]
   };
@@ -329,6 +489,15 @@ const renderFinding = (item: ReferenceReverseFinding): string =>
 const renderCandidate = (item: ReferenceReverseCandidate): string =>
   `- ${item.label}：${item.candidate}\n  来源：${item.sourceReason}`;
 
+const renderPromise = (item: ReferenceReaderPromise): string =>
+  `- ${item.label}：${item.promise}\n  来源：${item.sourceReason}`;
+
+const renderRepairDirection = (item: ReferenceRepairDirection): string =>
+  `- ${item.label}：${item.direction}\n  避免：${item.avoid}\n  来源：${item.sourceReason}`;
+
+const renderOriginalizationGuide = (item: ReferenceOriginalizationGuide): string =>
+  `- ${item.sourceStructure}：${item.originalMove}\n  边界：${item.boundary}`;
+
 export const renderReferenceReverseResult = (result: ReferenceReverseResult): string => [
   'StorySpec 参考作品反向拆解预览',
   '',
@@ -338,6 +507,12 @@ export const renderReferenceReverseResult = (result: ReferenceReverseResult): st
   `输入长度：${result.source.inputLength}`,
   `模式：${result.mode === 'original' ? '原创化转译' : '同人续写记录'}`,
   '写入状态：预览未写入',
+  '',
+  '结构吸引力',
+  '',
+  ...(result.appealSignals.length > 0
+    ? result.appealSignals.map(renderFinding)
+    : ['- 暂未识别明确喜欢点；请补充“我喜欢/我想保留/吸引我的是”。']),
   '',
   '原作依赖项',
   '',
@@ -356,6 +531,18 @@ export const renderReferenceReverseResult = (result: ReferenceReverseResult): st
   ...(result.translatableStructures.length > 0
     ? result.translatableStructures.map(renderFinding)
     : ['- 暂未识别可原创化结构，请补充喜欢点、讨厌点或想修复的承诺。']),
+  '',
+  '读者承诺',
+  '',
+  ...result.readerPromises.map(renderPromise),
+  '',
+  '修复方向',
+  '',
+  ...result.repairDirections.map(renderRepairDirection),
+  '',
+  '原创化指南',
+  '',
+  ...result.originalizationGuides.map(renderOriginalizationGuide),
   '',
   '新故事候选',
   '',

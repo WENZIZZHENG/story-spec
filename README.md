@@ -334,7 +334,7 @@ StorySpec 有两类入口，容易混淆：
 | `storyspec clarify [story]` | `interview` 的 CLI 澄清入口，适合非 agent 环境 |
 | `storyspec core [story]` | 查看故事核心信息面板；支持 `--missing` 和 `--json` |
 | `storyspec ingest [story]` | 从 `--text` 或 `--file` 吸收长文创作资料，默认预览；支持 `--apply-confirmed` 和 `--json` |
-| `storyspec reference:reverse [story]` | 从作者提供的参考作品读后笔记或摘要中提取原创化候选，默认 preview-only，不写入正典，不生成原作续写 |
+| `storyspec reference:reverse [story]` | 从作者提供的参考作品读后笔记或摘要中提取结构吸引力、原作依赖项、风险、读者承诺、修复方向和原创化候选；默认 preview-only，不写入正典，不生成原作续写 |
 | `storyspec co:create [story]` | 把长文吸收、核心缺口查看和 `preview specify/plan` 串成一个低摩擦入口；支持 `--text`、`--file`、`--apply-confirmed`、`--preview specify|plan|both` |
 | `storyspec creative:report [story]` | 查看作者确认、创作回声、卷计划视图、待澄清、AI 建议和漂移风险 |
 | `storyspec clarification:doctor [--story <story>]` | 检查孤儿答案、重复问题和未确认候选；默认只预览，`--fix` 才重写澄清摘要 |
@@ -409,7 +409,7 @@ StorySpec 有两类入口，容易混淆：
 | `storyspec research:add <title>` / `storyspec research:list` | 添加或列出本地 Research Source |
 | `storyspec research:link <sourceId> <targetPath>` | 把资料来源关联到 world/canon/spec/story 目标 |
 | `storyspec research:check` | 检查 Research Source 与 citation 的本地引用关系 |
-| `storyspec reference:reverse [story]` | 将参考作品笔记拆成原作依赖项、高风险相似项、可原创化结构和新故事候选；不抓取原文、不写入 world/canon/spec |
+| `storyspec reference:reverse [story]` | 将参考作品笔记拆成结构吸引力、原作依赖项、高风险相似项、可原创化结构、读者承诺、修复方向、原创化指南和新故事候选；不抓取原文、不写入 world/canon/spec |
 | `storyspec style:lint [story]` | 按 `spec/style` 规则检查正文文风 |
 | `storyspec style:explain <ruleId>` | 解释 style rule 的 pattern、severity 和 suggestion |
 | `storyspec compile` | 编译 Markdown manuscript，只写入 `build/` |
@@ -563,7 +563,7 @@ my-novel/
 ## 当前边界
 
 - `research:*` 默认离线管理本地资料和 citation，不抓取网络内容。
-- `reference:reverse` 只处理作者提供的读后笔记、摘要或本地资料，输出原创化候选预览；不联网、不下载原作、不解析整本小说、不生成未授权续写正文。
+- `reference:reverse` 只处理作者提供的读后笔记、摘要或本地资料，输出结构吸引力、读者承诺、修复方向和原创化候选预览；不联网、不下载原作、不解析整本小说、不生成未授权续写正文。
 - `style:lint` 只输出 findings 和建议，不自动改正文。
 - `feedback:to-tasks` 只生成待确认任务草稿，不直接写入 `tasks.md`。
 - `compile` 当前支持 Markdown manuscript，输出只写入 `build/`。
