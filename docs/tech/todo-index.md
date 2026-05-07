@@ -6,10 +6,11 @@ Active。本文是 StorySpec 当前唯一的待办入口。详细规则见 [todo
 
 ## 当前待办
 
-当前主线：规划阶段“多大纲候选”体验已完成；App 化路线选择的“本机 Web 工作台”第一阶段也已完成。`storyspec app` 已覆盖本机服务地基、零依赖工作台 shell、创作入口、核心缺口、多大纲候选、只读任务板、章节草稿入口和写后自检。云端多用户账号与项目隔离仍排在本机工作台之后，当前为 Planned 中期路线，不作为本轮 Active 开发项。
+当前主线：规划阶段“多大纲候选”体验已完成；App 化路线选择的“本机 Web 工作台”第一阶段也已完成。`storyspec app` 已覆盖本机服务地基、零依赖工作台 shell、创作入口、核心缺口、多大纲候选、只读任务板、章节草稿入口和写后自检。云端多用户账号与项目隔离仍排在本机工作台之后，当前为 Planned 中期路线，不作为本轮 Active 开发项。本轮讨论出的项目优化建议已另行收纳为 `project-optimization-roadmap.md` 的 Planned 路线。
 
 | 优先级 | 路线 | 状态 | 覆盖范围 | 下一步 |
 | --- | --- | --- | --- | --- |
+| P2 | [项目优化建议池路线图](project-optimization-roadmap.md) | Planned | 状态语义统一、项目回流闭环、写作链路收紧、反向拆解增强、文档收口，以及与多用户路线的横向关联 | 如要继续优化体验，先按子项拆成对应 OpenSpec change |
 | - | - | - | 当前无 Active 开发项 | 如要继续 App 中期路线，先新建 OpenSpec，例如 `add-multiuser-project-isolation` |
 
 ## Planned 后续路线
