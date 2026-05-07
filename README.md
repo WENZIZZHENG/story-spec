@@ -320,6 +320,7 @@ StorySpec 有两类入口，容易混淆：
 | `storyspec check` | 检查 Node.js、Git 和常见 AI CLI |
 | `storyspec app [--project <path>]` | 启动实验性本机 Web 工作台，打开或创建项目，管理素材、候选大纲、任务板、章节写作通道和章节草稿入口；仍不包含账号、云端或富文本编辑器 |
 | `storyspec status` | 汇总项目、当前故事长成了什么、tracking、Git 状态和下一步 |
+| `storyspec codex-status` | `status` 的兼容别名，方便 Codex 接手时读取项目状态 |
 | `storyspec next [story]` | 根据故事状态给出精简下一步建议；`--verbose` 展开完整工作台，`--modes` 查看低负担模式 |
 | `storyspec validate` | 校验项目结构、任务、tracking、world/canon、模板和写作规则 |
 
@@ -336,6 +337,7 @@ StorySpec 有两类入口，容易混淆：
 | `storyspec reference:reverse [story]` | 从作者提供的参考作品读后笔记或摘要中提取原创化候选，默认 preview-only，不写入正典，不生成原作续写 |
 | `storyspec co:create [story]` | 把长文吸收、核心缺口查看和 `preview specify/plan` 串成一个低摩擦入口；支持 `--text`、`--file`、`--apply-confirmed`、`--preview specify|plan|both` |
 | `storyspec creative:report [story]` | 查看作者确认、创作回声、卷计划视图、待澄清、AI 建议和漂移风险 |
+| `storyspec clarification:doctor [--story <story>]` | 检查孤儿答案、重复问题和未确认候选；默认只预览，`--fix` 才重写澄清摘要 |
 | `storyspec clarification:rollback --story <story> [--question <id>]` | 把最近一次确认或指定问题退回候选，保留原答案和证据，不修改正文或正典文件 |
 | `storyspec preview specify [story]` | 生成 StorySpec v0 规格草案，不直接写入正式规格 |
 | `storyspec preview plan [story]` | 生成创作计划 v0 草案，不直接写入 `creative-plan.md` |
@@ -365,6 +367,7 @@ StorySpec 有两类入口，容易混淆：
 | `storyspec canon:list` / `storyspec canon:check` | 列出或校验 Canon Ledger |
 | `storyspec entity:list` | 列出 Entity Graph 中的实体 |
 | `storyspec graph:build` / `storyspec graph:check` | 生成或校验实体关系索引 |
+| `storyspec graph:impact <entityId>` | 查看指定实体关联边和 evidencePaths，帮助评估改动影响范围 |
 | `storyspec scene:init <story>` | 为故事创建 Scene Card 模板 |
 | `storyspec scene:list` / `storyspec scene:check` / `storyspec scene:compile` | 管理和检查场景卡 |
 | `storyspec voice:list` / `storyspec voice:check` / `storyspec voice:sample` | 管理角色声音指纹 |
@@ -394,6 +397,8 @@ StorySpec 有两类入口，容易混淆：
 | `storyspec review` | 运行 reviewer loop，输出结构化 findings 和任务草稿 |
 | `storyspec handoff [story]` | 生成断点续写上下文包 |
 | `storyspec tasks:board [story]` | 把 `tasks.md` 导出为本地任务看板和 GitHub issue 草稿 |
+| `storyspec tasks:set-status <taskId> [story] --status todo|done` | 幂等更新单个写作任务状态，并刷新 `task-board.json` |
+| `storyspec task:finish <taskId> [story]` | 预览或应用单个写作任务收尾；`--apply` 才更新状态，`--commit` 可创建本地提交 |
 
 `/storyspec-write` 的章节写作顺序是：章节前置约束卡 -> beat 预览 -> 章节小样 -> 完整正文块 -> 写后自检。章节小样是 800-1500 字左右的精简预览稿，像缩略正文而不是纯大纲；它只用于确认读感、情绪顺序、人物反应、冲突推进、尺度边界和文风方向，默认不写入正式正文、不更新 tracking、不进入 canon。只有作者确认或改写小样后，才进入完整章节分块生成。
 
@@ -411,6 +416,15 @@ StorySpec 有两类入口，容易混淆：
 | `storyspec feedback:import <path>` / `storyspec feedback:list` | 导入或列出结构化读者反馈 |
 | `storyspec feedback:triage <id>` | 更新反馈状态，不修改正文 |
 | `storyspec feedback:to-tasks` | 把 feedback 转为待确认任务草稿，不直接写入 `tasks.md` |
+
+### 维护与自动化
+
+| 命令 | 作用 |
+| --- | --- |
+| `storyspec ci:check` | 输出本地 CI 质量检查清单，不运行外部命令 |
+| `storyspec maint:context [--topic todo|chapter|release]` | 输出当前维护主题的入口、规则和推荐验证命令 |
+| `storyspec docs:finish` | 为文档-only 变更生成收尾检查清单；`--commit` 通过检查后创建本地提交 |
+| `storyspec todo:capture --topic <name>` | 把讨论 notes 转成符合治理规则的待办路线草案；默认只预览，`--apply` 才写入 |
 
 ### Agent integrations
 
