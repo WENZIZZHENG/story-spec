@@ -45,7 +45,7 @@ storyspec preview specify -> storyspec apply
 | `/write` | 写章节草稿或正文 | `stories/*/content/` |
 | `/analyze` | 检查结构、连续性和质量 | 分析报告或任务建议 |
 
-`/write` 的正文执行默认分三阶段反馈：先输出 3-6 条 scene beat 预览（JSON `stage=plan`），再按 scene、自然段组或目标字数分块输出正文（`stage=write`），最后给出正文路径、字数、验证和 tracking 待确认项（`stage=finish`）。写作入口仍需要 Scene Card、任务边界和 preview / confirm / apply 门禁。
+`/write` 的正文执行顺序是：章节前置约束卡 -> 3-6 条 scene beat 预览 -> 章节小样 -> 完整正文块 -> 写后自检。beat 和章节小样都属于写前预览，JSON `stage` 仍使用 `plan`；完整正文块使用 `write`；收尾验证、自检和 tracking 待确认项使用 `finish`。章节小样默认不写入正式正文、tracking、tasks 或 canon，写作入口仍需要 Scene Card、任务边界和 preview / confirm / apply 门禁。
 
 辅助命令：
 
