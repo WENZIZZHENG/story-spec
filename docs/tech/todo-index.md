@@ -19,7 +19,7 @@ Active。本文是 StorySpec 当前唯一的待办入口。详细规则见 [todo
 | 优先级 | 路线 | 状态 | 覆盖范围 | 激活条件 |
 | --- | --- | --- | --- | --- |
 | P1 | [本机启动体验优化路线图](app-startup-experience-roadmap.md) | Planned | 启动引导、端口回退、环境自检与排障收口 | 用户确认推进本机启动体验，并完成 OpenSpec-first 设计 |
-| P0 | [单人 App 与多用户项目隔离路线图](app-multiuser-roadmap.md) | Planned | 新增 P0 上线门槛（身份与会话、项目隔离、AgentJob 控制面、审计证据链、配额限流）和 P1 优化（runtime adapter、协作体验、可观测性、备份恢复）；本机 Web 工作台第一阶段已完成 | 用户明确要求继续多用户/云端/自托管账号路线，并先完成 OpenSpec-first 设计（建议先开 `design-multiuser-control-plane-and-agent-runtime`） |
+| P0 | [单人 App 与多用户项目隔离路线图](app-multiuser-roadmap.md) | Planned | 目标技术架构已固定，详细任务见 [多用户 App 可开发任务拆分](app-multiuser-development-tasks.md)：MU-00 至 MU-14，覆盖身份、隔离、Job、审计、配额、runtime、OpenHands、协作、观测、备份、部署和收口 | 用户明确要求继续多用户/云端/自托管账号路线，并先完成 OpenSpec-first 设计（建议先开 `design-multiuser-control-plane-and-agent-runtime`） |
 
 ## 暂不作为活跃待办
 

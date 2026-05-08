@@ -4,6 +4,19 @@
 
 本机 Web 工作台第一阶段 Completed；多用户账号与项目隔离仍是 Planned 中期路线。本文登记“把 StorySpec 做成 App，并支持多人使用但项目默认隔离”的长期路线。新增待办决策：若终局是多用户 App，执行层采用“控制平面先行 + 执行引擎抽象 + OpenHands 优先适配”，Cline/Aider 作为用户侧补充入口，不作为多租户控制平面核心。2026-05-08 新增上线门槛待办：P0（身份/隔离/作业控制面/审计/配额）与 P1（runtime adapter、协作体验、可观测性、备份恢复）先于后续中期能力推进。实现前应按影响范围转为 OpenSpec change；本文不替代 OpenSpec artifacts。
 
+详细可开发任务拆分见 [app-multiuser-development-tasks.md](app-multiuser-development-tasks.md)。本文只保留路线级目标、边界和优先级；开发时先读任务拆分，再转 OpenSpec。
+
+## 目标技术架构
+
+- 后端：Node.js + TypeScript，保留并复用现有 `src/application/*` 领域能力。
+- API：新增多用户 server 进程，建议使用 Fastify；现有 `storyspec app` 本机 shell 保留为单机入口。
+- 前端：多用户产品化阶段使用 Vite + React + TypeScript + TanStack Query；P0 先做 API/控制平面，不先重写本机 shell。
+- 数据：PostgreSQL + Drizzle ORM 管理用户、项目、成员、会话、作业、审计、配额等元数据。
+- 队列：Redis + BullMQ 处理 `AgentJob` 队列、重试、超时、取消和 worker 隔离。
+- 文件：StorySpec 项目内容继续保留文件形态，通过 `ProjectStorage` 抽象访问，禁止客户端路径直通。
+- 执行：`AgentRuntimeAdapter` 抽象，先 `LocalStorySpecRunner`，再 `OpenHandsRunner`。
+- 安全：所有 API 统一执行 `userId + projectId` 授权，所有写入保持 candidate / preview / confirm / apply 门禁。
+
 ## 背景和目标
 
 StorySpec 当前主要是本地 CLI、文件模板和 agent prompt 工作流，适合单个作者在本地维护小说项目。若要让更多人使用，需要先把核心创作流程 App 化，再引入多用户账号和项目隔离。
