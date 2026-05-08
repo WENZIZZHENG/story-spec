@@ -4,6 +4,7 @@ import { registerAppCommand } from './commands/app.command.js';
 import { registerInitCommand } from './commands/init.command.js';
 import { registerCheckStatusCommand } from './commands/check-status.command.js';
 import { registerContractCommand } from './commands/contract.command.js';
+import { registerDoctorCommand } from './commands/doctor.command.js';
 import { registerCiCommand } from './commands/ci.command.js';
 import { registerHandoffCommand } from './commands/handoff.command.js';
 import { registerInfoCommand } from './commands/info.command.js';
@@ -66,6 +67,7 @@ export function runProgram(argv: string[]): void {
   registerAppCommand(program, { packageRoot });
   registerAgentCommand(program, { packageRoot });
   registerContractCommand(program, { packageRoot });
+  registerDoctorCommand(program);
   registerCiCommand(program);
   registerInterviewCommand(program);
   registerCheckStatusCommand(program);
@@ -97,6 +99,8 @@ export function runProgram(argv: string[]): void {
     console.log(chalk.yellow('使用示例:'));
     console.log('');
     console.log('  $ storyspec init D:/project/小说/我的故事 --agent codex');
+    console.log('  $ storyspec app --project D:/project/小说/我的故事');
+    console.log('  $ storyspec doctor --json');
     console.log('  $ storyspec story:new 法术编译纪元 --idea "异界穿越、编程施法"');
     console.log('  $ storyspec next 法术编译纪元');
     console.log('  $ storyspec interview 法术编译纪元 --focus protagonist --premise "异界穿越、编程施法"');
@@ -116,6 +120,8 @@ export function runProgram(argv: string[]): void {
     console.log('  我想先随便聊聊    选择今日模式，只给候选、回声和下一轮入口');
     console.log('');
     console.log(chalk.cyan('常用命令:'));
+    console.log('  app               启动本机 Web 工作台，可用 --project 预打开项目');
+    console.log('  doctor            检查 Node、Git、项目根、端口和浏览器打开能力');
     console.log('  story:new         保存作者原始灵感，不自动扩写成正典');
     console.log('  next              查看少命令化首屏导航，--verbose 展开完整入口卡');
     console.log('  interview         完成一轮低负担访谈，区分已确认和候选');

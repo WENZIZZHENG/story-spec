@@ -3,6 +3,8 @@ import { describe, expect, it } from 'vitest';
 import { createMemoryRecentProjectStore } from '../../src/application/local-app-projects.js';
 import type { ProjectFileSystem } from '../../src/application/project-ports.js';
 import {
+  createLocalAppStartJson,
+  type LocalAppWorkbenchServer,
   renderLocalAppStartPreview,
   renderLocalAppStarted,
   startLocalAppWorkbench
@@ -26,12 +28,97 @@ describe('local app command', () => {
   it('renders a started message with the local app URL', () => {
     expect(renderLocalAppStarted({
       url: 'http://127.0.0.1:43127',
-      tokenRequired: true
+      tokenRequired: true,
+      requestedPort: 43127,
+      port: 43127,
+      fallbackUsed: false
     })).toContain('http://127.0.0.1:43127');
     expect(renderLocalAppStarted({
       url: 'http://127.0.0.1:43127',
-      tokenRequired: true
+      tokenRequired: true,
+      requestedPort: 43127,
+      port: 43127,
+      fallbackUsed: false
     })).toContain('Ctrl+C');
+  });
+
+  it('renders fallback port details and stable JSON without exposing the token', () => {
+    const started = renderLocalAppStarted({
+      url: 'http://127.0.0.1:43128',
+      tokenRequired: true,
+      requestedPort: 43127,
+      port: 43128,
+      fallbackUsed: true
+    });
+
+    expect(started).toContain('http://127.0.0.1:43128');
+    expect(started).toContain('端口回退：43127 -> 43128');
+    expect(createLocalAppStartJson({
+      host: '127.0.0.1',
+      requestedPort: 43127,
+      port: 43128,
+      url: 'http://127.0.0.1:43128',
+      project: 'D:\\workspace\\spell-era',
+      openBrowser: false,
+      tokenRequired: true,
+      fallbackUsed: true,
+      status: 'started'
+    })).toMatchObject({
+      command: 'app',
+      host: '127.0.0.1',
+      requestedPort: 43127,
+      port: 43128,
+      fallbackUsed: true,
+      url: 'http://127.0.0.1:43128',
+      openBrowser: false,
+      tokenRequired: true,
+      status: 'started'
+    });
+    expect(JSON.stringify(createLocalAppStartJson({
+      host: '127.0.0.1',
+      requestedPort: 43127,
+      port: 43128,
+      url: 'http://127.0.0.1:43128',
+      openBrowser: false,
+      tokenRequired: true,
+      fallbackUsed: true,
+      status: 'started'
+    }))).not.toContain('secret-token');
+  });
+
+  it('falls back to the next loopback port when the requested port is occupied', async () => {
+    const attempts: number[] = [];
+
+    const result = await startLocalAppWorkbench({
+      host: '127.0.0.1',
+      port: 43127,
+      token: 'secret-token',
+      fileSystem: new MemoryFileSystem('D:\\workspace'),
+      recentProjects: createMemoryRecentProjectStore(),
+      projectStatus: async input => ({ projectRoot: input.projectRoot }),
+      startServer: async ({ port, core }) => {
+        attempts.push(port);
+        if (port === 43127) {
+          const error = new Error('listen EADDRINUSE') as NodeJS.ErrnoException;
+          error.code = 'EADDRINUSE';
+          throw error;
+        }
+
+        return {
+          url: `http://127.0.0.1:${port}`,
+          host: '127.0.0.1',
+          port,
+          close: async () => undefined,
+          core
+        } satisfies LocalAppWorkbenchServer;
+      }
+    });
+
+    expect(attempts).toEqual([43127, 43128]);
+    expect(result.requestedPort).toBe(43127);
+    expect(result.port).toBe(43128);
+    expect(result.fallbackUsed).toBe(true);
+    expect(result.server.url).toBe('http://127.0.0.1:43128');
   });
 
   it('starts the workbench and pre-opens a valid startup project without exposing the token in output', async () => {
@@ -75,11 +162,17 @@ describe('local app command', () => {
     expect(renderLocalAppStarted({
       url: result.server.url,
       tokenRequired: true,
+      requestedPort: 43127,
+      port: 43127,
+      fallbackUsed: false,
       openedProject: result.openedProject
     })).toContain('已打开项目：法术编译纪元');
     expect(renderLocalAppStarted({
       url: result.server.url,
       tokenRequired: true,
+      requestedPort: 43127,
+      port: 43127,
+      fallbackUsed: false,
       openedProject: result.openedProject
     })).not.toContain('secret-token');
   });

@@ -44,6 +44,23 @@ export interface LocalAppStartPreviewInput {
 export interface LocalAppStartedInput {
   url: string;
   tokenRequired: boolean;
+  requestedPort?: number;
+  port?: number;
+  fallbackUsed?: boolean;
+  openedProject?: LocalAppProject;
+  openProjectBlockedReasons?: string[];
+}
+
+export interface LocalAppStartJsonInput {
+  host: string;
+  requestedPort: number;
+  port: number;
+  url: string;
+  tokenRequired: boolean;
+  fallbackUsed: boolean;
+  status: 'preview' | 'started';
+  project?: string;
+  openBrowser?: boolean;
   openedProject?: LocalAppProject;
   openProjectBlockedReasons?: string[];
 }
@@ -81,9 +98,27 @@ export interface StartLocalAppWorkbenchInput<TProjectStatus = unknown> {
 export interface StartLocalAppWorkbenchResult<TProjectStatus = unknown> {
   server: LocalAppWorkbenchServer;
   core: ReturnType<typeof createLocalAppServerCore<TProjectStatus>>;
+  requestedPort: number;
+  port: number;
+  fallbackUsed: boolean;
   openedProject?: LocalAppProject;
   openProjectBlockedReasons?: string[];
 }
+
+export const createLocalAppStartJson = (input: LocalAppStartJsonInput): Record<string, unknown> => ({
+  command: 'app',
+  host: input.host,
+  requestedPort: input.requestedPort,
+  port: input.port,
+  url: input.url,
+  project: input.project,
+  openBrowser: input.openBrowser,
+  tokenRequired: input.tokenRequired,
+  fallbackUsed: input.fallbackUsed,
+  status: input.status,
+  openedProject: input.openedProject,
+  openProjectBlockedReasons: input.openProjectBlockedReasons
+});
 
 export const renderLocalAppStartPreview = (input: LocalAppStartPreviewInput): string => {
   const lines = [
@@ -104,6 +139,9 @@ export const renderLocalAppStarted = (input: LocalAppStartedInput): string => {
     '',
     `地址：${chalk.cyan(input.url)}`,
     `访问控制：${input.tokenRequired ? '需要本机 session token' : '未启用 token'}`,
+    input.fallbackUsed && input.requestedPort !== undefined && input.port !== undefined
+      ? chalk.yellow(`端口回退：${input.requestedPort} -> ${input.port}`)
+      : undefined,
     input.openedProject
       ? `已打开项目：${chalk.cyan(input.openedProject.name)}`
       : undefined,
@@ -115,6 +153,17 @@ export const renderLocalAppStarted = (input: LocalAppStartedInput): string => {
   ].filter((line): line is string => line !== undefined);
 
   return lines.join('\n');
+};
+
+const isPortInUseError = (error: unknown): boolean =>
+  error instanceof Error && (error as NodeJS.ErrnoException).code === 'EADDRINUSE';
+
+const createFallbackPorts = (requestedPort: number): number[] => {
+  if (requestedPort === 0) {
+    return [0];
+  }
+
+  return Array.from({ length: 10 }, (_, index) => requestedPort + index);
 };
 
 export const startLocalAppWorkbench = async <TProjectStatus>(
@@ -142,12 +191,30 @@ export const startLocalAppWorkbench = async <TProjectStatus>(
     chapterWritingLane: input.chapterWritingLane
   });
   const startServer = input.startServer ?? startLocalAppHttpServer;
-  const server = await startServer({
-    host: input.host,
-    port: input.port,
-    core,
-    token: input.token
-  });
+  let server: LocalAppWorkbenchServer | undefined;
+  let actualPort = input.port;
+
+  for (const candidatePort of createFallbackPorts(input.port)) {
+    try {
+      server = await startServer({
+        host: input.host,
+        port: candidatePort,
+        core,
+        token: input.token
+      });
+      actualPort = server.port ?? candidatePort;
+      break;
+    } catch (error) {
+      if (!isPortInUseError(error) || candidatePort === createFallbackPorts(input.port).at(-1)) {
+        throw error;
+      }
+    }
+  }
+
+  if (!server) {
+    throw new Error('Local App server failed to start');
+  }
+
   let openedProject: LocalAppProject | undefined;
   let openProjectBlockedReasons: string[] | undefined;
 
@@ -171,6 +238,9 @@ export const startLocalAppWorkbench = async <TProjectStatus>(
   return {
     server,
     core,
+    requestedPort: input.port,
+    port: actualPort,
+    fallbackUsed: actualPort !== input.port,
     openedProject,
     openProjectBlockedReasons
   };
@@ -191,16 +261,17 @@ export function registerAppCommand(program: Command, context: AppCommandContext)
       const tokenRequired = true;
 
       if (options.json && options.open === false) {
-        console.log(JSON.stringify({
-          command: 'app',
+        console.log(JSON.stringify(createLocalAppStartJson({
           host,
+          requestedPort: port,
           port,
           url: `http://${host}:${port}`,
           project: options.project,
           openBrowser: options.open !== false,
           tokenRequired,
+          fallbackUsed: false,
           status: 'preview'
-        }, null, 2));
+        }), null, 2));
         return;
       }
 
@@ -239,22 +310,26 @@ export function registerAppCommand(program: Command, context: AppCommandContext)
       const server = result.server;
 
       if (options.json) {
-        console.log(JSON.stringify({
-          command: 'app',
+        console.log(JSON.stringify(createLocalAppStartJson({
           host,
-          port,
+          requestedPort: result.requestedPort,
+          port: result.port,
           url: server.url,
           project: options.project,
           openBrowser: options.open !== false,
           tokenRequired,
+          fallbackUsed: result.fallbackUsed,
           status: 'started',
           openedProject: result.openedProject,
           openProjectBlockedReasons: result.openProjectBlockedReasons
-        }, null, 2));
+        }), null, 2));
       } else {
         console.log(renderLocalAppStarted({
           url: server.url,
           tokenRequired,
+          requestedPort: result.requestedPort,
+          port: result.port,
+          fallbackUsed: result.fallbackUsed,
           openedProject: result.openedProject,
           openProjectBlockedReasons: result.openProjectBlockedReasons
         }));

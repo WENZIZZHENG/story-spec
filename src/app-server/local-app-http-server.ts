@@ -101,6 +101,8 @@ export interface StartLocalAppHttpServerInput {
 
 export interface LocalAppHttpServer {
   url: string;
+  host: string;
+  port: number;
   close(): Promise<void>;
 }
 
@@ -434,6 +436,8 @@ export const startLocalAppHttpServer = async (
 
   return {
     url: `http://${input.host}:${address.port}`,
+    host: input.host,
+    port: address.port,
     close: () => new Promise((resolve, reject) => {
       server.close(error => error ? reject(error) : resolve());
     })

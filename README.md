@@ -55,6 +55,16 @@ storyspec app
 
 当前页面已经可以保存一句灵感、吸收长文资料预览、查看核心缺口、管理候选大纲、读取只读任务板、查看章节写作通道、创建章节草稿、列出草稿、查看草稿发布 dry-run、初始化 Scene Card，并运行章节级写后自检。继续创作卡会把当前故事阶段、推荐下一步、可复制命令、写入模式和状态词解释放在同一入口，方便重新打开项目后回到上次上下文。章节写作通道按 `outline -> tasks -> scene -> sample -> draft -> review` 展示当前阶段、下一步、阻断原因和只读边界。长文资料默认只预览，不自动写入正典；只有显式勾选“写入明确表达字段”时，才复用现有 `applyConfirmed` 语义写入作者明确表达的字段，AI 候选仍保留为候选。候选大纲提升和草稿发布默认 dry-run，不覆盖正式 `creative-plan.md` 或 `content/<chapter>.md`，章节小样也默认不写入正文、tracking、tasks 或 canon。它仍不是完整 React/Vite 前端，也不包含账号、云端、多用户或富文本编辑器；正文写作本身仍在草稿文件、CLI 和 agent 命令中完成。自动化检查可用 `storyspec app --json --no-open` 查看启动预览。
 
+### 启动辅助
+
+如果启动失败，先运行：
+
+```bash
+storyspec doctor
+```
+
+`storyspec doctor` 会检查 Node、Git、当前目录是否为 StorySpec 项目、默认 App 端口和浏览器打开能力；`storyspec app` 的默认端口被占用时会自动尝试备用端口，并在输出里报告最终 URL。需要脚本化时可使用 `--json`。
+
 它会问你今天想怎么玩：
 
 - 我想玩角色

@@ -2,7 +2,7 @@
 
 ## 状态
 
-Active。本文用于承接“项目启动方式是否好用”的后续优化待办，当前任务已激活但尚未实现，不代表能力已上线。涉及 CLI 行为、启动参数或公共文档承诺的变更，实施前应先转为 OpenSpec change（建议 ID：`improve-app-startup-experience`）。
+Completed。本文记录本机启动体验优化路线的第一轮收口：`storyspec app` 的端口回退、启动结果提示和 `storyspec doctor` 已通过 `openspec/changes/improve-app-startup-experience` 实现并验证。本文保留路线拆分和验收口径供追溯，不再作为活跃待办入口。
 
 ## 背景和目标
 
