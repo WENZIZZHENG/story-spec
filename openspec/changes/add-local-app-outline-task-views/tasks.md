@@ -40,4 +40,4 @@
 
 - [x] V.1 运行 OpenSpec 严格校验：`npx openspec validate add-local-app-outline-task-views --strict --json --no-interactive`。
 - [x] V.2 运行相关 unit、相关 smoke、`npm run build`、`npm run check:changes`、`git diff --check`。
-- [ ] V.3 创建本地中文 commit，不 push。
+- [x] V.3 创建本地中文 commit，不 push。

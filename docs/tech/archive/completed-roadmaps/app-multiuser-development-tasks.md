@@ -2,7 +2,7 @@
 
 ## 状态
 
-Active。本文把 [单人 App 与多用户项目隔离路线图](app-multiuser-roadmap.md) 拆成可直接转 OpenSpec / implementation tasks 的开发批次。本文不代表功能已实现；任何批次进入代码前必须先创建或关联 OpenSpec change。
+Completed。本文把 [单人 App 与多用户项目隔离路线图](app-multiuser-roadmap.md) 拆成可直接转 OpenSpec / implementation tasks 的开发批次；当前已全部完成并归档。本文不再作为活跃待办入口。
 
 ## 目标技术架构
 
@@ -43,11 +43,12 @@ Active。本文把 [单人 App 与多用户项目隔离路线图](app-multiuser-
 - 目标：建立独立于本机 `storyspec app` 的多用户服务入口。
 - 涉及模块：未来 `src/server/index.ts`、`src/server/http/*`、`src/server/config/*`、`package.json` scripts。
 - 开发产物：
-  1. 新增 server 启动入口与配置加载。
+  1. 新增 `storyspec server` 启动入口与配置加载。
   2. 新增 health check、request id、错误响应格式。
   3. 新增基础测试和启动 smoke。
 - 验收标准：`npm run build` 通过；server 可在测试环境启动；错误响应结构稳定。
 - 边界：不接真实登录、不接作业执行。
+- 进度：`storyspec server` 已可启动 loopback 监听，`/health`、request id 和未知路径标准错误响应已落地。
 
 ### MU-02 数据库 schema 与迁移框架
 
@@ -60,6 +61,7 @@ Active。本文把 [单人 App 与多用户项目隔离路线图](app-multiuser-
   3. repository 层接口，业务层不直接拼 SQL。
 - 验收标准：全新数据库可一键迁移；测试可创建/清理隔离数据；schema 字段覆盖 P0 需求。
 - 边界：不引入多租户共享项目模型，第一版 owner-only/member 基础角色即可。
+- 进度：已新增 `src/server/db/schema.ts`、`migrations.ts` 和 executor-based repository 适配层；尚未引入真实 PostgreSQL driver 或 Drizzle 依赖。
 
 ### MU-03 身份、会话与权限守卫
 
@@ -73,6 +75,7 @@ Active。本文把 [单人 App 与多用户项目隔离路线图](app-multiuser-
   4. logout / revoke session。
 - 验收标准：未登录不能访问项目 API；过期会话拒绝写操作；权限不足返回一致错误码。
 - 边界：不做企业 SSO、OAuth provider、市面账号体系联登。
+- 进度：已在多用户 server 入口新增 `GET /api/context?projectId=<id>` 受保护探针端点，统一执行 bearer token session 校验和 `userId + projectId` membership 校验；尚未实现登录 UI 或账号注册。
 
 ### MU-04 项目归属、ACL 与路径安全
 
@@ -85,6 +88,7 @@ Active。本文把 [单人 App 与多用户项目隔离路线图](app-multiuser-
   3. 项目 API 权限测试和路径穿越测试。
 - 验收标准：用户只能访问自己项目；跨项目/越界路径访问失败；合法 StorySpec 文件读写正常。
 - 边界：不做共享链接、团队空间和实时协作。
+- 进度：已新增受保护项目元信息端点和 `ProjectStorage` 路径解析探针；尚未实现项目创建、成员管理或真实文件读写 API。
 
 ### MU-05 AgentJob 队列与状态机
 
@@ -97,6 +101,7 @@ Active。本文把 [单人 App 与多用户项目隔离路线图](app-multiuser-
   3. 作业 API：创建、查询、取消、重试。
 - 验收标准：长任务不会阻塞 HTTP 请求；失败可重试且不会重复 apply；取消后状态一致。
 - 边界：不实现复杂 DAG、定时任务平台或跨区域调度。
+- 进度：已新增项目级 job API 控制面，覆盖创建、查询、取消和重试；尚未接 BullMQ/Redis worker 或真实 runtime。
 
 ### MU-06 审计、配额与限流
 
@@ -109,6 +114,7 @@ Active。本文把 [单人 App 与多用户项目隔离路线图](app-multiuser-
   3. 限流响应与 UI/API 可读的超限原因。
 - 验收标准：任一 apply 可追溯；超限行为可预测；单用户不能压垮全局队列。
 - 边界：不做商业计费系统。
+- 进度：已把 audit/quota foundation 接入 job API 控制面；job 创建前检查 user/project 级 `job` 配额，成功创建后消耗配额，创建/取消/重试写入审计事件；尚未实现商业计费、真实 Redis 限流或 apply diff 审计。
 
 ## P1 平台化增强
 
@@ -123,6 +129,7 @@ Active。本文把 [单人 App 与多用户项目隔离路线图](app-multiuser-
   3. job 与 runtime 的状态映射。
 - 验收标准：同一个 `AgentJob` 可通过 runtime adapter 执行；业务 API 不依赖具体 runner。
 - 边界：不接 OpenHands，不执行自动 apply。
+- 进度：已新增 `AgentRuntimeAdapter`、`LocalStorySpecRunner` 和 `runAgentJobWithRuntime()`；queued job 可通过 runtime 转为 running/succeeded 或 failed，输出保持 preview-only，不自动 apply。
 
 ### MU-08 OpenHandsRunner PoC
 
@@ -135,6 +142,7 @@ Active。本文把 [单人 App 与多用户项目隔离路线图](app-multiuser-
   3. 自动批准风险说明与平台侧 confirm/apply 兜底。
 - 验收标准：低风险任务可通过 OpenHands runtime 跑通；输出只进入候选/预览，不直接写正典。
 - 边界：不照搬 OpenHands 企业目录能力，不把 headless 自动批准等同于 StorySpec apply。
+- 进度：已新增 `OpenHandsRunner` PoC adapter，生成 headless 计划并强制 `autoApply=false`；当前不安装或调用真实 OpenHands。
 
 ### MU-09 多用户 App API 与 UI 回流
 
@@ -147,6 +155,7 @@ Active。本文把 [单人 App 与多用户项目隔离路线图](app-multiuser-
   3. 成员邀请/移除的基础 UI（非实时协作）。
 - 验收标准：用户不用 CLI 即可进入项目、查看权限和追踪作业。
 - 边界：不做多人实时编辑和共享链接。
+- 进度：已新增受保护项目列表、成员列表和项目 job 列表 API；当前只做控制平面 API，不做真实 React UI。
 
 ### MU-10 可观测性与故障定位
 
@@ -159,6 +168,7 @@ Active。本文把 [单人 App 与多用户项目隔离路线图](app-multiuser-
   3. 失败作业的错误分类与排障字段。
 - 验收标准：一次失败能定位到用户、项目、作业、runtime 和错误原因。
 - 边界：不引入复杂 APM 平台绑定。
+- 进度：已新增 `/ready` readiness endpoint、`AgentJob.traceId`、`runtimeErrorCode` 和错误响应可选 `traceId`；尚未接结构化日志平台或 APM。
 
 ### MU-11 备份、恢复、导出与删除
 
@@ -171,6 +181,7 @@ Active。本文把 [单人 App 与多用户项目隔离路线图](app-multiuser-
   3. 删除项目/账号数据流程和审计记录。
 - 验收标准：项目可导出；误操作有恢复路径；删除有明确结果和审计。
 - 边界：不做跨区域灾备。
+- 进度：已新增项目生命周期计划服务，能够生成 snapshot/export/delete plan，并把删除计划写入审计；当前不直接删除磁盘文件，仍是可审计计划层。
 
 ## P2 部署与文档收口
 
@@ -185,6 +196,7 @@ Active。本文把 [单人 App 与多用户项目隔离路线图](app-multiuser-
   3. 数据目录和备份位置说明。
 - 验收标准：新机器可按文档启动最小自托管环境。
 - 边界：不承诺 Kubernetes/企业高可用。
+- 进度：已新增 `docker-compose.yml`、`.env.example` 和 `docs/deploy/self-hosted.md`，明确当前 compose 只覆盖本地验证和配置边界，不假装 PostgreSQL/Redis worker 已完全接通。
 
 ### MU-13 安全与越权回归测试
 
@@ -197,6 +209,7 @@ Active。本文把 [单人 App 与多用户项目隔离路线图](app-multiuser-
   3. 路径穿越和重复 apply 测试。
 - 验收标准：安全回归测试稳定通过，并纳入 `npm run verify` 或专门 CI 清单。
 - 边界：不替代第三方安全审计。
+- 进度：已新增 `tests/security/multiuser-security.test.ts`，覆盖未登录、跨项目、路径穿越和 runtime preview-only。
 
 ### MU-14 README、changeset 与归档
 

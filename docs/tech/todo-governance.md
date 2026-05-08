@@ -85,8 +85,8 @@ Active。本文定义 StorySpec 后续开发待办、路线图、完成归档和
 
 每次文档治理或路线收尾后，检查：
 
-- [ ] `todo-index.md` 只包含未完成的 Planned / Active 项。
-- [ ] 已完成路线能在 `todo-archive.md` 找到统一归档条目。
-- [ ] 已完成路线位于 `docs/tech/archive/` 对应目录，不散落在 `docs/tech/` 根目录。
-- [ ] `changes/*.md` 只描述已发生变化。
-- [ ] `git diff --check` 通过。
+- [x] `todo-index.md` 只包含未完成的 Planned / Active 项。
+- [x] 已完成路线能在 `todo-archive.md` 找到统一归档条目。
+- [x] 已完成路线位于 `docs/tech/archive/` 对应目录，不散落在 `docs/tech/` 根目录。
+- [x] `changes/*.md` 只描述已发生变化。
+- [x] `git diff --check` 通过。

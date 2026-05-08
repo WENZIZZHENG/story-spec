@@ -23,6 +23,8 @@ export interface ProjectAccessContext {
 export interface ProjectAccessRepository {
   findProject(projectId: string): Promise<MultiuserProject | undefined>;
   findMembership(input: { projectId: string; userId: string }): Promise<ProjectMembership | undefined>;
+  listProjectsForUser?(userId: string): Promise<Array<MultiuserProject & { role: ProjectRole }>>;
+  listMembers?(projectId: string): Promise<ProjectMembership[]>;
 }
 
 export interface RequireProjectAccessInput {
@@ -77,6 +79,18 @@ export const createMemoryProjectAccessRepository = (
     },
     async findMembership(query) {
       return memberships.get(`${query.projectId}:${query.userId}`);
+    },
+    async listProjectsForUser(userId) {
+      return [...memberships.values()]
+        .filter(membership => membership.userId === userId)
+        .map(membership => {
+          const project = projects.get(membership.projectId);
+          return project ? { ...project, role: membership.role } : undefined;
+        })
+        .filter((project): project is MultiuserProject & { role: ProjectRole } => project !== undefined);
+    },
+    async listMembers(projectId) {
+      return [...memberships.values()].filter(membership => membership.projectId === projectId);
     }
   };
 };

@@ -27,6 +27,7 @@ import { registerCreativeReportCommand } from './commands/creative-report.comman
 import { registerPreviewApplyCommand } from './commands/preview-apply.command.js';
 import { registerAuthorProfileCommand } from './commands/author-profile.command.js';
 import { registerMaintenanceCommand } from './commands/maintenance.command.js';
+import { registerMultiuserServerCommand } from './commands/multiuser-server.command.js';
 import { registerReferenceCommand } from './commands/reference.command.js';
 import { registerOutlineCommand } from './commands/outline.command.js';
 import chalk from 'chalk';
@@ -90,6 +91,7 @@ export function runProgram(argv: string[]): void {
   registerCreativeReportCommand(program);
   registerPreviewApplyCommand(program);
   registerMaintenanceCommand(program);
+  registerMultiuserServerCommand(program);
   registerReferenceCommand(program);
   registerOutlineCommand(program);
   registerInfoCommand(program);
@@ -100,6 +102,7 @@ export function runProgram(argv: string[]): void {
     console.log('');
     console.log('  $ storyspec init D:/project/小说/我的故事 --agent codex');
     console.log('  $ storyspec app --project D:/project/小说/我的故事');
+    console.log('  $ storyspec server --host 127.0.0.1 --port 43210');
     console.log('  $ storyspec doctor --json');
     console.log('  $ storyspec story:new 法术编译纪元 --idea "异界穿越、编程施法"');
     console.log('  $ storyspec next 法术编译纪元');

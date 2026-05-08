@@ -38,10 +38,12 @@ describe('multiuser server core', () => {
       statusCode: 403,
       requestId: 'req-existing',
       code: 'PROJECT_ACCESS_DENIED',
-      message: '用户无权访问该项目'
+      message: '用户无权访问该项目',
+      traceId: 'trace-project-1'
     })).toEqual({
       statusCode: 403,
       requestId: 'req-existing',
+      traceId: 'trace-project-1',
       error: {
         code: 'PROJECT_ACCESS_DENIED',
         message: '用户无权访问该项目'

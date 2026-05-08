@@ -1,0 +1,41 @@
+services:
+  storyspec-server:
+    image: node:20-alpine
+    working_dir: /app
+    command: sh -c "npm install --omit=dev --package-lock=false --ignore-scripts --no-audit --no-fund && node dist/cli.js server --host 0.0.0.0 --port ${STORYSPEC_SERVER_PORT:-4321}"
+    ports:
+      - "${STORYSPEC_SERVER_PORT:-4321}:${STORYSPEC_SERVER_PORT:-4321}"
+    environment:
+      STORYSPEC_SERVER_HOST: 0.0.0.0
+      STORYSPEC_SERVER_PORT: ${STORYSPEC_SERVER_PORT:-4321}
+      STORYSPEC_DATABASE_URL: ${STORYSPEC_DATABASE_URL:-postgres://storyspec:storyspec@postgres:5432/storyspec}
+      STORYSPEC_REDIS_URL: ${STORYSPEC_REDIS_URL:-redis://redis:6379}
+      STORYSPEC_DATA_ROOT: ${STORYSPEC_DATA_ROOT:-/data/storyspec}
+      STORYSPEC_SESSION_SECRET: ${STORYSPEC_SESSION_SECRET:-change-me}
+    volumes:
+      - ./:/app:ro
+      - storyspec-node-modules:/app/node_modules
+      - storyspec-data:/data/storyspec
+    depends_on:
+      - postgres
+      - redis
+
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: storyspec
+      POSTGRES_USER: storyspec
+      POSTGRES_PASSWORD: storyspec
+    volumes:
+      - storyspec-postgres:/var/lib/postgresql/data
+
+  redis:
+    image: redis:7-alpine
+    volumes:
+      - storyspec-redis:/data
+
+volumes:
+  storyspec-data:
+  storyspec-node-modules:
+  storyspec-postgres:
+  storyspec-redis:

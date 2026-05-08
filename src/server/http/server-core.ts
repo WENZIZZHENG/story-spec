@@ -26,11 +26,13 @@ export interface ErrorResponseInput {
   requestId: string;
   code: string;
   message: string;
+  traceId?: string;
 }
 
 export interface ErrorResponse {
   statusCode: number;
   requestId: string;
+  traceId?: string;
   error: {
     code: string;
     message: string;
@@ -67,6 +69,7 @@ export const createRequestContext = (input: RequestContextInput = {}): RequestCo
 export const createErrorResponse = (input: ErrorResponseInput): ErrorResponse => ({
   statusCode: input.statusCode,
   requestId: input.requestId,
+  traceId: input.traceId,
   error: {
     code: input.code,
     message: input.message

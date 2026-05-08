@@ -12,6 +12,8 @@ export interface AgentJob {
   createdAt: string;
   updatedAt: string;
   errorMessage?: string;
+  traceId?: string;
+  runtimeErrorCode?: string;
 }
 
 export interface AgentJobRepository {
@@ -21,6 +23,7 @@ export interface AgentJobRepository {
     projectId: string;
     idempotencyKey: string;
   }): Promise<AgentJob | undefined>;
+  listByProject?(projectId: string): Promise<AgentJob[]>;
   save(job: AgentJob): Promise<void>;
 }
 
@@ -37,6 +40,7 @@ export interface CreateAgentJobInput {
   kind: string;
   runtime: string;
   idempotencyKey?: string;
+  traceId?: string;
   now?: () => string;
   idGenerator?: () => string;
 }
@@ -46,6 +50,7 @@ export interface TransitionAgentJobInput {
   jobId: string;
   status: AgentJobStatus;
   errorMessage?: string;
+  runtimeErrorCode?: string;
   now?: () => string;
 }
 
@@ -98,6 +103,9 @@ export const createMemoryAgentJobRepository = (): AgentJobRepository => {
         && activeStatuses.has(job.status)
       );
     },
+    async listByProject(projectId) {
+      return [...jobs.values()].filter(job => job.projectId === projectId);
+    },
     async save(job) {
       jobs.set(job.id, job);
     }
@@ -133,7 +141,8 @@ export const createAgentJob = async (
     attempt: 1,
     idempotencyKey: input.idempotencyKey,
     createdAt: now,
-    updatedAt: now
+    updatedAt: now,
+    traceId: input.traceId
   };
 
   await input.repository.save(job);
@@ -160,6 +169,7 @@ export const transitionAgentJob = async (
     ...job,
     status: input.status,
     errorMessage: input.errorMessage,
+    runtimeErrorCode: input.runtimeErrorCode,
     updatedAt: input.now?.() ?? currentTimestamp()
   };
   await input.repository.save(next);
