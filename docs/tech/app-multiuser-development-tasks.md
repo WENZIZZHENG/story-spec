@@ -2,7 +2,7 @@
 
 ## 状态
 
-Planned。本文把 [单人 App 与多用户项目隔离路线图](app-multiuser-roadmap.md) 拆成可直接转 OpenSpec / implementation tasks 的开发批次。本文不代表功能已实现；任何批次进入代码前必须先创建或关联 OpenSpec change。
+Active。本文把 [单人 App 与多用户项目隔离路线图](app-multiuser-roadmap.md) 拆成可直接转 OpenSpec / implementation tasks 的开发批次。本文不代表功能已实现；任何批次进入代码前必须先创建或关联 OpenSpec change。
 
 ## 目标技术架构
 

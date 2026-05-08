@@ -2,24 +2,24 @@
 
 ## 状态
 
-Active。本文是 StorySpec 当前唯一的待办入口。详细规则见 [todo-governance.md](todo-governance.md)，已完成事项见 [todo-archive.md](todo-archive.md)。当前暂无 Active 开发路线；新增或恢复任一任务前按影响范围转为 OpenSpec change。
+Active。本文是 StorySpec 当前唯一的待办入口。详细规则见 [todo-governance.md](todo-governance.md)，已完成事项见 [todo-archive.md](todo-archive.md)。当前 Active 开发路线为“多用户 App”和“本机启动体验优化”；实施前仍按影响范围转为 OpenSpec change。
 
 ## 当前待办
 
-当前主线：规划阶段“多大纲候选”体验已完成；App 化路线选择的“本机 Web 工作台”第一阶段也已完成。`storyspec app` 已覆盖本机服务地基、零依赖工作台 shell、创作入口、核心缺口、多大纲候选、只读任务板、章节写作通道、章节草稿入口、写后自检和继续创作回流卡。项目优化建议池 P0/P2 已完成并归档：写作链路收紧、章节小样预览、状态语义统一、项目回流闭环、反向拆解增强和文档收口均已完成。新增“本机启动体验优化路线图”作为 Planned 待办，聚焦启动引导、端口回退和环境自检；多用户 App 路线新增 P0 上线门槛与 P1 优化批次，需先完成控制平面、安全隔离、作业控制面和成本边界再推进规模化上线。当前暂无 Active 开发路线。
+当前主线：规划阶段“多大纲候选”体验已完成；App 化路线选择的“本机 Web 工作台”第一阶段也已完成。`storyspec app` 已覆盖本机服务地基、零依赖工作台 shell、创作入口、核心缺口、多大纲候选、只读任务板、章节写作通道、章节草稿入口、写后自检和继续创作回流卡。项目优化建议池 P0/P2 已完成并归档：写作链路收紧、章节小样预览、状态语义统一、项目回流闭环、反向拆解增强和文档收口均已完成。当前激活两条开发路线：P0 多用户 App 路线（先完成控制平面、安全隔离、作业控制面和成本边界）与 P1 本机启动体验优化（启动引导、端口回退和环境自检）。
 
 | 优先级 | 路线 | 状态 | 覆盖范围 | 下一步 |
 | --- | --- | --- | --- | --- |
 | P2 | [项目优化建议池路线图](project-optimization-roadmap.md) | Completed | P0 写作链路收紧、章节小样预览、P2 状态语义统一、项目回流闭环、反向拆解增强和文档收口已完成；多用户路线仅作横向关联 | 新增优化体验时另起专题 roadmap 和 OpenSpec change |
-| P1 | [本机启动体验优化路线图](app-startup-experience-roadmap.md) | Planned | 启动入口分层指引、`storyspec app` 端口占用回退与结果提示、`storyspec doctor` 环境自检 | 进入开发前新建 OpenSpec change（建议 `improve-app-startup-experience`）并按 P1-1→P1-2→P1-3 顺序执行 |
-| - | - | - | 当前无 Active 开发项 | 如要启动任一路线开发，先把对应路线转为 Active 并关联 OpenSpec |
+| P0 | [单人 App 与多用户项目隔离路线图](app-multiuser-roadmap.md) | Active | 目标技术架构已固定，详细任务见 [多用户 App 可开发任务拆分](app-multiuser-development-tasks.md)：MU-00 至 MU-14，覆盖身份、隔离、Job、审计、配额、runtime、OpenHands、协作、观测、备份、部署和收口 | 先创建 OpenSpec `design-multiuser-control-plane-and-agent-runtime`，再从 MU-00 开始执行 |
+| P1 | [本机启动体验优化路线图](app-startup-experience-roadmap.md) | Active | 启动入口分层指引、`storyspec app` 端口占用回退与结果提示、`storyspec doctor` 环境自检 | 创建 OpenSpec `improve-app-startup-experience`，并按 SX-00→SX-04 执行 |
 
-## Planned 后续路线
+## Active 后续路线
 
 | 优先级 | 路线 | 状态 | 覆盖范围 | 激活条件 |
 | --- | --- | --- | --- | --- |
-| P1 | [本机启动体验优化路线图](app-startup-experience-roadmap.md) | Planned | 启动引导、端口回退、环境自检与排障收口 | 用户确认推进本机启动体验，并完成 OpenSpec-first 设计 |
-| P0 | [单人 App 与多用户项目隔离路线图](app-multiuser-roadmap.md) | Planned | 目标技术架构已固定，详细任务见 [多用户 App 可开发任务拆分](app-multiuser-development-tasks.md)：MU-00 至 MU-14，覆盖身份、隔离、Job、审计、配额、runtime、OpenHands、协作、观测、备份、部署和收口 | 用户明确要求继续多用户/云端/自托管账号路线，并先完成 OpenSpec-first 设计（建议先开 `design-multiuser-control-plane-and-agent-runtime`） |
+| P0 | [单人 App 与多用户项目隔离路线图](app-multiuser-roadmap.md) | Active | 目标技术架构已固定，详细任务见 [多用户 App 可开发任务拆分](app-multiuser-development-tasks.md)：MU-00 至 MU-14，覆盖身份、隔离、Job、审计、配额、runtime、OpenHands、协作、观测、备份、部署和收口 | 已激活；实施前完成 OpenSpec-first 设计（建议先开 `design-multiuser-control-plane-and-agent-runtime`） |
+| P1 | [本机启动体验优化路线图](app-startup-experience-roadmap.md) | Active | 启动引导、端口回退、环境自检与排障收口 | 已激活；实施前完成 OpenSpec-first 设计（建议先开 `improve-app-startup-experience`） |
 
 ## 暂不作为活跃待办
 

@@ -2,7 +2,7 @@
 
 ## 状态
 
-Planned。本文用于承接“项目启动方式是否好用”的后续优化待办，当前只记录待实现项，不代表能力已上线。涉及 CLI 行为、启动参数或公共文档承诺的变更，实施前应先转为 OpenSpec change（建议 ID：`improve-app-startup-experience`）。
+Active。本文用于承接“项目启动方式是否好用”的后续优化待办，当前任务已激活但尚未实现，不代表能力已上线。涉及 CLI 行为、启动参数或公共文档承诺的变更，实施前应先转为 OpenSpec change（建议 ID：`improve-app-startup-experience`）。
 
 ## 背景和目标
 
