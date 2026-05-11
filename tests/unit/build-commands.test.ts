@@ -373,4 +373,26 @@ describe('buildCommandArtifacts', () => {
     await expect(exists(path.join(rootDir, 'dist', 'codex', '.specify', 'scripts', 'runtime', 'application', 'check-writing-state.js'))).resolves.toBe(true);
     await expect(exists(path.join(rootDir, 'dist', 'codex', '.specify', 'scripts', 'runtime', 'domain', 'story-artifact.js'))).resolves.toBe(true);
   });
+
+  it('preserves compiled runtime files when rebuilding default dist command artifacts', async () => {
+    const rootDir = await createPackageRootFixture();
+
+    await writeFile(path.join(rootDir, 'dist', 'cli.js'), 'console.log("cli")');
+    await mkdir(path.join(rootDir, 'dist', 'codex', 'stale'), { recursive: true });
+    await writeFile(path.join(rootDir, 'dist', 'codex', 'stale', 'old.md'), 'old artifact');
+
+    await buildCommandArtifacts({
+      rootDir,
+      agents: ['codex'],
+      scripts: ['sh']
+    });
+
+    await expect(readFile(path.join(rootDir, 'dist', 'cli.js'), 'utf-8')).resolves.toContain('cli');
+    await expect(exists(path.join(rootDir, 'dist', 'script-runtime.js'))).resolves.toBe(true);
+    await expect(exists(path.join(rootDir, 'dist', 'application', 'check-writing-state.js'))).resolves.toBe(true);
+    await expect(exists(path.join(rootDir, 'dist', 'domain', 'story-artifact.js'))).resolves.toBe(true);
+    await expect(exists(path.join(rootDir, 'dist', 'codex', 'stale', 'old.md'))).resolves.toBe(false);
+    await expect(exists(path.join(rootDir, 'dist', 'codex', '.codex', 'prompts', 'storyspec-plan.md'))).resolves.toBe(true);
+    await expect(exists(path.join(rootDir, 'dist', 'codex', '.specify', 'scripts', 'runtime', 'script-runtime.js'))).resolves.toBe(true);
+  });
 });

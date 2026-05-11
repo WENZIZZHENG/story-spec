@@ -130,6 +130,20 @@ const writeRuntimeBundle = async (
   }
 };
 
+const isDefaultDistOutput = (rootDir: string, outDir: string): boolean =>
+  path.resolve(outDir) === path.resolve(rootDir, 'dist');
+
+const cleanCommandArtifactsOutput = async (rootDir: string, outDir: string): Promise<void> => {
+  if (!isDefaultDistOutput(rootDir, outDir)) {
+    await fs.remove(outDir);
+    await fs.ensureDir(outDir);
+    return;
+  }
+
+  await fs.ensureDir(outDir);
+  await Promise.all(BUILD_COMMAND_AGENTS.map(agent => fs.remove(path.join(outDir, agent))));
+};
+
 const copyScriptSupportFiles = async (
   rootDir: string,
   specDir: string,
@@ -310,8 +324,7 @@ export const buildCommandArtifacts = async (
   const variants: BuildCommandVariantResult[] = [];
   const runtimeBundle = await readRuntimeBundle(input.rootDir);
 
-  await fs.remove(outDir);
-  await fs.ensureDir(outDir);
+  await cleanCommandArtifactsOutput(input.rootDir, outDir);
 
   for (const agent of agents) {
     for (const script of scripts) {

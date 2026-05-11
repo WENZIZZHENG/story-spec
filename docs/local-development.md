@@ -53,17 +53,19 @@ node dist/cli.js --help
 修改 `templates/commands/`、`src/prompt/`、agent renderer 或相关模板后，运行：
 
 ```bash
+npm run build
 npm run build:commands
 npm run update:command-manifest
 npm run check:command-manifest
 ```
 
-注意：`build:commands` 会重建 `dist` 中的命令产物。跑 smoke 前请再执行一次：
+需要跑 smoke 时可继续执行：
 
 ```bash
-npm run build
 npm run test:smoke
 ```
+
+`build:commands` 只清理并重建 `dist/<agent>` 下的命令产物，不会删除已经编译出的 `dist/cli.js` 和 runtime bundle。因此推荐顺序 `npm run build && npm run build:commands` 之后，不需要为了恢复 CLI 再额外运行一次 build，仍可直接运行 `node dist/cli.js --help`。
 
 ## 变更记录
 

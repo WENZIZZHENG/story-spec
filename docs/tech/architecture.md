@@ -75,12 +75,12 @@ flowchart LR
   Templates["templates/commands/*.md"] --> Frontmatter["frontmatter parser"]
   Frontmatter --> Compiler["prompt compiler"]
   Renderers["platform renderer registry"] --> Compiler
-  Compiler --> Outputs["dist commands\n.claude / .gemini / .codex / ..."]
+  Compiler --> Outputs["dist/<agent> commands\n.claude / .gemini / .codex / ..."]
   Runtime["dist/script-runtime.js\napplication/check-writing-state.js\ndomain/story-artifact.js"] --> Outputs
   Outputs --> Manifest["tests/fixtures/command-artifacts.manifest.json"]
 ```
 
-`buildCommandArtifacts` 是命令产物的 TypeScript 单一入口。旧的 `scripts/build/generate-commands.sh` 只作为兼容包装保留。生成产物变化必须更新 manifest，并通过 `npm run check:command-manifest` 在验证链路中显式暴露。
+`buildCommandArtifacts` 是命令产物的 TypeScript 单一入口。默认输出到 `dist` 时，它只清理已知 agent 子目录并保留 `dist/cli.js`、`dist/script-runtime.js` 等 compiled runtime；传入自定义 `outDir` 时仍会完整清理该目录，以保证 manifest 和测试不受旧文件影响。旧的 `scripts/build/generate-commands.sh` 只作为兼容包装保留。生成产物变化必须更新 manifest，并通过 `npm run check:command-manifest` 在验证链路中显式暴露。
 
 ### 状态与校验
 
