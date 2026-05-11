@@ -6,12 +6,11 @@ Active。本文是 StorySpec 当前唯一的待办入口。详细规则见 [todo
 
 ## 当前待办
 
-当前主线：本机 CLI、实验性本机工作台和多用户控制面基础已经完成一轮收口；下一轮不急着继续堆功能，而是先把构建/依赖/命令产物地基收稳，再把“完整 App 与多人在线写作平台”拆成可进入 OpenSpec 的独立任务。`storyspec app` 当前仍是实验性本机工作台，`storyspec server` 当前仍是多用户控制平面基础；账号、云端、实时协作、富文本编辑器、真实 PostgreSQL/Redis worker 和完整 SaaS 都只能作为待办推进，不能写成已实现能力。
+当前主线：本机 CLI、实验性本机工作台和多用户控制面基础已经完成一轮收口，P0 构建/依赖/命令产物/README 事实边界也已收稳；下一步进入“完整 App 与多人在线写作平台”的产品体验和 API 契约前置设计。`storyspec app` 当前仍是实验性本机工作台，`storyspec server` 当前仍是多用户控制平面基础；账号、云端、实时协作、富文本编辑器、真实 PostgreSQL/Redis worker 和完整 SaaS 都只能作为待办推进，不能写成已实现能力。
 
 | 优先级 | 路线 | 状态 | 覆盖范围 | 下一步 |
 | --- | --- | --- | --- | --- |
 | 总览 | [完整 App 与多人在线写作平台路线图](online-app-platform-roadmap.md) | Planned | 子路线索引、共通边界、推荐推进顺序、拆分映射 | 先读本文确认路线，再按任务范围读取对应子路线 |
-| P0 | [平台地基与发布边界路线图](platform-foundation-roadmap.md) | Active | 依赖/CI 可复现性和命令产物/runtime 清理边界已完成；待处理 README 事实边界 | 下一步处理 P0-3 README 高频命令去重与事实边界巡检 |
 | P1 | [完整 App 产品体验路线图](app-ux-roadmap.md) | Planned | 产品体验设计、信息架构、首批页面、状态语言、编辑器与工作台体验 | 产出 P1-0 完整 App 产品体验设计规格 |
 | P1 | [多人平台与 API 契约路线图](multiuser-platform-roadmap.md) | Planned | 多用户角色模型、API contract、真实 PostgreSQL、真实 worker、完整前端架构 | 先做 API contract 前置设计，再进入数据库、worker 和前端实现 |
 | P1/P2 | [协作写作与正典合并路线图](collaboration-canon-roadmap.md) | Planned | 候选、评论、审批、正典 patch、导入导出、插件/团队模板 | 平台对象模型和 API contract 清楚后再拆 OpenSpec |
@@ -19,17 +18,17 @@ Active。本文是 StorySpec 当前唯一的待办入口。详细规则见 [todo
 
 ## 当前推荐推进顺序
 
-1. 继续处理 [platform-foundation-roadmap.md](platform-foundation-roadmap.md) 的 P0-3 README 高频命令去重与事实边界巡检，确保公开文档只描述真实可用能力。
-2. 然后做 [app-ux-roadmap.md](app-ux-roadmap.md) 的 P1-0 完整 App 产品体验与界面重设计，先把用户路径、信息架构、页面地图和状态语言设计清楚。
-3. 再做 [multiuser-platform-roadmap.md](multiuser-platform-roadmap.md) 的 P1-2 API contract 与前端状态模型前置设计，让前端、server 和测试先共享字段契约。
-4. 最后为多人平台 P1 实现任务逐项建立 OpenSpec：产品边界/角色模型、真实数据库、真实 worker、完整 App 前端、协同写作正典合并协议。
-5. P2/P3 任务只在 P0/P1 稳定或有真实用户反馈后推进。
+1. 继续处理 [app-ux-roadmap.md](app-ux-roadmap.md) 的 P1-0 完整 App 产品体验与界面重设计，先把用户路径、信息架构、页面地图和状态语言设计清楚。
+2. 再做 [multiuser-platform-roadmap.md](multiuser-platform-roadmap.md) 的 P1-2 API contract 与前端状态模型前置设计，让前端、server 和测试先共享字段契约。
+3. 最后为多人平台 P1 实现任务逐项建立 OpenSpec：产品边界/角色模型、真实数据库、真实 worker、完整 App 前端、协同写作正典合并协议。
+4. P2/P3 任务只在 P0/P1 稳定或有真实用户反馈后推进。
 
 ## 暂不作为活跃待办
 
 | 文件 | 原因 | 归档入口 |
 | --- | --- | --- |
 | [project-optimization-roadmap.md](project-optimization-roadmap.md) | 项目优化建议池 P0/P2 已完成并归档；本次新增建议已迁移到 [online-app-platform-roadmap.md](online-app-platform-roadmap.md) | [todo-archive.md](todo-archive.md#项目优化建议池-p0) / [todo-archive.md](todo-archive.md#项目优化建议池-p2) |
+| [platform-foundation-roadmap.md](platform-foundation-roadmap.md) | 完整 App 路线 P0 地基任务已完成；后续转入 App UX 和 API contract | [todo-archive.md](todo-archive.md#平台地基与发布边界) |
 | [experience-followup-roadmap.md](experience-followup-roadmap.md) | 体验后续增强入口 P0-P3 discovery 已完成并关闭，未产出需立即实现的 OpenSpec change | [todo-archive.md](todo-archive.md#体验后续增强入口复核) |
 | [archive/completed-roadmaps/outline-candidates-roadmap.md](archive/completed-roadmaps/outline-candidates-roadmap.md) | 多大纲候选库、候选比较和 `outline:promote --yes` 提升门禁已完成并归档 | [todo-archive.md](todo-archive.md#多大纲候选与提升) |
 | [archive/completed-roadmaps/immersive-drafting-roadmap.md](archive/completed-roadmaps/immersive-drafting-roadmap.md) | 写中沉浸原则、约束后置自检、`/write` 和章节卡 prompt 姿态已完成并归档 | [todo-archive.md](todo-archive.md#章节写中沉浸体验) |

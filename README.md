@@ -345,7 +345,6 @@ StorySpec 有两类入口，容易混淆：
 | `storyspec check` | 检查 Node.js、Git 和常见 AI CLI |
 | `storyspec app [--project <path>]` | 启动实验性本机 Web 工作台，打开或创建项目，管理素材、候选大纲、任务板、章节写作通道和章节草稿入口；仍不包含账号、云端或富文本编辑器 |
 | `storyspec server [--host <host>] [--port <port>]` | 启动实验性多用户控制平面，提供 health、ready、项目/成员/job 列表、job 控制、审计/配额守卫和自托管基础；当前不包含完整 SaaS、真实 worker 或数据库全量接入 |
-| `storyspec server [--host <host>] [--port <port>]` | 启动实验性多用户控制平面，提供 health、ready、项目/成员/job 列表、job 控制、审计/配额守卫和自托管基础；当前不包含完整 SaaS、真实 worker 或数据库全量接入 |
 | `storyspec status` | 汇总项目、当前故事长成了什么、tracking、Git 状态和下一步 |
 | `storyspec codex-status` | `status` 的兼容别名，方便 Codex 接手时读取项目状态 |
 | `storyspec next [story]` | 根据故事状态给出精简下一步建议；`--verbose` 展开完整工作台，`--modes` 查看低负担模式 |
@@ -361,7 +360,7 @@ StorySpec 有两类入口，容易混淆：
 | `storyspec clarify [story]` | `interview` 的 CLI 澄清入口，适合非 agent 环境 |
 | `storyspec core [story]` | 查看故事核心信息面板；支持 `--missing` 和 `--json` |
 | `storyspec ingest [story]` | 从 `--text` 或 `--file` 吸收长文创作资料，默认预览；支持 `--apply-confirmed` 和 `--json` |
-| `storyspec reference:reverse [story]` | 从作者提供的参考作品读后笔记或摘要中提取结构吸引力、原作依赖项、风险、读者承诺、修复方向和原创化候选；默认 preview-only，不写入正典，不生成原作续写 |
+| `storyspec reference:reverse [story]` | 从作者提供的参考作品读后笔记或摘要中提取结构吸引力、原作依赖项、风险、读者承诺、修复方向和原创化候选；默认 preview-only，不抓取原文、不写入 world/canon/spec，不生成原作续写 |
 | `storyspec co:create [story]` | 把长文吸收、核心缺口查看和 `preview specify/plan` 串成一个低摩擦入口；支持 `--text`、`--file`、`--apply-confirmed`、`--preview specify|plan|both` |
 | `storyspec creative:report [story]` | 查看作者确认、创作回声、卷计划视图、待澄清、AI 建议和漂移风险 |
 | `storyspec clarification:doctor [--story <story>]` | 检查孤儿答案、重复问题和未确认候选；默认只预览，`--fix` 才重写澄清摘要 |
@@ -436,7 +435,6 @@ StorySpec 有两类入口，容易混淆：
 | `storyspec research:add <title>` / `storyspec research:list` | 添加或列出本地 Research Source |
 | `storyspec research:link <sourceId> <targetPath>` | 把资料来源关联到 world/canon/spec/story 目标 |
 | `storyspec research:check` | 检查 Research Source 与 citation 的本地引用关系 |
-| `storyspec reference:reverse [story]` | 将参考作品笔记拆成结构吸引力、原作依赖项、高风险相似项、可原创化结构、读者承诺、修复方向、原创化指南和新故事候选；不抓取原文、不写入 world/canon/spec |
 | `storyspec style:lint [story]` | 按 `spec/style` 规则检查正文文风 |
 | `storyspec style:explain <ruleId>` | 解释 style rule 的 pattern、severity 和 suggestion |
 | `storyspec compile` | 编译 Markdown manuscript，只写入 `build/` |
