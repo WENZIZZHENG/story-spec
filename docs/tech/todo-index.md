@@ -10,14 +10,20 @@ Active。本文是 StorySpec 当前唯一的待办入口。详细规则见 [todo
 
 | 优先级 | 路线 | 状态 | 覆盖范围 | 下一步 |
 | --- | --- | --- | --- | --- |
-| P0/P1 | [完整 App 与多人在线写作平台路线图](online-app-platform-roadmap.md) | Planned | 依赖/CI 可复现性、命令产物与 compiled runtime 分离、README 事实边界、完整 App 产品体验与界面重设计、多用户角色模型、真实 PostgreSQL/Redis worker、完整 App 前端、协同写作模型和正典合并协议 | 先把 P0-1/P0-2/P0-3 分别转成小 OpenSpec change，再做 P1-0 产品体验与界面设计，然后进入多人平台 P1 实现设计 |
+| 总览 | [完整 App 与多人在线写作平台路线图](online-app-platform-roadmap.md) | Planned | 子路线索引、共通边界、推荐推进顺序、拆分映射 | 先读本文确认路线，再按任务范围读取对应子路线 |
+| P0 | [平台地基与发布边界路线图](platform-foundation-roadmap.md) | Planned | 依赖/CI 可复现性、命令产物与 compiled runtime 分离、README 事实边界 | 先把 P0-1/P0-2/P0-3 分别转成小 OpenSpec change 或小修 |
+| P1 | [完整 App 产品体验路线图](app-ux-roadmap.md) | Planned | 产品体验设计、信息架构、首批页面、状态语言、编辑器与工作台体验 | 产出 P1-0 完整 App 产品体验设计规格 |
+| P1 | [多人平台与 API 契约路线图](multiuser-platform-roadmap.md) | Planned | 多用户角色模型、API contract、真实 PostgreSQL、真实 worker、完整前端架构 | 先做 API contract 前置设计，再进入数据库、worker 和前端实现 |
+| P1/P2 | [协作写作与正典合并路线图](collaboration-canon-roadmap.md) | Planned | 候选、评论、审批、正典 patch、导入导出、插件/团队模板 | 平台对象模型和 API contract 清楚后再拆 OpenSpec |
+| P2/P3 | [运维、安全与质量路线图](ops-quality-roadmap.md) | Planned | 安全、部署、观测性、备份恢复、场景测试、大文件拆分、依赖升级 | 随 P1 实现分批补质量门禁 |
 
 ## 当前推荐推进顺序
 
-1. 先处理 [online-app-platform-roadmap.md](online-app-platform-roadmap.md) 的 P0 地基任务，避免后续平台开发建立在不可复现的依赖和脆弱的生成产物链路上。
-2. 再做 [online-app-platform-roadmap.md](online-app-platform-roadmap.md) 的 P1-0 完整 App 产品体验与界面重设计，先把用户路径、信息架构、页面地图和状态语言设计清楚。
-3. 然后为多人平台 P1 实现任务逐项建立 OpenSpec：产品边界/角色模型、真实数据库、真实 worker、完整 App 前端、协同写作正典合并协议。
-4. P2/P3 任务只在 P0/P1 稳定或有真实用户反馈后推进。
+1. 先处理 [platform-foundation-roadmap.md](platform-foundation-roadmap.md) 的 P0 地基任务，避免后续平台开发建立在不可复现的依赖和脆弱的生成产物链路上。
+2. 再做 [app-ux-roadmap.md](app-ux-roadmap.md) 的 P1-0 完整 App 产品体验与界面重设计，先把用户路径、信息架构、页面地图和状态语言设计清楚。
+3. 然后做 [multiuser-platform-roadmap.md](multiuser-platform-roadmap.md) 的 P1-2 API contract 与前端状态模型前置设计，让前端、server 和测试先共享字段契约。
+4. 再为多人平台 P1 实现任务逐项建立 OpenSpec：产品边界/角色模型、真实数据库、真实 worker、完整 App 前端、协同写作正典合并协议。
+5. P2/P3 任务只在 P0/P1 稳定或有真实用户反馈后推进。
 
 ## 暂不作为活跃待办
 
