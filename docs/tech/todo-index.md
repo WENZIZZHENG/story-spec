@@ -10,13 +10,14 @@ Active。本文是 StorySpec 当前唯一的待办入口。详细规则见 [todo
 
 | 优先级 | 路线 | 状态 | 覆盖范围 | 下一步 |
 | --- | --- | --- | --- | --- |
-| P0/P1 | [完整 App 与多人在线写作平台路线图](online-app-platform-roadmap.md) | Planned | 依赖/CI 可复现性、命令产物与 compiled runtime 分离、README 事实边界、多用户角色模型、真实 PostgreSQL/Redis worker、完整 App 前端、协同写作模型和正典合并协议 | 先把 P0-1/P0-2/P0-3 分别转成小 OpenSpec change，再进入多人平台 P1 设计 |
+| P0/P1 | [完整 App 与多人在线写作平台路线图](online-app-platform-roadmap.md) | Planned | 依赖/CI 可复现性、命令产物与 compiled runtime 分离、README 事实边界、完整 App 产品体验与界面重设计、多用户角色模型、真实 PostgreSQL/Redis worker、完整 App 前端、协同写作模型和正典合并协议 | 先把 P0-1/P0-2/P0-3 分别转成小 OpenSpec change，再做 P1-0 产品体验与界面设计，然后进入多人平台 P1 实现设计 |
 
 ## 当前推荐推进顺序
 
 1. 先处理 [online-app-platform-roadmap.md](online-app-platform-roadmap.md) 的 P0 地基任务，避免后续平台开发建立在不可复现的依赖和脆弱的生成产物链路上。
-2. 再为多人平台 P1 任务逐项建立 OpenSpec：产品边界/角色模型、真实数据库、真实 worker、完整 App 前端、协同写作正典合并协议。
-3. P2/P3 任务只在 P0/P1 稳定或有真实用户反馈后推进。
+2. 再做 [online-app-platform-roadmap.md](online-app-platform-roadmap.md) 的 P1-0 完整 App 产品体验与界面重设计，先把用户路径、信息架构、页面地图和状态语言设计清楚。
+3. 然后为多人平台 P1 实现任务逐项建立 OpenSpec：产品边界/角色模型、真实数据库、真实 worker、完整 App 前端、协同写作正典合并协议。
+4. P2/P3 任务只在 P0/P1 稳定或有真实用户反馈后推进。
 
 ## 暂不作为活跃待办
 
