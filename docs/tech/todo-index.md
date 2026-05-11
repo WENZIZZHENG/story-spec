@@ -6,20 +6,23 @@ Active。本文是 StorySpec 当前唯一的待办入口。详细规则见 [todo
 
 ## 当前待办
 
-当前主线：规划阶段“多大纲候选”体验已完成；App 化路线选择的“本机 Web 工作台”第一阶段也已完成；本机启动体验优化也已完成并归档。`storyspec app` 已覆盖本机服务地基、零依赖工作台 shell、创作入口、核心缺口、多大纲候选、只读任务板、章节写作通道、章节草稿入口、写后自检和继续创作回流卡。项目优化建议池 P0/P2 已完成并归档：写作链路收紧、章节小样预览、状态语义统一、项目回流闭环、反向拆解增强和文档收口均已完成。多用户 App 路线已完成并归档，当前没有 Active 开发路线。
+当前主线：本机 CLI、实验性本机工作台和多用户控制面基础已经完成一轮收口；下一轮不急着继续堆功能，而是先把构建/依赖/命令产物地基收稳，再把“完整 App 与多人在线写作平台”拆成可进入 OpenSpec 的独立任务。`storyspec app` 当前仍是实验性本机工作台，`storyspec server` 当前仍是多用户控制平面基础；账号、云端、实时协作、富文本编辑器、真实 PostgreSQL/Redis worker 和完整 SaaS 都只能作为待办推进，不能写成已实现能力。
 
 | 优先级 | 路线 | 状态 | 覆盖范围 | 下一步 |
 | --- | --- | --- | --- | --- |
-| P2 | [项目优化建议池路线图](project-optimization-roadmap.md) | Completed | P0 写作链路收紧、章节小样预览、P2 状态语义统一、项目回流闭环、反向拆解增强和文档收口已完成；多用户路线仅作横向关联 | 新增优化体验时另起专题 roadmap 和 OpenSpec change |
+| P0/P1 | [完整 App 与多人在线写作平台路线图](online-app-platform-roadmap.md) | Planned | 依赖/CI 可复现性、命令产物与 compiled runtime 分离、README 事实边界、多用户角色模型、真实 PostgreSQL/Redis worker、完整 App 前端、协同写作模型和正典合并协议 | 先把 P0-1/P0-2/P0-3 分别转成小 OpenSpec change，再进入多人平台 P1 设计 |
 
-## 当前暂无活跃路线
+## 当前推荐推进顺序
 
-- 当前没有仍需继续推进的 Active 路线。已完成的多用户 App 路线见 [todo-archive.md](todo-archive.md#多用户-app-路线收口)。
+1. 先处理 [online-app-platform-roadmap.md](online-app-platform-roadmap.md) 的 P0 地基任务，避免后续平台开发建立在不可复现的依赖和脆弱的生成产物链路上。
+2. 再为多人平台 P1 任务逐项建立 OpenSpec：产品边界/角色模型、真实数据库、真实 worker、完整 App 前端、协同写作正典合并协议。
+3. P2/P3 任务只在 P0/P1 稳定或有真实用户反馈后推进。
 
 ## 暂不作为活跃待办
 
 | 文件 | 原因 | 归档入口 |
 | --- | --- | --- |
+| [project-optimization-roadmap.md](project-optimization-roadmap.md) | 项目优化建议池 P0/P2 已完成并归档；本次新增建议已迁移到 [online-app-platform-roadmap.md](online-app-platform-roadmap.md) | [todo-archive.md](todo-archive.md#项目优化建议池-p0) / [todo-archive.md](todo-archive.md#项目优化建议池-p2) |
 | [experience-followup-roadmap.md](experience-followup-roadmap.md) | 体验后续增强入口 P0-P3 discovery 已完成并关闭，未产出需立即实现的 OpenSpec change | [todo-archive.md](todo-archive.md#体验后续增强入口复核) |
 | [archive/completed-roadmaps/outline-candidates-roadmap.md](archive/completed-roadmaps/outline-candidates-roadmap.md) | 多大纲候选库、候选比较和 `outline:promote --yes` 提升门禁已完成并归档 | [todo-archive.md](todo-archive.md#多大纲候选与提升) |
 | [archive/completed-roadmaps/immersive-drafting-roadmap.md](archive/completed-roadmaps/immersive-drafting-roadmap.md) | 写中沉浸原则、约束后置自检、`/write` 和章节卡 prompt 姿态已完成并归档 | [todo-archive.md](todo-archive.md#章节写中沉浸体验) |
