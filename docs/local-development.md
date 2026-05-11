@@ -5,14 +5,17 @@
 ## 环境
 
 - Node.js 18+
-- npm
+- Bun（版本见仓库根目录 `.bun-version`）
+- npm（用于运行 `package.json` 中的 scripts）
 - Git
 
 安装依赖：
 
 ```bash
-npm install
+bun install --frozen-lockfile
 ```
+
+仓库以 `bun.lock` 作为依赖锁文件；本地开发和 CI 都应使用 Bun 的 frozen lockfile 安装依赖。日常构建、测试和 CLI 开发命令仍以 `package.json` 的 npm scripts 为准。
 
 ## 常用命令
 
