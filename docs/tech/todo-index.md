@@ -6,12 +6,12 @@ Active。本文是 StorySpec 当前唯一的待办入口。详细规则见 [todo
 
 ## 当前待办
 
-当前主线：本机 CLI、实验性本机工作台和多用户控制面基础已经完成一轮收口，P0 构建/依赖/命令产物/README 事实边界也已收稳；下一步进入“完整 App 与多人在线写作平台”的产品体验和 API 契约前置设计。`storyspec app` 当前仍是实验性本机工作台，`storyspec server` 当前仍是多用户控制平面基础；账号、云端、实时协作、富文本编辑器、真实 PostgreSQL/Redis worker 和完整 SaaS 都只能作为待办推进，不能写成已实现能力。
+当前主线：本机 CLI、实验性本机工作台和多用户控制面基础已经完成一轮收口，P0 构建/依赖/命令产物/README 事实边界也已收稳；下一步进入“完整 App 与多人在线写作平台”的产品体验和 API 契约前置设计。P1-0 的核心设计决策已记录到 [完整 App 故事驾驶舱体验设计](../superpowers/specs/2026-05-12-complete-app-story-cockpit-ux-design.md)，但功能尚未实现。`storyspec app` 当前仍是实验性本机工作台，`storyspec server` 当前仍是多用户控制平面基础；账号、云端、实时协作、富文本编辑器、真实 PostgreSQL/Redis worker 和完整 SaaS 都只能作为待办推进，不能写成已实现能力。
 
 | 优先级 | 路线 | 状态 | 覆盖范围 | 下一步 |
 | --- | --- | --- | --- | --- |
 | 总览 | [完整 App 与多人在线写作平台路线图](online-app-platform-roadmap.md) | Planned | 子路线索引、共通边界、推荐推进顺序、拆分映射 | 先读本文确认路线，再按任务范围读取对应子路线 |
-| P1 | [完整 App 产品体验路线图](app-ux-roadmap.md) | Planned | 产品体验设计、信息架构、首批页面、状态语言、编辑器与工作台体验 | 产出 P1-0 完整 App 产品体验设计规格 |
+| P1 | [完整 App 产品体验路线图](app-ux-roadmap.md) | Active | 产品体验设计、信息架构、首批页面、状态语言、编辑器与工作台体验 | Review P1-0 设计规格，再进入 API contract 与前端状态模型实施计划 |
 | P1 | [多人平台与 API 契约路线图](multiuser-platform-roadmap.md) | Planned | 多用户角色模型、API contract、真实 PostgreSQL、真实 worker、完整前端架构 | 先做 API contract 前置设计，再进入数据库、worker 和前端实现 |
 | P1/P2 | [协作写作与正典合并路线图](collaboration-canon-roadmap.md) | Planned | 候选、评论、审批、正典 patch、导入导出、插件/团队模板 | 平台对象模型和 API contract 清楚后再拆 OpenSpec |
 | P2/P3 | [运维、安全与质量路线图](ops-quality-roadmap.md) | Planned | 安全、部署、观测性、备份恢复、场景测试、大文件拆分、依赖升级 | 随 P1 实现分批补质量门禁 |
