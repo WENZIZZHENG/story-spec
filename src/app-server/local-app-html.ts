@@ -17,22 +17,23 @@ export const renderLocalAppHtml = (input: RenderLocalAppHtmlInput): string => {
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>StorySpec 本机工作台</title>
-  <meta name="description" content="StorySpec 本机项目选择和写作状态工作台">
+  <title>StorySpec 工作室</title>
+  <meta name="description" content="StorySpec 本机工作室控制台">
   <style>
     :root {
       color-scheme: light;
-      --paper: #f7f2e8;
-      --panel: #fffaf0;
-      --panel-strong: #f0e5d2;
-      --ink: #231f1a;
-      --muted: #6f6659;
-      --line: #d8cbb7;
-      --accent: #5d4a2f;
-      --accent-ink: #fffaf0;
-      --warn: #8d3d2f;
-      --ok: #315d4d;
-      --focus: #7a5b2b;
+      --app-bg: #f8fafc;
+      --panel: #ffffff;
+      --panel-strong: #eff6ff;
+      --ink: #0f172a;
+      --muted: #64748b;
+      --line: #dbe3ef;
+      --accent: #2563eb;
+      --attention: #f97316;
+      --accent-ink: #ffffff;
+      --warn: #b45309;
+      --ok: #047857;
+      --focus: #2563eb;
       --radius: 8px;
       --z-focus: 10;
     }
@@ -43,15 +44,15 @@ export const renderLocalAppHtml = (input: RenderLocalAppHtmlInput): string => {
 
     html {
       min-height: 100%;
-      background: var(--paper);
+      background: var(--app-bg);
     }
 
     body {
       margin: 0;
       min-height: 100dvh;
       color: var(--ink);
-      background: var(--paper);
-      font-family: ui-serif, Georgia, "Noto Serif SC", "Songti SC", serif;
+      background: var(--app-bg);
+      font-family: Inter, "Noto Sans SC", "Microsoft YaHei", Arial, sans-serif;
       line-height: 1.5;
     }
 
@@ -66,7 +67,7 @@ export const renderLocalAppHtml = (input: RenderLocalAppHtmlInput): string => {
     input:focus-visible,
     select:focus-visible,
     textarea:focus-visible {
-      outline: 3px solid rgba(122, 91, 43, 0.35);
+      outline: 3px solid rgba(37, 99, 235, 0.28);
       outline-offset: 2px;
       position: relative;
       z-index: var(--z-focus);
@@ -146,7 +147,7 @@ export const renderLocalAppHtml = (input: RenderLocalAppHtmlInput): string => {
       color: var(--muted);
       font-size: 13px;
       white-space: nowrap;
-      background: rgba(255, 250, 240, 0.72);
+      background: #ffffff;
     }
 
     .workspace-grid {
@@ -160,7 +161,7 @@ export const renderLocalAppHtml = (input: RenderLocalAppHtmlInput): string => {
     .panel {
       border: 1px solid var(--line);
       border-radius: var(--radius);
-      background: rgba(255, 250, 240, 0.78);
+      background: var(--panel);
       min-width: 0;
     }
 
@@ -171,7 +172,7 @@ export const renderLocalAppHtml = (input: RenderLocalAppHtmlInput): string => {
       gap: 10px;
       padding: 12px 14px;
       border-bottom: 1px solid var(--line);
-      background: rgba(240, 229, 210, 0.55);
+      background: var(--panel-strong);
     }
 
     .panel-body {
@@ -199,7 +200,7 @@ export const renderLocalAppHtml = (input: RenderLocalAppHtmlInput): string => {
       width: 100%;
       border: 1px solid var(--line);
       border-radius: 6px;
-      background: #fffdf8;
+      background: #ffffff;
       color: var(--ink);
       padding: 9px 10px;
     }
@@ -228,7 +229,7 @@ export const renderLocalAppHtml = (input: RenderLocalAppHtmlInput): string => {
     }
 
     button:hover {
-      background: #493a26;
+      background: #1d4ed8;
     }
 
     button:active {
@@ -241,7 +242,7 @@ export const renderLocalAppHtml = (input: RenderLocalAppHtmlInput): string => {
     }
 
     .secondary:hover {
-      background: rgba(93, 74, 47, 0.08);
+      background: #eff6ff;
     }
 
     .error {
@@ -266,14 +267,14 @@ export const renderLocalAppHtml = (input: RenderLocalAppHtmlInput): string => {
       width: 100%;
       text-align: left;
       border: 1px solid var(--line);
-      background: #fffdf8;
+      background: #ffffff;
       color: var(--ink);
       border-radius: 6px;
       padding: 10px;
     }
 
     .recent-item:hover {
-      background: #f8efe0;
+      background: #eff6ff;
     }
 
     .item-title {
@@ -292,7 +293,7 @@ export const renderLocalAppHtml = (input: RenderLocalAppHtmlInput): string => {
       border: 1px dashed var(--line);
       border-radius: 6px;
       padding: 12px;
-      background: rgba(255, 253, 248, 0.62);
+      background: #f8fafc;
     }
 
     .dossier-title {
@@ -322,7 +323,7 @@ export const renderLocalAppHtml = (input: RenderLocalAppHtmlInput): string => {
       border: 1px solid var(--line);
       border-radius: 6px;
       padding: 10px;
-      background: #fffdf8;
+      background: #ffffff;
     }
 
     .metric-value {
@@ -377,7 +378,7 @@ export const renderLocalAppHtml = (input: RenderLocalAppHtmlInput): string => {
       border: 1px solid var(--line);
       border-radius: 6px;
       padding: 10px;
-      background: #fffdf8;
+      background: #ffffff;
       font-family: ui-monospace, "SFMono-Regular", Consolas, monospace;
       font-size: 12px;
       overflow-wrap: anywhere;
@@ -400,7 +401,7 @@ export const renderLocalAppHtml = (input: RenderLocalAppHtmlInput): string => {
       border: 1px solid var(--line);
       border-radius: 6px;
       padding: 10px;
-      background: #fffdf8;
+      background: #ffffff;
       min-height: 42px;
       font-size: 13px;
     }
@@ -432,8 +433,8 @@ export const renderLocalAppHtml = (input: RenderLocalAppHtmlInput): string => {
   <div class="shell">
     <header class="topbar">
       <div>
-        <h1>StorySpec 本机工作台</h1>
-        <p class="subtitle">编辑台 / 档案控制台：打开本机项目，查看当前故事长成了什么，再决定下一步写入前确认。</p>
+        <h1>StorySpec 工作室</h1>
+        <p class="subtitle">工作室控制台：在本机项目里查看故事状态、候选、章节、任务和协作边界。Agent 不能直接写入正典，所有进入正式故事的内容都需要作者最终确认。</p>
       </div>
       <div class="status-pill" id="service-status">本机服务检查中</div>
     </header>
@@ -441,7 +442,7 @@ export const renderLocalAppHtml = (input: RenderLocalAppHtmlInput): string => {
     <main id="main" class="workspace-grid">
       <aside class="panel" aria-labelledby="project-drawer-title">
         <div class="panel-header">
-          <h2 id="project-drawer-title">项目抽屉</h2>
+          <h2 id="project-drawer-title">项目与故事</h2>
           <button class="secondary" id="refresh-recent" type="button">刷新</button>
         </div>
         <div class="panel-body stack">
@@ -490,15 +491,35 @@ export const renderLocalAppHtml = (input: RenderLocalAppHtmlInput): string => {
 
       <section class="panel" aria-labelledby="story-dossier-title">
         <div class="panel-header">
-          <h2 id="story-dossier-title">故事档案</h2>
+          <h2 id="story-dossier-title">故事驾驶舱</h2>
           <button class="secondary" id="refresh-status" type="button">读取状态</button>
         </div>
         <div class="panel-body stack">
           <div class="empty" id="status-empty">
             <strong>尚未打开项目</strong>
-            <p class="muted">选择一个 StorySpec 项目，或创建新项目。首屏会展示故事阶段、创作回声、缺口和文件状态。</p>
+            <p class="muted">选择一个 StorySpec 项目，或创建新项目。打开或创建项目后，首屏会展示故事阶段、当前卡点、待确认项、阻塞项和章节文件。</p>
           </div>
           <div id="status-content" hidden></div>
+
+          <section class="section-block" id="app-state-root" aria-labelledby="app-state-title">
+            <div class="dossier-title">
+              <h2 id="app-state-title">故事驾驶舱</h2>
+              <span class="mono">/api/projects/current/app-state</span>
+            </div>
+            <div class="result-box" id="story-cockpit-panel">打开或创建项目后，工作室会读取当前故事状态、主行动、待确认项、阻塞项和章节文件。</div>
+          </section>
+
+          <section class="section-block" aria-labelledby="studio-map-title">
+            <h2 id="studio-map-title">工作室控制台</h2>
+            <ul class="fact-list">
+              <li><strong>项目与故事</strong>：打开或创建本机 StorySpec 项目，管理最近项目和故事入口。</li>
+              <li><strong>故事驾驶舱</strong>：消费 /api/projects/current/app-state，汇总 storyName、stageLabel、currentBlocker 和主行动。</li>
+              <li><strong>章节与写作</strong>：查看章节通道、草稿、Scene Card 和写后自检。</li>
+              <li><strong>候选与正典</strong>：候选方案先进入 Preview / Confirm / Apply，正典 / 已确认事实只由作者最终确认。</li>
+              <li><strong>任务中心</strong>：只读查看任务板、缺口和下一步，不宣称云端多人或实时协作。</li>
+              <li><strong>协作侧栏</strong>：显示评论、边界、阻塞和稍后决定，提醒 Agent 不能直接写入正典。</li>
+            </ul>
+          </section>
 
           <section class="section-block" aria-labelledby="resume-lane-title">
             <div class="dossier-title">
@@ -509,7 +530,7 @@ export const renderLocalAppHtml = (input: RenderLocalAppHtmlInput): string => {
             <div class="command" id="resume-action-command">storyspec status</div>
             <div class="section-block">
               <h3>状态词</h3>
-              <div class="result-box" id="resume-glossary">candidate / preview / apply / dry-run / blocked / read-only / active / planned</div>
+              <div class="result-box" id="resume-glossary">候选方案 / 预览变更 / 试运行 / 应用到正式故事 / 暂时无法继续 / 稍后决定 / 正典 / 已确认事实 / 草稿 / 评论</div>
             </div>
           </section>
 
@@ -572,19 +593,19 @@ export const renderLocalAppHtml = (input: RenderLocalAppHtmlInput): string => {
 
       <aside class="panel" aria-labelledby="confirm-lane-title">
         <div class="panel-header">
-          <h2 id="confirm-lane-title">确认通道</h2>
-          <span class="muted">preview / confirm / apply</span>
+          <h2 id="confirm-lane-title">协作侧栏</h2>
+          <span class="muted">Preview / Confirm / Apply</span>
         </div>
         <div class="panel-body gate" id="confirm-lane">
-          <div class="empty">打开项目后，这里会显示下一步建议、待确认决策、tracking 和 Git 状态。</div>
+          <div class="empty">打开项目后，这里会显示下一步建议、待确认决策、评论、tracking 和 Git 状态。作者最终确认前，Agent 不能直接写入正典。</div>
         </div>
         <div class="panel-body gate" aria-labelledby="planning-panel-title">
           <section class="section-block">
             <div class="dossier-title">
-              <h2 id="planning-panel-title">规划面板</h2>
+              <h2 id="planning-panel-title">候选与正典</h2>
               <button class="secondary" id="refresh-outlines" type="button">刷新候选</button>
             </div>
-            <p class="muted">候选大纲不是正典；提升默认 dry-run，只展示覆盖正式计划前需要检查什么。</p>
+            <p class="muted">候选大纲不是正典；提升默认 dry-run，只展示覆盖正式计划前需要检查什么。应用到正式故事必须经过作者最终确认。</p>
             <div class="field">
               <label for="outline-story-name">故事名（可选）</label>
               <input id="outline-story-name" name="story" autocomplete="off" placeholder="留空则使用最近故事">
@@ -641,7 +662,7 @@ export const renderLocalAppHtml = (input: RenderLocalAppHtmlInput): string => {
 
           <section class="section-block">
             <div class="dossier-title">
-              <h3>任务板</h3>
+              <h3>任务中心</h3>
               <button class="secondary" id="refresh-task-board" type="button">读取只读任务板</button>
             </div>
             <p class="muted">任务板只读展示，不修改 tasks.md。</p>
@@ -652,7 +673,7 @@ export const renderLocalAppHtml = (input: RenderLocalAppHtmlInput): string => {
         <div class="panel-body gate" aria-labelledby="chapter-entry-title">
           <section class="section-block">
             <div class="dossier-title">
-              <h2 id="chapter-entry-title">章节入口</h2>
+              <h2 id="chapter-entry-title">章节与写作</h2>
               <div class="button-row">
                 <button class="secondary" id="refresh-chapter-lane" type="button">写作通道</button>
                 <button class="secondary" id="refresh-chapter-drafts" type="button">草稿列表</button>
@@ -744,6 +765,7 @@ export const renderLocalAppHtml = (input: RenderLocalAppHtmlInput): string => {
     const recentEmpty = document.querySelector("#recent-empty");
     const statusEmpty = document.querySelector("#status-empty");
     const statusContent = document.querySelector("#status-content");
+    const storyCockpitPanel = document.querySelector("#story-cockpit-panel");
     const resumeLane = document.querySelector("#resume-lane");
     const resumeActionCommand = document.querySelector("#resume-action-command");
     const resumeGlossary = document.querySelector("#resume-glossary");
@@ -809,6 +831,42 @@ export const renderLocalAppHtml = (input: RenderLocalAppHtmlInput): string => {
     const renderIngestItems = items => {
       if (!items || items.length === 0) return '<li>暂无。</li>';
       return items.map(item => '<li><strong>' + escapeHtml(item.label || item.questionId || "候选") + '</strong>：' + escapeHtml(item.answer || item.summary || "") + '</li>').join("");
+    };
+
+    const renderAppStateItems = (items, fallback) => {
+      const safeItems = Array.isArray(items) ? items : [];
+      const rendered = safeItems.map(item => {
+        if (!item) return "";
+        if (typeof item !== "object") return "<li>" + escapeHtml(String(item)) + "</li>";
+        const title = item.label || item.title || item.id || item.path || item.file || "未命名";
+        const detail = item.value || item.reason || item.summary || item.status || item.stage || item.blocker || item.description || "";
+        return '<li><strong>' + escapeHtml(title) + '</strong>' + (detail ? '：' + escapeHtml(detail) : '') + '</li>';
+      }).filter(Boolean);
+      return rendered.length ? rendered.join("") : "<li>" + fallback + "</li>";
+    };
+
+    const renderAppStatePages = (pages, fallback) => {
+      const safeItems = Array.isArray(pages) ? pages : [];
+      const rendered = safeItems.map(page => {
+        if (!page) return "";
+        if (typeof page !== "object") return "<li>" + escapeHtml(String(page)) + "</li>";
+        const title = page.label || page.title || page.name || page.id || page.href || "工作区页面";
+        const detail = page.description || page.summary || page.status || page.href || "";
+        return '<li><strong>' + escapeHtml(title) + '</strong>' + (detail ? '：' + escapeHtml(detail) : '') + '</li>';
+      }).filter(Boolean);
+      return rendered.length ? rendered.join("") : "<li>" + fallback + "</li>";
+    };
+
+    const renderWriteModeLanguage = entries => {
+      const safeItems = Array.isArray(entries) ? entries : [];
+      const rendered = safeItems.map(entry => {
+        if (!entry) return "";
+        if (typeof entry !== "object") return escapeHtml(String(entry));
+        const label = entry.label || entry.term || entry.primaryAction || "写入模式";
+        const meaning = entry.meaning || entry.description || entry.summary || "";
+        return escapeHtml(label) + (meaning ? "：" + escapeHtml(meaning) : "");
+      }).filter(Boolean);
+      return rendered.length ? rendered.join(" · ") : "预览变更 / 作者最终确认 / 应用到正式故事";
     };
 
     const outlineStoryQuery = () => {
@@ -923,6 +981,59 @@ export const renderLocalAppHtml = (input: RenderLocalAppHtmlInput): string => {
       \`;
     };
 
+    const renderAppState = appState => {
+      appState = appState || {};
+      const cockpit = appState.cockpit || {};
+      const metrics = cockpit.metrics || {};
+      const primaryAction = cockpit.primaryAction || {};
+      const collaborationItems = appState.collaborationRail?.items || [];
+      const pages = appState.pages || [];
+      const writeModeLanguage = Array.isArray(appState.writeModeLanguage) ? appState.writeModeLanguage : [];
+      storyCockpitPanel.innerHTML = \`
+        <div class="metric-grid">
+          <div class="metric"><span class="metric-value">\${escapeHtml(cockpit.storyName || "未选择")}</span><span class="metric-label">storyName</span></div>
+          <div class="metric"><span class="metric-value">\${escapeHtml(cockpit.stageLabel || "未开始")}</span><span class="metric-label">stageLabel</span></div>
+          <div class="metric"><span class="metric-value">\${escapeHtml(cockpit.currentBlocker || "暂无")}</span><span class="metric-label">currentBlocker</span></div>
+        </div>
+        <div class="metric-grid">
+          <div class="metric"><span class="metric-value">\${escapeHtml(metrics.pendingConfirmations ?? 0)}</span><span class="metric-label">待确认</span></div>
+          <div class="metric"><span class="metric-value">\${escapeHtml(metrics.blockers ?? 0)}</span><span class="metric-label">阻塞项</span></div>
+          <div class="metric"><span class="metric-value">\${escapeHtml(metrics.agentCandidates ?? 0)}</span><span class="metric-label">Agent 候选</span></div>
+          <div class="metric"><span class="metric-value">\${escapeHtml(metrics.chapterFiles ?? 0)}</span><span class="metric-label">章节文件</span></div>
+          <div class="metric"><span class="metric-value">\${escapeHtml(metrics.contentFiles ?? 0)}</span><span class="metric-label">正文文件</span></div>
+          <div class="metric"><span class="metric-value">\${escapeHtml(metrics.contentChars ?? 0)}</span><span class="metric-label">正文字符</span></div>
+        </div>
+        <div class="section-block">
+          <h3>下一步建议</h3>
+          <p><strong>\${escapeHtml(primaryAction.label || "稍后决定")}</strong></p>
+          <p>\${escapeHtml(primaryAction.reason || "打开或创建项目后，工作室会给出下一步理由。")}</p>
+          <p class="muted">writeMode：\${escapeHtml(primaryAction.writeMode || "read-only")}</p>
+        </div>
+        <div class="section-block">
+          <h3>协作侧栏</h3>
+          <ul class="fact-list">\${renderAppStateItems(collaborationItems, "暂无协作侧栏项目。")}</ul>
+        </div>
+        <div class="section-block">
+          <h3>工作区页面</h3>
+          <ul class="fact-list">\${renderAppStatePages(pages, "暂无工作区页面。")}</ul>
+        </div>
+        <div class="section-block">
+          <h3>写入边界</h3>
+          <ul class="fact-list">\${renderAppStateItems(cockpit.boundaries, "Agent 不能直接写入正典；应用到正式故事需要作者最终确认。")}</ul>
+          <p class="muted">\${renderWriteModeLanguage(writeModeLanguage)}</p>
+        </div>
+      \`;
+    };
+
+    const loadAppState = async () => {
+      try {
+        const appState = await api("/api/projects/current/app-state", { method: "GET" });
+        renderAppState(appState);
+      } catch (error) {
+        storyCockpitPanel.innerHTML = '<div class="empty">打开或创建项目后，工作室会读取故事驾驶舱状态。' + escapeHtml(error.message ? " " + error.message : "") + '</div>';
+      }
+    };
+
     const renderResumeLane = resume => {
       const glossary = resume.statusGlossary || [];
       resumeLane.innerHTML = \`
@@ -970,6 +1081,7 @@ export const renderLocalAppHtml = (input: RenderLocalAppHtmlInput): string => {
         confirmLane.innerHTML = '<div class="empty">' + escapeHtml(error.message) + '</div>';
         await loadResume();
       }
+      await loadAppState();
     };
 
     const openProject = async projectRoot => {

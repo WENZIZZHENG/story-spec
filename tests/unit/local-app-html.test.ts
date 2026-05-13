@@ -1,41 +1,219 @@
 import { describe, expect, it } from 'vitest';
+import { createContext, Script } from 'node:vm';
 import { renderLocalAppHtml } from '../../src/app-server/local-app-html.js';
 
+const runLocalAppScripts = async (
+  html: string,
+  responses: Record<string, { ok: boolean; body: unknown }>
+) => {
+  const elements = new Map<string, {
+    appendChild: (child: unknown) => void;
+    children: unknown[];
+    className: string;
+    hidden: boolean;
+    innerHTML: string;
+    textContent: string;
+    type: string;
+    value: string;
+    addEventListener: () => void;
+  }>();
+  const getElement = (selector: string) => {
+    const key = selector.startsWith('#') ? selector.slice(1) : selector;
+    const existing = elements.get(key);
+    if (existing) return existing;
+    const element = {
+      appendChild: (child: unknown) => {
+        element.children.push(child);
+      },
+      children: [] as unknown[],
+      className: '',
+      hidden: false,
+      innerHTML: '',
+      textContent: '',
+      type: '',
+      value: '',
+      addEventListener: () => undefined
+    };
+    elements.set(key, element);
+    return element;
+  };
+  const context = createContext({
+    console,
+    document: {
+      createElement: () => getElement(`created-${elements.size}`),
+      querySelector: getElement
+    },
+    fetch: async (url: string) => {
+      const response = responses[url] || { ok: false, body: { blockedReasons: ['未 mock'] } };
+      return {
+        ok: response.ok,
+        json: async () => response.body
+      };
+    },
+    FormData: class {},
+    URLSearchParams,
+    window: {}
+  });
+  const scripts = Array.from(html.matchAll(/<script>([\s\S]*?)<\/script>/g)).map(match => match[1]);
+  scripts.forEach((script, index) => {
+    new Script(script, { filename: `local-app-html-${index}.js` }).runInContext(context);
+  });
+  await new Promise(resolve => setTimeout(resolve, 0));
+  await new Promise(resolve => setTimeout(resolve, 0));
+  return { elements };
+};
+
 describe('local app html', () => {
-  it('renders a restrained editor desk workbench shell with token-backed API wiring', () => {
+  it('renders the studio workbench shell with story cockpit navigation', () => {
     const html = renderLocalAppHtml({
       token: 'secret-token'
     });
 
     expect(html).toContain('<!doctype html>');
-    expect(html).toContain('StorySpec 本机工作台');
-    expect(html).toContain('项目抽屉');
-    expect(html).toContain('故事档案');
-    expect(html).toContain('确认通道');
-    expect(html).toContain('继续创作');
-    expect(html).toContain('状态词');
+    expect(html).toContain('StorySpec 工作室');
+    expect(html).toContain('项目与故事');
+    expect(html).toContain('故事驾驶舱');
+    expect(html).toContain('章节与写作');
+    expect(html).toContain('候选与正典');
+    expect(html).toContain('任务中心');
+    expect(html).toContain('协作侧栏');
+    expect(html).toContain('Preview / Confirm / Apply');
     expect(html).toContain('最近项目');
     expect(html).toContain('打开项目');
     expect(html).toContain('创建项目');
     expect(html).toContain('下一步建议');
+    expect(html).toContain('/api/projects/current/app-state');
     expect(html).toContain('/api/projects/current/resume');
+    expect(html).toContain('id="app-state-root"');
+    expect(html).toContain('id="story-cockpit-panel"');
     expect(html).toContain('id="resume-lane"');
     expect(html).toContain('id="resume-action-command"');
     expect(html).toContain('secret-token');
     expect(html).toContain("x-storyspec-app-token");
   });
 
-  it('keeps the shell away from marketing hero and generic AI gradient styling', () => {
-    const html = renderLocalAppHtml({
+  it('uses studio workbench styling instead of paper dossier, marketing hero, or ops console styling', () => {
+    const rawHtml = renderLocalAppHtml({
       token: 'secret-token'
-    }).toLowerCase();
+    });
+    const html = rawHtml.toLowerCase();
 
+    expect(rawHtml).toContain('--app-bg: #f8fafc');
+    expect(rawHtml).toContain('--accent: #2563eb');
+    expect(rawHtml).toContain('--attention: #f97316');
+    expect(rawHtml).toContain('sans-serif');
+    expect(html).not.toContain('ui-serif');
+    expect(rawHtml).not.toContain('纸面档案');
     expect(html).not.toContain('hero');
     expect(html).not.toContain('linear-gradient');
     expect(html).not.toContain('glassmorphism');
     expect(html).not.toContain('backdrop-filter');
     expect(html).not.toContain('purple');
     expect(html).not.toContain('blueviolet');
+  });
+
+  it('renders studio state language and author confirmation boundaries', () => {
+    const html = renderLocalAppHtml({
+      token: 'secret-token'
+    });
+
+    expect(html).toContain('候选方案');
+    expect(html).toContain('预览变更');
+    expect(html).toContain('试运行');
+    expect(html).toContain('应用到正式故事');
+    expect(html).toContain('暂时无法继续');
+    expect(html).toContain('稍后决定');
+    expect(html).toContain('正典 / 已确认事实');
+    expect(html).toContain('草稿');
+    expect(html).toContain('评论');
+    expect(html).toContain('作者最终确认');
+    expect(html).toContain('Agent 不能直接写入正典');
+  });
+
+  it('loads nested CompleteAppState cockpit, rail, pages, and write mode contract', () => {
+    const html = renderLocalAppHtml({
+      token: 'secret-token'
+    });
+
+    expect(html).toContain('const cockpit = appState.cockpit || {};');
+    expect(html).toContain('const metrics = cockpit.metrics || {};');
+    expect(html).toContain('const primaryAction = cockpit.primaryAction || {};');
+    expect(html).toContain('appState.collaborationRail?.items');
+    expect(html).toContain('appState.pages');
+    expect(html).toContain('appState.writeModeLanguage');
+    expect(html).toContain('Array.isArray(appState.writeModeLanguage)');
+    expect(html).toContain('renderWriteModeLanguage(writeModeLanguage)');
+    expect(html).toContain('item.value');
+    expect(html).toContain('metrics.agentCandidates');
+    expect(html).toContain('metrics.contentFiles');
+    expect(html).toContain('metrics.contentChars');
+    expect(html).toContain('Agent 候选');
+    expect(html).toContain('正文文件');
+    expect(html).toContain('正文字符');
+    expect(html).toContain('cockpit.boundaries');
+    expect(html).toContain('cockpit.storyName');
+    expect(html).toContain('cockpit.stageLabel');
+    expect(html).toContain('cockpit.currentBlocker');
+    expect(html).not.toContain('appState.storyName');
+    expect(html).not.toContain('appState.stageLabel');
+    expect(html).not.toContain('appState.currentBlocker');
+    expect(html).not.toContain('appState.pendingConfirmations');
+    expect(html).not.toContain('appState.blockers');
+    expect(html).not.toContain('appState.chapterFiles');
+    expect(html).not.toContain('writeModeLanguage.preview');
+    expect(html).not.toContain('writeModeLanguage.confirm');
+    expect(html).not.toContain('writeModeLanguage.apply');
+  });
+
+  it('renders malformed nested app state without falling back to an app-state error panel', async () => {
+    const html = renderLocalAppHtml({
+      token: 'secret-token'
+    });
+
+    const { elements } = await runLocalAppScripts(html, {
+      '/api/app/health': { ok: true, body: { ok: true } },
+      '/api/projects/recent': { ok: true, body: [] },
+      '/api/projects/current/status': { ok: false, body: { blockedReasons: ['尚未打开项目'] } },
+      '/api/projects/current/resume': { ok: false, body: { blockedReasons: ['尚未打开项目'] } },
+      '/api/projects/current/app-state': {
+        ok: true,
+        body: {
+          cockpit: {
+            storyName: '<script>alert(1)</script>',
+            stageLabel: '草稿',
+            currentBlocker: '',
+            metrics: {},
+            primaryAction: {
+              label: '稍后决定',
+              reason: '等待作者确认',
+              writeMode: 'preview'
+            },
+            boundaries: [null, true, '作者最终确认']
+          },
+          collaborationRail: {
+            items: [
+              { label: '<img src=x onerror=alert(1)>', value: '<script>x</script>' },
+              null,
+              '评论'
+            ]
+          },
+          pages: { id: 'not-array' },
+          writeModeLanguage: []
+        }
+      }
+    });
+
+    const panelHtml = elements.get('story-cockpit-panel')?.innerHTML || '';
+
+    expect(panelHtml).toContain('&lt;script&gt;alert(1)&lt;/script&gt;');
+    expect(panelHtml).toContain('&lt;img src=x onerror=alert(1)&gt;');
+    expect(panelHtml).toContain('&lt;script&gt;x&lt;/script&gt;');
+    expect(panelHtml).toContain('暂无工作区页面。');
+    expect(panelHtml).toContain('预览变更 / 作者最终确认 / 应用到正式故事');
+    expect(panelHtml).toContain('作者最终确认');
+    expect(panelHtml).not.toContain('工作室会读取故事驾驶舱状态');
+    expect(panelHtml).not.toContain('<script>');
+    expect(panelHtml).not.toContain('<img');
   });
 
   it('renders accessible forms, inline errors, and empty status state', () => {
@@ -75,13 +253,13 @@ describe('local app html', () => {
       token: 'secret-token'
     });
 
-    expect(html).toContain('规划面板');
+    expect(html).toContain('候选与正典');
     expect(html).toContain('候选大纲');
     expect(html).toContain('创建候选');
     expect(html).toContain('比较候选');
     expect(html).toContain('提升预览');
     expect(html).toContain('默认 dry-run');
-    expect(html).toContain('任务板');
+    expect(html).toContain('任务中心');
     expect(html).toContain('只读');
     expect(html).toContain('/api/outlines/list');
     expect(html).toContain('/api/outlines/create');
@@ -99,7 +277,7 @@ describe('local app html', () => {
       token: 'secret-token'
     });
 
-    expect(html).toContain('章节入口');
+    expect(html).toContain('章节与写作');
     expect(html).toContain('写作通道');
     expect(html).toContain('outline -> tasks -> scene -> sample -> draft -> review');
     expect(html).toContain('章节小样');
