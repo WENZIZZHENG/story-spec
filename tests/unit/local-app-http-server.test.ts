@@ -119,7 +119,10 @@ describe('local app http server', () => {
       const html = await shell.text();
       expect(shell.status).toBe(200);
       expect(shell.headers.get('content-type')).toContain('text/html');
-      expect(html).toContain('StorySpec 本机工作台');
+      expect(html).toContain('StorySpec 工作室');
+      expect(html).toContain('/api/projects/current/app-state');
+      expect(html).toContain('项目与故事');
+      expect(html).toContain('故事驾驶舱');
       expect(html).toContain('secret');
 
       const unauthorized = await fetch(`${server.url}/api/projects/recent`);
