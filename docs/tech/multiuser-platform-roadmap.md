@@ -14,9 +14,10 @@ Planned。本文承接多人在线平台的产品对象、权限模型、API con
 ## P1-1 多人平台产品边界与角色模型
 
 - 类型：产品范围、权限、数据模型
+- 状态：已完成首批底座（2026-05-13）。`add-multiuser-role-permission-model` 已冻结 `owner/editor/reviewer/viewer/agent` 项目角色、项目/故事/章节/候选/评论/正典/agent job/成员/导出/删除权限动作矩阵，并把 action-level 权限检查接入 project guard；故事/章节级独立 ACL、邀请流程和复杂 workspace/team 表仍留给后续 OpenSpec。
 - 背景/问题：当前 server 已有控制面基础，但“多人在线写作平台”需要先定义用户、团队、项目、故事、章节、角色权限、协作边界和作者控制权，不然容易把多人协作做成共享文件夹。
 - 已有基础：session/project guard、membership、project metadata、audit/quota、job list、项目删除计划。
-- 缺口：缺少面向完整 App 的产品层概念，例如 workspace/team、owner/editor/reviewer/viewer、故事级和章节级权限、邀请流程、项目可见性、离线导出与删除确认。
+- 缺口：故事级和章节级独立权限、邀请流程、复杂 workspace/team 表、权限 UI、离线导出与删除的真实执行仍未实现。
 - 建议方案：
   1. 新建 OpenSpec 定义平台对象模型和权限矩阵。
   2. 明确“谁能创建候选、谁能评论、谁能 apply 正典、谁能发布章节、谁能运行 agent job”。
@@ -29,6 +30,7 @@ Planned。本文承接多人在线平台的产品对象、权限模型、API con
 ## P1-2 API contract 与前端状态模型前置设计
 
 - 类型：API、产品体验、测试契约
+- 状态：已完成首批底座（2026-05-13）。`add-multiuser-api-contract-state-model` 已冻结统一 envelope、错误码、权限状态、首批页面 endpoint map 和 fixtures；P1-1 已进一步把 page permission actions 对齐到角色权限模型。
 - 背景/问题：完整 App 不能等前端开工后再临时拼字段；项目列表、故事工作台、章节入口、候选审阅、任务中心、成员权限都需要稳定的响应结构、错误格式、权限状态和 loading / empty / offline 状态。否则前端设计、server API、权限模型和 E2E 会互相返工。
 - 已有基础：本机 App API、server 控制面 API、`src/server/http/multiuser-server.ts`、session/project guard、audit/quota/job 控制面、P1-0 将产出的页面地图和状态语言词典。
 - 缺口：缺少统一 API envelope、错误码、request id、权限决策对象、分页/排序规则、资源版本字段、前端 mock fixtures、API contract tests 和 OpenAPI/等价契约文档。

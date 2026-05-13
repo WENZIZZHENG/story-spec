@@ -293,7 +293,7 @@ describe('multiuser server entry', () => {
         }, {
           projectId: 'project-1',
           userId: 'user-2',
-          role: 'member'
+          role: 'editor'
         }]
       }),
       jobRepository,
@@ -316,7 +316,7 @@ describe('multiuser server entry', () => {
         }, {
           projectId: 'project-1',
           userId: 'user-2',
-          role: 'member'
+          role: 'editor'
         }]
       });
 

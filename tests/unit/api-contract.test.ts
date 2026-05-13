@@ -17,7 +17,7 @@ describe('multiuser api contract', () => {
       },
       permissions: [
         buildMultiuserPermissionDecision({
-          action: 'view-projects',
+          action: 'view-project',
           state: 'allowed',
           reason: '用户已登录并拥有可见项目。',
           requiresConfirmation: false
@@ -43,7 +43,7 @@ describe('multiuser api contract', () => {
       },
       permissions: [
         {
-          action: 'view-projects',
+          action: 'view-project',
           state: 'allowed',
           reason: '用户已登录并拥有可见项目。',
           requiresConfirmation: false
@@ -121,7 +121,7 @@ describe('multiuser api contract', () => {
         successStatus: 200,
         permissionActions: [
           {
-            action: 'view-projects',
+            action: 'view-project',
             state: 'allowed',
             reason: '登录后可以查看可见项目。',
             requiresConfirmation: false
@@ -146,7 +146,7 @@ describe('multiuser api contract', () => {
           {
             action: 'apply-story-cockpit-change',
             state: 'requires-confirmation',
-            reason: '高影响操作需要作者二次确认。',
+            reason: '正典变更必须经过拥有者二次确认。',
             requiresConfirmation: true
           }
         ],
@@ -167,9 +167,9 @@ describe('multiuser api contract', () => {
             requiresConfirmation: false
           },
           {
-            action: 'publish-chapter-draft',
+            action: 'publish-chapter',
             state: 'requires-confirmation',
-            reason: '发布章节草稿前必须确认。',
+            reason: '章节发布会改变正式故事，必须二次确认。',
             requiresConfirmation: true
           }
         ],
@@ -192,7 +192,7 @@ describe('multiuser api contract', () => {
           {
             action: 'apply-canon-change',
             state: 'requires-confirmation',
-            reason: '正典变更必须经过作者确认。',
+            reason: '正典变更必须经过拥有者二次确认。',
             requiresConfirmation: true
           }
         ],
@@ -210,6 +210,12 @@ describe('multiuser api contract', () => {
             action: 'view-tasks',
             state: 'allowed',
             reason: '项目成员可以查看任务中心。',
+            requiresConfirmation: false
+          },
+          {
+            action: 'run-agent-job',
+            state: 'allowed',
+            reason: '拥有者和编辑可以运行 agent job。',
             requiresConfirmation: false
           }
         ],
@@ -231,10 +237,9 @@ describe('multiuser api contract', () => {
           },
           {
             action: 'manage-members',
-            state: 'denied',
-            reason: '普通成员不能管理成员权限。',
-            requiresConfirmation: false,
-            requestAccessHref: '/settings/access'
+            state: 'requires-confirmation',
+            reason: '成员权限变更必须二次确认并写入审计。',
+            requiresConfirmation: true
           }
         ],
         expectedStates: ['success', 'forbidden', 'offline']

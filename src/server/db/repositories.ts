@@ -6,6 +6,7 @@ import type {
   ProjectAccessRepository,
   ProjectMembership
 } from '../projects/project-security.js';
+import type { ProjectRole } from '../projects/permission-model.js';
 import type { QuotaBucket, QuotaRepository } from '../quota/quota.js';
 
 export interface MultiuserDatabaseExecutor {
@@ -43,7 +44,7 @@ interface ProjectRow {
 interface MembershipRow {
   project_id: string;
   user_id: string;
-  role: 'owner' | 'member';
+  role: ProjectRole;
 }
 
 interface AgentJobRow {
@@ -202,7 +203,7 @@ export const createMultiuserDatabaseRepositories = (
       return row ? mapMembership(row) : undefined;
     },
     async listProjectsForUser(userId) {
-      const rows = await executor.queryMany<ProjectRow & { role: 'owner' | 'member' }>(
+      const rows = await executor.queryMany<ProjectRow & { role: ProjectRole }>(
         [
           'select p.id, p.owner_user_id, p.data_root, m.role',
           'from projects p join memberships m on p.id = m.project_id',

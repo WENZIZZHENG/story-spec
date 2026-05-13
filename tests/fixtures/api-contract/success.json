@@ -14,7 +14,7 @@
     },
     "permissions": [
       {
-        "action": "view-projects",
+        "action": "view-project",
         "state": "allowed",
         "reason": "登录后可以查看可见项目。",
         "requiresConfirmation": false

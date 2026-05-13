@@ -66,7 +66,7 @@ const memberships: MultiuserTableSchema = {
     'create table if not exists memberships (',
     '  project_id text not null references projects(id) on delete cascade,',
     '  user_id text not null references users(id) on delete cascade,',
-    '  role text not null check (role in (\'owner\', \'member\')),',
+    '  role text not null check (role in (\'owner\', \'editor\', \'reviewer\', \'viewer\', \'agent\')),',
     '  created_at timestamptz not null default now(),',
     '  primary key (project_id, user_id)',
     ');'

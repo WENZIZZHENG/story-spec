@@ -1,6 +1,6 @@
 import path from 'node:path';
-
-export type ProjectRole = 'owner' | 'member';
+import type { ProjectPermissionAction, ProjectRole } from './permission-model.js';
+import { resolveProjectPermissionDecision } from './permission-model.js';
 
 export interface MultiuserProject {
   id: string;
@@ -32,6 +32,7 @@ export interface RequireProjectAccessInput {
   userId?: string;
   projectId?: string;
   minimumRole?: ProjectRole;
+  requiredAction?: ProjectPermissionAction;
 }
 
 export interface ProjectAccessResult {
@@ -52,8 +53,11 @@ export interface ProjectStorage {
 }
 
 const roleRank: Record<ProjectRole, number> = {
-  member: 1,
-  owner: 2
+  viewer: 1,
+  agent: 2,
+  reviewer: 3,
+  editor: 4,
+  owner: 5
 };
 
 const blocked = (reason: string): ProjectAccessResult => ({
@@ -119,9 +123,19 @@ export const requireProjectAccess = async (
     return blocked('用户无权访问该项目');
   }
 
-  const minimumRole = input.minimumRole ?? 'member';
+  const minimumRole = input.minimumRole ?? 'viewer';
   if (roleRank[membership.role] < roleRank[minimumRole]) {
     return blocked('用户角色权限不足');
+  }
+
+  if (input.requiredAction) {
+    const decision = resolveProjectPermissionDecision({
+      role: membership.role,
+      action: input.requiredAction
+    });
+    if (decision.state === 'denied' || decision.state === 'disabled') {
+      return blocked(decision.reason);
+    }
   }
 
   return {

@@ -43,6 +43,9 @@ describe('multiuser database foundation', () => {
       'user_id',
       'role'
     ]));
+    expect(multiuserDatabaseSchema.memberships.createStatements.join('\n')).toContain(
+      "role in ('owner', 'editor', 'reviewer', 'viewer', 'agent')"
+    );
     expect(multiuserDatabaseSchema.agentJobs.columns).toEqual(expect.arrayContaining([
       'id',
       'user_id',
