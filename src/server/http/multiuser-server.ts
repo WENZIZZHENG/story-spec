@@ -14,6 +14,7 @@ import type { ProjectAccessRepository } from '../projects/project-security.js';
 import { createProjectStorage, requireProjectAccess } from '../projects/project-security.js';
 import type { QuotaRepository } from '../quota/quota.js';
 import { checkQuota, consumeQuota } from '../quota/quota.js';
+import type { PostgresReadyState } from '../db/postgres.js';
 import {
   createErrorResponse,
   createRequestContext,
@@ -29,6 +30,7 @@ export interface StartMultiuserServerInput {
   jobRepository?: AgentJobRepository;
   auditRepository?: AuditLogRepository;
   quotaRepository?: QuotaRepository;
+  database?: PostgresReadyState;
   runtimeIds?: string[];
   now?: () => string;
   jobIdGenerator?: () => string;
@@ -236,6 +238,11 @@ export const startMultiuserServer = async (input: StartMultiuserServerInput): Pr
           service: 'storyspec-multiuser',
           status: 'ready',
           version: input.version,
+          database: input.database ?? {
+            configured: false,
+            connected: false,
+            migrated: false
+          },
           repositories: {
             sessions: Boolean(input.sessionRepository),
             projects: Boolean(input.projectRepository),

@@ -50,9 +50,10 @@ Planned。本文承接多人在线平台的产品对象、权限模型、API con
 ## P1-3 真实 PostgreSQL driver、迁移执行与数据访问层
 
 - 类型：存储、部署、可靠性
-- 背景/问题：当前已定义 PostgreSQL schema、migration plan 和 repository adapter，但还没有真实 driver/连接池；多用户平台无法只依赖内存 repository。
-- 已有基础：`src/server/db/schema.ts`、`src/server/db/repositories.ts`、`docker-compose.yml`、`docs/deploy/self-hosted.md`。
-- 缺口：缺真实连接、迁移命令、事务边界、测试数据库 fixture、连接错误处理和部署配置。
+- 状态：已完成首批底座（2026-05-13）。`add-multiuser-postgres-driver` 已接入 `pg` connection pool、PostgreSQL executor、可重复 migration runner、`STORYSPEC_DATABASE_URL` / `STORYSPEC_DATABASE_MIGRATE` server wiring，以及 `/ready.database` configured/connected/migrated 状态；真实测试数据库容器 fixture、事务 helper 和生产 rollback 策略仍留给后续质量批次。
+- 背景/问题：当前已定义 PostgreSQL schema、migration plan 和 repository adapter；多用户平台不能长期依赖内存 repository。
+- 已有基础：`src/server/db/schema.ts`、`src/server/db/repositories.ts`、`src/server/db/postgres.ts`、`docker-compose.yml`、`docs/deploy/self-hosted.md`。
+- 缺口：缺少真实测试数据库 fixture、事务边界 helper、生产 migration rollback 和大规模数据访问压测。
 - 建议方案：
   1. 接入 PostgreSQL driver 和连接池。
   2. 增加 migration runner，并在 server startup 或独立命令中可控执行。

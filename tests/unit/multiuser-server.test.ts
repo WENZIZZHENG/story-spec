@@ -372,6 +372,11 @@ describe('multiuser server entry', () => {
         service: 'storyspec-multiuser',
         status: 'ready',
         version: '0.20.0',
+        database: {
+          configured: false,
+          connected: false,
+          migrated: false
+        },
         repositories: {
           sessions: true,
           projects: true,
@@ -380,6 +385,33 @@ describe('multiuser server entry', () => {
           quota: true
         },
         runtimes: ['local-storyspec', 'openhands']
+      });
+    } finally {
+      await server.close();
+    }
+  });
+
+  it('reports configured PostgreSQL readiness separately from repository wiring', async () => {
+    const server = await startMultiuserServer({
+      host: '127.0.0.1',
+      port: 0,
+      version: '0.20.0',
+      database: {
+        configured: true,
+        connected: true,
+        migrated: true
+      }
+    });
+
+    try {
+      const readiness = await fetch(`${server.url}/ready`);
+      expect(readiness.status).toBe(200);
+      await expect(readiness.json()).resolves.toMatchObject({
+        database: {
+          configured: true,
+          connected: true,
+          migrated: true
+        }
       });
     } finally {
       await server.close();
