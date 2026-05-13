@@ -5,6 +5,89 @@ import { createMemoryRecentProjectStore } from '../../src/application/local-app-
 import {
   createLocalAppServerCore
 } from '../../src/app-server/local-app-server.js';
+import type { ProjectStatus } from '../../src/application/get-project-status.js';
+
+const completeProjectStatus = (projectRoot: string): ProjectStatus => ({
+  projectRoot,
+  projectName: '法术编译纪元',
+  version: '1.0.0',
+  method: 'three-act',
+  configuredAI: ['codex'],
+  handoff: {
+    codexPrompts: true,
+    agentsFile: true
+  },
+  codex: {
+    prompts: true,
+    agentsFile: true
+  },
+  story: {
+    name: '编程施法',
+    path: path.join(projectRoot, 'stories', '编程施法'),
+    stage: 'tasked',
+    hasIdea: true,
+    hasClarifications: true,
+    hasCandidates: true,
+    hasSpecification: true,
+    hasCreativePlan: true,
+    hasTasks: true,
+    specificationVersion: 'v1',
+    creativePlanVersion: 'plan-v1',
+    tasksVersion: 'tasks-v1',
+    nextTask: 'T001 - 写第一章',
+    chapterFiles: 1,
+    contentFiles: 1,
+    contentChars: 1200,
+    creativeGaps: ['核心伙伴动机仍需确认'],
+    nextQuestions: ['第一章是否提前揭示魔法代价？'],
+    creativeControl: {
+      confirmedDecisions: 2,
+      pendingDecisions: 3,
+      unconfirmedAiSuggestions: 1,
+      cannotFinalize: ['AI 建议待确认：magic.cost']
+    },
+    creationEcho: {
+      flavor: '工程思维处理符文魔法',
+      maturityNote: '已可拆任务',
+      strongestParts: ['主角能力风味明确'],
+      missingPieces: ['核心伙伴动机']
+    }
+  },
+  tracking: [],
+  blockers: [{
+    severity: 'warning',
+    scope: 'task-output',
+    code: 'MISSING_TASK_OUTPUT',
+    message: '任务输出缺失',
+    path: 'content/chapter-02.md'
+  }],
+  git: {
+    available: true,
+    dirty: false,
+    changedFiles: 0,
+    files: []
+  },
+  navigationEntries: [],
+  nextActions: ['下一步任务：T001 - 写第一章'],
+  resume: {
+    projectRoot,
+    projectName: '法术编译纪元',
+    storyName: '编程施法',
+    stage: 'tasked',
+    stateLabel: '任务已生成，准备写作',
+    primaryAction: {
+      label: '继续下一项写作任务',
+      reason: 'T001 - 写第一章',
+      copyableCommand: 'storyspec context:pack 编程施法',
+      writesFiles: false,
+      writeMode: 'read-only',
+      boundary: '先生成上下文包。'
+    },
+    statusGlossary: [],
+    recentProjectHint: '本机 App 会记住最近项目。',
+    boundaries: ['不会绕过 preview / confirm / apply。']
+  }
+});
 
 describe('local app server core', () => {
   it('reports health and token requirement', () => {
@@ -170,6 +253,71 @@ describe('local app server core', () => {
           writeMode: 'read-only'
         },
         boundaries: ['不会绕过 preview / confirm / apply。']
+      }
+    });
+  });
+
+  it('returns complete app state with token and opened-project checks', async () => {
+    const fs = new MemoryFileSystem('D:\\workspace');
+    const projectRoot = path.resolve('D:\\workspace\\spell-era');
+    await fs.ensureDir(path.join(projectRoot, '.specify'));
+    await fs.writeJson(path.join(projectRoot, '.specify', 'config.json'), {
+      name: '法术编译纪元'
+    });
+    const core = createLocalAppServerCore({
+      token: 'secret',
+      fileSystem: fs,
+      recentProjects: createMemoryRecentProjectStore(),
+      projectStatus: async input => completeProjectStatus(input.projectRoot)
+    });
+
+    await expect(core.getCurrentCompleteAppState({ token: 'wrong' })).resolves.toEqual({
+      status: 401,
+      body: {
+        blocked: true,
+        blockedReasons: ['缺少或无效的本机 App session token']
+      }
+    });
+    await expect(core.getCurrentCompleteAppState({ token: 'secret' })).resolves.toEqual({
+      status: 403,
+      body: {
+        blocked: true,
+        blockedReasons: ['项目尚未在本次 App 会话中打开']
+      }
+    });
+
+    await core.openProject({ token: 'secret', projectRoot });
+
+    await expect(core.getCurrentCompleteAppState({ token: 'secret' })).resolves.toMatchObject({
+      status: 200,
+      body: {
+        project: {
+          opened: true,
+          name: '法术编译纪元',
+          root: projectRoot
+        },
+        pages: expect.arrayContaining([
+          expect.objectContaining({ id: 'story-cockpit', label: '故事驾驶舱' })
+        ]),
+        cockpit: {
+          storyName: '编程施法',
+          stageLabel: '任务已生成，准备写作',
+          currentBlocker: '任务输出缺失',
+          metrics: {
+            pendingConfirmations: 3,
+            blockers: 1,
+            agentCandidates: 1,
+            chapterFiles: 1,
+            contentFiles: 1,
+            contentChars: 1200
+          }
+        },
+        statusLanguage: expect.arrayContaining([
+          expect.objectContaining({ term: 'candidate', label: '候选方案' })
+        ]),
+        writeModeLanguage: expect.arrayContaining([
+          expect.objectContaining({ term: 'read-only', label: '只读' })
+        ])
       }
     });
   });

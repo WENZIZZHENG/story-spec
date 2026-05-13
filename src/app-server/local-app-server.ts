@@ -53,6 +53,11 @@ import {
   getChapterWritingLane as getChapterWritingLaneApplication,
   type GetChapterWritingLaneInput
 } from '../application/chapter-writing-lane.js';
+import type { ProjectStatus } from '../application/get-project-status.js';
+import {
+  buildCompleteAppState,
+  type CompleteAppState
+} from './app-state-contract.js';
 
 export interface LocalAppServerResponse<TBody = unknown> {
   status: number;
@@ -108,6 +113,10 @@ export interface CurrentProjectStatusRequest {
 }
 
 export interface CurrentProjectResumeRequest {
+  token: string;
+}
+
+export interface CurrentCompleteAppStateRequest {
   token: string;
 }
 
@@ -501,6 +510,24 @@ export const createLocalAppServerCore = <TProjectStatus>(
       return {
         status: 200,
         body: resume ?? {}
+      };
+    },
+
+    async getCurrentCompleteAppState(request: CurrentCompleteAppStateRequest): Promise<LocalAppServerResponse<CompleteAppState | LocalAppBlockedBody>> {
+      if (!hasToken(request.token)) {
+        return unauthorized();
+      }
+
+      const projectRoot = currentAllowedProject();
+      if (!projectRoot) {
+        return forbiddenProject();
+      }
+
+      const status = await input.projectStatus({ projectRoot }) as ProjectStatus;
+
+      return {
+        status: 200,
+        body: buildCompleteAppState(status)
       };
     },
 
