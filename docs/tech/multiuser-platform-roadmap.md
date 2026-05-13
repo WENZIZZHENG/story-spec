@@ -39,6 +39,7 @@ Planned。本文承接多人在线平台的产品对象、权限模型、API con
   4. 定义权限状态模型：允许、拒绝、禁用原因、申请权限入口、是否需要二次确认。
   5. 为前端提供 mock fixtures，让 UX/前端能在真实后端完成前走通页面状态。
   6. 增加 API contract tests，保护 server 和未来 web client 的字段契约。
+  7. 先落地 `multiuser-api-contract-state-model` 变更，冻结首批页面 endpoint map、权限状态和 fixtures，再继续数据库、worker 和完整前端。
 - 涉及文件/模块：`src/server/http/*`、`src/app-server/*`、未来 `web/` 或 `app/`、未来 `tests/contract/`、`docs/deploy/self-hosted.md`、后续 OpenSpec artifacts。
 - 验收标准：首批页面都有 endpoint map、响应字段、错误状态和权限状态；contract fixtures 能覆盖 success / empty / unauthorized / forbidden / conflict / blocked / offline；server 变更能通过 contract tests 暴露破坏性字段变化；P1-5 完整前端架构必须引用本任务产物。
 - 参考项目/资料：当前 server 控制面 API；Liveblocks docs 的协作状态边界；OpenAPI/JSON Schema 只作为契约表达候选，不默认引入生成链。

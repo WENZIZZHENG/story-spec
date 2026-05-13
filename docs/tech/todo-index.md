@@ -6,7 +6,7 @@ Active。本文是 StorySpec 当前唯一的待办入口。详细规则见 [todo
 
 ## 当前待办
 
-当前主线：本机 CLI、实验性本机工作台和多用户控制面基础已经完成一轮收口，P0 构建/依赖/命令产物/README 事实边界也已收稳；下一步继续推进“完整 App 与多人在线写作平台”的 API 契约和前端状态模型前置设计。P1-0 的核心设计决策已记录到 [完整 App 故事驾驶舱体验设计](../superpowers/specs/2026-05-12-complete-app-story-cockpit-ux-design.md)，首批实现切片已完成 complete App state contract、本机 App 状态 endpoint 和工作室控制台 shell。`storyspec app` 仍不是完整多人在线 App，`storyspec server` 当前仍是多用户控制平面基础；账号、云端、实时协作、富文本编辑器、真实 PostgreSQL/Redis worker 和完整 SaaS 都只能作为待办推进，不能写成已实现能力。
+当前主线：本机 CLI、实验性本机工作台和多用户控制面基础已经完成一轮收口，P0 构建/依赖/命令产物/README 事实边界也已收稳；下一步继续推进“完整 App 与多人在线写作平台”的 API 契约和前端状态模型前置设计。P1-0 的核心设计决策已记录到 [完整 App 故事驾驶舱体验设计](../superpowers/specs/2026-05-12-complete-app-story-cockpit-ux-design.md)，首批实现切片已完成 complete App state contract、本机 App 状态 endpoint 和工作室控制台 shell，`codex/complete-app-cockpit-first-slice` 还在推进 `multiuser-api-contract-state-model` 的首批契约与 fixture。`storyspec app` 仍不是完整多人在线 App，`storyspec server` 当前仍是多用户控制平面基础；账号、云端、实时协作、富文本编辑器、真实 PostgreSQL/Redis worker 和完整 SaaS 都只能作为待办推进，不能写成已实现能力。
 
 | 优先级 | 路线 | 状态 | 覆盖范围 | 下一步 |
 | --- | --- | --- | --- | --- |
@@ -19,7 +19,7 @@ Active。本文是 StorySpec 当前唯一的待办入口。详细规则见 [todo
 ## 当前推荐推进顺序
 
 1. 以 P1-0 首批实现切片为当前 App shell 和状态语言基线，继续维护“完整多人在线平台尚未完成”的事实边界。
-2. 下一步做 [multiuser-platform-roadmap.md](multiuser-platform-roadmap.md) 的 P1-2 API contract 与前端状态模型前置设计，让前端、server 和测试先共享字段契约。
+2. 下一步做 [multiuser-platform-roadmap.md](multiuser-platform-roadmap.md) 的 P1-2 API contract 与前端状态模型前置设计，让前端、server 和测试先共享字段契约；当前分支已在落 `multiuser-api-contract-state-model` 的契约底座。
 3. 再为多人平台 P1 实现任务逐项建立 OpenSpec：产品边界/角色模型、真实数据库、真实 worker、完整 App 前端、协同写作正典合并协议。
 4. P2/P3 任务只在 P0/P1 稳定或有真实用户反馈后推进。
 

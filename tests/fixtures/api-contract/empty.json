@@ -1,0 +1,30 @@
+{
+  "state": "empty",
+  "pageId": "task-center",
+  "response": {
+    "requestId": "req-fixture-empty",
+    "data": {
+      "tasks": []
+    },
+    "permissions": [
+      {
+        "action": "view-tasks",
+        "state": "allowed",
+        "reason": "项目成员可以查看任务中心。",
+        "requiresConfirmation": false
+      }
+    ],
+    "resourceVersion": "rv-task-center-empty",
+    "warnings": [
+      "暂无任务"
+    ],
+    "pagination": {
+      "page": 1,
+      "pageSize": 20,
+      "totalItems": 0,
+      "totalPages": 0,
+      "hasNextPage": false,
+      "hasPreviousPage": false
+    }
+  }
+}

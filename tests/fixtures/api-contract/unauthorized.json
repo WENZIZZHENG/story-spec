@@ -1,0 +1,12 @@
+{
+  "state": "unauthorized",
+  "pageId": "workspace-projects",
+  "response": {
+    "statusCode": 401,
+    "requestId": "req-fixture-unauthorized",
+    "error": {
+      "code": "AUTH_REQUIRED",
+      "message": "需要登录后再访问"
+    }
+  }
+}

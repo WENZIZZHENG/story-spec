@@ -1,0 +1,36 @@
+{
+  "state": "success",
+  "pageId": "workspace-projects",
+  "response": {
+    "requestId": "req-fixture-success",
+    "data": {
+      "projects": [
+        {
+          "id": "project-1",
+          "name": "法术编译纪元",
+          "role": "owner"
+        }
+      ]
+    },
+    "permissions": [
+      {
+        "action": "view-projects",
+        "state": "allowed",
+        "reason": "登录后可以查看可见项目。",
+        "requiresConfirmation": false
+      }
+    ],
+    "resourceVersion": "rv-projects-1",
+    "warnings": [
+      "只读列表"
+    ],
+    "pagination": {
+      "page": 1,
+      "pageSize": 20,
+      "totalItems": 1,
+      "totalPages": 1,
+      "hasNextPage": false,
+      "hasPreviousPage": false
+    }
+  }
+}

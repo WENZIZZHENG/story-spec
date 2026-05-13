@@ -1,0 +1,13 @@
+{
+  "state": "forbidden",
+  "pageId": "story-cockpit",
+  "response": {
+    "statusCode": 403,
+    "requestId": "req-fixture-forbidden",
+    "traceId": "trace-story-cockpit",
+    "error": {
+      "code": "PROJECT_ACCESS_DENIED",
+      "message": "用户无权访问该项目"
+    }
+  }
+}

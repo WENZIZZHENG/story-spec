@@ -1,0 +1,12 @@
+{
+  "state": "offline",
+  "pageId": "members-permissions",
+  "response": {
+    "statusCode": 503,
+    "requestId": "req-fixture-offline",
+    "error": {
+      "code": "OFFLINE",
+      "message": "服务暂时离线"
+    }
+  }
+}
