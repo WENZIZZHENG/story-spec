@@ -1,3 +1,5 @@
+import { buildCompleteAppFrontendArchitecture } from './app-frontend-architecture.js';
+
 export interface RenderLocalAppHtmlInput {
   token: string;
 }
@@ -11,6 +13,21 @@ const escapeHtml = (value: string): string => value
 
 export const renderLocalAppHtml = (input: RenderLocalAppHtmlInput): string => {
   const token = escapeHtml(input.token);
+  const frontendArchitecture = buildCompleteAppFrontendArchitecture();
+  const routeNavigation = frontendArchitecture.routes.map(route => (
+    `<a class="route-link" href="${escapeHtml(route.route)}" data-route-id="${escapeHtml(route.id)}">` +
+    `<strong>${escapeHtml(route.label)}</strong><span>${escapeHtml(route.purpose)}</span></a>`
+  )).join('');
+  const routeMap = frontendArchitecture.routes.map(route => (
+    `<li data-route-id="${escapeHtml(route.id)}"><strong>${escapeHtml(route.label)}</strong>` +
+    `：${escapeHtml(route.purpose)}<br><span class="muted">${escapeHtml(route.emptyState)}</span></li>`
+  )).join('');
+  const endpointMap = frontendArchitecture.apiClient.endpoints.map(endpoint => (
+    `<li class="endpoint-card" data-endpoint-id="${escapeHtml(endpoint.id)}">` +
+    `<strong>${escapeHtml(endpoint.method)} ${escapeHtml(endpoint.path)}</strong>` +
+    `<span>${escapeHtml(endpoint.description)}</span>` +
+    `<span class="mono">${escapeHtml(endpoint.routeId)} · ${escapeHtml(endpoint.boundary)}</span></li>`
+  )).join('');
 
   return `<!doctype html>
 <html lang="zh-CN">
@@ -148,6 +165,37 @@ export const renderLocalAppHtml = (input: RenderLocalAppHtmlInput): string => {
       font-size: 13px;
       white-space: nowrap;
       background: #ffffff;
+    }
+
+    .route-nav {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 8px;
+      padding: 12px 0 0;
+    }
+
+    .route-link {
+      display: grid;
+      gap: 4px;
+      min-height: 76px;
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      background: #ffffff;
+      color: var(--ink);
+      padding: 10px;
+      text-decoration: none;
+    }
+
+    .route-link:hover,
+    .route-link:focus-visible {
+      border-color: var(--accent);
+      background: #eff6ff;
+    }
+
+    .route-link span {
+      color: var(--muted);
+      font-size: 12px;
+      text-wrap: pretty;
     }
 
     .workspace-grid {
@@ -351,10 +399,26 @@ export const renderLocalAppHtml = (input: RenderLocalAppHtmlInput): string => {
     }
 
     .fact-list li,
-    .next-list li {
+    .next-list li,
+    .endpoint-card {
       border-left: 3px solid var(--line);
       padding-left: 10px;
       text-wrap: pretty;
+    }
+
+    .endpoint-map {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 8px;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .endpoint-card {
+      display: grid;
+      gap: 3px;
+      min-width: 0;
     }
 
     .gate {
@@ -410,6 +474,11 @@ export const renderLocalAppHtml = (input: RenderLocalAppHtmlInput): string => {
       .workspace-grid {
         grid-template-columns: 1fr;
       }
+
+      .route-nav,
+      .endpoint-map {
+        grid-template-columns: 1fr;
+      }
     }
 
     @media (max-width: 640px) {
@@ -438,6 +507,9 @@ export const renderLocalAppHtml = (input: RenderLocalAppHtmlInput): string => {
       </div>
       <div class="status-pill" id="service-status">本机服务检查中</div>
     </header>
+    <nav class="route-nav" aria-label="完整 App 首批页面导航">
+      ${routeNavigation}
+    </nav>
 
     <main id="main" class="workspace-grid">
       <aside class="panel" aria-labelledby="project-drawer-title">
@@ -512,12 +584,16 @@ export const renderLocalAppHtml = (input: RenderLocalAppHtmlInput): string => {
           <section class="section-block" aria-labelledby="studio-map-title">
             <h2 id="studio-map-title">工作室控制台</h2>
             <ul class="fact-list">
-              <li><strong>项目与故事</strong>：打开或创建本机 StorySpec 项目，管理最近项目和故事入口。</li>
-              <li><strong>故事驾驶舱</strong>：消费 /api/projects/current/app-state，汇总 storyName、stageLabel、currentBlocker 和主行动。</li>
-              <li><strong>章节与写作</strong>：查看章节通道、草稿、Scene Card 和写后自检。</li>
-              <li><strong>候选与正典</strong>：候选方案先进入 Preview / Confirm / Apply，正典 / 已确认事实只由作者最终确认。</li>
-              <li><strong>任务中心</strong>：只读查看任务板、缺口和下一步，不宣称云端多人或实时协作。</li>
+              ${routeMap}
               <li><strong>协作侧栏</strong>：显示评论、边界、阻塞和稍后决定，提醒 Agent 不能直接写入正典。</li>
+            </ul>
+          </section>
+
+          <section class="section-block" aria-labelledby="frontend-api-map-title">
+            <h2 id="frontend-api-map-title">前端 API 地图</h2>
+            <p class="muted">本机 shell 使用 ${frontendArchitecture.apiClient.tokenHeader} 调用这些端点；后续独立前端应复用同一页面和边界契约。</p>
+            <ul class="endpoint-map">
+              ${endpointMap}
             </ul>
           </section>
 

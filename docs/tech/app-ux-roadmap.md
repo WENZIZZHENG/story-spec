@@ -20,7 +20,7 @@ Active。本文承接完整 App 的产品体验、信息架构和界面设计任
 - 类型：产品体验、信息架构、UI/UX 设计
 - 当前设计规格：[完整 App 故事驾驶舱体验设计](../superpowers/specs/2026-05-12-complete-app-story-cockpit-ux-design.md)
 - 已确认设计决策：首版采用“作者 + 团队平衡”，信息架构为“故事驾驶舱居中”，项目/工作区入口作为 App shell 必备入口，故事内主页面为故事驾驶舱、章节与写作、候选与正典审阅、任务中心；高影响内容默认走 Preview / Confirm / Apply；视觉方向为“工作室控制台”。
-- 首批实现切片：已通过 `add-complete-app-story-cockpit-first-slice` 建立 complete App state contract、本机 App 状态 endpoint 和工作室控制台 shell；后续仍需 API contract、真实多人平台和完整前端架构。
+- 首批实现切片：已通过 `add-complete-app-story-cockpit-first-slice` 建立 complete App state contract、本机 App 状态 endpoint 和工作室控制台 shell；`add-complete-app-frontend-architecture-slice` 进一步抽出首批 route/API/status contract 和本机 shell API 地图。后续仍需真实多人产品流、独立前端项目、富文本编辑器和实时协作。
 - 背景/问题：当前 `storyspec app` 仍是实验性本机工作台，页面信息层级、入口说明和操作反馈不足；用户打开 Web 后不容易判断“下一步该做什么”“哪些内容只是候选”“哪些动作会写入正式故事”。如果直接进入前端架构重写，容易把不清晰的产品模型固化到路由、API 和数据模型里。
 - 已有基础：`src/app-server/local-app-html.ts`、本机 App API、server 控制面 API、preview / confirm / apply 流程、已归档的新用户引导和创作导航路线、归档设计能力 `ui-ux-designer` / `frontend-design` / `ui-ux-pro-max`。
 - 缺口：缺少完整 App 的产品定位、用户旅程、信息架构、主导航、页面地图、首程引导、空状态、权限反馈、协作状态语言和视觉方向；`candidate`、`preview`、`dry-run`、`apply`、`blocked`、`deferred` 等技术状态还没有转成用户能直接理解的界面文案。

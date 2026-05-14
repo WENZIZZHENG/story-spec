@@ -7,7 +7,7 @@
 - `storyspec server` 可以启动多用户 HTTP server。
 - `storyspec worker` 可以作为独立进程消费 agent job 队列。
 - `/health` 和 `/ready` 可用于基础探活。
-- 当前控制面已具备 session/project guard、项目元信息、路径解析探针、job 控制面、审计/配额守卫、runtime adapter foundation、只读 App 回流 API、PostgreSQL-backed repository 配置和 Redis/BullMQ worker 队列底座。
+- 当前控制面已具备 session/project guard、项目元信息、路径解析探针、job 控制面、审计/配额守卫、runtime adapter foundation、只读 App 回流 API、完整 App 首批前端架构契约、PostgreSQL-backed repository 配置和 Redis/BullMQ worker 队列底座。
 
 ## 启动方式
 
@@ -34,6 +34,7 @@
 ## 重要边界
 
 - 当前 Redis/BullMQ queue 和独立 worker 是首批底座，不包含生产级死信队列、dashboard、分布式锁或高可用调度。
+- 当前完整 App 前端架构只是本机 shell 可复用的首批 route/API/status contract，不包含独立前端项目、账号产品流、富文本编辑器或实时协作。
 - `OpenHandsRunner` 目前是 PoC adapter，不安装或调用真实 OpenHands。
 - 项目删除当前只生成需要二次确认的删除计划和审计事件，不直接删除磁盘文件。
 - 该配置面向本地/自托管验证，不承诺 Kubernetes、企业高可用或商业计费。

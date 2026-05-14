@@ -78,6 +78,16 @@ describe('local app html', () => {
     expect(html).toContain('任务中心');
     expect(html).toContain('协作侧栏');
     expect(html).toContain('Preview / Confirm / Apply');
+    expect(html).toContain('aria-label="完整 App 首批页面导航"');
+    expect(html).toContain('data-route-id="project-workspace"');
+    expect(html).toContain('data-route-id="story-cockpit"');
+    expect(html).toContain('data-route-id="chapter-writing"');
+    expect(html).toContain('data-route-id="canon-review"');
+    expect(html).toContain('data-route-id="task-center"');
+    expect(html).toContain('前端 API 地图');
+    expect(html).toContain('data-endpoint-id="current-app-state"');
+    expect(html).toContain('data-endpoint-id="story-ingest"');
+    expect(html).toContain('data-endpoint-id="chapter-draft-promote"');
     expect(html).toContain('最近项目');
     expect(html).toContain('打开项目');
     expect(html).toContain('创建项目');
