@@ -968,6 +968,18 @@ describe('multiuser server entry', () => {
           code: 'MULTIUSER_REPOSITORY_NOT_CONFIGURED'
         }
       });
+
+      const panel = await fetch(`${server.url}/api/projects/project-1/stories/story-main/canon-review`, {
+        headers: {
+          authorization: 'Bearer session-token'
+        }
+      });
+      expect(panel.status).toBe(503);
+      await expect(panel.json()).resolves.toMatchObject({
+        error: {
+          code: 'MULTIUSER_REPOSITORY_NOT_CONFIGURED'
+        }
+      });
     } finally {
       await server.close();
     }
@@ -1108,6 +1120,53 @@ describe('multiuser server entry', () => {
         patchIds: [patch.id],
         reviewerIds: ['user-reviewer'],
         blockedReasons: []
+      });
+
+      const reviewPanel = await fetch(`${server.url}/api/projects/project-1/stories/story-main/canon-review`, {
+        headers: {
+          authorization: 'Bearer reviewer-token'
+        }
+      });
+      expect(reviewPanel.status).toBe(200);
+      await expect(reviewPanel.json()).resolves.toMatchObject({
+        projectId: 'project-1',
+        storyId: 'story-main',
+        totals: {
+          proposals: 1,
+          reviews: 1,
+          patches: 1,
+          applyRequests: 1
+        },
+        entries: [
+          {
+            proposal: {
+              id: proposal.id,
+              storyId: 'story-main',
+              status: 'apply-requested'
+            },
+            reviews: [
+              {
+                reviewerUserId: 'user-reviewer',
+                decision: 'approve'
+              }
+            ],
+            patches: [
+              {
+                id: patch.id,
+                kind: 'canon-fact'
+              }
+            ],
+            applyRequests: [
+              {
+                status: 'ready',
+                patchIds: [patch.id]
+              }
+            ],
+            nextActions: [
+              '等待作者确认 apply；正式故事仍未写入。'
+            ]
+          }
+        ]
       });
 
       await expect(auditRepository.listByProject('project-1')).resolves.toEqual(expect.arrayContaining([

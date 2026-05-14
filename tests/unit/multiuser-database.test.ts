@@ -400,6 +400,23 @@ describe('multiuser database foundation', () => {
       blockedReasons: [],
       createdAt: '2026-05-08T12:03:00.000Z'
     });
+    await expect(repositories.collaboration.listProposalsByProject?.({
+      projectId: 'project-1',
+      storyId: 'story-main'
+    })).resolves.toEqual([
+      expect.objectContaining({
+        id: 'proposal-1',
+        projectId: 'project-1',
+        storyId: 'story-main'
+      })
+    ]);
+    await expect(repositories.collaboration.listApplyRequests?.('proposal-1')).resolves.toEqual([
+      expect.objectContaining({
+        id: 'apply-1',
+        proposalId: 'proposal-1',
+        status: 'ready'
+      })
+    ]);
     expect(repositories.collaboration.snapshot()).toMatchObject({
       proposals: [
         { id: 'proposal-1' }
@@ -419,5 +436,7 @@ describe('multiuser database foundation', () => {
     expect(queries.some(query => query.sql.includes('insert into collaboration_review_decisions'))).toBe(true);
     expect(queries.some(query => query.sql.includes('insert into collaboration_canon_patches'))).toBe(true);
     expect(queries.some(query => query.sql.includes('insert into collaboration_apply_requests'))).toBe(true);
+    expect(queries.some(query => query.sql.includes('from collaboration_proposals') && query.sql.includes('story_id = $2'))).toBe(true);
+    expect(queries.some(query => query.sql.includes('from collaboration_apply_requests where proposal_id = $1'))).toBe(true);
   });
 });

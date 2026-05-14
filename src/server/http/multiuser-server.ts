@@ -14,6 +14,7 @@ import type {
   VersionSnapshot
 } from '../collaboration/canon-merge.js';
 import {
+  buildCollaborationCanonReviewPanel,
   createApplyRequest,
   createCanonPatch,
   createCollaborationProposal,
@@ -440,6 +441,47 @@ export const startMultiuserServer = async (input: StartMultiuserServerInput): Pr
       const collaborationMatch = url.pathname.match(
         /^\/api\/projects\/([^/]+)\/collaboration\/proposals(?:\/([^/]+)\/(reviews|patches|apply-requests))?$/
       );
+      const canonReviewMatch = url.pathname.match(
+        /^\/api\/projects\/([^/]+)\/stories\/([^/]+)\/canon-review$/
+      );
+      if (
+        request.method === 'GET'
+        && (canonReviewMatch || (collaborationMatch && !collaborationMatch[2] && !collaborationMatch[3]))
+      ) {
+        if (!input.sessionRepository || !input.projectRepository || !input.collaborationRepository) {
+          sendJson(response, 503, repositoryNotConfigured(context.requestId), context.requestId);
+          return;
+        }
+
+        const projectId = decodeURIComponent((canonReviewMatch?.[1] ?? collaborationMatch?.[1]) ?? '');
+        const storyId = canonReviewMatch?.[2]
+          ? decodeURIComponent(canonReviewMatch[2])
+          : url.searchParams.get('storyId') ?? undefined;
+        const guard = await requireProjectContext({
+          request,
+          sessionRepository: input.sessionRepository,
+          projectRepository: input.projectRepository,
+          projectId,
+          now: input.now
+        });
+        if (guard.statusCode !== 200) {
+          sendJson(response, guard.statusCode, createErrorResponse({
+            statusCode: guard.statusCode,
+            requestId: context.requestId,
+            code: guard.code,
+            message: guard.message
+          }), context.requestId);
+          return;
+        }
+
+        const panel = await buildCollaborationCanonReviewPanel({
+          repository: input.collaborationRepository,
+          projectId: guard.accessContext.projectId,
+          storyId
+        });
+        sendJson(response, 200, panel, context.requestId);
+        return;
+      }
       if (collaborationMatch && request.method === 'POST') {
         if (!input.sessionRepository || !input.projectRepository || !input.collaborationRepository) {
           sendJson(response, 503, repositoryNotConfigured(context.requestId), context.requestId);

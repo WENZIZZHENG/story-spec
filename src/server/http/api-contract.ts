@@ -168,7 +168,7 @@ export const MULTIUSER_CONTRACT_PAGE_ENDPOINTS: MultiuserContractPageEndpoint[] 
     label: '候选与正典',
     endpoint: '/api/projects/:projectId/stories/:storyId/canon-review',
     method: 'GET',
-    description: '审阅候选、正典冲突和评论结果。',
+    description: '读取候选、审批、patch 和 apply request 的只读审阅面板。',
     successStatus: 200,
     permissionActions: [
       {

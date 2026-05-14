@@ -121,14 +121,36 @@ export interface CollaborationCanonRepositorySnapshot {
 
 export interface CollaborationCanonRepository {
   findProposalById(proposalId: string): Promise<CollaborationProposal | undefined>;
+  listProposalsByProject?(input: { projectId: string; storyId?: string }): Promise<CollaborationProposal[]>;
   saveProposal(proposal: CollaborationProposal): Promise<void>;
   listReviewDecisions(proposalId: string): Promise<ReviewDecision[]>;
   saveReviewDecision(decision: ReviewDecision): Promise<void>;
   listPatches(proposalId: string): Promise<CanonPatch[]>;
   savePatch(patch: CanonPatch): Promise<void>;
+  listApplyRequests?(proposalId: string): Promise<ApplyRequest[]>;
   saveApplyRequest(request: ApplyRequest): Promise<void>;
   saveCommentThread?(thread: CommentThread): Promise<void>;
   snapshot(): CollaborationCanonRepositorySnapshot;
+}
+
+export interface CollaborationCanonReviewEntry {
+  proposal: CollaborationProposal;
+  reviews: ReviewDecision[];
+  patches: CanonPatch[];
+  applyRequests: ApplyRequest[];
+  nextActions: string[];
+}
+
+export interface CollaborationCanonReviewPanel {
+  projectId: string;
+  storyId?: string;
+  totals: {
+    proposals: number;
+    reviews: number;
+    patches: number;
+    applyRequests: number;
+  };
+  entries: CollaborationCanonReviewEntry[];
 }
 
 export interface CreateCollaborationProposalInput {
@@ -192,6 +214,12 @@ export const createMemoryCollaborationCanonRepository = (): CollaborationCanonRe
     async findProposalById(proposalId) {
       return proposals.get(proposalId);
     },
+    async listProposalsByProject(input) {
+      return [...proposals.values()].filter(proposal =>
+        proposal.projectId === input.projectId
+        && (input.storyId === undefined || proposal.storyId === input.storyId)
+      );
+    },
     async saveProposal(proposal) {
       proposals.set(proposal.id, proposal);
     },
@@ -206,6 +234,9 @@ export const createMemoryCollaborationCanonRepository = (): CollaborationCanonRe
     },
     async savePatch(patch) {
       patches.push(patch);
+    },
+    async listApplyRequests(proposalId) {
+      return applyRequests.filter(request => request.proposalId === proposalId);
     },
     async saveApplyRequest(request) {
       applyRequests.push(request);
@@ -222,6 +253,101 @@ export const createMemoryCollaborationCanonRepository = (): CollaborationCanonRe
         commentThreads: [...commentThreads]
       };
     }
+  };
+};
+
+const fallbackListProposalsByProject = (
+  repository: CollaborationCanonRepository,
+  input: { projectId: string; storyId?: string }
+): CollaborationProposal[] =>
+  repository.snapshot().proposals.filter(proposal =>
+    proposal.projectId === input.projectId
+    && (input.storyId === undefined || proposal.storyId === input.storyId)
+  );
+
+const fallbackListApplyRequests = (
+  repository: CollaborationCanonRepository,
+  proposalId: string
+): ApplyRequest[] =>
+  repository.snapshot().applyRequests.filter(request => request.proposalId === proposalId);
+
+const buildNextActions = (entry: {
+  proposal: CollaborationProposal;
+  reviews: ReviewDecision[];
+  patches: CanonPatch[];
+  applyRequests: ApplyRequest[];
+}): string[] => {
+  const latestApplyRequest = entry.applyRequests.at(-1);
+  if (latestApplyRequest?.status === 'ready') {
+    return ['等待作者确认 apply；正式故事仍未写入。'];
+  }
+  if (latestApplyRequest?.status === 'blocked') {
+    return latestApplyRequest.blockedReasons.length > 0
+      ? latestApplyRequest.blockedReasons.map(reason => `处理阻塞：${reason}`)
+      : ['处理 apply 阻塞后再请求作者确认。'];
+  }
+  if (entry.patches.length === 0) {
+    return ['生成可审阅 canon patch，并附回滚入口。'];
+  }
+  if (!entry.reviews.some(review => review.decision === 'approve')) {
+    return ['等待 reviewer 审批或作者显式确认。'];
+  }
+  if (entry.proposal.status === 'rejected') {
+    return ['候选已拒绝，可保留审计记录或重新提交候选。'];
+  }
+  if (entry.proposal.status === 'deferred') {
+    return ['候选已稍后决定，保留未确认状态。'];
+  }
+  return ['可以创建 apply request；正式故事仍需二次确认。'];
+};
+
+export const buildCollaborationCanonReviewPanel = async (
+  input: {
+    repository: CollaborationCanonRepository;
+    projectId: string;
+    storyId?: string;
+  }
+): Promise<CollaborationCanonReviewPanel> => {
+  const proposals = input.repository.listProposalsByProject
+    ? await input.repository.listProposalsByProject({
+      projectId: input.projectId,
+      storyId: input.storyId
+    })
+    : fallbackListProposalsByProject(input.repository, {
+      projectId: input.projectId,
+      storyId: input.storyId
+    });
+
+  const entries: CollaborationCanonReviewEntry[] = [];
+  for (const proposal of proposals.sort((left, right) => right.updatedAt.localeCompare(left.updatedAt))) {
+    const reviews = await input.repository.listReviewDecisions(proposal.id);
+    const patches = await input.repository.listPatches(proposal.id);
+    const applyRequests = input.repository.listApplyRequests
+      ? await input.repository.listApplyRequests(proposal.id)
+      : fallbackListApplyRequests(input.repository, proposal.id);
+    const entry = {
+      proposal,
+      reviews,
+      patches,
+      applyRequests,
+      nextActions: [] as string[]
+    };
+    entries.push({
+      ...entry,
+      nextActions: buildNextActions(entry)
+    });
+  }
+
+  return {
+    projectId: input.projectId,
+    ...(input.storyId ? { storyId: input.storyId } : {}),
+    totals: {
+      proposals: entries.length,
+      reviews: entries.reduce((total, entry) => total + entry.reviews.length, 0),
+      patches: entries.reduce((total, entry) => total + entry.patches.length, 0),
+      applyRequests: entries.reduce((total, entry) => total + entry.applyRequests.length, 0)
+    },
+    entries
   };
 };
 

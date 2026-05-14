@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import {
+  buildCollaborationCanonReviewPanel,
   createApplyRequest,
   createCanonPatch,
   createCollaborationProposal,
@@ -224,5 +225,106 @@ describe('collaboration canon merge protocol', () => {
       '目标版本已变化：proposal=chapter-v1 current=chapter-v2。',
       '伏笔 payoff 未确认。'
     ]);
+  });
+
+  it('builds a read-only canon review panel filtered by project and story', async () => {
+    const repository = createMemoryCollaborationCanonRepository();
+    await createCollaborationProposal({
+      repository,
+      actorUserId: 'editor-1',
+      projectId: 'project-1',
+      storyId: 'story-main',
+      target: {
+        kind: 'canon',
+        path: 'stories/main/canon.md',
+        resourceVersion: 'canon-v1'
+      },
+      sourceRefs: [{ kind: 'manual', id: 'note-1', label: '人工记录' }],
+      summary: '新增正典事实。',
+      now: () => '2026-05-14T08:00:00.000Z',
+      idGenerator: () => 'proposal-1'
+    });
+    await submitReviewDecision({
+      repository,
+      proposalId: 'proposal-1',
+      reviewerUserId: 'reviewer-1',
+      decision: 'approve',
+      now: () => '2026-05-14T08:01:00.000Z',
+      idGenerator: () => 'review-1'
+    });
+    await createCanonPatch({
+      repository,
+      proposalId: 'proposal-1',
+      targetPath: 'stories/main/canon.md',
+      kind: 'canon-fact',
+      diffSummary: '新增 fact-1。',
+      rollbackHint: '删除 fact-1。',
+      sourceRefs: ['note-1'],
+      idGenerator: () => 'patch-1'
+    });
+    await createApplyRequest({
+      repository,
+      proposalId: 'proposal-1',
+      actorUserId: 'owner-1',
+      authorConfirmed: true,
+      currentVersion: {
+        resourceVersion: 'canon-v1',
+        storyStage: 'drafting',
+        canonFactIds: [],
+        taskState: 'open'
+      },
+      now: () => '2026-05-14T08:02:00.000Z',
+      idGenerator: () => 'apply-1'
+    });
+    await createCollaborationProposal({
+      repository,
+      actorUserId: 'editor-1',
+      projectId: 'project-1',
+      storyId: 'other-story',
+      target: {
+        kind: 'chapter',
+        path: 'stories/other/content/chapter-001.md',
+        resourceVersion: 'chapter-v1'
+      },
+      sourceRefs: [{ kind: 'draft', id: 'draft-1', label: '其他故事草稿' }],
+      summary: '其他故事候选。',
+      now: () => '2026-05-14T08:03:00.000Z',
+      idGenerator: () => 'proposal-other'
+    });
+
+    await expect(buildCollaborationCanonReviewPanel({
+      repository,
+      projectId: 'project-1',
+      storyId: 'story-main'
+    })).resolves.toMatchObject({
+      projectId: 'project-1',
+      storyId: 'story-main',
+      totals: {
+        proposals: 1,
+        reviews: 1,
+        patches: 1,
+        applyRequests: 1
+      },
+      entries: [
+        {
+          proposal: {
+            id: 'proposal-1',
+            status: 'apply-requested'
+          },
+          reviews: [
+            { id: 'review-1' }
+          ],
+          patches: [
+            { id: 'patch-1' }
+          ],
+          applyRequests: [
+            { id: 'apply-1', status: 'ready' }
+          ],
+          nextActions: [
+            '等待作者确认 apply；正式故事仍未写入。'
+          ]
+        }
+      ]
+    });
   });
 });

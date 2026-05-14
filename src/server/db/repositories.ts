@@ -463,6 +463,20 @@ export const createMultiuserDatabaseRepositories = (
       );
       return row ? mapCollaborationProposal(row) : undefined;
     },
+    async listProposalsByProject(input) {
+      const clauses = [
+        'select id, actor_user_id, project_id, story_id, status, target, source_refs, summary, risks, created_at, updated_at',
+        'from collaboration_proposals where project_id = $1'
+      ];
+      const params: unknown[] = [input.projectId];
+      if (input.storyId) {
+        clauses.push('and story_id = $2');
+        params.push(input.storyId);
+      }
+      clauses.push('order by updated_at desc');
+      const rows = await executor.queryMany<CollaborationProposalRow>(clauses.join(' '), params);
+      return rows.map(mapCollaborationProposal);
+    },
     async saveProposal(proposal) {
       collaborationCache.proposals.set(proposal.id, proposal);
       await executor.execute(
@@ -542,6 +556,16 @@ export const createMultiuserDatabaseRepositories = (
           JSON.stringify(patch.sourceRefs)
         ]
       );
+    },
+    async listApplyRequests(proposalId) {
+      const rows = await executor.queryMany<CollaborationApplyRequestRow>(
+        [
+          'select id, proposal_id, actor_user_id, status, current_version, patch_ids, reviewer_ids, blocked_reasons, created_at',
+          'from collaboration_apply_requests where proposal_id = $1 order by created_at asc'
+        ].join(' '),
+        [proposalId]
+      );
+      return rows.map(mapCollaborationApplyRequest);
     },
     async saveApplyRequest(request) {
       collaborationCache.applyRequests.push(request);
