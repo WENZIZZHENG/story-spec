@@ -1,5 +1,16 @@
 import type { AuditEvent, AuditLogRepository } from '../audit/audit-log.js';
 import type { MultiuserSession, MultiuserUser, SessionRepository } from '../auth/session.js';
+import type {
+  ApplyRequest,
+  CanonPatch,
+  CollaborationCanonRepository,
+  CollaborationProposal,
+  CollaborationRisk,
+  CollaborationSourceRef,
+  CollaborationTarget,
+  ReviewDecision,
+  VersionSnapshot
+} from '../collaboration/canon-merge.js';
 import type { AgentJob, AgentJobRepository } from '../jobs/agent-job.js';
 import type {
   MultiuserProject,
@@ -21,6 +32,7 @@ export interface MultiuserDatabaseRepositories {
   jobs: AgentJobRepository;
   audit: AuditLogRepository;
   quota: QuotaRepository;
+  collaboration: CollaborationCanonRepository;
 }
 
 interface UserRow {
@@ -83,6 +95,51 @@ interface QuotaRow {
   used: number;
 }
 
+interface CollaborationProposalRow {
+  id: string;
+  actor_user_id: string;
+  project_id: string;
+  story_id: string;
+  status: CollaborationProposal['status'];
+  target: CollaborationTarget | string;
+  source_refs: CollaborationSourceRef[] | string;
+  summary: string;
+  risks: CollaborationRisk[] | string;
+  created_at: string;
+  updated_at: string;
+}
+
+interface CollaborationReviewDecisionRow {
+  id: string;
+  proposal_id: string;
+  reviewer_user_id: string;
+  decision: ReviewDecision['decision'];
+  note?: string;
+  created_at: string;
+}
+
+interface CollaborationCanonPatchRow {
+  id: string;
+  proposal_id: string;
+  target_path: string;
+  kind: CanonPatch['kind'];
+  diff_summary: string;
+  rollback_hint: string;
+  source_refs: string[] | string;
+}
+
+interface CollaborationApplyRequestRow {
+  id: string;
+  proposal_id: string;
+  actor_user_id: string;
+  status: ApplyRequest['status'];
+  current_version: VersionSnapshot | string;
+  patch_ids: string[] | string;
+  reviewer_ids: string[] | string;
+  blocked_reasons: string[] | string;
+  created_at: string;
+}
+
 const mapUser = (row: UserRow): MultiuserUser => ({
   id: row.id,
   displayName: row.display_name
@@ -118,8 +175,7 @@ const mapJob = (row: AgentJobRow): AgentJob => ({
   idempotencyKey: row.idempotency_key,
   createdAt: row.created_at,
   updatedAt: row.updated_at,
-  errorMessage: row.error_message
-  ,
+  errorMessage: row.error_message,
   traceId: row.trace_id,
   runtimeErrorCode: row.runtime_error_code
 });
@@ -144,10 +200,70 @@ const mapQuota = (row: QuotaRow): QuotaBucket => ({
   used: row.used
 });
 
+const parseJsonValue = <T>(value: T | string): T => {
+  if (typeof value === 'string') {
+    return JSON.parse(value) as T;
+  }
+  return value;
+};
+
+const mapCollaborationProposal = (row: CollaborationProposalRow): CollaborationProposal => ({
+  id: row.id,
+  actorUserId: row.actor_user_id,
+  projectId: row.project_id,
+  storyId: row.story_id,
+  status: row.status,
+  target: parseJsonValue<CollaborationTarget>(row.target),
+  sourceRefs: parseJsonValue<CollaborationSourceRef[]>(row.source_refs),
+  summary: row.summary,
+  risks: parseJsonValue<CollaborationRisk[]>(row.risks),
+  createdAt: row.created_at,
+  updatedAt: row.updated_at
+});
+
+const mapCollaborationReviewDecision = (row: CollaborationReviewDecisionRow): ReviewDecision => ({
+  id: row.id,
+  proposalId: row.proposal_id,
+  reviewerUserId: row.reviewer_user_id,
+  decision: row.decision,
+  note: row.note,
+  createdAt: row.created_at
+});
+
+const mapCollaborationCanonPatch = (row: CollaborationCanonPatchRow): CanonPatch => ({
+  id: row.id,
+  proposalId: row.proposal_id,
+  targetPath: row.target_path,
+  kind: row.kind,
+  diffSummary: row.diff_summary,
+  rollbackHint: row.rollback_hint,
+  sourceRefs: parseJsonValue<string[]>(row.source_refs)
+});
+
+const mapCollaborationApplyRequest = (row: CollaborationApplyRequestRow): ApplyRequest => ({
+  id: row.id,
+  proposalId: row.proposal_id,
+  actorUserId: row.actor_user_id,
+  status: row.status,
+  currentVersion: parseJsonValue<VersionSnapshot>(row.current_version),
+  patchIds: parseJsonValue<string[]>(row.patch_ids),
+  reviewerIds: parseJsonValue<string[]>(row.reviewer_ids),
+  blockedReasons: parseJsonValue<string[]>(row.blocked_reasons),
+  createdAt: row.created_at
+});
+
 export const createMultiuserDatabaseRepositories = (
   executor: MultiuserDatabaseExecutor
-): MultiuserDatabaseRepositories => ({
-  sessions: {
+): MultiuserDatabaseRepositories => {
+  const collaborationCache = {
+    proposals: new Map<string, CollaborationProposal>(),
+    reviewDecisions: [] as ReviewDecision[],
+    patches: [] as CanonPatch[],
+    applyRequests: [] as ApplyRequest[]
+  };
+
+  return {
+    sessions: {
     async findUser(userId) {
       const row = await executor.queryOne<UserRow>(
         'select id, display_name from users where id = $1',
@@ -183,8 +299,8 @@ export const createMultiuserDatabaseRepositories = (
       );
       return row ? mapSession(row) : undefined;
     }
-  },
-  projects: {
+    },
+    projects: {
     async findProject(projectId) {
       const row = await executor.queryOne<ProjectRow>(
         'select id, owner_user_id, data_root from projects where id = $1',
@@ -226,8 +342,8 @@ export const createMultiuserDatabaseRepositories = (
       );
       return rows.map(mapMembership);
     }
-  },
-  jobs: {
+    },
+    jobs: {
     async findById(jobId) {
       const row = await executor.queryOne<AgentJobRow>(
         [
@@ -283,8 +399,8 @@ export const createMultiuserDatabaseRepositories = (
         ]
       );
     }
-  },
-  audit: {
+    },
+    audit: {
     async save(event) {
       await executor.execute(
         [
@@ -313,8 +429,8 @@ export const createMultiuserDatabaseRepositories = (
       );
       return rows.map(mapAudit);
     }
-  },
-  quota: {
+    },
+    quota: {
     async findBucket(input) {
       const row = await executor.queryOne<QuotaRow>(
         [
@@ -335,5 +451,128 @@ export const createMultiuserDatabaseRepositories = (
         [bucket.id, bucket.scopeType, bucket.scopeId, bucket.metric, bucket.limit, bucket.used]
       );
     }
-  }
-});
+    },
+    collaboration: {
+    async findProposalById(proposalId) {
+      const row = await executor.queryOne<CollaborationProposalRow>(
+        [
+          'select id, actor_user_id, project_id, story_id, status, target, source_refs, summary, risks, created_at, updated_at',
+          'from collaboration_proposals where id = $1'
+        ].join(' '),
+        [proposalId]
+      );
+      return row ? mapCollaborationProposal(row) : undefined;
+    },
+    async saveProposal(proposal) {
+      collaborationCache.proposals.set(proposal.id, proposal);
+      await executor.execute(
+        [
+          'insert into collaboration_proposals (id, actor_user_id, project_id, story_id, status, target, source_refs, summary, risks, created_at, updated_at)',
+          'values ($1, $2, $3, $4, $5, $6::jsonb, $7::jsonb, $8, $9::jsonb, $10, $11)',
+          'on conflict (id) do update set status = excluded.status, target = excluded.target, source_refs = excluded.source_refs, summary = excluded.summary, risks = excluded.risks, updated_at = excluded.updated_at'
+        ].join(' '),
+        [
+          proposal.id,
+          proposal.actorUserId,
+          proposal.projectId,
+          proposal.storyId,
+          proposal.status,
+          JSON.stringify(proposal.target),
+          JSON.stringify(proposal.sourceRefs),
+          proposal.summary,
+          JSON.stringify(proposal.risks),
+          proposal.createdAt,
+          proposal.updatedAt
+        ]
+      );
+    },
+    async listReviewDecisions(proposalId) {
+      const rows = await executor.queryMany<CollaborationReviewDecisionRow>(
+        [
+          'select id, proposal_id, reviewer_user_id, decision, note, created_at',
+          'from collaboration_review_decisions where proposal_id = $1 order by created_at asc'
+        ].join(' '),
+        [proposalId]
+      );
+      return rows.map(mapCollaborationReviewDecision);
+    },
+    async saveReviewDecision(decision) {
+      collaborationCache.reviewDecisions.push(decision);
+      await executor.execute(
+        [
+          'insert into collaboration_review_decisions (id, proposal_id, reviewer_user_id, decision, note, created_at)',
+          'values ($1, $2, $3, $4, $5, $6)',
+          'on conflict (id) do update set decision = excluded.decision, note = excluded.note'
+        ].join(' '),
+        [
+          decision.id,
+          decision.proposalId,
+          decision.reviewerUserId,
+          decision.decision,
+          decision.note,
+          decision.createdAt
+        ]
+      );
+    },
+    async listPatches(proposalId) {
+      const rows = await executor.queryMany<CollaborationCanonPatchRow>(
+        [
+          'select id, proposal_id, target_path, kind, diff_summary, rollback_hint, source_refs',
+          'from collaboration_canon_patches where proposal_id = $1 order by id asc'
+        ].join(' '),
+        [proposalId]
+      );
+      return rows.map(mapCollaborationCanonPatch);
+    },
+    async savePatch(patch) {
+      collaborationCache.patches.push(patch);
+      await executor.execute(
+        [
+          'insert into collaboration_canon_patches (id, proposal_id, target_path, kind, diff_summary, rollback_hint, source_refs)',
+          'values ($1, $2, $3, $4, $5, $6, $7::jsonb)',
+          'on conflict (id) do update set target_path = excluded.target_path, kind = excluded.kind, diff_summary = excluded.diff_summary, rollback_hint = excluded.rollback_hint, source_refs = excluded.source_refs'
+        ].join(' '),
+        [
+          patch.id,
+          patch.proposalId,
+          patch.targetPath,
+          patch.kind,
+          patch.diffSummary,
+          patch.rollbackHint,
+          JSON.stringify(patch.sourceRefs)
+        ]
+      );
+    },
+    async saveApplyRequest(request) {
+      collaborationCache.applyRequests.push(request);
+      await executor.execute(
+        [
+          'insert into collaboration_apply_requests (id, proposal_id, actor_user_id, status, current_version, patch_ids, reviewer_ids, blocked_reasons, created_at)',
+          'values ($1, $2, $3, $4, $5::jsonb, $6::jsonb, $7::jsonb, $8::jsonb, $9)',
+          'on conflict (id) do update set status = excluded.status, current_version = excluded.current_version, patch_ids = excluded.patch_ids, reviewer_ids = excluded.reviewer_ids, blocked_reasons = excluded.blocked_reasons'
+        ].join(' '),
+        [
+          request.id,
+          request.proposalId,
+          request.actorUserId,
+          request.status,
+          JSON.stringify(request.currentVersion),
+          JSON.stringify(request.patchIds),
+          JSON.stringify(request.reviewerIds),
+          JSON.stringify(request.blockedReasons),
+          request.createdAt
+        ]
+      );
+    },
+    snapshot() {
+      return {
+        proposals: [...collaborationCache.proposals.values()],
+        reviewDecisions: [...collaborationCache.reviewDecisions],
+        patches: [...collaborationCache.patches],
+        applyRequests: [...collaborationCache.applyRequests],
+        commentThreads: []
+      };
+    }
+    }
+  };
+};

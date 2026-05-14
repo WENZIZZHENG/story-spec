@@ -3,6 +3,7 @@ import { describe, expect, it, vi } from 'vitest';
 import { registerMultiuserServerCommand } from '../../src/cli/commands/multiuser-server.command.js';
 import { createMemoryAuditLogRepository } from '../../src/server/audit/audit-log.js';
 import { createMemorySessionRepository } from '../../src/server/auth/session.js';
+import { createMemoryCollaborationCanonRepository } from '../../src/server/collaboration/canon-merge.js';
 import { createMemoryAgentJobRepository } from '../../src/server/jobs/agent-job.js';
 import { createMemoryProjectAccessRepository } from '../../src/server/projects/project-security.js';
 import { createMemoryQuotaRepository } from '../../src/server/quota/quota.js';
@@ -29,6 +30,7 @@ describe('multiuser server command', () => {
         sessions: createMemorySessionRepository({ users: [] }),
         projects: createMemoryProjectAccessRepository({ projects: [], memberships: [] }),
         jobs: createMemoryAgentJobRepository(),
+        collaboration: createMemoryCollaborationCanonRepository(),
         audit: createMemoryAuditLogRepository(),
         quota: createMemoryQuotaRepository({ buckets: [] })
       },
@@ -74,6 +76,7 @@ describe('multiuser server command', () => {
       sessionRepository: expect.any(Object),
       projectRepository: expect.any(Object),
       jobRepository: expect.any(Object),
+      collaborationRepository: expect.any(Object),
       auditRepository: expect.any(Object),
       quotaRepository: expect.any(Object),
       database: {

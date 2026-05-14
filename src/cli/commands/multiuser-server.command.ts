@@ -49,6 +49,7 @@ export const registerMultiuserServerCommand = (
         sessionRepository: databaseConnection?.repositories.sessions,
         projectRepository: databaseConnection?.repositories.projects,
         jobRepository: databaseConnection?.repositories.jobs,
+        collaborationRepository: databaseConnection?.repositories.collaboration,
         auditRepository: databaseConnection?.repositories.audit,
         quotaRepository: databaseConnection?.repositories.quota,
         database: databaseConnection?.ready

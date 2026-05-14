@@ -12,6 +12,10 @@ export interface MultiuserDatabaseSchema {
   agentJobs: MultiuserTableSchema;
   auditLogs: MultiuserTableSchema;
   quotaBuckets: MultiuserTableSchema;
+  collaborationProposals: MultiuserTableSchema;
+  collaborationReviewDecisions: MultiuserTableSchema;
+  collaborationCanonPatches: MultiuserTableSchema;
+  collaborationApplyRequests: MultiuserTableSchema;
 }
 
 export interface MultiuserMigrationPlan {
@@ -154,7 +158,102 @@ const quotaBuckets: MultiuserTableSchema = {
   ]
 };
 
-export const MULTIUSER_MIGRATION_VERSION = 1;
+const collaborationProposals: MultiuserTableSchema = {
+  name: 'collaboration_proposals',
+  columns: [
+    'id',
+    'actor_user_id',
+    'project_id',
+    'story_id',
+    'status',
+    'target',
+    'source_refs',
+    'summary',
+    'risks',
+    'created_at',
+    'updated_at'
+  ],
+  createStatements: [
+    'create table if not exists collaboration_proposals (',
+    '  id text primary key,',
+    '  actor_user_id text not null references users(id) on delete cascade,',
+    '  project_id text not null references projects(id) on delete cascade,',
+    '  story_id text not null,',
+    '  status text not null,',
+    '  target jsonb not null,',
+    '  source_refs jsonb not null,',
+    '  summary text not null,',
+    '  risks jsonb not null,',
+    '  created_at timestamptz not null,',
+    '  updated_at timestamptz not null',
+    ');',
+    'create index if not exists collaboration_proposals_project_story_idx on collaboration_proposals (project_id, story_id, updated_at desc);'
+  ]
+};
+
+const collaborationReviewDecisions: MultiuserTableSchema = {
+  name: 'collaboration_review_decisions',
+  columns: ['id', 'proposal_id', 'reviewer_user_id', 'decision', 'note', 'created_at'],
+  createStatements: [
+    'create table if not exists collaboration_review_decisions (',
+    '  id text primary key,',
+    '  proposal_id text not null references collaboration_proposals(id) on delete cascade,',
+    '  reviewer_user_id text not null references users(id) on delete cascade,',
+    '  decision text not null,',
+    '  note text,',
+    '  created_at timestamptz not null',
+    ');',
+    'create index if not exists collaboration_review_decisions_proposal_idx on collaboration_review_decisions (proposal_id, created_at asc);'
+  ]
+};
+
+const collaborationCanonPatches: MultiuserTableSchema = {
+  name: 'collaboration_canon_patches',
+  columns: ['id', 'proposal_id', 'target_path', 'kind', 'diff_summary', 'rollback_hint', 'source_refs'],
+  createStatements: [
+    'create table if not exists collaboration_canon_patches (',
+    '  id text primary key,',
+    '  proposal_id text not null references collaboration_proposals(id) on delete cascade,',
+    '  target_path text not null,',
+    '  kind text not null,',
+    '  diff_summary text not null,',
+    '  rollback_hint text not null,',
+    '  source_refs jsonb not null',
+    ');',
+    'create index if not exists collaboration_canon_patches_proposal_idx on collaboration_canon_patches (proposal_id);'
+  ]
+};
+
+const collaborationApplyRequests: MultiuserTableSchema = {
+  name: 'collaboration_apply_requests',
+  columns: [
+    'id',
+    'proposal_id',
+    'actor_user_id',
+    'status',
+    'current_version',
+    'patch_ids',
+    'reviewer_ids',
+    'blocked_reasons',
+    'created_at'
+  ],
+  createStatements: [
+    'create table if not exists collaboration_apply_requests (',
+    '  id text primary key,',
+    '  proposal_id text not null references collaboration_proposals(id) on delete cascade,',
+    '  actor_user_id text not null references users(id) on delete cascade,',
+    '  status text not null,',
+    '  current_version jsonb not null,',
+    '  patch_ids jsonb not null,',
+    '  reviewer_ids jsonb not null,',
+    '  blocked_reasons jsonb not null,',
+    '  created_at timestamptz not null',
+    ');',
+    'create index if not exists collaboration_apply_requests_proposal_idx on collaboration_apply_requests (proposal_id, created_at desc);'
+  ]
+};
+
+export const MULTIUSER_MIGRATION_VERSION = 2;
 
 export const multiuserDatabaseSchema: MultiuserDatabaseSchema = {
   users,
@@ -163,18 +262,30 @@ export const multiuserDatabaseSchema: MultiuserDatabaseSchema = {
   memberships,
   agentJobs,
   auditLogs,
-  quotaBuckets
+  quotaBuckets,
+  collaborationProposals,
+  collaborationReviewDecisions,
+  collaborationCanonPatches,
+  collaborationApplyRequests
 };
+
+const tableStatements = (schema: MultiuserTableSchema): string[] => [
+  schema.createStatements.join('\n')
+];
 
 export const createMultiuserMigrationPlan = (): MultiuserMigrationPlan => ({
   version: MULTIUSER_MIGRATION_VERSION,
   statements: [
-    ...users.createStatements,
-    ...sessions.createStatements,
-    ...projects.createStatements,
-    ...memberships.createStatements,
-    ...agentJobs.createStatements,
-    ...auditLogs.createStatements,
-    ...quotaBuckets.createStatements
+    ...tableStatements(users),
+    ...tableStatements(sessions),
+    ...tableStatements(projects),
+    ...tableStatements(memberships),
+    ...tableStatements(agentJobs),
+    ...tableStatements(auditLogs),
+    ...tableStatements(quotaBuckets),
+    ...tableStatements(collaborationProposals),
+    ...tableStatements(collaborationReviewDecisions),
+    ...tableStatements(collaborationCanonPatches),
+    ...tableStatements(collaborationApplyRequests)
   ]
 });
