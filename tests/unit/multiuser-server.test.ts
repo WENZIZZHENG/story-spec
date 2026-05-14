@@ -658,6 +658,137 @@ describe('multiuser server entry', () => {
     }
   });
 
+  it('serves a project job dashboard with status counts and queue snapshot', async () => {
+    const jobRepository = createMemoryAgentJobRepository();
+    const jobQueue = createMemoryAgentJobQueue();
+    const queued = await createAgentJob({
+      repository: jobRepository,
+      userId: 'user-1',
+      projectId: 'project-1',
+      kind: 'chapter-draft',
+      runtime: 'local-storyspec',
+      now: () => '2026-05-08T12:00:00.000Z',
+      idGenerator: () => 'job-queued'
+    });
+    await jobQueue.enqueue({
+      jobId: 'job-queued',
+      projectId: 'project-1',
+      userId: 'user-1',
+      runtime: 'local-storyspec',
+      kind: 'chapter-draft',
+      attempt: 1
+    });
+    const running = await createAgentJob({
+      repository: jobRepository,
+      userId: 'user-1',
+      projectId: 'project-1',
+      kind: 'review',
+      runtime: 'local-storyspec',
+      now: () => '2026-05-08T12:01:00.000Z',
+      idGenerator: () => 'job-running'
+    });
+    await transitionAgentJob({
+      repository: jobRepository,
+      jobId: running.job!.id,
+      status: 'running',
+      now: () => '2026-05-08T12:02:00.000Z'
+    });
+    const failed = await createAgentJob({
+      repository: jobRepository,
+      userId: 'user-1',
+      projectId: 'project-1',
+      kind: 'canon-review',
+      runtime: 'openhands',
+      now: () => '2026-05-08T12:03:00.000Z',
+      idGenerator: () => 'job-failed'
+    });
+    await transitionAgentJob({
+      repository: jobRepository,
+      jobId: failed.job!.id,
+      status: 'running',
+      now: () => '2026-05-08T12:04:00.000Z'
+    });
+    await transitionAgentJob({
+      repository: jobRepository,
+      jobId: failed.job!.id,
+      status: 'failed',
+      errorMessage: 'runner failed',
+      now: () => '2026-05-08T12:05:00.000Z'
+    });
+    const server = await startMultiuserServer({
+      host: '127.0.0.1',
+      port: 0,
+      version: '0.20.0',
+      sessionRepository: createMemorySessionRepository({
+        users: [{ id: 'user-1', displayName: '作者甲' }],
+        sessions: [{
+          token: 'session-token',
+          userId: 'user-1',
+          expiresAt: '2026-05-08T13:00:00.000Z'
+        }]
+      }),
+      projectRepository: createMemoryProjectAccessRepository({
+        projects: [{
+          id: 'project-1',
+          ownerUserId: 'user-1',
+          dataRoot: 'D:\\storyspec-data\\project-1'
+        }],
+        memberships: [{
+          projectId: 'project-1',
+          userId: 'user-1',
+          role: 'owner'
+        }]
+      }),
+      jobRepository,
+      jobQueue,
+      now: () => '2026-05-08T12:06:00.000Z'
+    });
+
+    try {
+      const dashboard = await fetch(`${server.url}/api/projects/project-1/jobs/dashboard`, {
+        headers: {
+          authorization: 'Bearer session-token'
+        }
+      });
+      expect(dashboard.status).toBe(200);
+      await expect(dashboard.json()).resolves.toMatchObject({
+        projectId: 'project-1',
+        totalJobs: 3,
+        activeJobs: 2,
+        retryableJobs: 1,
+        statusCounts: {
+          queued: 1,
+          running: 1,
+          succeeded: 0,
+          failed: 1,
+          canceled: 0,
+          timeout: 0
+        },
+        queue: {
+          readiness: {
+            configured: true,
+            connected: true,
+            worker: true,
+            driver: 'memory'
+          },
+          snapshot: {
+            pending: 1,
+            acknowledged: 0,
+            failed: 0
+          }
+        },
+        latestJobs: [
+          expect.objectContaining({ id: 'job-failed', status: 'failed' }),
+          expect.objectContaining({ id: 'job-running', status: 'running' }),
+          expect.objectContaining({ id: 'job-queued', status: 'queued' })
+        ]
+      });
+      expect(queued.job?.status).toBe('queued');
+    } finally {
+      await server.close();
+    }
+  });
+
   it('enforces configured job quota before creating jobs', async () => {
     const jobRepository = createMemoryAgentJobRepository();
     const quotaRepository = createMemoryQuotaRepository({

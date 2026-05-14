@@ -22,6 +22,7 @@ import {
 } from '../collaboration/canon-merge.js';
 import type { AgentJob, AgentJobRepository } from '../jobs/agent-job.js';
 import {
+  buildAgentJobDashboard,
   cancelAgentJob,
   createAgentJob,
   retryAgentJob
@@ -246,6 +247,17 @@ const auditServerMutation = async (
     jobId: input.jobId,
     now: input.now
   });
+};
+
+const getQueueSnapshot = (queue: AgentJobQueue | undefined) => {
+  if (!queue || !('snapshot' in queue) || typeof queue.snapshot !== 'function') {
+    return undefined;
+  }
+  return queue.snapshot() as {
+    pending: unknown[];
+    acknowledged: unknown[];
+    failed: unknown[];
+  };
 };
 
 const repositoryNotConfigured = (requestId?: string) => createErrorResponse({
@@ -756,6 +768,19 @@ export const startMultiuserServer = async (input: StartMultiuserServerInput): Pr
             now: input.now
           });
           sendJson(response, 200, result.job, context.requestId);
+          return;
+        }
+
+        if (request.method === 'GET' && jobId === 'dashboard' && !action) {
+          const jobs = input.jobRepository.listByProject
+            ? await input.jobRepository.listByProject(guard.accessContext.projectId)
+            : [];
+          sendJson(response, 200, buildAgentJobDashboard({
+            projectId: guard.accessContext.projectId,
+            jobs,
+            queueReadyState: input.jobQueue?.getReadyState() ?? unconfiguredQueueReadyState(),
+            queueSnapshot: getQueueSnapshot(input.jobQueue)
+          }), context.requestId);
           return;
         }
 

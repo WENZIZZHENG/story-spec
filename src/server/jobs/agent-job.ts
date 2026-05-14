@@ -33,6 +33,28 @@ export interface AgentJobResult {
   job?: AgentJob;
 }
 
+export interface AgentJobDashboard {
+  projectId: string;
+  totalJobs: number;
+  activeJobs: number;
+  retryableJobs: number;
+  statusCounts: Record<AgentJobStatus, number>;
+  latestJobs: AgentJob[];
+  queue: {
+    readiness: {
+      configured: boolean;
+      connected: boolean;
+      worker: boolean;
+      driver: 'memory' | 'bullmq' | 'none';
+    };
+    snapshot?: {
+      pending: number;
+      acknowledged: number;
+      failed: number;
+    };
+  };
+}
+
 export interface CreateAgentJobInput {
   repository: AgentJobRepository;
   userId: string;
@@ -70,6 +92,7 @@ export interface RetryAgentJobInput {
 const terminalStatuses = new Set<AgentJobStatus>(['succeeded', 'failed', 'canceled', 'timeout']);
 const activeStatuses = new Set<AgentJobStatus>(['queued', 'running']);
 const retryableStatuses = new Set<AgentJobStatus>(['failed', 'timeout']);
+const allStatuses: AgentJobStatus[] = ['queued', 'running', 'succeeded', 'failed', 'canceled', 'timeout'];
 const transitions: Record<AgentJobStatus, AgentJobStatus[]> = {
   queued: ['running', 'canceled'],
   running: ['succeeded', 'failed', 'timeout', 'canceled'],
@@ -224,5 +247,49 @@ export const retryAgentJob = async (
     blocked: false,
     blockedReasons: [],
     job: retry
+  };
+};
+
+export const buildAgentJobDashboard = (
+  input: {
+    projectId: string;
+    jobs: AgentJob[];
+    queueReadyState: AgentJobDashboard['queue']['readiness'];
+    queueSnapshot?: {
+      pending: unknown[];
+      acknowledged: unknown[];
+      failed: unknown[];
+    };
+    latestLimit?: number;
+  }
+): AgentJobDashboard => {
+  const statusCounts = Object.fromEntries(
+    allStatuses.map(status => [status, 0])
+  ) as Record<AgentJobStatus, number>;
+  for (const job of input.jobs) {
+    statusCounts[job.status] += 1;
+  }
+
+  return {
+    projectId: input.projectId,
+    totalJobs: input.jobs.length,
+    activeJobs: input.jobs.filter(job => activeStatuses.has(job.status)).length,
+    retryableJobs: input.jobs.filter(job => retryableStatuses.has(job.status)).length,
+    statusCounts,
+    latestJobs: [...input.jobs]
+      .sort((left, right) => right.updatedAt.localeCompare(left.updatedAt))
+      .slice(0, input.latestLimit ?? 10),
+    queue: {
+      readiness: input.queueReadyState,
+      ...(input.queueSnapshot
+        ? {
+          snapshot: {
+            pending: input.queueSnapshot.pending.length,
+            acknowledged: input.queueSnapshot.acknowledged.length,
+            failed: input.queueSnapshot.failed.length
+          }
+        }
+        : {})
+    }
   };
 };
