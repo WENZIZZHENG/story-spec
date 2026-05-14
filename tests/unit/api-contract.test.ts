@@ -90,6 +90,7 @@ describe('multiuser api contract', () => {
     expect(MULTIUSER_CONTRACT_ERROR_CODES).toEqual([
       'AUTH_REQUIRED',
       'BLOCKED',
+      'COLLABORATION_MUTATION_BLOCKED',
       'CONFLICT',
       'FORBIDDEN',
       'INTERNAL_SERVER_ERROR',
@@ -103,6 +104,8 @@ describe('multiuser api contract', () => {
       'PROJECT_ACCESS_DENIED',
       'PROJECT_NOT_FOUND',
       'PROJECT_PATH_INVALID',
+      'PROPOSAL_NOT_FOUND',
+      'PROPOSAL_PROJECT_MISMATCH',
       'QUOTA_EXCEEDED',
       'RESOURCE_CONFLICT',
       'ROUTE_NOT_FOUND',

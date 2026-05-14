@@ -28,7 +28,7 @@ export interface RequestContext {
 
 export interface ErrorResponseInput {
   statusCode: number;
-  requestId: string;
+  requestId?: string;
   code: MultiuserContractErrorCode;
   message: string;
   traceId?: string;
@@ -76,7 +76,7 @@ export const createRequestContext = (input: RequestContextInput = {}): RequestCo
 export const createErrorResponse = (input: ErrorResponseInput): ErrorResponse => ({
   ...buildMultiuserContractErrorResponse({
     statusCode: input.statusCode,
-    requestId: input.requestId,
+    requestId: input.requestId ?? createRequestContext().requestId,
     code: input.code,
     message: input.message,
     details: input.details,
