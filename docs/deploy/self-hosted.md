@@ -5,8 +5,9 @@
 ## 当前可用
 
 - `storyspec server` 可以启动多用户 HTTP server。
+- `storyspec worker` 可以作为独立进程消费 agent job 队列。
 - `/health` 和 `/ready` 可用于基础探活。
-- 当前控制面已具备 session/project guard、项目元信息、路径解析探针、job 控制面、审计/配额守卫、runtime adapter foundation、只读 App 回流 API 和 PostgreSQL-backed repository 配置。
+- 当前控制面已具备 session/project guard、项目元信息、路径解析探针、job 控制面、审计/配额守卫、runtime adapter foundation、只读 App 回流 API、PostgreSQL-backed repository 配置和 Redis/BullMQ worker 队列底座。
 
 ## 启动方式
 
@@ -23,9 +24,16 @@
 - `STORYSPEC_DATABASE_MIGRATE` 默认是 `true`，启动时会执行可重复 migration；设为 `false` 时只连接数据库，不自动建表。
 - `/ready` 的 `database.configured`、`database.connected` 和 `database.migrated` 会分别显示数据库是否配置、是否连接成功、当前 migration version 是否已记录。
 
+## Worker 队列
+
+- `storyspec server` 在配置 `STORYSPEC_REDIS_URL` 并传入 queue adapter 后，会在创建新 agent job 后 enqueue；幂等命中的 active job 不会重复入列。
+- `storyspec worker` 读取 `STORYSPEC_DATABASE_URL` 和 `STORYSPEC_REDIS_URL`，连接 PostgreSQL repository 与 Redis/BullMQ 队列，并通过现有 runtime adapter 处理 queued job。
+- `STORYSPEC_WORKER_CONCURRENCY` 默认是 `1`；`STORYSPEC_WORKER_ONCE=true` 或 `storyspec worker --once` 可用于本地单次验证。
+- worker 输出仍是 preview-only candidate，不会自动 apply 正文、正典、tracking 或正式故事文件。
+
 ## 重要边界
 
-- 当前已提供 Redis/BullMQ 的部署占位，但还没有真实 worker queue。
+- 当前 Redis/BullMQ queue 和独立 worker 是首批底座，不包含生产级死信队列、dashboard、分布式锁或高可用调度。
 - `OpenHandsRunner` 目前是 PoC adapter，不安装或调用真实 OpenHands。
 - 项目删除当前只生成需要二次确认的删除计划和审计事件，不直接删除磁盘文件。
 - 该配置面向本地/自托管验证，不承诺 Kubernetes、企业高可用或商业计费。

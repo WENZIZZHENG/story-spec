@@ -6,13 +6,13 @@ Active。本文是 StorySpec 当前唯一的待办入口。详细规则见 [todo
 
 ## 当前待办
 
-当前主线：本机 CLI、实验性本机工作台和多用户控制面基础已经完成一轮收口，P0 构建/依赖/命令产物/README 事实边界也已收稳；下一步继续推进“完整 App 与多人在线写作平台”的 worker 和完整前端承载层。P1-0 的核心设计决策已记录到 [完整 App 故事驾驶舱体验设计](../superpowers/specs/2026-05-12-complete-app-story-cockpit-ux-design.md)，首批实现切片已完成 complete App state contract、本机 App 状态 endpoint 和工作室控制台 shell；`codex/complete-app-cockpit-first-slice` 已落地 `multiuser-api-contract-state-model` 的首批契约与 fixture、`multiuser-role-permission-model` 的角色权限底座，以及 `multiuser-postgres-driver` 的真实 PostgreSQL driver 与 migration runner。`storyspec app` 仍不是完整多人在线 App，`storyspec server` 当前仍是多用户控制平面基础；账号云端产品、实时协作、富文本编辑器、真实 Redis worker 和完整 SaaS 都只能作为待办推进，不能写成已实现能力。
+当前主线：本机 CLI、实验性本机工作台和多用户控制面基础已经完成一轮收口，P0 构建/依赖/命令产物/README 事实边界也已收稳；下一步继续推进“完整 App 与多人在线写作平台”的完整前端承载层和协作正典协议。P1-0 的核心设计决策已记录到 [完整 App 故事驾驶舱体验设计](../superpowers/specs/2026-05-12-complete-app-story-cockpit-ux-design.md)，首批实现切片已完成 complete App state contract、本机 App 状态 endpoint 和工作室控制台 shell；`codex/complete-app-cockpit-first-slice` 已落地 `multiuser-api-contract-state-model` 的首批契约与 fixture、`multiuser-role-permission-model` 的角色权限底座、`multiuser-postgres-driver` 的真实 PostgreSQL driver 与 migration runner，以及 `multiuser-worker-queue` 的 Redis/BullMQ worker 队列底座。`storyspec app` 仍不是完整多人在线 App，`storyspec server` 当前仍是多用户控制平面基础；账号云端产品、实时协作、富文本编辑器、真实 OpenHands headless 执行和完整 SaaS 都只能作为待办推进，不能写成已实现能力。
 
 | 优先级 | 路线 | 状态 | 覆盖范围 | 下一步 |
 | --- | --- | --- | --- | --- |
 | 总览 | [完整 App 与多人在线写作平台路线图](online-app-platform-roadmap.md) | Planned | 子路线索引、共通边界、推荐推进顺序、拆分映射 | 先读本文确认路线，再按任务范围读取对应子路线 |
 | P1 | [完整 App 产品体验路线图](app-ux-roadmap.md) | Active | 产品体验设计、信息架构、首批页面、状态语言、编辑器与工作台体验 | P1-0 首批实现切片已完成；后续继续补完整前端架构输入 |
-| P1 | [多人平台与 API 契约路线图](multiuser-platform-roadmap.md) | Active | 多用户角色模型、API contract、真实 PostgreSQL、真实 worker、完整前端架构 | 角色模型、API contract 和 PostgreSQL driver 底座已完成；下一步进入 P1-4 Redis/BullMQ worker 与 agent job 真实执行队列 |
+| P1 | [多人平台与 API 契约路线图](multiuser-platform-roadmap.md) | Active | 多用户角色模型、API contract、真实 PostgreSQL、真实 worker、完整前端架构 | 角色模型、API contract、PostgreSQL driver 和 worker 队列底座已完成；下一步进入 P1-5 完整 App 前端架构与 API 契约落地 |
 | P1/P2 | [协作写作与正典合并路线图](collaboration-canon-roadmap.md) | Planned | 候选、评论、审批、正典 patch、导入导出、插件/团队模板 | 平台对象模型和 API contract 清楚后再拆 OpenSpec |
 | P2/P3 | [运维、安全与质量路线图](ops-quality-roadmap.md) | Planned | 安全、部署、观测性、备份恢复、场景测试、大文件拆分、依赖升级 | 随 P1 实现分批补质量门禁 |
 
@@ -20,7 +20,7 @@ Active。本文是 StorySpec 当前唯一的待办入口。详细规则见 [todo
 
 1. 以 P1-0 首批实现切片为当前 App shell 和状态语言基线，继续维护“完整多人在线平台尚未完成”的事实边界。
 2. 已完成 [multiuser-platform-roadmap.md](multiuser-platform-roadmap.md) 的 P1-2 API contract 与 P1-1 角色权限底座，让前端、server 和测试共享字段契约与权限动作语言。
-3. 下一步为多人平台 P1 实现任务逐项建立 OpenSpec：真实 worker、完整 App 前端、协同写作正典合并协议。
+3. 下一步为多人平台 P1 实现任务逐项建立 OpenSpec：完整 App 前端、协同写作正典合并协议、真实 OpenHands headless 执行和生产级 worker 可靠性。
 4. P2/P3 任务只在 P0/P1 稳定或有真实用户反馈后推进。
 
 ## 暂不作为活跃待办

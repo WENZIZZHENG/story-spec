@@ -15,6 +15,8 @@ import { createProjectStorage, requireProjectAccess } from '../projects/project-
 import type { QuotaRepository } from '../quota/quota.js';
 import { checkQuota, consumeQuota } from '../quota/quota.js';
 import type { PostgresReadyState } from '../db/postgres.js';
+import type { AgentJobQueue } from '../queue/agent-job-queue.js';
+import { createAgentJobQueuePayload, unconfiguredQueueReadyState } from '../queue/agent-job-queue.js';
 import {
   createErrorResponse,
   createRequestContext,
@@ -28,6 +30,7 @@ export interface StartMultiuserServerInput {
   sessionRepository?: SessionRepository;
   projectRepository?: ProjectAccessRepository;
   jobRepository?: AgentJobRepository;
+  jobQueue?: AgentJobQueue;
   auditRepository?: AuditLogRepository;
   quotaRepository?: QuotaRepository;
   database?: PostgresReadyState;
@@ -250,6 +253,7 @@ export const startMultiuserServer = async (input: StartMultiuserServerInput): Pr
             audit: Boolean(input.auditRepository),
             quota: Boolean(input.quotaRepository)
           },
+          queue: input.jobQueue?.getReadyState() ?? unconfiguredQueueReadyState(),
           runtimes: input.runtimeIds ?? []
         }, context.requestId);
         return;
@@ -458,6 +462,13 @@ export const startMultiuserServer = async (input: StartMultiuserServerInput): Pr
             return;
           }
 
+          const existingActiveJob = body.idempotencyKey === undefined
+            ? undefined
+            : await input.jobRepository.findActiveByIdempotencyKey({
+              userId: guard.accessContext.userId,
+              projectId: guard.accessContext.projectId,
+              idempotencyKey: String(body.idempotencyKey)
+            });
           const result = await createAgentJob({
             repository: input.jobRepository,
             userId: guard.accessContext.userId,
@@ -476,6 +487,9 @@ export const startMultiuserServer = async (input: StartMultiuserServerInput): Pr
               message: result.blockedReasons[0] ?? 'job 创建失败'
             }), context.requestId);
             return;
+          }
+          if (!existingActiveJob && input.jobQueue) {
+            await input.jobQueue.enqueue(createAgentJobQueuePayload(result.job));
           }
           await consumeJobQuota({
             quotaRepository: input.quotaRepository,

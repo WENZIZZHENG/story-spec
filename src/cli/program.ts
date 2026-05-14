@@ -28,6 +28,7 @@ import { registerPreviewApplyCommand } from './commands/preview-apply.command.js
 import { registerAuthorProfileCommand } from './commands/author-profile.command.js';
 import { registerMaintenanceCommand } from './commands/maintenance.command.js';
 import { registerMultiuserServerCommand } from './commands/multiuser-server.command.js';
+import { registerMultiuserWorkerCommand } from './commands/multiuser-worker.command.js';
 import { registerReferenceCommand } from './commands/reference.command.js';
 import { registerOutlineCommand } from './commands/outline.command.js';
 import chalk from 'chalk';
@@ -92,6 +93,7 @@ export function runProgram(argv: string[]): void {
   registerPreviewApplyCommand(program);
   registerMaintenanceCommand(program);
   registerMultiuserServerCommand(program);
+  registerMultiuserWorkerCommand(program);
   registerReferenceCommand(program);
   registerOutlineCommand(program);
   registerInfoCommand(program);
@@ -103,6 +105,7 @@ export function runProgram(argv: string[]): void {
     console.log('  $ storyspec init D:/project/小说/我的故事 --agent codex');
     console.log('  $ storyspec app --project D:/project/小说/我的故事');
     console.log('  $ storyspec server --host 127.0.0.1 --port 43210');
+    console.log('  $ storyspec worker --once');
     console.log('  $ storyspec doctor --json');
     console.log('  $ storyspec story:new 法术编译纪元 --idea "异界穿越、编程施法"');
     console.log('  $ storyspec next 法术编译纪元');
@@ -124,6 +127,7 @@ export function runProgram(argv: string[]): void {
     console.log('');
     console.log(chalk.cyan('常用命令:'));
     console.log('  app               启动本机 Web 工作台，可用 --project 预打开项目');
+    console.log('  worker            运行多用户 agent job worker，输出仍保持 preview-only');
     console.log('  doctor            检查 Node、Git、项目根、端口和浏览器打开能力');
     console.log('  story:new         保存作者原始灵感，不自动扩写成正典');
     console.log('  next              查看少命令化首屏导航，--verbose 展开完整入口卡');

@@ -51,6 +51,8 @@ describe('README fact boundaries', () => {
     expect(rowByCommand.get('storyspec app [--project <path>]')).toContain('实验性本机 Web 工作台');
     expect(rowByCommand.get('storyspec app [--project <path>]')).toContain('仍不包含账号、云端或富文本编辑器');
     expect(rowByCommand.get('storyspec server [--host <host>] [--port <port>]')).toContain('实验性多用户控制平面');
-    expect(rowByCommand.get('storyspec server [--host <host>] [--port <port>]')).toContain('当前不包含完整 SaaS、真实 worker 或数据库全量接入');
+    expect(rowByCommand.get('storyspec server [--host <host>] [--port <port>]')).toContain('当前不包含完整 SaaS、完整前端或实时协作');
+    expect(rowByCommand.get('storyspec worker [--once]')).toContain('preview-only');
+    expect(rowByCommand.get('storyspec worker [--once]')).toContain('不自动写入正文或正典');
   });
 });

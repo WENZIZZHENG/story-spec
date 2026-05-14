@@ -3,6 +3,7 @@ import { createMemoryAuditLogRepository } from '../../src/server/audit/audit-log
 import { createMemorySessionRepository } from '../../src/server/auth/session.js';
 import { startMultiuserServer } from '../../src/server/http/multiuser-server.js';
 import { createAgentJob, createMemoryAgentJobRepository, transitionAgentJob } from '../../src/server/jobs/agent-job.js';
+import { createMemoryAgentJobQueue } from '../../src/server/queue/agent-job-queue.js';
 import { createMemoryProjectAccessRepository } from '../../src/server/projects/project-security.js';
 import { createMemoryQuotaRepository } from '../../src/server/quota/quota.js';
 
@@ -362,6 +363,7 @@ describe('multiuser server entry', () => {
       jobRepository: createMemoryAgentJobRepository(),
       auditRepository: createMemoryAuditLogRepository(),
       quotaRepository: createMemoryQuotaRepository({ buckets: [] }),
+      jobQueue: createMemoryAgentJobQueue(),
       runtimeIds: ['local-storyspec', 'openhands']
     });
 
@@ -383,6 +385,12 @@ describe('multiuser server entry', () => {
           jobs: true,
           audit: true,
           quota: true
+        },
+        queue: {
+          configured: true,
+          connected: true,
+          worker: true,
+          driver: 'memory'
         },
         runtimes: ['local-storyspec', 'openhands']
       });
@@ -562,6 +570,87 @@ describe('multiuser server entry', () => {
       } finally {
         await retryServer.close();
       }
+    } finally {
+      await server.close();
+    }
+  });
+
+  it('enqueues newly created jobs but does not duplicate idempotent active jobs', async () => {
+    const jobRepository = createMemoryAgentJobRepository();
+    const jobQueue = createMemoryAgentJobQueue();
+    const server = await startMultiuserServer({
+      host: '127.0.0.1',
+      port: 0,
+      version: '0.20.0',
+      sessionRepository: createMemorySessionRepository({
+        users: [{ id: 'user-1', displayName: '作者甲' }],
+        sessions: [{
+          token: 'session-token',
+          userId: 'user-1',
+          expiresAt: '2026-05-13T13:00:00.000Z'
+        }]
+      }),
+      projectRepository: createMemoryProjectAccessRepository({
+        projects: [{
+          id: 'project-1',
+          ownerUserId: 'user-1',
+          dataRoot: 'D:\\storyspec-data\\project-1'
+        }],
+        memberships: [{
+          projectId: 'project-1',
+          userId: 'user-1',
+          role: 'owner'
+        }]
+      }),
+      jobRepository,
+      jobQueue,
+      now: () => '2026-05-13T12:00:00.000Z',
+      jobIdGenerator: () => 'job-1'
+    });
+
+    try {
+      const first = await fetch(`${server.url}/api/projects/project-1/jobs`, {
+        method: 'POST',
+        headers: {
+          authorization: 'Bearer session-token',
+          'content-type': 'application/json'
+        },
+        body: JSON.stringify({
+          kind: 'chapter-draft',
+          runtime: 'local-storyspec',
+          idempotencyKey: 'chapter-1'
+        })
+      });
+      expect(first.status).toBe(200);
+
+      const second = await fetch(`${server.url}/api/projects/project-1/jobs`, {
+        method: 'POST',
+        headers: {
+          authorization: 'Bearer session-token',
+          'content-type': 'application/json'
+        },
+        body: JSON.stringify({
+          kind: 'chapter-draft',
+          runtime: 'local-storyspec',
+          idempotencyKey: 'chapter-1'
+        })
+      });
+      expect(second.status).toBe(200);
+      await expect(second.json()).resolves.toMatchObject({
+        id: 'job-1',
+        status: 'queued'
+      });
+
+      expect(jobQueue.snapshot().pending).toEqual([
+        {
+          jobId: 'job-1',
+          projectId: 'project-1',
+          userId: 'user-1',
+          runtime: 'local-storyspec',
+          kind: 'chapter-draft',
+          attempt: 1
+        }
+      ]);
     } finally {
       await server.close();
     }
