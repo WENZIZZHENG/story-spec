@@ -167,6 +167,65 @@ export const renderLocalAppHtml = (input: RenderLocalAppHtmlInput): string => {
       background: #ffffff;
     }
 
+    .guide-strip {
+      display: grid;
+      gap: 12px;
+      padding: 14px 0 2px;
+    }
+
+    .guide-header {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: baseline;
+      justify-content: space-between;
+    }
+
+    .guide-steps {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 8px;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .guide-step {
+      display: grid;
+      gap: 8px;
+      min-height: 132px;
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      background: #ffffff;
+      padding: 12px;
+    }
+
+    .guide-step strong {
+      display: block;
+      color: var(--ink);
+    }
+
+    .guide-step p {
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .guide-action {
+      align-self: end;
+      width: fit-content;
+      border: 1px solid var(--accent);
+      border-radius: 6px;
+      color: var(--accent);
+      padding: 7px 10px;
+      text-decoration: none;
+      font-size: 13px;
+    }
+
+    .guide-action:hover,
+    .guide-action:focus-visible {
+      background: #eff6ff;
+    }
+
     .route-nav {
       display: grid;
       grid-template-columns: repeat(5, minmax(0, 1fr));
@@ -476,6 +535,7 @@ export const renderLocalAppHtml = (input: RenderLocalAppHtmlInput): string => {
       }
 
       .route-nav,
+      .guide-steps,
       .endpoint-map {
         grid-template-columns: 1fr;
       }
@@ -507,6 +567,32 @@ export const renderLocalAppHtml = (input: RenderLocalAppHtmlInput): string => {
       </div>
       <div class="status-pill" id="service-status">本机服务检查中</div>
     </header>
+    <section class="guide-strip" id="guided-first-run" aria-labelledby="guided-first-run-title">
+      <div class="guide-header">
+        <div>
+          <h2 id="guided-first-run-title">开始路径</h2>
+          <p class="muted">先把故事放进工作室，再决定继续写作、审阅候选或处理任务。候选和预览不会自动写入正式故事，进入正典前仍需要作者确认。</p>
+        </div>
+        <span class="status-pill">候选和预览不会自动写入正式故事</span>
+      </div>
+      <ol class="guide-steps" aria-label="StorySpec 使用路径">
+        <li class="guide-step" data-guide-step="project">
+          <strong>1. 打开或创建项目</strong>
+          <p>选择已有 StorySpec 项目，或创建一个新项目作为工作区入口。</p>
+          <a class="guide-action" href="#open-project-form">去打开项目</a>
+        </li>
+        <li class="guide-step" data-guide-step="story">
+          <strong>2. 创建或选择故事</strong>
+          <p>用一句灵感或长文资料开始；资料默认先变成候选和待确认项。</p>
+          <a class="guide-action" href="#story-idea-form">去创建故事</a>
+        </li>
+        <li class="guide-step" data-guide-step="review">
+          <strong>3. 继续写作或审阅候选</strong>
+          <p>从故事驾驶舱进入章节、任务或候选与正典审阅，先预览再确认。</p>
+          <a class="guide-action" href="#confirm-lane-title">去审阅候选</a>
+        </li>
+      </ol>
+    </section>
     <nav class="route-nav" aria-label="完整 App 首批页面导航">
       ${routeNavigation}
     </nav>

@@ -102,6 +102,25 @@ describe('local app html', () => {
     expect(html).toContain("x-storyspec-app-token");
   });
 
+  it('renders a guided first-run path before the dense workbench controls', () => {
+    const html = renderLocalAppHtml({
+      token: 'secret-token'
+    });
+
+    expect(html).toContain('id="guided-first-run"');
+    expect(html).toContain('开始路径');
+    expect(html).toContain('1. 打开或创建项目');
+    expect(html).toContain('2. 创建或选择故事');
+    expect(html).toContain('3. 继续写作或审阅候选');
+    expect(html).toContain('href="#open-project-form"');
+    expect(html).toContain('href="#story-idea-form"');
+    expect(html).toContain('href="#confirm-lane-title"');
+    expect(html).toContain('候选和预览不会自动写入正式故事');
+    expect(html).toContain('data-guide-step="project"');
+    expect(html).toContain('data-guide-step="story"');
+    expect(html).toContain('data-guide-step="review"');
+  });
+
   it('uses studio workbench styling instead of paper dossier, marketing hero, or ops console styling', () => {
     const rawHtml = renderLocalAppHtml({
       token: 'secret-token'
