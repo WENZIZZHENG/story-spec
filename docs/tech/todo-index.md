@@ -12,7 +12,7 @@ Active。本文是 StorySpec 当前唯一的待办入口。详细规则见 [todo
 | --- | --- | --- | --- | --- |
 | 总览 | [完整 App 与多人在线写作平台路线图](online-app-platform-roadmap.md) | Planned | 子路线索引、共通边界、推荐推进顺序、拆分映射 | 先读本文确认路线，再按任务范围读取对应子路线 |
 | P1 | [完整 App 产品体验路线图](app-ux-roadmap.md) | Active | 产品体验设计、信息架构、首批页面、状态语言、编辑器与工作台体验 | P1-0 首批实现切片和 P1-5 前端架构契约底座已完成；后续进入独立前端项目和编辑器体验研究 |
-| P1 | [多人平台与 API 契约路线图](multiuser-platform-roadmap.md) | Active | 多用户角色模型、API contract、真实 PostgreSQL、真实 worker、完整前端架构 | 角色模型、API contract、PostgreSQL driver、worker 队列和前端架构契约底座已完成；下一步进入协作正典合并协议、真实 OpenHands headless 执行和生产级 worker 可靠性 |
+| P1 | [多人平台与 API 契约路线图](multiuser-platform-roadmap.md) | Active | 多用户角色模型、API contract、真实 PostgreSQL、真实 worker、完整前端架构 | 角色模型、API contract、PostgreSQL driver、worker 队列、worker 可靠性策略和前端架构契约底座已完成；下一步进入真实 OpenHands headless、worker dashboard/HA 和独立前端项目 |
 | P1/P2 | [协作写作与正典合并路线图](collaboration-canon-roadmap.md) | Active | 候选、评论、审批、正典 patch、导入导出、插件/团队模板 | P1-6 协作正典协议底座已完成；后续进入 HTTP/API、持久化、评论审批 UI 和真实 apply executor |
 | P2/P3 | [运维、安全与质量路线图](ops-quality-roadmap.md) | Planned | 安全、部署、观测性、备份恢复、场景测试、大文件拆分、依赖升级 | 随 P1 实现分批补质量门禁 |
 
@@ -20,7 +20,7 @@ Active。本文是 StorySpec 当前唯一的待办入口。详细规则见 [todo
 
 1. 以 P1-0 首批实现切片为当前 App shell 和状态语言基线，继续维护“完整多人在线平台尚未完成”的事实边界。
 2. 已完成 [multiuser-platform-roadmap.md](multiuser-platform-roadmap.md) 的 P1-2 API contract 与 P1-1 角色权限底座，让前端、server 和测试共享字段契约与权限动作语言。
-3. 下一步为多人平台 P1 实现任务逐项建立 OpenSpec：协作正典 HTTP/API 与 UI、真实 OpenHands headless 执行、生产级 worker 可靠性和独立前端项目。
+3. 下一步为多人平台 P1 实现任务逐项建立 OpenSpec：协作正典 HTTP/API 与 UI、真实 OpenHands headless 执行、worker dashboard/告警/HA 和独立前端项目。
 4. P2/P3 任务只在 P0/P1 稳定或有真实用户反馈后推进。
 
 ## 暂不作为活跃待办

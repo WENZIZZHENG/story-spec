@@ -18,6 +18,9 @@ import {
 import {
   runNextAgentJob
 } from '../../src/server/workers/agent-job-worker.js';
+import {
+  createMemoryWorkerFailureRepository
+} from '../../src/server/workers/worker-reliability.js';
 
 describe('multiuser worker queue', () => {
   it('enqueues payloads and runs queued jobs through a preview-only runtime', async () => {
@@ -126,6 +129,7 @@ describe('multiuser worker queue', () => {
   it('marks jobs and queue items as failed when runtime execution fails', async () => {
     const repository = createMemoryAgentJobRepository();
     const queue = createMemoryAgentJobQueue();
+    const failureRepository = createMemoryWorkerFailureRepository();
     const created = await createAgentJob({
       repository,
       userId: 'user-1',
@@ -140,6 +144,8 @@ describe('multiuser worker queue', () => {
     const result = await runNextAgentJob({
       repository,
       queue,
+      failureRepository,
+      maxAttempts: 3,
       runtimes: [
         createLocalStorySpecRunner({
           execute: async () => {
@@ -154,6 +160,12 @@ describe('multiuser worker queue', () => {
       processed: true,
       action: 'failed',
       blockedReasons: ['runner exploded'],
+      failureRecord: {
+        jobId: 'job-1',
+        decision: 'retryable',
+        failureKind: 'runtime-failed',
+        reason: 'runner exploded'
+      },
       job: {
         id: 'job-1',
         status: 'failed',
@@ -169,6 +181,16 @@ describe('multiuser worker queue', () => {
         }
       ]
     });
+    expect(failureRepository.snapshot()).toEqual([
+      expect.objectContaining({
+        jobId: 'job-1',
+        attempt: 1,
+        maxAttempts: 3,
+        decision: 'retryable',
+        failureKind: 'runtime-failed',
+        reason: 'runner exploded'
+      })
+    ]);
   });
 
   it('normalizes Redis URLs for BullMQ and exposes queue readiness', async () => {

@@ -67,10 +67,10 @@ Active。本文承接多人在线平台的产品对象、权限模型、API cont
 ## P1-4 Redis/BullMQ worker 与 agent job 真实执行队列
 
 - 类型：任务调度、agent runtime、可观测性
-- 状态：已完成首批底座（2026-05-14）。`add-multiuser-worker-queue` 已新增 `AgentJobQueue`、内存队列、BullMQ adapter、preview-only worker runner、server job enqueue、`/ready.queue` 和 `storyspec worker` CLI wiring；生产级死信队列、dashboard、分布式锁、高可用调度和真实 OpenHands headless 执行仍留给后续质量批次。
+- 状态：已完成首批底座（2026-05-14）。`add-multiuser-worker-queue` 已新增 `AgentJobQueue`、内存队列、BullMQ adapter、preview-only worker runner、server job enqueue、`/ready.queue` 和 `storyspec worker` CLI wiring；`add-worker-reliability-policy` 已补 worker failure policy、retryable/dead-letter 决策和失败记录底座。dashboard、分布式锁、高可用调度、BullMQ attempts 策略和真实 OpenHands headless 执行仍留给后续质量批次。
 - 背景/问题：当前有 job 控制面、审计/配额守卫和 runtime adapter foundation，但 Redis/BullMQ worker 仍是部署占位，OpenHandsRunner 也是 PoC adapter。
 - 已有基础：`src/server/jobs/agent-job.ts`、`src/server/agent-runtime/*`、`src/server/quota/*`、`src/server/audit/*`、job API。
-- 缺口：缺少真实队列、worker 进程、重试/取消语义、幂等键、运行日志、产物回传、预览结果落库和失败恢复。
+- 缺口：真实队列、worker 进程、基础重试/取消语义、幂等键和失败分类已完成首批底座；仍缺运行日志查询、产物回传、预览结果落库、dashboard、告警、分布式锁、BullMQ attempts 策略和失败恢复执行器。
 - 建议方案：
   1. 先实现本地 runner worker，所有输出默认 preview-only。
   2. 再接 Redis/BullMQ 队列，补取消、重试、超时、并发限制和配额消耗。
