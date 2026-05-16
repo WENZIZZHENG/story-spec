@@ -11,7 +11,7 @@ import {
 
 describe('multiuser database foundation', () => {
   it('defines all core metadata tables and repeatable migration SQL', () => {
-    expect(MULTIUSER_MIGRATION_VERSION).toBe(3);
+    expect(MULTIUSER_MIGRATION_VERSION).toBe(4);
     expect(Object.keys(multiuserDatabaseSchema).sort()).toEqual([
       'agentJobs',
       'auditLogs',
@@ -105,9 +105,12 @@ describe('multiuser database foundation', () => {
       'comments',
       'updated_at'
     ]));
+    expect(multiuserDatabaseSchema.collaborationCanonPatches.columns).toEqual(expect.arrayContaining([
+      'content'
+    ]));
 
     const migration = createMultiuserMigrationPlan();
-    expect(migration.version).toBe(3);
+    expect(migration.version).toBe(4);
     expect(migration.statements).toEqual(expect.arrayContaining([
       expect.stringContaining('create table if not exists users'),
       expect.stringContaining('create table if not exists sessions'),
@@ -121,6 +124,9 @@ describe('multiuser database foundation', () => {
       expect.stringContaining('create table if not exists collaboration_canon_patches'),
       expect.stringContaining('create table if not exists collaboration_apply_requests'),
       expect.stringContaining('create table if not exists collaboration_comment_threads')
+    ]));
+    expect(migration.statements).toEqual(expect.arrayContaining([
+      expect.stringContaining('content text')
     ]));
     expect(createMultiuserMigrationPlan()).toEqual(migration);
   });
@@ -286,6 +292,7 @@ describe('multiuser database foundation', () => {
             kind: 'canon-fact',
             diff_summary: '新增正典事实。',
             rollback_hint: '删除 fact-1。',
+            content: '# Canon\n\n- fact-1\n',
             source_refs: ['note-1']
           }];
         }
@@ -403,11 +410,13 @@ describe('multiuser database foundation', () => {
       kind: 'canon-fact',
       diffSummary: '新增正典事实。',
       rollbackHint: '删除 fact-1。',
+      content: '# Canon\n\n- fact-1\n',
       sourceRefs: ['note-1']
     });
     await expect(repositories.collaboration.listPatches('proposal-1')).resolves.toEqual([
       expect.objectContaining({
         id: 'patch-1',
+        content: '# Canon\n\n- fact-1\n',
         sourceRefs: ['note-1']
       })
     ]);

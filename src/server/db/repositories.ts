@@ -126,6 +126,7 @@ interface CollaborationCanonPatchRow {
   kind: CanonPatch['kind'];
   diff_summary: string;
   rollback_hint: string;
+  content?: string;
   source_refs: string[] | string;
 }
 
@@ -249,6 +250,7 @@ const mapCollaborationCanonPatch = (row: CollaborationCanonPatchRow): CanonPatch
   kind: row.kind,
   diffSummary: row.diff_summary,
   rollbackHint: row.rollback_hint,
+  content: row.content,
   sourceRefs: parseJsonValue<string[]>(row.source_refs)
 });
 
@@ -553,7 +555,7 @@ export const createMultiuserDatabaseRepositories = (
     async listPatches(proposalId) {
       const rows = await executor.queryMany<CollaborationCanonPatchRow>(
         [
-          'select id, proposal_id, target_path, kind, diff_summary, rollback_hint, source_refs',
+          'select id, proposal_id, target_path, kind, diff_summary, rollback_hint, content, source_refs',
           'from collaboration_canon_patches where proposal_id = $1 order by id asc'
         ].join(' '),
         [proposalId]
@@ -564,9 +566,9 @@ export const createMultiuserDatabaseRepositories = (
       collaborationCache.patches.push(patch);
       await executor.execute(
         [
-          'insert into collaboration_canon_patches (id, proposal_id, target_path, kind, diff_summary, rollback_hint, source_refs)',
-          'values ($1, $2, $3, $4, $5, $6, $7::jsonb)',
-          'on conflict (id) do update set target_path = excluded.target_path, kind = excluded.kind, diff_summary = excluded.diff_summary, rollback_hint = excluded.rollback_hint, source_refs = excluded.source_refs'
+          'insert into collaboration_canon_patches (id, proposal_id, target_path, kind, diff_summary, rollback_hint, content, source_refs)',
+          'values ($1, $2, $3, $4, $5, $6, $7, $8::jsonb)',
+          'on conflict (id) do update set target_path = excluded.target_path, kind = excluded.kind, diff_summary = excluded.diff_summary, rollback_hint = excluded.rollback_hint, content = excluded.content, source_refs = excluded.source_refs'
         ].join(' '),
         [
           patch.id,
@@ -575,6 +577,7 @@ export const createMultiuserDatabaseRepositories = (
           patch.kind,
           patch.diffSummary,
           patch.rollbackHint,
+          patch.content,
           JSON.stringify(patch.sourceRefs)
         ]
       );
@@ -590,7 +593,12 @@ export const createMultiuserDatabaseRepositories = (
       return rows.map(mapCollaborationApplyRequest);
     },
     async saveApplyRequest(request) {
-      collaborationCache.applyRequests.push(request);
+      const existingIndex = collaborationCache.applyRequests.findIndex(item => item.id === request.id);
+      if (existingIndex >= 0) {
+        collaborationCache.applyRequests[existingIndex] = request;
+      } else {
+        collaborationCache.applyRequests.push(request);
+      }
       await executor.execute(
         [
           'insert into collaboration_apply_requests (id, proposal_id, actor_user_id, status, current_version, patch_ids, reviewer_ids, blocked_reasons, created_at)',

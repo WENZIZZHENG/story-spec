@@ -1,4 +1,7 @@
 import { describe, expect, it } from 'vitest';
+import { mkdtemp, readFile, rm } from 'node:fs/promises';
+import os from 'node:os';
+import path from 'node:path';
 import { createMemoryAuditLogRepository } from '../../src/server/audit/audit-log.js';
 import { createMemorySessionRepository } from '../../src/server/auth/session.js';
 import { createMemoryCollaborationCanonRepository } from '../../src/server/collaboration/canon-merge.js';
@@ -1447,6 +1450,148 @@ describe('multiuser server entry', () => {
       });
     } finally {
       await server.close();
+    }
+  });
+
+  it('applies ready collaboration requests to project storage with audit', async () => {
+    const projectRoot = await mkdtemp(path.join(os.tmpdir(), 'storyspec-apply-'));
+    const collaborationRepository = createMemoryCollaborationCanonRepository();
+    const auditRepository = createMemoryAuditLogRepository();
+    const server = await startMultiuserServer({
+      host: '127.0.0.1',
+      port: 0,
+      version: '0.20.0',
+      sessionRepository: createMemorySessionRepository({
+        users: [
+          { id: 'user-owner', displayName: '作者甲' },
+          { id: 'user-reviewer', displayName: '审稿乙' }
+        ],
+        sessions: [{
+          token: 'owner-token',
+          userId: 'user-owner',
+          expiresAt: '2026-05-08T13:00:00.000Z'
+        }, {
+          token: 'reviewer-token',
+          userId: 'user-reviewer',
+          expiresAt: '2026-05-08T13:00:00.000Z'
+        }]
+      }),
+      projectRepository: createMemoryProjectAccessRepository({
+        projects: [{
+          id: 'project-1',
+          ownerUserId: 'user-owner',
+          dataRoot: projectRoot
+        }],
+        memberships: [{
+          projectId: 'project-1',
+          userId: 'user-owner',
+          role: 'owner'
+        }, {
+          projectId: 'project-1',
+          userId: 'user-reviewer',
+          role: 'reviewer'
+        }]
+      }),
+      collaborationRepository,
+      auditRepository,
+      now: () => '2026-05-08T12:00:00.000Z'
+    });
+
+    try {
+      const proposalResponse = await fetch(`${server.url}/api/projects/project-1/collaboration/proposals`, {
+        method: 'POST',
+        headers: {
+          authorization: 'Bearer owner-token',
+          'content-type': 'application/json'
+        },
+        body: JSON.stringify({
+          storyId: 'story-main',
+          target: {
+            kind: 'canon',
+            path: 'stories/main/canon.md',
+            resourceVersion: 'canon-v1'
+          },
+          sourceRefs: [{
+            kind: 'manual',
+            id: 'note-1',
+            label: '人工记录'
+          }],
+          summary: '候选事实。'
+        })
+      });
+      const proposal = await proposalResponse.json() as { id: string };
+
+      await fetch(`${server.url}/api/projects/project-1/collaboration/proposals/${proposal.id}/reviews`, {
+        method: 'POST',
+        headers: {
+          authorization: 'Bearer reviewer-token',
+          'content-type': 'application/json'
+        },
+        body: JSON.stringify({
+          decision: 'approve'
+        })
+      });
+      const patchResponse = await fetch(`${server.url}/api/projects/project-1/collaboration/proposals/${proposal.id}/patches`, {
+        method: 'POST',
+        headers: {
+          authorization: 'Bearer owner-token',
+          'content-type': 'application/json'
+        },
+        body: JSON.stringify({
+          targetPath: 'stories/main/canon.md',
+          kind: 'canon-fact',
+          diffSummary: '写入 fact-1。',
+          rollbackHint: '恢复 canon-v1。',
+          sourceRefs: ['note-1'],
+          content: '# Canon\n\n- fact-1\n'
+        })
+      });
+      const patch = await patchResponse.json() as { id: string };
+      const applyResponse = await fetch(`${server.url}/api/projects/project-1/collaboration/proposals/${proposal.id}/apply-requests`, {
+        method: 'POST',
+        headers: {
+          authorization: 'Bearer owner-token',
+          'content-type': 'application/json'
+        },
+        body: JSON.stringify({
+          authorConfirmed: true,
+          currentVersion: {
+            resourceVersion: 'canon-v1',
+            storyStage: 'drafting',
+            canonFactIds: [],
+            taskState: 'open'
+          }
+        })
+      });
+      const applyRequest = await applyResponse.json() as { id: string };
+
+      const executed = await fetch(`${server.url}/api/projects/project-1/collaboration/proposals/${proposal.id}/apply-requests/${applyRequest.id}/apply`, {
+        method: 'POST',
+        headers: {
+          authorization: 'Bearer owner-token'
+        }
+      });
+
+      expect(executed.status).toBe(200);
+      await expect(executed.json()).resolves.toMatchObject({
+        proposalId: proposal.id,
+        applyRequestId: applyRequest.id,
+        appliedPatchIds: [patch.id],
+        writtenPaths: ['stories/main/canon.md']
+      });
+      await expect(readFile(path.join(projectRoot, 'stories', 'main', 'canon.md'), 'utf-8')).resolves.toBe('# Canon\n\n- fact-1\n');
+      await expect(collaborationRepository.findProposalById(proposal.id)).resolves.toMatchObject({
+        status: 'applied'
+      });
+      await expect(auditRepository.listByProject('project-1')).resolves.toEqual(expect.arrayContaining([
+        expect.objectContaining({
+          action: 'collaboration.apply.execute',
+          diffSummary: expect.stringContaining(applyRequest.id)
+        })
+      ]));
+    } finally {
+      await server.close();
+      await rm(projectRoot, { recursive: true, force: true });
     }
   });
 

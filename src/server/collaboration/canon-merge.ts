@@ -96,6 +96,7 @@ export interface CanonPatch {
   kind: CanonPatchKind;
   diffSummary: string;
   rollbackHint: string;
+  content?: string;
   sourceRefs: string[];
 }
 
@@ -109,6 +110,25 @@ export interface ApplyRequest {
   reviewerIds: string[];
   blockedReasons: string[];
   createdAt: string;
+  appliedAt?: string;
+}
+
+export interface ExecuteApplyRequestInput {
+  repository: CollaborationCanonRepository;
+  proposalId: string;
+  applyRequestId: string;
+  actorUserId: string;
+  writePatch(input: { targetPath: string; content: string }): Promise<void>;
+  now?: () => string;
+}
+
+export interface ExecuteApplyRequestResult {
+  proposalId: string;
+  applyRequestId: string;
+  actorUserId: string;
+  appliedPatchIds: string[];
+  writtenPaths: string[];
+  appliedAt: string;
 }
 
 export interface CollaborationCanonRepositorySnapshot {
@@ -188,6 +208,7 @@ export interface CreateCanonPatchInput {
   kind: CanonPatchKind;
   diffSummary: string;
   rollbackHint: string;
+  content?: string;
   sourceRefs: string[];
   idGenerator?: () => string;
 }
@@ -259,7 +280,12 @@ export const createMemoryCollaborationCanonRepository = (): CollaborationCanonRe
       return applyRequests.filter(request => request.proposalId === proposalId);
     },
     async saveApplyRequest(request) {
-      applyRequests.push(request);
+      const existingIndex = applyRequests.findIndex(item => item.id === request.id);
+      if (existingIndex >= 0) {
+        applyRequests[existingIndex] = request;
+      } else {
+        applyRequests.push(request);
+      }
     },
     async listCommentThreads(input) {
       return commentThreads.filter(thread =>
@@ -501,11 +527,78 @@ export const createCanonPatch = async (
     kind: input.kind,
     diffSummary: input.diffSummary,
     rollbackHint: input.rollbackHint,
+    content: input.content,
     sourceRefs: input.sourceRefs
   };
 
   await input.repository.savePatch(patch);
   return patch;
+};
+
+export const executeApplyRequest = async (
+  input: ExecuteApplyRequestInput
+): Promise<ExecuteApplyRequestResult> => {
+  const proposal = await input.repository.findProposalById(input.proposalId);
+  if (!proposal) {
+    throw new Error(`PROPOSAL_NOT_FOUND:${input.proposalId}`);
+  }
+
+  const requests = input.repository.listApplyRequests
+    ? await input.repository.listApplyRequests(input.proposalId)
+    : fallbackListApplyRequests(input.repository, input.proposalId);
+  const request = requests.find(item => item.id === input.applyRequestId);
+  if (!request) {
+    throw new Error(`APPLY_REQUEST_NOT_FOUND:${input.applyRequestId}`);
+  }
+  if (request.status !== 'ready') {
+    throw new Error(`APPLY_REQUEST_NOT_READY:${request.status}`);
+  }
+
+  const patches = await input.repository.listPatches(input.proposalId);
+  const patchesById = new Map(patches.map(patch => [patch.id, patch]));
+  const selectedPatches = request.patchIds.map(patchId => {
+    const patch = patchesById.get(patchId);
+    if (!patch) {
+      throw new Error(`PATCH_NOT_FOUND:${patchId}`);
+    }
+    if (!patch.rollbackHint.trim()) {
+      throw new Error(`PATCH_ROLLBACK_HINT_REQUIRED:${patchId}`);
+    }
+    if (patch.content === undefined) {
+      throw new Error(`PATCH_CONTENT_REQUIRED:${patchId}`);
+    }
+    return patch;
+  });
+
+  const writtenPaths: string[] = [];
+  for (const patch of selectedPatches) {
+    await input.writePatch({
+      targetPath: patch.targetPath,
+      content: patch.content ?? ''
+    });
+    writtenPaths.push(patch.targetPath);
+  }
+
+  const appliedAt = input.now?.() ?? currentTimestamp();
+  await input.repository.saveApplyRequest({
+    ...request,
+    status: 'applied',
+    appliedAt
+  });
+  await input.repository.saveProposal({
+    ...proposal,
+    status: 'applied',
+    updatedAt: appliedAt
+  });
+
+  return {
+    proposalId: proposal.id,
+    applyRequestId: request.id,
+    actorUserId: input.actorUserId,
+    appliedPatchIds: selectedPatches.map(patch => patch.id),
+    writtenPaths,
+    appliedAt
+  };
 };
 
 const collectApplyGateReasons = (

@@ -210,7 +210,7 @@ const collaborationReviewDecisions: MultiuserTableSchema = {
 
 const collaborationCanonPatches: MultiuserTableSchema = {
   name: 'collaboration_canon_patches',
-  columns: ['id', 'proposal_id', 'target_path', 'kind', 'diff_summary', 'rollback_hint', 'source_refs'],
+  columns: ['id', 'proposal_id', 'target_path', 'kind', 'diff_summary', 'rollback_hint', 'content', 'source_refs'],
   createStatements: [
     'create table if not exists collaboration_canon_patches (',
     '  id text primary key,',
@@ -219,6 +219,7 @@ const collaborationCanonPatches: MultiuserTableSchema = {
     '  kind text not null,',
     '  diff_summary text not null,',
     '  rollback_hint text not null,',
+    '  content text,',
     '  source_refs jsonb not null',
     ');',
     'create index if not exists collaboration_canon_patches_proposal_idx on collaboration_canon_patches (proposal_id);'
@@ -281,7 +282,7 @@ const collaborationCommentThreads: MultiuserTableSchema = {
   ]
 };
 
-export const MULTIUSER_MIGRATION_VERSION = 3;
+export const MULTIUSER_MIGRATION_VERSION = 4;
 
 export const multiuserDatabaseSchema: MultiuserDatabaseSchema = {
   users,
