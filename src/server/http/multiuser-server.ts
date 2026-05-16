@@ -27,6 +27,7 @@ import {
 import type { AgentJob, AgentJobRepository } from '../jobs/agent-job.js';
 import {
   buildAgentJobDashboard,
+  buildAgentJobLog,
   cancelAgentJob,
   createAgentJob,
   retryAgentJob
@@ -864,7 +865,7 @@ export const startMultiuserServer = async (input: StartMultiuserServerInput): Pr
         }
       }
 
-      const jobMatch = url.pathname.match(/^\/api\/projects\/([^/]+)\/jobs(?:\/([^/]+)(?:\/(cancel|retry))?)?$/);
+      const jobMatch = url.pathname.match(/^\/api\/projects\/([^/]+)\/jobs(?:\/([^/]+)(?:\/(cancel|retry|logs))?)?$/);
       if (jobMatch && (request.method === 'GET' || request.method === 'POST')) {
         if (!input.sessionRepository || !input.projectRepository || !input.jobRepository) {
           sendJson(response, 503, createErrorResponse({
@@ -1024,6 +1025,11 @@ export const startMultiuserServer = async (input: StartMultiuserServerInput): Pr
 
         if (request.method === 'GET' && !action) {
           sendJson(response, 200, existing.job, context.requestId);
+          return;
+        }
+
+        if (request.method === 'GET' && action === 'logs') {
+          sendJson(response, 200, buildAgentJobLog(existing.job), context.requestId);
           return;
         }
 

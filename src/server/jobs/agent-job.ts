@@ -55,6 +55,22 @@ export interface AgentJobDashboard {
   };
 }
 
+export type AgentJobLogLevel = 'info' | 'warning' | 'error';
+
+export interface AgentJobLogEntry {
+  level: AgentJobLogLevel;
+  message: string;
+  createdAt: string;
+  traceId?: string;
+  runtimeErrorCode?: string;
+}
+
+export interface AgentJobLog {
+  projectId: string;
+  jobId: string;
+  entries: AgentJobLogEntry[];
+}
+
 export interface CreateAgentJobInput {
   repository: AgentJobRepository;
   userId: string;
@@ -111,6 +127,25 @@ const blocked = (reason: string): AgentJobResult => ({
   blockedReasons: [reason]
 });
 
+const buildJobStatusLogMessage = (
+  job: AgentJob
+): { level: AgentJobLogLevel; message: string } => {
+  switch (job.status) {
+    case 'queued':
+      return { level: 'info', message: 'job 等待 worker 执行。' };
+    case 'running':
+      return { level: 'info', message: 'job 正在运行。' };
+    case 'succeeded':
+      return { level: 'info', message: 'job 已完成。' };
+    case 'failed':
+      return { level: 'error', message: `job 失败：${job.errorMessage ?? 'runtime 执行失败'}` };
+    case 'timeout':
+      return { level: 'error', message: `job 超时：${job.errorMessage ?? 'runtime 执行超时'}` };
+    case 'canceled':
+      return { level: 'warning', message: 'job 已取消。' };
+  }
+};
+
 export const createMemoryAgentJobRepository = (): AgentJobRepository => {
   const jobs = new Map<string, AgentJob>();
 
@@ -132,6 +167,33 @@ export const createMemoryAgentJobRepository = (): AgentJobRepository => {
     async save(job) {
       jobs.set(job.id, job);
     }
+  };
+};
+
+export const buildAgentJobLog = (job: AgentJob): AgentJobLog => {
+  const withTrace = job.traceId ? { traceId: job.traceId } : {};
+  const entries: AgentJobLogEntry[] = [{
+    level: 'info',
+    message: `job 已创建并进入队列：${job.kind} / ${job.runtime}`,
+    createdAt: job.createdAt,
+    ...withTrace
+  }];
+
+  if (job.status !== 'queued' || job.updatedAt !== job.createdAt) {
+    const statusLog = buildJobStatusLogMessage(job);
+    entries.push({
+      level: statusLog.level,
+      message: statusLog.message,
+      createdAt: job.updatedAt,
+      ...withTrace,
+      ...(job.runtimeErrorCode ? { runtimeErrorCode: job.runtimeErrorCode } : {})
+    });
+  }
+
+  return {
+    projectId: job.projectId,
+    jobId: job.id,
+    entries
   };
 };
 

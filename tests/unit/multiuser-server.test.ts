@@ -792,6 +792,91 @@ describe('multiuser server entry', () => {
     }
   });
 
+  it('serves project-scoped agent job logs without mutating the job', async () => {
+    const jobRepository = createMemoryAgentJobRepository();
+    await createAgentJob({
+      repository: jobRepository,
+      userId: 'user-1',
+      projectId: 'project-1',
+      kind: 'chapter-draft',
+      runtime: 'local-storyspec',
+      traceId: 'trace-1',
+      now: () => '2026-05-08T12:00:00.000Z',
+      idGenerator: () => 'job-logs'
+    });
+    await transitionAgentJob({
+      repository: jobRepository,
+      jobId: 'job-logs',
+      status: 'running',
+      now: () => '2026-05-08T12:00:10.000Z'
+    });
+    await transitionAgentJob({
+      repository: jobRepository,
+      jobId: 'job-logs',
+      status: 'failed',
+      errorMessage: 'runtime failed',
+      runtimeErrorCode: 'RUNTIME_EXECUTION_FAILED',
+      now: () => '2026-05-08T12:00:20.000Z'
+    });
+    const server = await startMultiuserServer({
+      host: '127.0.0.1',
+      port: 0,
+      version: '0.20.0',
+      sessionRepository: createMemorySessionRepository({
+        users: [{ id: 'user-1', displayName: '作者甲' }],
+        sessions: [{
+          token: 'session-token',
+          userId: 'user-1',
+          expiresAt: '2026-05-08T13:00:00.000Z'
+        }]
+      }),
+      projectRepository: createMemoryProjectAccessRepository({
+        projects: [{
+          id: 'project-1',
+          ownerUserId: 'user-1',
+          dataRoot: 'D:\\storyspec-data\\project-1'
+        }],
+        memberships: [{
+          projectId: 'project-1',
+          userId: 'user-1',
+          role: 'owner'
+        }]
+      }),
+      jobRepository,
+      now: () => '2026-05-08T12:00:00.000Z'
+    });
+
+    try {
+      const logs = await fetch(`${server.url}/api/projects/project-1/jobs/job-logs/logs`, {
+        headers: {
+          authorization: 'Bearer session-token'
+        }
+      });
+
+      expect(logs.status).toBe(200);
+      await expect(logs.json()).resolves.toMatchObject({
+        projectId: 'project-1',
+        jobId: 'job-logs',
+        entries: [
+          {
+            level: 'info',
+            traceId: 'trace-1'
+          },
+          {
+            level: 'error',
+            runtimeErrorCode: 'RUNTIME_EXECUTION_FAILED'
+          }
+        ]
+      });
+      await expect(jobRepository.findById('job-logs')).resolves.toMatchObject({
+        status: 'failed',
+        updatedAt: '2026-05-08T12:00:20.000Z'
+      });
+    } finally {
+      await server.close();
+    }
+  });
+
   it('enforces configured job quota before creating jobs', async () => {
     const jobRepository = createMemoryAgentJobRepository();
     const quotaRepository = createMemoryQuotaRepository({
