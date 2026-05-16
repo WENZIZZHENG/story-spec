@@ -4,6 +4,7 @@ import { mkdir, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import type { AuditLogRepository } from '../audit/audit-log.js';
 import { buildProjectActivityFeed, recordAuditEvent } from '../audit/audit-log.js';
+import type { AgentRuntimeOutputRepository } from '../agent-runtime/agent-runtime.js';
 import type { SessionRepository } from '../auth/session.js';
 import { requireUser } from '../auth/session.js';
 import type {
@@ -56,6 +57,7 @@ export interface StartMultiuserServerInput {
   sessionRepository?: SessionRepository;
   projectRepository?: ProjectAccessRepository;
   jobRepository?: AgentJobRepository;
+  runtimeOutputRepository?: AgentRuntimeOutputRepository;
   jobQueue?: AgentJobQueue;
   collaborationRepository?: CollaborationCanonRepository;
   auditRepository?: AuditLogRepository;
@@ -950,7 +952,7 @@ export const startMultiuserServer = async (input: StartMultiuserServerInput): Pr
         }
       }
 
-      const jobMatch = url.pathname.match(/^\/api\/projects\/([^/]+)\/jobs(?:\/([^/]+)(?:\/(cancel|retry|logs))?)?$/);
+      const jobMatch = url.pathname.match(/^\/api\/projects\/([^/]+)\/jobs(?:\/([^/]+)(?:\/(cancel|retry|logs|output))?)?$/);
       if (jobMatch && (request.method === 'GET' || request.method === 'POST')) {
         if (!input.sessionRepository || !input.projectRepository || !input.jobRepository) {
           sendJson(response, 503, createErrorResponse({
@@ -1130,6 +1132,17 @@ export const startMultiuserServer = async (input: StartMultiuserServerInput): Pr
 
         if (request.method === 'GET' && action === 'logs') {
           sendJson(response, 200, buildAgentJobLog(existing.job), context.requestId);
+          return;
+        }
+
+        if (request.method === 'GET' && action === 'output') {
+          sendJson(response, 200, {
+            projectId: guard.accessContext.projectId,
+            jobId,
+            outputs: input.runtimeOutputRepository
+              ? await input.runtimeOutputRepository.listByJob(jobId)
+              : []
+          }, context.requestId);
           return;
         }
 

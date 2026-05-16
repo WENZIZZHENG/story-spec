@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest';
 import { mkdtemp, readFile, rm } from 'node:fs/promises';
 import os from 'node:os';
 import path from 'node:path';
+import { createMemoryRuntimeOutputRepository } from '../../src/server/agent-runtime/agent-runtime.js';
 import { createMemoryAuditLogRepository } from '../../src/server/audit/audit-log.js';
 import { createMemorySessionRepository } from '../../src/server/auth/session.js';
 import { createMemoryCollaborationCanonRepository } from '../../src/server/collaboration/canon-merge.js';
@@ -872,6 +873,102 @@ describe('multiuser server entry', () => {
       await expect(jobRepository.findById('job-logs')).resolves.toMatchObject({
         status: 'failed',
         updatedAt: '2026-05-08T12:00:20.000Z'
+      });
+    } finally {
+      await server.close();
+    }
+  });
+
+  it('serves project-scoped runtime output records without mutating the job', async () => {
+    const jobRepository = createMemoryAgentJobRepository();
+    const outputRepository = createMemoryRuntimeOutputRepository();
+    await createAgentJob({
+      repository: jobRepository,
+      userId: 'user-1',
+      projectId: 'project-1',
+      kind: 'canon-review',
+      runtime: 'openhands',
+      traceId: 'trace-output',
+      now: () => '2026-05-16T13:00:00.000Z',
+      idGenerator: () => 'job-output'
+    });
+    await outputRepository.save({
+      jobId: 'job-output',
+      candidateRef: 'openhands:job-output',
+      previewOnly: true,
+      summary: 'OpenHands headless 已生成候选',
+      artifacts: [{
+        id: 'openhands-stdout',
+        kind: 'stdout',
+        label: 'OpenHands stdout',
+        previewText: '候选输出'
+      }],
+      logs: [{
+        level: 'info',
+        message: 'OpenHands stdout: 候选输出',
+        createdAt: '2026-05-16T13:01:00.000Z'
+      }],
+      traceId: 'trace-output',
+      createdAt: '2026-05-16T13:01:00.000Z'
+    });
+    const server = await startMultiuserServer({
+      host: '127.0.0.1',
+      port: 0,
+      version: '0.20.0',
+      sessionRepository: createMemorySessionRepository({
+        users: [{ id: 'user-1', displayName: '作者甲' }],
+        sessions: [{
+          token: 'session-token',
+          userId: 'user-1',
+          expiresAt: '2026-05-16T14:00:00.000Z'
+        }]
+      }),
+      projectRepository: createMemoryProjectAccessRepository({
+        projects: [{
+          id: 'project-1',
+          ownerUserId: 'user-1',
+          dataRoot: 'D:\\storyspec-data\\project-1'
+        }],
+        memberships: [{
+          projectId: 'project-1',
+          userId: 'user-1',
+          role: 'owner'
+        }]
+      }),
+      jobRepository,
+      runtimeOutputRepository: outputRepository,
+      now: () => '2026-05-16T13:02:00.000Z'
+    });
+
+    try {
+      const output = await fetch(`${server.url}/api/projects/project-1/jobs/job-output/output`, {
+        headers: {
+          authorization: 'Bearer session-token'
+        }
+      });
+
+      expect(output.status).toBe(200);
+      await expect(output.json()).resolves.toEqual({
+        projectId: 'project-1',
+        jobId: 'job-output',
+        outputs: [expect.objectContaining({
+          jobId: 'job-output',
+          candidateRef: 'openhands:job-output',
+          previewOnly: true,
+          summary: 'OpenHands headless 已生成候选',
+          artifacts: [expect.objectContaining({
+            id: 'openhands-stdout',
+            previewText: '候选输出'
+          })],
+          logs: [expect.objectContaining({
+            level: 'info',
+            message: 'OpenHands stdout: 候选输出'
+          })],
+          traceId: 'trace-output'
+        })]
+      });
+      await expect(jobRepository.findById('job-output')).resolves.toMatchObject({
+        status: 'queued'
       });
     } finally {
       await server.close();
