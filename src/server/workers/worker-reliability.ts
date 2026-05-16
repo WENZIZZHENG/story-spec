@@ -1,4 +1,4 @@
-import type { AgentJob } from '../jobs/agent-job.js';
+import type { AgentJob, AgentJobRepository } from '../jobs/agent-job.js';
 import type { QueueReadyState } from '../queue/agent-job-queue.js';
 
 export type WorkerFailureKind =
@@ -99,6 +99,37 @@ export interface WorkerAlertSummary {
   alerts: WorkerAlertItem[];
 }
 
+export interface WorkerLeaseRecoveryAffectedJob {
+  workerId: string;
+  jobId: string;
+  projectId: string;
+  userId: string;
+  runtime: string;
+  kind: string;
+  attempt: number;
+  status: 'running';
+  leaseExpiresAt: string;
+  traceId?: string;
+  recommendedAction: string;
+}
+
+export interface WorkerLeaseRecoveryJobRef {
+  workerId: string;
+  jobId: string;
+  leaseExpiresAt: string;
+  status?: AgentJob['status'];
+  reason: string;
+}
+
+export interface WorkerLeaseRecoveryPlan {
+  generatedAt: string;
+  projectId?: string;
+  staleLeases: WorkerLease[];
+  affectedJobs: WorkerLeaseRecoveryAffectedJob[];
+  missingJobRefs: WorkerLeaseRecoveryJobRef[];
+  ignoredJobRefs: WorkerLeaseRecoveryJobRef[];
+}
+
 export interface BuildWorkerAlertSummaryInput {
   projectId: string;
   jobs: AgentJob[];
@@ -109,6 +140,13 @@ export interface BuildWorkerAlertSummaryInput {
     acknowledged: unknown[];
     failed: unknown[];
   };
+  now?: () => string;
+}
+
+export interface BuildWorkerLeaseRecoveryPlanInput {
+  leaseRepository: WorkerLeaseRepository;
+  jobRepository: AgentJobRepository;
+  projectId?: string;
   now?: () => string;
 }
 
@@ -257,6 +295,69 @@ export const refreshWorkerLease = async (
 
   await input.repository.save(lease);
   return lease;
+};
+
+export const buildWorkerLeaseRecoveryPlan = async (
+  input: BuildWorkerLeaseRecoveryPlanInput
+): Promise<WorkerLeaseRecoveryPlan> => {
+  const generatedAt = input.now?.() ?? currentTimestamp();
+  const staleLeases = await input.leaseRepository.listStale({ now: generatedAt });
+  const affectedJobs: WorkerLeaseRecoveryAffectedJob[] = [];
+  const missingJobRefs: WorkerLeaseRecoveryJobRef[] = [];
+  const ignoredJobRefs: WorkerLeaseRecoveryJobRef[] = [];
+
+  for (const lease of staleLeases) {
+    for (const jobId of lease.activeJobIds) {
+      const job = await input.jobRepository.findById(jobId);
+      if (!job) {
+        missingJobRefs.push({
+          workerId: lease.workerId,
+          jobId,
+          leaseExpiresAt: lease.leaseExpiresAt,
+          reason: 'lease 引用了不存在的 job。'
+        });
+        continue;
+      }
+
+      if (input.projectId && job.projectId !== input.projectId) {
+        continue;
+      }
+
+      if (job.status !== 'running') {
+        ignoredJobRefs.push({
+          workerId: lease.workerId,
+          jobId,
+          leaseExpiresAt: lease.leaseExpiresAt,
+          status: job.status,
+          reason: 'job 状态不是 running。'
+        });
+        continue;
+      }
+
+      affectedJobs.push({
+        workerId: lease.workerId,
+        jobId: job.id,
+        projectId: job.projectId,
+        userId: job.userId,
+        runtime: job.runtime,
+        kind: job.kind,
+        attempt: job.attempt,
+        status: 'running',
+        leaseExpiresAt: lease.leaseExpiresAt,
+        ...(job.traceId ? { traceId: job.traceId } : lease.traceId ? { traceId: lease.traceId } : {}),
+        recommendedAction: '确认 worker 已停止后，人工检查 job 日志并决定是否标记 timeout 或手动 retry。'
+      });
+    }
+  }
+
+  return {
+    generatedAt,
+    ...(input.projectId ? { projectId: input.projectId } : {}),
+    staleLeases,
+    affectedJobs,
+    missingJobRefs,
+    ignoredJobRefs
+  };
 };
 
 export const recordWorkerFailure = async (

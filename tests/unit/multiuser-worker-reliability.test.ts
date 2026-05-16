@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import {
+  buildWorkerLeaseRecoveryPlan,
   buildWorkerAlertSummary,
   classifyWorkerFailure,
   createMemoryWorkerLeaseRepository,
@@ -7,6 +8,11 @@ import {
   refreshWorkerLease,
   recordWorkerFailure
 } from '../../src/server/workers/worker-reliability.js';
+import {
+  createAgentJob,
+  createMemoryAgentJobRepository,
+  transitionAgentJob
+} from '../../src/server/jobs/agent-job.js';
 
 describe('multiuser worker reliability policy', () => {
   it('classifies runtime failures as retryable before max attempts', () => {
@@ -262,5 +268,101 @@ describe('multiuser worker reliability policy', () => {
     await expect(repository.listStale({
       now: '2026-05-16T12:01:00.000Z'
     })).resolves.toEqual([]);
+  });
+
+  it('builds a non-mutating recovery plan for stale worker leases', async () => {
+    const leaseRepository = createMemoryWorkerLeaseRepository();
+    const jobRepository = createMemoryAgentJobRepository();
+    await createAgentJob({
+      repository: jobRepository,
+      userId: 'user-1',
+      projectId: 'project-1',
+      kind: 'chapter-draft',
+      runtime: 'local-storyspec',
+      traceId: 'trace-running',
+      now: () => '2026-05-16T12:00:00.000Z',
+      idGenerator: () => 'job-running'
+    });
+    await transitionAgentJob({
+      repository: jobRepository,
+      jobId: 'job-running',
+      status: 'running',
+      now: () => '2026-05-16T12:00:10.000Z'
+    });
+    await createAgentJob({
+      repository: jobRepository,
+      userId: 'user-1',
+      projectId: 'project-1',
+      kind: 'chapter-draft',
+      runtime: 'local-storyspec',
+      now: () => '2026-05-16T12:00:00.000Z',
+      idGenerator: () => 'job-succeeded'
+    });
+    await transitionAgentJob({
+      repository: jobRepository,
+      jobId: 'job-succeeded',
+      status: 'running',
+      now: () => '2026-05-16T12:00:10.000Z'
+    });
+    await transitionAgentJob({
+      repository: jobRepository,
+      jobId: 'job-succeeded',
+      status: 'succeeded',
+      now: () => '2026-05-16T12:00:20.000Z'
+    });
+    await refreshWorkerLease({
+      repository: leaseRepository,
+      workerId: 'worker-stale',
+      concurrency: 2,
+      activeJobIds: ['job-running', 'job-succeeded', 'job-missing'],
+      traceId: 'trace-worker',
+      now: () => '2026-05-16T12:00:00.000Z',
+      leaseTtlMs: 30_000
+    });
+    await refreshWorkerLease({
+      repository: leaseRepository,
+      workerId: 'worker-active',
+      concurrency: 1,
+      activeJobIds: ['job-active'],
+      now: () => '2026-05-16T12:02:00.000Z',
+      leaseTtlMs: 30_000
+    });
+
+    const plan = await buildWorkerLeaseRecoveryPlan({
+      leaseRepository,
+      jobRepository,
+      projectId: 'project-1',
+      now: () => '2026-05-16T12:01:00.000Z'
+    });
+
+    expect(plan).toMatchObject({
+      generatedAt: '2026-05-16T12:01:00.000Z',
+      projectId: 'project-1',
+      staleLeases: [expect.objectContaining({
+        workerId: 'worker-stale',
+        leaseExpiresAt: '2026-05-16T12:00:30.000Z'
+      })],
+      affectedJobs: [expect.objectContaining({
+        jobId: 'job-running',
+        workerId: 'worker-stale',
+        projectId: 'project-1',
+        status: 'running',
+        traceId: 'trace-running',
+        recommendedAction: '确认 worker 已停止后，人工检查 job 日志并决定是否标记 timeout 或手动 retry。'
+      })],
+      missingJobRefs: [expect.objectContaining({
+        workerId: 'worker-stale',
+        jobId: 'job-missing'
+      })],
+      ignoredJobRefs: [expect.objectContaining({
+        workerId: 'worker-stale',
+        jobId: 'job-succeeded',
+        status: 'succeeded',
+        reason: 'job 状态不是 running。'
+      })]
+    });
+    await expect(jobRepository.findById('job-running')).resolves.toMatchObject({
+      status: 'running'
+    });
   });
 });
