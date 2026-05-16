@@ -15,6 +15,7 @@ export const renderLocalAppHtml = (input: RenderLocalAppHtmlInput): string => {
   const token = escapeHtml(input.token);
   const frontendArchitecture = buildCompleteAppFrontendArchitecture();
   const collaborationReview = frontendArchitecture.collaborationCanonReview;
+  const runtimeOutput = frontendArchitecture.runtimeOutput;
   const endpointById = new Map(frontendArchitecture.apiClient.endpoints.map(endpoint => [endpoint.id, endpoint]));
   const routeNavigation = frontendArchitecture.routes.map(route => (
     `<a class="route-link" href="${escapeHtml(route.route)}" data-route-id="${escapeHtml(route.id)}">` +
@@ -52,6 +53,14 @@ export const renderLocalAppHtml = (input: RenderLocalAppHtmlInput): string => {
       `<span class="mono">${escapeHtml(action.requiredPermission)} · ${escapeHtml(action.boundary)}</span></li>`
     );
   }).join('');
+  const runtimeOutputEndpoint = endpointById.get(runtimeOutput.endpointId);
+  const runtimeOutputEndpointLabel = runtimeOutputEndpoint
+    ? `${runtimeOutputEndpoint.method} ${runtimeOutputEndpoint.path}`
+    : runtimeOutput.endpointId;
+  const runtimeOutputPanes = runtimeOutput.panes.map(pane => (
+    `<li data-runtime-output-pane-id="${escapeHtml(pane.id)}"><strong>${escapeHtml(pane.label)}</strong>` +
+    `：${escapeHtml(pane.purpose)}<br><span class="muted">${escapeHtml(pane.emptyState)}</span></li>`
+  )).join('');
 
   return `<!doctype html>
 <html lang="zh-CN">
@@ -891,6 +900,26 @@ export const renderLocalAppHtml = (input: RenderLocalAppHtmlInput): string => {
             <div class="error" id="task-board-error" role="status" aria-live="polite"></div>
             <div class="result-box" id="task-board-result">读取后会显示任务总数、待办、完成、writeReady 和 planOnly。</div>
           </section>
+
+          <section class="section-block" data-endpoint-id="${escapeHtml(runtimeOutput.endpointId)}">
+            <div class="dossier-title">
+              <h3>${escapeHtml(runtimeOutput.title)}</h3>
+              <button class="secondary" id="refresh-runtime-output" type="button">读取 output</button>
+            </div>
+            <p class="muted">${escapeHtml(runtimeOutput.previewOnlyBoundary)}</p>
+            <p class="mono">${escapeHtml(runtimeOutputEndpointLabel)}</p>
+            <div class="field">
+              <label for="runtime-output-project-id">项目 ID</label>
+              <input id="runtime-output-project-id" name="projectId" autocomplete="off" placeholder="project-1">
+            </div>
+            <div class="field">
+              <label for="runtime-output-job-id">Job ID</label>
+              <input id="runtime-output-job-id" name="jobId" autocomplete="off" placeholder="job-output">
+            </div>
+            <ul class="fact-list">${runtimeOutputPanes}</ul>
+            <div class="error" id="runtime-output-error" role="status" aria-live="polite"></div>
+            <div class="result-box" id="runtime-output-result">${escapeHtml(runtimeOutput.emptyState)}</div>
+          </section>
         </div>
         <div class="panel-body gate" aria-labelledby="chapter-entry-title">
           <section class="section-block">
@@ -1005,10 +1034,12 @@ export const renderLocalAppHtml = (input: RenderLocalAppHtmlInput): string => {
     const outlineCompareError = document.querySelector("#outline-compare-error");
     const outlinePromoteError = document.querySelector("#outline-promote-error");
     const taskBoardError = document.querySelector("#task-board-error");
+    const runtimeOutputError = document.querySelector("#runtime-output-error");
     const outlineListResult = document.querySelector("#outline-list-result");
     const outlineCompareResult = document.querySelector("#outline-compare-result");
     const outlinePromoteResult = document.querySelector("#outline-promote-result");
     const taskBoardResult = document.querySelector("#task-board-result");
+    const runtimeOutputResult = document.querySelector("#runtime-output-result");
     const chapterLaneError = document.querySelector("#chapter-lane-error");
     const chapterDraftListError = document.querySelector("#chapter-draft-list-error");
     const chapterDraftError = document.querySelector("#chapter-draft-error");
@@ -1498,6 +1529,36 @@ export const renderLocalAppHtml = (input: RenderLocalAppHtmlInput): string => {
         \`;
       } catch (error) {
         taskBoardError.textContent = error.message;
+      }
+    });
+
+    document.querySelector("#refresh-runtime-output").addEventListener("click", async () => {
+      runtimeOutputError.textContent = "";
+      const projectId = document.querySelector("#runtime-output-project-id").value.trim();
+      const jobId = document.querySelector("#runtime-output-job-id").value.trim();
+      if (!projectId || !jobId) {
+        runtimeOutputError.textContent = "请先填写项目 ID 和 Job ID。";
+        return;
+      }
+      try {
+        const result = await api("/api/projects/" + encodeURIComponent(projectId) + "/jobs/" + encodeURIComponent(jobId) + "/output", { method: "GET" });
+        const outputs = result.outputs || [];
+        runtimeOutputResult.innerHTML = outputs.length
+          ? outputs.map(output => {
+            const artifacts = output.artifacts || [];
+            const logs = output.logs || [];
+            const artifactItems = artifacts.map(artifact => '<li><strong>' + escapeHtml(artifact.label || artifact.id || "artifact") + '</strong>：' + escapeHtml(artifact.kind || "") + '<br><span class="muted">' + escapeHtml(artifact.previewText || "") + '</span></li>').join("") || '<li>这个 job 还没有可展示的 artifact。</li>';
+            const logItems = logs.map(log => '<li><strong>' + escapeHtml(log.level || "info") + '</strong>：' + escapeHtml(log.message || "") + '<br><span class="muted">' + escapeHtml(log.createdAt || "") + '</span></li>').join("") || '<li>这个 job 还没有 runtime log。</li>';
+            return '<div class="section-block">'
+              + '<h3>' + escapeHtml(output.summary || output.candidateRef || "runtime output") + '</h3>'
+              + '<p class="muted">preview-only：' + (output.previewOnly ? "是" : "否") + ' · ' + escapeHtml(output.createdAt || "") + '</p>'
+              + '<div class="section-block"><h3>Artifacts</h3><ul class="fact-list">' + artifactItems + '</ul></div>'
+              + '<div class="section-block"><h3>Logs</h3><ul class="fact-list">' + logItems + '</ul></div>'
+              + '</div>';
+          }).join("")
+          : '<div class="empty">这个 job 还没有 runtime output record。</div>';
+      } catch (error) {
+        runtimeOutputError.textContent = error.message;
       }
     });
 

@@ -42,6 +42,8 @@ export type CollaborationCanonReviewStatus =
   | 'blocked'
   | 'deferred';
 
+export type RuntimeOutputPaneId = 'artifacts' | 'logs';
+
 export interface CompleteAppFrontendRoute {
   id: CompleteAppFrontendRouteId;
   label: string;
@@ -98,6 +100,23 @@ export interface CollaborationCanonReviewUiContract {
   statusLanguage: CollaborationCanonReviewStatusLanguage[];
 }
 
+export interface RuntimeOutputPane {
+  id: RuntimeOutputPaneId;
+  label: string;
+  purpose: string;
+  emptyState: string;
+}
+
+export interface RuntimeOutputUiContract {
+  routeId: 'task-center';
+  title: string;
+  endpointId: 'agent-runtime-output';
+  previewOnlyBoundary: string;
+  panes: RuntimeOutputPane[];
+  emptyState: string;
+  errorState: string;
+}
+
 export interface CompleteAppFrontendArchitecture {
   routes: CompleteAppFrontendRoute[];
   apiClient: {
@@ -105,6 +124,7 @@ export interface CompleteAppFrontendArchitecture {
     endpoints: CompleteAppFrontendEndpoint[];
   };
   collaborationCanonReview: CollaborationCanonReviewUiContract;
+  runtimeOutput: RuntimeOutputUiContract;
   stateLanguage: {
     loading: string;
     empty: string;
@@ -156,7 +176,7 @@ const routes: CompleteAppFrontendRoute[] = [
     label: '任务中心',
     route: '#task-center',
     purpose: '查看只读任务板、下一步任务和 agent job 的 preview-only 边界。',
-    primaryEndpoints: ['task-board'],
+    primaryEndpoints: ['task-board', 'agent-runtime-output'],
     requiredPermission: '可以查看任务；执行 agent job 受配额和权限守卫限制。',
     emptyState: '生成任务后，任务中心会展示只读任务板和推荐下一步。'
   }
@@ -346,6 +366,14 @@ const endpoints: CompleteAppFrontendEndpoint[] = [
     routeId: 'task-center',
     boundary: 'read-only',
     description: '读取只读任务板。'
+  },
+  {
+    id: 'agent-runtime-output',
+    method: 'GET',
+    path: '/api/projects/:projectId/jobs/:jobId/output',
+    routeId: 'task-center',
+    boundary: 'read-only',
+    description: '读取 agent job 的 preview-only runtime artifacts 和 logs。'
   },
   {
     id: 'chapter-lane',
@@ -552,6 +580,29 @@ const collaborationCanonReview: CollaborationCanonReviewUiContract = {
   ]
 };
 
+const runtimeOutput: RuntimeOutputUiContract = {
+  routeId: 'task-center',
+  title: 'Runtime 输出预览',
+  endpointId: 'agent-runtime-output',
+  previewOnlyBoundary: 'Artifacts 和 logs 只用于审阅，不自动写入正文、正典、tracking 或 proposal。',
+  emptyState: '选择一个 job 后，任务中心会展示 runtime output records。',
+  errorState: '读取失败时只显示错误状态，不触发 retry、cancel、enqueue 或 apply。',
+  panes: [
+    {
+      id: 'artifacts',
+      label: 'Artifacts',
+      purpose: '展示 stdout/stderr、候选摘要或其他 bounded preview artifact。',
+      emptyState: '这个 job 还没有可展示的 artifact。'
+    },
+    {
+      id: 'logs',
+      label: 'Logs',
+      purpose: '展示 runtime log entry，辅助判断候选是否值得进入审阅。',
+      emptyState: '这个 job 还没有 runtime log。'
+    }
+  ]
+};
+
 export const buildCompleteAppFrontendArchitecture = (): CompleteAppFrontendArchitecture => ({
   routes,
   apiClient: {
@@ -559,6 +610,7 @@ export const buildCompleteAppFrontendArchitecture = (): CompleteAppFrontendArchi
     endpoints
   },
   collaborationCanonReview,
+  runtimeOutput,
   stateLanguage: {
     loading: '正在读取工作室状态。',
     empty: '还没有可展示内容，请先打开项目或创建故事。',

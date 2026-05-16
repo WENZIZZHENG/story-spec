@@ -195,4 +195,43 @@ describe('complete app frontend architecture', () => {
       })
     ]));
   });
+
+  it('defines the runtime output read-only UI contract for the task center', () => {
+    const architecture = buildCompleteAppFrontendArchitecture();
+
+    expect(architecture.routes).toEqual(expect.arrayContaining([
+      expect.objectContaining({
+        id: 'task-center',
+        primaryEndpoints: expect.arrayContaining(['agent-runtime-output'])
+      })
+    ]));
+    expect(architecture.apiClient.endpoints).toEqual(expect.arrayContaining([
+      expect.objectContaining({
+        id: 'agent-runtime-output',
+        method: 'GET',
+        path: '/api/projects/:projectId/jobs/:jobId/output',
+        routeId: 'task-center',
+        boundary: 'read-only',
+        description: '读取 agent job 的 preview-only runtime artifacts 和 logs。'
+      })
+    ]));
+    expect(architecture.runtimeOutput).toMatchObject({
+      routeId: 'task-center',
+      title: 'Runtime 输出预览',
+      endpointId: 'agent-runtime-output',
+      previewOnlyBoundary: 'Artifacts 和 logs 只用于审阅，不自动写入正文、正典、tracking 或 proposal。',
+      panes: [
+        {
+          id: 'artifacts',
+          label: 'Artifacts',
+          emptyState: '这个 job 还没有可展示的 artifact。'
+        },
+        {
+          id: 'logs',
+          label: 'Logs',
+          emptyState: '这个 job 还没有 runtime log。'
+        }
+      ]
+    });
+  });
 });

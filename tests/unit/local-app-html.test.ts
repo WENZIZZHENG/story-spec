@@ -301,6 +301,24 @@ describe('local app html', () => {
     expect(html).toContain('id="task-board-result"');
   });
 
+  it('renders runtime output preview controls in the task center without mutation actions', () => {
+    const html = renderLocalAppHtml({
+      token: 'secret-token'
+    });
+
+    expect(html).toContain('Runtime 输出预览');
+    expect(html).toContain('读取 output');
+    expect(html).toContain('Artifacts 和 logs 只用于审阅');
+    expect(html).toContain('/api/projects/:projectId/jobs/:jobId/output');
+    expect(html).toContain('data-endpoint-id="agent-runtime-output"');
+    expect(html).toContain('id="runtime-output-project-id"');
+    expect(html).toContain('id="runtime-output-job-id"');
+    expect(html).toContain('id="runtime-output-result"');
+    expect(html).toContain('Artifacts');
+    expect(html).toContain('Logs');
+    expect(html).not.toContain('自动应用 output');
+  });
+
   it('renders the collaboration canon review UI contract without claiming realtime collaboration', () => {
     const html = renderLocalAppHtml({
       token: 'secret-token'
