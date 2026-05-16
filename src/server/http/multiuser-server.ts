@@ -41,6 +41,8 @@ import { checkQuota, consumeQuota } from '../quota/quota.js';
 import type { PostgresReadyState } from '../db/postgres.js';
 import type { AgentJobQueue } from '../queue/agent-job-queue.js';
 import { createAgentJobQueuePayload, unconfiguredQueueReadyState } from '../queue/agent-job-queue.js';
+import type { WorkerFailureRepository } from '../workers/worker-reliability.js';
+import { buildWorkerAlertSummary } from '../workers/worker-reliability.js';
 import {
   createErrorResponse,
   createRequestContext,
@@ -58,6 +60,7 @@ export interface StartMultiuserServerInput {
   collaborationRepository?: CollaborationCanonRepository;
   auditRepository?: AuditLogRepository;
   quotaRepository?: QuotaRepository;
+  workerFailureRepository?: WorkerFailureRepository;
   database?: PostgresReadyState;
   runtimeIds?: string[];
   now?: () => string;
@@ -1069,6 +1072,21 @@ export const startMultiuserServer = async (input: StartMultiuserServerInput): Pr
             jobs,
             queueReadyState: input.jobQueue?.getReadyState() ?? unconfiguredQueueReadyState(),
             queueSnapshot: getQueueSnapshot(input.jobQueue)
+          }), context.requestId);
+          return;
+        }
+
+        if (request.method === 'GET' && jobId === 'alerts' && !action) {
+          const jobs = input.jobRepository.listByProject
+            ? await input.jobRepository.listByProject(guard.accessContext.projectId)
+            : [];
+          sendJson(response, 200, buildWorkerAlertSummary({
+            projectId: guard.accessContext.projectId,
+            jobs,
+            failureRecords: input.workerFailureRepository?.snapshot() ?? [],
+            queueReadyState: input.jobQueue?.getReadyState() ?? unconfiguredQueueReadyState(),
+            queueSnapshot: getQueueSnapshot(input.jobQueue),
+            now: input.now
           }), context.requestId);
           return;
         }

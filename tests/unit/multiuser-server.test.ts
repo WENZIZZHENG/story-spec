@@ -10,6 +10,7 @@ import { createAgentJob, createMemoryAgentJobRepository, transitionAgentJob } fr
 import { createMemoryAgentJobQueue } from '../../src/server/queue/agent-job-queue.js';
 import { createMemoryProjectAccessRepository } from '../../src/server/projects/project-security.js';
 import { createMemoryQuotaRepository } from '../../src/server/quota/quota.js';
+import { createMemoryWorkerFailureRepository, recordWorkerFailure } from '../../src/server/workers/worker-reliability.js';
 
 describe('multiuser server entry', () => {
   it('starts a loopback listener with health and standard errors', async () => {
@@ -872,6 +873,141 @@ describe('multiuser server entry', () => {
         status: 'failed',
         updatedAt: '2026-05-08T12:00:20.000Z'
       });
+    } finally {
+      await server.close();
+    }
+  });
+
+  it('serves read-only worker alerts for the task center', async () => {
+    const jobRepository = createMemoryAgentJobRepository();
+    const jobQueue = createMemoryAgentJobQueue();
+    const failureRepository = createMemoryWorkerFailureRepository();
+    await createAgentJob({
+      repository: jobRepository,
+      userId: 'user-1',
+      projectId: 'project-1',
+      kind: 'chapter-draft',
+      runtime: 'local-storyspec',
+      now: () => '2026-05-16T10:00:00.000Z',
+      idGenerator: () => 'job-failed'
+    });
+    await transitionAgentJob({
+      repository: jobRepository,
+      jobId: 'job-failed',
+      status: 'running',
+      now: () => '2026-05-16T10:01:00.000Z'
+    });
+    await transitionAgentJob({
+      repository: jobRepository,
+      jobId: 'job-failed',
+      status: 'failed',
+      errorMessage: 'runner failed',
+      now: () => '2026-05-16T10:02:00.000Z'
+    });
+    const failure = await recordWorkerFailure({
+      repository: failureRepository,
+      jobId: 'job-failed',
+      projectId: 'project-1',
+      userId: 'user-1',
+      runtime: 'local-storyspec',
+      kind: 'chapter-draft',
+      attempt: 1,
+      maxAttempts: 3,
+      failureKind: 'runtime-failed',
+      reason: 'runner failed',
+      traceId: 'trace-1',
+      now: () => '2026-05-16T10:02:00.000Z',
+      idGenerator: () => 'failure-1'
+    });
+    const otherProjectFailure = await recordWorkerFailure({
+      repository: failureRepository,
+      jobId: 'job-other',
+      projectId: 'project-other',
+      userId: 'user-1',
+      runtime: 'local-storyspec',
+      kind: 'chapter-draft',
+      attempt: 3,
+      maxAttempts: 3,
+      failureKind: 'runtime-failed',
+      reason: 'other project',
+      now: () => '2026-05-16T10:03:00.000Z',
+      idGenerator: () => 'failure-other'
+    });
+    const beforeQueue = jobQueue.snapshot();
+    const server = await startMultiuserServer({
+      host: '127.0.0.1',
+      port: 0,
+      version: '0.20.0',
+      sessionRepository: createMemorySessionRepository({
+        users: [{ id: 'user-1', displayName: '作者甲' }],
+        sessions: [{
+          token: 'session-token',
+          userId: 'user-1',
+          expiresAt: '2026-05-16T11:00:00.000Z'
+        }]
+      }),
+      projectRepository: createMemoryProjectAccessRepository({
+        projects: [{
+          id: 'project-1',
+          ownerUserId: 'user-1',
+          dataRoot: 'D:\\storyspec-data\\project-1'
+        }],
+        memberships: [{
+          projectId: 'project-1',
+          userId: 'user-1',
+          role: 'owner'
+        }]
+      }),
+      jobRepository,
+      jobQueue,
+      workerFailureRepository: failureRepository,
+      now: () => '2026-05-16T10:05:00.000Z'
+    });
+
+    try {
+      const unauthorized = await fetch(`${server.url}/api/projects/project-1/jobs/alerts`);
+      expect(unauthorized.status).toBe(401);
+
+      const alerts = await fetch(`${server.url}/api/projects/project-1/jobs/alerts`, {
+        headers: {
+          authorization: 'Bearer session-token'
+        }
+      });
+
+      expect(alerts.status).toBe(200);
+      await expect(alerts.json()).resolves.toMatchObject({
+        projectId: 'project-1',
+        totalAlerts: 1,
+        retryableFailures: 1,
+        deadLetterFailures: 0,
+        queue: {
+          readiness: {
+            configured: true,
+            connected: true,
+            worker: true,
+            driver: 'memory'
+          },
+          snapshot: {
+            pending: 0,
+            acknowledged: 0,
+            failed: 0
+          }
+        },
+        alerts: [
+          expect.objectContaining({
+            id: 'failure-1',
+            category: 'retryable',
+            jobId: 'job-failed',
+            failureId: 'failure-1',
+            traceId: 'trace-1'
+          })
+        ]
+      });
+      await expect(jobRepository.findById('job-failed')).resolves.toMatchObject({
+        status: 'failed'
+      });
+      expect(jobQueue.snapshot()).toEqual(beforeQueue);
+      expect(failureRepository.snapshot()).toEqual([failure, otherProjectFailure]);
     } finally {
       await server.close();
     }

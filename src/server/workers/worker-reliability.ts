@@ -1,3 +1,6 @@
+import type { AgentJob } from '../jobs/agent-job.js';
+import type { QueueReadyState } from '../queue/agent-job-queue.js';
+
 export type WorkerFailureKind =
   | 'job-missing'
   | 'runtime-missing'
@@ -41,6 +44,52 @@ export interface WorkerFailureRepository {
   snapshot(): WorkerFailureRecord[];
 }
 
+export type WorkerAlertSeverity = 'info' | 'warning' | 'critical';
+
+export type WorkerAlertCategory = 'queue' | 'retryable' | 'dead-letter' | 'job-status';
+
+export interface WorkerAlertItem {
+  id: string;
+  severity: WorkerAlertSeverity;
+  category: WorkerAlertCategory;
+  jobId?: string;
+  failureId?: string;
+  reason: string;
+  recommendedAction: string;
+  traceId?: string;
+  createdAt: string;
+}
+
+export interface WorkerAlertSummary {
+  projectId: string;
+  totalAlerts: number;
+  retryableFailures: number;
+  deadLetterFailures: number;
+  failedJobsWithoutFailureRecord: number;
+  queue: {
+    readiness: QueueReadyState;
+    snapshot?: {
+      pending: number;
+      acknowledged: number;
+      failed: number;
+    };
+  };
+  alerts: WorkerAlertItem[];
+}
+
+export interface BuildWorkerAlertSummaryInput {
+  projectId: string;
+  jobs: AgentJob[];
+  failureRecords: WorkerFailureRecord[];
+  queueReadyState: QueueReadyState;
+  queueSnapshot?: {
+    pending: unknown[];
+    acknowledged: unknown[];
+    failed: unknown[];
+  };
+  now?: () => string;
+}
+
 export interface RecordWorkerFailureInput {
   repository: WorkerFailureRepository;
   jobId: string;
@@ -59,6 +108,24 @@ export interface RecordWorkerFailureInput {
 
 const currentTimestamp = (): string => new Date().toISOString();
 const defaultId = (): string => `worker-failure-${Math.random().toString(36).slice(2, 12)}`;
+
+const failedJobStatuses = new Set<AgentJob['status']>(['failed', 'timeout']);
+
+const queueAlertReason = (readiness: QueueReadyState): string => {
+  const reasons = [
+    !readiness.configured ? '队列未配置' : '',
+    !readiness.connected ? '队列未连接' : '',
+    !readiness.worker ? 'worker 未运行' : ''
+  ].filter(Boolean);
+  return `${reasons.join('；')}。`;
+};
+
+const queueAlertRecommendedAction = (readiness: QueueReadyState): string => {
+  if (!readiness.configured) {
+    return '配置 Redis/BullMQ 或确认当前环境只使用内存队列。';
+  }
+  return '检查 Redis/BullMQ 连接和 storyspec worker 进程。';
+};
 
 export const classifyWorkerFailure = (
   input: WorkerFailurePolicyInput
@@ -120,4 +187,99 @@ export const recordWorkerFailure = async (
 
   await input.repository.save(record);
   return record;
+};
+
+export const buildWorkerAlertSummary = (
+  input: BuildWorkerAlertSummaryInput
+): WorkerAlertSummary => {
+  const now = input.now?.() ?? currentTimestamp();
+  const projectFailures = input.failureRecords
+    .filter(record => record.projectId === input.projectId)
+    .sort((left, right) => right.createdAt.localeCompare(left.createdAt));
+  const retryableFailures = projectFailures.filter(record => record.decision === 'retryable');
+  const deadLetterFailures = projectFailures.filter(record => record.decision === 'dead-letter');
+  const failureJobIds = new Set(projectFailures.map(record => record.jobId));
+  const failedJobsWithoutRecords = input.jobs
+    .filter(job => job.projectId === input.projectId)
+    .filter(job => failedJobStatuses.has(job.status))
+    .filter(job => !failureJobIds.has(job.id))
+    .sort((left, right) => right.updatedAt.localeCompare(left.updatedAt));
+  const alerts: WorkerAlertItem[] = [];
+
+  if (
+    !input.queueReadyState.configured
+    || !input.queueReadyState.connected
+    || !input.queueReadyState.worker
+  ) {
+    alerts.push({
+      id: 'queue-unavailable',
+      severity: 'critical',
+      category: 'queue',
+      reason: queueAlertReason(input.queueReadyState),
+      recommendedAction: queueAlertRecommendedAction(input.queueReadyState),
+      createdAt: now
+    });
+  }
+
+  for (const record of deadLetterFailures) {
+    alerts.push({
+      id: record.id,
+      severity: 'critical',
+      category: 'dead-letter',
+      jobId: record.jobId,
+      failureId: record.id,
+      reason: record.reason,
+      recommendedAction: '人工检查 job 日志和 failure record；修正后再决定是否手动重试。',
+      ...(record.traceId ? { traceId: record.traceId } : {}),
+      createdAt: record.createdAt
+    });
+  }
+
+  for (const record of retryableFailures) {
+    alerts.push({
+      id: record.id,
+      severity: 'warning',
+      category: 'retryable',
+      jobId: record.jobId,
+      failureId: record.id,
+      reason: record.reason,
+      recommendedAction: '查看 job 日志后，可使用现有 retry API 手动重试。',
+      ...(record.traceId ? { traceId: record.traceId } : {}),
+      createdAt: record.createdAt
+    });
+  }
+
+  for (const job of failedJobsWithoutRecords) {
+    alerts.push({
+      id: `job-status-${job.id}`,
+      severity: 'warning',
+      category: 'job-status',
+      jobId: job.id,
+      reason: `job 状态为 ${job.status}，但没有对应 worker failure record。`,
+      recommendedAction: '查看 job 日志；若需要恢复，请使用现有 retry API 手动重试。',
+      ...(job.traceId ? { traceId: job.traceId } : {}),
+      createdAt: job.updatedAt
+    });
+  }
+
+  return {
+    projectId: input.projectId,
+    totalAlerts: alerts.length,
+    retryableFailures: retryableFailures.length,
+    deadLetterFailures: deadLetterFailures.length,
+    failedJobsWithoutFailureRecord: failedJobsWithoutRecords.length,
+    queue: {
+      readiness: input.queueReadyState,
+      ...(input.queueSnapshot
+        ? {
+          snapshot: {
+            pending: input.queueSnapshot.pending.length,
+            acknowledged: input.queueSnapshot.acknowledged.length,
+            failed: input.queueSnapshot.failed.length
+          }
+        }
+        : {})
+    },
+    alerts
+  };
 };
