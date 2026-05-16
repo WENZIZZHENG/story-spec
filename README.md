@@ -64,14 +64,14 @@ storyspec app
 - 项目列表、成员列表和 job 列表
 - job 创建、取消和重试
 - job 审计与配额守卫
-- runtime adapter 基础和 OpenHands PoC 边界
+- runtime adapter 基础和显式 opt-in 的 OpenHands headless executor 边界
 - PostgreSQL-backed repository 配置和 migration runner
 - Redis/BullMQ worker 队列底座与独立 `storyspec worker` 入口
 - 完整 App 首批前端架构契约、本机 API 地图和工作台导航事实源
 - 项目快照、导出和删除计划
 - 最小自托管配置示例
 
-这些能力仍是控制平面基础，不是完整 SaaS；worker 输出保持 preview-only，真实 OpenHands 执行、独立前端项目、富文本编辑器、实时协作和生产级高可用仍在路线图里。自托管说明见 [docs/deploy/self-hosted.md](docs/deploy/self-hosted.md)。
+这些能力仍是控制平面基础，不是完整 SaaS；worker 输出保持 preview-only。`STORYSPEC_OPENHANDS_HEADLESS=true` 可显式启用 OpenHands headless executor，但仍不会自动写入正文、正典或 tracking；独立前端项目、富文本编辑器、实时协作、产物回传和生产级高可用仍在路线图里。自托管说明见 [docs/deploy/self-hosted.md](docs/deploy/self-hosted.md)。
 
 ### 启动辅助
 
@@ -348,7 +348,7 @@ StorySpec 有两类入口，容易混淆：
 | `storyspec check` | 检查 Node.js、Git 和常见 AI CLI |
 | `storyspec app [--project <path>]` | 启动实验性本机 Web 工作台，打开或创建项目，管理素材、候选大纲、任务板、章节写作通道和章节草稿入口；已包含首批前端架构契约和 API 地图，仍不包含账号、云端、实时协作或富文本编辑器 |
 | `storyspec server [--host <host>] [--port <port>]` | 启动实验性多用户控制平面，提供 health、ready、项目/成员/job 列表、job 控制、审计/配额守卫、PostgreSQL repository 配置和自托管基础；当前不包含完整 SaaS、独立前端项目或实时协作 |
-| `storyspec worker [--once]` | 运行多用户 agent job worker，连接 PostgreSQL repository 和 Redis/BullMQ queue，输出保持 preview-only，不自动写入正文或正典 |
+| `storyspec worker [--once]` | 运行多用户 agent job worker，连接 PostgreSQL repository 和 Redis/BullMQ queue；默认不调用 OpenHands，设置 `STORYSPEC_OPENHANDS_HEADLESS=true` 后可显式启用 headless executor，输出仍保持 preview-only，不自动写入正文或正典 |
 | `storyspec status` | 汇总项目、当前故事长成了什么、tracking、Git 状态和下一步 |
 | `storyspec codex-status` | `status` 的兼容别名，方便 Codex 接手时读取项目状态 |
 | `storyspec next [story]` | 根据故事状态给出精简下一步建议；`--verbose` 展开完整工作台，`--modes` 查看低负担模式 |

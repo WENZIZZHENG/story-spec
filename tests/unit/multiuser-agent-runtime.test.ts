@@ -1,4 +1,4 @@
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 import {
   createLocalStorySpecRunner,
   runAgentJobWithRuntime
@@ -110,12 +110,14 @@ describe('multiuser agent runtime adapters', () => {
     expect(runner.plan(created.job!)).toEqual({
       command: 'openhands',
       args: [
+        '--headless',
         '--workspace',
         'D:\\storyspec-data\\project-1',
-        '--prompt',
-        'StorySpec job: chapter-draft (job-1)'
+        '-t',
+        expect.stringContaining('StorySpec job: chapter-draft (job-1)')
       ],
       workspaceRoot: 'D:\\storyspec-data\\project-1',
+      task: expect.stringContaining('输出只能作为候选'),
       autoApply: false
     });
 
@@ -124,5 +126,72 @@ describe('multiuser agent runtime adapters', () => {
       candidateRef: 'openhands:job-1',
       previewOnly: true
     });
+  });
+
+  it('runs OpenHands through an injected headless executor as preview-only output', async () => {
+    const executor = vi.fn(async () => ({
+      exitCode: 0,
+      stdout: '候选输出摘要',
+      stderr: ''
+    }));
+    const runner = createOpenHandsRunner({
+      workspaceRoot: 'D:\\storyspec-data\\project-1',
+      command: 'openhands',
+      promptPrefix: 'StorySpec headless job',
+      executor
+    });
+    const repository = createMemoryAgentJobRepository();
+    const created = await createAgentJob({
+      repository,
+      userId: 'user-1',
+      projectId: 'project-1',
+      kind: 'canon-review',
+      runtime: 'openhands',
+      now: () => '2026-05-16T12:00:00.000Z',
+      idGenerator: () => 'job-headless'
+    });
+
+    await expect(runner.start(created.job!)).resolves.toEqual({
+      jobId: 'job-headless',
+      candidateRef: 'openhands:job-headless',
+      previewOnly: true,
+      summary: 'OpenHands headless 已生成候选：候选输出摘要'
+    });
+    expect(executor).toHaveBeenCalledWith({
+      command: 'openhands',
+      args: [
+        '--headless',
+        '--workspace',
+        'D:\\storyspec-data\\project-1',
+        '-t',
+        expect.stringContaining('StorySpec headless job: canon-review (job-headless)')
+      ],
+      workspaceRoot: 'D:\\storyspec-data\\project-1',
+      task: expect.stringContaining('输出只能作为候选'),
+      autoApply: false
+    });
+  });
+
+  it('turns failed OpenHands headless execution into a runtime error', async () => {
+    const runner = createOpenHandsRunner({
+      workspaceRoot: 'D:\\storyspec-data\\project-1',
+      executor: async () => ({
+        exitCode: 2,
+        stdout: '',
+        stderr: 'missing api key'
+      })
+    });
+    const repository = createMemoryAgentJobRepository();
+    const created = await createAgentJob({
+      repository,
+      userId: 'user-1',
+      projectId: 'project-1',
+      kind: 'chapter-draft',
+      runtime: 'openhands',
+      now: () => '2026-05-16T12:00:00.000Z',
+      idGenerator: () => 'job-headless-failed'
+    });
+
+    await expect(runner.start(created.job!)).rejects.toThrow('OpenHands headless failed with exit code 2: missing api key');
   });
 });

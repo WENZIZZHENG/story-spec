@@ -29,12 +29,13 @@
 - `storyspec server` 在配置 `STORYSPEC_REDIS_URL` 并传入 queue adapter 后，会在创建新 agent job 后 enqueue；幂等命中的 active job 不会重复入列。
 - `storyspec worker` 读取 `STORYSPEC_DATABASE_URL` 和 `STORYSPEC_REDIS_URL`，连接 PostgreSQL repository 与 Redis/BullMQ 队列，并通过现有 runtime adapter 处理 queued job。
 - `STORYSPEC_WORKER_CONCURRENCY` 默认是 `1`；`STORYSPEC_WORKER_ONCE=true` 或 `storyspec worker --once` 可用于本地单次验证。
+- `STORYSPEC_OPENHANDS_HEADLESS` 默认是 `false`；只有设为 `true` 时，OpenHands runtime 才会调用 `STORYSPEC_OPENHANDS_COMMAND` 指定的 headless 命令，并使用 `STORYSPEC_OPENHANDS_PROMPT_PREFIX` 作为任务提示前缀。
 - worker 输出仍是 preview-only candidate，不会自动 apply 正文、正典、tracking 或正式故事文件。
 
 ## 重要边界
 
-- 当前 Redis/BullMQ queue 和独立 worker 是首批底座，不包含生产级死信队列、dashboard、分布式锁或高可用调度。
+- 当前 Redis/BullMQ queue 和独立 worker 是首批底座，不包含生产级死信队列、分布式锁或高可用调度。
 - 当前完整 App 前端架构只是本机 shell 可复用的首批 route/API/status contract，不包含独立前端项目、账号产品流、富文本编辑器或实时协作。
-- `OpenHandsRunner` 目前是 PoC adapter，不安装或调用真实 OpenHands。
+- `OpenHandsRunner` 默认仍是 PoC adapter；显式启用 headless executor 后可调用本机已安装的 OpenHands，但 StorySpec 不安装 OpenHands、不持久化 stdout/stderr，也不把输出自动应用为正式内容。
 - 项目删除当前只生成需要二次确认的删除计划和审计事件，不直接删除磁盘文件。
 - 该配置面向本地/自托管验证，不承诺 Kubernetes、企业高可用或商业计费。

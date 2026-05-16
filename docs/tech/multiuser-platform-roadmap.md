@@ -67,14 +67,14 @@ Active。本文承接多人在线平台的产品对象、权限模型、API cont
 ## P1-4 Redis/BullMQ worker 与 agent job 真实执行队列
 
 - 类型：任务调度、agent runtime、可观测性
-- 状态：已完成首批底座（2026-05-16）。`add-multiuser-worker-queue` 已新增 `AgentJobQueue`、内存队列、BullMQ adapter、preview-only worker runner、server job enqueue、`/ready.queue` 和 `storyspec worker` CLI wiring；`add-worker-reliability-policy` 已补 worker failure policy、retryable/dead-letter 决策和失败记录底座；`add-agent-job-dashboard-read-api` 已提供项目级 job dashboard 读模型，展示状态计数、active/retryable 数量和 queue readiness；`add-agent-job-log-read-api` 已提供项目级 job 日志只读接口，从 job 状态生成创建、运行结果、失败原因和 runtime error code 时间线；`add-worker-alert-summary-read-api` 已提供项目级 worker 告警摘要只读接口，聚合 retryable/dead-letter failure、queue readiness 和 failed job 状态。分布式锁、高可用调度、BullMQ attempts 策略、外部告警推送、stdout/stderr 输出持久化和真实 OpenHands headless 执行仍留给后续质量批次。
-- 背景/问题：当前有 job 控制面、审计/配额守卫和 runtime adapter foundation，但 Redis/BullMQ worker 仍是部署占位，OpenHandsRunner 也是 PoC adapter。
+- 状态：已完成首批底座（2026-05-16）。`add-multiuser-worker-queue` 已新增 `AgentJobQueue`、内存队列、BullMQ adapter、preview-only worker runner、server job enqueue、`/ready.queue` 和 `storyspec worker` CLI wiring；`add-worker-reliability-policy` 已补 worker failure policy、retryable/dead-letter 决策和失败记录底座；`add-agent-job-dashboard-read-api` 已提供项目级 job dashboard 读模型，展示状态计数、active/retryable 数量和 queue readiness；`add-agent-job-log-read-api` 已提供项目级 job 日志只读接口，从 job 状态生成创建、运行结果、失败原因和 runtime error code 时间线；`add-worker-alert-summary-read-api` 已提供项目级 worker 告警摘要只读接口，聚合 retryable/dead-letter failure、queue readiness 和 failed job 状态；`add-openhands-headless-executor` 已提供显式 opt-in 的 OpenHands headless executor。分布式锁、高可用调度、BullMQ attempts 策略、外部告警推送、stdout/stderr 输出持久化、产物回传和预览结果落库仍留给后续质量批次。
+- 背景/问题：当前有 job 控制面、审计/配额守卫、runtime adapter foundation 和显式启用的 OpenHands headless executor，但 worker 还缺生产级调度、产物回传和完整可观测性。
 - 已有基础：`src/server/jobs/agent-job.ts`、`src/server/agent-runtime/*`、`src/server/quota/*`、`src/server/audit/*`、job API。
-- 缺口：真实队列、worker 进程、基础重试/取消语义、幂等键、失败分类、job dashboard 读模型、基于 job 状态的日志查询和 worker 告警摘要读接口已完成首批底座；仍缺 stdout/stderr 输出持久化、产物回传、预览结果落库、外部告警推送、分布式锁、BullMQ attempts 策略和失败恢复执行器。
+- 缺口：真实队列、worker 进程、基础重试/取消语义、幂等键、失败分类、job dashboard 读模型、基于 job 状态的日志查询、worker 告警摘要读接口和显式 OpenHands headless executor 已完成首批底座；仍缺 stdout/stderr 输出持久化、产物回传、预览结果落库、外部告警推送、分布式锁、BullMQ attempts 策略和失败恢复执行器。
 - 建议方案：
   1. 先实现本地 runner worker，所有输出默认 preview-only。
   2. 再接 Redis/BullMQ 队列，补取消、重试、超时、并发限制和配额消耗。
-  3. 最后评估 OpenHands 或其他 agent runtime 的真实 headless 执行。
+  3. 再补 OpenHands 或其他 agent runtime 的产物回传、日志持久化和安全边界。
 - 涉及文件/模块：`src/server/jobs/*`、`src/server/agent-runtime/*`、`src/server/audit/*`、`src/server/quota/*`、`docker-compose.yml`、tests。
 - 验收标准：创建 job 后由 worker 异步处理；取消和重试有明确状态转移；失败不会 apply 正文或正典；所有写入候选都能追溯到 job/audit。
 - 参考项目/资料：BullMQ 官方文档；当前 `add-multiuser-agent-job-foundation` 和 `add-multiuser-runtime-app-observability`。

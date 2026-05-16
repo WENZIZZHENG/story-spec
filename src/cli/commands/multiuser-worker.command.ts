@@ -1,6 +1,10 @@
 import type { Command } from '@commander-js/extra-typings';
 import { createLocalStorySpecRunner } from '../../server/agent-runtime/local-storyspec-runner.js';
-import { createOpenHandsRunner } from '../../server/agent-runtime/openhands-runner.js';
+import {
+  createOpenHandsHeadlessExecutor,
+  createOpenHandsRunner
+} from '../../server/agent-runtime/openhands-runner.js';
+import type { AgentRuntimeAdapter } from '../../server/agent-runtime/agent-runtime.js';
 import { createPostgresDatabaseConnection } from '../../server/db/postgres.js';
 import type { PostgresDatabaseConnection } from '../../server/db/postgres.js';
 import { createBullMqAgentJobQueue } from '../../server/queue/bullmq-agent-job-queue.js';
@@ -13,8 +17,16 @@ export interface MultiuserWorkerCommandDependencies {
   env?: NodeJS.ProcessEnv;
   createDatabaseConnection?: typeof createPostgresDatabaseConnection;
   createQueue?: (input: BullMqAgentJobQueueInput) => AgentJobQueue;
+  createRuntimes?: (input: WorkerRuntimeConfig) => AgentRuntimeAdapter[];
   runWorker?: (input: RunNextAgentJobInput) => Promise<RunNextAgentJobResult>;
   waitForShutdown?: () => Promise<void>;
+}
+
+export interface WorkerRuntimeConfig {
+  workspaceRoot: string;
+  openHandsHeadless: boolean;
+  openHandsCommand?: string;
+  openHandsPromptPrefix?: string;
 }
 
 const waitForShutdownSignal = (): Promise<void> => new Promise(resolve => {
@@ -34,15 +46,29 @@ const parseBoolean = (value: string | undefined, fallback: boolean): boolean => 
   return value !== 'false';
 };
 
+const parseExplicitTrue = (value: string | undefined): boolean => value?.trim() === 'true';
+
 const parsePositiveInteger = (value: string | undefined, fallback: number): number => {
   const parsed = Number.parseInt(String(value ?? ''), 10);
   return Number.isFinite(parsed) && parsed > 0 ? parsed : fallback;
 };
 
-const createWorkerRuntimes = () => [
+const trimOptional = (value: string | undefined): string | undefined => {
+  const trimmed = value?.trim();
+  return trimmed ? trimmed : undefined;
+};
+
+const createWorkerRuntimes = (
+  input: WorkerRuntimeConfig
+): AgentRuntimeAdapter[] => [
   createLocalStorySpecRunner(),
   createOpenHandsRunner({
-    workspaceRoot: process.cwd()
+    workspaceRoot: input.workspaceRoot,
+    command: input.openHandsCommand,
+    promptPrefix: input.openHandsPromptPrefix,
+    executor: input.openHandsHeadless
+      ? createOpenHandsHeadlessExecutor()
+      : undefined
   })
 ];
 
@@ -79,12 +105,19 @@ export const registerMultiuserWorkerCommand = (
         concurrency
       });
       const runWorker = dependencies.runWorker ?? runNextAgentJob;
+      const runtimeConfig: WorkerRuntimeConfig = {
+        workspaceRoot: process.cwd(),
+        openHandsHeadless: parseExplicitTrue(env.STORYSPEC_OPENHANDS_HEADLESS),
+        openHandsCommand: trimOptional(env.STORYSPEC_OPENHANDS_COMMAND),
+        openHandsPromptPrefix: trimOptional(env.STORYSPEC_OPENHANDS_PROMPT_PREFIX)
+      };
+      const runtimes = (dependencies.createRuntimes ?? createWorkerRuntimes)(runtimeConfig);
 
       try {
         const workerInput: RunNextAgentJobInput = {
           repository: databaseConnection.repositories.jobs,
           queue,
-          runtimes: createWorkerRuntimes()
+          runtimes
         };
 
         if (once) {
