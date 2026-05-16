@@ -3,6 +3,7 @@ import {
   buildWorkerLeaseRecoveryPlan,
   buildWorkerAlertSummary,
   classifyWorkerFailure,
+  createMemoryWorkerJobLockRepository,
   createMemoryWorkerLeaseRepository,
   createMemoryWorkerFailureRepository,
   refreshWorkerLease,
@@ -431,6 +432,115 @@ describe('multiuser worker reliability policy', () => {
         id: 'failure-stale',
         jobId: 'job-stale',
         decision: 'retryable'
+      })
+    ]);
+  });
+
+  it('job lock blocks competing workers and allows takeover after expiration', async () => {
+    const repository = createMemoryWorkerJobLockRepository();
+
+    const acquired = await repository.acquire({
+      jobId: 'job-locked',
+      workerId: 'worker-a',
+      traceId: 'trace-a',
+      now: '2026-05-16T12:00:00.000Z',
+      lockTtlMs: 30_000
+    });
+    const blocked = await repository.acquire({
+      jobId: 'job-locked',
+      workerId: 'worker-b',
+      now: '2026-05-16T12:00:10.000Z',
+      lockTtlMs: 30_000
+    });
+    const heartbeat = await repository.heartbeat({
+      jobId: 'job-locked',
+      workerId: 'worker-a',
+      now: '2026-05-16T12:00:20.000Z',
+      lockTtlMs: 30_000
+    });
+    const takenOver = await repository.acquire({
+      jobId: 'job-locked',
+      workerId: 'worker-b',
+      traceId: 'trace-b',
+      now: '2026-05-16T12:01:00.000Z',
+      lockTtlMs: 30_000
+    });
+    const staleHeartbeat = await repository.heartbeat({
+      jobId: 'job-locked',
+      workerId: 'worker-a',
+      now: '2026-05-16T12:01:05.000Z',
+      lockTtlMs: 30_000
+    });
+    const staleRelease = await repository.release({
+      jobId: 'job-locked',
+      workerId: 'worker-a',
+      releasedAt: '2026-05-16T12:01:06.000Z'
+    });
+    const released = await repository.release({
+      jobId: 'job-locked',
+      workerId: 'worker-b',
+      releasedAt: '2026-05-16T12:01:10.000Z'
+    });
+
+    expect(acquired).toMatchObject({
+      acquired: true,
+      lock: {
+        jobId: 'job-locked',
+        workerId: 'worker-a',
+        status: 'active',
+        acquiredAt: '2026-05-16T12:00:00.000Z',
+        lastHeartbeatAt: '2026-05-16T12:00:00.000Z',
+        lockExpiresAt: '2026-05-16T12:00:30.000Z',
+        traceId: 'trace-a'
+      }
+    });
+    expect(blocked).toMatchObject({
+      acquired: false,
+      blockedReason: 'job lock 已由 worker-a 持有，过期时间 2026-05-16T12:00:30.000Z。'
+    });
+    expect(heartbeat).toMatchObject({
+      success: true,
+      lock: {
+        workerId: 'worker-a',
+        lastHeartbeatAt: '2026-05-16T12:00:20.000Z',
+        lockExpiresAt: '2026-05-16T12:00:50.000Z'
+      }
+    });
+    expect(takenOver).toMatchObject({
+      acquired: true,
+      lock: {
+        workerId: 'worker-b',
+        acquiredAt: '2026-05-16T12:01:00.000Z',
+        previousWorkerId: 'worker-a',
+        traceId: 'trace-b'
+      }
+    });
+    expect(staleHeartbeat).toEqual({
+      success: false,
+      blockedReason: 'job lock 当前归 worker-b 持有，worker-a 不能 heartbeat。'
+    });
+    expect(staleRelease).toEqual({
+      success: false,
+      blockedReason: 'job lock 当前归 worker-b 持有，worker-a 不能 release。'
+    });
+    expect(released).toMatchObject({
+      success: true,
+      lock: {
+        jobId: 'job-locked',
+        workerId: 'worker-b',
+        status: 'released',
+        releasedAt: '2026-05-16T12:01:10.000Z'
+      }
+    });
+    await expect(repository.findByJobId('job-locked')).resolves.toMatchObject({
+      workerId: 'worker-b',
+      status: 'released'
+    });
+    expect(repository.snapshot()).toEqual([
+      expect.objectContaining({
+        jobId: 'job-locked',
+        workerId: 'worker-b',
+        status: 'released'
       })
     ]);
   });

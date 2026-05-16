@@ -67,6 +67,61 @@ export interface WorkerLeaseRepository {
   snapshot(): WorkerLease[];
 }
 
+export type WorkerJobLockStatus = 'active' | 'released';
+
+export interface WorkerJobLock {
+  jobId: string;
+  workerId: string;
+  status: WorkerJobLockStatus;
+  acquiredAt: string;
+  lastHeartbeatAt: string;
+  lockExpiresAt: string;
+  traceId?: string;
+  previousWorkerId?: string;
+  releasedAt?: string;
+}
+
+export interface WorkerJobLockAcquireInput {
+  jobId: string;
+  workerId: string;
+  now: string;
+  lockTtlMs: number;
+  traceId?: string;
+}
+
+export interface WorkerJobLockHeartbeatInput {
+  jobId: string;
+  workerId: string;
+  now: string;
+  lockTtlMs: number;
+}
+
+export interface WorkerJobLockReleaseInput {
+  jobId: string;
+  workerId: string;
+  releasedAt: string;
+}
+
+export interface WorkerJobLockAcquireResult {
+  acquired: boolean;
+  lock?: WorkerJobLock;
+  blockedReason?: string;
+}
+
+export interface WorkerJobLockMutationResult {
+  success: boolean;
+  lock?: WorkerJobLock;
+  blockedReason?: string;
+}
+
+export interface WorkerJobLockRepository {
+  acquire(input: WorkerJobLockAcquireInput): Promise<WorkerJobLockAcquireResult>;
+  heartbeat(input: WorkerJobLockHeartbeatInput): Promise<WorkerJobLockMutationResult>;
+  release(input: WorkerJobLockReleaseInput): Promise<WorkerJobLockMutationResult>;
+  findByJobId(jobId: string): Promise<WorkerJobLock | undefined>;
+  snapshot(): WorkerJobLock[];
+}
+
 export type WorkerAlertSeverity = 'info' | 'warning' | 'critical';
 
 export type WorkerAlertCategory = 'queue' | 'retryable' | 'dead-letter' | 'job-status';
@@ -302,6 +357,125 @@ export const createMemoryWorkerLeaseRepository = (): WorkerLeaseRepository => {
       return [...leases.values()]
         .sort((left, right) => left.workerId.localeCompare(right.workerId))
         .map(lease => ({ ...lease, activeJobIds: [...lease.activeJobIds] }));
+    }
+  };
+};
+
+export const createMemoryWorkerJobLockRepository = (): WorkerJobLockRepository => {
+  const locks = new Map<string, WorkerJobLock>();
+
+  const cloneLock = (lock: WorkerJobLock): WorkerJobLock => ({ ...lock });
+  const lockExpiresAt = (now: string, ttlMs: number): string => (
+    new Date(Date.parse(now) + ttlMs).toISOString()
+  );
+  const isActiveAndUnexpired = (lock: WorkerJobLock, now: string): boolean => (
+    lock.status === 'active' && lock.lockExpiresAt > now
+  );
+
+  return {
+    async acquire(input) {
+      const existing = locks.get(input.jobId);
+      if (existing && isActiveAndUnexpired(existing, input.now)) {
+        if (existing.workerId !== input.workerId) {
+          return {
+            acquired: false,
+            blockedReason: `job lock 已由 ${existing.workerId} 持有，过期时间 ${existing.lockExpiresAt}。`
+          };
+        }
+
+        const refreshed: WorkerJobLock = {
+          ...existing,
+          lastHeartbeatAt: input.now,
+          lockExpiresAt: lockExpiresAt(input.now, input.lockTtlMs),
+          ...(input.traceId ? { traceId: input.traceId } : {})
+        };
+        locks.set(input.jobId, refreshed);
+        return {
+          acquired: true,
+          lock: cloneLock(refreshed)
+        };
+      }
+
+      const lock: WorkerJobLock = {
+        jobId: input.jobId,
+        workerId: input.workerId,
+        status: 'active',
+        acquiredAt: input.now,
+        lastHeartbeatAt: input.now,
+        lockExpiresAt: lockExpiresAt(input.now, input.lockTtlMs),
+        ...(input.traceId ? { traceId: input.traceId } : {}),
+        ...(existing && existing.workerId !== input.workerId
+          ? { previousWorkerId: existing.workerId }
+          : {})
+      };
+      locks.set(input.jobId, lock);
+      return {
+        acquired: true,
+        lock: cloneLock(lock)
+      };
+    },
+    async heartbeat(input) {
+      const existing = locks.get(input.jobId);
+      if (!existing || existing.status !== 'active') {
+        return {
+          success: false,
+          blockedReason: 'job lock 不存在或已释放，不能 heartbeat。'
+        };
+      }
+
+      if (existing.workerId !== input.workerId) {
+        return {
+          success: false,
+          blockedReason: `job lock 当前归 ${existing.workerId} 持有，${input.workerId} 不能 heartbeat。`
+        };
+      }
+
+      const lock: WorkerJobLock = {
+        ...existing,
+        lastHeartbeatAt: input.now,
+        lockExpiresAt: lockExpiresAt(input.now, input.lockTtlMs)
+      };
+      locks.set(input.jobId, lock);
+      return {
+        success: true,
+        lock: cloneLock(lock)
+      };
+    },
+    async release(input) {
+      const existing = locks.get(input.jobId);
+      if (!existing || existing.status !== 'active') {
+        return {
+          success: false,
+          blockedReason: 'job lock 不存在或已释放，不能 release。'
+        };
+      }
+
+      if (existing.workerId !== input.workerId) {
+        return {
+          success: false,
+          blockedReason: `job lock 当前归 ${existing.workerId} 持有，${input.workerId} 不能 release。`
+        };
+      }
+
+      const lock: WorkerJobLock = {
+        ...existing,
+        status: 'released',
+        releasedAt: input.releasedAt
+      };
+      locks.set(input.jobId, lock);
+      return {
+        success: true,
+        lock: cloneLock(lock)
+      };
+    },
+    async findByJobId(jobId) {
+      const lock = locks.get(jobId);
+      return lock ? cloneLock(lock) : undefined;
+    },
+    snapshot() {
+      return [...locks.values()]
+        .sort((left, right) => left.jobId.localeCompare(right.jobId))
+        .map(cloneLock);
     }
   };
 };
