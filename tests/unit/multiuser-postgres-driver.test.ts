@@ -53,14 +53,14 @@ describe('multiuser postgres driver', () => {
 
     await expect(runMultiuserMigrations(executor)).resolves.toEqual({
       applied: true,
-      version: 4,
+      version: 5,
       statementsExecuted: expect.any(Number)
     });
     expect(executed.some(call => call.sql.includes('create table if not exists schema_migrations'))).toBe(true);
     expect(executed.some(call => call.sql.includes('create table if not exists users'))).toBe(true);
     expect(executed.at(-1)).toEqual({
       sql: 'insert into schema_migrations (version, applied_at) values ($1, now())',
-      params: [4]
+      params: [5]
     });
   });
 
@@ -69,7 +69,7 @@ describe('multiuser postgres driver', () => {
     const executor = {
       async queryOne<T>(sql: string): Promise<T | undefined> {
         executed.push(sql);
-        return { version: 4 } as T;
+        return { version: 5 } as T;
       },
       async queryMany<T>(): Promise<T[]> {
         return [];
@@ -81,7 +81,7 @@ describe('multiuser postgres driver', () => {
 
     await expect(runMultiuserMigrations(executor)).resolves.toEqual({
       applied: false,
-      version: 4,
+      version: 5,
       statementsExecuted: 0
     });
     expect(executed).not.toContain(expect.stringContaining('create table if not exists users'));

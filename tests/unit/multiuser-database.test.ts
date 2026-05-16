@@ -11,7 +11,7 @@ import {
 
 describe('multiuser database foundation', () => {
   it('defines all core metadata tables and repeatable migration SQL', () => {
-    expect(MULTIUSER_MIGRATION_VERSION).toBe(4);
+    expect(MULTIUSER_MIGRATION_VERSION).toBe(5);
     expect(Object.keys(multiuserDatabaseSchema).sort()).toEqual([
       'agentJobs',
       'auditLogs',
@@ -106,11 +106,16 @@ describe('multiuser database foundation', () => {
       'updated_at'
     ]));
     expect(multiuserDatabaseSchema.collaborationCanonPatches.columns).toEqual(expect.arrayContaining([
-      'content'
+      'content',
+      'rollback_content'
+    ]));
+    expect(multiuserDatabaseSchema.collaborationApplyRequests.columns).toEqual(expect.arrayContaining([
+      'applied_at',
+      'rolled_back_at'
     ]));
 
     const migration = createMultiuserMigrationPlan();
-    expect(migration.version).toBe(4);
+    expect(migration.version).toBe(5);
     expect(migration.statements).toEqual(expect.arrayContaining([
       expect.stringContaining('create table if not exists users'),
       expect.stringContaining('create table if not exists sessions'),
@@ -126,7 +131,9 @@ describe('multiuser database foundation', () => {
       expect.stringContaining('create table if not exists collaboration_comment_threads')
     ]));
     expect(migration.statements).toEqual(expect.arrayContaining([
-      expect.stringContaining('content text')
+      expect.stringContaining('content text'),
+      expect.stringContaining('rollback_content text'),
+      expect.stringContaining('rolled_back_at timestamptz')
     ]));
     expect(createMultiuserMigrationPlan()).toEqual(migration);
   });
@@ -293,6 +300,7 @@ describe('multiuser database foundation', () => {
             diff_summary: '新增正典事实。',
             rollback_hint: '删除 fact-1。',
             content: '# Canon\n\n- fact-1\n',
+            rollback_content: '# Canon\n',
             source_refs: ['note-1']
           }];
         }
@@ -311,7 +319,9 @@ describe('multiuser database foundation', () => {
             patch_ids: ['patch-1'],
             reviewer_ids: ['user-2'],
             blocked_reasons: [],
-            created_at: '2026-05-08T12:03:00.000Z'
+            created_at: '2026-05-08T12:03:00.000Z',
+            applied_at: '2026-05-08T12:04:00.000Z',
+            rolled_back_at: '2026-05-08T12:05:00.000Z'
           }];
         }
         if (sql.includes('from collaboration_comment_threads')) {
@@ -411,12 +421,14 @@ describe('multiuser database foundation', () => {
       diffSummary: '新增正典事实。',
       rollbackHint: '删除 fact-1。',
       content: '# Canon\n\n- fact-1\n',
+      rollbackContent: '# Canon\n',
       sourceRefs: ['note-1']
     });
     await expect(repositories.collaboration.listPatches('proposal-1')).resolves.toEqual([
       expect.objectContaining({
         id: 'patch-1',
         content: '# Canon\n\n- fact-1\n',
+        rollbackContent: '# Canon\n',
         sourceRefs: ['note-1']
       })
     ]);
@@ -435,7 +447,9 @@ describe('multiuser database foundation', () => {
       patchIds: ['patch-1'],
       reviewerIds: ['user-2'],
       blockedReasons: [],
-      createdAt: '2026-05-08T12:03:00.000Z'
+      createdAt: '2026-05-08T12:03:00.000Z',
+      appliedAt: '2026-05-08T12:04:00.000Z',
+      rolledBackAt: '2026-05-08T12:05:00.000Z'
     });
     await expect(repositories.collaboration.listProposalsByProject?.({
       projectId: 'project-1',
@@ -451,7 +465,9 @@ describe('multiuser database foundation', () => {
       expect.objectContaining({
         id: 'apply-1',
         proposalId: 'proposal-1',
-        status: 'ready'
+        status: 'ready',
+        appliedAt: '2026-05-08T12:04:00.000Z',
+        rolledBackAt: '2026-05-08T12:05:00.000Z'
       })
     ]);
     await repositories.collaboration.saveCommentThread?.({

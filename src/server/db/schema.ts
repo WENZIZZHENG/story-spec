@@ -210,7 +210,7 @@ const collaborationReviewDecisions: MultiuserTableSchema = {
 
 const collaborationCanonPatches: MultiuserTableSchema = {
   name: 'collaboration_canon_patches',
-  columns: ['id', 'proposal_id', 'target_path', 'kind', 'diff_summary', 'rollback_hint', 'content', 'source_refs'],
+  columns: ['id', 'proposal_id', 'target_path', 'kind', 'diff_summary', 'rollback_hint', 'content', 'rollback_content', 'source_refs'],
   createStatements: [
     'create table if not exists collaboration_canon_patches (',
     '  id text primary key,',
@@ -220,8 +220,10 @@ const collaborationCanonPatches: MultiuserTableSchema = {
     '  diff_summary text not null,',
     '  rollback_hint text not null,',
     '  content text,',
+    '  rollback_content text,',
     '  source_refs jsonb not null',
     ');',
+    'alter table if exists collaboration_canon_patches add column if not exists rollback_content text;',
     'create index if not exists collaboration_canon_patches_proposal_idx on collaboration_canon_patches (proposal_id);'
   ]
 };
@@ -237,7 +239,9 @@ const collaborationApplyRequests: MultiuserTableSchema = {
     'patch_ids',
     'reviewer_ids',
     'blocked_reasons',
-    'created_at'
+    'created_at',
+    'applied_at',
+    'rolled_back_at'
   ],
   createStatements: [
     'create table if not exists collaboration_apply_requests (',
@@ -249,8 +253,12 @@ const collaborationApplyRequests: MultiuserTableSchema = {
     '  patch_ids jsonb not null,',
     '  reviewer_ids jsonb not null,',
     '  blocked_reasons jsonb not null,',
-    '  created_at timestamptz not null',
+    '  created_at timestamptz not null,',
+    '  applied_at timestamptz,',
+    '  rolled_back_at timestamptz',
     ');',
+    'alter table if exists collaboration_apply_requests add column if not exists applied_at timestamptz;',
+    'alter table if exists collaboration_apply_requests add column if not exists rolled_back_at timestamptz;',
     'create index if not exists collaboration_apply_requests_proposal_idx on collaboration_apply_requests (proposal_id, created_at desc);'
   ]
 };
@@ -282,7 +290,7 @@ const collaborationCommentThreads: MultiuserTableSchema = {
   ]
 };
 
-export const MULTIUSER_MIGRATION_VERSION = 4;
+export const MULTIUSER_MIGRATION_VERSION = 5;
 
 export const multiuserDatabaseSchema: MultiuserDatabaseSchema = {
   users,

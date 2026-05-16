@@ -22,6 +22,7 @@ import {
   createCanonPatch,
   createCollaborationProposal,
   executeApplyRequest,
+  executeRollbackRequest,
   submitReviewDecision
 } from '../collaboration/canon-merge.js';
 import type { AgentJob, AgentJobRepository } from '../jobs/agent-job.js';
@@ -234,7 +235,8 @@ const auditServerMutation = async (
       | 'collaboration.review.submit'
       | 'collaboration.patch.create'
       | 'collaboration.apply_request.create'
-      | 'collaboration.apply.execute';
+      | 'collaboration.apply.execute'
+      | 'collaboration.rollback.execute';
     jobId?: string;
     diffSummary: string;
     now?: () => string;
@@ -500,6 +502,9 @@ export const startMultiuserServer = async (input: StartMultiuserServerInput): Pr
       const collaborationApplyExecuteMatch = url.pathname.match(
         /^\/api\/projects\/([^/]+)\/collaboration\/proposals\/([^/]+)\/apply-requests\/([^/]+)\/apply$/
       );
+      const collaborationRollbackExecuteMatch = url.pathname.match(
+        /^\/api\/projects\/([^/]+)\/collaboration\/proposals\/([^/]+)\/apply-requests\/([^/]+)\/rollback$/
+      );
       const canonReviewMatch = url.pathname.match(
         /^\/api\/projects\/([^/]+)\/stories\/([^/]+)\/canon-review$/
       );
@@ -608,6 +613,82 @@ export const startMultiuserServer = async (input: StartMultiuserServerInput): Pr
             projectId: guard.accessContext.projectId,
             action: 'collaboration.apply.execute',
             diffSummary: `执行协作正典 apply request ${result.applyRequestId}，写入 ${result.writtenPaths.length} 个文件`,
+            now: input.now
+          });
+          sendJson(response, 200, result, context.requestId);
+          return;
+        } catch (error) {
+          sendJson(response, 400, collaborationMutationBlocked(context.requestId, error), context.requestId);
+          return;
+        }
+      }
+      if (collaborationRollbackExecuteMatch && request.method === 'POST') {
+        if (!input.sessionRepository || !input.projectRepository || !input.collaborationRepository) {
+          sendJson(response, 503, repositoryNotConfigured(context.requestId), context.requestId);
+          return;
+        }
+
+        const projectId = decodeURIComponent(collaborationRollbackExecuteMatch[1] ?? '');
+        const proposalId = decodeURIComponent(collaborationRollbackExecuteMatch[2] ?? '');
+        const applyRequestId = decodeURIComponent(collaborationRollbackExecuteMatch[3] ?? '');
+        const guard = await requireProjectContext({
+          request,
+          sessionRepository: input.sessionRepository,
+          projectRepository: input.projectRepository,
+          projectId,
+          requiredAction: 'apply-canon-change',
+          now: input.now
+        });
+        if (guard.statusCode !== 200) {
+          sendJson(response, guard.statusCode, createErrorResponse({
+            statusCode: guard.statusCode,
+            requestId: context.requestId,
+            code: guard.code,
+            message: guard.message
+          }), context.requestId);
+          return;
+        }
+
+        try {
+          const proposal = await input.collaborationRepository.findProposalById(proposalId);
+          if (!proposal) {
+            sendJson(response, 404, createErrorResponse({
+              statusCode: 404,
+              requestId: context.requestId,
+              code: 'PROPOSAL_NOT_FOUND',
+              message: 'proposal 不存在'
+            }), context.requestId);
+            return;
+          }
+          if (proposal.projectId !== guard.accessContext.projectId) {
+            sendJson(response, 403, createErrorResponse({
+              statusCode: 403,
+              requestId: context.requestId,
+              code: 'PROPOSAL_PROJECT_MISMATCH',
+              message: 'proposal 不属于当前项目'
+            }), context.requestId);
+            return;
+          }
+
+          const storage = createProjectStorage(guard.project);
+          const result = await executeRollbackRequest({
+            repository: input.collaborationRepository,
+            proposalId: proposal.id,
+            applyRequestId,
+            actorUserId: guard.accessContext.userId,
+            writePatch: async patch => {
+              const targetPath = storage.resolve(patch.targetPath);
+              await mkdir(path.dirname(targetPath), { recursive: true });
+              await writeFile(targetPath, patch.content, 'utf-8');
+            },
+            now: input.now
+          });
+          await auditServerMutation({
+            auditRepository: input.auditRepository,
+            actorUserId: guard.accessContext.userId,
+            projectId: guard.accessContext.projectId,
+            action: 'collaboration.rollback.execute',
+            diffSummary: `回滚协作正典 apply request ${result.applyRequestId}，写入 ${result.writtenPaths.length} 个文件`,
             now: input.now
           });
           sendJson(response, 200, result, context.requestId);
@@ -825,6 +906,7 @@ export const startMultiuserServer = async (input: StartMultiuserServerInput): Pr
               diffSummary: String(body.diffSummary ?? ''),
               rollbackHint: String(body.rollbackHint ?? ''),
               content: body.content === undefined ? undefined : String(body.content),
+              rollbackContent: body.rollbackContent === undefined ? undefined : String(body.rollbackContent),
               sourceRefs: (body.sourceRefs ?? []) as string[]
             });
             await auditServerMutation({

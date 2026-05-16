@@ -1628,7 +1628,8 @@ describe('multiuser server entry', () => {
           diffSummary: '写入 fact-1。',
           rollbackHint: '恢复 canon-v1。',
           sourceRefs: ['note-1'],
-          content: '# Canon\n\n- fact-1\n'
+          content: '# Canon\n\n- fact-1\n',
+          rollbackContent: '# Canon\n'
         })
       });
       const patch = await patchResponse.json() as { id: string };
@@ -1668,9 +1669,31 @@ describe('multiuser server entry', () => {
       await expect(collaborationRepository.findProposalById(proposal.id)).resolves.toMatchObject({
         status: 'applied'
       });
+      const rolledBack = await fetch(`${server.url}/api/projects/project-1/collaboration/proposals/${proposal.id}/apply-requests/${applyRequest.id}/rollback`, {
+        method: 'POST',
+        headers: {
+          authorization: 'Bearer owner-token'
+        }
+      });
+
+      expect(rolledBack.status).toBe(200);
+      await expect(rolledBack.json()).resolves.toMatchObject({
+        proposalId: proposal.id,
+        applyRequestId: applyRequest.id,
+        rolledBackPatchIds: [patch.id],
+        writtenPaths: ['stories/main/canon.md']
+      });
+      await expect(readFile(path.join(projectRoot, 'stories', 'main', 'canon.md'), 'utf-8')).resolves.toBe('# Canon\n');
+      await expect(collaborationRepository.findProposalById(proposal.id)).resolves.toMatchObject({
+        status: 'rolled-back'
+      });
       await expect(auditRepository.listByProject('project-1')).resolves.toEqual(expect.arrayContaining([
         expect.objectContaining({
           action: 'collaboration.apply.execute',
+          diffSummary: expect.stringContaining(applyRequest.id)
+        }),
+        expect.objectContaining({
+          action: 'collaboration.rollback.execute',
           diffSummary: expect.stringContaining(applyRequest.id)
         })
       ]));

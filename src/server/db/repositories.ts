@@ -127,6 +127,7 @@ interface CollaborationCanonPatchRow {
   diff_summary: string;
   rollback_hint: string;
   content?: string;
+  rollback_content?: string;
   source_refs: string[] | string;
 }
 
@@ -140,6 +141,8 @@ interface CollaborationApplyRequestRow {
   reviewer_ids: string[] | string;
   blocked_reasons: string[] | string;
   created_at: string;
+  applied_at?: string;
+  rolled_back_at?: string;
 }
 
 interface CollaborationCommentThreadRow {
@@ -251,6 +254,7 @@ const mapCollaborationCanonPatch = (row: CollaborationCanonPatchRow): CanonPatch
   diffSummary: row.diff_summary,
   rollbackHint: row.rollback_hint,
   content: row.content,
+  rollbackContent: row.rollback_content,
   sourceRefs: parseJsonValue<string[]>(row.source_refs)
 });
 
@@ -263,7 +267,9 @@ const mapCollaborationApplyRequest = (row: CollaborationApplyRequestRow): ApplyR
   patchIds: parseJsonValue<string[]>(row.patch_ids),
   reviewerIds: parseJsonValue<string[]>(row.reviewer_ids),
   blockedReasons: parseJsonValue<string[]>(row.blocked_reasons),
-  createdAt: row.created_at
+  createdAt: row.created_at,
+  appliedAt: row.applied_at,
+  rolledBackAt: row.rolled_back_at
 });
 
 const mapCollaborationCommentThread = (row: CollaborationCommentThreadRow): CommentThread => ({
@@ -555,7 +561,7 @@ export const createMultiuserDatabaseRepositories = (
     async listPatches(proposalId) {
       const rows = await executor.queryMany<CollaborationCanonPatchRow>(
         [
-          'select id, proposal_id, target_path, kind, diff_summary, rollback_hint, content, source_refs',
+          'select id, proposal_id, target_path, kind, diff_summary, rollback_hint, content, rollback_content, source_refs',
           'from collaboration_canon_patches where proposal_id = $1 order by id asc'
         ].join(' '),
         [proposalId]
@@ -566,9 +572,9 @@ export const createMultiuserDatabaseRepositories = (
       collaborationCache.patches.push(patch);
       await executor.execute(
         [
-          'insert into collaboration_canon_patches (id, proposal_id, target_path, kind, diff_summary, rollback_hint, content, source_refs)',
-          'values ($1, $2, $3, $4, $5, $6, $7, $8::jsonb)',
-          'on conflict (id) do update set target_path = excluded.target_path, kind = excluded.kind, diff_summary = excluded.diff_summary, rollback_hint = excluded.rollback_hint, content = excluded.content, source_refs = excluded.source_refs'
+          'insert into collaboration_canon_patches (id, proposal_id, target_path, kind, diff_summary, rollback_hint, content, rollback_content, source_refs)',
+          'values ($1, $2, $3, $4, $5, $6, $7, $8, $9::jsonb)',
+          'on conflict (id) do update set target_path = excluded.target_path, kind = excluded.kind, diff_summary = excluded.diff_summary, rollback_hint = excluded.rollback_hint, content = excluded.content, rollback_content = excluded.rollback_content, source_refs = excluded.source_refs'
         ].join(' '),
         [
           patch.id,
@@ -578,6 +584,7 @@ export const createMultiuserDatabaseRepositories = (
           patch.diffSummary,
           patch.rollbackHint,
           patch.content,
+          patch.rollbackContent,
           JSON.stringify(patch.sourceRefs)
         ]
       );
@@ -585,7 +592,7 @@ export const createMultiuserDatabaseRepositories = (
     async listApplyRequests(proposalId) {
       const rows = await executor.queryMany<CollaborationApplyRequestRow>(
         [
-          'select id, proposal_id, actor_user_id, status, current_version, patch_ids, reviewer_ids, blocked_reasons, created_at',
+          'select id, proposal_id, actor_user_id, status, current_version, patch_ids, reviewer_ids, blocked_reasons, created_at, applied_at, rolled_back_at',
           'from collaboration_apply_requests where proposal_id = $1 order by created_at asc'
         ].join(' '),
         [proposalId]
@@ -601,9 +608,9 @@ export const createMultiuserDatabaseRepositories = (
       }
       await executor.execute(
         [
-          'insert into collaboration_apply_requests (id, proposal_id, actor_user_id, status, current_version, patch_ids, reviewer_ids, blocked_reasons, created_at)',
-          'values ($1, $2, $3, $4, $5::jsonb, $6::jsonb, $7::jsonb, $8::jsonb, $9)',
-          'on conflict (id) do update set status = excluded.status, current_version = excluded.current_version, patch_ids = excluded.patch_ids, reviewer_ids = excluded.reviewer_ids, blocked_reasons = excluded.blocked_reasons'
+          'insert into collaboration_apply_requests (id, proposal_id, actor_user_id, status, current_version, patch_ids, reviewer_ids, blocked_reasons, created_at, applied_at, rolled_back_at)',
+          'values ($1, $2, $3, $4, $5::jsonb, $6::jsonb, $7::jsonb, $8::jsonb, $9, $10, $11)',
+          'on conflict (id) do update set status = excluded.status, current_version = excluded.current_version, patch_ids = excluded.patch_ids, reviewer_ids = excluded.reviewer_ids, blocked_reasons = excluded.blocked_reasons, applied_at = excluded.applied_at, rolled_back_at = excluded.rolled_back_at'
         ].join(' '),
         [
           request.id,
@@ -614,7 +621,9 @@ export const createMultiuserDatabaseRepositories = (
           JSON.stringify(request.patchIds),
           JSON.stringify(request.reviewerIds),
           JSON.stringify(request.blockedReasons),
-          request.createdAt
+          request.createdAt,
+          request.appliedAt,
+          request.rolledBackAt
         ]
       );
     },

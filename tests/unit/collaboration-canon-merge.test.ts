@@ -7,6 +7,7 @@ import {
   createCollaborationProposal,
   createMemoryCollaborationCanonRepository,
   executeApplyRequest,
+  executeRollbackRequest,
   submitReviewDecision
 } from '../../src/server/collaboration/canon-merge.js';
 
@@ -258,6 +259,100 @@ describe('collaboration canon merge protocol', () => {
       expect.objectContaining({
         id: 'apply-1',
         status: 'applied'
+      })
+    ]);
+  });
+
+  it('rolls back applied requests by writing explicit rollback content', async () => {
+    const repository = createMemoryCollaborationCanonRepository();
+    await createCollaborationProposal({
+      repository,
+      actorUserId: 'agent',
+      projectId: 'project-1',
+      storyId: 'story-1',
+      target: {
+        kind: 'canon',
+        path: 'stories/demo/canon.md',
+        resourceVersion: 'canon-v1'
+      },
+      sourceRefs: [{ kind: 'manual', id: 'note-1', label: '人工记录' }],
+      summary: '新增正典事实。',
+      now: () => '2026-05-16T08:00:00.000Z',
+      idGenerator: () => 'proposal-1'
+    });
+    await submitReviewDecision({
+      repository,
+      proposalId: 'proposal-1',
+      reviewerUserId: 'reviewer-1',
+      decision: 'approve',
+      now: () => '2026-05-16T08:01:00.000Z',
+      idGenerator: () => 'review-1'
+    });
+    await createCanonPatch({
+      repository,
+      proposalId: 'proposal-1',
+      targetPath: 'stories/demo/canon.md',
+      kind: 'canon-fact',
+      diffSummary: '写入 fact-1。',
+      rollbackHint: '恢复 canon-v1。',
+      sourceRefs: ['note-1'],
+      content: '# Canon\n\n- fact-1\n',
+      rollbackContent: '# Canon\n',
+      idGenerator: () => 'patch-1'
+    });
+    await createApplyRequest({
+      repository,
+      proposalId: 'proposal-1',
+      actorUserId: 'owner-1',
+      currentVersion: {
+        resourceVersion: 'canon-v1',
+        storyStage: 'drafting',
+        canonFactIds: [],
+        taskState: 'open'
+      },
+      now: () => '2026-05-16T08:02:00.000Z',
+      idGenerator: () => 'apply-1'
+    });
+    await executeApplyRequest({
+      repository,
+      proposalId: 'proposal-1',
+      applyRequestId: 'apply-1',
+      actorUserId: 'owner-1',
+      writePatch: async () => {},
+      now: () => '2026-05-16T08:03:00.000Z'
+    });
+    const writes: Array<{ targetPath: string; content: string }> = [];
+
+    await expect(executeRollbackRequest({
+      repository,
+      proposalId: 'proposal-1',
+      applyRequestId: 'apply-1',
+      actorUserId: 'owner-1',
+      writePatch: async patch => {
+        writes.push(patch);
+      },
+      now: () => '2026-05-16T08:04:00.000Z'
+    })).resolves.toEqual({
+      proposalId: 'proposal-1',
+      applyRequestId: 'apply-1',
+      actorUserId: 'owner-1',
+      rolledBackPatchIds: ['patch-1'],
+      writtenPaths: ['stories/demo/canon.md'],
+      rolledBackAt: '2026-05-16T08:04:00.000Z'
+    });
+    expect(writes).toEqual([{
+      targetPath: 'stories/demo/canon.md',
+      content: '# Canon\n'
+    }]);
+    await expect(repository.findProposalById('proposal-1')).resolves.toMatchObject({
+      status: 'rolled-back',
+      updatedAt: '2026-05-16T08:04:00.000Z'
+    });
+    await expect(repository.listApplyRequests?.('proposal-1')).resolves.toEqual([
+      expect.objectContaining({
+        id: 'apply-1',
+        status: 'rolled-back',
+        rolledBackAt: '2026-05-16T08:04:00.000Z'
       })
     ]);
   });

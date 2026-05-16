@@ -5,6 +5,7 @@ export type CollaborationProposalStatus =
   | 'approved'
   | 'apply-requested'
   | 'applied'
+  | 'rolled-back'
   | 'rejected'
   | 'deferred';
 
@@ -19,7 +20,7 @@ export type CollaborationSourceKind = 'preview' | 'draft' | 'agent-job' | 'comme
 
 export type ReviewDecisionValue = 'approve' | 'request-changes' | 'reject' | 'defer';
 
-export type ApplyRequestStatus = 'blocked' | 'ready' | 'applied' | 'canceled';
+export type ApplyRequestStatus = 'blocked' | 'ready' | 'applied' | 'rolled-back' | 'canceled';
 
 export type CanonPatchKind =
   | 'spec-section'
@@ -97,6 +98,7 @@ export interface CanonPatch {
   diffSummary: string;
   rollbackHint: string;
   content?: string;
+  rollbackContent?: string;
   sourceRefs: string[];
 }
 
@@ -111,6 +113,7 @@ export interface ApplyRequest {
   blockedReasons: string[];
   createdAt: string;
   appliedAt?: string;
+  rolledBackAt?: string;
 }
 
 export interface ExecuteApplyRequestInput {
@@ -129,6 +132,24 @@ export interface ExecuteApplyRequestResult {
   appliedPatchIds: string[];
   writtenPaths: string[];
   appliedAt: string;
+}
+
+export interface ExecuteRollbackRequestInput {
+  repository: CollaborationCanonRepository;
+  proposalId: string;
+  applyRequestId: string;
+  actorUserId: string;
+  writePatch(input: { targetPath: string; content: string }): Promise<void>;
+  now?: () => string;
+}
+
+export interface ExecuteRollbackRequestResult {
+  proposalId: string;
+  applyRequestId: string;
+  actorUserId: string;
+  rolledBackPatchIds: string[];
+  writtenPaths: string[];
+  rolledBackAt: string;
 }
 
 export interface CollaborationCanonRepositorySnapshot {
@@ -209,6 +230,7 @@ export interface CreateCanonPatchInput {
   diffSummary: string;
   rollbackHint: string;
   content?: string;
+  rollbackContent?: string;
   sourceRefs: string[];
   idGenerator?: () => string;
 }
@@ -338,6 +360,9 @@ const buildNextActions = (entry: {
   const latestApplyRequest = entry.applyRequests.at(-1);
   if (latestApplyRequest?.status === 'ready') {
     return ['等待作者确认 apply；正式故事仍未写入。'];
+  }
+  if (latestApplyRequest?.status === 'rolled-back') {
+    return ['apply 已回滚；可重新提交修订候选。'];
   }
   if (latestApplyRequest?.status === 'blocked') {
     return latestApplyRequest.blockedReasons.length > 0
@@ -528,6 +553,7 @@ export const createCanonPatch = async (
     diffSummary: input.diffSummary,
     rollbackHint: input.rollbackHint,
     content: input.content,
+    rollbackContent: input.rollbackContent,
     sourceRefs: input.sourceRefs
   };
 
@@ -598,6 +624,72 @@ export const executeApplyRequest = async (
     appliedPatchIds: selectedPatches.map(patch => patch.id),
     writtenPaths,
     appliedAt
+  };
+};
+
+export const executeRollbackRequest = async (
+  input: ExecuteRollbackRequestInput
+): Promise<ExecuteRollbackRequestResult> => {
+  const proposal = await input.repository.findProposalById(input.proposalId);
+  if (!proposal) {
+    throw new Error(`PROPOSAL_NOT_FOUND:${input.proposalId}`);
+  }
+
+  const requests = input.repository.listApplyRequests
+    ? await input.repository.listApplyRequests(input.proposalId)
+    : fallbackListApplyRequests(input.repository, input.proposalId);
+  const request = requests.find(item => item.id === input.applyRequestId);
+  if (!request) {
+    throw new Error(`APPLY_REQUEST_NOT_FOUND:${input.applyRequestId}`);
+  }
+  if (request.status !== 'applied') {
+    throw new Error(`APPLY_REQUEST_NOT_APPLIED:${request.status}`);
+  }
+
+  const patches = await input.repository.listPatches(input.proposalId);
+  const patchesById = new Map(patches.map(patch => [patch.id, patch]));
+  const selectedPatches = request.patchIds.map(patchId => {
+    const patch = patchesById.get(patchId);
+    if (!patch) {
+      throw new Error(`PATCH_NOT_FOUND:${patchId}`);
+    }
+    if (!patch.rollbackHint.trim()) {
+      throw new Error(`PATCH_ROLLBACK_HINT_REQUIRED:${patchId}`);
+    }
+    if (patch.rollbackContent === undefined) {
+      throw new Error(`PATCH_ROLLBACK_CONTENT_REQUIRED:${patchId}`);
+    }
+    return patch;
+  });
+
+  const writtenPaths: string[] = [];
+  for (const patch of selectedPatches) {
+    await input.writePatch({
+      targetPath: patch.targetPath,
+      content: patch.rollbackContent ?? ''
+    });
+    writtenPaths.push(patch.targetPath);
+  }
+
+  const rolledBackAt = input.now?.() ?? currentTimestamp();
+  await input.repository.saveApplyRequest({
+    ...request,
+    status: 'rolled-back',
+    rolledBackAt
+  });
+  await input.repository.saveProposal({
+    ...proposal,
+    status: 'rolled-back',
+    updatedAt: rolledBackAt
+  });
+
+  return {
+    proposalId: proposal.id,
+    applyRequestId: request.id,
+    actorUserId: input.actorUserId,
+    rolledBackPatchIds: selectedPatches.map(patch => patch.id),
+    writtenPaths,
+    rolledBackAt
   };
 };
 
