@@ -1,4 +1,5 @@
 import type { AgentJob, AgentJobRepository } from '../jobs/agent-job.js';
+import { transitionAgentJob } from '../jobs/agent-job.js';
 import type { QueueReadyState } from '../queue/agent-job-queue.js';
 
 export type WorkerFailureKind =
@@ -130,6 +131,26 @@ export interface WorkerLeaseRecoveryPlan {
   ignoredJobRefs: WorkerLeaseRecoveryJobRef[];
 }
 
+export interface WorkerStaleJobRecoveryRecord {
+  workerId: string;
+  jobId: string;
+  status: 'timeout';
+  failureRecord?: WorkerFailureRecord;
+}
+
+export interface WorkerStaleJobRecoverySkip {
+  workerId: string;
+  jobId: string;
+  reason: string;
+}
+
+export interface WorkerStaleJobRecoveryResult {
+  plan: WorkerLeaseRecoveryPlan;
+  recoveredJobs: WorkerStaleJobRecoveryRecord[];
+  skippedJobs: WorkerStaleJobRecoverySkip[];
+  blockedReasons: string[];
+}
+
 export interface BuildWorkerAlertSummaryInput {
   projectId: string;
   jobs: AgentJob[];
@@ -148,6 +169,12 @@ export interface BuildWorkerLeaseRecoveryPlanInput {
   jobRepository: AgentJobRepository;
   projectId?: string;
   now?: () => string;
+}
+
+export interface RecoverStaleWorkerJobsInput extends BuildWorkerLeaseRecoveryPlanInput {
+  failureRepository?: WorkerFailureRepository;
+  maxAttempts?: number;
+  failureIdGenerator?: () => string;
 }
 
 export interface RecordWorkerFailureInput {
@@ -382,6 +409,70 @@ export const recordWorkerFailure = async (
 
   await input.repository.save(record);
   return record;
+};
+
+export const recoverStaleWorkerJobs = async (
+  input: RecoverStaleWorkerJobsInput
+): Promise<WorkerStaleJobRecoveryResult> => {
+  const plan = await buildWorkerLeaseRecoveryPlan(input);
+  const recoveredJobs: WorkerStaleJobRecoveryRecord[] = [];
+  const skippedJobs: WorkerStaleJobRecoverySkip[] = [];
+  const blockedReasons: string[] = [];
+  const reason = 'worker lease 已过期，job 从 running 恢复为 timeout。';
+
+  for (const affected of plan.affectedJobs) {
+    const result = await transitionAgentJob({
+      repository: input.jobRepository,
+      jobId: affected.jobId,
+      status: 'timeout',
+      errorMessage: reason,
+      runtimeErrorCode: 'WORKER_LEASE_EXPIRED',
+      now: input.now
+    });
+
+    if (result.blocked || !result.job) {
+      const blockedReason = result.blockedReasons[0] ?? 'job 无法恢复为 timeout';
+      skippedJobs.push({
+        workerId: affected.workerId,
+        jobId: affected.jobId,
+        reason: blockedReason
+      });
+      blockedReasons.push(blockedReason);
+      continue;
+    }
+
+    const failureRecord = input.failureRepository
+      ? await recordWorkerFailure({
+        repository: input.failureRepository,
+        jobId: affected.jobId,
+        projectId: affected.projectId,
+        userId: affected.userId,
+        runtime: affected.runtime,
+        kind: affected.kind,
+        attempt: affected.attempt,
+        maxAttempts: input.maxAttempts ?? 3,
+        failureKind: 'queue-failed',
+        reason,
+        traceId: affected.traceId,
+        now: input.now,
+        idGenerator: input.failureIdGenerator
+      })
+      : undefined;
+
+    recoveredJobs.push({
+      workerId: affected.workerId,
+      jobId: affected.jobId,
+      status: 'timeout',
+      failureRecord
+    });
+  }
+
+  return {
+    plan,
+    recoveredJobs,
+    skippedJobs,
+    blockedReasons
+  };
 };
 
 export const buildWorkerAlertSummary = (

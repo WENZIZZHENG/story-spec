@@ -6,6 +6,7 @@ import {
   createMemoryWorkerLeaseRepository,
   createMemoryWorkerFailureRepository,
   refreshWorkerLease,
+  recoverStaleWorkerJobs,
   recordWorkerFailure
 } from '../../src/server/workers/worker-reliability.js';
 import {
@@ -364,5 +365,73 @@ describe('multiuser worker reliability policy', () => {
     await expect(jobRepository.findById('job-running')).resolves.toMatchObject({
       status: 'running'
     });
+  });
+
+  it('runs timeout recovery for stale worker jobs without retrying or requeueing', async () => {
+    const leaseRepository = createMemoryWorkerLeaseRepository();
+    const failureRepository = createMemoryWorkerFailureRepository();
+    const jobRepository = createMemoryAgentJobRepository();
+    await createAgentJob({
+      repository: jobRepository,
+      userId: 'user-1',
+      projectId: 'project-1',
+      kind: 'canon-review',
+      runtime: 'openhands',
+      traceId: 'trace-stale',
+      now: () => '2026-05-16T12:00:00.000Z',
+      idGenerator: () => 'job-stale'
+    });
+    await transitionAgentJob({
+      repository: jobRepository,
+      jobId: 'job-stale',
+      status: 'running',
+      now: () => '2026-05-16T12:00:10.000Z'
+    });
+    await refreshWorkerLease({
+      repository: leaseRepository,
+      workerId: 'worker-stale',
+      concurrency: 1,
+      activeJobIds: ['job-stale'],
+      now: () => '2026-05-16T12:00:00.000Z',
+      leaseTtlMs: 30_000
+    });
+
+    const result = await recoverStaleWorkerJobs({
+      leaseRepository,
+      jobRepository,
+      failureRepository,
+      maxAttempts: 3,
+      now: () => '2026-05-16T12:01:00.000Z',
+      failureIdGenerator: () => 'failure-stale'
+    });
+
+    expect(result).toMatchObject({
+      recoveredJobs: [expect.objectContaining({
+        jobId: 'job-stale',
+        workerId: 'worker-stale',
+        status: 'timeout',
+        failureRecord: expect.objectContaining({
+          id: 'failure-stale',
+          jobId: 'job-stale',
+          failureKind: 'queue-failed',
+          decision: 'retryable',
+          reason: 'worker lease 已过期，job 从 running 恢复为 timeout。'
+        })
+      })],
+      skippedJobs: [],
+      blockedReasons: []
+    });
+    await expect(jobRepository.findById('job-stale')).resolves.toMatchObject({
+      status: 'timeout',
+      errorMessage: 'worker lease 已过期，job 从 running 恢复为 timeout。',
+      runtimeErrorCode: 'WORKER_LEASE_EXPIRED'
+    });
+    expect(failureRepository.snapshot()).toEqual([
+      expect.objectContaining({
+        id: 'failure-stale',
+        jobId: 'job-stale',
+        decision: 'retryable'
+      })
+    ]);
   });
 });
