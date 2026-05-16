@@ -14,6 +14,7 @@ import type {
   VersionSnapshot
 } from '../collaboration/canon-merge.js';
 import {
+  addCollaborationComment,
   buildCollaborationCanonReviewPanel,
   createApplyRequest,
   createCanonPatch,
@@ -225,6 +226,7 @@ const auditServerMutation = async (
       | 'agent_job.cancel'
       | 'agent_job.retry'
       | 'collaboration.proposal.create'
+      | 'collaboration.comment.create'
       | 'collaboration.review.submit'
       | 'collaboration.patch.create'
       | 'collaboration.apply_request.create';
@@ -451,7 +453,7 @@ export const startMultiuserServer = async (input: StartMultiuserServerInput): Pr
       }
 
       const collaborationMatch = url.pathname.match(
-        /^\/api\/projects\/([^/]+)\/collaboration\/proposals(?:\/([^/]+)\/(reviews|patches|apply-requests))?$/
+        /^\/api\/projects\/([^/]+)\/collaboration\/proposals(?:\/([^/]+)\/(reviews|patches|apply-requests|comments))?$/
       );
       const canonReviewMatch = url.pathname.match(
         /^\/api\/projects\/([^/]+)\/stories\/([^/]+)\/canon-review$/
@@ -494,6 +496,66 @@ export const startMultiuserServer = async (input: StartMultiuserServerInput): Pr
         sendJson(response, 200, panel, context.requestId);
         return;
       }
+      if (collaborationMatch && request.method === 'GET' && collaborationMatch[3] === 'comments') {
+        if (!input.sessionRepository || !input.projectRepository || !input.collaborationRepository) {
+          sendJson(response, 503, repositoryNotConfigured(context.requestId), context.requestId);
+          return;
+        }
+
+        const projectId = decodeURIComponent(collaborationMatch[1] ?? '');
+        const proposalId = collaborationMatch[2] ? decodeURIComponent(collaborationMatch[2]) : undefined;
+        const guard = await requireProjectContext({
+          request,
+          sessionRepository: input.sessionRepository,
+          projectRepository: input.projectRepository,
+          projectId,
+          now: input.now
+        });
+        if (guard.statusCode !== 200) {
+          sendJson(response, guard.statusCode, createErrorResponse({
+            statusCode: guard.statusCode,
+            requestId: context.requestId,
+            code: guard.code,
+            message: guard.message
+          }), context.requestId);
+          return;
+        }
+
+        const proposal = proposalId
+          ? await input.collaborationRepository.findProposalById(proposalId)
+          : undefined;
+        if (!proposal) {
+          sendJson(response, 404, createErrorResponse({
+            statusCode: 404,
+            requestId: context.requestId,
+            code: 'PROPOSAL_NOT_FOUND',
+            message: 'proposal 不存在'
+          }), context.requestId);
+          return;
+        }
+        if (proposal.projectId !== guard.accessContext.projectId) {
+          sendJson(response, 403, createErrorResponse({
+            statusCode: 403,
+            requestId: context.requestId,
+            code: 'PROPOSAL_PROJECT_MISMATCH',
+            message: 'proposal 不属于当前项目'
+          }), context.requestId);
+          return;
+        }
+
+        const threads = input.collaborationRepository.listCommentThreads
+          ? await input.collaborationRepository.listCommentThreads({
+            projectId: guard.accessContext.projectId,
+            anchorKind: 'proposal',
+            anchorId: proposal.id
+          })
+          : [];
+        sendJson(response, 200, {
+          proposalId: proposal.id,
+          threads
+        }, context.requestId);
+        return;
+      }
       if (collaborationMatch && request.method === 'POST') {
         if (!input.sessionRepository || !input.projectRepository || !input.collaborationRepository) {
           sendJson(response, 503, repositoryNotConfigured(context.requestId), context.requestId);
@@ -503,7 +565,7 @@ export const startMultiuserServer = async (input: StartMultiuserServerInput): Pr
         const projectId = decodeURIComponent(collaborationMatch[1] ?? '');
         const proposalId = collaborationMatch[2] ? decodeURIComponent(collaborationMatch[2]) : undefined;
         const action = collaborationMatch[3];
-        const requiredAction: ProjectPermissionAction = action === 'reviews'
+        const requiredAction: ProjectPermissionAction = action === 'reviews' || action === 'comments'
           ? 'review-canon'
           : action === 'apply-requests'
             ? 'apply-canon-change'
@@ -607,6 +669,29 @@ export const startMultiuserServer = async (input: StartMultiuserServerInput): Pr
               now: input.now
             });
             sendJson(response, 200, decision, context.requestId);
+            return;
+          }
+
+          if (action === 'comments') {
+            const thread = await addCollaborationComment({
+              repository: input.collaborationRepository,
+              actorUserId: guard.accessContext.userId,
+              projectId: guard.accessContext.projectId,
+              storyId: proposalCheck.proposal.storyId,
+              anchorKind: 'proposal',
+              anchorId: proposalCheck.proposal.id,
+              body: String(body.body ?? ''),
+              now: input.now
+            });
+            await auditServerMutation({
+              auditRepository: input.auditRepository,
+              actorUserId: guard.accessContext.userId,
+              projectId: guard.accessContext.projectId,
+              action: 'collaboration.comment.create',
+              diffSummary: `创建协作正典 comment ${thread.id}`,
+              now: input.now
+            });
+            sendJson(response, 200, thread, context.requestId);
             return;
           }
 

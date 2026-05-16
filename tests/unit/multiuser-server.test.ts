@@ -1192,6 +1192,51 @@ describe('multiuser server entry', () => {
       expect(created.status).toBe(200);
       const proposal = await created.json() as { id: string };
 
+      const commented = await fetch(`${server.url}/api/projects/project-1/collaboration/proposals/${proposal.id}/comments`, {
+        method: 'POST',
+        headers: {
+          authorization: 'Bearer reviewer-token',
+          'content-type': 'application/json'
+        },
+        body: JSON.stringify({
+          body: '这里需要补充来源证据。'
+        })
+      });
+      expect(commented.status).toBe(200);
+      await expect(commented.json()).resolves.toMatchObject({
+        projectId: 'project-1',
+        storyId: 'story-main',
+        anchorKind: 'proposal',
+        anchorId: proposal.id,
+        comments: [
+          {
+            actorUserId: 'user-reviewer',
+            body: '这里需要补充来源证据。',
+            createdAt: '2026-05-08T12:00:00.000Z'
+          }
+        ]
+      });
+
+      const comments = await fetch(`${server.url}/api/projects/project-1/collaboration/proposals/${proposal.id}/comments`, {
+        headers: {
+          authorization: 'Bearer owner-token'
+        }
+      });
+      expect(comments.status).toBe(200);
+      await expect(comments.json()).resolves.toMatchObject({
+        proposalId: proposal.id,
+        threads: [
+          {
+            anchorId: proposal.id,
+            comments: [
+              {
+                body: '这里需要补充来源证据。'
+              }
+            ]
+          }
+        ]
+      });
+
       const reviewed = await fetch(`${server.url}/api/projects/project-1/collaboration/proposals/${proposal.id}/reviews`, {
         method: 'POST',
         headers: {
@@ -1302,6 +1347,7 @@ describe('multiuser server entry', () => {
 
       await expect(auditRepository.listByProject('project-1')).resolves.toEqual(expect.arrayContaining([
         expect.objectContaining({ action: 'collaboration.proposal.create' }),
+        expect.objectContaining({ action: 'collaboration.comment.create' }),
         expect.objectContaining({ action: 'collaboration.review.submit' }),
         expect.objectContaining({ action: 'collaboration.patch.create' }),
         expect.objectContaining({ action: 'collaboration.apply_request.create' })

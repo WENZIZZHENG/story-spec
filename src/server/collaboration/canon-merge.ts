@@ -129,6 +129,11 @@ export interface CollaborationCanonRepository {
   savePatch(patch: CanonPatch): Promise<void>;
   listApplyRequests?(proposalId: string): Promise<ApplyRequest[]>;
   saveApplyRequest(request: ApplyRequest): Promise<void>;
+  listCommentThreads?(input: {
+    projectId: string;
+    anchorKind?: CommentThread['anchorKind'];
+    anchorId?: string;
+  }): Promise<CommentThread[]>;
   saveCommentThread?(thread: CommentThread): Promise<void>;
   snapshot(): CollaborationCanonRepositorySnapshot;
 }
@@ -197,11 +202,26 @@ export interface CreateApplyRequestInput {
   idGenerator?: () => string;
 }
 
+export interface AddCollaborationCommentInput {
+  repository: CollaborationCanonRepository;
+  projectId: string;
+  storyId: string;
+  anchorKind: CommentThread['anchorKind'];
+  anchorId: string;
+  actorUserId: string;
+  body: string;
+  now?: () => string;
+  threadIdGenerator?: () => string;
+  commentIdGenerator?: () => string;
+}
+
 const currentTimestamp = (): string => new Date().toISOString();
 const defaultProposalId = (): string => `proposal-${Math.random().toString(36).slice(2, 12)}`;
 const defaultReviewId = (): string => `review-${Math.random().toString(36).slice(2, 12)}`;
 const defaultPatchId = (): string => `patch-${Math.random().toString(36).slice(2, 12)}`;
 const defaultApplyId = (): string => `apply-${Math.random().toString(36).slice(2, 12)}`;
+const defaultThreadId = (): string => `thread-${Math.random().toString(36).slice(2, 12)}`;
+const defaultCommentId = (): string => `comment-${Math.random().toString(36).slice(2, 12)}`;
 
 export const createMemoryCollaborationCanonRepository = (): CollaborationCanonRepository => {
   const proposals = new Map<string, CollaborationProposal>();
@@ -241,8 +261,20 @@ export const createMemoryCollaborationCanonRepository = (): CollaborationCanonRe
     async saveApplyRequest(request) {
       applyRequests.push(request);
     },
+    async listCommentThreads(input) {
+      return commentThreads.filter(thread =>
+        thread.projectId === input.projectId
+        && (input.anchorKind === undefined || thread.anchorKind === input.anchorKind)
+        && (input.anchorId === undefined || thread.anchorId === input.anchorId)
+      );
+    },
     async saveCommentThread(thread) {
-      commentThreads.push(thread);
+      const existingIndex = commentThreads.findIndex(item => item.id === thread.id);
+      if (existingIndex >= 0) {
+        commentThreads[existingIndex] = thread;
+      } else {
+        commentThreads.push(thread);
+      }
     },
     snapshot() {
       return {
@@ -371,6 +403,53 @@ export const createCollaborationProposal = async (
 
   await input.repository.saveProposal(proposal);
   return proposal;
+};
+
+export const addCollaborationComment = async (
+  input: AddCollaborationCommentInput
+): Promise<CommentThread> => {
+  const body = input.body.trim();
+  if (!body) {
+    throw new Error('COMMENT_BODY_REQUIRED');
+  }
+
+  const now = input.now?.() ?? currentTimestamp();
+  const existing = input.repository.listCommentThreads
+    ? (await input.repository.listCommentThreads({
+      projectId: input.projectId,
+      anchorKind: input.anchorKind,
+      anchorId: input.anchorId
+    })).at(0)
+    : input.repository.snapshot().commentThreads.find(thread =>
+      thread.projectId === input.projectId
+      && thread.anchorKind === input.anchorKind
+      && thread.anchorId === input.anchorId
+    );
+  const comment = {
+    id: input.commentIdGenerator?.() ?? defaultCommentId(),
+    actorUserId: input.actorUserId,
+    body,
+    createdAt: now
+  };
+  const thread: CommentThread = existing
+    ? {
+      ...existing,
+      comments: [...existing.comments, comment]
+    }
+    : {
+      id: input.threadIdGenerator?.() ?? defaultThreadId(),
+      projectId: input.projectId,
+      storyId: input.storyId,
+      anchorKind: input.anchorKind,
+      anchorId: input.anchorId,
+      comments: [comment]
+    };
+
+  if (!input.repository.saveCommentThread) {
+    throw new Error('COMMENT_THREAD_REPOSITORY_UNSUPPORTED');
+  }
+  await input.repository.saveCommentThread(thread);
+  return thread;
 };
 
 const nextProposalStatusForDecision = (decision: ReviewDecisionValue): CollaborationProposalStatus => {

@@ -4,6 +4,7 @@ import type {
   ApplyRequest,
   CanonPatch,
   CollaborationCanonRepository,
+  CommentThread,
   CollaborationProposal,
   CollaborationRisk,
   CollaborationSourceRef,
@@ -140,6 +141,17 @@ interface CollaborationApplyRequestRow {
   created_at: string;
 }
 
+interface CollaborationCommentThreadRow {
+  id: string;
+  project_id: string;
+  story_id: string;
+  anchor_kind: CommentThread['anchorKind'];
+  anchor_id: string;
+  comments: CommentThread['comments'] | string;
+  created_at: string;
+  updated_at: string;
+}
+
 const mapUser = (row: UserRow): MultiuserUser => ({
   id: row.id,
   displayName: row.display_name
@@ -252,6 +264,15 @@ const mapCollaborationApplyRequest = (row: CollaborationApplyRequestRow): ApplyR
   createdAt: row.created_at
 });
 
+const mapCollaborationCommentThread = (row: CollaborationCommentThreadRow): CommentThread => ({
+  id: row.id,
+  projectId: row.project_id,
+  storyId: row.story_id,
+  anchorKind: row.anchor_kind,
+  anchorId: row.anchor_id,
+  comments: parseJsonValue<CommentThread['comments']>(row.comments)
+});
+
 export const createMultiuserDatabaseRepositories = (
   executor: MultiuserDatabaseExecutor
 ): MultiuserDatabaseRepositories => {
@@ -259,7 +280,8 @@ export const createMultiuserDatabaseRepositories = (
     proposals: new Map<string, CollaborationProposal>(),
     reviewDecisions: [] as ReviewDecision[],
     patches: [] as CanonPatch[],
-    applyRequests: [] as ApplyRequest[]
+    applyRequests: [] as ApplyRequest[],
+    commentThreads: [] as CommentThread[]
   };
 
   return {
@@ -588,13 +610,58 @@ export const createMultiuserDatabaseRepositories = (
         ]
       );
     },
+    async listCommentThreads(input) {
+      const clauses = [
+        'select id, project_id, story_id, anchor_kind, anchor_id, comments, created_at, updated_at',
+        'from collaboration_comment_threads where project_id = $1'
+      ];
+      const params: unknown[] = [input.projectId];
+      if (input.anchorKind) {
+        params.push(input.anchorKind);
+        clauses.push(`and anchor_kind = $${params.length}`);
+      }
+      if (input.anchorId) {
+        params.push(input.anchorId);
+        clauses.push(`and anchor_id = $${params.length}`);
+      }
+      clauses.push('order by updated_at desc');
+      const rows = await executor.queryMany<CollaborationCommentThreadRow>(clauses.join(' '), params);
+      return rows.map(mapCollaborationCommentThread);
+    },
+    async saveCommentThread(thread) {
+      const existingIndex = collaborationCache.commentThreads.findIndex(item => item.id === thread.id);
+      if (existingIndex >= 0) {
+        collaborationCache.commentThreads[existingIndex] = thread;
+      } else {
+        collaborationCache.commentThreads.push(thread);
+      }
+      const createdAt = thread.comments[0]?.createdAt ?? new Date(0).toISOString();
+      const updatedAt = thread.comments.at(-1)?.createdAt ?? createdAt;
+      await executor.execute(
+        [
+          'insert into collaboration_comment_threads (id, project_id, story_id, anchor_kind, anchor_id, comments, created_at, updated_at)',
+          'values ($1, $2, $3, $4, $5, $6::jsonb, $7, $8)',
+          'on conflict (id) do update set comments = excluded.comments, updated_at = excluded.updated_at'
+        ].join(' '),
+        [
+          thread.id,
+          thread.projectId,
+          thread.storyId,
+          thread.anchorKind,
+          thread.anchorId,
+          JSON.stringify(thread.comments),
+          createdAt,
+          updatedAt
+        ]
+      );
+    },
     snapshot() {
       return {
         proposals: [...collaborationCache.proposals.values()],
         reviewDecisions: [...collaborationCache.reviewDecisions],
         patches: [...collaborationCache.patches],
         applyRequests: [...collaborationCache.applyRequests],
-        commentThreads: []
+        commentThreads: [...collaborationCache.commentThreads]
       };
     }
     }

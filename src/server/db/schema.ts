@@ -16,6 +16,7 @@ export interface MultiuserDatabaseSchema {
   collaborationReviewDecisions: MultiuserTableSchema;
   collaborationCanonPatches: MultiuserTableSchema;
   collaborationApplyRequests: MultiuserTableSchema;
+  collaborationCommentThreads: MultiuserTableSchema;
 }
 
 export interface MultiuserMigrationPlan {
@@ -253,7 +254,34 @@ const collaborationApplyRequests: MultiuserTableSchema = {
   ]
 };
 
-export const MULTIUSER_MIGRATION_VERSION = 2;
+const collaborationCommentThreads: MultiuserTableSchema = {
+  name: 'collaboration_comment_threads',
+  columns: [
+    'id',
+    'project_id',
+    'story_id',
+    'anchor_kind',
+    'anchor_id',
+    'comments',
+    'created_at',
+    'updated_at'
+  ],
+  createStatements: [
+    'create table if not exists collaboration_comment_threads (',
+    '  id text primary key,',
+    '  project_id text not null references projects(id) on delete cascade,',
+    '  story_id text not null,',
+    '  anchor_kind text not null check (anchor_kind in (\'proposal\', \'story\', \'chapter\', \'task\', \'canon-fact\')),',
+    '  anchor_id text not null,',
+    '  comments jsonb not null,',
+    '  created_at timestamptz not null,',
+    '  updated_at timestamptz not null',
+    ');',
+    'create index if not exists collaboration_comment_threads_anchor_idx on collaboration_comment_threads (project_id, anchor_kind, anchor_id, updated_at desc);'
+  ]
+};
+
+export const MULTIUSER_MIGRATION_VERSION = 3;
 
 export const multiuserDatabaseSchema: MultiuserDatabaseSchema = {
   users,
@@ -266,7 +294,8 @@ export const multiuserDatabaseSchema: MultiuserDatabaseSchema = {
   collaborationProposals,
   collaborationReviewDecisions,
   collaborationCanonPatches,
-  collaborationApplyRequests
+  collaborationApplyRequests,
+  collaborationCommentThreads
 };
 
 const tableStatements = (schema: MultiuserTableSchema): string[] => [
@@ -286,6 +315,7 @@ export const createMultiuserMigrationPlan = (): MultiuserMigrationPlan => ({
     ...tableStatements(collaborationProposals),
     ...tableStatements(collaborationReviewDecisions),
     ...tableStatements(collaborationCanonPatches),
-    ...tableStatements(collaborationApplyRequests)
+    ...tableStatements(collaborationApplyRequests),
+    ...tableStatements(collaborationCommentThreads)
   ]
 });

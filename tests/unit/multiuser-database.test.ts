@@ -11,12 +11,13 @@ import {
 
 describe('multiuser database foundation', () => {
   it('defines all core metadata tables and repeatable migration SQL', () => {
-    expect(MULTIUSER_MIGRATION_VERSION).toBe(2);
+    expect(MULTIUSER_MIGRATION_VERSION).toBe(3);
     expect(Object.keys(multiuserDatabaseSchema).sort()).toEqual([
       'agentJobs',
       'auditLogs',
       'collaborationApplyRequests',
       'collaborationCanonPatches',
+      'collaborationCommentThreads',
       'collaborationProposals',
       'collaborationReviewDecisions',
       'memberships',
@@ -95,9 +96,18 @@ describe('multiuser database foundation', () => {
       'created_at',
       'updated_at'
     ]));
+    expect(multiuserDatabaseSchema.collaborationCommentThreads.columns).toEqual(expect.arrayContaining([
+      'id',
+      'project_id',
+      'story_id',
+      'anchor_kind',
+      'anchor_id',
+      'comments',
+      'updated_at'
+    ]));
 
     const migration = createMultiuserMigrationPlan();
-    expect(migration.version).toBe(2);
+    expect(migration.version).toBe(3);
     expect(migration.statements).toEqual(expect.arrayContaining([
       expect.stringContaining('create table if not exists users'),
       expect.stringContaining('create table if not exists sessions'),
@@ -109,7 +119,8 @@ describe('multiuser database foundation', () => {
       expect.stringContaining('create table if not exists collaboration_proposals'),
       expect.stringContaining('create table if not exists collaboration_review_decisions'),
       expect.stringContaining('create table if not exists collaboration_canon_patches'),
-      expect.stringContaining('create table if not exists collaboration_apply_requests')
+      expect.stringContaining('create table if not exists collaboration_apply_requests'),
+      expect.stringContaining('create table if not exists collaboration_comment_threads')
     ]));
     expect(createMultiuserMigrationPlan()).toEqual(migration);
   });
@@ -296,6 +307,23 @@ describe('multiuser database foundation', () => {
             created_at: '2026-05-08T12:03:00.000Z'
           }];
         }
+        if (sql.includes('from collaboration_comment_threads')) {
+          return [{
+            id: 'thread-1',
+            project_id: 'project-1',
+            story_id: 'story-main',
+            anchor_kind: 'proposal',
+            anchor_id: 'proposal-1',
+            comments: [{
+              id: 'comment-1',
+              actorUserId: 'user-2',
+              body: '需要补来源。',
+              createdAt: '2026-05-08T12:04:00.000Z'
+            }],
+            created_at: '2026-05-08T12:04:00.000Z',
+            updated_at: '2026-05-08T12:04:00.000Z'
+          }];
+        }
         if (sql.includes('from collaboration_proposals')) {
           return [{
             id: 'proposal-1',
@@ -417,6 +445,34 @@ describe('multiuser database foundation', () => {
         status: 'ready'
       })
     ]);
+    await repositories.collaboration.saveCommentThread?.({
+      id: 'thread-1',
+      projectId: 'project-1',
+      storyId: 'story-main',
+      anchorKind: 'proposal',
+      anchorId: 'proposal-1',
+      comments: [{
+        id: 'comment-1',
+        actorUserId: 'user-2',
+        body: '需要补来源。',
+        createdAt: '2026-05-08T12:04:00.000Z'
+      }]
+    });
+    await expect(repositories.collaboration.listCommentThreads?.({
+      projectId: 'project-1',
+      anchorKind: 'proposal',
+      anchorId: 'proposal-1'
+    })).resolves.toEqual([
+      expect.objectContaining({
+        id: 'thread-1',
+        anchorKind: 'proposal',
+        comments: [
+          expect.objectContaining({
+            body: '需要补来源。'
+          })
+        ]
+      })
+    ]);
     expect(repositories.collaboration.snapshot()).toMatchObject({
       proposals: [
         { id: 'proposal-1' }
@@ -430,13 +486,17 @@ describe('multiuser database foundation', () => {
       applyRequests: [
         { id: 'apply-1' }
       ],
-      commentThreads: []
+      commentThreads: [
+        { id: 'thread-1' }
+      ]
     });
     expect(queries.some(query => query.sql.includes('insert into collaboration_proposals'))).toBe(true);
     expect(queries.some(query => query.sql.includes('insert into collaboration_review_decisions'))).toBe(true);
     expect(queries.some(query => query.sql.includes('insert into collaboration_canon_patches'))).toBe(true);
     expect(queries.some(query => query.sql.includes('insert into collaboration_apply_requests'))).toBe(true);
+    expect(queries.some(query => query.sql.includes('insert into collaboration_comment_threads'))).toBe(true);
     expect(queries.some(query => query.sql.includes('from collaboration_proposals') && query.sql.includes('story_id = $2'))).toBe(true);
     expect(queries.some(query => query.sql.includes('from collaboration_apply_requests where proposal_id = $1'))).toBe(true);
+    expect(queries.some(query => query.sql.includes('from collaboration_comment_threads'))).toBe(true);
   });
 });

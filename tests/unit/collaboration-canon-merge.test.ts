@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import {
+  addCollaborationComment,
   buildCollaborationCanonReviewPanel,
   createApplyRequest,
   createCanonPatch,
@@ -326,5 +327,61 @@ describe('collaboration canon merge protocol', () => {
         }
       ]
     });
+  });
+
+  it('adds proposal comments without changing proposal apply state', async () => {
+    const repository = createMemoryCollaborationCanonRepository();
+    await createCollaborationProposal({
+      repository,
+      actorUserId: 'editor-1',
+      projectId: 'project-1',
+      storyId: 'story-main',
+      target: {
+        kind: 'canon',
+        path: 'stories/main/canon.md',
+        resourceVersion: 'canon-v1'
+      },
+      sourceRefs: [{ kind: 'manual', id: 'note-1', label: '人工记录' }],
+      summary: '新增正典事实。',
+      now: () => '2026-05-16T08:00:00.000Z',
+      idGenerator: () => 'proposal-1'
+    });
+
+    const thread = await addCollaborationComment({
+      repository,
+      projectId: 'project-1',
+      storyId: 'story-main',
+      anchorKind: 'proposal',
+      anchorId: 'proposal-1',
+      actorUserId: 'reviewer-1',
+      body: '这里需要补充来源证据。',
+      now: () => '2026-05-16T08:01:00.000Z',
+      threadIdGenerator: () => 'thread-1',
+      commentIdGenerator: () => 'comment-1'
+    });
+
+    expect(thread).toMatchObject({
+      id: 'thread-1',
+      projectId: 'project-1',
+      storyId: 'story-main',
+      anchorKind: 'proposal',
+      anchorId: 'proposal-1',
+      comments: [
+        {
+          id: 'comment-1',
+          actorUserId: 'reviewer-1',
+          body: '这里需要补充来源证据。',
+          createdAt: '2026-05-16T08:01:00.000Z'
+        }
+      ]
+    });
+    await expect(repository.findProposalById('proposal-1')).resolves.toMatchObject({
+      status: 'draft'
+    });
+    await expect(repository.listCommentThreads?.({
+      projectId: 'project-1',
+      anchorKind: 'proposal',
+      anchorId: 'proposal-1'
+    })).resolves.toEqual([thread]);
   });
 });
