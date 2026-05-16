@@ -44,6 +44,28 @@ export interface WorkerFailureRepository {
   snapshot(): WorkerFailureRecord[];
 }
 
+export type WorkerLeaseStatus = 'active' | 'stopped';
+
+export interface WorkerLease {
+  workerId: string;
+  status: WorkerLeaseStatus;
+  concurrency: number;
+  activeJobIds: string[];
+  lastHeartbeatAt: string;
+  leaseExpiresAt: string;
+  traceId?: string;
+  stoppedAt?: string;
+}
+
+export interface WorkerLeaseRepository {
+  save(lease: WorkerLease): Promise<void>;
+  findByWorkerId(workerId: string): Promise<WorkerLease | undefined>;
+  listActive(): Promise<WorkerLease[]>;
+  listStale(input: { now: string }): Promise<WorkerLease[]>;
+  markStopped(input: { workerId: string; stoppedAt: string }): Promise<WorkerLease | undefined>;
+  snapshot(): WorkerLease[];
+}
+
 export type WorkerAlertSeverity = 'info' | 'warning' | 'critical';
 
 export type WorkerAlertCategory = 'queue' | 'retryable' | 'dead-letter' | 'job-status';
@@ -106,6 +128,16 @@ export interface RecordWorkerFailureInput {
   idGenerator?: () => string;
 }
 
+export interface RefreshWorkerLeaseInput {
+  repository: WorkerLeaseRepository;
+  workerId: string;
+  concurrency: number;
+  activeJobIds: string[];
+  leaseTtlMs: number;
+  traceId?: string;
+  now?: () => string;
+}
+
 const currentTimestamp = (): string => new Date().toISOString();
 const defaultId = (): string => `worker-failure-${Math.random().toString(36).slice(2, 12)}`;
 
@@ -163,6 +195,68 @@ export const createMemoryWorkerFailureRepository = (): WorkerFailureRepository =
       return [...records];
     }
   };
+};
+
+export const createMemoryWorkerLeaseRepository = (): WorkerLeaseRepository => {
+  const leases = new Map<string, WorkerLease>();
+
+  const activeLeases = (): WorkerLease[] => [...leases.values()]
+    .filter(lease => lease.status === 'active')
+    .sort((left, right) => left.workerId.localeCompare(right.workerId));
+
+  return {
+    async save(lease) {
+      leases.set(lease.workerId, { ...lease, activeJobIds: [...lease.activeJobIds] });
+    },
+    async findByWorkerId(workerId) {
+      const lease = leases.get(workerId);
+      return lease ? { ...lease, activeJobIds: [...lease.activeJobIds] } : undefined;
+    },
+    async listActive() {
+      return activeLeases().map(lease => ({ ...lease, activeJobIds: [...lease.activeJobIds] }));
+    },
+    async listStale(input) {
+      return activeLeases()
+        .filter(lease => lease.leaseExpiresAt < input.now)
+        .map(lease => ({ ...lease, activeJobIds: [...lease.activeJobIds] }));
+    },
+    async markStopped(input) {
+      const existing = leases.get(input.workerId);
+      if (!existing) {
+        return undefined;
+      }
+      const stopped: WorkerLease = {
+        ...existing,
+        status: 'stopped',
+        stoppedAt: input.stoppedAt
+      };
+      leases.set(input.workerId, stopped);
+      return { ...stopped, activeJobIds: [...stopped.activeJobIds] };
+    },
+    snapshot() {
+      return [...leases.values()]
+        .sort((left, right) => left.workerId.localeCompare(right.workerId))
+        .map(lease => ({ ...lease, activeJobIds: [...lease.activeJobIds] }));
+    }
+  };
+};
+
+export const refreshWorkerLease = async (
+  input: RefreshWorkerLeaseInput
+): Promise<WorkerLease> => {
+  const now = input.now?.() ?? currentTimestamp();
+  const lease: WorkerLease = {
+    workerId: input.workerId,
+    status: 'active',
+    concurrency: input.concurrency,
+    activeJobIds: [...input.activeJobIds],
+    lastHeartbeatAt: now,
+    leaseExpiresAt: new Date(Date.parse(now) + input.leaseTtlMs).toISOString(),
+    ...(input.traceId ? { traceId: input.traceId } : {})
+  };
+
+  await input.repository.save(lease);
+  return lease;
 };
 
 export const recordWorkerFailure = async (

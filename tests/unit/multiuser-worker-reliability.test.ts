@@ -2,7 +2,9 @@ import { describe, expect, it } from 'vitest';
 import {
   buildWorkerAlertSummary,
   classifyWorkerFailure,
+  createMemoryWorkerLeaseRepository,
   createMemoryWorkerFailureRepository,
+  refreshWorkerLease,
   recordWorkerFailure
 } from '../../src/server/workers/worker-reliability.js';
 
@@ -189,5 +191,76 @@ describe('multiuser worker reliability policy', () => {
       })
     ]);
     expect(repository.snapshot()).toEqual([retryable, deadLetter]);
+  });
+
+  it('tracks worker lease heartbeats and stale workers without requeueing jobs', async () => {
+    const repository = createMemoryWorkerLeaseRepository();
+
+    const registered = await refreshWorkerLease({
+      repository,
+      workerId: 'worker-a',
+      concurrency: 2,
+      activeJobIds: ['job-1'],
+      traceId: 'trace-worker-a',
+      now: () => '2026-05-16T12:00:00.000Z',
+      leaseTtlMs: 30_000
+    });
+    const refreshed = await refreshWorkerLease({
+      repository,
+      workerId: 'worker-a',
+      concurrency: 2,
+      activeJobIds: ['job-2', 'job-3'],
+      now: () => '2026-05-16T12:00:20.000Z',
+      leaseTtlMs: 30_000
+    });
+
+    expect(registered).toMatchObject({
+      workerId: 'worker-a',
+      status: 'active',
+      concurrency: 2,
+      activeJobIds: ['job-1'],
+      traceId: 'trace-worker-a',
+      lastHeartbeatAt: '2026-05-16T12:00:00.000Z',
+      leaseExpiresAt: '2026-05-16T12:00:30.000Z'
+    });
+    expect(refreshed).toMatchObject({
+      workerId: 'worker-a',
+      status: 'active',
+      activeJobIds: ['job-2', 'job-3'],
+      lastHeartbeatAt: '2026-05-16T12:00:20.000Z',
+      leaseExpiresAt: '2026-05-16T12:00:50.000Z'
+    });
+    await expect(repository.listActive()).resolves.toEqual([refreshed]);
+    await expect(repository.listStale({
+      now: '2026-05-16T12:01:00.000Z'
+    })).resolves.toEqual([refreshed]);
+    expect(repository.snapshot()).toEqual([refreshed]);
+  });
+
+  it('marks stopped worker leases outside the active listing', async () => {
+    const repository = createMemoryWorkerLeaseRepository();
+    await refreshWorkerLease({
+      repository,
+      workerId: 'worker-a',
+      concurrency: 1,
+      activeJobIds: [],
+      now: () => '2026-05-16T12:00:00.000Z',
+      leaseTtlMs: 30_000
+    });
+
+    const stopped = await repository.markStopped({
+      workerId: 'worker-a',
+      stoppedAt: '2026-05-16T12:00:10.000Z'
+    });
+
+    expect(stopped).toMatchObject({
+      workerId: 'worker-a',
+      status: 'stopped',
+      stoppedAt: '2026-05-16T12:00:10.000Z'
+    });
+    await expect(repository.listActive()).resolves.toEqual([]);
+    await expect(repository.listStale({
+      now: '2026-05-16T12:01:00.000Z'
+    })).resolves.toEqual([]);
   });
 });
