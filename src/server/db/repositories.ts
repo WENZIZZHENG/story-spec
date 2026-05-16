@@ -13,6 +13,7 @@ import type {
   VersionSnapshot
 } from '../collaboration/canon-merge.js';
 import type { AgentJob, AgentJobRepository } from '../jobs/agent-job.js';
+import type { AgentRuntimeArtifact, AgentRuntimeLogEntry, AgentRuntimeOutputRecord, AgentRuntimeOutputRepository } from '../agent-runtime/agent-runtime.js';
 import type {
   MultiuserProject,
   ProjectAccessRepository,
@@ -31,6 +32,7 @@ export interface MultiuserDatabaseRepositories {
   sessions: SessionRepository;
   projects: ProjectAccessRepository;
   jobs: AgentJobRepository;
+  runtimeOutputs: AgentRuntimeOutputRepository;
   audit: AuditLogRepository;
   quota: QuotaRepository;
   collaboration: CollaborationCanonRepository;
@@ -94,6 +96,18 @@ interface QuotaRow {
   metric: QuotaBucket['metric'];
   limit_value: number;
   used: number;
+}
+
+interface AgentRuntimeOutputRow {
+  id: string;
+  job_id: string;
+  candidate_ref: string;
+  preview_only: boolean;
+  summary: string;
+  artifacts: AgentRuntimeArtifact[] | string;
+  logs: Array<AgentRuntimeLogEntry & { createdAt: string }> | string;
+  trace_id?: string;
+  created_at: string;
 }
 
 interface CollaborationProposalRow {
@@ -194,6 +208,17 @@ const mapJob = (row: AgentJobRow): AgentJob => ({
   errorMessage: row.error_message,
   traceId: row.trace_id,
   runtimeErrorCode: row.runtime_error_code
+});
+
+const mapRuntimeOutput = (row: AgentRuntimeOutputRow): AgentRuntimeOutputRecord => ({
+  jobId: row.job_id,
+  candidateRef: row.candidate_ref,
+  previewOnly: true,
+  summary: row.summary,
+  artifacts: parseJsonValue<AgentRuntimeArtifact[]>(row.artifacts),
+  logs: parseJsonValue<Array<AgentRuntimeLogEntry & { createdAt: string }>>(row.logs),
+  traceId: row.trace_id,
+  createdAt: row.created_at
 });
 
 const mapAudit = (row: AuditRow): AuditEvent => ({
@@ -428,6 +453,41 @@ export const createMultiuserDatabaseRepositories = (
           job.runtimeErrorCode
         ]
       );
+    }
+    },
+    runtimeOutputs: {
+    async save(record) {
+      await executor.execute(
+        [
+          'insert into agent_runtime_outputs (id, job_id, candidate_ref, preview_only, summary, artifacts, logs, trace_id, created_at)',
+          'values ($1, $2, $3, $4, $5, $6::jsonb, $7::jsonb, $8, $9)',
+          'on conflict (id) do update set candidate_ref = excluded.candidate_ref, preview_only = excluded.preview_only, summary = excluded.summary, artifacts = excluded.artifacts, logs = excluded.logs, trace_id = excluded.trace_id, created_at = excluded.created_at'
+        ].join(' '),
+        [
+          `${record.jobId}:${record.candidateRef}`,
+          record.jobId,
+          record.candidateRef,
+          record.previewOnly,
+          record.summary,
+          JSON.stringify(record.artifacts),
+          JSON.stringify(record.logs),
+          record.traceId,
+          record.createdAt
+        ]
+      );
+    },
+    async listByJob(jobId) {
+      const rows = await executor.queryMany<AgentRuntimeOutputRow>(
+        [
+          'select id, job_id, candidate_ref, preview_only, summary, artifacts, logs, trace_id, created_at',
+          'from agent_runtime_outputs where job_id = $1 order by created_at desc'
+        ].join(' '),
+        [jobId]
+      );
+      return rows.map(mapRuntimeOutput);
+    },
+    snapshot() {
+      return [];
     }
     },
     audit: {

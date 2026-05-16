@@ -11,9 +11,10 @@ import {
 
 describe('multiuser database foundation', () => {
   it('defines all core metadata tables and repeatable migration SQL', () => {
-    expect(MULTIUSER_MIGRATION_VERSION).toBe(5);
+    expect(MULTIUSER_MIGRATION_VERSION).toBe(6);
     expect(Object.keys(multiuserDatabaseSchema).sort()).toEqual([
       'agentJobs',
+      'agentRuntimeOutputs',
       'auditLogs',
       'collaborationApplyRequests',
       'collaborationCanonPatches',
@@ -63,6 +64,17 @@ describe('multiuser database foundation', () => {
       'created_at',
       'updated_at',
       'error_message'
+    ]));
+    expect(multiuserDatabaseSchema.agentRuntimeOutputs.columns).toEqual(expect.arrayContaining([
+      'id',
+      'job_id',
+      'candidate_ref',
+      'preview_only',
+      'summary',
+      'artifacts',
+      'logs',
+      'trace_id',
+      'created_at'
     ]));
     expect(multiuserDatabaseSchema.auditLogs.columns).toEqual(expect.arrayContaining([
       'id',
@@ -115,13 +127,14 @@ describe('multiuser database foundation', () => {
     ]));
 
     const migration = createMultiuserMigrationPlan();
-    expect(migration.version).toBe(5);
+    expect(migration.version).toBe(6);
     expect(migration.statements).toEqual(expect.arrayContaining([
       expect.stringContaining('create table if not exists users'),
       expect.stringContaining('create table if not exists sessions'),
       expect.stringContaining('create table if not exists projects'),
       expect.stringContaining('create table if not exists memberships'),
       expect.stringContaining('create table if not exists agent_jobs'),
+      expect.stringContaining('create table if not exists agent_runtime_outputs'),
       expect.stringContaining('create table if not exists audit_logs'),
       expect.stringContaining('create table if not exists quota_buckets'),
       expect.stringContaining('create table if not exists collaboration_proposals'),
@@ -136,6 +149,89 @@ describe('multiuser database foundation', () => {
       expect.stringContaining('rolled_back_at timestamptz')
     ]));
     expect(createMultiuserMigrationPlan()).toEqual(migration);
+  });
+
+  it('adapts runtime output repository through the database executor boundary', async () => {
+    const queries: Array<{ sql: string; params: unknown[] }> = [];
+    const executor: MultiuserDatabaseExecutor = {
+      async queryOne() {
+        return undefined;
+      },
+      async queryMany(sql, params) {
+        queries.push({ sql, params });
+        if (sql.includes('from agent_runtime_outputs')) {
+          return [{
+            id: 'output-1',
+            job_id: 'job-1',
+            candidate_ref: 'openhands:job-1',
+            preview_only: true,
+            summary: 'OpenHands headless 已生成候选',
+            artifacts: [{
+              id: 'openhands-stdout',
+              kind: 'stdout',
+              label: 'OpenHands stdout',
+              previewText: '候选输出'
+            }],
+            logs: [{
+              level: 'info',
+              message: 'OpenHands stdout: 候选输出',
+              createdAt: '2026-05-16T13:01:00.000Z'
+            }],
+            trace_id: 'trace-output',
+            created_at: '2026-05-16T13:01:00.000Z'
+          }];
+        }
+        return [];
+      },
+      async execute(sql, params) {
+        queries.push({ sql, params });
+      }
+    };
+    const repositories = createMultiuserDatabaseRepositories(executor);
+
+    await repositories.runtimeOutputs.save({
+      jobId: 'job-1',
+      candidateRef: 'openhands:job-1',
+      previewOnly: true,
+      summary: 'OpenHands headless 已生成候选',
+      artifacts: [{
+        id: 'openhands-stdout',
+        kind: 'stdout',
+        label: 'OpenHands stdout',
+        previewText: '候选输出'
+      }],
+      logs: [{
+        level: 'info',
+        message: 'OpenHands stdout: 候选输出',
+        createdAt: '2026-05-16T13:01:00.000Z'
+      }],
+      traceId: 'trace-output',
+      createdAt: '2026-05-16T13:01:00.000Z'
+    });
+    await expect(repositories.runtimeOutputs.listByJob('job-1')).resolves.toEqual([
+      {
+        jobId: 'job-1',
+        candidateRef: 'openhands:job-1',
+        previewOnly: true,
+        summary: 'OpenHands headless 已生成候选',
+        artifacts: [{
+          id: 'openhands-stdout',
+          kind: 'stdout',
+          label: 'OpenHands stdout',
+          previewText: '候选输出'
+        }],
+        logs: [{
+          level: 'info',
+          message: 'OpenHands stdout: 候选输出',
+          createdAt: '2026-05-16T13:01:00.000Z'
+        }],
+        traceId: 'trace-output',
+        createdAt: '2026-05-16T13:01:00.000Z'
+      }
+    ]);
+
+    expect(queries.some(query => query.sql.includes('insert into agent_runtime_outputs'))).toBe(true);
+    expect(queries.some(query => query.sql.includes('from agent_runtime_outputs where job_id = $1'))).toBe(true);
   });
 
   it('adapts repository interfaces through a database executor boundary', async () => {

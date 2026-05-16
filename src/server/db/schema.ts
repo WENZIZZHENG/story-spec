@@ -10,6 +10,7 @@ export interface MultiuserDatabaseSchema {
   projects: MultiuserTableSchema;
   memberships: MultiuserTableSchema;
   agentJobs: MultiuserTableSchema;
+  agentRuntimeOutputs: MultiuserTableSchema;
   auditLogs: MultiuserTableSchema;
   quotaBuckets: MultiuserTableSchema;
   collaborationProposals: MultiuserTableSchema;
@@ -112,6 +113,35 @@ const agentJobs: MultiuserTableSchema = {
     '  runtime_error_code text',
     ');',
     'create index if not exists agent_jobs_idempotency_key_idx on agent_jobs (user_id, project_id, idempotency_key);'
+  ]
+};
+
+const agentRuntimeOutputs: MultiuserTableSchema = {
+  name: 'agent_runtime_outputs',
+  columns: [
+    'id',
+    'job_id',
+    'candidate_ref',
+    'preview_only',
+    'summary',
+    'artifacts',
+    'logs',
+    'trace_id',
+    'created_at'
+  ],
+  createStatements: [
+    'create table if not exists agent_runtime_outputs (',
+    '  id text primary key,',
+    '  job_id text not null references agent_jobs(id) on delete cascade,',
+    '  candidate_ref text not null,',
+    '  preview_only boolean not null default true,',
+    '  summary text not null,',
+    '  artifacts jsonb not null,',
+    '  logs jsonb not null,',
+    '  trace_id text,',
+    '  created_at timestamptz not null',
+    ');',
+    'create index if not exists agent_runtime_outputs_job_created_at_idx on agent_runtime_outputs (job_id, created_at desc);'
   ]
 };
 
@@ -290,7 +320,7 @@ const collaborationCommentThreads: MultiuserTableSchema = {
   ]
 };
 
-export const MULTIUSER_MIGRATION_VERSION = 5;
+export const MULTIUSER_MIGRATION_VERSION = 6;
 
 export const multiuserDatabaseSchema: MultiuserDatabaseSchema = {
   users,
@@ -298,6 +328,7 @@ export const multiuserDatabaseSchema: MultiuserDatabaseSchema = {
   projects,
   memberships,
   agentJobs,
+  agentRuntimeOutputs,
   auditLogs,
   quotaBuckets,
   collaborationProposals,
@@ -319,6 +350,7 @@ export const createMultiuserMigrationPlan = (): MultiuserMigrationPlan => ({
     ...tableStatements(projects),
     ...tableStatements(memberships),
     ...tableStatements(agentJobs),
+    ...tableStatements(agentRuntimeOutputs),
     ...tableStatements(auditLogs),
     ...tableStatements(quotaBuckets),
     ...tableStatements(collaborationProposals),
