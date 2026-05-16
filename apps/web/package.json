@@ -1,0 +1,10 @@
+{
+  "name": "@storyspec/web",
+  "private": true,
+  "type": "module",
+  "description": "StorySpec 独立 Web App shell 首批骨架",
+  "scripts": {
+    "test": "vitest run ../../tests/unit/independent-web-app-shell.test.ts",
+    "build": "tsc --noEmit --module NodeNext --moduleResolution NodeNext --target ES2022 src/app-shell.ts src/main.ts"
+  }
+}
