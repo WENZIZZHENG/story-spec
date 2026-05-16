@@ -1,7 +1,7 @@
 import http from 'node:http';
 import type { AddressInfo } from 'node:net';
 import type { AuditLogRepository } from '../audit/audit-log.js';
-import { recordAuditEvent } from '../audit/audit-log.js';
+import { buildProjectActivityFeed, recordAuditEvent } from '../audit/audit-log.js';
 import type { SessionRepository } from '../auth/session.js';
 import { requireUser } from '../auth/session.js';
 import type {
@@ -449,6 +449,43 @@ export const startMultiuserServer = async (input: StartMultiuserServerInput): Pr
           ownerUserId: guard.project.ownerUserId,
           dataRoot: guard.project.dataRoot
         }, context.requestId);
+        return;
+      }
+
+      const activityMatch = url.pathname.match(/^\/api\/projects\/([^/]+)\/activity$/);
+      if (request.method === 'GET' && activityMatch) {
+        if (!input.sessionRepository || !input.projectRepository || !input.auditRepository) {
+          sendJson(response, 503, repositoryNotConfigured(context.requestId), context.requestId);
+          return;
+        }
+
+        const guard = await requireProjectContext({
+          request,
+          sessionRepository: input.sessionRepository,
+          projectRepository: input.projectRepository,
+          projectId: decodeURIComponent(activityMatch[1] ?? ''),
+          now: input.now
+        });
+        if (guard.statusCode !== 200) {
+          sendJson(response, guard.statusCode, createErrorResponse({
+            statusCode: guard.statusCode,
+            requestId: context.requestId,
+            code: guard.code,
+            message: guard.message
+          }), context.requestId);
+          return;
+        }
+
+        const limitValue = Number(url.searchParams.get('limit') ?? 50);
+        const limit = Number.isFinite(limitValue) && limitValue > 0
+          ? Math.min(Math.trunc(limitValue), 100)
+          : 50;
+        const feed = await buildProjectActivityFeed({
+          repository: input.auditRepository,
+          projectId: guard.accessContext.projectId,
+          limit
+        });
+        sendJson(response, 200, feed, context.requestId);
         return;
       }
 

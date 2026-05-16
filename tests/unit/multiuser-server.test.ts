@@ -1449,4 +1449,91 @@ describe('multiuser server entry', () => {
       await server.close();
     }
   });
+
+  it('serves a read-only project activity feed from audit events', async () => {
+    const auditRepository = createMemoryAuditLogRepository();
+    await auditRepository.save({
+      id: 'audit-job',
+      actorUserId: 'user-owner',
+      projectId: 'project-1',
+      action: 'agent_job.create',
+      source: 'multiuser-server',
+      diffSummary: '创建 draft job',
+      jobId: 'job-1',
+      createdAt: '2026-05-08T12:01:00.000Z'
+    });
+    await auditRepository.save({
+      id: 'audit-comment',
+      actorUserId: 'user-reviewer',
+      projectId: 'project-1',
+      action: 'collaboration.comment.create',
+      source: 'multiuser-server',
+      diffSummary: '创建协作正典 comment thread-1',
+      createdAt: '2026-05-08T12:02:00.000Z'
+    });
+    const server = await startMultiuserServer({
+      host: '127.0.0.1',
+      port: 0,
+      version: '0.20.0',
+      sessionRepository: createMemorySessionRepository({
+        users: [
+          { id: 'user-owner', displayName: '作者甲' },
+          { id: 'user-reviewer', displayName: '审稿乙' }
+        ],
+        sessions: [{
+          token: 'reviewer-token',
+          userId: 'user-reviewer',
+          expiresAt: '2026-05-08T13:00:00.000Z'
+        }]
+      }),
+      projectRepository: createMemoryProjectAccessRepository({
+        projects: [{
+          id: 'project-1',
+          ownerUserId: 'user-owner',
+          dataRoot: 'D:\\storyspec-data\\project-1'
+        }],
+        memberships: [{
+          projectId: 'project-1',
+          userId: 'user-reviewer',
+          role: 'reviewer'
+        }]
+      }),
+      auditRepository,
+      now: () => '2026-05-08T12:00:00.000Z'
+    });
+
+    try {
+      const activity = await fetch(`${server.url}/api/projects/project-1/activity`, {
+        headers: {
+          authorization: 'Bearer reviewer-token'
+        }
+      });
+
+      expect(activity.status).toBe(200);
+      await expect(activity.json()).resolves.toEqual({
+        projectId: 'project-1',
+        items: [{
+          id: 'audit-comment',
+          actorUserId: 'user-reviewer',
+          action: 'collaboration.comment.create',
+          kind: 'collaboration',
+          source: 'multiuser-server',
+          summary: '创建协作正典 comment thread-1',
+          createdAt: '2026-05-08T12:02:00.000Z'
+        }, {
+          id: 'audit-job',
+          actorUserId: 'user-owner',
+          action: 'agent_job.create',
+          kind: 'agent-job',
+          source: 'multiuser-server',
+          summary: '创建 draft job',
+          jobId: 'job-1',
+          createdAt: '2026-05-08T12:01:00.000Z'
+        }]
+      });
+      await expect(auditRepository.listByProject('project-1')).resolves.toHaveLength(2);
+    } finally {
+      await server.close();
+    }
+  });
 });
