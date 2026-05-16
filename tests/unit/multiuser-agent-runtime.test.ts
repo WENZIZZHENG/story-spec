@@ -1,5 +1,6 @@
 import { describe, expect, it, vi } from 'vitest';
 import {
+  createMemoryRuntimeOutputRepository,
   createLocalStorySpecRunner,
   runAgentJobWithRuntime
 } from '../../src/server/agent-runtime/local-storyspec-runner.js';
@@ -128,6 +129,68 @@ describe('multiuser agent runtime adapters', () => {
     });
   });
 
+  it('records successful runtime output as preview-only artifacts and logs', async () => {
+    const repository = createMemoryAgentJobRepository();
+    const outputRepository = createMemoryRuntimeOutputRepository();
+    await createAgentJob({
+      repository,
+      userId: 'user-1',
+      projectId: 'project-1',
+      kind: 'chapter-draft',
+      runtime: 'local-storyspec',
+      now: () => '2026-05-16T13:00:00.000Z',
+      idGenerator: () => 'job-output',
+      traceId: 'trace-output'
+    });
+
+    const result = await runAgentJobWithRuntime({
+      repository,
+      outputRepository,
+      jobId: 'job-output',
+      runtime: createLocalStorySpecRunner({
+        execute: async job => ({
+          jobId: job.id,
+          candidateRef: `candidate:${job.id}`,
+          previewOnly: true,
+          summary: '生成章节候选',
+          artifacts: [{
+            id: 'artifact-summary',
+            kind: 'summary',
+            label: '候选摘要',
+            previewText: '章节候选摘要'
+          }],
+          logs: [{
+            level: 'info',
+            message: 'runtime returned preview output'
+          }]
+        })
+      }),
+      now: () => '2026-05-16T13:01:00.000Z'
+    });
+
+    expect(result.blocked).toBe(false);
+    expect(outputRepository.snapshot()).toEqual([
+      expect.objectContaining({
+        jobId: 'job-output',
+        candidateRef: 'candidate:job-output',
+        previewOnly: true,
+        summary: '生成章节候选',
+        traceId: 'trace-output',
+        createdAt: '2026-05-16T13:01:00.000Z',
+        artifacts: [expect.objectContaining({
+          id: 'artifact-summary',
+          kind: 'summary',
+          previewText: '章节候选摘要'
+        })],
+        logs: [expect.objectContaining({
+          level: 'info',
+          message: 'runtime returned preview output',
+          createdAt: '2026-05-16T13:01:00.000Z'
+        })]
+      })
+    ]);
+  });
+
   it('runs OpenHands through an injected headless executor as preview-only output', async () => {
     const executor = vi.fn(async () => ({
       exitCode: 0,
@@ -155,7 +218,17 @@ describe('multiuser agent runtime adapters', () => {
       jobId: 'job-headless',
       candidateRef: 'openhands:job-headless',
       previewOnly: true,
-      summary: 'OpenHands headless 已生成候选：候选输出摘要'
+      summary: 'OpenHands headless 已生成候选：候选输出摘要',
+      artifacts: [{
+        id: 'openhands-stdout',
+        kind: 'stdout',
+        label: 'OpenHands stdout',
+        previewText: '候选输出摘要'
+      }],
+      logs: [{
+        level: 'info',
+        message: 'OpenHands stdout: 候选输出摘要'
+      }]
     });
     expect(executor).toHaveBeenCalledWith({
       command: 'openhands',

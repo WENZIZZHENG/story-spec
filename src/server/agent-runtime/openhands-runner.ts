@@ -1,7 +1,7 @@
 import { execFile } from 'node:child_process';
 import { promisify } from 'node:util';
 import type { AgentJob } from '../jobs/agent-job.js';
-import type { AgentRuntimeAdapter, AgentRuntimeOutput } from './agent-runtime.js';
+import type { AgentRuntimeAdapter, AgentRuntimeArtifact, AgentRuntimeLogEntry, AgentRuntimeOutput } from './agent-runtime.js';
 
 const execFileAsync = promisify(execFile);
 
@@ -46,6 +46,44 @@ const compactOutput = (stdout: string, stderr: string): string => {
     .slice(0, 300);
   return output || 'OpenHands 未返回输出';
 };
+
+const streamPreview = (value: string): string => value.trim().slice(0, 1000);
+
+const buildStreamArtifacts = (
+  execution: OpenHandsHeadlessExecutionResult
+): AgentRuntimeArtifact[] => {
+  const streams: Array<{ id: string; kind: string; label: string; value: string }> = [
+    {
+      id: 'openhands-stdout',
+      kind: 'stdout',
+      label: 'OpenHands stdout',
+      value: execution.stdout
+    },
+    {
+      id: 'openhands-stderr',
+      kind: 'stderr',
+      label: 'OpenHands stderr',
+      value: execution.stderr
+    }
+  ];
+
+  return streams
+    .map(stream => ({ ...stream, previewText: streamPreview(stream.value) }))
+    .filter(stream => stream.previewText)
+    .map(({ id, kind, label, previewText }) => ({
+      id,
+      kind,
+      label,
+      previewText
+    }));
+};
+
+const buildStreamLogs = (
+  artifacts: AgentRuntimeArtifact[]
+): AgentRuntimeLogEntry[] => artifacts.map(artifact => ({
+  level: artifact.kind === 'stderr' ? 'warning' : 'info',
+  message: `${artifact.label}: ${artifact.previewText.slice(0, 300)}`
+}));
 
 export const createOpenHandsHeadlessExecutor = (): OpenHandsHeadlessExecutor => async plan => {
   try {
@@ -134,7 +172,12 @@ export const createOpenHandsRunner = (
         jobId: job.id,
         candidateRef: `openhands:${job.id}`,
         previewOnly: true,
-        summary: `OpenHands headless 已生成候选：${compactOutput(execution.stdout, execution.stderr)}`
+        summary: `OpenHands headless 已生成候选：${compactOutput(execution.stdout, execution.stderr)}`,
+        artifacts: buildStreamArtifacts(execution)
+      };
+      latestResult = {
+        ...latestResult,
+        logs: buildStreamLogs(latestResult.artifacts ?? [])
       };
       return latestResult;
     },
