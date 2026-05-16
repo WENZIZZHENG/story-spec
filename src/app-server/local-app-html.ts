@@ -14,6 +14,8 @@ const escapeHtml = (value: string): string => value
 export const renderLocalAppHtml = (input: RenderLocalAppHtmlInput): string => {
   const token = escapeHtml(input.token);
   const frontendArchitecture = buildCompleteAppFrontendArchitecture();
+  const collaborationReview = frontendArchitecture.collaborationCanonReview;
+  const endpointById = new Map(frontendArchitecture.apiClient.endpoints.map(endpoint => [endpoint.id, endpoint]));
   const routeNavigation = frontendArchitecture.routes.map(route => (
     `<a class="route-link" href="${escapeHtml(route.route)}" data-route-id="${escapeHtml(route.id)}">` +
     `<strong>${escapeHtml(route.label)}</strong><span>${escapeHtml(route.purpose)}</span></a>`
@@ -28,6 +30,28 @@ export const renderLocalAppHtml = (input: RenderLocalAppHtmlInput): string => {
     `<span>${escapeHtml(endpoint.description)}</span>` +
     `<span class="mono">${escapeHtml(endpoint.routeId)} · ${escapeHtml(endpoint.boundary)}</span></li>`
   )).join('');
+  const collaborationColumns = collaborationReview.columns.map(column => (
+    `<li data-collaboration-column-id="${escapeHtml(column.id)}"><strong>${escapeHtml(column.label)}</strong>` +
+    `：${escapeHtml(column.purpose)}</li>`
+  )).join('');
+  const collaborationStatuses = collaborationReview.statusLanguage.map(status => (
+    `<li data-collaboration-status="${escapeHtml(status.status)}"><strong>${escapeHtml(status.label)}</strong>` +
+    `：${escapeHtml(status.nextAction)}</li>`
+  )).join('');
+  const collaborationActions = collaborationReview.actions.map(action => {
+    const endpoint = endpointById.get(action.endpointId);
+    const endpointLabel = endpoint
+      ? `${endpoint.method} ${endpoint.path}`
+      : action.endpointId;
+
+    return (
+      `<li class="endpoint-card" data-collaboration-endpoint-id="${escapeHtml(action.endpointId)}">` +
+      `<strong>${escapeHtml(action.label)}</strong>` +
+      `<span>${escapeHtml(endpointLabel)}</span>` +
+      `<span>${escapeHtml(action.confirmationCopy)}</span>` +
+      `<span class="mono">${escapeHtml(action.requiredPermission)} · ${escapeHtml(action.boundary)}</span></li>`
+    );
+  }).join('');
 
   return `<!doctype html>
 <html lang="zh-CN">
@@ -774,6 +798,42 @@ export const renderLocalAppHtml = (input: RenderLocalAppHtmlInput): string => {
             </div>
             <div class="error" id="outline-list-error" role="status" aria-live="polite"></div>
             <div class="result-box" id="outline-list-result">读取后会列出候选大纲。</div>
+          </section>
+
+          <section class="section-block" id="collaboration-canon-review-desk" aria-labelledby="collaboration-canon-review-title">
+            <div class="dossier-title">
+              <h2 id="collaboration-canon-review-title">${escapeHtml(collaborationReview.title)}</h2>
+              <span class="mono">canon-review · proposal · apply · rollback</span>
+            </div>
+            <p class="muted">${escapeHtml(collaborationReview.localShellBoundary)} 这不是最终实时协作 UI；本机工作室只提供 contract、状态列和导航入口。</p>
+            <div class="field">
+              <label for="collaboration-project-id">项目 ID</label>
+              <input id="collaboration-project-id" autocomplete="off" placeholder="project-1">
+            </div>
+            <div class="field">
+              <label for="collaboration-story-id">故事 ID</label>
+              <input id="collaboration-story-id" autocomplete="off" placeholder="story-main">
+            </div>
+            <div class="empty">${escapeHtml(collaborationReview.emptyState)}</div>
+            <div class="section-block">
+              <h3>审阅状态列</h3>
+              <ul class="fact-list">
+                ${collaborationColumns}
+              </ul>
+            </div>
+            <div class="section-block">
+              <h3>状态语言</h3>
+              <ul class="fact-list">
+                ${collaborationStatuses}
+              </ul>
+            </div>
+            <div class="section-block">
+              <h3>协作 API 入口</h3>
+              <ul class="endpoint-map">
+                ${collaborationActions}
+              </ul>
+            </div>
+            <div class="result-box">apply / rollback 会写入项目 dataRoot，必须具备 apply-canon-change 权限、作者二次确认，并进入 audit log。</div>
           </section>
 
           <form class="section-block" id="outline-create-form">

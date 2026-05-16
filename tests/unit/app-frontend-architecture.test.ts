@@ -99,4 +99,100 @@ describe('complete app frontend architecture', () => {
     ]));
     expect(architecture.implementationBoundary).toContain('本切片不包含富文本编辑器或实时协作。');
   });
+
+  it('defines the collaboration canon review UI contract and mutation boundaries', () => {
+    const architecture = buildCompleteAppFrontendArchitecture();
+
+    expect(architecture.collaborationCanonReview).toMatchObject({
+      routeId: 'canon-review',
+      title: '协作正典审阅台',
+      emptyState: '还没有协作 proposal 时，先从候选、草稿、评论或 agent job 输出创建 proposal。',
+      localShellBoundary: '本机 shell 只展示协作正典 UI contract 和导航语言；真实评论、审批、apply 与 rollback 仍由 storyspec server 权限和审计保护。'
+    });
+    expect(architecture.collaborationCanonReview.columns.map(column => column.id)).toEqual([
+      'proposals',
+      'reviews',
+      'patches',
+      'apply-requests',
+      'comments',
+      'activity'
+    ]);
+    expect(architecture.collaborationCanonReview.actions).toEqual(expect.arrayContaining([
+      expect.objectContaining({
+        id: 'view-canon-review',
+        endpointId: 'collaboration-canon-review-panel',
+        boundary: 'read-only',
+        requiredPermission: 'view-canon-review'
+      }),
+      expect.objectContaining({
+        id: 'comment-on-proposal',
+        endpointId: 'collaboration-proposal-comments',
+        boundary: 'preview',
+        requiredPermission: 'review-canon'
+      }),
+      expect.objectContaining({
+        id: 'execute-apply-request',
+        endpointId: 'collaboration-apply-execute',
+        boundary: 'apply-confirmed',
+        requiredPermission: 'apply-canon-change'
+      }),
+      expect.objectContaining({
+        id: 'execute-rollback-request',
+        endpointId: 'collaboration-rollback-execute',
+        boundary: 'apply-confirmed',
+        requiredPermission: 'apply-canon-change'
+      })
+    ]));
+    expect(architecture.collaborationCanonReview.statusLanguage).toEqual(expect.arrayContaining([
+      expect.objectContaining({
+        status: 'ready-for-review',
+        label: '等待审阅'
+      }),
+      expect.objectContaining({
+        status: 'apply-requested',
+        label: '等待作者确认 apply'
+      }),
+      expect.objectContaining({
+        status: 'rolled-back',
+        label: '已回滚'
+      })
+    ]));
+    expect(architecture.apiClient.endpoints).toEqual(expect.arrayContaining([
+      expect.objectContaining({
+        id: 'collaboration-canon-review-panel',
+        method: 'GET',
+        path: '/api/projects/:projectId/stories/:storyId/canon-review',
+        routeId: 'canon-review',
+        boundary: 'read-only'
+      }),
+      expect.objectContaining({
+        id: 'collaboration-proposal-comments',
+        method: 'POST',
+        path: '/api/projects/:projectId/collaboration/proposals/:proposalId/comments',
+        routeId: 'canon-review',
+        boundary: 'preview'
+      }),
+      expect.objectContaining({
+        id: 'collaboration-apply-execute',
+        method: 'POST',
+        path: '/api/projects/:projectId/collaboration/proposals/:proposalId/apply-requests/:applyRequestId/apply',
+        routeId: 'canon-review',
+        boundary: 'apply-confirmed'
+      }),
+      expect.objectContaining({
+        id: 'collaboration-rollback-execute',
+        method: 'POST',
+        path: '/api/projects/:projectId/collaboration/proposals/:proposalId/apply-requests/:applyRequestId/rollback',
+        routeId: 'canon-review',
+        boundary: 'apply-confirmed'
+      }),
+      expect.objectContaining({
+        id: 'project-activity-feed',
+        method: 'GET',
+        path: '/api/projects/:projectId/activity',
+        routeId: 'canon-review',
+        boundary: 'read-only'
+      })
+    ]));
+  });
 });

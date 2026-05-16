@@ -301,6 +301,41 @@ describe('local app html', () => {
     expect(html).toContain('id="task-board-result"');
   });
 
+  it('renders the collaboration canon review UI contract without claiming realtime collaboration', () => {
+    const html = renderLocalAppHtml({
+      token: 'secret-token'
+    });
+
+    expect(html).toContain('协作正典审阅台');
+    expect(html).toContain('本机 shell 只展示协作正典 UI contract 和导航语言');
+    expect(html).toContain('真实评论、审批、apply 与 rollback 仍由 storyspec server 权限和审计保护');
+    expect(html).toContain('项目 ID');
+    expect(html).toContain('故事 ID');
+    expect(html).toContain('project-1');
+    expect(html).toContain('story-main');
+    expect(html).toContain('候选 Proposal');
+    expect(html).toContain('审批');
+    expect(html).toContain('Canon Patch');
+    expect(html).toContain('Apply Request');
+    expect(html).toContain('评论线程');
+    expect(html).toContain('活动流');
+    expect(html).toContain('等待作者确认 apply');
+    expect(html).toContain('已回滚');
+    expect(html).toContain('apply-canon-change');
+    expect(html).toContain('执行后会写入项目 dataRoot，必须二次确认并记录审计。');
+    expect(html).toContain('回滚会写回明确 rollbackContent，必须二次确认并记录审计。');
+    expect(html).toContain('data-collaboration-endpoint-id="collaboration-canon-review-panel"');
+    expect(html).toContain('data-collaboration-endpoint-id="collaboration-proposal-comments"');
+    expect(html).toContain('data-collaboration-endpoint-id="collaboration-apply-execute"');
+    expect(html).toContain('data-collaboration-endpoint-id="collaboration-rollback-execute"');
+    expect(html).toContain('data-collaboration-endpoint-id="project-activity-feed"');
+    expect(html).toContain('/api/projects/:projectId/stories/:storyId/canon-review');
+    expect(html).toContain('/api/projects/:projectId/activity');
+    expect(html).toContain('不是最终实时协作 UI');
+    expect(html.toLowerCase()).not.toContain('websocket');
+    expect(html.toLowerCase()).not.toContain('presence');
+  });
+
   it('renders chapter draft entry, scene card initialization, and post-write review controls without a rich text editor', () => {
     const html = renderLocalAppHtml({
       token: 'secret-token'

@@ -13,6 +13,35 @@ export type CompleteAppFrontendEndpointBoundary =
   | 'dry-run'
   | 'apply-confirmed';
 
+export type CollaborationCanonReviewColumnId =
+  | 'proposals'
+  | 'reviews'
+  | 'patches'
+  | 'apply-requests'
+  | 'comments'
+  | 'activity';
+
+export type CollaborationCanonReviewActionId =
+  | 'view-canon-review'
+  | 'create-proposal'
+  | 'comment-on-proposal'
+  | 'submit-review'
+  | 'create-canon-patch'
+  | 'create-apply-request'
+  | 'execute-apply-request'
+  | 'execute-rollback-request'
+  | 'view-project-activity';
+
+export type CollaborationCanonReviewStatus =
+  | 'ready-for-review'
+  | 'changes-requested'
+  | 'approved'
+  | 'apply-requested'
+  | 'applied'
+  | 'rolled-back'
+  | 'blocked'
+  | 'deferred';
+
 export interface CompleteAppFrontendRoute {
   id: CompleteAppFrontendRouteId;
   label: string;
@@ -38,12 +67,44 @@ export interface CompleteAppFrontendErrorState {
   nextAction: string;
 }
 
+export interface CollaborationCanonReviewColumn {
+  id: CollaborationCanonReviewColumnId;
+  label: string;
+  purpose: string;
+}
+
+export interface CollaborationCanonReviewAction {
+  id: CollaborationCanonReviewActionId;
+  label: string;
+  endpointId: string;
+  boundary: CompleteAppFrontendEndpointBoundary;
+  requiredPermission: string;
+  confirmationCopy: string;
+}
+
+export interface CollaborationCanonReviewStatusLanguage {
+  status: CollaborationCanonReviewStatus;
+  label: string;
+  nextAction: string;
+}
+
+export interface CollaborationCanonReviewUiContract {
+  routeId: 'canon-review';
+  title: string;
+  emptyState: string;
+  localShellBoundary: string;
+  columns: CollaborationCanonReviewColumn[];
+  actions: CollaborationCanonReviewAction[];
+  statusLanguage: CollaborationCanonReviewStatusLanguage[];
+}
+
 export interface CompleteAppFrontendArchitecture {
   routes: CompleteAppFrontendRoute[];
   apiClient: {
     tokenHeader: 'x-storyspec-app-token';
     endpoints: CompleteAppFrontendEndpoint[];
   };
+  collaborationCanonReview: CollaborationCanonReviewUiContract;
   stateLanguage: {
     loading: string;
     empty: string;
@@ -207,6 +268,78 @@ const endpoints: CompleteAppFrontendEndpoint[] = [
     description: '预览候选提升影响。'
   },
   {
+    id: 'collaboration-canon-review-panel',
+    method: 'GET',
+    path: '/api/projects/:projectId/stories/:storyId/canon-review',
+    routeId: 'canon-review',
+    boundary: 'read-only',
+    description: '读取协作正典 proposal、review、patch 和 apply request 审阅面板。'
+  },
+  {
+    id: 'collaboration-proposal-create',
+    method: 'POST',
+    path: '/api/projects/:projectId/collaboration/proposals',
+    routeId: 'canon-review',
+    boundary: 'preview',
+    description: '从候选、草稿、评论或 agent job 输出创建协作正典 proposal。'
+  },
+  {
+    id: 'collaboration-proposal-comments',
+    method: 'POST',
+    path: '/api/projects/:projectId/collaboration/proposals/:proposalId/comments',
+    routeId: 'canon-review',
+    boundary: 'preview',
+    description: '为 proposal 创建评论线程，不写入正式正典。'
+  },
+  {
+    id: 'collaboration-proposal-reviews',
+    method: 'POST',
+    path: '/api/projects/:projectId/collaboration/proposals/:proposalId/reviews',
+    routeId: 'canon-review',
+    boundary: 'preview',
+    description: '提交 reviewer 审批决定，仍需作者确认才能进入 apply。'
+  },
+  {
+    id: 'collaboration-canon-patches',
+    method: 'POST',
+    path: '/api/projects/:projectId/collaboration/proposals/:proposalId/patches',
+    routeId: 'canon-review',
+    boundary: 'preview',
+    description: '创建可审阅 canon patch 和 rollback 提示。'
+  },
+  {
+    id: 'collaboration-apply-requests',
+    method: 'POST',
+    path: '/api/projects/:projectId/collaboration/proposals/:proposalId/apply-requests',
+    routeId: 'canon-review',
+    boundary: 'apply-confirmed',
+    description: '创建 apply request；正式写入仍需显式执行。'
+  },
+  {
+    id: 'collaboration-apply-execute',
+    method: 'POST',
+    path: '/api/projects/:projectId/collaboration/proposals/:proposalId/apply-requests/:applyRequestId/apply',
+    routeId: 'canon-review',
+    boundary: 'apply-confirmed',
+    description: '执行 ready apply request，写入项受 apply-canon-change 权限和审计保护。'
+  },
+  {
+    id: 'collaboration-rollback-execute',
+    method: 'POST',
+    path: '/api/projects/:projectId/collaboration/proposals/:proposalId/apply-requests/:applyRequestId/rollback',
+    routeId: 'canon-review',
+    boundary: 'apply-confirmed',
+    description: '执行 applied apply request 的回滚内容写回，受权限和审计保护。'
+  },
+  {
+    id: 'project-activity-feed',
+    method: 'GET',
+    path: '/api/projects/:projectId/activity',
+    routeId: 'canon-review',
+    boundary: 'read-only',
+    description: '读取项目活动流，展示评论、审批、apply、rollback 和 agent job 事件。'
+  },
+  {
     id: 'task-board',
     method: 'GET',
     path: '/api/tasks/board',
@@ -264,12 +397,168 @@ const endpoints: CompleteAppFrontendEndpoint[] = [
   }
 ];
 
+const collaborationCanonReview: CollaborationCanonReviewUiContract = {
+  routeId: 'canon-review',
+  title: '协作正典审阅台',
+  emptyState: '还没有协作 proposal 时，先从候选、草稿、评论或 agent job 输出创建 proposal。',
+  localShellBoundary: '本机 shell 只展示协作正典 UI contract 和导航语言；真实评论、审批、apply 与 rollback 仍由 storyspec server 权限和审计保护。',
+  columns: [
+    {
+      id: 'proposals',
+      label: '候选 Proposal',
+      purpose: '展示来源、目标文件、风险摘要和当前状态。'
+    },
+    {
+      id: 'reviews',
+      label: '审批',
+      purpose: '展示 reviewer approve / request-changes / reject 决策。'
+    },
+    {
+      id: 'patches',
+      label: 'Canon Patch',
+      purpose: '展示目标路径、diff 摘要、来源追踪和 rollbackHint。'
+    },
+    {
+      id: 'apply-requests',
+      label: 'Apply Request',
+      purpose: '展示 apply gate 结果、阻塞原因和作者确认状态。'
+    },
+    {
+      id: 'comments',
+      label: '评论线程',
+      purpose: '围绕 proposal 留下审阅意见，不直接改正典。'
+    },
+    {
+      id: 'activity',
+      label: '活动流',
+      purpose: '按时间线追踪评论、审批、apply、rollback 和 agent job。'
+    }
+  ],
+  actions: [
+    {
+      id: 'view-canon-review',
+      label: '读取审阅面板',
+      endpointId: 'collaboration-canon-review-panel',
+      boundary: 'read-only',
+      requiredPermission: 'view-canon-review',
+      confirmationCopy: '只读查看，不写入故事文件。'
+    },
+    {
+      id: 'create-proposal',
+      label: '创建 proposal',
+      endpointId: 'collaboration-proposal-create',
+      boundary: 'preview',
+      requiredPermission: 'review-canon',
+      confirmationCopy: '创建候选审阅对象，不代表正典已改变。'
+    },
+    {
+      id: 'comment-on-proposal',
+      label: '评论 proposal',
+      endpointId: 'collaboration-proposal-comments',
+      boundary: 'preview',
+      requiredPermission: 'review-canon',
+      confirmationCopy: '评论用于审阅讨论，不直接写入正典。'
+    },
+    {
+      id: 'submit-review',
+      label: '提交审批',
+      endpointId: 'collaboration-proposal-reviews',
+      boundary: 'preview',
+      requiredPermission: 'review-canon',
+      confirmationCopy: '审批只是进入 apply gate 的证据，仍需作者确认。'
+    },
+    {
+      id: 'create-canon-patch',
+      label: '生成 canon patch',
+      endpointId: 'collaboration-canon-patches',
+      boundary: 'preview',
+      requiredPermission: 'review-canon',
+      confirmationCopy: 'patch 必须包含来源追踪和回滚入口。'
+    },
+    {
+      id: 'create-apply-request',
+      label: '请求 apply',
+      endpointId: 'collaboration-apply-requests',
+      boundary: 'apply-confirmed',
+      requiredPermission: 'apply-canon-change',
+      confirmationCopy: '创建 apply request 需要作者确认当前版本和风险。'
+    },
+    {
+      id: 'execute-apply-request',
+      label: '执行 apply',
+      endpointId: 'collaboration-apply-execute',
+      boundary: 'apply-confirmed',
+      requiredPermission: 'apply-canon-change',
+      confirmationCopy: '执行后会写入项目 dataRoot，必须二次确认并记录审计。'
+    },
+    {
+      id: 'execute-rollback-request',
+      label: '执行 rollback',
+      endpointId: 'collaboration-rollback-execute',
+      boundary: 'apply-confirmed',
+      requiredPermission: 'apply-canon-change',
+      confirmationCopy: '回滚会写回明确 rollbackContent，必须二次确认并记录审计。'
+    },
+    {
+      id: 'view-project-activity',
+      label: '读取活动流',
+      endpointId: 'project-activity-feed',
+      boundary: 'read-only',
+      requiredPermission: 'view-project',
+      confirmationCopy: '只读查看项目协作时间线。'
+    }
+  ],
+  statusLanguage: [
+    {
+      status: 'ready-for-review',
+      label: '等待审阅',
+      nextAction: '请 reviewer 评论或提交审批。'
+    },
+    {
+      status: 'changes-requested',
+      label: '请求修改',
+      nextAction: '先处理审阅意见，再重新提交 proposal。'
+    },
+    {
+      status: 'approved',
+      label: '已审批',
+      nextAction: '可以生成 patch 或创建 apply request。'
+    },
+    {
+      status: 'apply-requested',
+      label: '等待作者确认 apply',
+      nextAction: '作者检查 diff、风险和 rollback 后再执行。'
+    },
+    {
+      status: 'applied',
+      label: '已应用',
+      nextAction: '正式故事已写入；保留活动和回滚入口。'
+    },
+    {
+      status: 'rolled-back',
+      label: '已回滚',
+      nextAction: '可重新提交修订候选或关闭 proposal。'
+    },
+    {
+      status: 'blocked',
+      label: '暂时阻塞',
+      nextAction: '先处理 apply gate 阻塞原因。'
+    },
+    {
+      status: 'deferred',
+      label: '稍后决定',
+      nextAction: '保留候选，不把它视为已完成。'
+    }
+  ]
+};
+
 export const buildCompleteAppFrontendArchitecture = (): CompleteAppFrontendArchitecture => ({
   routes,
   apiClient: {
     tokenHeader: 'x-storyspec-app-token',
     endpoints
   },
+  collaborationCanonReview,
   stateLanguage: {
     loading: '正在读取工作室状态。',
     empty: '还没有可展示内容，请先打开项目或创建故事。',
