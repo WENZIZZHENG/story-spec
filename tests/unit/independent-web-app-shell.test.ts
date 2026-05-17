@@ -2,6 +2,7 @@ import { readFile } from 'node:fs/promises';
 import { existsSync } from 'node:fs';
 import { rm } from 'node:fs/promises';
 import { execFile } from 'node:child_process';
+import { spawn } from 'node:child_process';
 import { promisify } from 'node:util';
 import { fileURLToPath } from 'node:url';
 import { describe, expect, it } from 'vitest';
@@ -11,6 +12,8 @@ import {
 } from '../../apps/web/src/app-shell.js';
 
 const execFileAsync = promisify(execFile);
+const rootDir = fileURLToPath(new URL('../..', import.meta.url));
+const nodeCommand = process.execPath;
 
 describe('independent web app shell', () => {
   it('defines an independent web shell contract without replacing the local fallback', () => {
@@ -133,7 +136,7 @@ describe('independent web app shell', () => {
     });
     const npmCommand = process.platform === 'win32' ? 'npm.cmd' : 'npm';
     await execFileAsync(npmCommand, ['run', 'build:web'], {
-      cwd: fileURLToPath(new URL('../..', import.meta.url)),
+      cwd: rootDir,
       shell: process.platform === 'win32'
     });
 
@@ -141,5 +144,59 @@ describe('independent web app shell', () => {
     expect(builtHtml).toContain('src="./src/main.js"');
     expect(builtHtml).not.toContain('src="./src/main.ts"');
     expect(existsSync(new URL('../../apps/web/dist/src/main.js', import.meta.url))).toBe(true);
+  });
+
+  it('dev server serves the built web shell on a local port', async () => {
+    const webPackage = JSON.parse(await readFile(new URL('../../apps/web/package.json', import.meta.url), 'utf8')) as {
+      scripts: Record<string, string>;
+    };
+
+    expect(webPackage.scripts.dev).toBe('node ../../scripts/dev-web-app.cjs');
+
+    const server = spawn(nodeCommand, ['scripts/dev-web-app.cjs', '--port', '0'], {
+      cwd: rootDir,
+      stdio: ['ignore', 'pipe', 'pipe']
+    });
+    const url = await new Promise<string>((resolve, reject) => {
+      let stdout = '';
+      let stderr = '';
+      const timeout = setTimeout(() => {
+        reject(new Error(`dev server did not start. stdout=${stdout} stderr=${stderr}`));
+      }, 5000);
+
+      server.stdout?.on('data', chunk => {
+        stdout += String(chunk);
+        const match = stdout.match(/http:\/\/127\.0\.0\.1:\d+\//);
+        if (match) {
+          clearTimeout(timeout);
+          resolve(match[0]);
+        }
+      });
+      server.stderr?.on('data', chunk => {
+        stderr += String(chunk);
+      });
+      server.on('error', error => {
+        clearTimeout(timeout);
+        reject(error);
+      });
+      server.on('exit', code => {
+        if (code !== null && code !== 0) {
+          clearTimeout(timeout);
+          reject(new Error(`dev server exited with ${code}. stderr=${stderr}`));
+        }
+      });
+    });
+
+    try {
+      const response = await fetch(url);
+      const html = await response.text();
+
+      expect(response.status).toBe(200);
+      expect(html).toContain('StorySpec Web');
+      expect(html).toContain('src="./src/main.js"');
+      expect(html).not.toContain('src="./src/main.ts"');
+    } finally {
+      server.kill();
+    }
   });
 });
