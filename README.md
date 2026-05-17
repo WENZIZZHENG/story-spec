@@ -55,6 +55,16 @@ storyspec app
 
 当前页面已经可以保存一句灵感、吸收长文资料预览、查看核心缺口、管理候选大纲、读取只读任务板、查看章节写作通道、创建章节草稿、列出草稿、查看草稿发布 dry-run、初始化 Scene Card，并运行章节级写后自检。继续创作卡会把当前故事阶段、推荐下一步、可复制命令、写入模式和状态词解释放在同一入口，方便重新打开项目后回到上次上下文。章节写作通道按 `outline -> tasks -> scene -> sample -> draft -> review` 展示当前阶段、下一步、阻断原因和只读边界。长文资料默认只预览，不自动写入正典；只有显式勾选“写入明确表达字段”时，才复用现有 `applyConfirmed` 语义写入作者明确表达的字段，AI 候选仍保留为候选。候选大纲提升和草稿发布默认 dry-run，不覆盖正式 `creative-plan.md` 或 `content/<chapter>.md`，章节小样也默认不写入正文、tracking、tasks 或 canon。它仍不是完整 React/Vite 前端，也不包含账号、云端、多用户、实时协作或富文本编辑器；正文写作本身仍在草稿文件、CLI 和 agent 命令中完成。自动化检查可用 `storyspec app --json --no-open` 查看启动预览。
 
+仓库内还包含独立 Web shell 首片 `apps/web/`，用于承接完整 App 的长期前端方向。它目前是零依赖 TypeScript + 静态 HTML：包含首批路由/API 边界、登录/权限只读面板、统一错误边界、本地静态预览服务和 HTTP 级 E2E 冒烟。开发时可运行：
+
+```bash
+npm run build:web
+npm --prefix apps/web run dev
+npm run test:e2e
+```
+
+`apps/web` 仍是前端承载层首片，不是完整 SaaS：真实账号/团队 mutation UI、浏览器级 E2E、实时协作和富文本编辑器仍在后续路线中。
+
 ## 多用户控制平面
 
 `storyspec server` 提供独立的多用户控制平面基础，当前已包含：
@@ -67,11 +77,11 @@ storyspec app
 - runtime adapter 基础和显式 opt-in 的 OpenHands headless executor 边界
 - PostgreSQL-backed repository 配置和 migration runner
 - Redis/BullMQ worker 队列底座与独立 `storyspec worker` 入口
-- 完整 App 首批前端架构契约、本机 API 地图和工作台导航事实源
+- 完整 App 首批前端架构契约、本机 API 地图、独立 `apps/web` shell、登录/权限只读 UI、错误边界、静态构建链、本地预览服务和 HTTP 级 E2E 冒烟
 - 项目快照、导出和删除计划
 - 最小自托管配置示例
 
-这些能力仍是控制平面基础，不是完整 SaaS；worker 输出保持 preview-only。`STORYSPEC_OPENHANDS_HEADLESS=true` 可显式启用 OpenHands headless executor，但仍不会自动写入正文、正典或 tracking；独立前端项目、富文本编辑器、实时协作、产物回传和生产级高可用仍在路线图里。自托管说明见 [docs/deploy/self-hosted.md](docs/deploy/self-hosted.md)。
+这些能力仍是控制平面基础，不是完整 SaaS；worker 输出保持 preview-only。`STORYSPEC_OPENHANDS_HEADLESS=true` 可显式启用 OpenHands headless executor，但仍不会自动写入正文、正典或 tracking；真实账号产品、浏览器级 E2E、富文本编辑器、实时协作、产物回传和生产级高可用仍在路线图里。自托管说明见 [docs/deploy/self-hosted.md](docs/deploy/self-hosted.md)。
 
 ### 启动辅助
 
@@ -347,7 +357,7 @@ StorySpec 有两类入口，容易混淆：
 | `storyspec upgrade` | 升级现有项目的命令、脚本、规范或模板 |
 | `storyspec check` | 检查 Node.js、Git 和常见 AI CLI |
 | `storyspec app [--project <path>]` | 启动实验性本机 Web 工作台，打开或创建项目，管理素材、候选大纲、任务板、章节写作通道和章节草稿入口；已包含首批前端架构契约和 API 地图，仍不包含账号、云端、实时协作或富文本编辑器 |
-| `storyspec server [--host <host>] [--port <port>]` | 启动实验性多用户控制平面，提供 health、ready、项目/成员/job 列表、job 控制、审计/配额守卫、PostgreSQL repository 配置和自托管基础；当前不包含完整 SaaS、独立前端项目或实时协作 |
+| `storyspec server [--host <host>] [--port <port>]` | 启动实验性多用户控制平面，提供 health、ready、项目/成员/job 列表、job 控制、审计/配额守卫、PostgreSQL repository 配置和自托管基础；当前不包含完整 SaaS、真实账号产品流或实时协作 |
 | `storyspec worker [--once]` | 运行多用户 agent job worker，连接 PostgreSQL repository 和 Redis/BullMQ queue；默认不调用 OpenHands，设置 `STORYSPEC_OPENHANDS_HEADLESS=true` 后可显式启用 headless executor，输出仍保持 preview-only，不自动写入正文或正典 |
 | `storyspec status` | 汇总项目、当前故事长成了什么、tracking、Git 状态和下一步 |
 | `storyspec codex-status` | `status` 的兼容别名，方便 Codex 接手时读取项目状态 |
