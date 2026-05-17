@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import {
+  buildProjectActivityFeed,
   createMemoryAuditLogRepository,
   recordAuditEvent
 } from '../../src/server/audit/audit-log.js';
@@ -36,6 +37,57 @@ describe('multiuser audit and quota foundation', () => {
       createdAt: '2026-05-08T12:00:00.000Z'
     });
     await expect(repository.listByProject('project-1')).resolves.toEqual([result]);
+  });
+
+  it('builds a project activity feed from audit events', async () => {
+    const repository = createMemoryAuditLogRepository();
+    await recordAuditEvent({
+      repository,
+      actorUserId: 'user-1',
+      projectId: 'project-1',
+      action: 'collaboration.comment.create',
+      source: 'multiuser-server',
+      diffSummary: '创建协作正典 comment thread-1',
+      now: () => '2026-05-08T12:02:00.000Z',
+      idGenerator: () => 'audit-comment'
+    });
+    await recordAuditEvent({
+      repository,
+      actorUserId: 'user-2',
+      projectId: 'project-1',
+      action: 'agent_job.create',
+      source: 'multiuser-server',
+      diffSummary: '创建 draft job',
+      jobId: 'job-1',
+      now: () => '2026-05-08T12:01:00.000Z',
+      idGenerator: () => 'audit-job'
+    });
+
+    await expect(buildProjectActivityFeed({
+      repository,
+      projectId: 'project-1'
+    })).resolves.toEqual({
+      projectId: 'project-1',
+      items: [{
+        id: 'audit-comment',
+        actorUserId: 'user-1',
+        action: 'collaboration.comment.create',
+        kind: 'collaboration',
+        source: 'multiuser-server',
+        summary: '创建协作正典 comment thread-1',
+        jobId: undefined,
+        createdAt: '2026-05-08T12:02:00.000Z'
+      }, {
+        id: 'audit-job',
+        actorUserId: 'user-2',
+        action: 'agent_job.create',
+        kind: 'agent-job',
+        source: 'multiuser-server',
+        summary: '创建 draft job',
+        jobId: 'job-1',
+        createdAt: '2026-05-08T12:01:00.000Z'
+      }]
+    });
   });
 
   it('checks and consumes quota without exceeding the limit', async () => {

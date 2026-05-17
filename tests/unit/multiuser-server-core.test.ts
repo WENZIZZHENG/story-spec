@@ -50,4 +50,28 @@ describe('multiuser server core', () => {
       }
     });
   });
+
+  it('keeps contract details on error responses', () => {
+    expect(createErrorResponse({
+      statusCode: 409,
+      requestId: 'req-conflict',
+      code: 'RESOURCE_CONFLICT',
+      message: '存在待解决的正典冲突',
+      details: {
+        storyId: 'story-1',
+        resourceVersion: 'rv-story-1'
+      }
+    })).toEqual({
+      statusCode: 409,
+      requestId: 'req-conflict',
+      error: {
+        code: 'RESOURCE_CONFLICT',
+        message: '存在待解决的正典冲突',
+        details: {
+          storyId: 'story-1',
+          resourceVersion: 'rv-story-1'
+        }
+      }
+    });
+  });
 });

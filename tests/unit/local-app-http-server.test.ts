@@ -6,6 +6,7 @@ import { createMemoryRecentProjectStore } from '../../src/application/local-app-
 import { nodeFileSystem } from '../../src/infrastructure/node-file-system.js';
 import { createLocalAppServerCore } from '../../src/app-server/local-app-server.js';
 import { startLocalAppHttpServer } from '../../src/app-server/local-app-http-server.js';
+import type { ProjectStatus } from '../../src/application/get-project-status.js';
 
 const tempDirs: string[] = [];
 
@@ -14,6 +15,82 @@ const makeTempDir = async () => {
   tempDirs.push(dir);
   return dir;
 };
+
+const completeProjectStatus = (projectRoot: string): ProjectStatus => ({
+  projectRoot,
+  projectName: '法术编译纪元',
+  version: '1.0.0',
+  method: 'three-act',
+  configuredAI: ['codex'],
+  handoff: {
+    codexPrompts: true,
+    agentsFile: true
+  },
+  codex: {
+    prompts: true,
+    agentsFile: true
+  },
+  story: {
+    name: '编程施法',
+    path: path.join(projectRoot, 'stories', '编程施法'),
+    stage: 'tasked',
+    hasIdea: true,
+    hasClarifications: true,
+    hasCandidates: true,
+    hasSpecification: true,
+    hasCreativePlan: true,
+    hasTasks: true,
+    specificationVersion: 'v1',
+    creativePlanVersion: 'plan-v1',
+    tasksVersion: 'tasks-v1',
+    nextTask: 'T001 - 写第一章',
+    chapterFiles: 1,
+    contentFiles: 1,
+    contentChars: 1200,
+    creativeGaps: ['核心伙伴动机仍需确认'],
+    nextQuestions: ['第一章是否提前揭示魔法代价？'],
+    creativeControl: {
+      confirmedDecisions: 2,
+      pendingDecisions: 3,
+      unconfirmedAiSuggestions: 1,
+      cannotFinalize: ['AI 建议待确认：magic.cost']
+    },
+    creationEcho: {
+      flavor: '工程思维处理符文魔法',
+      maturityNote: '已可拆任务',
+      strongestParts: ['主角能力风味明确'],
+      missingPieces: ['核心伙伴动机']
+    }
+  },
+  tracking: [],
+  blockers: [],
+  git: {
+    available: true,
+    dirty: false,
+    changedFiles: 0,
+    files: []
+  },
+  navigationEntries: [],
+  nextActions: ['下一步任务：T001 - 写第一章'],
+  resume: {
+    projectRoot,
+    projectName: '法术编译纪元',
+    storyName: '编程施法',
+    stage: 'tasked',
+    stateLabel: '任务已生成，准备写作',
+    primaryAction: {
+      label: '继续下一项写作任务',
+      reason: 'T001 - 写第一章',
+      copyableCommand: 'storyspec context:pack 编程施法',
+      writesFiles: false,
+      writeMode: 'read-only',
+      boundary: '先生成上下文包。'
+    },
+    statusGlossary: [],
+    recentProjectHint: '本机 App 会记住最近项目。',
+    boundaries: ['不会绕过 preview / confirm / apply。']
+  }
+});
 
 afterEach(async () => {
   await Promise.all(tempDirs.splice(0).map(dir => rm(dir, { recursive: true, force: true })));
@@ -42,7 +119,10 @@ describe('local app http server', () => {
       const html = await shell.text();
       expect(shell.status).toBe(200);
       expect(shell.headers.get('content-type')).toContain('text/html');
-      expect(html).toContain('StorySpec 本机工作台');
+      expect(html).toContain('StorySpec 工作室');
+      expect(html).toContain('/api/projects/current/app-state');
+      expect(html).toContain('项目与故事');
+      expect(html).toContain('故事驾驶舱');
       expect(html).toContain('secret');
 
       const unauthorized = await fetch(`${server.url}/api/projects/recent`);
@@ -180,6 +260,67 @@ describe('local app http server', () => {
           writeMode: 'read-only'
         },
         boundaries: ['不会绕过 preview / confirm / apply。']
+      });
+    } finally {
+      await server.close();
+    }
+  });
+
+  it('serves complete app state through a token-protected endpoint', async () => {
+    const projectRoot = await makeTempDir();
+    await mkdir(path.join(projectRoot, '.specify'), { recursive: true });
+    await writeFile(path.join(projectRoot, '.specify', 'config.json'), JSON.stringify({
+      name: '法术编译纪元'
+    }));
+    const core = createLocalAppServerCore({
+      token: 'secret',
+      fileSystem: nodeFileSystem,
+      recentProjects: createMemoryRecentProjectStore(),
+      projectStatus: async input => completeProjectStatus(input.projectRoot)
+    });
+    const server = await startLocalAppHttpServer({
+      host: '127.0.0.1',
+      port: 0,
+      core,
+      token: 'secret'
+    });
+
+    try {
+      const unauthorized = await fetch(`${server.url}/api/projects/current/app-state`);
+      expect(unauthorized.status).toBe(401);
+
+      await fetch(`${server.url}/api/projects/open`, {
+        method: 'POST',
+        headers: {
+          'content-type': 'application/json',
+          'x-storyspec-app-token': 'secret'
+        },
+        body: JSON.stringify({ projectRoot })
+      });
+
+      const appState = await fetch(`${server.url}/api/projects/current/app-state`, {
+        headers: {
+          'x-storyspec-app-token': 'secret'
+        }
+      });
+
+      expect(appState.status).toBe(200);
+      await expect(appState.json()).resolves.toMatchObject({
+        project: {
+          opened: true,
+          name: '法术编译纪元',
+          root: projectRoot
+        },
+        cockpit: {
+          storyName: '编程施法',
+          stageLabel: '任务已生成，准备写作'
+        },
+        statusLanguage: expect.arrayContaining([
+          expect.objectContaining({ term: 'candidate', label: '候选方案' })
+        ]),
+        writeModeLanguage: expect.arrayContaining([
+          expect.objectContaining({ term: 'read-only', label: '只读' })
+        ])
       });
     } finally {
       await server.close();

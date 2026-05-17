@@ -20,9 +20,10 @@ Active。本文承接完整 App 的产品体验、信息架构和界面设计任
 - 类型：产品体验、信息架构、UI/UX 设计
 - 当前设计规格：[完整 App 故事驾驶舱体验设计](../superpowers/specs/2026-05-12-complete-app-story-cockpit-ux-design.md)
 - 已确认设计决策：首版采用“作者 + 团队平衡”，信息架构为“故事驾驶舱居中”，项目/工作区入口作为 App shell 必备入口，故事内主页面为故事驾驶舱、章节与写作、候选与正典审阅、任务中心；高影响内容默认走 Preview / Confirm / Apply；视觉方向为“工作室控制台”。
+- 首批实现切片：已通过 `add-complete-app-story-cockpit-first-slice` 建立 complete App state contract、本机 App 状态 endpoint 和工作室控制台 shell；`add-complete-app-frontend-architecture-slice` 进一步抽出首批 route/API/status contract 和本机 shell API 地图；`add-local-app-guided-first-run` 已在本机 Web 首屏补三步开始路径，降低“打开后不知道怎么用”的摩擦；`add-independent-web-app-shell` 已新增 `apps/web/` 独立前端首片 shell、route/API 边界和本机 fallback 约束；`add-login-permission-ui-slice` 已提供 session/角色/权限动作的只读 UI contract；`add-web-build-pipeline` 已提供零依赖静态构建链并纳入根 build；`add-web-dev-server` 已提供本地静态预览服务；`add-web-error-boundary` 已提供统一错误边界 UI contract；`add-web-shell-e2e-smoke` 已提供零依赖 HTTP 级 E2E 冒烟。后续仍需真实多人账号产品流、富文本编辑器和实时协作。
 - 背景/问题：当前 `storyspec app` 仍是实验性本机工作台，页面信息层级、入口说明和操作反馈不足；用户打开 Web 后不容易判断“下一步该做什么”“哪些内容只是候选”“哪些动作会写入正式故事”。如果直接进入前端架构重写，容易把不清晰的产品模型固化到路由、API 和数据模型里。
 - 已有基础：`src/app-server/local-app-html.ts`、本机 App API、server 控制面 API、preview / confirm / apply 流程、已归档的新用户引导和创作导航路线、归档设计能力 `ui-ux-designer` / `frontend-design` / `ui-ux-pro-max`。
-- 缺口：缺少完整 App 的产品定位、用户旅程、信息架构、主导航、页面地图、首程引导、空状态、权限反馈、协作状态语言和视觉方向；`candidate`、`preview`、`dry-run`、`apply`、`blocked`、`deferred` 等技术状态还没有转成用户能直接理解的界面文案。
+- 缺口：产品定位、用户旅程、信息架构、主导航、页面地图、首批状态语言、本机 Web 首屏开始路径、独立 `apps/web/` shell 首片、登录/权限只读 UI contract、静态构建链、本地预览服务、统一错误边界和 HTTP 级 E2E 已完成首批落地；仍缺真实账号/团队产品流、协作评论审批 UI、浏览器级 E2E、富文本编辑器和实时协作体验。
 - 建议方案：
   1. 先产出产品体验设计规格，再进入前端架构和 API 契约实现。
   2. 明确核心角色和使用路径：作者、编辑、审稿者、只读成员、agent-runner 分别如何创建项目、进入故事、处理候选、评论、审批和应用正典。

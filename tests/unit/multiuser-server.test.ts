@@ -1,10 +1,17 @@
 import { describe, expect, it } from 'vitest';
+import { mkdtemp, readFile, rm } from 'node:fs/promises';
+import os from 'node:os';
+import path from 'node:path';
+import { createMemoryRuntimeOutputRepository } from '../../src/server/agent-runtime/agent-runtime.js';
 import { createMemoryAuditLogRepository } from '../../src/server/audit/audit-log.js';
 import { createMemorySessionRepository } from '../../src/server/auth/session.js';
+import { createMemoryCollaborationCanonRepository } from '../../src/server/collaboration/canon-merge.js';
 import { startMultiuserServer } from '../../src/server/http/multiuser-server.js';
 import { createAgentJob, createMemoryAgentJobRepository, transitionAgentJob } from '../../src/server/jobs/agent-job.js';
+import { createMemoryAgentJobQueue } from '../../src/server/queue/agent-job-queue.js';
 import { createMemoryProjectAccessRepository } from '../../src/server/projects/project-security.js';
 import { createMemoryQuotaRepository } from '../../src/server/quota/quota.js';
+import { createMemoryWorkerFailureRepository, recordWorkerFailure } from '../../src/server/workers/worker-reliability.js';
 
 describe('multiuser server entry', () => {
   it('starts a loopback listener with health and standard errors', async () => {
@@ -293,7 +300,7 @@ describe('multiuser server entry', () => {
         }, {
           projectId: 'project-1',
           userId: 'user-2',
-          role: 'member'
+          role: 'editor'
         }]
       }),
       jobRepository,
@@ -316,7 +323,7 @@ describe('multiuser server entry', () => {
         }, {
           projectId: 'project-1',
           userId: 'user-2',
-          role: 'member'
+          role: 'editor'
         }]
       });
 
@@ -362,6 +369,7 @@ describe('multiuser server entry', () => {
       jobRepository: createMemoryAgentJobRepository(),
       auditRepository: createMemoryAuditLogRepository(),
       quotaRepository: createMemoryQuotaRepository({ buckets: [] }),
+      jobQueue: createMemoryAgentJobQueue(),
       runtimeIds: ['local-storyspec', 'openhands']
     });
 
@@ -372,14 +380,53 @@ describe('multiuser server entry', () => {
         service: 'storyspec-multiuser',
         status: 'ready',
         version: '0.20.0',
+        database: {
+          configured: false,
+          connected: false,
+          migrated: false
+        },
         repositories: {
           sessions: true,
           projects: true,
           jobs: true,
+          collaboration: false,
           audit: true,
           quota: true
         },
+        queue: {
+          configured: true,
+          connected: true,
+          worker: true,
+          driver: 'memory'
+        },
         runtimes: ['local-storyspec', 'openhands']
+      });
+    } finally {
+      await server.close();
+    }
+  });
+
+  it('reports configured PostgreSQL readiness separately from repository wiring', async () => {
+    const server = await startMultiuserServer({
+      host: '127.0.0.1',
+      port: 0,
+      version: '0.20.0',
+      database: {
+        configured: true,
+        connected: true,
+        migrated: true
+      }
+    });
+
+    try {
+      const readiness = await fetch(`${server.url}/ready`);
+      expect(readiness.status).toBe(200);
+      await expect(readiness.json()).resolves.toMatchObject({
+        database: {
+          configured: true,
+          connected: true,
+          migrated: true
+        }
       });
     } finally {
       await server.close();
@@ -530,6 +577,534 @@ describe('multiuser server entry', () => {
       } finally {
         await retryServer.close();
       }
+    } finally {
+      await server.close();
+    }
+  });
+
+  it('enqueues newly created jobs but does not duplicate idempotent active jobs', async () => {
+    const jobRepository = createMemoryAgentJobRepository();
+    const jobQueue = createMemoryAgentJobQueue();
+    const server = await startMultiuserServer({
+      host: '127.0.0.1',
+      port: 0,
+      version: '0.20.0',
+      sessionRepository: createMemorySessionRepository({
+        users: [{ id: 'user-1', displayName: '作者甲' }],
+        sessions: [{
+          token: 'session-token',
+          userId: 'user-1',
+          expiresAt: '2026-05-13T13:00:00.000Z'
+        }]
+      }),
+      projectRepository: createMemoryProjectAccessRepository({
+        projects: [{
+          id: 'project-1',
+          ownerUserId: 'user-1',
+          dataRoot: 'D:\\storyspec-data\\project-1'
+        }],
+        memberships: [{
+          projectId: 'project-1',
+          userId: 'user-1',
+          role: 'owner'
+        }]
+      }),
+      jobRepository,
+      jobQueue,
+      now: () => '2026-05-13T12:00:00.000Z',
+      jobIdGenerator: () => 'job-1'
+    });
+
+    try {
+      const first = await fetch(`${server.url}/api/projects/project-1/jobs`, {
+        method: 'POST',
+        headers: {
+          authorization: 'Bearer session-token',
+          'content-type': 'application/json'
+        },
+        body: JSON.stringify({
+          kind: 'chapter-draft',
+          runtime: 'local-storyspec',
+          idempotencyKey: 'chapter-1'
+        })
+      });
+      expect(first.status).toBe(200);
+
+      const second = await fetch(`${server.url}/api/projects/project-1/jobs`, {
+        method: 'POST',
+        headers: {
+          authorization: 'Bearer session-token',
+          'content-type': 'application/json'
+        },
+        body: JSON.stringify({
+          kind: 'chapter-draft',
+          runtime: 'local-storyspec',
+          idempotencyKey: 'chapter-1'
+        })
+      });
+      expect(second.status).toBe(200);
+      await expect(second.json()).resolves.toMatchObject({
+        id: 'job-1',
+        status: 'queued'
+      });
+
+      expect(jobQueue.snapshot().pending).toEqual([
+        {
+          jobId: 'job-1',
+          projectId: 'project-1',
+          userId: 'user-1',
+          runtime: 'local-storyspec',
+          kind: 'chapter-draft',
+          attempt: 1
+        }
+      ]);
+    } finally {
+      await server.close();
+    }
+  });
+
+  it('serves a project job dashboard with status counts and queue snapshot', async () => {
+    const jobRepository = createMemoryAgentJobRepository();
+    const jobQueue = createMemoryAgentJobQueue();
+    const queued = await createAgentJob({
+      repository: jobRepository,
+      userId: 'user-1',
+      projectId: 'project-1',
+      kind: 'chapter-draft',
+      runtime: 'local-storyspec',
+      now: () => '2026-05-08T12:00:00.000Z',
+      idGenerator: () => 'job-queued'
+    });
+    await jobQueue.enqueue({
+      jobId: 'job-queued',
+      projectId: 'project-1',
+      userId: 'user-1',
+      runtime: 'local-storyspec',
+      kind: 'chapter-draft',
+      attempt: 1
+    });
+    const running = await createAgentJob({
+      repository: jobRepository,
+      userId: 'user-1',
+      projectId: 'project-1',
+      kind: 'review',
+      runtime: 'local-storyspec',
+      now: () => '2026-05-08T12:01:00.000Z',
+      idGenerator: () => 'job-running'
+    });
+    await transitionAgentJob({
+      repository: jobRepository,
+      jobId: running.job!.id,
+      status: 'running',
+      now: () => '2026-05-08T12:02:00.000Z'
+    });
+    const failed = await createAgentJob({
+      repository: jobRepository,
+      userId: 'user-1',
+      projectId: 'project-1',
+      kind: 'canon-review',
+      runtime: 'openhands',
+      now: () => '2026-05-08T12:03:00.000Z',
+      idGenerator: () => 'job-failed'
+    });
+    await transitionAgentJob({
+      repository: jobRepository,
+      jobId: failed.job!.id,
+      status: 'running',
+      now: () => '2026-05-08T12:04:00.000Z'
+    });
+    await transitionAgentJob({
+      repository: jobRepository,
+      jobId: failed.job!.id,
+      status: 'failed',
+      errorMessage: 'runner failed',
+      now: () => '2026-05-08T12:05:00.000Z'
+    });
+    const server = await startMultiuserServer({
+      host: '127.0.0.1',
+      port: 0,
+      version: '0.20.0',
+      sessionRepository: createMemorySessionRepository({
+        users: [{ id: 'user-1', displayName: '作者甲' }],
+        sessions: [{
+          token: 'session-token',
+          userId: 'user-1',
+          expiresAt: '2026-05-08T13:00:00.000Z'
+        }]
+      }),
+      projectRepository: createMemoryProjectAccessRepository({
+        projects: [{
+          id: 'project-1',
+          ownerUserId: 'user-1',
+          dataRoot: 'D:\\storyspec-data\\project-1'
+        }],
+        memberships: [{
+          projectId: 'project-1',
+          userId: 'user-1',
+          role: 'owner'
+        }]
+      }),
+      jobRepository,
+      jobQueue,
+      now: () => '2026-05-08T12:06:00.000Z'
+    });
+
+    try {
+      const dashboard = await fetch(`${server.url}/api/projects/project-1/jobs/dashboard`, {
+        headers: {
+          authorization: 'Bearer session-token'
+        }
+      });
+      expect(dashboard.status).toBe(200);
+      await expect(dashboard.json()).resolves.toMatchObject({
+        projectId: 'project-1',
+        totalJobs: 3,
+        activeJobs: 2,
+        retryableJobs: 1,
+        statusCounts: {
+          queued: 1,
+          running: 1,
+          succeeded: 0,
+          failed: 1,
+          canceled: 0,
+          timeout: 0
+        },
+        queue: {
+          readiness: {
+            configured: true,
+            connected: true,
+            worker: true,
+            driver: 'memory'
+          },
+          snapshot: {
+            pending: 1,
+            acknowledged: 0,
+            failed: 0
+          }
+        },
+        latestJobs: [
+          expect.objectContaining({ id: 'job-failed', status: 'failed' }),
+          expect.objectContaining({ id: 'job-running', status: 'running' }),
+          expect.objectContaining({ id: 'job-queued', status: 'queued' })
+        ]
+      });
+      expect(queued.job?.status).toBe('queued');
+    } finally {
+      await server.close();
+    }
+  });
+
+  it('serves project-scoped agent job logs without mutating the job', async () => {
+    const jobRepository = createMemoryAgentJobRepository();
+    await createAgentJob({
+      repository: jobRepository,
+      userId: 'user-1',
+      projectId: 'project-1',
+      kind: 'chapter-draft',
+      runtime: 'local-storyspec',
+      traceId: 'trace-1',
+      now: () => '2026-05-08T12:00:00.000Z',
+      idGenerator: () => 'job-logs'
+    });
+    await transitionAgentJob({
+      repository: jobRepository,
+      jobId: 'job-logs',
+      status: 'running',
+      now: () => '2026-05-08T12:00:10.000Z'
+    });
+    await transitionAgentJob({
+      repository: jobRepository,
+      jobId: 'job-logs',
+      status: 'failed',
+      errorMessage: 'runtime failed',
+      runtimeErrorCode: 'RUNTIME_EXECUTION_FAILED',
+      now: () => '2026-05-08T12:00:20.000Z'
+    });
+    const server = await startMultiuserServer({
+      host: '127.0.0.1',
+      port: 0,
+      version: '0.20.0',
+      sessionRepository: createMemorySessionRepository({
+        users: [{ id: 'user-1', displayName: '作者甲' }],
+        sessions: [{
+          token: 'session-token',
+          userId: 'user-1',
+          expiresAt: '2026-05-08T13:00:00.000Z'
+        }]
+      }),
+      projectRepository: createMemoryProjectAccessRepository({
+        projects: [{
+          id: 'project-1',
+          ownerUserId: 'user-1',
+          dataRoot: 'D:\\storyspec-data\\project-1'
+        }],
+        memberships: [{
+          projectId: 'project-1',
+          userId: 'user-1',
+          role: 'owner'
+        }]
+      }),
+      jobRepository,
+      now: () => '2026-05-08T12:00:00.000Z'
+    });
+
+    try {
+      const logs = await fetch(`${server.url}/api/projects/project-1/jobs/job-logs/logs`, {
+        headers: {
+          authorization: 'Bearer session-token'
+        }
+      });
+
+      expect(logs.status).toBe(200);
+      await expect(logs.json()).resolves.toMatchObject({
+        projectId: 'project-1',
+        jobId: 'job-logs',
+        entries: [
+          {
+            level: 'info',
+            traceId: 'trace-1'
+          },
+          {
+            level: 'error',
+            runtimeErrorCode: 'RUNTIME_EXECUTION_FAILED'
+          }
+        ]
+      });
+      await expect(jobRepository.findById('job-logs')).resolves.toMatchObject({
+        status: 'failed',
+        updatedAt: '2026-05-08T12:00:20.000Z'
+      });
+    } finally {
+      await server.close();
+    }
+  });
+
+  it('serves project-scoped runtime output records without mutating the job', async () => {
+    const jobRepository = createMemoryAgentJobRepository();
+    const outputRepository = createMemoryRuntimeOutputRepository();
+    await createAgentJob({
+      repository: jobRepository,
+      userId: 'user-1',
+      projectId: 'project-1',
+      kind: 'canon-review',
+      runtime: 'openhands',
+      traceId: 'trace-output',
+      now: () => '2026-05-16T13:00:00.000Z',
+      idGenerator: () => 'job-output'
+    });
+    await outputRepository.save({
+      jobId: 'job-output',
+      candidateRef: 'openhands:job-output',
+      previewOnly: true,
+      summary: 'OpenHands headless 已生成候选',
+      artifacts: [{
+        id: 'openhands-stdout',
+        kind: 'stdout',
+        label: 'OpenHands stdout',
+        previewText: '候选输出'
+      }],
+      logs: [{
+        level: 'info',
+        message: 'OpenHands stdout: 候选输出',
+        createdAt: '2026-05-16T13:01:00.000Z'
+      }],
+      traceId: 'trace-output',
+      createdAt: '2026-05-16T13:01:00.000Z'
+    });
+    const server = await startMultiuserServer({
+      host: '127.0.0.1',
+      port: 0,
+      version: '0.20.0',
+      sessionRepository: createMemorySessionRepository({
+        users: [{ id: 'user-1', displayName: '作者甲' }],
+        sessions: [{
+          token: 'session-token',
+          userId: 'user-1',
+          expiresAt: '2026-05-16T14:00:00.000Z'
+        }]
+      }),
+      projectRepository: createMemoryProjectAccessRepository({
+        projects: [{
+          id: 'project-1',
+          ownerUserId: 'user-1',
+          dataRoot: 'D:\\storyspec-data\\project-1'
+        }],
+        memberships: [{
+          projectId: 'project-1',
+          userId: 'user-1',
+          role: 'owner'
+        }]
+      }),
+      jobRepository,
+      runtimeOutputRepository: outputRepository,
+      now: () => '2026-05-16T13:02:00.000Z'
+    });
+
+    try {
+      const output = await fetch(`${server.url}/api/projects/project-1/jobs/job-output/output`, {
+        headers: {
+          authorization: 'Bearer session-token'
+        }
+      });
+
+      expect(output.status).toBe(200);
+      await expect(output.json()).resolves.toEqual({
+        projectId: 'project-1',
+        jobId: 'job-output',
+        outputs: [expect.objectContaining({
+          jobId: 'job-output',
+          candidateRef: 'openhands:job-output',
+          previewOnly: true,
+          summary: 'OpenHands headless 已生成候选',
+          artifacts: [expect.objectContaining({
+            id: 'openhands-stdout',
+            previewText: '候选输出'
+          })],
+          logs: [expect.objectContaining({
+            level: 'info',
+            message: 'OpenHands stdout: 候选输出'
+          })],
+          traceId: 'trace-output'
+        })]
+      });
+      await expect(jobRepository.findById('job-output')).resolves.toMatchObject({
+        status: 'queued'
+      });
+    } finally {
+      await server.close();
+    }
+  });
+
+  it('serves read-only worker alerts for the task center', async () => {
+    const jobRepository = createMemoryAgentJobRepository();
+    const jobQueue = createMemoryAgentJobQueue();
+    const failureRepository = createMemoryWorkerFailureRepository();
+    await createAgentJob({
+      repository: jobRepository,
+      userId: 'user-1',
+      projectId: 'project-1',
+      kind: 'chapter-draft',
+      runtime: 'local-storyspec',
+      now: () => '2026-05-16T10:00:00.000Z',
+      idGenerator: () => 'job-failed'
+    });
+    await transitionAgentJob({
+      repository: jobRepository,
+      jobId: 'job-failed',
+      status: 'running',
+      now: () => '2026-05-16T10:01:00.000Z'
+    });
+    await transitionAgentJob({
+      repository: jobRepository,
+      jobId: 'job-failed',
+      status: 'failed',
+      errorMessage: 'runner failed',
+      now: () => '2026-05-16T10:02:00.000Z'
+    });
+    const failure = await recordWorkerFailure({
+      repository: failureRepository,
+      jobId: 'job-failed',
+      projectId: 'project-1',
+      userId: 'user-1',
+      runtime: 'local-storyspec',
+      kind: 'chapter-draft',
+      attempt: 1,
+      maxAttempts: 3,
+      failureKind: 'runtime-failed',
+      reason: 'runner failed',
+      traceId: 'trace-1',
+      now: () => '2026-05-16T10:02:00.000Z',
+      idGenerator: () => 'failure-1'
+    });
+    const otherProjectFailure = await recordWorkerFailure({
+      repository: failureRepository,
+      jobId: 'job-other',
+      projectId: 'project-other',
+      userId: 'user-1',
+      runtime: 'local-storyspec',
+      kind: 'chapter-draft',
+      attempt: 3,
+      maxAttempts: 3,
+      failureKind: 'runtime-failed',
+      reason: 'other project',
+      now: () => '2026-05-16T10:03:00.000Z',
+      idGenerator: () => 'failure-other'
+    });
+    const beforeQueue = jobQueue.snapshot();
+    const server = await startMultiuserServer({
+      host: '127.0.0.1',
+      port: 0,
+      version: '0.20.0',
+      sessionRepository: createMemorySessionRepository({
+        users: [{ id: 'user-1', displayName: '作者甲' }],
+        sessions: [{
+          token: 'session-token',
+          userId: 'user-1',
+          expiresAt: '2026-05-16T11:00:00.000Z'
+        }]
+      }),
+      projectRepository: createMemoryProjectAccessRepository({
+        projects: [{
+          id: 'project-1',
+          ownerUserId: 'user-1',
+          dataRoot: 'D:\\storyspec-data\\project-1'
+        }],
+        memberships: [{
+          projectId: 'project-1',
+          userId: 'user-1',
+          role: 'owner'
+        }]
+      }),
+      jobRepository,
+      jobQueue,
+      workerFailureRepository: failureRepository,
+      now: () => '2026-05-16T10:05:00.000Z'
+    });
+
+    try {
+      const unauthorized = await fetch(`${server.url}/api/projects/project-1/jobs/alerts`);
+      expect(unauthorized.status).toBe(401);
+
+      const alerts = await fetch(`${server.url}/api/projects/project-1/jobs/alerts`, {
+        headers: {
+          authorization: 'Bearer session-token'
+        }
+      });
+
+      expect(alerts.status).toBe(200);
+      await expect(alerts.json()).resolves.toMatchObject({
+        projectId: 'project-1',
+        totalAlerts: 1,
+        retryableFailures: 1,
+        deadLetterFailures: 0,
+        queue: {
+          readiness: {
+            configured: true,
+            connected: true,
+            worker: true,
+            driver: 'memory'
+          },
+          snapshot: {
+            pending: 0,
+            acknowledged: 0,
+            failed: 0
+          }
+        },
+        alerts: [
+          expect.objectContaining({
+            id: 'failure-1',
+            category: 'retryable',
+            jobId: 'job-failed',
+            failureId: 'failure-1',
+            traceId: 'trace-1'
+          })
+        ]
+      });
+      await expect(jobRepository.findById('job-failed')).resolves.toMatchObject({
+        status: 'failed'
+      });
+      expect(jobQueue.snapshot()).toEqual(beforeQueue);
+      expect(failureRepository.snapshot()).toEqual([failure, otherProjectFailure]);
     } finally {
       await server.close();
     }
@@ -777,6 +1352,672 @@ describe('multiuser server entry', () => {
           jobId: 'job-retried-audit'
         })
       ]));
+    } finally {
+      await server.close();
+    }
+  });
+
+  it('returns repository readiness and 503 when collaboration repository is missing', async () => {
+    const server = await startMultiuserServer({
+      host: '127.0.0.1',
+      port: 0,
+      version: '0.20.0',
+      sessionRepository: createMemorySessionRepository({
+        users: [{ id: 'user-1', displayName: '作者甲' }],
+        sessions: [{
+          token: 'session-token',
+          userId: 'user-1',
+          expiresAt: '2026-05-08T13:00:00.000Z'
+        }]
+      }),
+      projectRepository: createMemoryProjectAccessRepository({
+        projects: [{
+          id: 'project-1',
+          ownerUserId: 'user-1',
+          dataRoot: 'D:\\storyspec-data\\project-1'
+        }],
+        memberships: [{
+          projectId: 'project-1',
+          userId: 'user-1',
+          role: 'owner'
+        }]
+      })
+    });
+
+    try {
+      const readiness = await fetch(`${server.url}/ready`);
+      await expect(readiness.json()).resolves.toMatchObject({
+        repositories: {
+          collaboration: false
+        }
+      });
+
+      const created = await fetch(`${server.url}/api/projects/project-1/collaboration/proposals`, {
+        method: 'POST',
+        headers: {
+          authorization: 'Bearer session-token',
+          'content-type': 'application/json'
+        },
+        body: JSON.stringify({
+          storyId: 'story-main',
+          target: {
+            kind: 'canon',
+            path: 'stories/main/canon.md',
+            resourceVersion: 'canon-v1'
+          },
+          sourceRefs: [{
+            kind: 'agent-job',
+            id: 'job-1',
+            label: '章节候选'
+          }],
+          summary: '把候选事实纳入正典预览。'
+        })
+      });
+
+      expect(created.status).toBe(503);
+      await expect(created.json()).resolves.toMatchObject({
+        error: {
+          code: 'MULTIUSER_REPOSITORY_NOT_CONFIGURED'
+        }
+      });
+
+      const panel = await fetch(`${server.url}/api/projects/project-1/stories/story-main/canon-review`, {
+        headers: {
+          authorization: 'Bearer session-token'
+        }
+      });
+      expect(panel.status).toBe(503);
+      await expect(panel.json()).resolves.toMatchObject({
+        error: {
+          code: 'MULTIUSER_REPOSITORY_NOT_CONFIGURED'
+        }
+      });
+    } finally {
+      await server.close();
+    }
+  });
+
+  it('handles collaboration canon proposal review patch and apply request mutations', async () => {
+    const collaborationRepository = createMemoryCollaborationCanonRepository();
+    const auditRepository = createMemoryAuditLogRepository();
+    const server = await startMultiuserServer({
+      host: '127.0.0.1',
+      port: 0,
+      version: '0.20.0',
+      sessionRepository: createMemorySessionRepository({
+        users: [
+          { id: 'user-owner', displayName: '作者甲' },
+          { id: 'user-reviewer', displayName: '审稿者乙' }
+        ],
+        sessions: [{
+          token: 'owner-token',
+          userId: 'user-owner',
+          expiresAt: '2026-05-08T13:00:00.000Z'
+        }, {
+          token: 'reviewer-token',
+          userId: 'user-reviewer',
+          expiresAt: '2026-05-08T13:00:00.000Z'
+        }]
+      }),
+      projectRepository: createMemoryProjectAccessRepository({
+        projects: [{
+          id: 'project-1',
+          ownerUserId: 'user-owner',
+          dataRoot: 'D:\\storyspec-data\\project-1'
+        }],
+        memberships: [{
+          projectId: 'project-1',
+          userId: 'user-owner',
+          role: 'owner'
+        }, {
+          projectId: 'project-1',
+          userId: 'user-reviewer',
+          role: 'reviewer'
+        }]
+      }),
+      collaborationRepository,
+      auditRepository,
+      now: () => '2026-05-08T12:00:00.000Z'
+    });
+
+    try {
+      const readiness = await fetch(`${server.url}/ready`);
+      await expect(readiness.json()).resolves.toMatchObject({
+        repositories: {
+          collaboration: true
+        }
+      });
+
+      const created = await fetch(`${server.url}/api/projects/project-1/collaboration/proposals`, {
+        method: 'POST',
+        headers: {
+          authorization: 'Bearer owner-token',
+          'content-type': 'application/json'
+        },
+        body: JSON.stringify({
+          storyId: 'story-main',
+          target: {
+            kind: 'canon',
+            path: 'stories/main/canon.md',
+            resourceVersion: 'canon-v1'
+          },
+          sourceRefs: [{
+            kind: 'agent-job',
+            id: 'job-1',
+            label: '章节候选'
+          }],
+          summary: '把候选事实纳入正典预览。',
+          risks: []
+        })
+      });
+      expect(created.status).toBe(200);
+      const proposal = await created.json() as { id: string };
+
+      const commented = await fetch(`${server.url}/api/projects/project-1/collaboration/proposals/${proposal.id}/comments`, {
+        method: 'POST',
+        headers: {
+          authorization: 'Bearer reviewer-token',
+          'content-type': 'application/json'
+        },
+        body: JSON.stringify({
+          body: '这里需要补充来源证据。'
+        })
+      });
+      expect(commented.status).toBe(200);
+      await expect(commented.json()).resolves.toMatchObject({
+        projectId: 'project-1',
+        storyId: 'story-main',
+        anchorKind: 'proposal',
+        anchorId: proposal.id,
+        comments: [
+          {
+            actorUserId: 'user-reviewer',
+            body: '这里需要补充来源证据。',
+            createdAt: '2026-05-08T12:00:00.000Z'
+          }
+        ]
+      });
+
+      const comments = await fetch(`${server.url}/api/projects/project-1/collaboration/proposals/${proposal.id}/comments`, {
+        headers: {
+          authorization: 'Bearer owner-token'
+        }
+      });
+      expect(comments.status).toBe(200);
+      await expect(comments.json()).resolves.toMatchObject({
+        proposalId: proposal.id,
+        threads: [
+          {
+            anchorId: proposal.id,
+            comments: [
+              {
+                body: '这里需要补充来源证据。'
+              }
+            ]
+          }
+        ]
+      });
+
+      const reviewed = await fetch(`${server.url}/api/projects/project-1/collaboration/proposals/${proposal.id}/reviews`, {
+        method: 'POST',
+        headers: {
+          authorization: 'Bearer reviewer-token',
+          'content-type': 'application/json'
+        },
+        body: JSON.stringify({
+          decision: 'approve',
+          note: '正典来源清晰，可以进入应用确认。'
+        })
+      });
+      expect(reviewed.status).toBe(200);
+      await expect(reviewed.json()).resolves.toMatchObject({
+        proposalId: proposal.id,
+        reviewerUserId: 'user-reviewer',
+        decision: 'approve'
+      });
+
+      const patched = await fetch(`${server.url}/api/projects/project-1/collaboration/proposals/${proposal.id}/patches`, {
+        method: 'POST',
+        headers: {
+          authorization: 'Bearer owner-token',
+          'content-type': 'application/json'
+        },
+        body: JSON.stringify({
+          targetPath: 'stories/main/canon.md',
+          kind: 'canon-fact',
+          diffSummary: '新增主角知道港口暗号的正典事实。',
+          rollbackHint: '删除 canon fact fact-1。',
+          sourceRefs: ['job-1']
+        })
+      });
+      expect(patched.status).toBe(200);
+      const patch = await patched.json() as { id: string };
+
+      const applyRequested = await fetch(`${server.url}/api/projects/project-1/collaboration/proposals/${proposal.id}/apply-requests`, {
+        method: 'POST',
+        headers: {
+          authorization: 'Bearer owner-token',
+          'content-type': 'application/json'
+        },
+        body: JSON.stringify({
+          authorConfirmed: true,
+          currentVersion: {
+            resourceVersion: 'canon-v1',
+            storyStage: 'drafting',
+            canonFactIds: ['fact-old'],
+            taskState: 'open'
+          }
+        })
+      });
+      expect(applyRequested.status).toBe(200);
+      await expect(applyRequested.json()).resolves.toMatchObject({
+        proposalId: proposal.id,
+        actorUserId: 'user-owner',
+        status: 'ready',
+        patchIds: [patch.id],
+        reviewerIds: ['user-reviewer'],
+        blockedReasons: []
+      });
+
+      const reviewPanel = await fetch(`${server.url}/api/projects/project-1/stories/story-main/canon-review`, {
+        headers: {
+          authorization: 'Bearer reviewer-token'
+        }
+      });
+      expect(reviewPanel.status).toBe(200);
+      await expect(reviewPanel.json()).resolves.toMatchObject({
+        projectId: 'project-1',
+        storyId: 'story-main',
+        totals: {
+          proposals: 1,
+          reviews: 1,
+          patches: 1,
+          applyRequests: 1
+        },
+        entries: [
+          {
+            proposal: {
+              id: proposal.id,
+              storyId: 'story-main',
+              status: 'apply-requested'
+            },
+            reviews: [
+              {
+                reviewerUserId: 'user-reviewer',
+                decision: 'approve'
+              }
+            ],
+            patches: [
+              {
+                id: patch.id,
+                kind: 'canon-fact'
+              }
+            ],
+            applyRequests: [
+              {
+                status: 'ready',
+                patchIds: [patch.id]
+              }
+            ],
+            nextActions: [
+              '等待作者确认 apply；正式故事仍未写入。'
+            ]
+          }
+        ]
+      });
+
+      await expect(auditRepository.listByProject('project-1')).resolves.toEqual(expect.arrayContaining([
+        expect.objectContaining({ action: 'collaboration.proposal.create' }),
+        expect.objectContaining({ action: 'collaboration.comment.create' }),
+        expect.objectContaining({ action: 'collaboration.review.submit' }),
+        expect.objectContaining({ action: 'collaboration.patch.create' }),
+        expect.objectContaining({ action: 'collaboration.apply_request.create' })
+      ]));
+    } finally {
+      await server.close();
+    }
+  });
+
+  it('rejects collaboration apply requests without apply-canon-change permission', async () => {
+    const collaborationRepository = createMemoryCollaborationCanonRepository();
+    const server = await startMultiuserServer({
+      host: '127.0.0.1',
+      port: 0,
+      version: '0.20.0',
+      sessionRepository: createMemorySessionRepository({
+        users: [
+          { id: 'user-owner', displayName: '作者甲' },
+          { id: 'user-editor', displayName: '编辑乙' }
+        ],
+        sessions: [{
+          token: 'owner-token',
+          userId: 'user-owner',
+          expiresAt: '2026-05-08T13:00:00.000Z'
+        }, {
+          token: 'editor-token',
+          userId: 'user-editor',
+          expiresAt: '2026-05-08T13:00:00.000Z'
+        }]
+      }),
+      projectRepository: createMemoryProjectAccessRepository({
+        projects: [{
+          id: 'project-1',
+          ownerUserId: 'user-owner',
+          dataRoot: 'D:\\storyspec-data\\project-1'
+        }],
+        memberships: [{
+          projectId: 'project-1',
+          userId: 'user-owner',
+          role: 'owner'
+        }, {
+          projectId: 'project-1',
+          userId: 'user-editor',
+          role: 'editor'
+        }]
+      }),
+      collaborationRepository,
+      now: () => '2026-05-08T12:00:00.000Z'
+    });
+
+    try {
+      const proposal = await fetch(`${server.url}/api/projects/project-1/collaboration/proposals`, {
+        method: 'POST',
+        headers: {
+          authorization: 'Bearer owner-token',
+          'content-type': 'application/json'
+        },
+        body: JSON.stringify({
+          storyId: 'story-main',
+          target: {
+            kind: 'canon',
+            path: 'stories/main/canon.md',
+            resourceVersion: 'canon-v1'
+          },
+          sourceRefs: [{
+            kind: 'manual',
+            id: 'note-1',
+            label: '人工记录'
+          }],
+          summary: '候选事实。'
+        })
+      });
+      const proposalBody = await proposal.json() as { id: string };
+
+      const denied = await fetch(`${server.url}/api/projects/project-1/collaboration/proposals/${proposalBody.id}/apply-requests`, {
+        method: 'POST',
+        headers: {
+          authorization: 'Bearer editor-token',
+          'content-type': 'application/json'
+        },
+        body: JSON.stringify({
+          authorConfirmed: true,
+          currentVersion: {
+            resourceVersion: 'canon-v1',
+            storyStage: 'drafting',
+            canonFactIds: [],
+            taskState: 'open'
+          }
+        })
+      });
+
+      expect(denied.status).toBe(403);
+      await expect(denied.json()).resolves.toMatchObject({
+        error: {
+          code: 'PROJECT_ACCESS_DENIED'
+        }
+      });
+    } finally {
+      await server.close();
+    }
+  });
+
+  it('applies ready collaboration requests to project storage with audit', async () => {
+    const projectRoot = await mkdtemp(path.join(os.tmpdir(), 'storyspec-apply-'));
+    const collaborationRepository = createMemoryCollaborationCanonRepository();
+    const auditRepository = createMemoryAuditLogRepository();
+    const server = await startMultiuserServer({
+      host: '127.0.0.1',
+      port: 0,
+      version: '0.20.0',
+      sessionRepository: createMemorySessionRepository({
+        users: [
+          { id: 'user-owner', displayName: '作者甲' },
+          { id: 'user-reviewer', displayName: '审稿乙' }
+        ],
+        sessions: [{
+          token: 'owner-token',
+          userId: 'user-owner',
+          expiresAt: '2026-05-08T13:00:00.000Z'
+        }, {
+          token: 'reviewer-token',
+          userId: 'user-reviewer',
+          expiresAt: '2026-05-08T13:00:00.000Z'
+        }]
+      }),
+      projectRepository: createMemoryProjectAccessRepository({
+        projects: [{
+          id: 'project-1',
+          ownerUserId: 'user-owner',
+          dataRoot: projectRoot
+        }],
+        memberships: [{
+          projectId: 'project-1',
+          userId: 'user-owner',
+          role: 'owner'
+        }, {
+          projectId: 'project-1',
+          userId: 'user-reviewer',
+          role: 'reviewer'
+        }]
+      }),
+      collaborationRepository,
+      auditRepository,
+      now: () => '2026-05-08T12:00:00.000Z'
+    });
+
+    try {
+      const proposalResponse = await fetch(`${server.url}/api/projects/project-1/collaboration/proposals`, {
+        method: 'POST',
+        headers: {
+          authorization: 'Bearer owner-token',
+          'content-type': 'application/json'
+        },
+        body: JSON.stringify({
+          storyId: 'story-main',
+          target: {
+            kind: 'canon',
+            path: 'stories/main/canon.md',
+            resourceVersion: 'canon-v1'
+          },
+          sourceRefs: [{
+            kind: 'manual',
+            id: 'note-1',
+            label: '人工记录'
+          }],
+          summary: '候选事实。'
+        })
+      });
+      const proposal = await proposalResponse.json() as { id: string };
+
+      await fetch(`${server.url}/api/projects/project-1/collaboration/proposals/${proposal.id}/reviews`, {
+        method: 'POST',
+        headers: {
+          authorization: 'Bearer reviewer-token',
+          'content-type': 'application/json'
+        },
+        body: JSON.stringify({
+          decision: 'approve'
+        })
+      });
+      const patchResponse = await fetch(`${server.url}/api/projects/project-1/collaboration/proposals/${proposal.id}/patches`, {
+        method: 'POST',
+        headers: {
+          authorization: 'Bearer owner-token',
+          'content-type': 'application/json'
+        },
+        body: JSON.stringify({
+          targetPath: 'stories/main/canon.md',
+          kind: 'canon-fact',
+          diffSummary: '写入 fact-1。',
+          rollbackHint: '恢复 canon-v1。',
+          sourceRefs: ['note-1'],
+          content: '# Canon\n\n- fact-1\n',
+          rollbackContent: '# Canon\n'
+        })
+      });
+      const patch = await patchResponse.json() as { id: string };
+      const applyResponse = await fetch(`${server.url}/api/projects/project-1/collaboration/proposals/${proposal.id}/apply-requests`, {
+        method: 'POST',
+        headers: {
+          authorization: 'Bearer owner-token',
+          'content-type': 'application/json'
+        },
+        body: JSON.stringify({
+          authorConfirmed: true,
+          currentVersion: {
+            resourceVersion: 'canon-v1',
+            storyStage: 'drafting',
+            canonFactIds: [],
+            taskState: 'open'
+          }
+        })
+      });
+      const applyRequest = await applyResponse.json() as { id: string };
+
+      const executed = await fetch(`${server.url}/api/projects/project-1/collaboration/proposals/${proposal.id}/apply-requests/${applyRequest.id}/apply`, {
+        method: 'POST',
+        headers: {
+          authorization: 'Bearer owner-token'
+        }
+      });
+
+      expect(executed.status).toBe(200);
+      await expect(executed.json()).resolves.toMatchObject({
+        proposalId: proposal.id,
+        applyRequestId: applyRequest.id,
+        appliedPatchIds: [patch.id],
+        writtenPaths: ['stories/main/canon.md']
+      });
+      await expect(readFile(path.join(projectRoot, 'stories', 'main', 'canon.md'), 'utf-8')).resolves.toBe('# Canon\n\n- fact-1\n');
+      await expect(collaborationRepository.findProposalById(proposal.id)).resolves.toMatchObject({
+        status: 'applied'
+      });
+      const rolledBack = await fetch(`${server.url}/api/projects/project-1/collaboration/proposals/${proposal.id}/apply-requests/${applyRequest.id}/rollback`, {
+        method: 'POST',
+        headers: {
+          authorization: 'Bearer owner-token'
+        }
+      });
+
+      expect(rolledBack.status).toBe(200);
+      await expect(rolledBack.json()).resolves.toMatchObject({
+        proposalId: proposal.id,
+        applyRequestId: applyRequest.id,
+        rolledBackPatchIds: [patch.id],
+        writtenPaths: ['stories/main/canon.md']
+      });
+      await expect(readFile(path.join(projectRoot, 'stories', 'main', 'canon.md'), 'utf-8')).resolves.toBe('# Canon\n');
+      await expect(collaborationRepository.findProposalById(proposal.id)).resolves.toMatchObject({
+        status: 'rolled-back'
+      });
+      await expect(auditRepository.listByProject('project-1')).resolves.toEqual(expect.arrayContaining([
+        expect.objectContaining({
+          action: 'collaboration.apply.execute',
+          diffSummary: expect.stringContaining(applyRequest.id)
+        }),
+        expect.objectContaining({
+          action: 'collaboration.rollback.execute',
+          diffSummary: expect.stringContaining(applyRequest.id)
+        })
+      ]));
+    } finally {
+      await server.close();
+      await rm(projectRoot, { recursive: true, force: true });
+    }
+  });
+
+  it('serves a read-only project activity feed from audit events', async () => {
+    const auditRepository = createMemoryAuditLogRepository();
+    await auditRepository.save({
+      id: 'audit-job',
+      actorUserId: 'user-owner',
+      projectId: 'project-1',
+      action: 'agent_job.create',
+      source: 'multiuser-server',
+      diffSummary: '创建 draft job',
+      jobId: 'job-1',
+      createdAt: '2026-05-08T12:01:00.000Z'
+    });
+    await auditRepository.save({
+      id: 'audit-comment',
+      actorUserId: 'user-reviewer',
+      projectId: 'project-1',
+      action: 'collaboration.comment.create',
+      source: 'multiuser-server',
+      diffSummary: '创建协作正典 comment thread-1',
+      createdAt: '2026-05-08T12:02:00.000Z'
+    });
+    const server = await startMultiuserServer({
+      host: '127.0.0.1',
+      port: 0,
+      version: '0.20.0',
+      sessionRepository: createMemorySessionRepository({
+        users: [
+          { id: 'user-owner', displayName: '作者甲' },
+          { id: 'user-reviewer', displayName: '审稿乙' }
+        ],
+        sessions: [{
+          token: 'reviewer-token',
+          userId: 'user-reviewer',
+          expiresAt: '2026-05-08T13:00:00.000Z'
+        }]
+      }),
+      projectRepository: createMemoryProjectAccessRepository({
+        projects: [{
+          id: 'project-1',
+          ownerUserId: 'user-owner',
+          dataRoot: 'D:\\storyspec-data\\project-1'
+        }],
+        memberships: [{
+          projectId: 'project-1',
+          userId: 'user-reviewer',
+          role: 'reviewer'
+        }]
+      }),
+      auditRepository,
+      now: () => '2026-05-08T12:00:00.000Z'
+    });
+
+    try {
+      const activity = await fetch(`${server.url}/api/projects/project-1/activity`, {
+        headers: {
+          authorization: 'Bearer reviewer-token'
+        }
+      });
+
+      expect(activity.status).toBe(200);
+      await expect(activity.json()).resolves.toEqual({
+        projectId: 'project-1',
+        items: [{
+          id: 'audit-comment',
+          actorUserId: 'user-reviewer',
+          action: 'collaboration.comment.create',
+          kind: 'collaboration',
+          source: 'multiuser-server',
+          summary: '创建协作正典 comment thread-1',
+          createdAt: '2026-05-08T12:02:00.000Z'
+        }, {
+          id: 'audit-job',
+          actorUserId: 'user-owner',
+          action: 'agent_job.create',
+          kind: 'agent-job',
+          source: 'multiuser-server',
+          summary: '创建 draft job',
+          jobId: 'job-1',
+          createdAt: '2026-05-08T12:01:00.000Z'
+        }]
+      });
+      await expect(auditRepository.listByProject('project-1')).resolves.toHaveLength(2);
     } finally {
       await server.close();
     }

@@ -1,19 +1,49 @@
 import http from 'node:http';
 import type { AddressInfo } from 'node:net';
+import { mkdir, writeFile } from 'node:fs/promises';
+import path from 'node:path';
 import type { AuditLogRepository } from '../audit/audit-log.js';
-import { recordAuditEvent } from '../audit/audit-log.js';
+import { buildProjectActivityFeed, recordAuditEvent } from '../audit/audit-log.js';
+import type { AgentRuntimeOutputRepository } from '../agent-runtime/agent-runtime.js';
 import type { SessionRepository } from '../auth/session.js';
 import { requireUser } from '../auth/session.js';
+import type {
+  CanonPatchKind,
+  CollaborationCanonRepository,
+  CollaborationRisk,
+  CollaborationSourceRef,
+  CollaborationTarget,
+  ReviewDecisionValue,
+  VersionSnapshot
+} from '../collaboration/canon-merge.js';
+import {
+  addCollaborationComment,
+  buildCollaborationCanonReviewPanel,
+  createApplyRequest,
+  createCanonPatch,
+  createCollaborationProposal,
+  executeApplyRequest,
+  executeRollbackRequest,
+  submitReviewDecision
+} from '../collaboration/canon-merge.js';
 import type { AgentJob, AgentJobRepository } from '../jobs/agent-job.js';
 import {
+  buildAgentJobDashboard,
+  buildAgentJobLog,
   cancelAgentJob,
   createAgentJob,
   retryAgentJob
 } from '../jobs/agent-job.js';
+import type { ProjectPermissionAction } from '../projects/permission-model.js';
 import type { ProjectAccessRepository } from '../projects/project-security.js';
 import { createProjectStorage, requireProjectAccess } from '../projects/project-security.js';
 import type { QuotaRepository } from '../quota/quota.js';
 import { checkQuota, consumeQuota } from '../quota/quota.js';
+import type { PostgresReadyState } from '../db/postgres.js';
+import type { AgentJobQueue } from '../queue/agent-job-queue.js';
+import { createAgentJobQueuePayload, unconfiguredQueueReadyState } from '../queue/agent-job-queue.js';
+import type { WorkerFailureRepository } from '../workers/worker-reliability.js';
+import { buildWorkerAlertSummary } from '../workers/worker-reliability.js';
 import {
   createErrorResponse,
   createRequestContext,
@@ -27,8 +57,13 @@ export interface StartMultiuserServerInput {
   sessionRepository?: SessionRepository;
   projectRepository?: ProjectAccessRepository;
   jobRepository?: AgentJobRepository;
+  runtimeOutputRepository?: AgentRuntimeOutputRepository;
+  jobQueue?: AgentJobQueue;
+  collaborationRepository?: CollaborationCanonRepository;
   auditRepository?: AuditLogRepository;
   quotaRepository?: QuotaRepository;
+  workerFailureRepository?: WorkerFailureRepository;
+  database?: PostgresReadyState;
   runtimeIds?: string[];
   now?: () => string;
   jobIdGenerator?: () => string;
@@ -94,6 +129,7 @@ const requireProjectContext = async (
     sessionRepository: SessionRepository;
     projectRepository: ProjectAccessRepository;
     projectId?: string;
+    requiredAction?: ProjectPermissionAction;
     now?: () => string;
   }
 ) => {
@@ -113,7 +149,8 @@ const requireProjectContext = async (
   const accessResult = await requireProjectAccess({
     repository: input.projectRepository,
     userId: userResult.context.userId,
-    projectId: input.projectId
+    projectId: input.projectId,
+    requiredAction: input.requiredAction
   });
   if (accessResult.blocked || !accessResult.context || !accessResult.project) {
     return {
@@ -189,13 +226,23 @@ const consumeJobQuota = async (
   });
 };
 
-const auditJobMutation = async (
+const auditServerMutation = async (
   input: {
     auditRepository?: AuditLogRepository;
     actorUserId: string;
     projectId: string;
-    action: 'agent_job.create' | 'agent_job.cancel' | 'agent_job.retry';
-    jobId: string;
+    action:
+      | 'agent_job.create'
+      | 'agent_job.cancel'
+      | 'agent_job.retry'
+      | 'collaboration.proposal.create'
+      | 'collaboration.comment.create'
+      | 'collaboration.review.submit'
+      | 'collaboration.patch.create'
+      | 'collaboration.apply_request.create'
+      | 'collaboration.apply.execute'
+      | 'collaboration.rollback.execute';
+    jobId?: string;
     diffSummary: string;
     now?: () => string;
   }
@@ -215,6 +262,31 @@ const auditJobMutation = async (
     now: input.now
   });
 };
+
+const getQueueSnapshot = (queue: AgentJobQueue | undefined) => {
+  if (!queue || !('snapshot' in queue) || typeof queue.snapshot !== 'function') {
+    return undefined;
+  }
+  return queue.snapshot() as {
+    pending: unknown[];
+    acknowledged: unknown[];
+    failed: unknown[];
+  };
+};
+
+const repositoryNotConfigured = (requestId?: string) => createErrorResponse({
+  statusCode: 503,
+  requestId,
+  code: 'MULTIUSER_REPOSITORY_NOT_CONFIGURED',
+  message: '多用户 repository 尚未配置'
+});
+
+const collaborationMutationBlocked = (requestId: string | undefined, error: unknown) => createErrorResponse({
+  statusCode: 400,
+  requestId,
+  code: 'COLLABORATION_MUTATION_BLOCKED',
+  message: error instanceof Error ? error.message : String(error)
+});
 
 export const startMultiuserServer = async (input: StartMultiuserServerInput): Promise<MultiuserServer> => {
   const server = http.createServer(async (request, response) => {
@@ -236,13 +308,20 @@ export const startMultiuserServer = async (input: StartMultiuserServerInput): Pr
           service: 'storyspec-multiuser',
           status: 'ready',
           version: input.version,
+          database: input.database ?? {
+            configured: false,
+            connected: false,
+            migrated: false
+          },
           repositories: {
             sessions: Boolean(input.sessionRepository),
             projects: Boolean(input.projectRepository),
             jobs: Boolean(input.jobRepository),
+            collaboration: Boolean(input.collaborationRepository),
             audit: Boolean(input.auditRepository),
             quota: Boolean(input.quotaRepository)
           },
+          queue: input.jobQueue?.getReadyState() ?? unconfiguredQueueReadyState(),
           runtimes: input.runtimeIds ?? []
         }, context.requestId);
         return;
@@ -385,7 +464,495 @@ export const startMultiuserServer = async (input: StartMultiuserServerInput): Pr
         return;
       }
 
-      const jobMatch = url.pathname.match(/^\/api\/projects\/([^/]+)\/jobs(?:\/([^/]+)(?:\/(cancel|retry))?)?$/);
+      const activityMatch = url.pathname.match(/^\/api\/projects\/([^/]+)\/activity$/);
+      if (request.method === 'GET' && activityMatch) {
+        if (!input.sessionRepository || !input.projectRepository || !input.auditRepository) {
+          sendJson(response, 503, repositoryNotConfigured(context.requestId), context.requestId);
+          return;
+        }
+
+        const guard = await requireProjectContext({
+          request,
+          sessionRepository: input.sessionRepository,
+          projectRepository: input.projectRepository,
+          projectId: decodeURIComponent(activityMatch[1] ?? ''),
+          now: input.now
+        });
+        if (guard.statusCode !== 200) {
+          sendJson(response, guard.statusCode, createErrorResponse({
+            statusCode: guard.statusCode,
+            requestId: context.requestId,
+            code: guard.code,
+            message: guard.message
+          }), context.requestId);
+          return;
+        }
+
+        const limitValue = Number(url.searchParams.get('limit') ?? 50);
+        const limit = Number.isFinite(limitValue) && limitValue > 0
+          ? Math.min(Math.trunc(limitValue), 100)
+          : 50;
+        const feed = await buildProjectActivityFeed({
+          repository: input.auditRepository,
+          projectId: guard.accessContext.projectId,
+          limit
+        });
+        sendJson(response, 200, feed, context.requestId);
+        return;
+      }
+
+      const collaborationMatch = url.pathname.match(
+        /^\/api\/projects\/([^/]+)\/collaboration\/proposals(?:\/([^/]+)\/(reviews|patches|apply-requests|comments))?$/
+      );
+      const collaborationApplyExecuteMatch = url.pathname.match(
+        /^\/api\/projects\/([^/]+)\/collaboration\/proposals\/([^/]+)\/apply-requests\/([^/]+)\/apply$/
+      );
+      const collaborationRollbackExecuteMatch = url.pathname.match(
+        /^\/api\/projects\/([^/]+)\/collaboration\/proposals\/([^/]+)\/apply-requests\/([^/]+)\/rollback$/
+      );
+      const canonReviewMatch = url.pathname.match(
+        /^\/api\/projects\/([^/]+)\/stories\/([^/]+)\/canon-review$/
+      );
+      if (
+        request.method === 'GET'
+        && (canonReviewMatch || (collaborationMatch && !collaborationMatch[2] && !collaborationMatch[3]))
+      ) {
+        if (!input.sessionRepository || !input.projectRepository || !input.collaborationRepository) {
+          sendJson(response, 503, repositoryNotConfigured(context.requestId), context.requestId);
+          return;
+        }
+
+        const projectId = decodeURIComponent((canonReviewMatch?.[1] ?? collaborationMatch?.[1]) ?? '');
+        const storyId = canonReviewMatch?.[2]
+          ? decodeURIComponent(canonReviewMatch[2])
+          : url.searchParams.get('storyId') ?? undefined;
+        const guard = await requireProjectContext({
+          request,
+          sessionRepository: input.sessionRepository,
+          projectRepository: input.projectRepository,
+          projectId,
+          now: input.now
+        });
+        if (guard.statusCode !== 200) {
+          sendJson(response, guard.statusCode, createErrorResponse({
+            statusCode: guard.statusCode,
+            requestId: context.requestId,
+            code: guard.code,
+            message: guard.message
+          }), context.requestId);
+          return;
+        }
+
+        const panel = await buildCollaborationCanonReviewPanel({
+          repository: input.collaborationRepository,
+          projectId: guard.accessContext.projectId,
+          storyId
+        });
+        sendJson(response, 200, panel, context.requestId);
+        return;
+      }
+      if (collaborationApplyExecuteMatch && request.method === 'POST') {
+        if (!input.sessionRepository || !input.projectRepository || !input.collaborationRepository) {
+          sendJson(response, 503, repositoryNotConfigured(context.requestId), context.requestId);
+          return;
+        }
+
+        const projectId = decodeURIComponent(collaborationApplyExecuteMatch[1] ?? '');
+        const proposalId = decodeURIComponent(collaborationApplyExecuteMatch[2] ?? '');
+        const applyRequestId = decodeURIComponent(collaborationApplyExecuteMatch[3] ?? '');
+        const guard = await requireProjectContext({
+          request,
+          sessionRepository: input.sessionRepository,
+          projectRepository: input.projectRepository,
+          projectId,
+          requiredAction: 'apply-canon-change',
+          now: input.now
+        });
+        if (guard.statusCode !== 200) {
+          sendJson(response, guard.statusCode, createErrorResponse({
+            statusCode: guard.statusCode,
+            requestId: context.requestId,
+            code: guard.code,
+            message: guard.message
+          }), context.requestId);
+          return;
+        }
+
+        try {
+          const proposal = await input.collaborationRepository.findProposalById(proposalId);
+          if (!proposal) {
+            sendJson(response, 404, createErrorResponse({
+              statusCode: 404,
+              requestId: context.requestId,
+              code: 'PROPOSAL_NOT_FOUND',
+              message: 'proposal 不存在'
+            }), context.requestId);
+            return;
+          }
+          if (proposal.projectId !== guard.accessContext.projectId) {
+            sendJson(response, 403, createErrorResponse({
+              statusCode: 403,
+              requestId: context.requestId,
+              code: 'PROPOSAL_PROJECT_MISMATCH',
+              message: 'proposal 不属于当前项目'
+            }), context.requestId);
+            return;
+          }
+
+          const storage = createProjectStorage(guard.project);
+          const result = await executeApplyRequest({
+            repository: input.collaborationRepository,
+            proposalId: proposal.id,
+            applyRequestId,
+            actorUserId: guard.accessContext.userId,
+            writePatch: async patch => {
+              const targetPath = storage.resolve(patch.targetPath);
+              await mkdir(path.dirname(targetPath), { recursive: true });
+              await writeFile(targetPath, patch.content, 'utf-8');
+            },
+            now: input.now
+          });
+          await auditServerMutation({
+            auditRepository: input.auditRepository,
+            actorUserId: guard.accessContext.userId,
+            projectId: guard.accessContext.projectId,
+            action: 'collaboration.apply.execute',
+            diffSummary: `执行协作正典 apply request ${result.applyRequestId}，写入 ${result.writtenPaths.length} 个文件`,
+            now: input.now
+          });
+          sendJson(response, 200, result, context.requestId);
+          return;
+        } catch (error) {
+          sendJson(response, 400, collaborationMutationBlocked(context.requestId, error), context.requestId);
+          return;
+        }
+      }
+      if (collaborationRollbackExecuteMatch && request.method === 'POST') {
+        if (!input.sessionRepository || !input.projectRepository || !input.collaborationRepository) {
+          sendJson(response, 503, repositoryNotConfigured(context.requestId), context.requestId);
+          return;
+        }
+
+        const projectId = decodeURIComponent(collaborationRollbackExecuteMatch[1] ?? '');
+        const proposalId = decodeURIComponent(collaborationRollbackExecuteMatch[2] ?? '');
+        const applyRequestId = decodeURIComponent(collaborationRollbackExecuteMatch[3] ?? '');
+        const guard = await requireProjectContext({
+          request,
+          sessionRepository: input.sessionRepository,
+          projectRepository: input.projectRepository,
+          projectId,
+          requiredAction: 'apply-canon-change',
+          now: input.now
+        });
+        if (guard.statusCode !== 200) {
+          sendJson(response, guard.statusCode, createErrorResponse({
+            statusCode: guard.statusCode,
+            requestId: context.requestId,
+            code: guard.code,
+            message: guard.message
+          }), context.requestId);
+          return;
+        }
+
+        try {
+          const proposal = await input.collaborationRepository.findProposalById(proposalId);
+          if (!proposal) {
+            sendJson(response, 404, createErrorResponse({
+              statusCode: 404,
+              requestId: context.requestId,
+              code: 'PROPOSAL_NOT_FOUND',
+              message: 'proposal 不存在'
+            }), context.requestId);
+            return;
+          }
+          if (proposal.projectId !== guard.accessContext.projectId) {
+            sendJson(response, 403, createErrorResponse({
+              statusCode: 403,
+              requestId: context.requestId,
+              code: 'PROPOSAL_PROJECT_MISMATCH',
+              message: 'proposal 不属于当前项目'
+            }), context.requestId);
+            return;
+          }
+
+          const storage = createProjectStorage(guard.project);
+          const result = await executeRollbackRequest({
+            repository: input.collaborationRepository,
+            proposalId: proposal.id,
+            applyRequestId,
+            actorUserId: guard.accessContext.userId,
+            writePatch: async patch => {
+              const targetPath = storage.resolve(patch.targetPath);
+              await mkdir(path.dirname(targetPath), { recursive: true });
+              await writeFile(targetPath, patch.content, 'utf-8');
+            },
+            now: input.now
+          });
+          await auditServerMutation({
+            auditRepository: input.auditRepository,
+            actorUserId: guard.accessContext.userId,
+            projectId: guard.accessContext.projectId,
+            action: 'collaboration.rollback.execute',
+            diffSummary: `回滚协作正典 apply request ${result.applyRequestId}，写入 ${result.writtenPaths.length} 个文件`,
+            now: input.now
+          });
+          sendJson(response, 200, result, context.requestId);
+          return;
+        } catch (error) {
+          sendJson(response, 400, collaborationMutationBlocked(context.requestId, error), context.requestId);
+          return;
+        }
+      }
+      if (collaborationMatch && request.method === 'GET' && collaborationMatch[3] === 'comments') {
+        if (!input.sessionRepository || !input.projectRepository || !input.collaborationRepository) {
+          sendJson(response, 503, repositoryNotConfigured(context.requestId), context.requestId);
+          return;
+        }
+
+        const projectId = decodeURIComponent(collaborationMatch[1] ?? '');
+        const proposalId = collaborationMatch[2] ? decodeURIComponent(collaborationMatch[2]) : undefined;
+        const guard = await requireProjectContext({
+          request,
+          sessionRepository: input.sessionRepository,
+          projectRepository: input.projectRepository,
+          projectId,
+          now: input.now
+        });
+        if (guard.statusCode !== 200) {
+          sendJson(response, guard.statusCode, createErrorResponse({
+            statusCode: guard.statusCode,
+            requestId: context.requestId,
+            code: guard.code,
+            message: guard.message
+          }), context.requestId);
+          return;
+        }
+
+        const proposal = proposalId
+          ? await input.collaborationRepository.findProposalById(proposalId)
+          : undefined;
+        if (!proposal) {
+          sendJson(response, 404, createErrorResponse({
+            statusCode: 404,
+            requestId: context.requestId,
+            code: 'PROPOSAL_NOT_FOUND',
+            message: 'proposal 不存在'
+          }), context.requestId);
+          return;
+        }
+        if (proposal.projectId !== guard.accessContext.projectId) {
+          sendJson(response, 403, createErrorResponse({
+            statusCode: 403,
+            requestId: context.requestId,
+            code: 'PROPOSAL_PROJECT_MISMATCH',
+            message: 'proposal 不属于当前项目'
+          }), context.requestId);
+          return;
+        }
+
+        const threads = input.collaborationRepository.listCommentThreads
+          ? await input.collaborationRepository.listCommentThreads({
+            projectId: guard.accessContext.projectId,
+            anchorKind: 'proposal',
+            anchorId: proposal.id
+          })
+          : [];
+        sendJson(response, 200, {
+          proposalId: proposal.id,
+          threads
+        }, context.requestId);
+        return;
+      }
+      if (collaborationMatch && request.method === 'POST') {
+        if (!input.sessionRepository || !input.projectRepository || !input.collaborationRepository) {
+          sendJson(response, 503, repositoryNotConfigured(context.requestId), context.requestId);
+          return;
+        }
+
+        const projectId = decodeURIComponent(collaborationMatch[1] ?? '');
+        const proposalId = collaborationMatch[2] ? decodeURIComponent(collaborationMatch[2]) : undefined;
+        const action = collaborationMatch[3];
+        const requiredAction: ProjectPermissionAction = action === 'reviews' || action === 'comments'
+          ? 'review-canon'
+          : action === 'apply-requests'
+            ? 'apply-canon-change'
+            : 'create-candidate';
+        const guard = await requireProjectContext({
+          request,
+          sessionRepository: input.sessionRepository,
+          projectRepository: input.projectRepository,
+          projectId,
+          requiredAction,
+          now: input.now
+        });
+        if (guard.statusCode !== 200) {
+          sendJson(response, guard.statusCode, createErrorResponse({
+            statusCode: guard.statusCode,
+            requestId: context.requestId,
+            code: guard.code,
+            message: guard.message
+          }), context.requestId);
+          return;
+        }
+
+        const ensureProjectProposal = async (id: string | undefined) => {
+          if (!id) {
+            return {
+              statusCode: 404,
+              code: 'PROPOSAL_NOT_FOUND',
+              message: 'proposal 不存在'
+            } as const;
+          }
+          const proposal = await input.collaborationRepository?.findProposalById(id);
+          if (!proposal) {
+            return {
+              statusCode: 404,
+              code: 'PROPOSAL_NOT_FOUND',
+              message: 'proposal 不存在'
+            } as const;
+          }
+          if (proposal.projectId !== guard.accessContext.projectId) {
+            return {
+              statusCode: 403,
+              code: 'PROPOSAL_PROJECT_MISMATCH',
+              message: 'proposal 不属于当前项目'
+            } as const;
+          }
+          return { statusCode: 200, proposal } as const;
+        };
+
+        try {
+          const body = await parseJsonBody(request);
+          if (!proposalId && !action) {
+            const proposal = await createCollaborationProposal({
+              repository: input.collaborationRepository,
+              actorUserId: guard.accessContext.userId,
+              projectId: guard.accessContext.projectId,
+              storyId: String(body.storyId ?? ''),
+              target: body.target as CollaborationTarget,
+              sourceRefs: (body.sourceRefs ?? []) as CollaborationSourceRef[],
+              summary: String(body.summary ?? ''),
+              risks: (body.risks ?? []) as CollaborationRisk[],
+              now: input.now
+            });
+            await auditServerMutation({
+              auditRepository: input.auditRepository,
+              actorUserId: guard.accessContext.userId,
+              projectId: guard.accessContext.projectId,
+              action: 'collaboration.proposal.create',
+              diffSummary: `创建协作正典 proposal ${proposal.id}`,
+              now: input.now
+            });
+            sendJson(response, 200, proposal, context.requestId);
+            return;
+          }
+
+          const proposalCheck = await ensureProjectProposal(proposalId);
+          if (proposalCheck.statusCode !== 200) {
+            sendJson(response, proposalCheck.statusCode, createErrorResponse({
+              statusCode: proposalCheck.statusCode,
+              requestId: context.requestId,
+              code: proposalCheck.code,
+              message: proposalCheck.message
+            }), context.requestId);
+            return;
+          }
+
+          if (action === 'reviews') {
+            const decision = await submitReviewDecision({
+              repository: input.collaborationRepository,
+              proposalId: proposalCheck.proposal.id,
+              reviewerUserId: guard.accessContext.userId,
+              decision: String(body.decision ?? '') as ReviewDecisionValue,
+              note: body.note === undefined ? undefined : String(body.note),
+              now: input.now
+            });
+            await auditServerMutation({
+              auditRepository: input.auditRepository,
+              actorUserId: guard.accessContext.userId,
+              projectId: guard.accessContext.projectId,
+              action: 'collaboration.review.submit',
+              diffSummary: `提交协作正典 review ${decision.id}：${decision.decision}`,
+              now: input.now
+            });
+            sendJson(response, 200, decision, context.requestId);
+            return;
+          }
+
+          if (action === 'comments') {
+            const thread = await addCollaborationComment({
+              repository: input.collaborationRepository,
+              actorUserId: guard.accessContext.userId,
+              projectId: guard.accessContext.projectId,
+              storyId: proposalCheck.proposal.storyId,
+              anchorKind: 'proposal',
+              anchorId: proposalCheck.proposal.id,
+              body: String(body.body ?? ''),
+              now: input.now
+            });
+            await auditServerMutation({
+              auditRepository: input.auditRepository,
+              actorUserId: guard.accessContext.userId,
+              projectId: guard.accessContext.projectId,
+              action: 'collaboration.comment.create',
+              diffSummary: `创建协作正典 comment ${thread.id}`,
+              now: input.now
+            });
+            sendJson(response, 200, thread, context.requestId);
+            return;
+          }
+
+          if (action === 'patches') {
+            const patch = await createCanonPatch({
+              repository: input.collaborationRepository,
+              proposalId: proposalCheck.proposal.id,
+              targetPath: String(body.targetPath ?? ''),
+              kind: String(body.kind ?? '') as CanonPatchKind,
+              diffSummary: String(body.diffSummary ?? ''),
+              rollbackHint: String(body.rollbackHint ?? ''),
+              content: body.content === undefined ? undefined : String(body.content),
+              rollbackContent: body.rollbackContent === undefined ? undefined : String(body.rollbackContent),
+              sourceRefs: (body.sourceRefs ?? []) as string[]
+            });
+            await auditServerMutation({
+              auditRepository: input.auditRepository,
+              actorUserId: guard.accessContext.userId,
+              projectId: guard.accessContext.projectId,
+              action: 'collaboration.patch.create',
+              diffSummary: `创建协作正典 patch ${patch.id}`,
+              now: input.now
+            });
+            sendJson(response, 200, patch, context.requestId);
+            return;
+          }
+
+          if (action === 'apply-requests') {
+            const applyRequest = await createApplyRequest({
+              repository: input.collaborationRepository,
+              proposalId: proposalCheck.proposal.id,
+              actorUserId: guard.accessContext.userId,
+              currentVersion: body.currentVersion as VersionSnapshot,
+              authorConfirmed: Boolean(body.authorConfirmed),
+              now: input.now
+            });
+            await auditServerMutation({
+              auditRepository: input.auditRepository,
+              actorUserId: guard.accessContext.userId,
+              projectId: guard.accessContext.projectId,
+              action: 'collaboration.apply_request.create',
+              diffSummary: `创建协作正典 apply request ${applyRequest.id}：${applyRequest.status}`,
+              now: input.now
+            });
+            sendJson(response, 200, applyRequest, context.requestId);
+            return;
+          }
+        } catch (error) {
+          sendJson(response, 400, collaborationMutationBlocked(context.requestId, error), context.requestId);
+          return;
+        }
+      }
+
+      const jobMatch = url.pathname.match(/^\/api\/projects\/([^/]+)\/jobs(?:\/([^/]+)(?:\/(cancel|retry|logs|output))?)?$/);
       if (jobMatch && (request.method === 'GET' || request.method === 'POST')) {
         if (!input.sessionRepository || !input.projectRepository || !input.jobRepository) {
           sendJson(response, 503, createErrorResponse({
@@ -451,6 +1018,13 @@ export const startMultiuserServer = async (input: StartMultiuserServerInput): Pr
             return;
           }
 
+          const existingActiveJob = body.idempotencyKey === undefined
+            ? undefined
+            : await input.jobRepository.findActiveByIdempotencyKey({
+              userId: guard.accessContext.userId,
+              projectId: guard.accessContext.projectId,
+              idempotencyKey: String(body.idempotencyKey)
+            });
           const result = await createAgentJob({
             repository: input.jobRepository,
             userId: guard.accessContext.userId,
@@ -470,12 +1044,15 @@ export const startMultiuserServer = async (input: StartMultiuserServerInput): Pr
             }), context.requestId);
             return;
           }
+          if (!existingActiveJob && input.jobQueue) {
+            await input.jobQueue.enqueue(createAgentJobQueuePayload(result.job));
+          }
           await consumeJobQuota({
             quotaRepository: input.quotaRepository,
             userId: guard.accessContext.userId,
             projectId: guard.accessContext.projectId
           });
-          await auditJobMutation({
+          await auditServerMutation({
             auditRepository: input.auditRepository,
             actorUserId: guard.accessContext.userId,
             projectId: guard.accessContext.projectId,
@@ -485,6 +1062,34 @@ export const startMultiuserServer = async (input: StartMultiuserServerInput): Pr
             now: input.now
           });
           sendJson(response, 200, result.job, context.requestId);
+          return;
+        }
+
+        if (request.method === 'GET' && jobId === 'dashboard' && !action) {
+          const jobs = input.jobRepository.listByProject
+            ? await input.jobRepository.listByProject(guard.accessContext.projectId)
+            : [];
+          sendJson(response, 200, buildAgentJobDashboard({
+            projectId: guard.accessContext.projectId,
+            jobs,
+            queueReadyState: input.jobQueue?.getReadyState() ?? unconfiguredQueueReadyState(),
+            queueSnapshot: getQueueSnapshot(input.jobQueue)
+          }), context.requestId);
+          return;
+        }
+
+        if (request.method === 'GET' && jobId === 'alerts' && !action) {
+          const jobs = input.jobRepository.listByProject
+            ? await input.jobRepository.listByProject(guard.accessContext.projectId)
+            : [];
+          sendJson(response, 200, buildWorkerAlertSummary({
+            projectId: guard.accessContext.projectId,
+            jobs,
+            failureRecords: input.workerFailureRepository?.snapshot() ?? [],
+            queueReadyState: input.jobQueue?.getReadyState() ?? unconfiguredQueueReadyState(),
+            queueSnapshot: getQueueSnapshot(input.jobQueue),
+            now: input.now
+          }), context.requestId);
           return;
         }
 
@@ -525,6 +1130,22 @@ export const startMultiuserServer = async (input: StartMultiuserServerInput): Pr
           return;
         }
 
+        if (request.method === 'GET' && action === 'logs') {
+          sendJson(response, 200, buildAgentJobLog(existing.job), context.requestId);
+          return;
+        }
+
+        if (request.method === 'GET' && action === 'output') {
+          sendJson(response, 200, {
+            projectId: guard.accessContext.projectId,
+            jobId,
+            outputs: input.runtimeOutputRepository
+              ? await input.runtimeOutputRepository.listByJob(jobId)
+              : []
+          }, context.requestId);
+          return;
+        }
+
         if (request.method === 'POST' && action === 'cancel') {
           const result = await cancelAgentJob({
             repository: input.jobRepository,
@@ -540,7 +1161,7 @@ export const startMultiuserServer = async (input: StartMultiuserServerInput): Pr
             }), context.requestId);
             return;
           }
-          await auditJobMutation({
+          await auditServerMutation({
             auditRepository: input.auditRepository,
             actorUserId: guard.accessContext.userId,
             projectId: guard.accessContext.projectId,
@@ -569,7 +1190,7 @@ export const startMultiuserServer = async (input: StartMultiuserServerInput): Pr
             }), context.requestId);
             return;
           }
-          await auditJobMutation({
+          await auditServerMutation({
             auditRepository: input.auditRepository,
             actorUserId: guard.accessContext.userId,
             projectId: guard.accessContext.projectId,

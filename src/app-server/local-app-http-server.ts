@@ -16,6 +16,7 @@ interface LocalAppHttpCore {
   }): Promise<{ status: number; body: unknown }>;
   getCurrentProjectStatus(request: { token: string }): Promise<{ status: number; body: unknown }>;
   getCurrentProjectResume(request: { token: string }): Promise<{ status: number; body: unknown }>;
+  getCurrentCompleteAppState(request: { token: string }): Promise<{ status: number; body: unknown }>;
   createStoryIdea(request: {
     token: string;
     name: string;
@@ -212,6 +213,14 @@ export const startLocalAppHttpServer = async (
 
       if (request.method === 'GET' && url.pathname === '/api/projects/current/resume') {
         const result = await input.core.getCurrentProjectResume({
+          token: getToken(request)
+        });
+        sendJson(response, result.status, result.body);
+        return;
+      }
+
+      if (request.method === 'GET' && url.pathname === '/api/projects/current/app-state') {
+        const result = await input.core.getCurrentCompleteAppState({
           token: getToken(request)
         });
         sendJson(response, result.status, result.body);

@@ -20,7 +20,8 @@
     "storyspec": "dist/cli.js"
   },
   "scripts": {
-    "build": "tsc",
+    "build": "tsc && npm run build:web",
+    "build:web": "npm --prefix apps/web run build",
     "postbuild": "node scripts/postbuild.cjs",
     "build:commands": "node scripts/build-commands.cjs --agents=generic,continue-check,claude,gemini,cursor,windsurf,roocode,copilot,qwen,opencode,codex,kilocode,auggie,codebuddy,q --scripts=sh",
     "check:command-manifest": "tsx scripts/build/command-artifact-manifest.ts",
@@ -28,6 +29,7 @@
     "update:command-manifest": "tsx scripts/build/command-artifact-manifest.ts --update",
     "dev": "tsx src/cli.ts",
     "test": "vitest run tests/unit",
+    "test:e2e": "vitest run tests/e2e",
     "test:coverage": "vitest run tests/unit --coverage",
     "test:smoke": "vitest run tests/smoke",
     "verify": "npm run build && npm test && npm run test:coverage && npm run check:changes && npm run check:command-manifest && npm run build:commands && npm run build && npm run test:smoke",
@@ -38,13 +40,15 @@
   },
   "dependencies": {
     "@commander-js/extra-typings": "^12.0.0",
+    "bullmq": "^5.76.8",
     "chalk": "^5.3.0",
     "dotenv": "^16.3.1",
     "fs-extra": "^11.2.0",
     "glob": "^10.3.10",
     "inquirer": "^9.2.12",
     "js-yaml": "^4.1.0",
-    "ora": "^8.0.1"
+    "ora": "^8.0.1",
+    "pg": "^8.20.0"
   },
   "devDependencies": {
     "@types/fs-extra": "^11.0.4",
@@ -52,6 +56,7 @@
     "@types/js-yaml": "^4.0.9",
     "@types/jsonfile": "^6.1.4",
     "@types/node": "^20.10.0",
+    "@types/pg": "^8.20.0",
     "@types/through": "^0.0.33",
     "@vitest/coverage-v8": "^3.2.4",
     "tsx": "^4.7.0",

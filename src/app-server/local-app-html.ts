@@ -1,3 +1,5 @@
+import { buildCompleteAppFrontendArchitecture } from './app-frontend-architecture.js';
+
 export interface RenderLocalAppHtmlInput {
   token: string;
 }
@@ -11,28 +13,77 @@ const escapeHtml = (value: string): string => value
 
 export const renderLocalAppHtml = (input: RenderLocalAppHtmlInput): string => {
   const token = escapeHtml(input.token);
+  const frontendArchitecture = buildCompleteAppFrontendArchitecture();
+  const collaborationReview = frontendArchitecture.collaborationCanonReview;
+  const runtimeOutput = frontendArchitecture.runtimeOutput;
+  const endpointById = new Map(frontendArchitecture.apiClient.endpoints.map(endpoint => [endpoint.id, endpoint]));
+  const routeNavigation = frontendArchitecture.routes.map(route => (
+    `<a class="route-link" href="${escapeHtml(route.route)}" data-route-id="${escapeHtml(route.id)}">` +
+    `<strong>${escapeHtml(route.label)}</strong><span>${escapeHtml(route.purpose)}</span></a>`
+  )).join('');
+  const routeMap = frontendArchitecture.routes.map(route => (
+    `<li data-route-id="${escapeHtml(route.id)}"><strong>${escapeHtml(route.label)}</strong>` +
+    `：${escapeHtml(route.purpose)}<br><span class="muted">${escapeHtml(route.emptyState)}</span></li>`
+  )).join('');
+  const endpointMap = frontendArchitecture.apiClient.endpoints.map(endpoint => (
+    `<li class="endpoint-card" data-endpoint-id="${escapeHtml(endpoint.id)}">` +
+    `<strong>${escapeHtml(endpoint.method)} ${escapeHtml(endpoint.path)}</strong>` +
+    `<span>${escapeHtml(endpoint.description)}</span>` +
+    `<span class="mono">${escapeHtml(endpoint.routeId)} · ${escapeHtml(endpoint.boundary)}</span></li>`
+  )).join('');
+  const collaborationColumns = collaborationReview.columns.map(column => (
+    `<li data-collaboration-column-id="${escapeHtml(column.id)}"><strong>${escapeHtml(column.label)}</strong>` +
+    `：${escapeHtml(column.purpose)}</li>`
+  )).join('');
+  const collaborationStatuses = collaborationReview.statusLanguage.map(status => (
+    `<li data-collaboration-status="${escapeHtml(status.status)}"><strong>${escapeHtml(status.label)}</strong>` +
+    `：${escapeHtml(status.nextAction)}</li>`
+  )).join('');
+  const collaborationActions = collaborationReview.actions.map(action => {
+    const endpoint = endpointById.get(action.endpointId);
+    const endpointLabel = endpoint
+      ? `${endpoint.method} ${endpoint.path}`
+      : action.endpointId;
+
+    return (
+      `<li class="endpoint-card" data-collaboration-endpoint-id="${escapeHtml(action.endpointId)}">` +
+      `<strong>${escapeHtml(action.label)}</strong>` +
+      `<span>${escapeHtml(endpointLabel)}</span>` +
+      `<span>${escapeHtml(action.confirmationCopy)}</span>` +
+      `<span class="mono">${escapeHtml(action.requiredPermission)} · ${escapeHtml(action.boundary)}</span></li>`
+    );
+  }).join('');
+  const runtimeOutputEndpoint = endpointById.get(runtimeOutput.endpointId);
+  const runtimeOutputEndpointLabel = runtimeOutputEndpoint
+    ? `${runtimeOutputEndpoint.method} ${runtimeOutputEndpoint.path}`
+    : runtimeOutput.endpointId;
+  const runtimeOutputPanes = runtimeOutput.panes.map(pane => (
+    `<li data-runtime-output-pane-id="${escapeHtml(pane.id)}"><strong>${escapeHtml(pane.label)}</strong>` +
+    `：${escapeHtml(pane.purpose)}<br><span class="muted">${escapeHtml(pane.emptyState)}</span></li>`
+  )).join('');
 
   return `<!doctype html>
 <html lang="zh-CN">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>StorySpec 本机工作台</title>
-  <meta name="description" content="StorySpec 本机项目选择和写作状态工作台">
+  <title>StorySpec 工作室</title>
+  <meta name="description" content="StorySpec 本机工作室控制台">
   <style>
     :root {
       color-scheme: light;
-      --paper: #f7f2e8;
-      --panel: #fffaf0;
-      --panel-strong: #f0e5d2;
-      --ink: #231f1a;
-      --muted: #6f6659;
-      --line: #d8cbb7;
-      --accent: #5d4a2f;
-      --accent-ink: #fffaf0;
-      --warn: #8d3d2f;
-      --ok: #315d4d;
-      --focus: #7a5b2b;
+      --app-bg: #f8fafc;
+      --panel: #ffffff;
+      --panel-strong: #eff6ff;
+      --ink: #0f172a;
+      --muted: #64748b;
+      --line: #dbe3ef;
+      --accent: #2563eb;
+      --attention: #f97316;
+      --accent-ink: #ffffff;
+      --warn: #b45309;
+      --ok: #047857;
+      --focus: #2563eb;
       --radius: 8px;
       --z-focus: 10;
     }
@@ -43,15 +94,15 @@ export const renderLocalAppHtml = (input: RenderLocalAppHtmlInput): string => {
 
     html {
       min-height: 100%;
-      background: var(--paper);
+      background: var(--app-bg);
     }
 
     body {
       margin: 0;
       min-height: 100dvh;
       color: var(--ink);
-      background: var(--paper);
-      font-family: ui-serif, Georgia, "Noto Serif SC", "Songti SC", serif;
+      background: var(--app-bg);
+      font-family: Inter, "Noto Sans SC", "Microsoft YaHei", Arial, sans-serif;
       line-height: 1.5;
     }
 
@@ -66,7 +117,7 @@ export const renderLocalAppHtml = (input: RenderLocalAppHtmlInput): string => {
     input:focus-visible,
     select:focus-visible,
     textarea:focus-visible {
-      outline: 3px solid rgba(122, 91, 43, 0.35);
+      outline: 3px solid rgba(37, 99, 235, 0.28);
       outline-offset: 2px;
       position: relative;
       z-index: var(--z-focus);
@@ -146,7 +197,97 @@ export const renderLocalAppHtml = (input: RenderLocalAppHtmlInput): string => {
       color: var(--muted);
       font-size: 13px;
       white-space: nowrap;
-      background: rgba(255, 250, 240, 0.72);
+      background: #ffffff;
+    }
+
+    .guide-strip {
+      display: grid;
+      gap: 12px;
+      padding: 14px 0 2px;
+    }
+
+    .guide-header {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: baseline;
+      justify-content: space-between;
+    }
+
+    .guide-steps {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 8px;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .guide-step {
+      display: grid;
+      gap: 8px;
+      min-height: 132px;
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      background: #ffffff;
+      padding: 12px;
+    }
+
+    .guide-step strong {
+      display: block;
+      color: var(--ink);
+    }
+
+    .guide-step p {
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .guide-action {
+      align-self: end;
+      width: fit-content;
+      border: 1px solid var(--accent);
+      border-radius: 6px;
+      color: var(--accent);
+      padding: 7px 10px;
+      text-decoration: none;
+      font-size: 13px;
+    }
+
+    .guide-action:hover,
+    .guide-action:focus-visible {
+      background: #eff6ff;
+    }
+
+    .route-nav {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 8px;
+      padding: 12px 0 0;
+    }
+
+    .route-link {
+      display: grid;
+      gap: 4px;
+      min-height: 76px;
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      background: #ffffff;
+      color: var(--ink);
+      padding: 10px;
+      text-decoration: none;
+    }
+
+    .route-link:hover,
+    .route-link:focus-visible {
+      border-color: var(--accent);
+      background: #eff6ff;
+    }
+
+    .route-link span {
+      color: var(--muted);
+      font-size: 12px;
+      text-wrap: pretty;
     }
 
     .workspace-grid {
@@ -160,7 +301,7 @@ export const renderLocalAppHtml = (input: RenderLocalAppHtmlInput): string => {
     .panel {
       border: 1px solid var(--line);
       border-radius: var(--radius);
-      background: rgba(255, 250, 240, 0.78);
+      background: var(--panel);
       min-width: 0;
     }
 
@@ -171,7 +312,7 @@ export const renderLocalAppHtml = (input: RenderLocalAppHtmlInput): string => {
       gap: 10px;
       padding: 12px 14px;
       border-bottom: 1px solid var(--line);
-      background: rgba(240, 229, 210, 0.55);
+      background: var(--panel-strong);
     }
 
     .panel-body {
@@ -199,7 +340,7 @@ export const renderLocalAppHtml = (input: RenderLocalAppHtmlInput): string => {
       width: 100%;
       border: 1px solid var(--line);
       border-radius: 6px;
-      background: #fffdf8;
+      background: #ffffff;
       color: var(--ink);
       padding: 9px 10px;
     }
@@ -228,7 +369,7 @@ export const renderLocalAppHtml = (input: RenderLocalAppHtmlInput): string => {
     }
 
     button:hover {
-      background: #493a26;
+      background: #1d4ed8;
     }
 
     button:active {
@@ -241,7 +382,7 @@ export const renderLocalAppHtml = (input: RenderLocalAppHtmlInput): string => {
     }
 
     .secondary:hover {
-      background: rgba(93, 74, 47, 0.08);
+      background: #eff6ff;
     }
 
     .error {
@@ -266,14 +407,14 @@ export const renderLocalAppHtml = (input: RenderLocalAppHtmlInput): string => {
       width: 100%;
       text-align: left;
       border: 1px solid var(--line);
-      background: #fffdf8;
+      background: #ffffff;
       color: var(--ink);
       border-radius: 6px;
       padding: 10px;
     }
 
     .recent-item:hover {
-      background: #f8efe0;
+      background: #eff6ff;
     }
 
     .item-title {
@@ -292,7 +433,7 @@ export const renderLocalAppHtml = (input: RenderLocalAppHtmlInput): string => {
       border: 1px dashed var(--line);
       border-radius: 6px;
       padding: 12px;
-      background: rgba(255, 253, 248, 0.62);
+      background: #f8fafc;
     }
 
     .dossier-title {
@@ -322,7 +463,7 @@ export const renderLocalAppHtml = (input: RenderLocalAppHtmlInput): string => {
       border: 1px solid var(--line);
       border-radius: 6px;
       padding: 10px;
-      background: #fffdf8;
+      background: #ffffff;
     }
 
     .metric-value {
@@ -350,10 +491,26 @@ export const renderLocalAppHtml = (input: RenderLocalAppHtmlInput): string => {
     }
 
     .fact-list li,
-    .next-list li {
+    .next-list li,
+    .endpoint-card {
       border-left: 3px solid var(--line);
       padding-left: 10px;
       text-wrap: pretty;
+    }
+
+    .endpoint-map {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 8px;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .endpoint-card {
+      display: grid;
+      gap: 3px;
+      min-width: 0;
     }
 
     .gate {
@@ -377,7 +534,7 @@ export const renderLocalAppHtml = (input: RenderLocalAppHtmlInput): string => {
       border: 1px solid var(--line);
       border-radius: 6px;
       padding: 10px;
-      background: #fffdf8;
+      background: #ffffff;
       font-family: ui-monospace, "SFMono-Regular", Consolas, monospace;
       font-size: 12px;
       overflow-wrap: anywhere;
@@ -400,13 +557,19 @@ export const renderLocalAppHtml = (input: RenderLocalAppHtmlInput): string => {
       border: 1px solid var(--line);
       border-radius: 6px;
       padding: 10px;
-      background: #fffdf8;
+      background: #ffffff;
       min-height: 42px;
       font-size: 13px;
     }
 
     @media (max-width: 1080px) {
       .workspace-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .route-nav,
+      .guide-steps,
+      .endpoint-map {
         grid-template-columns: 1fr;
       }
     }
@@ -432,16 +595,45 @@ export const renderLocalAppHtml = (input: RenderLocalAppHtmlInput): string => {
   <div class="shell">
     <header class="topbar">
       <div>
-        <h1>StorySpec 本机工作台</h1>
-        <p class="subtitle">编辑台 / 档案控制台：打开本机项目，查看当前故事长成了什么，再决定下一步写入前确认。</p>
+        <h1>StorySpec 工作室</h1>
+        <p class="subtitle">工作室控制台：在本机项目里查看故事状态、候选、章节、任务和协作边界。Agent 不能直接写入正典，所有进入正式故事的内容都需要作者最终确认。</p>
       </div>
       <div class="status-pill" id="service-status">本机服务检查中</div>
     </header>
+    <section class="guide-strip" id="guided-first-run" aria-labelledby="guided-first-run-title">
+      <div class="guide-header">
+        <div>
+          <h2 id="guided-first-run-title">开始路径</h2>
+          <p class="muted">先把故事放进工作室，再决定继续写作、审阅候选或处理任务。候选和预览不会自动写入正式故事，进入正典前仍需要作者确认。</p>
+        </div>
+        <span class="status-pill">候选和预览不会自动写入正式故事</span>
+      </div>
+      <ol class="guide-steps" aria-label="StorySpec 使用路径">
+        <li class="guide-step" data-guide-step="project">
+          <strong>1. 打开或创建项目</strong>
+          <p>选择已有 StorySpec 项目，或创建一个新项目作为工作区入口。</p>
+          <a class="guide-action" href="#open-project-form">去打开项目</a>
+        </li>
+        <li class="guide-step" data-guide-step="story">
+          <strong>2. 创建或选择故事</strong>
+          <p>用一句灵感或长文资料开始；资料默认先变成候选和待确认项。</p>
+          <a class="guide-action" href="#story-idea-form">去创建故事</a>
+        </li>
+        <li class="guide-step" data-guide-step="review">
+          <strong>3. 继续写作或审阅候选</strong>
+          <p>从故事驾驶舱进入章节、任务或候选与正典审阅，先预览再确认。</p>
+          <a class="guide-action" href="#confirm-lane-title">去审阅候选</a>
+        </li>
+      </ol>
+    </section>
+    <nav class="route-nav" aria-label="完整 App 首批页面导航">
+      ${routeNavigation}
+    </nav>
 
     <main id="main" class="workspace-grid">
       <aside class="panel" aria-labelledby="project-drawer-title">
         <div class="panel-header">
-          <h2 id="project-drawer-title">项目抽屉</h2>
+          <h2 id="project-drawer-title">项目与故事</h2>
           <button class="secondary" id="refresh-recent" type="button">刷新</button>
         </div>
         <div class="panel-body stack">
@@ -490,15 +682,39 @@ export const renderLocalAppHtml = (input: RenderLocalAppHtmlInput): string => {
 
       <section class="panel" aria-labelledby="story-dossier-title">
         <div class="panel-header">
-          <h2 id="story-dossier-title">故事档案</h2>
+          <h2 id="story-dossier-title">故事驾驶舱</h2>
           <button class="secondary" id="refresh-status" type="button">读取状态</button>
         </div>
         <div class="panel-body stack">
           <div class="empty" id="status-empty">
             <strong>尚未打开项目</strong>
-            <p class="muted">选择一个 StorySpec 项目，或创建新项目。首屏会展示故事阶段、创作回声、缺口和文件状态。</p>
+            <p class="muted">选择一个 StorySpec 项目，或创建新项目。打开或创建项目后，首屏会展示故事阶段、当前卡点、待确认项、阻塞项和章节文件。</p>
           </div>
           <div id="status-content" hidden></div>
+
+          <section class="section-block" id="app-state-root" aria-labelledby="app-state-title">
+            <div class="dossier-title">
+              <h2 id="app-state-title">故事驾驶舱</h2>
+              <span class="mono">/api/projects/current/app-state</span>
+            </div>
+            <div class="result-box" id="story-cockpit-panel">打开或创建项目后，工作室会读取当前故事状态、主行动、待确认项、阻塞项和章节文件。</div>
+          </section>
+
+          <section class="section-block" aria-labelledby="studio-map-title">
+            <h2 id="studio-map-title">工作室控制台</h2>
+            <ul class="fact-list">
+              ${routeMap}
+              <li><strong>协作侧栏</strong>：显示评论、边界、阻塞和稍后决定，提醒 Agent 不能直接写入正典。</li>
+            </ul>
+          </section>
+
+          <section class="section-block" aria-labelledby="frontend-api-map-title">
+            <h2 id="frontend-api-map-title">前端 API 地图</h2>
+            <p class="muted">本机 shell 使用 ${frontendArchitecture.apiClient.tokenHeader} 调用这些端点；后续独立前端应复用同一页面和边界契约。</p>
+            <ul class="endpoint-map">
+              ${endpointMap}
+            </ul>
+          </section>
 
           <section class="section-block" aria-labelledby="resume-lane-title">
             <div class="dossier-title">
@@ -509,7 +725,7 @@ export const renderLocalAppHtml = (input: RenderLocalAppHtmlInput): string => {
             <div class="command" id="resume-action-command">storyspec status</div>
             <div class="section-block">
               <h3>状态词</h3>
-              <div class="result-box" id="resume-glossary">candidate / preview / apply / dry-run / blocked / read-only / active / planned</div>
+              <div class="result-box" id="resume-glossary">候选方案 / 预览变更 / 试运行 / 应用到正式故事 / 暂时无法继续 / 稍后决定 / 正典 / 已确认事实 / 草稿 / 评论</div>
             </div>
           </section>
 
@@ -572,25 +788,61 @@ export const renderLocalAppHtml = (input: RenderLocalAppHtmlInput): string => {
 
       <aside class="panel" aria-labelledby="confirm-lane-title">
         <div class="panel-header">
-          <h2 id="confirm-lane-title">确认通道</h2>
-          <span class="muted">preview / confirm / apply</span>
+          <h2 id="confirm-lane-title">协作侧栏</h2>
+          <span class="muted">Preview / Confirm / Apply</span>
         </div>
         <div class="panel-body gate" id="confirm-lane">
-          <div class="empty">打开项目后，这里会显示下一步建议、待确认决策、tracking 和 Git 状态。</div>
+          <div class="empty">打开项目后，这里会显示下一步建议、待确认决策、评论、tracking 和 Git 状态。作者最终确认前，Agent 不能直接写入正典。</div>
         </div>
         <div class="panel-body gate" aria-labelledby="planning-panel-title">
           <section class="section-block">
             <div class="dossier-title">
-              <h2 id="planning-panel-title">规划面板</h2>
+              <h2 id="planning-panel-title">候选与正典</h2>
               <button class="secondary" id="refresh-outlines" type="button">刷新候选</button>
             </div>
-            <p class="muted">候选大纲不是正典；提升默认 dry-run，只展示覆盖正式计划前需要检查什么。</p>
+            <p class="muted">候选大纲不是正典；提升默认 dry-run，只展示覆盖正式计划前需要检查什么。应用到正式故事必须经过作者最终确认。</p>
             <div class="field">
               <label for="outline-story-name">故事名（可选）</label>
               <input id="outline-story-name" name="story" autocomplete="off" placeholder="留空则使用最近故事">
             </div>
             <div class="error" id="outline-list-error" role="status" aria-live="polite"></div>
             <div class="result-box" id="outline-list-result">读取后会列出候选大纲。</div>
+          </section>
+
+          <section class="section-block" id="collaboration-canon-review-desk" aria-labelledby="collaboration-canon-review-title">
+            <div class="dossier-title">
+              <h2 id="collaboration-canon-review-title">${escapeHtml(collaborationReview.title)}</h2>
+              <span class="mono">canon-review · proposal · apply · rollback</span>
+            </div>
+            <p class="muted">${escapeHtml(collaborationReview.localShellBoundary)} 这不是最终实时协作 UI；本机工作室只提供 contract、状态列和导航入口。</p>
+            <div class="field">
+              <label for="collaboration-project-id">项目 ID</label>
+              <input id="collaboration-project-id" autocomplete="off" placeholder="project-1">
+            </div>
+            <div class="field">
+              <label for="collaboration-story-id">故事 ID</label>
+              <input id="collaboration-story-id" autocomplete="off" placeholder="story-main">
+            </div>
+            <div class="empty">${escapeHtml(collaborationReview.emptyState)}</div>
+            <div class="section-block">
+              <h3>审阅状态列</h3>
+              <ul class="fact-list">
+                ${collaborationColumns}
+              </ul>
+            </div>
+            <div class="section-block">
+              <h3>状态语言</h3>
+              <ul class="fact-list">
+                ${collaborationStatuses}
+              </ul>
+            </div>
+            <div class="section-block">
+              <h3>协作 API 入口</h3>
+              <ul class="endpoint-map">
+                ${collaborationActions}
+              </ul>
+            </div>
+            <div class="result-box">apply / rollback 会写入项目 dataRoot，必须具备 apply-canon-change 权限、作者二次确认，并进入 audit log。</div>
           </section>
 
           <form class="section-block" id="outline-create-form">
@@ -641,18 +893,38 @@ export const renderLocalAppHtml = (input: RenderLocalAppHtmlInput): string => {
 
           <section class="section-block">
             <div class="dossier-title">
-              <h3>任务板</h3>
+              <h3>任务中心</h3>
               <button class="secondary" id="refresh-task-board" type="button">读取只读任务板</button>
             </div>
             <p class="muted">任务板只读展示，不修改 tasks.md。</p>
             <div class="error" id="task-board-error" role="status" aria-live="polite"></div>
             <div class="result-box" id="task-board-result">读取后会显示任务总数、待办、完成、writeReady 和 planOnly。</div>
           </section>
+
+          <section class="section-block" data-endpoint-id="${escapeHtml(runtimeOutput.endpointId)}">
+            <div class="dossier-title">
+              <h3>${escapeHtml(runtimeOutput.title)}</h3>
+              <button class="secondary" id="refresh-runtime-output" type="button">读取 output</button>
+            </div>
+            <p class="muted">${escapeHtml(runtimeOutput.previewOnlyBoundary)}</p>
+            <p class="mono">${escapeHtml(runtimeOutputEndpointLabel)}</p>
+            <div class="field">
+              <label for="runtime-output-project-id">项目 ID</label>
+              <input id="runtime-output-project-id" name="projectId" autocomplete="off" placeholder="project-1">
+            </div>
+            <div class="field">
+              <label for="runtime-output-job-id">Job ID</label>
+              <input id="runtime-output-job-id" name="jobId" autocomplete="off" placeholder="job-output">
+            </div>
+            <ul class="fact-list">${runtimeOutputPanes}</ul>
+            <div class="error" id="runtime-output-error" role="status" aria-live="polite"></div>
+            <div class="result-box" id="runtime-output-result">${escapeHtml(runtimeOutput.emptyState)}</div>
+          </section>
         </div>
         <div class="panel-body gate" aria-labelledby="chapter-entry-title">
           <section class="section-block">
             <div class="dossier-title">
-              <h2 id="chapter-entry-title">章节入口</h2>
+              <h2 id="chapter-entry-title">章节与写作</h2>
               <div class="button-row">
                 <button class="secondary" id="refresh-chapter-lane" type="button">写作通道</button>
                 <button class="secondary" id="refresh-chapter-drafts" type="button">草稿列表</button>
@@ -744,6 +1016,7 @@ export const renderLocalAppHtml = (input: RenderLocalAppHtmlInput): string => {
     const recentEmpty = document.querySelector("#recent-empty");
     const statusEmpty = document.querySelector("#status-empty");
     const statusContent = document.querySelector("#status-content");
+    const storyCockpitPanel = document.querySelector("#story-cockpit-panel");
     const resumeLane = document.querySelector("#resume-lane");
     const resumeActionCommand = document.querySelector("#resume-action-command");
     const resumeGlossary = document.querySelector("#resume-glossary");
@@ -761,10 +1034,12 @@ export const renderLocalAppHtml = (input: RenderLocalAppHtmlInput): string => {
     const outlineCompareError = document.querySelector("#outline-compare-error");
     const outlinePromoteError = document.querySelector("#outline-promote-error");
     const taskBoardError = document.querySelector("#task-board-error");
+    const runtimeOutputError = document.querySelector("#runtime-output-error");
     const outlineListResult = document.querySelector("#outline-list-result");
     const outlineCompareResult = document.querySelector("#outline-compare-result");
     const outlinePromoteResult = document.querySelector("#outline-promote-result");
     const taskBoardResult = document.querySelector("#task-board-result");
+    const runtimeOutputResult = document.querySelector("#runtime-output-result");
     const chapterLaneError = document.querySelector("#chapter-lane-error");
     const chapterDraftListError = document.querySelector("#chapter-draft-list-error");
     const chapterDraftError = document.querySelector("#chapter-draft-error");
@@ -809,6 +1084,42 @@ export const renderLocalAppHtml = (input: RenderLocalAppHtmlInput): string => {
     const renderIngestItems = items => {
       if (!items || items.length === 0) return '<li>暂无。</li>';
       return items.map(item => '<li><strong>' + escapeHtml(item.label || item.questionId || "候选") + '</strong>：' + escapeHtml(item.answer || item.summary || "") + '</li>').join("");
+    };
+
+    const renderAppStateItems = (items, fallback) => {
+      const safeItems = Array.isArray(items) ? items : [];
+      const rendered = safeItems.map(item => {
+        if (!item) return "";
+        if (typeof item !== "object") return "<li>" + escapeHtml(String(item)) + "</li>";
+        const title = item.label || item.title || item.id || item.path || item.file || "未命名";
+        const detail = item.value || item.reason || item.summary || item.status || item.stage || item.blocker || item.description || "";
+        return '<li><strong>' + escapeHtml(title) + '</strong>' + (detail ? '：' + escapeHtml(detail) : '') + '</li>';
+      }).filter(Boolean);
+      return rendered.length ? rendered.join("") : "<li>" + fallback + "</li>";
+    };
+
+    const renderAppStatePages = (pages, fallback) => {
+      const safeItems = Array.isArray(pages) ? pages : [];
+      const rendered = safeItems.map(page => {
+        if (!page) return "";
+        if (typeof page !== "object") return "<li>" + escapeHtml(String(page)) + "</li>";
+        const title = page.label || page.title || page.name || page.id || page.href || "工作区页面";
+        const detail = page.description || page.summary || page.status || page.href || "";
+        return '<li><strong>' + escapeHtml(title) + '</strong>' + (detail ? '：' + escapeHtml(detail) : '') + '</li>';
+      }).filter(Boolean);
+      return rendered.length ? rendered.join("") : "<li>" + fallback + "</li>";
+    };
+
+    const renderWriteModeLanguage = entries => {
+      const safeItems = Array.isArray(entries) ? entries : [];
+      const rendered = safeItems.map(entry => {
+        if (!entry) return "";
+        if (typeof entry !== "object") return escapeHtml(String(entry));
+        const label = entry.label || entry.term || entry.primaryAction || "写入模式";
+        const meaning = entry.meaning || entry.description || entry.summary || "";
+        return escapeHtml(label) + (meaning ? "：" + escapeHtml(meaning) : "");
+      }).filter(Boolean);
+      return rendered.length ? rendered.join(" · ") : "预览变更 / 作者最终确认 / 应用到正式故事";
     };
 
     const outlineStoryQuery = () => {
@@ -923,6 +1234,59 @@ export const renderLocalAppHtml = (input: RenderLocalAppHtmlInput): string => {
       \`;
     };
 
+    const renderAppState = appState => {
+      appState = appState || {};
+      const cockpit = appState.cockpit || {};
+      const metrics = cockpit.metrics || {};
+      const primaryAction = cockpit.primaryAction || {};
+      const collaborationItems = appState.collaborationRail?.items || [];
+      const pages = appState.pages || [];
+      const writeModeLanguage = Array.isArray(appState.writeModeLanguage) ? appState.writeModeLanguage : [];
+      storyCockpitPanel.innerHTML = \`
+        <div class="metric-grid">
+          <div class="metric"><span class="metric-value">\${escapeHtml(cockpit.storyName || "未选择")}</span><span class="metric-label">storyName</span></div>
+          <div class="metric"><span class="metric-value">\${escapeHtml(cockpit.stageLabel || "未开始")}</span><span class="metric-label">stageLabel</span></div>
+          <div class="metric"><span class="metric-value">\${escapeHtml(cockpit.currentBlocker || "暂无")}</span><span class="metric-label">currentBlocker</span></div>
+        </div>
+        <div class="metric-grid">
+          <div class="metric"><span class="metric-value">\${escapeHtml(metrics.pendingConfirmations ?? 0)}</span><span class="metric-label">待确认</span></div>
+          <div class="metric"><span class="metric-value">\${escapeHtml(metrics.blockers ?? 0)}</span><span class="metric-label">阻塞项</span></div>
+          <div class="metric"><span class="metric-value">\${escapeHtml(metrics.agentCandidates ?? 0)}</span><span class="metric-label">Agent 候选</span></div>
+          <div class="metric"><span class="metric-value">\${escapeHtml(metrics.chapterFiles ?? 0)}</span><span class="metric-label">章节文件</span></div>
+          <div class="metric"><span class="metric-value">\${escapeHtml(metrics.contentFiles ?? 0)}</span><span class="metric-label">正文文件</span></div>
+          <div class="metric"><span class="metric-value">\${escapeHtml(metrics.contentChars ?? 0)}</span><span class="metric-label">正文字符</span></div>
+        </div>
+        <div class="section-block">
+          <h3>下一步建议</h3>
+          <p><strong>\${escapeHtml(primaryAction.label || "稍后决定")}</strong></p>
+          <p>\${escapeHtml(primaryAction.reason || "打开或创建项目后，工作室会给出下一步理由。")}</p>
+          <p class="muted">writeMode：\${escapeHtml(primaryAction.writeMode || "read-only")}</p>
+        </div>
+        <div class="section-block">
+          <h3>协作侧栏</h3>
+          <ul class="fact-list">\${renderAppStateItems(collaborationItems, "暂无协作侧栏项目。")}</ul>
+        </div>
+        <div class="section-block">
+          <h3>工作区页面</h3>
+          <ul class="fact-list">\${renderAppStatePages(pages, "暂无工作区页面。")}</ul>
+        </div>
+        <div class="section-block">
+          <h3>写入边界</h3>
+          <ul class="fact-list">\${renderAppStateItems(cockpit.boundaries, "Agent 不能直接写入正典；应用到正式故事需要作者最终确认。")}</ul>
+          <p class="muted">\${renderWriteModeLanguage(writeModeLanguage)}</p>
+        </div>
+      \`;
+    };
+
+    const loadAppState = async () => {
+      try {
+        const appState = await api("/api/projects/current/app-state", { method: "GET" });
+        renderAppState(appState);
+      } catch (error) {
+        storyCockpitPanel.innerHTML = '<div class="empty">打开或创建项目后，工作室会读取故事驾驶舱状态。' + escapeHtml(error.message ? " " + error.message : "") + '</div>';
+      }
+    };
+
     const renderResumeLane = resume => {
       const glossary = resume.statusGlossary || [];
       resumeLane.innerHTML = \`
@@ -970,6 +1334,7 @@ export const renderLocalAppHtml = (input: RenderLocalAppHtmlInput): string => {
         confirmLane.innerHTML = '<div class="empty">' + escapeHtml(error.message) + '</div>';
         await loadResume();
       }
+      await loadAppState();
     };
 
     const openProject = async projectRoot => {
@@ -1164,6 +1529,36 @@ export const renderLocalAppHtml = (input: RenderLocalAppHtmlInput): string => {
         \`;
       } catch (error) {
         taskBoardError.textContent = error.message;
+      }
+    });
+
+    document.querySelector("#refresh-runtime-output").addEventListener("click", async () => {
+      runtimeOutputError.textContent = "";
+      const projectId = document.querySelector("#runtime-output-project-id").value.trim();
+      const jobId = document.querySelector("#runtime-output-job-id").value.trim();
+      if (!projectId || !jobId) {
+        runtimeOutputError.textContent = "请先填写项目 ID 和 Job ID。";
+        return;
+      }
+      try {
+        const result = await api("/api/projects/" + encodeURIComponent(projectId) + "/jobs/" + encodeURIComponent(jobId) + "/output", { method: "GET" });
+        const outputs = result.outputs || [];
+        runtimeOutputResult.innerHTML = outputs.length
+          ? outputs.map(output => {
+            const artifacts = output.artifacts || [];
+            const logs = output.logs || [];
+            const artifactItems = artifacts.map(artifact => '<li><strong>' + escapeHtml(artifact.label || artifact.id || "artifact") + '</strong>：' + escapeHtml(artifact.kind || "") + '<br><span class="muted">' + escapeHtml(artifact.previewText || "") + '</span></li>').join("") || '<li>这个 job 还没有可展示的 artifact。</li>';
+            const logItems = logs.map(log => '<li><strong>' + escapeHtml(log.level || "info") + '</strong>：' + escapeHtml(log.message || "") + '<br><span class="muted">' + escapeHtml(log.createdAt || "") + '</span></li>').join("") || '<li>这个 job 还没有 runtime log。</li>';
+            return '<div class="section-block">'
+              + '<h3>' + escapeHtml(output.summary || output.candidateRef || "runtime output") + '</h3>'
+              + '<p class="muted">preview-only：' + (output.previewOnly ? "是" : "否") + ' · ' + escapeHtml(output.createdAt || "") + '</p>'
+              + '<div class="section-block"><h3>Artifacts</h3><ul class="fact-list">' + artifactItems + '</ul></div>'
+              + '<div class="section-block"><h3>Logs</h3><ul class="fact-list">' + logItems + '</ul></div>'
+              + '</div>';
+          }).join("")
+          : '<div class="empty">这个 job 还没有 runtime output record。</div>';
+      } catch (error) {
+        runtimeOutputError.textContent = error.message;
       }
     });
 

@@ -6,6 +6,40 @@ export interface AgentRuntimeOutput {
   candidateRef: string;
   previewOnly: true;
   summary: string;
+  artifacts?: AgentRuntimeArtifact[];
+  logs?: AgentRuntimeLogEntry[];
+}
+
+export type AgentRuntimeLogLevel = 'info' | 'warning' | 'error';
+
+export interface AgentRuntimeArtifact {
+  id: string;
+  kind: string;
+  label: string;
+  previewText: string;
+}
+
+export interface AgentRuntimeLogEntry {
+  level: AgentRuntimeLogLevel;
+  message: string;
+  createdAt?: string;
+}
+
+export interface AgentRuntimeOutputRecord {
+  jobId: string;
+  candidateRef: string;
+  previewOnly: true;
+  summary: string;
+  artifacts: AgentRuntimeArtifact[];
+  logs: Array<AgentRuntimeLogEntry & { createdAt: string }>;
+  traceId?: string;
+  createdAt: string;
+}
+
+export interface AgentRuntimeOutputRepository {
+  save(record: AgentRuntimeOutputRecord): Promise<void>;
+  listByJob(jobId: string): Promise<AgentRuntimeOutputRecord[]>;
+  snapshot(): AgentRuntimeOutputRecord[];
 }
 
 export interface AgentRuntimeAdapter {
@@ -19,6 +53,7 @@ export interface AgentRuntimeAdapter {
 
 export interface RunAgentJobWithRuntimeInput {
   repository: AgentJobRepository;
+  outputRepository?: AgentRuntimeOutputRepository;
   jobId: string;
   runtime: AgentRuntimeAdapter;
   now?: () => string;
@@ -39,6 +74,61 @@ const blocked = (
   blockedReasons: [reason],
   job
 });
+
+export const createMemoryRuntimeOutputRepository = (): AgentRuntimeOutputRepository => {
+  const records: AgentRuntimeOutputRecord[] = [];
+
+  return {
+    async save(record) {
+      records.push({
+        ...record,
+        artifacts: record.artifacts.map(artifact => ({ ...artifact })),
+        logs: record.logs.map(log => ({ ...log }))
+      });
+    },
+    async listByJob(jobId) {
+      return records
+        .filter(record => record.jobId === jobId)
+        .map(record => ({
+          ...record,
+          artifacts: record.artifacts.map(artifact => ({ ...artifact })),
+          logs: record.logs.map(log => ({ ...log }))
+        }));
+    },
+    snapshot() {
+      return records.map(record => ({
+        ...record,
+        artifacts: record.artifacts.map(artifact => ({ ...artifact })),
+        logs: record.logs.map(log => ({ ...log }))
+      }));
+    }
+  };
+};
+
+const saveRuntimeOutput = async (
+  input: RunAgentJobWithRuntimeInput,
+  job: AgentJob,
+  output: AgentRuntimeOutput
+): Promise<void> => {
+  if (!input.outputRepository) {
+    return;
+  }
+
+  const createdAt = input.now?.() ?? new Date().toISOString();
+  await input.outputRepository.save({
+    jobId: output.jobId,
+    candidateRef: output.candidateRef,
+    previewOnly: true,
+    summary: output.summary,
+    artifacts: output.artifacts ?? [],
+    logs: (output.logs ?? []).map(log => ({
+      ...log,
+      createdAt: log.createdAt ?? createdAt
+    })),
+    ...(job.traceId ? { traceId: job.traceId } : {}),
+    createdAt
+  });
+};
 
 export const runAgentJobWithRuntime = async (
   input: RunAgentJobWithRuntimeInput
@@ -65,6 +155,7 @@ export const runAgentJobWithRuntime = async (
 
   try {
     const output = await input.runtime.start(running.job);
+    await saveRuntimeOutput(input, running.job, output);
     const succeeded = await transitionAgentJob({
       repository: input.repository,
       jobId: running.job.id,

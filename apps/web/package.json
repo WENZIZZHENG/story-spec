@@ -1,0 +1,12 @@
+{
+  "name": "@storyspec/web",
+  "private": true,
+  "type": "module",
+  "description": "StorySpec 独立 Web App shell 首批骨架",
+  "scripts": {
+    "dev": "node ../../scripts/dev-web-app.cjs",
+    "test": "vitest run ../../tests/unit/independent-web-app-shell.test.ts",
+    "build": "node ../../scripts/build-web-app.cjs",
+    "typecheck": "tsc --noEmit -p tsconfig.json"
+  }
+}

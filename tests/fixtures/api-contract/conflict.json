@@ -1,0 +1,12 @@
+{
+  "state": "conflict",
+  "pageId": "canon-review",
+  "response": {
+    "statusCode": 409,
+    "requestId": "req-fixture-conflict",
+    "error": {
+      "code": "RESOURCE_CONFLICT",
+      "message": "存在待解决的正典冲突"
+    }
+  }
+}

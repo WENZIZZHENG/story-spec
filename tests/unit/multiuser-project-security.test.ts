@@ -42,6 +42,31 @@ describe('multiuser project security', () => {
     });
   });
 
+  it('blocks action-level access when a project role lacks permission', async () => {
+    const repository = createMemoryProjectAccessRepository({
+      projects: [{
+        id: 'project-1',
+        ownerUserId: 'user-1',
+        dataRoot: path.resolve('D:\\storyspec-data\\projects\\spell-era')
+      }],
+      memberships: [{
+        projectId: 'project-1',
+        userId: 'user-2',
+        role: 'viewer'
+      }]
+    });
+
+    await expect(requireProjectAccess({
+      repository,
+      userId: 'user-2',
+      projectId: 'project-1',
+      requiredAction: 'comment'
+    })).resolves.toMatchObject({
+      blocked: true,
+      blockedReasons: ['只读成员不能评论，需要向项目拥有者申请更高权限。']
+    });
+  });
+
   it('rejects non-members and path-only access', async () => {
     const repository = createMemoryProjectAccessRepository({
       projects: [{

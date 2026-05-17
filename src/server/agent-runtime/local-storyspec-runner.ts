@@ -1,6 +1,6 @@
 import type { AgentJob } from '../jobs/agent-job.js';
 import type { AgentRuntimeAdapter, AgentRuntimeOutput, RunAgentJobWithRuntimeInput, RunAgentJobWithRuntimeResult } from './agent-runtime.js';
-import { runAgentJobWithRuntime } from './agent-runtime.js';
+import { createMemoryRuntimeOutputRepository, runAgentJobWithRuntime } from './agent-runtime.js';
 
 export interface LocalStorySpecRunnerInput {
   execute?: (job: AgentJob) => Promise<AgentRuntimeOutput>;
@@ -47,4 +47,4 @@ export const runAgentJobWithRuntimeLocal = async (
   input: RunAgentJobWithRuntimeInput
 ): Promise<RunAgentJobWithRuntimeResult> => runAgentJobWithRuntime(input);
 
-export { runAgentJobWithRuntime };
+export { createMemoryRuntimeOutputRepository, runAgentJobWithRuntime };

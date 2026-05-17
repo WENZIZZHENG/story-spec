@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import {
   cancelAgentJob,
+  buildAgentJobLog,
   createAgentJob,
   createMemoryAgentJobRepository,
   retryAgentJob,
@@ -136,6 +137,38 @@ describe('multiuser agent job foundation', () => {
         attempt: 2,
         idempotencyKey: 'draft-chapter-1:retry:2'
       }
+    });
+  });
+
+  it('builds a read-only job log timeline from job state', () => {
+    expect(buildAgentJobLog({
+      id: 'job-1',
+      userId: 'user-1',
+      projectId: 'project-1',
+      kind: 'chapter-draft',
+      runtime: 'local-storyspec',
+      status: 'failed',
+      attempt: 1,
+      createdAt: '2026-05-08T12:00:00.000Z',
+      updatedAt: '2026-05-08T12:00:20.000Z',
+      errorMessage: 'runtime failed',
+      runtimeErrorCode: 'RUNTIME_EXECUTION_FAILED',
+      traceId: 'trace-1'
+    })).toEqual({
+      projectId: 'project-1',
+      jobId: 'job-1',
+      entries: [{
+        level: 'info',
+        message: 'job 已创建并进入队列：chapter-draft / local-storyspec',
+        createdAt: '2026-05-08T12:00:00.000Z',
+        traceId: 'trace-1'
+      }, {
+        level: 'error',
+        message: 'job 失败：runtime failed',
+        createdAt: '2026-05-08T12:00:20.000Z',
+        traceId: 'trace-1',
+        runtimeErrorCode: 'RUNTIME_EXECUTION_FAILED'
+      }]
     });
   });
 });

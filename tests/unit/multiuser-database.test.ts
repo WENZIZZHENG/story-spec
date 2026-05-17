@@ -11,10 +11,16 @@ import {
 
 describe('multiuser database foundation', () => {
   it('defines all core metadata tables and repeatable migration SQL', () => {
-    expect(MULTIUSER_MIGRATION_VERSION).toBe(1);
+    expect(MULTIUSER_MIGRATION_VERSION).toBe(6);
     expect(Object.keys(multiuserDatabaseSchema).sort()).toEqual([
       'agentJobs',
+      'agentRuntimeOutputs',
       'auditLogs',
+      'collaborationApplyRequests',
+      'collaborationCanonPatches',
+      'collaborationCommentThreads',
+      'collaborationProposals',
+      'collaborationReviewDecisions',
       'memberships',
       'projects',
       'quotaBuckets',
@@ -43,6 +49,9 @@ describe('multiuser database foundation', () => {
       'user_id',
       'role'
     ]));
+    expect(multiuserDatabaseSchema.memberships.createStatements.join('\n')).toContain(
+      "role in ('owner', 'editor', 'reviewer', 'viewer', 'agent')"
+    );
     expect(multiuserDatabaseSchema.agentJobs.columns).toEqual(expect.arrayContaining([
       'id',
       'user_id',
@@ -55,6 +64,17 @@ describe('multiuser database foundation', () => {
       'created_at',
       'updated_at',
       'error_message'
+    ]));
+    expect(multiuserDatabaseSchema.agentRuntimeOutputs.columns).toEqual(expect.arrayContaining([
+      'id',
+      'job_id',
+      'candidate_ref',
+      'preview_only',
+      'summary',
+      'artifacts',
+      'logs',
+      'trace_id',
+      'created_at'
     ]));
     expect(multiuserDatabaseSchema.auditLogs.columns).toEqual(expect.arrayContaining([
       'id',
@@ -75,19 +95,143 @@ describe('multiuser database foundation', () => {
       'used',
       'updated_at'
     ]));
+    expect(multiuserDatabaseSchema.collaborationProposals.columns).toEqual(expect.arrayContaining([
+      'id',
+      'actor_user_id',
+      'project_id',
+      'story_id',
+      'status',
+      'target',
+      'source_refs',
+      'summary',
+      'risks',
+      'created_at',
+      'updated_at'
+    ]));
+    expect(multiuserDatabaseSchema.collaborationCommentThreads.columns).toEqual(expect.arrayContaining([
+      'id',
+      'project_id',
+      'story_id',
+      'anchor_kind',
+      'anchor_id',
+      'comments',
+      'updated_at'
+    ]));
+    expect(multiuserDatabaseSchema.collaborationCanonPatches.columns).toEqual(expect.arrayContaining([
+      'content',
+      'rollback_content'
+    ]));
+    expect(multiuserDatabaseSchema.collaborationApplyRequests.columns).toEqual(expect.arrayContaining([
+      'applied_at',
+      'rolled_back_at'
+    ]));
 
     const migration = createMultiuserMigrationPlan();
-    expect(migration.version).toBe(1);
+    expect(migration.version).toBe(6);
     expect(migration.statements).toEqual(expect.arrayContaining([
       expect.stringContaining('create table if not exists users'),
       expect.stringContaining('create table if not exists sessions'),
       expect.stringContaining('create table if not exists projects'),
       expect.stringContaining('create table if not exists memberships'),
       expect.stringContaining('create table if not exists agent_jobs'),
+      expect.stringContaining('create table if not exists agent_runtime_outputs'),
       expect.stringContaining('create table if not exists audit_logs'),
-      expect.stringContaining('create table if not exists quota_buckets')
+      expect.stringContaining('create table if not exists quota_buckets'),
+      expect.stringContaining('create table if not exists collaboration_proposals'),
+      expect.stringContaining('create table if not exists collaboration_review_decisions'),
+      expect.stringContaining('create table if not exists collaboration_canon_patches'),
+      expect.stringContaining('create table if not exists collaboration_apply_requests'),
+      expect.stringContaining('create table if not exists collaboration_comment_threads')
+    ]));
+    expect(migration.statements).toEqual(expect.arrayContaining([
+      expect.stringContaining('content text'),
+      expect.stringContaining('rollback_content text'),
+      expect.stringContaining('rolled_back_at timestamptz')
     ]));
     expect(createMultiuserMigrationPlan()).toEqual(migration);
+  });
+
+  it('adapts runtime output repository through the database executor boundary', async () => {
+    const queries: Array<{ sql: string; params: unknown[] }> = [];
+    const executor: MultiuserDatabaseExecutor = {
+      async queryOne() {
+        return undefined;
+      },
+      async queryMany(sql, params) {
+        queries.push({ sql, params });
+        if (sql.includes('from agent_runtime_outputs')) {
+          return [{
+            id: 'output-1',
+            job_id: 'job-1',
+            candidate_ref: 'openhands:job-1',
+            preview_only: true,
+            summary: 'OpenHands headless 已生成候选',
+            artifacts: [{
+              id: 'openhands-stdout',
+              kind: 'stdout',
+              label: 'OpenHands stdout',
+              previewText: '候选输出'
+            }],
+            logs: [{
+              level: 'info',
+              message: 'OpenHands stdout: 候选输出',
+              createdAt: '2026-05-16T13:01:00.000Z'
+            }],
+            trace_id: 'trace-output',
+            created_at: '2026-05-16T13:01:00.000Z'
+          }];
+        }
+        return [];
+      },
+      async execute(sql, params) {
+        queries.push({ sql, params });
+      }
+    };
+    const repositories = createMultiuserDatabaseRepositories(executor);
+
+    await repositories.runtimeOutputs.save({
+      jobId: 'job-1',
+      candidateRef: 'openhands:job-1',
+      previewOnly: true,
+      summary: 'OpenHands headless 已生成候选',
+      artifacts: [{
+        id: 'openhands-stdout',
+        kind: 'stdout',
+        label: 'OpenHands stdout',
+        previewText: '候选输出'
+      }],
+      logs: [{
+        level: 'info',
+        message: 'OpenHands stdout: 候选输出',
+        createdAt: '2026-05-16T13:01:00.000Z'
+      }],
+      traceId: 'trace-output',
+      createdAt: '2026-05-16T13:01:00.000Z'
+    });
+    await expect(repositories.runtimeOutputs.listByJob('job-1')).resolves.toEqual([
+      {
+        jobId: 'job-1',
+        candidateRef: 'openhands:job-1',
+        previewOnly: true,
+        summary: 'OpenHands headless 已生成候选',
+        artifacts: [{
+          id: 'openhands-stdout',
+          kind: 'stdout',
+          label: 'OpenHands stdout',
+          previewText: '候选输出'
+        }],
+        logs: [{
+          level: 'info',
+          message: 'OpenHands stdout: 候选输出',
+          createdAt: '2026-05-16T13:01:00.000Z'
+        }],
+        traceId: 'trace-output',
+        createdAt: '2026-05-16T13:01:00.000Z'
+      }
+    ]);
+
+    expect(queries.some(query => query.sql.includes('insert into agent_runtime_outputs'))).toBe(true);
+    expect(queries.some(query => query.sql.includes('from agent_runtime_outputs where job_id = $1'))).toBe(true);
   });
 
   it('adapts repository interfaces through a database executor boundary', async () => {
@@ -199,5 +343,281 @@ describe('multiuser database foundation', () => {
 
     expect(queries.some(query => query.sql.includes('insert into sessions'))).toBe(true);
     expect(queries.some(query => query.sql.includes('insert into quota_buckets'))).toBe(true);
+  });
+
+  it('adapts collaboration canon repository through the database executor boundary', async () => {
+    const queries: Array<{ sql: string; params: unknown[] }> = [];
+    const executor: MultiuserDatabaseExecutor = {
+      async queryOne(sql, params) {
+        queries.push({ sql, params });
+        if (sql.includes('from collaboration_proposals')) {
+          return {
+            id: 'proposal-1',
+            actor_user_id: 'user-1',
+            project_id: 'project-1',
+            story_id: 'story-main',
+            status: 'approved',
+            target: {
+              kind: 'canon',
+              path: 'stories/main/canon.md',
+              resourceVersion: 'canon-v1'
+            },
+            source_refs: [{
+              kind: 'manual',
+              id: 'note-1',
+              label: '人工记录'
+            }],
+            summary: '候选事实。',
+            risks: [],
+            created_at: '2026-05-08T12:00:00.000Z',
+            updated_at: '2026-05-08T12:01:00.000Z'
+          };
+        }
+        return undefined;
+      },
+      async queryMany(sql, params) {
+        queries.push({ sql, params });
+        if (sql.includes('from collaboration_review_decisions')) {
+          return [{
+            id: 'review-1',
+            proposal_id: 'proposal-1',
+            reviewer_user_id: 'user-2',
+            decision: 'approve',
+            note: '可以应用。',
+            created_at: '2026-05-08T12:02:00.000Z'
+          }];
+        }
+        if (sql.includes('from collaboration_canon_patches')) {
+          return [{
+            id: 'patch-1',
+            proposal_id: 'proposal-1',
+            target_path: 'stories/main/canon.md',
+            kind: 'canon-fact',
+            diff_summary: '新增正典事实。',
+            rollback_hint: '删除 fact-1。',
+            content: '# Canon\n\n- fact-1\n',
+            rollback_content: '# Canon\n',
+            source_refs: ['note-1']
+          }];
+        }
+        if (sql.includes('from collaboration_apply_requests')) {
+          return [{
+            id: 'apply-1',
+            proposal_id: 'proposal-1',
+            actor_user_id: 'user-1',
+            status: 'ready',
+            current_version: {
+              resourceVersion: 'canon-v1',
+              storyStage: 'drafting',
+              canonFactIds: ['fact-old'],
+              taskState: 'open'
+            },
+            patch_ids: ['patch-1'],
+            reviewer_ids: ['user-2'],
+            blocked_reasons: [],
+            created_at: '2026-05-08T12:03:00.000Z',
+            applied_at: '2026-05-08T12:04:00.000Z',
+            rolled_back_at: '2026-05-08T12:05:00.000Z'
+          }];
+        }
+        if (sql.includes('from collaboration_comment_threads')) {
+          return [{
+            id: 'thread-1',
+            project_id: 'project-1',
+            story_id: 'story-main',
+            anchor_kind: 'proposal',
+            anchor_id: 'proposal-1',
+            comments: [{
+              id: 'comment-1',
+              actorUserId: 'user-2',
+              body: '需要补来源。',
+              createdAt: '2026-05-08T12:04:00.000Z'
+            }],
+            created_at: '2026-05-08T12:04:00.000Z',
+            updated_at: '2026-05-08T12:04:00.000Z'
+          }];
+        }
+        if (sql.includes('from collaboration_proposals')) {
+          return [{
+            id: 'proposal-1',
+            actor_user_id: 'user-1',
+            project_id: 'project-1',
+            story_id: 'story-main',
+            status: 'approved',
+            target: {
+              kind: 'canon',
+              path: 'stories/main/canon.md',
+              resourceVersion: 'canon-v1'
+            },
+            source_refs: [],
+            summary: '候选事实。',
+            risks: [],
+            created_at: '2026-05-08T12:00:00.000Z',
+            updated_at: '2026-05-08T12:01:00.000Z'
+          }];
+        }
+        return [];
+      },
+      async execute(sql, params) {
+        queries.push({ sql, params });
+      }
+    };
+    const repositories = createMultiuserDatabaseRepositories(executor);
+
+    await repositories.collaboration.saveProposal({
+      id: 'proposal-1',
+      actorUserId: 'user-1',
+      projectId: 'project-1',
+      storyId: 'story-main',
+      status: 'draft',
+      target: {
+        kind: 'canon',
+        path: 'stories/main/canon.md',
+        resourceVersion: 'canon-v1'
+      },
+      sourceRefs: [{
+        kind: 'manual',
+        id: 'note-1',
+        label: '人工记录'
+      }],
+      summary: '候选事实。',
+      risks: [],
+      createdAt: '2026-05-08T12:00:00.000Z',
+      updatedAt: '2026-05-08T12:00:00.000Z'
+    });
+    await expect(repositories.collaboration.findProposalById('proposal-1')).resolves.toMatchObject({
+      id: 'proposal-1',
+      actorUserId: 'user-1',
+      target: {
+        kind: 'canon'
+      }
+    });
+
+    await repositories.collaboration.saveReviewDecision({
+      id: 'review-1',
+      proposalId: 'proposal-1',
+      reviewerUserId: 'user-2',
+      decision: 'approve',
+      note: '可以应用。',
+      createdAt: '2026-05-08T12:02:00.000Z'
+    });
+    await expect(repositories.collaboration.listReviewDecisions('proposal-1')).resolves.toEqual([
+      expect.objectContaining({
+        id: 'review-1',
+        proposalId: 'proposal-1',
+        decision: 'approve'
+      })
+    ]);
+
+    await repositories.collaboration.savePatch({
+      id: 'patch-1',
+      proposalId: 'proposal-1',
+      targetPath: 'stories/main/canon.md',
+      kind: 'canon-fact',
+      diffSummary: '新增正典事实。',
+      rollbackHint: '删除 fact-1。',
+      content: '# Canon\n\n- fact-1\n',
+      rollbackContent: '# Canon\n',
+      sourceRefs: ['note-1']
+    });
+    await expect(repositories.collaboration.listPatches('proposal-1')).resolves.toEqual([
+      expect.objectContaining({
+        id: 'patch-1',
+        content: '# Canon\n\n- fact-1\n',
+        rollbackContent: '# Canon\n',
+        sourceRefs: ['note-1']
+      })
+    ]);
+
+    await repositories.collaboration.saveApplyRequest({
+      id: 'apply-1',
+      proposalId: 'proposal-1',
+      actorUserId: 'user-1',
+      status: 'ready',
+      currentVersion: {
+        resourceVersion: 'canon-v1',
+        storyStage: 'drafting',
+        canonFactIds: ['fact-old'],
+        taskState: 'open'
+      },
+      patchIds: ['patch-1'],
+      reviewerIds: ['user-2'],
+      blockedReasons: [],
+      createdAt: '2026-05-08T12:03:00.000Z',
+      appliedAt: '2026-05-08T12:04:00.000Z',
+      rolledBackAt: '2026-05-08T12:05:00.000Z'
+    });
+    await expect(repositories.collaboration.listProposalsByProject?.({
+      projectId: 'project-1',
+      storyId: 'story-main'
+    })).resolves.toEqual([
+      expect.objectContaining({
+        id: 'proposal-1',
+        projectId: 'project-1',
+        storyId: 'story-main'
+      })
+    ]);
+    await expect(repositories.collaboration.listApplyRequests?.('proposal-1')).resolves.toEqual([
+      expect.objectContaining({
+        id: 'apply-1',
+        proposalId: 'proposal-1',
+        status: 'ready',
+        appliedAt: '2026-05-08T12:04:00.000Z',
+        rolledBackAt: '2026-05-08T12:05:00.000Z'
+      })
+    ]);
+    await repositories.collaboration.saveCommentThread?.({
+      id: 'thread-1',
+      projectId: 'project-1',
+      storyId: 'story-main',
+      anchorKind: 'proposal',
+      anchorId: 'proposal-1',
+      comments: [{
+        id: 'comment-1',
+        actorUserId: 'user-2',
+        body: '需要补来源。',
+        createdAt: '2026-05-08T12:04:00.000Z'
+      }]
+    });
+    await expect(repositories.collaboration.listCommentThreads?.({
+      projectId: 'project-1',
+      anchorKind: 'proposal',
+      anchorId: 'proposal-1'
+    })).resolves.toEqual([
+      expect.objectContaining({
+        id: 'thread-1',
+        anchorKind: 'proposal',
+        comments: [
+          expect.objectContaining({
+            body: '需要补来源。'
+          })
+        ]
+      })
+    ]);
+    expect(repositories.collaboration.snapshot()).toMatchObject({
+      proposals: [
+        { id: 'proposal-1' }
+      ],
+      reviewDecisions: [
+        { id: 'review-1' }
+      ],
+      patches: [
+        { id: 'patch-1' }
+      ],
+      applyRequests: [
+        { id: 'apply-1' }
+      ],
+      commentThreads: [
+        { id: 'thread-1' }
+      ]
+    });
+    expect(queries.some(query => query.sql.includes('insert into collaboration_proposals'))).toBe(true);
+    expect(queries.some(query => query.sql.includes('insert into collaboration_review_decisions'))).toBe(true);
+    expect(queries.some(query => query.sql.includes('insert into collaboration_canon_patches'))).toBe(true);
+    expect(queries.some(query => query.sql.includes('insert into collaboration_apply_requests'))).toBe(true);
+    expect(queries.some(query => query.sql.includes('insert into collaboration_comment_threads'))).toBe(true);
+    expect(queries.some(query => query.sql.includes('from collaboration_proposals') && query.sql.includes('story_id = $2'))).toBe(true);
+    expect(queries.some(query => query.sql.includes('from collaboration_apply_requests where proposal_id = $1'))).toBe(true);
+    expect(queries.some(query => query.sql.includes('from collaboration_comment_threads'))).toBe(true);
   });
 });

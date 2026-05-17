@@ -33,6 +33,44 @@ export interface AgentJobResult {
   job?: AgentJob;
 }
 
+export interface AgentJobDashboard {
+  projectId: string;
+  totalJobs: number;
+  activeJobs: number;
+  retryableJobs: number;
+  statusCounts: Record<AgentJobStatus, number>;
+  latestJobs: AgentJob[];
+  queue: {
+    readiness: {
+      configured: boolean;
+      connected: boolean;
+      worker: boolean;
+      driver: 'memory' | 'bullmq' | 'none';
+    };
+    snapshot?: {
+      pending: number;
+      acknowledged: number;
+      failed: number;
+    };
+  };
+}
+
+export type AgentJobLogLevel = 'info' | 'warning' | 'error';
+
+export interface AgentJobLogEntry {
+  level: AgentJobLogLevel;
+  message: string;
+  createdAt: string;
+  traceId?: string;
+  runtimeErrorCode?: string;
+}
+
+export interface AgentJobLog {
+  projectId: string;
+  jobId: string;
+  entries: AgentJobLogEntry[];
+}
+
 export interface CreateAgentJobInput {
   repository: AgentJobRepository;
   userId: string;
@@ -70,6 +108,7 @@ export interface RetryAgentJobInput {
 const terminalStatuses = new Set<AgentJobStatus>(['succeeded', 'failed', 'canceled', 'timeout']);
 const activeStatuses = new Set<AgentJobStatus>(['queued', 'running']);
 const retryableStatuses = new Set<AgentJobStatus>(['failed', 'timeout']);
+const allStatuses: AgentJobStatus[] = ['queued', 'running', 'succeeded', 'failed', 'canceled', 'timeout'];
 const transitions: Record<AgentJobStatus, AgentJobStatus[]> = {
   queued: ['running', 'canceled'],
   running: ['succeeded', 'failed', 'timeout', 'canceled'],
@@ -87,6 +126,25 @@ const blocked = (reason: string): AgentJobResult => ({
   blocked: true,
   blockedReasons: [reason]
 });
+
+const buildJobStatusLogMessage = (
+  job: AgentJob
+): { level: AgentJobLogLevel; message: string } => {
+  switch (job.status) {
+    case 'queued':
+      return { level: 'info', message: 'job 等待 worker 执行。' };
+    case 'running':
+      return { level: 'info', message: 'job 正在运行。' };
+    case 'succeeded':
+      return { level: 'info', message: 'job 已完成。' };
+    case 'failed':
+      return { level: 'error', message: `job 失败：${job.errorMessage ?? 'runtime 执行失败'}` };
+    case 'timeout':
+      return { level: 'error', message: `job 超时：${job.errorMessage ?? 'runtime 执行超时'}` };
+    case 'canceled':
+      return { level: 'warning', message: 'job 已取消。' };
+  }
+};
 
 export const createMemoryAgentJobRepository = (): AgentJobRepository => {
   const jobs = new Map<string, AgentJob>();
@@ -109,6 +167,33 @@ export const createMemoryAgentJobRepository = (): AgentJobRepository => {
     async save(job) {
       jobs.set(job.id, job);
     }
+  };
+};
+
+export const buildAgentJobLog = (job: AgentJob): AgentJobLog => {
+  const withTrace = job.traceId ? { traceId: job.traceId } : {};
+  const entries: AgentJobLogEntry[] = [{
+    level: 'info',
+    message: `job 已创建并进入队列：${job.kind} / ${job.runtime}`,
+    createdAt: job.createdAt,
+    ...withTrace
+  }];
+
+  if (job.status !== 'queued' || job.updatedAt !== job.createdAt) {
+    const statusLog = buildJobStatusLogMessage(job);
+    entries.push({
+      level: statusLog.level,
+      message: statusLog.message,
+      createdAt: job.updatedAt,
+      ...withTrace,
+      ...(job.runtimeErrorCode ? { runtimeErrorCode: job.runtimeErrorCode } : {})
+    });
+  }
+
+  return {
+    projectId: job.projectId,
+    jobId: job.id,
+    entries
   };
 };
 
@@ -224,5 +309,49 @@ export const retryAgentJob = async (
     blocked: false,
     blockedReasons: [],
     job: retry
+  };
+};
+
+export const buildAgentJobDashboard = (
+  input: {
+    projectId: string;
+    jobs: AgentJob[];
+    queueReadyState: AgentJobDashboard['queue']['readiness'];
+    queueSnapshot?: {
+      pending: unknown[];
+      acknowledged: unknown[];
+      failed: unknown[];
+    };
+    latestLimit?: number;
+  }
+): AgentJobDashboard => {
+  const statusCounts = Object.fromEntries(
+    allStatuses.map(status => [status, 0])
+  ) as Record<AgentJobStatus, number>;
+  for (const job of input.jobs) {
+    statusCounts[job.status] += 1;
+  }
+
+  return {
+    projectId: input.projectId,
+    totalJobs: input.jobs.length,
+    activeJobs: input.jobs.filter(job => activeStatuses.has(job.status)).length,
+    retryableJobs: input.jobs.filter(job => retryableStatuses.has(job.status)).length,
+    statusCounts,
+    latestJobs: [...input.jobs]
+      .sort((left, right) => right.updatedAt.localeCompare(left.updatedAt))
+      .slice(0, input.latestLimit ?? 10),
+    queue: {
+      readiness: input.queueReadyState,
+      ...(input.queueSnapshot
+        ? {
+          snapshot: {
+            pending: input.queueSnapshot.pending.length,
+            acknowledged: input.queueSnapshot.acknowledged.length,
+            failed: input.queueSnapshot.failed.length
+          }
+        }
+        : {})
+    }
   };
 };

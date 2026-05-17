@@ -1,0 +1,12 @@
+{
+  "state": "blocked",
+  "pageId": "chapter-writing",
+  "response": {
+    "statusCode": 400,
+    "requestId": "req-fixture-blocked",
+    "error": {
+      "code": "BLOCKED",
+      "message": "当前章节缺少必要输入"
+    }
+  }
+}

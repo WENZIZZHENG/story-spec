@@ -1,3 +1,8 @@
+import {
+  buildMultiuserContractErrorResponse,
+  type MultiuserContractErrorCode
+} from './api-contract.js';
+
 export interface ServerHealthInput {
   version: string;
   now?: () => string;
@@ -23,10 +28,11 @@ export interface RequestContext {
 
 export interface ErrorResponseInput {
   statusCode: number;
-  requestId: string;
-  code: string;
+  requestId?: string;
+  code: MultiuserContractErrorCode;
   message: string;
   traceId?: string;
+  details?: unknown;
 }
 
 export interface ErrorResponse {
@@ -34,8 +40,9 @@ export interface ErrorResponse {
   requestId: string;
   traceId?: string;
   error: {
-    code: string;
+    code: MultiuserContractErrorCode;
     message: string;
+    details?: unknown;
   };
 }
 
@@ -67,11 +74,12 @@ export const createRequestContext = (input: RequestContextInput = {}): RequestCo
 };
 
 export const createErrorResponse = (input: ErrorResponseInput): ErrorResponse => ({
-  statusCode: input.statusCode,
-  requestId: input.requestId,
-  traceId: input.traceId,
-  error: {
+  ...buildMultiuserContractErrorResponse({
+    statusCode: input.statusCode,
+    requestId: input.requestId ?? createRequestContext().requestId,
     code: input.code,
-    message: input.message
-  }
+    message: input.message,
+    details: input.details,
+    traceId: input.traceId
+  })
 });
