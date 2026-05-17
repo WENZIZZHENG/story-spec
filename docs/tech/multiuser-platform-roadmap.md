@@ -83,10 +83,10 @@ Active。本文承接多人在线平台的产品对象、权限模型、API cont
 ## P1-5 完整 App 前端架构与 API 契约落地
 
 - 类型：前端架构、API、产品体验
-- 状态：已完成首批底座（2026-05-16）。`add-complete-app-frontend-architecture-slice` 已新增完整 App 前端架构契约，冻结项目与工作区、故事驾驶舱、章节与写作、候选与正典审阅、任务中心的 route/API/status contract，并让本机 App shell 从该契约渲染导航和 API 地图；`add-independent-web-app-shell` 已新增 `apps/web/` 独立前端首片 shell、route/API 边界和 fallback 约束；登录态 UI、成员权限 UI、E2E、富文本编辑器和实时协作仍留给后续 OpenSpec。
+- 状态：已完成首批底座（2026-05-17）。`add-complete-app-frontend-architecture-slice` 已新增完整 App 前端架构契约，冻结项目与工作区、故事驾驶舱、章节与写作、候选与正典审阅、任务中心的 route/API/status contract，并让本机 App shell 从该契约渲染导航和 API 地图；`add-independent-web-app-shell` 已新增 `apps/web/` 独立前端首片 shell、route/API 边界和 fallback 约束；`add-login-permission-ui-slice` 已新增登录/权限只读 UI contract、`login-permission` route 和 `multiuser-context` 只读 endpoint；前端构建/dev server、E2E、富文本编辑器和实时协作仍留给后续 OpenSpec。
 - 背景/问题：当前 `storyspec app` 是零依赖本机页面，能证明工作台流程，但不适合作为长期多人在线 App 的前端承载层。
 - 已有基础：`src/app-server/local-app-html.ts`、`src/app-server/local-app-server.ts`、本机 App API、server 控制面 API、P1-0 产品体验设计、P1-2 API contract。
-- 缺口：独立前端项目首片 shell 已建立；仍缺状态管理、登录态 UI、成员权限 UI、错误边界组件、端到端测试、真实构建/dev server 和可维护组件边界。
+- 缺口：独立前端项目首片 shell 与登录/权限只读 UI contract 已建立；仍缺状态管理、真实账号/团队 mutation UI、错误边界组件、端到端测试、真实构建/dev server 和可维护组件边界。
 - 建议方案：
   1. 引用 P1-0 的 App IA 和 P1-2 的 API contract，先建立项目列表、故事工作台、章节写作、候选/评论、任务/审稿、设置的前端骨架。
   2. 再选择前端栈，优先小步迁移，不一次性重写本机工作台。

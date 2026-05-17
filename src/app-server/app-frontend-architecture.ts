@@ -1,5 +1,6 @@
 export type CompleteAppFrontendRouteId =
   | 'project-workspace'
+  | 'login-permission'
   | 'story-cockpit'
   | 'chapter-writing'
   | 'canon-review'
@@ -117,12 +118,23 @@ export interface RuntimeOutputUiContract {
   errorState: string;
 }
 
+export interface LoginPermissionUiContract {
+  routeId: 'login-permission';
+  title: string;
+  endpointId: 'multiuser-context';
+  readonlyBoundary: string;
+  visibleStates: string[];
+  disabledActionState: string;
+  nonGoals: string[];
+}
+
 export interface CompleteAppFrontendArchitecture {
   routes: CompleteAppFrontendRoute[];
   apiClient: {
     tokenHeader: 'x-storyspec-app-token';
     endpoints: CompleteAppFrontendEndpoint[];
   };
+  loginPermission: LoginPermissionUiContract;
   collaborationCanonReview: CollaborationCanonReviewUiContract;
   runtimeOutput: RuntimeOutputUiContract;
   stateLanguage: {
@@ -143,6 +155,15 @@ const routes: CompleteAppFrontendRoute[] = [
     primaryEndpoints: ['recent-projects', 'open-project', 'create-project'],
     requiredPermission: '本机 session token 可访问；多人权限由 server 项目成员关系决定。',
     emptyState: '选择一个 StorySpec 项目，或创建新项目。'
+  },
+  {
+    id: 'login-permission',
+    label: '登录与权限',
+    route: '#login-permission',
+    purpose: '展示当前 session、项目角色、允许动作、禁用动作和权限不足下一步。',
+    primaryEndpoints: ['multiuser-context'],
+    requiredPermission: '本机 session token 或多人 server bearer token 有效；项目角色决定动作状态。',
+    emptyState: '绑定 session 并打开项目后，权限面板会展示当前角色和可执行动作。'
   },
   {
     id: 'story-cockpit',
@@ -214,6 +235,14 @@ const endpoints: CompleteAppFrontendEndpoint[] = [
     routeId: 'story-cockpit',
     boundary: 'read-only',
     description: '读取完整 App 状态契约。'
+  },
+  {
+    id: 'multiuser-context',
+    method: 'GET',
+    path: '/api/context?projectId=:projectId',
+    routeId: 'login-permission',
+    boundary: 'read-only',
+    description: '读取当前 session、项目 membership 和权限上下文。'
   },
   {
     id: 'current-resume',
@@ -603,12 +632,31 @@ const runtimeOutput: RuntimeOutputUiContract = {
   ]
 };
 
+const loginPermission: LoginPermissionUiContract = {
+  routeId: 'login-permission',
+  title: '登录与权限',
+  endpointId: 'multiuser-context',
+  readonlyBoundary: '登录/权限 UI 只读展示 session、角色和 action-level 权限状态，不创建账号、不邀请成员、不修改角色。',
+  visibleStates: [
+    'session-bound：当前 session 可用于读取项目上下文。',
+    'forbidden：当前角色缺少动作权限，需要 owner/editor 调整。',
+    'disabled：功能尚未接入账号/团队流程，只展示后续入口语言。'
+  ],
+  disabledActionState: '禁用动作必须显示 disabledReason 和 nextAction，不能只隐藏按钮。',
+  nonGoals: [
+    '不实现注册、登录、登出或 session revoke。',
+    '不实现邀请成员、角色变更或团队管理 mutation。',
+    '不绕过 storyspec server 的 session、membership 和 action-level guard。'
+  ]
+};
+
 export const buildCompleteAppFrontendArchitecture = (): CompleteAppFrontendArchitecture => ({
   routes,
   apiClient: {
     tokenHeader: 'x-storyspec-app-token',
     endpoints
   },
+  loginPermission,
   collaborationCanonReview,
   runtimeOutput,
   stateLanguage: {

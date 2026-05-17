@@ -9,12 +9,19 @@ describe('complete app frontend architecture', () => {
 
     expect(architecture.routes.map(route => route.id)).toEqual([
       'project-workspace',
+      'login-permission',
       'story-cockpit',
       'chapter-writing',
       'canon-review',
       'task-center'
     ]);
     expect(architecture.routes).toEqual(expect.arrayContaining([
+      expect.objectContaining({
+        id: 'login-permission',
+        label: '登录与权限',
+        primaryEndpoints: ['multiuser-context'],
+        emptyState: expect.stringContaining('权限面板')
+      }),
       expect.objectContaining({
         id: 'story-cockpit',
         label: '故事驾驶舱',
@@ -40,6 +47,13 @@ describe('complete app frontend architecture', () => {
 
     expect(architecture.apiClient.tokenHeader).toBe('x-storyspec-app-token');
     expect(architecture.apiClient.endpoints).toEqual(expect.arrayContaining([
+      expect.objectContaining({
+        id: 'multiuser-context',
+        method: 'GET',
+        path: '/api/context?projectId=:projectId',
+        routeId: 'login-permission',
+        boundary: 'read-only'
+      }),
       expect.objectContaining({
         id: 'current-app-state',
         method: 'GET',
@@ -71,6 +85,28 @@ describe('complete app frontend architecture', () => {
     ]));
     expect(architecture.apiClient.endpoints.map(endpoint => endpoint.id)).toContain('chapter-review');
     expect(architecture.apiClient.endpoints.map(endpoint => endpoint.id)).toContain('task-board');
+  });
+
+  it('defines the login and permission read-only UI contract', () => {
+    const architecture = buildCompleteAppFrontendArchitecture();
+
+    expect(architecture.loginPermission).toMatchObject({
+      routeId: 'login-permission',
+      title: '登录与权限',
+      endpointId: 'multiuser-context',
+      readonlyBoundary: '登录/权限 UI 只读展示 session、角色和 action-level 权限状态，不创建账号、不邀请成员、不修改角色。'
+    });
+    expect(architecture.loginPermission.visibleStates).toEqual(expect.arrayContaining([
+      expect.stringContaining('session-bound'),
+      expect.stringContaining('forbidden'),
+      expect.stringContaining('disabled')
+    ]));
+    expect(architecture.loginPermission.disabledActionState).toBe('禁用动作必须显示 disabledReason 和 nextAction，不能只隐藏按钮。');
+    expect(architecture.loginPermission.nonGoals).toEqual(expect.arrayContaining([
+      '不实现注册、登录、登出或 session revoke。',
+      '不实现邀请成员、角色变更或团队管理 mutation。',
+      '不绕过 storyspec server 的 session、membership 和 action-level guard。'
+    ]));
   });
 
   it('keeps user-facing state language and product boundaries explicit', () => {

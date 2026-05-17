@@ -7,6 +7,10 @@ export type IndependentWebRouteId =
 
 export type IndependentWebBoundary = 'read-only' | 'preview' | 'dry-run' | 'apply-confirmed';
 
+export type IndependentWebAuthState = 'session-bound';
+
+export type IndependentWebRole = 'owner' | 'editor' | 'reviewer' | 'viewer' | 'agent';
+
 export interface IndependentWebRoute {
   id: IndependentWebRouteId;
   label: string;
@@ -17,13 +21,44 @@ export interface IndependentWebRoute {
 export interface IndependentWebApiClient {
   baseUrl: '/api';
   tokenHeader: 'x-storyspec-app-token';
-  authState: 'session-bound';
+  authState: IndependentWebAuthState;
+}
+
+export interface IndependentWebAuthSession {
+  state: IndependentWebAuthState;
+  userLabel: string;
+  projectLabel: string;
+}
+
+export interface IndependentWebAuthRole {
+  role: IndependentWebRole;
+  label: string;
+  description: string;
+}
+
+export interface IndependentWebPermissionAction {
+  id: string;
+  label: string;
+  allowed: boolean;
+  boundary: IndependentWebBoundary;
+  requiredPermission: string;
+  disabledReason?: string;
+  nextAction?: string;
+}
+
+export interface IndependentWebAuthPanel {
+  title: '登录与权限';
+  session: IndependentWebAuthSession;
+  role: IndependentWebAuthRole;
+  actions: IndependentWebPermissionAction[];
+  boundaries: string[];
 }
 
 export interface IndependentWebAppShell {
   projectRoot: 'apps/web';
   title: 'StorySpec Web';
   apiClient: IndependentWebApiClient;
+  authPanel: IndependentWebAuthPanel;
   routes: IndependentWebRoute[];
   boundaries: string[];
   nonGoals: string[];
@@ -43,6 +78,57 @@ export const buildIndependentWebAppShell = (): IndependentWebAppShell => ({
     baseUrl: '/api',
     tokenHeader: 'x-storyspec-app-token',
     authState: 'session-bound'
+  },
+  authPanel: {
+    title: '登录与权限',
+    session: {
+      state: 'session-bound',
+      userLabel: '本机作者',
+      projectLabel: '当前项目'
+    },
+    role: {
+      role: 'owner',
+      label: '拥有者',
+      description: '可以查看项目、运行审阅流程，并在作者确认后应用正典变更。'
+    },
+    actions: [
+      {
+        id: 'view-project',
+        label: '查看项目',
+        allowed: true,
+        boundary: 'read-only',
+        requiredPermission: 'view-project'
+      },
+      {
+        id: 'review-canon',
+        label: '审阅候选',
+        allowed: true,
+        boundary: 'preview',
+        requiredPermission: 'review-canon'
+      },
+      {
+        id: 'apply-canon-change',
+        label: '应用正典变更',
+        allowed: true,
+        boundary: 'apply-confirmed',
+        requiredPermission: 'apply-canon-change',
+        nextAction: '执行前仍需查看 diff、风险和 rollback。'
+      },
+      {
+        id: 'invite-member',
+        label: '邀请成员',
+        allowed: false,
+        boundary: 'read-only',
+        requiredPermission: 'manage-members',
+        disabledReason: '邀请成员仍属于后续账号/团队流程，本切片只展示权限状态。',
+        nextAction: '等待邀请流程 OpenSpec 落地后再开放。'
+      }
+    ],
+    boundaries: [
+      '本面板只展示 session 与权限状态，不创建账号、不邀请成员、不修改角色。',
+      '真实访问仍由 storyspec server 的 session、membership 和 action-level guard 判定。',
+      '权限不足时必须展示原因和下一步，不能静默隐藏高风险动作。'
+    ]
   },
   routes: [
     {
@@ -94,6 +180,21 @@ export const renderIndependentWebAppHtml = (shell: IndependentWebAppShell): stri
     `<span>${escapeHtml(route.purpose)}</span>` +
     `<code>${escapeHtml(route.boundary)}</code></li>`
   )).join('');
+  const permissionActions = shell.authPanel.actions.map(action => {
+    const disabled = action.allowed ? '' : ' aria-disabled="true"';
+    const status = action.allowed ? '可用' : '暂不可用';
+    const details = [
+      `<span>${escapeHtml(action.requiredPermission)} · ${escapeHtml(action.boundary)} · ${status}</span>`,
+      action.disabledReason ? `<small>${escapeHtml(action.disabledReason)}</small>` : '',
+      action.nextAction ? `<small>${escapeHtml(action.nextAction)}</small>` : ''
+    ].join('');
+
+    return (
+      `<li data-permission-action="${escapeHtml(action.id)}"${disabled}>` +
+      `<strong>${escapeHtml(action.label)}</strong>${details}</li>`
+    );
+  }).join('');
+  const authBoundaries = shell.authPanel.boundaries.map(item => `<li>${escapeHtml(item)}</li>`).join('');
   const boundaries = shell.boundaries.map(item => `<li>${escapeHtml(item)}</li>`).join('');
   const nonGoals = shell.nonGoals.map(item => `<li>${escapeHtml(item)}</li>`).join('');
 
@@ -102,6 +203,10 @@ export const renderIndependentWebAppHtml = (shell: IndependentWebAppShell): stri
     `<h1>${escapeHtml(shell.title)}</h1>`,
     '<p>独立前端 shell 首片，复用 StorySpec App route/API/status contract。</p>',
     `<p><strong>API</strong> ${escapeHtml(shell.apiClient.baseUrl)} · ${escapeHtml(shell.apiClient.tokenHeader)} · ${escapeHtml(shell.apiClient.authState)}</p>`,
+    `<section aria-labelledby="auth-panel-title"><h2 id="auth-panel-title">${escapeHtml(shell.authPanel.title)}</h2>`,
+    `<p><strong>${escapeHtml(shell.authPanel.session.userLabel)}</strong> · ${escapeHtml(shell.authPanel.session.projectLabel)} · ${escapeHtml(shell.authPanel.session.state)}</p>`,
+    `<p><strong>${escapeHtml(shell.authPanel.role.label)}</strong> · ${escapeHtml(shell.authPanel.role.description)}</p>`,
+    `<ul>${permissionActions}</ul><ul>${authBoundaries}</ul></section>`,
     `<nav aria-label="StorySpec Web routes"><ul>${routes}</ul></nav>`,
     `<section><h2>写入边界</h2><ul>${boundaries}</ul></section>`,
     `<section><h2>非目标</h2><ul>${nonGoals}</ul></section>`,
