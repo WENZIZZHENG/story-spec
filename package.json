@@ -20,7 +20,8 @@
     "storyspec": "dist/cli.js"
   },
   "scripts": {
-    "build": "tsc",
+    "build": "tsc && npm run build:web",
+    "build:web": "npm --prefix apps/web run build",
     "postbuild": "node scripts/postbuild.cjs",
     "build:commands": "node scripts/build-commands.cjs --agents=generic,continue-check,claude,gemini,cursor,windsurf,roocode,copilot,qwen,opencode,codex,kilocode,auggie,codebuddy,q --scripts=sh",
     "check:command-manifest": "tsx scripts/build/command-artifact-manifest.ts",

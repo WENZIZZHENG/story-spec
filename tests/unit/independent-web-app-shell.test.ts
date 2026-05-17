@@ -1,9 +1,16 @@
 import { readFile } from 'node:fs/promises';
+import { existsSync } from 'node:fs';
+import { rm } from 'node:fs/promises';
+import { execFile } from 'node:child_process';
+import { promisify } from 'node:util';
+import { fileURLToPath } from 'node:url';
 import { describe, expect, it } from 'vitest';
 import {
   buildIndependentWebAppShell,
   renderIndependentWebAppHtml
 } from '../../apps/web/src/app-shell.js';
+
+const execFileAsync = promisify(execFile);
 
 describe('independent web app shell', () => {
   it('defines an independent web shell contract without replacing the local fallback', () => {
@@ -95,5 +102,44 @@ describe('independent web app shell', () => {
     expect(html).toContain('<div id="storyspec-web-root">');
     expect(html).toContain('src="./src/main.ts"');
     expect(html).toContain('StorySpec Web');
+  });
+
+  it('web build pipeline emits static artifacts without framework dependencies', async () => {
+    const rootPackage = JSON.parse(await readFile(new URL('../../package.json', import.meta.url), 'utf8')) as {
+      scripts: Record<string, string>;
+      dependencies?: Record<string, string>;
+      devDependencies?: Record<string, string>;
+    };
+    const webPackage = JSON.parse(await readFile(new URL('../../apps/web/package.json', import.meta.url), 'utf8')) as {
+      scripts: Record<string, string>;
+      dependencies?: Record<string, string>;
+      devDependencies?: Record<string, string>;
+    };
+    const frameworkPackages = ['@vitejs/plugin-react', 'vite', 'react', 'react-dom', 'next', 'tailwindcss'];
+
+    expect(rootPackage.scripts['build:web']).toBe('npm --prefix apps/web run build');
+    expect(rootPackage.scripts.build).toContain('npm run build:web');
+    expect(webPackage.scripts.build).toBe('node ../../scripts/build-web-app.cjs');
+    expect([
+      ...Object.keys(rootPackage.dependencies ?? {}),
+      ...Object.keys(rootPackage.devDependencies ?? {}),
+      ...Object.keys(webPackage.dependencies ?? {}),
+      ...Object.keys(webPackage.devDependencies ?? {})
+    ]).not.toEqual(expect.arrayContaining(frameworkPackages));
+
+    await rm(new URL('../../apps/web/dist', import.meta.url), {
+      force: true,
+      recursive: true
+    });
+    const npmCommand = process.platform === 'win32' ? 'npm.cmd' : 'npm';
+    await execFileAsync(npmCommand, ['run', 'build:web'], {
+      cwd: fileURLToPath(new URL('../..', import.meta.url)),
+      shell: process.platform === 'win32'
+    });
+
+    const builtHtml = await readFile(new URL('../../apps/web/dist/index.html', import.meta.url), 'utf8');
+    expect(builtHtml).toContain('src="./src/main.js"');
+    expect(builtHtml).not.toContain('src="./src/main.ts"');
+    expect(existsSync(new URL('../../apps/web/dist/src/main.js', import.meta.url))).toBe(true);
   });
 });
