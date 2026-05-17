@@ -99,6 +99,48 @@ describe('independent web app shell', () => {
     expect(html).not.toContain('<form');
   });
 
+  it('error boundary panel renders readable non-mutating recovery states', () => {
+    const shell = buildIndependentWebAppShell();
+    const html = renderIndependentWebAppHtml(shell);
+
+    expect(shell.errorBoundary).toMatchObject({
+      title: '错误边界'
+    });
+    expect(shell.errorBoundary.boundaries).toEqual(expect.arrayContaining([
+      '错误边界只展示状态和下一步，不自动 retry、logout、apply 或修改权限。'
+    ]));
+    expect(shell.errorBoundary.states.map(state => state.id)).toEqual([
+      'unauthorized',
+      'forbidden',
+      'offline',
+      'blocked',
+      'conflict'
+    ]);
+    expect(shell.errorBoundary.states).toEqual(expect.arrayContaining([
+      expect.objectContaining({
+        id: 'unauthorized',
+        label: '会话已失效',
+        severity: 'warning',
+        retryable: false,
+        nextAction: '重新启动 storyspec app 或使用新的 session token。'
+      }),
+      expect.objectContaining({
+        id: 'offline',
+        label: '服务暂时不可用',
+        severity: 'critical',
+        retryable: true,
+        nextAction: '检查本机 server、数据库或 worker 状态后手动重试。'
+      })
+    ]));
+    expect(html).toContain('错误边界');
+    expect(html).toContain('会话已失效');
+    expect(html).toContain('权限不足');
+    expect(html).toContain('服务暂时不可用');
+    expect(html).toContain('retryable');
+    expect(html).toContain('不自动 retry、logout、apply 或修改权限');
+    expect(html).not.toContain('onclick=');
+  });
+
   it('ships a static html entry that mounts the web shell module', async () => {
     const html = await readFile(new URL('../../apps/web/index.html', import.meta.url), 'utf8');
 

@@ -11,6 +11,15 @@ export type IndependentWebAuthState = 'session-bound';
 
 export type IndependentWebRole = 'owner' | 'editor' | 'reviewer' | 'viewer' | 'agent';
 
+export type IndependentWebErrorStateId =
+  | 'unauthorized'
+  | 'forbidden'
+  | 'offline'
+  | 'blocked'
+  | 'conflict';
+
+export type IndependentWebErrorSeverity = 'info' | 'warning' | 'critical';
+
 export interface IndependentWebRoute {
   id: IndependentWebRouteId;
   label: string;
@@ -54,11 +63,27 @@ export interface IndependentWebAuthPanel {
   boundaries: string[];
 }
 
+export interface IndependentWebErrorState {
+  id: IndependentWebErrorStateId;
+  label: string;
+  message: string;
+  nextAction: string;
+  severity: IndependentWebErrorSeverity;
+  retryable: boolean;
+}
+
+export interface IndependentWebErrorBoundary {
+  title: '错误边界';
+  states: IndependentWebErrorState[];
+  boundaries: string[];
+}
+
 export interface IndependentWebAppShell {
   projectRoot: 'apps/web';
   title: 'StorySpec Web';
   apiClient: IndependentWebApiClient;
   authPanel: IndependentWebAuthPanel;
+  errorBoundary: IndependentWebErrorBoundary;
   routes: IndependentWebRoute[];
   boundaries: string[];
   nonGoals: string[];
@@ -130,6 +155,55 @@ export const buildIndependentWebAppShell = (): IndependentWebAppShell => ({
       '权限不足时必须展示原因和下一步，不能静默隐藏高风险动作。'
     ]
   },
+  errorBoundary: {
+    title: '错误边界',
+    states: [
+      {
+        id: 'unauthorized',
+        label: '会话已失效',
+        message: '当前 session token 无效、过期或已撤销。',
+        nextAction: '重新启动 storyspec app 或使用新的 session token。',
+        severity: 'warning',
+        retryable: false
+      },
+      {
+        id: 'forbidden',
+        label: '权限不足',
+        message: '当前角色不能执行这个动作。',
+        nextAction: '请让项目 owner/editor 调整访问范围，或选择只读路径继续。',
+        severity: 'warning',
+        retryable: false
+      },
+      {
+        id: 'offline',
+        label: '服务暂时不可用',
+        message: '本机 server、数据库或 worker 暂时不可达。',
+        nextAction: '检查本机 server、数据库或 worker 状态后手动重试。',
+        severity: 'critical',
+        retryable: true
+      },
+      {
+        id: 'blocked',
+        label: '暂时无法继续',
+        message: '流程存在阻塞原因，系统不会把它当作已完成。',
+        nextAction: '先处理阻塞原因，或把决定保留为稍后处理。',
+        severity: 'info',
+        retryable: false
+      },
+      {
+        id: 'conflict',
+        label: '内容有冲突',
+        message: '当前内容版本、patch 或 apply request 与目标状态不一致。',
+        nextAction: '先查看 diff、冲突说明和 rollback，再决定是否继续。',
+        severity: 'warning',
+        retryable: false
+      }
+    ],
+    boundaries: [
+      '错误边界只展示状态和下一步，不自动 retry、logout、apply 或修改权限。',
+      '可重试状态只显示 retryable 标记，具体恢复动作必须由用户确认。'
+    ]
+  },
   routes: [
     {
       id: 'project-workspace',
@@ -195,6 +269,17 @@ export const renderIndependentWebAppHtml = (shell: IndependentWebAppShell): stri
     );
   }).join('');
   const authBoundaries = shell.authPanel.boundaries.map(item => `<li>${escapeHtml(item)}</li>`).join('');
+  const errorStates = shell.errorBoundary.states.map(state => {
+    const retryable = state.retryable ? 'retryable' : 'manual';
+    return (
+      `<li data-error-state="${escapeHtml(state.id)}" data-severity="${escapeHtml(state.severity)}">` +
+      `<strong>${escapeHtml(state.label)}</strong>` +
+      `<span>${escapeHtml(state.message)}</span>` +
+      `<small>${escapeHtml(state.nextAction)}</small>` +
+      `<code>${retryable}</code></li>`
+    );
+  }).join('');
+  const errorBoundaries = shell.errorBoundary.boundaries.map(item => `<li>${escapeHtml(item)}</li>`).join('');
   const boundaries = shell.boundaries.map(item => `<li>${escapeHtml(item)}</li>`).join('');
   const nonGoals = shell.nonGoals.map(item => `<li>${escapeHtml(item)}</li>`).join('');
 
@@ -207,6 +292,8 @@ export const renderIndependentWebAppHtml = (shell: IndependentWebAppShell): stri
     `<p><strong>${escapeHtml(shell.authPanel.session.userLabel)}</strong> · ${escapeHtml(shell.authPanel.session.projectLabel)} · ${escapeHtml(shell.authPanel.session.state)}</p>`,
     `<p><strong>${escapeHtml(shell.authPanel.role.label)}</strong> · ${escapeHtml(shell.authPanel.role.description)}</p>`,
     `<ul>${permissionActions}</ul><ul>${authBoundaries}</ul></section>`,
+    `<section aria-labelledby="error-boundary-title"><h2 id="error-boundary-title">${escapeHtml(shell.errorBoundary.title)}</h2>`,
+    `<ul>${errorStates}</ul><ul>${errorBoundaries}</ul></section>`,
     `<nav aria-label="StorySpec Web routes"><ul>${routes}</ul></nav>`,
     `<section><h2>写入边界</h2><ul>${boundaries}</ul></section>`,
     `<section><h2>非目标</h2><ul>${nonGoals}</ul></section>`,
