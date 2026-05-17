@@ -29,6 +29,7 @@
     "update:command-manifest": "tsx scripts/build/command-artifact-manifest.ts --update",
     "dev": "tsx src/cli.ts",
     "test": "vitest run tests/unit",
+    "test:e2e": "vitest run tests/e2e",
     "test:coverage": "vitest run tests/unit --coverage",
     "test:smoke": "vitest run tests/smoke",
     "verify": "npm run build && npm test && npm run test:coverage && npm run check:changes && npm run check:command-manifest && npm run build:commands && npm run build && npm run test:smoke",
