@@ -52,7 +52,7 @@ describe('README fact boundaries', () => {
     expect(rowByCommand.get('storyspec app [--project <path>]')).toContain('首批前端架构契约和 API 地图');
     expect(rowByCommand.get('storyspec app [--project <path>]')).toContain('仍不包含账号、云端、实时协作或富文本编辑器');
     expect(rowByCommand.get('storyspec server [--host <host>] [--port <port>]')).toContain('实验性多用户控制平面');
-    expect(rowByCommand.get('storyspec server [--host <host>] [--port <port>]')).toContain('当前不包含完整 SaaS、独立前端项目或实时协作');
+    expect(rowByCommand.get('storyspec server [--host <host>] [--port <port>]')).toContain('当前不包含完整 SaaS、真实账号产品流或实时协作');
     expect(rowByCommand.get('storyspec worker [--once]')).toContain('preview-only');
     expect(rowByCommand.get('storyspec worker [--once]')).toContain('不自动写入正文或正典');
   });
